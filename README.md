@@ -1,6 +1,6 @@
 # UIF — web starter toolset
 
-An opinionated toolset to build Web UI and Web Services like so:
+An opinionated toolset to build UI and Web Services like so:
 
 ![Demo App base on UIF](./docs/uif-app-demo.png)
 
