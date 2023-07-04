@@ -1,0 +1,35 @@
+@nav-width: 200px;
+@border-color: #9cabb5;
+
+.segmented-form-group-setup {
+  border: 2px solid @border-color;
+  display: flex;
+  padding: 2px;
+
+  &__nav {
+    border: 2px solid @border-color;
+    padding: 10px;
+    margin: 0;
+    margin-right: 2px;
+    vertical-align: top;
+    width: @nav-width;
+    display: inline-block;
+    list-style: none;
+
+    li {
+      margin-bottom: 5px;
+
+      &.active {
+        font-weight: 900;
+      }
+    }
+  }
+
+  &__content {
+    padding: 10px;
+    border: 2px solid @border-color;
+    vertical-align: top;
+    width: calc(~'100% - @{nav-width} - 2px');
+    display: inline-block;
+  }
+}

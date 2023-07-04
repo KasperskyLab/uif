@@ -1,0 +1,74 @@
+.wizard-setup {
+
+  .steps {
+    border: 2px solid #9cabb5;
+    padding: 5px;
+
+    &:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+
+    .step {
+      border: 2px solid #9cabb5;
+      vertical-align: middle;
+      position: relative;
+      min-height: 81px;
+      float: left;
+      margin: 5px;
+
+      .form-content {
+        padding: 10px;
+      }
+
+      .buttons {
+        padding: 10px;
+        text-align: center;
+
+        .ui-input-button {
+          margin-right: 10px;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
+
+      &:not(:last-child):after {
+        display: block;
+        opacity: 1;
+        margin: 0 .25rem 0 0;
+        width: 1.18em;
+        height: 1em;
+        font-family: Icons;
+        font-style: normal;
+        font-weight: 500;
+        text-decoration: inherit;
+        text-align: center;
+        speak: none;
+        font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+
+
+
+
+        transform: translateY(-50%);
+        position: absolute;
+        content: "\f105";
+        font-size: 22px;
+        right: -29px;
+        top: 50%;
+        color: #9cabb5;
+      }
+    }
+  }
+
+}

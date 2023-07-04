@@ -1,0 +1,163 @@
+.rotation(@deg:5deg){
+    -webkit-transform: rotate(@deg);
+    transform: rotate(@deg);
+}
+
+.animation-count(@count: 1) {
+    -webkit-animation-iteration-count: @count;
+    animation-iteration-count: @count;
+}
+
+.animateBase (@animationName, @duration) {
+    .animation-name(@animationName);
+    .animation-duration(@duration);
+    .animation-fill-mode(both);
+}
+
+.animationReady (@animationName, @duration: 1s) {
+    .animateBase(@animationName, @duration);
+}
+
+.animationReady (@animationName) when (@animationName = swing) {
+    .animateBase(swing);
+    .transform-origin(top center);
+}
+
+.animationReady (@animationName) when (@animationName = hinge) {
+    .animateBase(hinge, 2s);
+}
+
+.animationReady (@animationName) when (@animationName = lightSpeedOut) {
+    .animateBase(lightSpeedOut);
+    .animation-function(ease-in);
+}
+
+.animationReady (@animationName) when (@animationName = lightSpeedIn) {
+    .animateBase(lightSpeedIn);
+    .animation-function(ease-in);
+}
+
+.animationReady (@animationName) when (@animationName = flyOut) {
+    .animateBase(flyOut, 0.8s);
+    .animation-function(cubic-bezier(0.6, 0.04, 0.98, 0.335));
+}
+
+.animationReady (@animationName) when (@animationName = processIconRotation) {
+    .animateBase(processIconRotation, 3s);
+    .animation-function(ease-in-out);
+    .transform-origin(50% 50%);
+    .animation-fill-mode(forwards);
+}
+
+.transform-origin(@s) {
+    -webkit-transform-origin: @s;
+    transform-origin: @s;
+}
+
+.backface(@b: hidden) {
+    -webkit-backface-visibility: @b;
+    backface-visibility: @b;
+}
+
+.animation(@name, @duration: 1s, @function: ease, @delay: 0) {
+    -webkit-animation: @name @duration @function @delay;
+    animation: @name @duration @function @delay;
+}
+
+.animation-name(@name) {
+    -webkit-animation-name: @name;
+    animation-name: @name;
+}
+
+.animation-duration(@duration: 0.2s) {
+    -webkit-animation-duration: @duration;
+    animation-duration: @duration;
+}
+
+.animation-function(@function: ease) {
+    -webkit-animation-timing-function: @function;
+    animation-timing-function: @function;
+}
+
+//<single-animation-iteration-count> = infinite | <number>
+.animation-count(@count: 1) {
+    -webkit-animation-iteration-count: @count;
+    animation-iteration-count: @count;
+}
+
+.animation-timing-function(@fnc: ease-in-out) {
+    -webkit-animation-timing-function: @fnc;
+    animation-timing-function: @fnc;
+}
+
+//<single-animation-direction> = normal | reverse | alternate | alternate-reverse
+.animation-direction(@direction: normal) {
+    -webkit-animation-direction :@direction;
+    animation-animation-direction: @direction;
+}
+
+//<single-animation-play-state> = running | paused
+.animation-play-state(@state: running) {
+    -webkit-animation-play-state: @state;
+    animation-animation-play-state: @state;
+}
+
+.animation-delay(@delay: 0.5s) {
+    -webkit-animation-delay: @delay;
+    animation-delay: @delay;
+}
+
+//<single-animation-fill-mode> = none | forwards | backwards | both
+.animation-fill-mode(@mode: forwards) {
+    -webkit-animation-fill-mode: @mode;
+    animation-fill-mode: @mode;
+}
+
+.clockRotation() {
+    0% {
+        .rotation(0deg);
+    }
+    90% {
+        .rotation(180deg);
+    }
+    100% {
+        .rotation(180deg);
+    }
+}
+
+@-webkit-keyframes processIconRotation {
+    .clockRotation();
+}
+
+@keyframes processIconRotation {
+    .clockRotation();
+}
+
+
+@keyframes slideInUpBar {
+    from {
+        position: relative;
+        height: 1px;
+        visibility: visible;
+    }
+
+    to {
+        position: relative;
+        height: 74px;
+    }
+}
+
+
+
+@keyframes slideInUpBarItem {
+    from {
+        -webkit-transform: translateY(100%);
+        transform: translateY(100%);
+        visibility: visible;
+    }
+
+    to {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,8 @@
+{
+  "linters": {
+    "*.js": [
+      "standard",
+      "eslint --parser \"babel-eslint\" --no-eslintrc --rule 'max-len: [2, 120]'"
+    ]
+  }
+}

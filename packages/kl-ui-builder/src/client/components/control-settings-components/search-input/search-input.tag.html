@@ -1,0 +1,19 @@
+<search-input>
+    <div class="search_list-wrap">
+
+        <div class="ui fluid input">
+            <input type="text"
+                   ref="input"
+                   value="{opts.term}"
+                   onkeyup="{onValueChange}">
+        </div>
+
+        <ul class="search_list { active: active }">
+            <li onclick="{searchItemClick}" class="item {highlighted: item.highlight}" each="{item in searchData}">{item && item.title}</li>
+        </ul>
+    </div>
+
+    <script>
+        //= include *.tag.js
+    </script>
+</search-input>

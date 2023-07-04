@@ -1,0 +1,14 @@
+<segmented-form-group-setup>
+  <div class='segmented-form-group-setup'>
+    <ul class='segmented-form-group-setup__nav' onclick="{ onTabClick }">
+      <li each="{ items }" class="{ active: activeValue === value }" data-value="{ value }">{ text }</li>
+    </ul>
+    <div class='segmented-form-group-setup__content'>
+      <span if="{ activeValue }">Form #{ activeValue } content</span>
+    </div>
+  </div>
+  
+  <script>
+      //= include *.tag.js
+  </script>
+</segmented-form-group-setup>

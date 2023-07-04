@@ -1,0 +1,15 @@
+{
+    "dod": {
+      "designTokens": true,
+      "useThemedHook": true,
+      "unitTests": true,
+      "screenshotTests": false,
+      "migration": true,
+      "apiTable": true,
+      "storybook": true
+    },
+    "component": "Search",
+    "desctiption": "Search component.",
+    "usage": "The component can be used to search for content.",
+    "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-UI-KIT?node-id=1683%3A10032"
+  }

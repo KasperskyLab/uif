@@ -1,0 +1,28 @@
+<context-loader>
+    <div class="context-loader-ctr">
+        <div class="intro-text">{introText}</div>
+        <div class="option" ondrop="{handleFiles}" ondragover="{handleDrag}">
+            <input type="file" hide="{true}" id="files" ref="files" accept=".json" multiple onchange="{handleFiles}"/>
+            <div class="option-text" onclick={uploadFile}>
+                <i class="uib icon upload"></i><span
+                    class="text">Upload files from the file system</span></div>
+        </div>
+        <div class="option" if="{haveSavedSession}">
+            <div class="option-text" onclick="{loadFromLocalStorage}">
+                <i class="uib icon session"></i>
+                <div class="text">
+                    <div>Open the last saved session</div>
+                    <div class="text-small">{lastActivityDate}</div>
+                </div>
+            </div>
+        </div>
+        <div class="option">
+            <div class="option-text" onclick={createFiles}>
+                <i class="uib icon create_file"></i><span class="text">Create new</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</context-loader>

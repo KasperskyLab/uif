@@ -1,0 +1,23 @@
+<popup class="ui dimmer modals modals-uib page transition visible active">
+
+    <div class="ui tiny test modal transition visible active">
+
+        <i class="remove icon modal-close" onclick="{close}"></i>
+
+        <div class="header">
+            <i class="uib icon {opts.icon}"></i>
+            <yield from="caption"/>
+        </div>
+        <div class="content">
+            <yield from="body"/>
+        </div>
+        <div class="actions">
+            <yield from="buttons"/>
+        </div>
+    </div>
+
+
+    <script>
+        //= include *.tag.js
+    </script>
+</popup>

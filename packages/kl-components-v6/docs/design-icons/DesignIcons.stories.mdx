@@ -1,0 +1,66 @@
+import { Canvas, Meta, Story } from '@storybook/addon-docs'
+import { StoryColumn, StoryWrapper } from '../../.storybook/StoryComponents'
+import { badges } from '../../.storybook/badges';
+import { DesignIcons, ExampleIcon, ExampleIconWithSize, ExampleIconWithSizeColor } from './DesignIcons'
+
+<Meta
+  title="Design/@kl-icons"
+  component={DesignIcons}
+/>
+
+# @kl/icons
+
+This npm package is a standalone icon library that you can use in your projects.
+
+**The icon library has two main implementations:**
+- *Design System:* svg icon pack in Figma (https://www.figma.com/file/sFYnrrW2tEOurX8rL2OCki/%F0%9F%92%8E-Library---Icons?node-id=0%3A1).
+- *UI Kit:* npm package containing all the icons from the design system. The @kl/icons icon pack npm is maintained by the UIF development team.
+
+## Install
+``` js 
+npm install @kl/icons 
+```
+
+## Usage
+**Import:**
+``` js 
+import AccountLogin from '@kl/icons'
+import Like from '@kl/icons'
+```
+``` js 
+import { AccountLogin, Like } from '@kl/icons'
+```
+``` js 
+import * as Icons from '@kl/icons'
+```
+
+**Props:**  
+*size*: 'extraSmall', 'small', 'medium', 'large' ( Default: matches icon size )     
+*color*: string ( Default: #0D0D15 )  
+
+**Code example:**
+``` js 
+<AccountLogin/>
+```
+<Story name="ExampleIcon">
+  <ExampleIcon/>
+</Story>
+
+``` js 
+<AccountLogin size='medium'/>
+```
+<Story name="ExampleIconWithSize">
+  <ExampleIconWithSize/>
+</Story>
+
+``` js 
+<AccountLogin size='medium' color='green'>
+```
+<Story name="ExampleIconWithSizeColor">
+  <ExampleIconWithSizeColor/>
+</Story>
+
+**Icons list:**
+<Story name="Common">
+  <DesignIcons/>
+</Story>

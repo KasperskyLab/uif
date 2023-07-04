@@ -1,0 +1,7 @@
+node_modules
+.history
+.npmrc
+lib
+.vscode
+.idea
+.env

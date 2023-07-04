@@ -1,0 +1,56 @@
+{
+  "component": "Tabs",
+  "v6": "/docs/atoms-tabs--basic",
+  "v3": [],
+  "v5": [],
+  "common": [
+    {
+      "prop": "addIcon",
+      "changes": "Removed"
+    },
+    {
+      "prop": "animated",
+      "changes": "Removed"
+    },
+    {
+      "prop": "centered",
+      "changes": "Removed"
+    },
+    {
+      "prop": "hideAdd",
+      "changes": "Removed"
+    },
+    {
+      "prop": "popupClassName",
+      "changes": "Removed"
+    },
+    {
+      "prop": "renderTabBar",
+      "changes": "Removed"
+    },
+    {
+      "prop": "size",
+      "changes": "Removed"
+    },
+    {
+      "prop": "tabBarExtraContent",
+      "changes": "Removed"
+    },
+    {
+      "prop": "tabBarGutter",
+      "changes": "Removed"
+    },
+    {
+      "prop": "tabBarStyle",
+      "changes": "Removed"
+    },
+    {
+      "prop": "onEdit",
+      "changes": "Removed"
+    },
+    {
+      "prop": "onTabScroll",
+      "changes": "Removed"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+<list-editor-setup>
+    <div class="ctrl le-ctr le-ctr-scrollable">
+        <div class="le-toolbar" if="{actions && actions.length > 0}">
+            <div class="le-toolbar-item" each={actions}>
+                {text}
+            </div>
+        </div>
+        <div class="form-controlbox-content">
+
+            <table class="le-table" id="le-table">
+                <colgroup>
+                    <col each="{columns}">
+                </colgroup>
+                <thead>
+                <tr>
+                    <td each="{column in columns}" class="le-col-header">
+                        <build-type label="{_.get(column, 'additionalFields.buildType')}"></build-type>
+                        <span>{column.text}</span>
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td each="{col, i in columns}" class="le-cell">
+                        <div onclick={selectContainer} class="le-cell-content {selected: selected}">
+                            <component-draft parent_setup={parent.opts.setup} compact="1"
+                                             ref='{"cd_" + i}'></component-draft>
+                        </div>
+                    </td>
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</list-editor-setup>

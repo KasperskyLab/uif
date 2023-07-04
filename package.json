@@ -1,0 +1,73 @@
+{
+  "devDependencies": {
+    "babel-eslint": "10.0.1",
+    "eslint": "^6.6.0",
+    "husky": "^3.0.9",
+    "jest": "23.6.0",
+    "lerna": "3.10.8",
+    "lint-staged": "8.1.3",
+    "standard": "14.3.1"
+  },
+  "name": "uif",
+  "scripts": {
+    "install:all": "lerna exec  --stream -- yarn",
+    "test": "jest --config=jest.config.json --verbose",
+    "test:all": "lerna run test --stream --concurrency 1",
+    "lint:all": "lerna run lint --stream --concurrency 1 --no-bail",
+    "lint:all:fix": "lerna run lint:fix --stream --concurrency 1 --no-bail"
+  },
+  "standard": {
+    "env": [
+      "jest",
+      "browser"
+    ],
+    "globals": [
+      "kl",
+      "runtime",
+      "_",
+      "localization",
+      "$",
+      "joinComponent",
+      "getComponentSchemePair",
+      "shortId",
+      "key",
+      "constants",
+      "shortid",
+      "riot",
+      "ControlSetup",
+      "PropertyGroup",
+      "TextField",
+      "BoolField",
+      "OptionalFunctionField",
+      "LinkButtonField",
+      "OptionalTextField",
+      "ListEditorElementsField",
+      "LockSourceField",
+      "AccordionSourceField",
+      "StyleField",
+      "DependencyListField",
+      "ValidationListField",
+      "ValueField",
+      "TableColumnListField",
+      "ListEditorActionsField",
+      "customFields",
+      "moduleExtension",
+      "SelectField",
+      "CustomLayoutField",
+      "GridItemsListField"
+    ],
+    "validate": [
+      "javascript"
+    ],
+    "ignore": [
+      ".history",
+      ".idea",
+      ".vscode"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}

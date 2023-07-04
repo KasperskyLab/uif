@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": true,
+    "storybook": true
+  },
+  "component": "DatePicker",
+  "description": "Interactive date picker component. It is based on the styled `DatePicker` component from `antd`, which in turn is built on `rc-picker`",
+  "usage": "",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1%3A1586"
+}

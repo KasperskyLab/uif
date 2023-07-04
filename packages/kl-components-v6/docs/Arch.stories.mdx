@@ -1,0 +1,29 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Docs/Component Architecture" />
+
+# Component Architecture
+
+All components consist of several structural parts
+
+`Component` + `Component View` + `Css config` + `Themed Hook` + `Hooks` = `Component`
+
+Component - the entry point to the component. At a minimum, it uses `Themed Hook` and `Component View`.
+
+Component View - is the basis of the component, contains the minimum amount of logic required. For styling, wraps the used component in `styled-components` which uses `Component css`.
+Must be a fully functioning component.
+
+Component css - css styles of the component. Uses `Css config`.
+
+Css config is the component's styling configuration, which includes the required colors, sizes, and typography for the elements.
+Returns data as an object, making it easy to override one or more variables as needed.
+(Each theme has a separate configuration)
+
+Themed Hook - component theming, creating component style configuration object - `Css config`.
+
+Hooks - the internal logic of the component. Contains logic that is not “essential” for the component.
+Allows end users to override the logic of the component.
+
+## Example
+
+```src/button```

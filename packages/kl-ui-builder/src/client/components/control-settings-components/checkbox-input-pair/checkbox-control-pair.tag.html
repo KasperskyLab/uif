@@ -1,0 +1,16 @@
+<checkbox-control-pair>
+
+
+    <checkbox text="{opts.label}" value="{checked}" onchange={onToggle}></checkbox>
+
+    <div show={checked} class="child-block">
+        <div class="child-block-item">
+            <span class="child-block-arrow"></span>
+            <yield/>
+        </div>
+    </div>
+
+    <script>
+        //= include *.tag.js
+    </script>
+</checkbox-control-pair>

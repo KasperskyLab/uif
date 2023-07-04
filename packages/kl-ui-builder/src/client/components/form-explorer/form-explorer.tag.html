@@ -1,0 +1,43 @@
+<form-explorer class="form-explorer">
+
+    <div class="offset-v-box">
+        <section-header text="Form list"></section-header>
+
+        <button if={forms.length} onclick="{onCreateNewForm}" class="ui button small">Create new form</button>
+        <a
+            class="form-collapse"
+            if="{ forms.length }"
+            href='javascript:void(0);'
+            onclick="{ toggleAllFormsExpand }">
+            { allFormsExpanded ? 'Collapse all' : 'Expand all' }
+        </a>
+
+    </div>
+    <div class="form-explorer-body">
+
+        <file-tree model={forms}
+            child-nodes-resolver="{getChildNodes}"
+            ondblclick="{onOpenForm}"
+            text="name" onnodeselect="{onNodeSelect}"
+            if={forms.length}></file-tree>
+        <div if={!forms.length}>
+            <div class="empty-text">Form list is empty.</div>
+            <div class="offset-v-box">
+                <button onclick="{onCreateNewForm}" class="ui button">Create new form</button>
+            </div>
+        </div>
+    </div>
+
+    <style scoped>
+        a.form-collapse {
+            font-size: 10px;
+            margin-left: 25px;
+            text-transform: uppercase;
+            color: #000;
+        }
+    </style>
+
+    <script>
+        //= include *.tag.js
+    </script>
+</form-explorer>

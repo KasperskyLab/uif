@@ -1,0 +1,121 @@
+{
+  "component": "Toolbar",
+  "v6": "/docs/molecules-toolbar",
+  "v3": [
+    {
+      "prop": "grey",
+      "changes": {
+        "before": "boolean",
+        "after": "-",
+        "description": "prop is missing from the new design"
+      }
+    },
+    {
+      "prop": "componentId",
+      "changes": {
+        "before": "-",
+        "after": "string",
+        "description":"The unique id of the component"
+      }
+    },
+    {
+      "prop": "left",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "ToolbarItems<ToolbarItemKey>[]",
+        "description":"The unique id of the component"
+      }
+    },
+    {
+      "prop": "right",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "ToolbarItems<ToolbarItemKey>[]",
+        "description":"The unique id of the component"
+      }
+    }
+  ],
+  "v5": [],
+  "common": [
+    {
+      "prop": "Toolbar.FilterItem",
+      "changes": {
+        "before": "-",
+        "after": "React.FC<IButtonProps>",
+        "description":"Filter button often used in context with a table"
+      }
+    },
+    {
+      "prop": "Toolbar.FilterActiveItem",
+      "changes": {
+        "before": "-",
+        "after": "React.FC<IButtonProps>",
+        "description":"A button with an active filter state, often for use in context with a table"
+      }
+    },
+    {
+      "prop": "Toolbar.SettingsItem",
+      "changes": {
+        "before": "-",
+        "after": "React.FC<IButtonProps>",
+        "description":"Button with settings often for use in context with a table"
+      }
+    },
+    {
+      "prop": "Toolbar.ScaleItem",
+      "changes": {
+        "before": "-",
+        "after": "React.FC<IButtonProps>",
+        "description":"Scale button often used in context with a table"
+      }
+    },
+    {
+      "prop": "Toolbar.Header",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "-",
+        "description":"depricated"
+      }
+    },
+    {
+      "prop": "Toolbar.Button",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "-",
+        "description":"depricated"
+      }
+    },
+    {
+      "prop": "Toolbar.IconButton",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "-",
+        "description":"depricated"
+      }
+    },
+    {
+      "prop": "Toolbar.ButtonGroup",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "-",
+        "description":"depricated"
+      }
+    },
+    {
+      "prop": "Toolbar.Search",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "-",
+        "description":"depricated"
+      }
+    },
+    {
+      "prop": "Toolbar.Divider",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "-",
+        "description":"depricated"
+      }
+    }
+  ]
+}

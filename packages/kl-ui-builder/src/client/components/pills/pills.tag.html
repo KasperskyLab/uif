@@ -1,0 +1,12 @@
+<pills>
+
+    <div class="ui menu {opts.modificator}">
+        <a each={opts.items}
+           onclick="{onItemClick}"
+           class="item { active: active }"><i if="{icon}" class="uib icon {icon}"></i>{title}</a>
+    </div>
+
+    <script>
+        //= include *.tag.js
+    </script>
+</pills>

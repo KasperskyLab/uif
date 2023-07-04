@@ -1,0 +1,16 @@
+{
+  "component": "Grid",
+  "v6": "/docs/molecules-grid--basic",
+  "v3": [
+    {
+      "prop": "layout",
+      "changes": "Removed unused alignItems and justifyItems"
+    },
+    {
+      "prop": "layoutProperty",
+      "changes": "Added - gap, rowGap, columnGap"
+    }
+  ],
+  "v5": [],
+  "common": []
+}

@@ -1,0 +1,15 @@
+{
+    "dod": {
+      "designTokens": true,
+      "useThemedHook": true,
+      "unitTests": true,
+      "screenshotTests": false,
+      "migration": true,
+      "apiTable": true,
+      "storybook": true
+    },
+    "component": "KeyValue",
+    "usage": "",
+    "desctiption": "The component is used to structure information. As a rule, it is displayed in sections with details.",
+    "designLink": ""
+  }

@@ -1,0 +1,71 @@
+.code-editor {
+    display: block;
+    width: 100%;
+}
+
+.code-editor-wrap {
+    display:block;
+    position: relative;
+    background: #fff;
+    margin: 0 10px 10px 10px;
+
+    &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        z-index: 4;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+
+        box-shadow: inset 0 4px 3px -2px rgba(0,0,0,.1);
+    }
+}
+
+.height-full {
+    flex: 1;
+
+    .code-editor {
+        height: 100%;
+
+        .ce-ctr {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+            .cm-s-default {
+                flex: 1;
+            }
+        }
+    }
+}
+
+.CodeMirror {
+    .code-editor-wrap & {
+        background-color: transparent;
+    }
+}
+.CodeMirror pre {
+    font-family: 'SourceCodePro-Medium' !important;
+}
+.CodeMirror-gutters {
+    border: none !important;
+    padding-top:5px;
+
+}
+.CodeMirror-linenumber {
+    color: #6b777e !important;
+}
+.ce-error {
+    background-color: red;
+    padding: 5px;
+    margin: 1px;
+    color: white;
+    font-size: 11px;
+}
+.ce-error-title {
+    font-size: 11px;
+    font-weight: bold;
+    padding: 5px;
+}

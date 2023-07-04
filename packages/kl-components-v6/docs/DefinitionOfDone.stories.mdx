@@ -1,0 +1,70 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Docs/Definition of done" />
+
+# Definition of done
+
+When working with components (creating/editing), it is recommended to add a checklist to the description of the Pull Request with criteria for the completeness and correctness of the changes being made.
+The so-called Definition Of Done.
+
+Check off each item and make sure that nothing is forgotten during development.
+The list is not strict and is needed solely for self-control.
+
+---
+
+### Creating a component:
+
+- [x] Created a story with examples of using the component
+- [x] Usage examples are quite clear and comprehensive
+- [x] Dark theme supported and example added to story
+- [x] Component re-exported in global index file
+- [x] Supported HTML attributes for testing (if needed) and the ability to define them from the outside (via props)
+- [x] Text elements (if any) are not hardcoded and it is possible to define them from the outside (via props)
+
+---
+
+### Adding functionality to an existing component:
+
+- [x] Added usage examples in story
+- [x] All previous stories of this component are checked and work correctly
+- [x] Dark theme works correctly, including for new functionality
+- [x] Supported HTML attributes for testing (if needed) and the ability to define them from the outside (via props)
+- [x] Text elements (if any) are not hardcoded and it is possible to define them from the outside (via props)
+
+---
+
+### Fix/Change the functionality of an existing component:
+
+- [x] All stories of this component have been tested and work correctly
+- [x] Dark theme works correctly
+
+
+### Development of documentation
+
+The docs of each component should be wrapped with the WithMeta hoc, which in turn enriches the documentation with meta information ( review checklist, status and etc. )
+
+#### Example
+
+```
+...
+import { Alert } from './Alert'
+import { AlertProps } from './types'
+import { AlertDocs } from './docs'
+import { withMeta } from '../../helpers/hooks/MetaComponent/withMeta'
+import Meta from './meta.json'
+
+export default {
+  title: 'Molecules/Alert',
+  component: Alert,
+  parameters: {
+    badges: [badges.stable, badges.needsDesignReview],
+    docs: {
+      page: withMeta(Meta)
+    }
+  }
+}
+...
+```
+
+
+

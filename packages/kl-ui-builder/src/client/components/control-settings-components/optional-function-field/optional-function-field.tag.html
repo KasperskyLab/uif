@@ -1,0 +1,11 @@
+<optional-function-field>
+    <checkbox-control-pair ref="controlSwitch" label="{opts.label}"
+                           term="{opts.fncName}" enabled="{opts.fncName != null}"
+                           onchange="{onValueChange}">
+        <search-input search_function="{runtime.memberSearch}" ref="fncName"
+                      term="{opts.term}" onchange_handler="{onValueChange}"></search-input>
+    </checkbox-control-pair>
+    <script>
+        //= include *.tag.js
+    </script>
+</optional-function-field>

@@ -1,0 +1,63 @@
+.wizard-steps {
+  display: block;
+
+  & > .ui.button {
+    margin-bottom: 10px;
+  }
+
+  .step {
+    display: block;
+    margin-top: 10px;
+    position: relative;
+    margin-bottom: 20px;
+
+    .fields-section-caption {
+      margin-bottom: 5px;
+    }
+
+
+    hr {
+      border: none;
+      border-bottom: 1px dotted #ccc;
+    }
+    
+    &:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+
+    &-index {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      line-height: 15px;
+      border-radius: 50%;
+      color: #fff;
+      background: #234258;
+      text-align: center;
+      font-size: 10px;
+      top: -1px;
+      position: relative;
+      margin: 0 0.2em;
+    }
+
+    &-remove {
+      position: absolute;
+      right: -5px;
+      top: 0;
+    }
+
+    .cs-field-set-group {
+      position: relative;
+      padding: 0 25px 5px 15px;
+      float: right;
+      width: 90%;
+
+      .custom-buttons-handler {
+        display: inline-block;
+        width: calc(~'100% - 25px');
+      }
+    }
+  }
+}

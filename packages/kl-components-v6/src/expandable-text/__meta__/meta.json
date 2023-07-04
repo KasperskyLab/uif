@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": false,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true
+  },
+  "component": "ExpandableText",
+  "desctiption": "",
+  "usage": "",
+  "designLink": ""
+}

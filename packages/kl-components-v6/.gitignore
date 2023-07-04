@@ -1,0 +1,11 @@
+node_modules
+.vscode/
+.idea
+lib
+_build
+.env
+.history
+/react
+storybook-static/
+esm/
+!package-lock.json

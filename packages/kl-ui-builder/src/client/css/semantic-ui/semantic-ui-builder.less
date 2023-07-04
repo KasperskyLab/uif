@@ -1,0 +1,98 @@
+/*
+
+███████╗███████╗███╗   ███╗ █████╗ ███╗   ██╗████████╗██╗ ██████╗    ██╗   ██╗██╗
+██╔════╝██╔════╝████╗ ████║██╔══██╗████╗  ██║╚══██╔══╝██║██╔════╝    ██║   ██║██║
+███████╗█████╗  ██╔████╔██║███████║██╔██╗ ██║   ██║   ██║██║         ██║   ██║██║
+╚════██║██╔══╝  ██║╚██╔╝██║██╔══██║██║╚██╗██║   ██║   ██║██║         ██║   ██║██║
+███████║███████╗██║ ╚═╝ ██║██║  ██║██║ ╚████║   ██║   ██║╚██████╗    ╚██████╔╝██║
+╚══════╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚═╝ ╚═════╝     ╚═════╝ ╚═╝
+
+  Import this file into your LESS project to use Semantic UI without build tools
+*/
+
+/* Global */
+& { @import "definitions/globals/reset"; }
+& { @import "definitions/globals/site"; }
+
+/* Elements */
+& { @import "definitions/elements/button"; }
+& { @import "definitions/elements/container"; }
+& { @import "definitions/elements/divider"; }
+& { @import "definitions/elements/header"; }
+& { @import "definitions/elements/icon"; }
+& { @import "definitions/elements/image"; }
+& { @import "definitions/elements/input"; }
+& { @import "definitions/elements/label"; }
+& { @import "definitions/elements/list"; }
+& { @import "definitions/elements/loader"; }
+& { @import "definitions/elements/segment"; }
+& { @import "definitions/elements/step"; }
+
+/* Collections */
+& { @import "definitions/collections/breadcrumb"; }
+& { @import "definitions/collections/form"; }
+& { @import "definitions/collections/grid"; }
+& { @import "definitions/collections/menu"; }
+& { @import "definitions/collections/message"; }
+& { @import "definitions/collections/table"; }
+
+/* Views */
+& { @import "definitions/views/item"; }
+
+/* Modules */
+& { @import "definitions/modules/accordion"; }
+& { @import "definitions/modules/checkbox"; }
+& { @import "definitions/modules/dimmer"; }
+& { @import "definitions/modules/dropdown"; }
+& { @import "definitions/modules/modal"; }
+& { @import "definitions/modules/popup"; }
+& { @import "definitions/modules/progress"; }
+& { @import "definitions/modules/search"; }
+& { @import "definitions/modules/sidebar"; }
+& { @import "definitions/modules/sticky"; }
+& { @import "definitions/modules/tab"; }
+& { @import "definitions/modules/transition"; }
+
+
+@import "themes/ui-builder/_custom/layout";
+
+/* legacy ui builder css */
+
+@import "themes/ui-builder/_custom/mixins/flexbox";
+@import "themes/ui-builder/_custom/mixins/animations";
+//@import "themes/ui-builder/_custom/common/scaffolding";
+@import "themes/ui-builder/_custom/common/variables";
+@import "themes/ui-builder/_custom/common/utils.less";
+@import "themes/ui-builder/_custom/common/grid";
+@import "themes/ui-builder/_custom/common/type";
+@import "themes/ui-builder/_custom/forms/forms";
+@import "themes/ui-builder/_custom/buttons/buttons";
+// ui designer styles
+
+@import "themes/ui-builder/_custom/designer/component-styles";
+@import "themes/ui-builder/_custom/designer/designer";
+@import "themes/ui-builder/_custom/designer/gutter";
+@import "themes/ui-builder/_custom/components/tabs";
+@import "themes/ui-builder/_custom/components/breadcrumbs";
+@import "themes/ui-builder/_custom/components/discussion-board.less";
+@import "themes/ui-builder/_custom/components/mockups-list.less";
+@import "themes/ui-builder/_custom/components/components.less";
+@import "themes/ui-builder/_custom/components/dependency-setup.less";
+@import "themes/ui-builder/_custom/components/example-area.less";
+@import "themes/ui-builder/_custom/components/markdown-preview.less";
+@import "themes/ui-builder/_custom/codemirror-customization.less";
+
+/**/
+
+@import "themes/ui-builder/_custom/view-elements/parameter.less";
+@import "themes/ui-builder/_custom/view-elements/trigger.less";
+
+@font-face {
+  font-family: 'SourceCodePro-Medium';
+  src: url('SourceCodePro-Medium.eot?c1eiex');
+  src: url('SourceCodePro-Medium.eot?c1eiex#iefix') format('embedded-opentype'),
+  url('SourceCodePro-Medium.ttf?c1eiex') format('truetype'),
+  url('SourceCodePro-Medium.woff?c1eiex') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}

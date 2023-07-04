@@ -1,0 +1,230 @@
+<value-field-mapper>
+    <div class="offset-v-element">
+        <div id="selector" class="offset-v-element">
+            <label class="cs-form-label">
+                Data source
+            </label>
+            <select ref="slct" value="{opts.slct}" onchange="{onValueSourceTypeChange}" class="ui dropdown fluid">
+                <option value="0" selected={opts.slct !=null ? opts.slct== 0 : true}>
+                    Constant
+                </option>
+                <option value="1" selected={opts.slct== 1}>
+                    Handler
+                </option>
+                <option value="2" selected={opts.slct== 2}>
+                    Model property
+                </option>
+                <option value="3" selected={opts.slct== 3}>
+                    runtime.variable
+                </option>
+            </select>
+        </div>
+        <div class="child-block">
+            <div show={ valueSourceType==1 } class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    Getter name
+                </label>
+                <div class="grid-cols ">
+                    <search-input search_function="{runtime.memberSearch}"
+                                  term="{opts.getterFncName}"
+                                  ref="getterFncName" onchange_handler="{onValueChange}"></search-input>
+                </div>
+            </div>
+            <div show={ valueSourceType==1 } class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <div class="grid-cols child-block-cb">
+                    <checkbox text="Call only when initializing the form"
+                              onchange={onCallGetterOnce}
+                              value={opts.callGetterOnce}></checkbox>
+                </div>
+            </div>
+            <div show={ valueSourceType==1 } class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    Setter name
+                </label>
+                <div class="grid-cols ">
+                    <search-input search_function="{runtime.memberSearch}"
+                                  term="{opts.setterFncName}"
+                                  ref="setterFncName" onchange_handler="{onValueChange}"></search-input>
+                </div>
+            </div>
+            <div show={ valueSourceType== 2 } class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    <span class="element-info">
+                        <div class="ksc-form-input-balloon"></div>
+                    </span>Property name
+                </label>
+
+                <div class="ui grid clear">
+                    <div class="column width-full">
+                        <div class="ui fluid input">
+                            <input type="text"
+                                   ref="contextPropName"
+                                   value="{opts.contextPropName}"
+                                   onchange="{onValueChange}">
+                        </div>
+                    </div>
+                    <div class="column auto">
+                        <mini-popup>
+                            <tree model={parent.ctx}
+                                  ondblclick="{parent.selectProp}"
+                                  onnodeselect="{parent.onPropSelect}"
+                                  tree-name="value-field-mapper-tree"></tree>
+                        </mini-popup>
+                    </div>
+                </div>
+
+            </div>
+            <div class="child-block-item" show={ valueSourceType== 2 }>
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    <span class="element-info">
+                        <div class="ksc-form-input-balloon"></div>
+                    </span>Value type
+                </label>
+                <div>
+                    <select ref="valueType" value="{opts.valueType}" onchange="{onValueChange}" class="ui dropdown fluid">
+                        <option value="raw"  selected="{opts.valueType == 'raw'}">
+                        </option>
+                        <option value="string"  selected="{opts.valueType == 'string'}">
+                            String
+                        </option>
+                        <option value="number" selected="{opts.valueType == 'number'}">
+                            Number
+                        </option>
+                        <option value="boolean" selected="{opts.valueType == 'boolean'}">
+                            Bool
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="child-block-item" show={ valueSourceType== 2 }>
+
+                <span class="child-block-arrow"></span>
+
+                <div>
+                    <div class="child-block-item">
+                        <checkbox text="Patch context value before show"
+                                  onchange={onSetPatchAfterRead}
+                                  value={opts.shouldPatchAfterRead}></checkbox>
+                    </div>
+                    <div class="child-block" show={shouldPatchAfterRead}>
+                        <div class="child-block-item">
+                            <span class="child-block-arrow"></span>
+                            <search-input
+                                    search_function="{runtime.memberSearch}"
+                                    term="{opts.afterReadPatchFncName}"
+                                    onchange_handler="{onValueChange}" ref="slctAfterReadPatchFncName"></search-input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="child-block-item" show={ valueSourceType== 2 }>
+
+                <span class="child-block-arrow"></span>
+
+                <checkbox text="Patch value before saving to context"
+                          onchange={onSetPatchBeforeSave}
+                          value={opts.shouldPatchBeforeSave}></checkbox>
+                <div class="child-block" show={shouldPatchBeforeSave}>
+                    <div class="child-block-item">
+                        <span class="child-block-arrow"></span>
+                        <search-input
+                                search_function="{runtime.memberSearch}"
+                                term="{opts.beforeSavePatchFncName}"
+                                onchange_handler="{onValueChange}" ref="slctBeforeSavePatchFncName"></search-input>
+                    </div>
+                </div>
+            </div>
+            <div show={ valueSourceType==3 } class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <div>
+                    <div class="ui fluid input">
+                        <input type="text"
+                               ref="variableName"
+                               value="{opts.variableName}"
+                               onchange="{onValueChange}">
+                    </div>
+                </div>
+            </div>
+            <div show={ valueSourceType==0 } class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <div class="ui fluid input">
+                    <input type="text"
+                           ref="simpleValue"
+                           value="{opts.simpleValue}"
+                           onchange="{onValueChange}">
+                </div>
+            </div>
+            <div class="child-block-item">
+                <span class="child-block-arrow"></span>
+                <div class="offset-v-element">
+                    <label class="cs-form-label">
+                        Events
+                    </label>
+                    <div class="child-block">
+                        <div class="child-block-item">
+                            <span class="child-block-arrow"></span>
+                            <div class="child-block-cb">
+                                <checkbox text="After changing the value" onchange={onSetChangeHandler}
+                                            value={opts.shouldProcessValueChange}></checkbox>
+                            </div>
+                            <div show={shouldProcessValueChange} class="offset-v-element">
+                                <div class="child-block">
+                                    <label class="cs-form-label">invoke handler</label>
+                                    <div class="child-block-item">
+                                        <span class="child-block-arrow"></span>
+                                        <search-input search_function="{runtime.memberSearch}"
+                                                        term="{opts.changeHandlerFncName}"
+                                                        onchange_handler="{onValueChange}"
+                                                        ref="slctChangeHandlerFncName"></search-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="child-block-item">
+                            <span class="child-block-arrow"></span>
+                            <div class="child-block-cb">
+                                <checkbox text="Don't show the action-bar when changing"
+                                            onchange={onSetSilentChangeMode}
+                                            value={opts.isInSilentChangeMode}></checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="child-block-item last-child">
+                <span class="child-block-arrow"></span>
+                <div class="offset-v-element">
+                    <label class="cs-form-label">
+                        Interaction with the model
+                    </label>
+                    <div class="child-block">
+                        <div class="child-block-item">
+                            <span class="child-block-arrow"></span>
+                            <div class="grid-cols child-block-cb">
+                                <checkbox text="Ignore model changes after initialization"
+                                          onchange={onSetIgnoreModelUpdates}
+                                          value={opts.ignoreModelUpdates}></checkbox>
+                            </div>
+                        </div>
+                        <div class="child-block-item">
+                            <span class="child-block-arrow"></span>
+                            <div class="grid-cols child-block-cb">
+                                <checkbox text="Do not highlight control changes"
+                                          onchange={onSetHighlightChanges}
+                                          value={opts.highlightChanges === false}></checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</value-field-mapper>

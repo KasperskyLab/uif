@@ -1,0 +1,10 @@
+_build/
+dev/
+lib/
+.vscode
+.env
+node_modules/
+.history
+.idea
+.lock
+.history

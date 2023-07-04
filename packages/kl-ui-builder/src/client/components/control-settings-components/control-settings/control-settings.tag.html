@@ -1,0 +1,49 @@
+<control-settings class="control-settings">
+
+    <div class="ui grid clear">
+        <div class="column width-full">
+
+            <div class="control-settings-caption" if="{controlCaption}">
+                <i class="icon {icon}"></i>
+                <span class="text">{controlCaption}</span>
+            </div>
+
+        </div>
+
+        <div class="column auto">
+
+            <div class="expand-button">
+                <i class="js-accordion-expandAll icon down angle double" title="expand/collapse all"></i>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="ui accordion control-settings-body js-accordion-settings js-scroll-shade">
+
+        <div class="scroll-inner js-scroll-shade-inner">
+
+            <div class="control-settings-offset" each="{entry, i in properties}">
+                <div class="{'fields-section': entry.title != null }" if="{entry.items != null}">
+
+                    <div if="{entry.title}" class="fields-section-caption title {'active': i === 0}"><i if="{entry.icon}" class="uib icon {entry.iconClassName}"></i><span>{entry.title}</span><i class="dropdown icon"></i></div>
+
+                    <div class="content {'active': i === 0}">
+                        <div class="property-wrap" each="{property, i in entry.items}" if="{!property.hidden}">
+                            <property model="{property}"></property>
+                        </div>
+                    </div>
+
+                </div>
+
+                <property if="{entry.items == null && !entry.hidden}" model="{entry}"></property>
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</control-settings>

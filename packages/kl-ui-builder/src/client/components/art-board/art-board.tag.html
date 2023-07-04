@@ -1,0 +1,13 @@
+<art-board class="art-board">
+    <div class="art-board-root flex-column root-ctr { invalid: !valid}">
+        <div ondrop={onComponentDrop} ondragover="{onDragOver}"
+             class="art-board-drop emb-css _inact"
+             onclick="{onArtBoardClick}">
+            <component-draft each={controlSetup in drafts} parent="0" control_setup={controlSetup} parent_setup={}
+                             level="0"></component-draft>
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</art-board>

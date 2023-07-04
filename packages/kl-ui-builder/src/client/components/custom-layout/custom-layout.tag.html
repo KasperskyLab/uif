@@ -1,0 +1,72 @@
+<custom-layout>
+    <div class="child-block-item">
+        <span class="child-block-arrow"></span>
+        <label>Custom Layout Settings</label>
+    </div>
+    <div class="gal-settings">
+        <div class="gal-settings-value">
+            <label>Rows</label>
+            <div class="ui fluid input { error: !rowsValid }">
+                <input
+                    type="text"
+                    value="{rows}"
+                    onkeyup="{saveRowsChange}"
+                >
+            </div>
+        </div>
+        <div class="gal-settings-value">
+            <label>Columns</label>
+            <div class="ui fluid input { error: !columnsValid }">
+                <input
+                    type="text"
+                    value="{columns}"
+                    onkeyup="{saveColumnsChange}"
+                >
+            </div>
+        </div>
+        <div class="gal-settings-value">
+            <input type='checkbox' checked={ useAreas } onchange={changeUseAreas}>
+            <label>Use Area</label>
+            <div class="gal-areas-scrollContainer">
+                <table class="gal-areas-table" if={useAreas}>
+                    <tbody>
+                        <tr>
+                            <td>
+
+                            </td>
+                            <td each={areaRow, column in areas[0]}>
+                                <i class="uib i-remove icon" onclick="{deleteAreaColumn}"></i>
+                            </td>
+                        </tr>
+                        <tr each={areaRow, row in areas}>
+                            <td>
+                                <i class="uib i-remove icon" onclick="{deleteAreaRow}"></i>
+                            </td>
+                            <td each={areaC, column in areas[row]}>
+                                <div class="ui fluid input { error: !validateAreaName(areas[row][column]) }">
+                                    <input
+                                        type='text'
+                                        onchange="{ setUpdatedArea(row, column) }"
+                                        value="{ areas[row][column] }"
+                                    >
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="cs-link-ctr" if={useAreas}>
+                <a href="#" onclick="{addAreaRow}" class="ui button link add">Add new Area row</a>
+            </div>
+            <div class="cs-link-ctr" if={useAreas}>
+                <a href="#" onclick="{addAreaColumn}" class="ui button link add">Add new Area column</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //= include *.tag.js
+    </script>
+</custom-layout>

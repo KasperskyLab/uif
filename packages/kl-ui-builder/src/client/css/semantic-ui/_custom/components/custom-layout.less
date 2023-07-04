@@ -1,0 +1,63 @@
+.gal {
+    &-settings {
+        display: block;
+
+        &-value {
+            margin: 5px 0 0 0;
+        }
+    }
+
+    &-areas {
+        &-scrollContainer {
+            margin: 5px 0 0 0;
+            overflow-x: auto;
+        }
+        &-table {
+            border-collapse: collapse;
+            border: #a3aeb6 solid 1px;
+
+            tbody {
+                tr {
+                    height: 25px;
+
+                    td:first-child {
+                        border-right: #a3aeb6 solid 1px;
+                        text-align: center;
+                        width: min-content;
+                    }
+
+                    td:not(:first-child) {
+                        min-width: 100px;
+                    }
+
+                    td:not(:last-child):not(:first-child) {
+                        border-right: 1px solid #dee0e1;
+                    }
+                }
+
+                tr:first-child {
+                    border-bottom: #a3aeb6 solid 1px;
+                    text-align: center;
+                }
+
+                tr:not(:last-child):not(:first-child) {
+                    border-bottom: 1px solid #dee0e1;
+                }
+
+                input {
+                    border: none;
+                    height: 30px;
+                    width: 100px;
+                    padding: 2px 7px;
+                }
+            }
+        }
+    }
+}
+
+custom-layout {
+    display: block;
+    border: gray;
+    margin-bottom: @padding;
+    margin-left: @padding;
+}

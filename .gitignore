@@ -1,0 +1,13 @@
+node_modules
+.idea
+.vscode
+.DS_Store
+package-lock.json
+yarn-error.log
+.idea/
+.vscode/
+.npmrc
+.env
+lerna-debug.log
+config.json
+coverage

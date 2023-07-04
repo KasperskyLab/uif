@@ -1,0 +1,13 @@
+/*******************************
+         Theme Overrides
+*******************************/
+
+.section-header.ui.header.medium {
+  .icon {
+    margin: 0;
+    font-size: 18px;
+    color: rgba(0,0,0,.87);
+    vertical-align: text-bottom;
+    height: auto;
+  }
+}

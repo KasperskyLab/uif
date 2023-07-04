@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>KSC UI Builder</title>
+    <link rel="stylesheet" type="text/css" href="css/styles-ui-builder.css" />
+    <link rel="stylesheet" href="css/codemirror.css">
+    <link rel="stylesheet" href="css/elegant.css">
+    <link rel="stylesheet" href="css/github-markdown.css">
+
+    <script type="text/javascript">
+        var socketUrl = '{{- socketUrl}}';
+        var pluginId = '{{- pluginId}}';
+        var availablePlugins={{ availablePlugins | dump | safe }};
+        var customFields = JSON.parse('{{ customFields | safe }}');
+    </script>
+</head>
+
+<body>
+    <app></app>
+    <script src="js/client.js"></script>
+</body>
+
+</html>

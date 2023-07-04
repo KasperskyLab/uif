@@ -1,0 +1,28 @@
+<lock-source-mapper>
+    <checkbox-control-pair ref="controlSwitch" label="{opts.label}" term="{opts.fncName}" onchange="{onValueChange}" options="{lockSources}"
+        enabled="{opts.lockSource != null}" locker="{opts.lockSource}">
+        <select ref="lockSourceName" class="ui dropdown fluid" onchange="{onValueChange}">
+            <option each="{opts.options}" value="{id}" selected="{ id == parent.opts.locker }">{displayName}</option>
+        </select>
+    </checkbox-control-pair>
+    <div class="child-block-item" show={ valueSourceType==2 }>
+        <span class="child-block-arrow"></span>
+        <checkbox text="Use getter/setter function" onchange={onSwitchGetterSetterFnc} value={opts.userGetterSetter}></checkbox>
+        <div class="child-block" show={userGetterSetter}>
+            <div class="child-block-item">
+                <span class="child-block-arrow"></span>
+                <search-input search_function="{runtime.memberSearch}" term="{opts.getterFncName}" onchange_handler="{onValueChange}"
+                    ref="getterFncName"></search-input>
+            </div>
+            <div class="child-block-item">
+                <span class="child-block-arrow"></span>
+                <search-input search_function="{runtime.memberSearch}" term="{opts.setterFncName}" onchange_handler="{onValueChange}"
+                    ref="setterFncName"></search-input>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //= include *.tag.js
+    </script>
+</lock-source-mapper>

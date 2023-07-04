@@ -1,0 +1,36 @@
+{
+  "component": "Pagination",
+  "v6": "/docs/molecules-pagination--basic",
+  "v3": [],
+  "v5": [],
+  "common": [
+    {
+      "prop": "defaultCurrent",
+      "changes": "Removed"
+    },
+    {
+      "prop": "itemRender",
+      "changes": "Removed"
+    },
+    {
+      "prop": "responsive",
+      "changes": "Removed"
+    },
+    {
+      "prop": "showLessItems",
+      "changes": "Removed"
+    },
+    {
+      "prop": "showTitle",
+      "changes": "Removed"
+    },
+    {
+      "prop": "size",
+      "changes": {
+        "before": "default | small",
+        "after": "small | medium",
+        "description": "Changing the size grid"
+      }
+    }
+  ]
+}

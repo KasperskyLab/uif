@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true
+  },
+  "component": "Radio",
+  "desctiption": "Component for rendering radiobuttons. The base is AntdRadio from the Antd library.",
+  "usage": "Used to draw radio buttons",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1%3A1586"
+}

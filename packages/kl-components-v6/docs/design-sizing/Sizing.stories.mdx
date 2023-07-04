@@ -1,0 +1,18 @@
+import { Canvas, Meta, Story } from '@storybook/addon-docs'
+import { StoryColumn, StoryWrapper } from '../../.storybook/StoryComponents'
+import { badges } from '../../.storybook/badges';
+import { Sizing } from './Sizing'
+import { ExampleSizingComponent } from './ExampleSizingComponent'
+
+<Meta
+  title="Design/Sizing"
+  component={Sizing}
+/>
+
+<Story name="Common">
+    <Sizing />
+</Story>
+
+<Story name="Example">
+    <ExampleSizingComponent />
+</Story>

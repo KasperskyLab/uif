@@ -1,0 +1,116 @@
+.art-board {
+    display: block;
+    padding: 10px 3px 10px 10px;
+    margin-left: @outer-width;
+    flex: 1;
+    position: relative;
+    overflow: auto;
+    border-top: none;
+    user-select: none;
+    background: @inner-bg;
+
+    .art-board-view {
+        position: absolute;
+        font-size: 11px;
+        top: 10px;
+        right: 15px;
+        margin: 0;
+        padding: 7px 10px;
+    }
+
+    .art-board-root {
+        display: flex;
+        flex: 1;
+        height: 100%;
+        flex-direction: column;
+    }
+
+    .art-board-drop {
+        display: block;
+        flex: 1;
+        overflow: auto;
+        padding: 5px;
+        margin-top: 30px;
+    }
+    build-type {
+        margin : 0;
+        height : 0;
+        display: inline-block;
+
+        .build-type {
+            display : inline-block;
+            position: relative;
+            top     : 13px;
+        }
+    }
+    .le-table {
+        build-type {
+            display: inline;
+            .build-type {
+                position: static;
+                color: #2aa88e;
+                background: none;
+            }
+        }
+    }
+}
+
+.ui-form-label {
+    color: #234258;
+    &--group {
+        display: block;
+        text-align: center;
+        padding: 12px;
+        background-color: #eff3f5;
+        margin: 3px;
+    }
+}
+.le-ctr.ctrl-group {
+    border: #9cabb5 dashed 2px;
+}
+
+.le-ctr.le-ctr-scrollable {
+    border: none;
+
+    ::-webkit-scrollbar {
+        height: 5px;
+    }
+
+    .form-controlbox-content {
+        overflow: auto;
+        border: 2px solid #9cabb5;
+    }
+
+    .le-table {
+        width:100%
+    }
+}
+
+.ctr.invalid {
+    border: 1px solid red;
+}
+
+.ui-btn-artboard-view {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    margin: 0;
+    padding: 4px 10px;
+}
+
+.art-board-toolbox-col {
+    display: flex;
+    flex: 1;
+    overflow: auto;
+
+    &-wrap {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        width: 600px; /* works like min-width */
+
+        .ui.header {
+            padding: 30px 30px 0 30px;
+        }
+    }
+}

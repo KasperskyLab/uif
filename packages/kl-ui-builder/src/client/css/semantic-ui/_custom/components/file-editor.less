@@ -1,0 +1,29 @@
+.file-editor {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 15px 10px;
+    position: relative;
+    overflow: auto;
+
+    margin-left: @outer-width;
+    background: @inner-bg;
+}
+
+.localization-col {
+    display: flex;
+    flex: 1;
+
+    &-wrap {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+
+        .ui.header {
+            padding: 30px 30px 0 30px;
+        }
+    }
+}

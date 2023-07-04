@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true
+  },
+  "component": "Tooltip",
+  "description": "Tooltip component. The Tooltip from the Antd library is used as a basis.",
+  "usage": "The element appears when hovering over the parent element to which the Tooltip is attached",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1%3A1586"
+}

@@ -1,0 +1,13 @@
+<right-side class="right-side">
+    <div class="right-side-middle">
+        <control-settings show="{ mode == 0 }"></control-settings>
+    </div>
+    <div class="right-side-footer" show="{actionBarIsVisible}">
+        <button show="{deleteButtonIsVisible}" onclick="{deleteForm}" class="ui button">Delete form</button>
+        <button show="{downloadButtonIsVisible}" onclick="{downloadForm}" class="ui button">Download</button>
+        <button onclick="{saveForm}" class="ui button">Save</button>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</right-side>

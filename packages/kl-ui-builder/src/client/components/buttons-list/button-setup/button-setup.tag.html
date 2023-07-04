@@ -1,0 +1,29 @@
+<button-setup>
+    <div>
+        <div class="grid-cols">
+            <div class="grid-cols-item">
+                <checkbox text="{opts.text}" ref="chbActive" onchange="{saveSelection}" value="{opts.state.active}"></checkbox>
+            </div>
+            <div class="grid-cols-item align-right">
+                <button if="{active && !mappedToFunc}" class="ui button link add" onclick="{mapToFunc}">Add handler</button>
+            </div>
+        </div>
+        <div class="offset-v-element" if="{active && mappedToFunc}">
+            <label class=""><i class="uib icon node _node-pos"></i><span class="element-info"><div class="ksc-form-input-balloon"></div></span>Invoke function after click</label>
+        </div>
+        <div class="grid-cols offset-v-element offset-padding-left-md" if="{active && mappedToFunc}">
+            <div class="grid-cols-item _v-middle _rmpad col-stretch">
+                <select ref="slctCustomFncName"
+                    value="{fncName}" 
+                    onchange="{onFncSelect}" class="ui dropdown fluid">
+                </select>
+            </div>
+            <div class="grid-cols-item">
+                <i class="bordered uib i-remove icon" onclick="{deleteFncMapping}"></i>
+            </div>
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</button-setup>

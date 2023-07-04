@@ -1,0 +1,23 @@
+{
+    "info": {
+        "heading": "List of persons"
+    },
+    "persons": [
+        {
+            "age": 45,
+            "fname": "John",
+            "lname": "Doe"
+        },
+        {
+            "age": 35,
+            "fname": "Nikolas",
+            "lname": "Zakas"
+        },
+        {
+            "age": 50,
+            "fname": "Dug",
+            "lname": "Crockford",
+            "mature": true
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true
+  },
+  "component": "Tabs",
+  "desctiption": "The basis is AntdTabs from the Antd library.",
+  "usage": "Switching in one window, between several tabs",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-UI-KIT?node-id=1194%3A9138"
+}

@@ -1,0 +1,27 @@
+<property>
+    <div class="{'property-section': opts.model.showOutline} {'property-vertical-offset': setPropertyOffset}">
+
+        <label class="property-label" hide="{hideTitle}">
+            <i if="{opts.model.showOutline && opts.model.outlineIcon}" class="uib icon {opts.model.outlineIcon}"></i>
+            {opts.model.outlineHeader ? opts.model.outlineHeader : opts.model.title}
+            <i class="uib icon ico-localization" show="{opts.model && (opts.model.localized || (opts.model.type == 'ValueField' && parent.valueIsLocalized))}"></i>
+
+
+            <span hidden>
+                <i class="info icon circle blue tooltip"></i>
+
+                <span class="ui tooltip popup bottom right transition ___hidden ____visible">
+                    I'm not on the same level as the button, but i can still be found.
+                </span>
+            </span>
+
+        </label>
+
+        <div class="property-control-container">
+            <dynamic source="{parent.getPropertyEditControl.bind(null, opts.model)}"></dynamic>
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</property>

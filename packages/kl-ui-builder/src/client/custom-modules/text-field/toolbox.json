@@ -1,0 +1,6 @@
+{
+  "type": "textbox",
+  "group": "inputs",
+  "title": "Text field",
+  "icon": "uib textbox"
+}

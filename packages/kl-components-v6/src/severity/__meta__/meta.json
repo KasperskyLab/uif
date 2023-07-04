@@ -1,0 +1,15 @@
+{
+    "dod": {
+      "designTokens": true,
+      "useThemedHook": true,
+      "unitTests": true,
+      "screenshotTests": false,
+      "migration": true,
+      "apiTable": true,
+      "storybook": true
+    },
+    "component": "Severity",
+    "desctiption": "Component for setting the status.",
+    "usage": "It can be used to set the status of entities within an application.",
+    "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=18472%3A75653"
+  }

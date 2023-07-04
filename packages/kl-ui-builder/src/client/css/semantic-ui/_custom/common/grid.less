@@ -1,0 +1,60 @@
+// Global Defaults //
+@mobile-width:              739px;
+@tablet-width:              959px;
+@desktop-width:             100%;
+
+
+// Resonsive Design Break Points
+@mobile-breakpoint:         @tablet-width;
+@tablet-breakpoint:         @tablet-width;
+@desktop-breakpoint:        @desktop-width;
+
+@border-color: #dfdedb;
+@padding: 20px;
+@main-cont-padd: 20px;
+
+
+.grid-cols {
+    display: table;
+    width: 100%;
+
+    &._width-auto {
+        width: auto;
+    }
+
+    &._info {
+        margin-bottom: 20px;
+
+        .grid-cols {
+            &-item {
+                padding: 10px;
+            }
+        }
+
+    }
+
+    &-row {
+        display: table-row;
+    }
+
+    &-item {
+        display: table-cell;
+        padding: 0 20px 0 0;
+
+        &.col-stretch {
+            width: 100%;
+        }
+
+        &._rmpad,
+        &:last-child {
+            padding: 0;
+        }
+
+        &._v-middle {
+            vertical-align: middle;
+        }
+    }
+}
+
+
+

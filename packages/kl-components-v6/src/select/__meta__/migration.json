@@ -1,0 +1,24 @@
+{
+  "component": "Select",
+  "v6": "/docs/molecules-select--basic",
+  "v3": [
+    {
+      "prop": "error",
+      "changes": "Removed"
+    },
+    {
+      "prop": "prefixIcon",
+      "changes": "Removed"
+    },
+    {
+      "prop": "className",
+      "changes": "Now - dropdownClassName"
+    },
+    {
+      "prop": "fluid",
+      "changes": "Removed"
+    }
+  ],
+  "v5": "No longer extends the interface Antd - SelectProps<SelectValue>",
+  "common": "-"
+}

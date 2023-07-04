@@ -1,0 +1,156 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
+    color: #58595b;
+    background-color: #fff;
+    position: relative;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+}
+
+html, body {
+    height: 100%;
+}
+
+h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
+    margin: 0.5em 0;
+    font-weight: normal;
+}
+
+h1, .h1 {
+    font-size: 24px;
+    margin: 0 0 1em 0;
+    color: #6b777e;
+    font-weight: normal;
+}
+
+h2, .h2 {
+    font-size: 24px;
+    margin: @padding*2 0 0.5em 0;
+
+    &:first-child {
+        margin-top: 0;
+    }
+}
+
+h3, .h3 {
+    font-size: 18px;
+    margin: @padding 0 0.5em 0;
+
+    &:first-child {
+        margin-top: 0;
+    }
+}
+
+h4, .h4 {
+    font-size: 16px;
+    margin:@padding 0 10px 0;
+}
+
+.g-hidden {
+    display: none!important;
+}
+
+.g-viz-hidden {
+    visibility: hidden!important;
+}
+
+
+.text-small {
+}
+
+.text-large {
+}
+
+.text-marked {
+}
+
+.text-strong {
+    font-weight: bold;
+}
+
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.text-nowrap {
+    white-space: nowrap;
+}
+
+.text-prewap {
+    white-space: pre-wrap;
+}
+
+.text-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.text-lowercase {
+    text-transform: lowercase;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+.text-capitalize {
+    text-transform: capitalize;
+}
+
+
+.box-sizing (@model:border-box) {
+    -webkit-box-sizing: @model;
+    -moz-box-sizing: @model;
+    box-sizing: @model;
+}
+
+.offset-v-box {
+    &,
+    &:last-child {
+        margin-bottom: @padding;
+    }
+}
+
+.offset-v-element {
+    margin-bottom: 7px;
+}
+
+.offset-padding-left-sm {
+    padding-left: 10px;
+}
+
+.offset-padding-left-md {
+    padding-left: 20px;
+}
+
+.offset-padding-right-sm {
+    padding-right: 10px;
+}
+
+.offset-padding-right-md {
+    padding-right: 20px;
+}
+
+.align-right {
+    text-align: right;
+}

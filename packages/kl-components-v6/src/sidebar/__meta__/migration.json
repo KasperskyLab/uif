@@ -1,0 +1,121 @@
+{
+  "component": "Sidebar",
+  "v6": "/docs/organisms-sidebar--basic",
+  "v3": [
+    {
+      "prop": "sidebarSize",
+      "changes": "Now prop 'size' - extraSmall | small | medium | large"
+    },
+    {
+      "prop": "content",
+      "changes": "Now through children"
+    },
+    {
+      "prop": "show",
+      "changes": "Now visible"
+    },
+    {
+      "prop": "toolbar",
+      "changes": "Removed"
+    },
+    {
+      "prop": "header",
+      "changes": "Now title - ReactNode"
+    },
+    {
+      "prop": "onBackButtonClick",
+      "changes": "Removed"
+    },
+    {
+      "prop": "blockInteraction",
+      "changes": "Removed"
+    },
+    {
+      "prop": "index",
+      "changes": "Now zIndex"
+    },
+    {
+      "prop": "closeIconVisible",
+      "changes": "Now closable"
+    }
+  ],
+  "v5": [
+    {
+      "prop": "autoFocus",
+      "changes": "Removed"
+    },
+    {
+      "prop": "afterVisibleChange",
+      "changes": "Removed"
+    },
+    {
+      "prop": "bodyStyle",
+      "changes": "Removed"
+    },
+    {
+      "prop": "contentWrapperStyle",
+      "changes": "Removed"
+    },
+    {
+      "prop": "destroyOnClose",
+      "changes": "Removed"
+    },
+    {
+      "prop": "drawerStyle",
+      "changes": "Removed"
+    },
+    {
+      "prop": "extra",
+      "changes": "Removed"
+    },
+    {
+      "prop": "footerStyle",
+      "changes": "Removed"
+    },
+    {
+      "prop": "forceRender",
+      "changes": "Removed"
+    },
+    {
+      "prop": "getContainer",
+      "changes": "Removed"
+    },
+    {
+      "prop": "headerStyle",
+      "changes": "Removed"
+    },
+    {
+      "prop": "height",
+      "changes": "Removed"
+    },
+    {
+      "prop": "maskStyle",
+      "changes": "Removed"
+    },
+    {
+      "prop": "placement",
+      "changes": "Removed"
+    },
+    {
+      "prop": "push",
+      "changes": "Removed"
+    },
+    {
+      "prop": "style",
+      "changes": "Removed"
+    },
+    {
+      "prop": "size",
+      "changes": {
+        "before": "large | big | medium | small | xsmall",
+        "after": "extraSmall | small | medium | large",
+        "description": "Changing the size grid in steps of 2 units"
+      }
+    },
+    {
+      "prop": "width",
+      "changes": "Removed"
+    }
+  ],
+  "common": []
+}

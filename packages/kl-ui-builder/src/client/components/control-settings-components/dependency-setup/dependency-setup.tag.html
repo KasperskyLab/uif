@@ -1,0 +1,174 @@
+<dependency-setup class="{multi: opts.display_number}">
+    <div class="dependency-setup-number" if="{opts.display_number}">{opts.index + 1}</div>
+    <div>
+        <div class="offset-v-element">
+            <label class="cs-form-label">
+                <span class="element-info">Control state</span>
+            </label>
+            <select class="ui dropdown fluid" onchange="{onChange}" ref="state" value="{opts.setup.state}">
+                <option value="hidden">Hidden</option>
+                <option value="visible">Visible</option>
+                <option value="disabled">Disabled</option>
+                <option value="enabled">Enabled</option>
+            </select>
+        </div>
+        <div>
+            <label class="cs-form-label">
+                <span class="element-info">If</span>
+            </label>
+            <div class="offset-v-element child-block">
+                <div class="child-block-item">
+                    <span class="child-block-arrow"></span>
+                    <div class="offset-v-element">
+                        <div class="grid-cols">
+                            <select class="ui dropdown fluid" ref="masterTypeSelect" onchange="{onMasterTypeSelect}"
+                                    value="{masterType}">
+                                <option value="0">Control value</option>
+                                <option value="1">runtime.variable</option>
+                                <option value="3">model property</option>
+                                <option value="2">handler result</option>
+                                <option value="4">Combination of model values</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="child-block offset-v-element">
+                        <div class="child-block-item" if="{masterType == '0'}">
+                            <span class="child-block-arrow"></span>
+                            <label class="cs-form-label">
+                                <span class="element-info">Control ID</span>
+                            </label>
+                            <div class="grid-cols">
+                                <select class="ui dropdown fluid" ref="masterCtrlId" onchange="{onIdSelect}">
+                                    <option each="{ctrl in controlIds}" value="{ctrl.id}"
+                                            selected="{ctrl.id == parent.opts.setup.masterCtrlId}">{ctrl.displayName}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="child-block offset-v-element">
+                        <div class="child-block-item" if="{masterType == '1'}">
+                            <span class="child-block-arrow"></span>
+                            <div class="offset-v-element">
+                                <label class="cs-form-label">
+                                    <span class="element-info">Variable name</span>
+                                </label>
+                                <div class="grid-cols">
+                                    <div class="ui fluid input">
+                                        <input type="textbox"
+                                               onchange="{onChange}"
+                                               ref="runtimeVarName"
+                                               value="{opts.setup.runtimeVarName}">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="child-block offset-v-element">
+                        <div class="child-block-item" if="{masterType == '2'}">
+                            <span class="child-block-arrow"></span>
+                            <div class="offset-v-element">
+                                <label class="cs-form-label">
+                                    <span class="element-info">Handler name</span>
+                                </label>
+                                <div class="grid-cols">
+                                    <search-input search_function="{runtime.memberSearch}"
+                                                  term="{opts.setup.resolverFncName}"
+                                                  onchange_handler="{onChange}"
+                                                  ref="resolverFncName"></search-input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="child-block offset-v-element">
+                        <div class="child-block-item" if="{masterType == '3'}">
+                            <span class="child-block-arrow"></span>
+                            <div class="offset-v-element">
+                                <label class="cs-form-label">
+                                    <span class="element-info">Property name</span>
+                                </label>
+                                <div class="grid-cols">
+                                    <div class="ui fluid input">
+                                        <input type="textbox"
+                                               onchange="{onChange}"
+                                               ref="modelPropName"
+                                               value="{opts.setup.modelPropName}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="child-block offset-v-element">
+                        <div class="child-block-item" if="{masterType == '4'}">
+                            <span class="child-block-arrow"></span>
+                            <div class="offset-v-element">
+                                <label class="cs-form-label">
+                                    <span class="element-info">Condition</span>
+                                </label>
+                                <div class="grid-cols">
+                                    <div class="ui fluid input">
+                                        <input type="textbox"
+                                               onchange="{onChange}"
+                                               ref="complexCondition"
+                                               value="{opts.setup.complexCondition}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="child-block-item" hide="{masterType == '4'}">
+                    <span class="child-block-arrow"></span>
+                    <div class="offset-v-element">
+                        <div class="grid-cols">
+                            <select class="ui dropdown fluid" onchange="{onChange}" ref="operator"
+                                    value="{opts.setup.operator}">
+                                <option value="=">Equals</option>
+                                <option value="[]">Contains one of the elements</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="child-block-item" hide="{masterType == '4'}">
+                    <span class="child-block-arrow"></span>
+                    <div class="offset-v-element">
+                        <div class="grid-cols">
+                            <div class="ui fluid input">
+                                <input type="textbox"
+                                       onchange="{onChange}"
+                                       ref="val"
+                                       value="{opts.setup.value}">
+                            </div>
+
+                            <div class="child-block">
+                                <div class="child-block-item">
+                                    <span class="child-block-arrow"></span>
+                                    <label class="cs-form-label">
+                                        <span class="element-info">To cast this value to the type</span>
+                                    </label>
+                                    <div class="grid-cols">
+                                        <select class="ui dropdown fluid" onchange="{onChange}" ref="valueType"
+                                                value="{opts.setup.valueType}">
+                                            <option value="String">String</option>
+                                            <option value="Int">Int</option>
+                                            <option value="Number">Number</option>
+                                            <option value="Bool">Bool</option>
+                                            <option value="Date">Date</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <a href="#" onclick="{remove}" class="ui button link remove">Remove this dependency</a>
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</dependency-setup>

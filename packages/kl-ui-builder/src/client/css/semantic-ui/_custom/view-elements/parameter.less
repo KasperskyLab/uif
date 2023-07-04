@@ -1,0 +1,48 @@
+@offset-default: 20px;
+
+.parameter {
+    display: table;
+    width: 100%;
+    max-width: 710px;
+    margin-bottom: 30px;
+    margin-top: 10px;
+
+    &-col {
+        display: table-cell;
+        vertical-align: top;
+        padding-right: @offset-default;
+
+        &:last-child {
+            padding-right: 0;
+        }
+
+        [dir="rtl"] & {
+            padding-right: 0;
+            padding-left: @offset-default;
+        }
+    }
+
+    &-name {
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    &-desc {
+        margin-top: 10px;
+        word-break: break-word;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .checkbox-wrap {
+        margin: 0;
+        
+        .trigger {
+            margin-top: 1px;
+        }
+    }
+
+    &.component-toggle {
+        margin-bottom: 30px;
+    }
+}

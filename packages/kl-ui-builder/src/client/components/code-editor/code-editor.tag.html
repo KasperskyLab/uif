@@ -1,0 +1,14 @@
+<code-editor>
+    <div class="ce-ctr">
+        <textarea ref="area" cols="30" rows="10"></textarea>
+        <div if="{errors.length}">
+            <div class="ce-error-title">There are errors in the code:</div>
+            <div each="{error in errors}" class="ce-error">
+                {error}
+            </div>
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</code-editor>

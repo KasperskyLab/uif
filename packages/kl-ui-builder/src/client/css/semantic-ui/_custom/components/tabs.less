@@ -1,0 +1,51 @@
+.ksc-nav {
+    &-pills {
+
+        padding: 0;
+        margin: 10px 0;
+        list-style: none;
+        font-size: 11px;
+        text-transform: uppercase;
+
+        .user-select();
+
+        &>li {
+            display: inline-block;
+        }
+
+        .ksc-pills-btn {
+            display: inline-block;
+            font-weight: bold;
+            min-width: 0;
+            text-decoration: none;
+            box-shadow: none;
+            background: transparent;
+            color: #00a88e;
+            padding: 3px 10px;
+            border: none;
+            border-radius: 3px;
+            margin: 0 0 0 5px;
+            cursor: pointer;
+
+            &:hover {
+                background: #00a88e;
+                color: #fff;
+            }
+
+            &.state-active {
+                background: #00a88e;
+                color: #fff;
+
+
+                &.pill-critical {
+                    background: #ef3340;
+                }
+
+                &.pill-warning {
+                    background: #e0b82f;
+                }
+            }
+        }
+    }
+
+}

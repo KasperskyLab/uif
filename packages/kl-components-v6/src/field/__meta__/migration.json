@@ -1,0 +1,56 @@
+{
+  "component": "Upload",
+  "v6": "/docs/molecules-upload",
+  "v3": [
+    {
+      "prop": "titleText",
+      "changes": {
+        "before": "titleText - string",
+        "after": "title - string",
+        "description": "Prop name changed"
+      }
+    },
+    {
+      "prop": "buttonText",
+      "changes": {
+        "before": "buttonText - string",
+        "after": "IButtonProps[]",
+        "description": "Button rendering business logic changed"
+      }
+    },
+    {
+      "prop": "bottomText",
+      "changes": {
+        "before": "bottomText",
+        "after": "-",
+        "description": "depricated"
+      }
+    },
+    {
+      "prop": "disabled",
+      "changes": {
+        "before": "disabled",
+        "after": "disabled",
+        "description": "-"
+      }
+    },
+    {
+      "prop": "buttonSize",
+      "changes": {
+        "before": "-",
+        "after": "-",
+        "description": "depricated"
+      }
+    },
+    {
+      "prop": "buttonMode",
+      "changes": {
+        "before": "-",
+        "after": "-",
+        "description": "depricated"
+      }
+    }
+  ],
+  "v5": [],
+  "common": []
+}

@@ -1,0 +1,15 @@
+{
+    "dod": {
+      "designTokens": false,
+      "useThemedHook": false,
+      "unitTests": false,
+      "screenshotTests": false,
+      "migration": false,
+      "apiTable": false,
+      "storybook": true
+    },
+    "component": "Table",
+    "desctiption": "A container component for a group of commands or controls.",
+    "usage": "",
+    "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-UI-KIT?node-id=4055%3A17685"
+  }

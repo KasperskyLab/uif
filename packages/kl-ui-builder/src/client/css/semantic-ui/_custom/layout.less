@@ -1,0 +1,71 @@
+.layout {
+  /* first layout root element */
+  &-root {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  &-col {
+
+    /* each layout columns; root child */
+    &-center {
+      position: relative;
+      display: flex;
+      align-content: stretch;
+      align-items: stretch;
+      justify-content: flex-start;
+      flex-direction: column;
+    }
+
+    &-center {
+      flex: 1;
+    }
+
+    /* each layout column top section; layout columns child */
+    &-top {
+      padding: 0 15px 0 15px;
+      background: #46525d;
+    }
+
+    /* each layout column middle section; layout columns child */
+    &-middle {
+      flex: 1;
+      justify-content: flex-start;
+      align-items: stretch;
+      align-content: stretch;
+      position: relative;
+      padding: 15px;
+      display: flex;
+      height: 90%;
+    }
+
+    /* each layout column footer section; layout columns child */
+    &-footer {
+      height: 60px;
+      text-align: center;
+      padding: 15px 0;
+      margin: 0 15px;
+      border-top: 1px solid #f59e00;
+      z-index: 1;
+    }
+  }
+}
+
+.pills-content {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  padding: @outer-width @outer-width 0 @outer-width;
+
+  &-wrap {
+    flex-direction: column;
+    padding: 0;
+  }
+}
+
+.flex-column {
+  flex-direction: column;
+}

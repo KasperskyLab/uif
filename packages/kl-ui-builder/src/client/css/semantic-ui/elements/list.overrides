@@ -1,0 +1,186 @@
+.toolbox,
+.localization-files {
+  display: block;
+  padding: 0 10px 10px;
+  margin: 0;
+  color: #374a58;
+  background: @inner-bg;
+  overflow: auto;
+  overflow-y: scroll;
+
+  .toolbox-group-header {
+    width: 20px;
+    height: 1px;
+    border-bottom: 1px solid #f59e00;
+    overflow: hidden;
+    padding: 0;
+    margin: 15px 15px 10px 12px;
+  }
+}
+
+
+.toolbox {
+  width: 66px;
+  display: flex;
+  flex-direction: column;
+  overflow: inherit;
+  padding: 0;
+  position: relative;
+  padding-top: 10px;
+  transition: width 100ms ease;
+
+  &-toggler {
+    text-align: center;
+    margin: 10px 0;
+    position: absolute;
+    top: -8px;
+    right: -5px;
+    width: 20px;
+    z-index: 3;
+    background: #e6e6e6;
+    padding: 5px 0;
+    border-radius: 0 3px 3px 0;
+    transform: scale(0.5);
+
+    .icon {
+      font-size: 12px;
+      cursor: pointer;
+      margin: 0;
+    }
+  }
+
+  &-scroll {
+    overflow: auto;
+    overflow-y: scroll;
+    padding: 0 10px 10px 10px;
+  }
+
+  &.is-visible {
+    position: relative;
+    left: 0;
+    width: 220px;
+
+
+    .ui.list.list-aside .item .icon+.content  {
+      display: table-cell;
+    }
+
+    .toolbox-group-header {
+      width: auto;
+      height: auto;
+      border-bottom-color: transparent;
+      color: #f59e00;
+      font-weight: 600;
+    }
+
+  }
+
+
+  .ui.list.list-aside {
+
+    .item {
+      &:active {
+        cursor: move;
+        cursor: grab;
+        cursor: -moz-grab;
+        cursor: -webkit-grab;
+      }
+    }
+  }
+}
+
+
+
+.localization-files {
+
+
+  &.is-visible {
+    position: relative;
+    left: 0;
+    width: 240px;
+
+
+    .ui.list.list-aside .item .icon+.content  {
+      display: table-cell;
+    }
+
+    .localization-files-group-header {
+      width: auto;
+      height: auto;
+      border-bottom-color: transparent;
+      color: #f59e00;
+      font-weight: 600;
+    }
+  }
+
+
+  .localization-files-group-header {
+    width: 20px;
+    height: 1px;
+    border-bottom: 1px solid #f59e00;
+    overflow: hidden;
+    padding: 0;
+    margin: 15px 15px 10px 12px;
+  }
+
+  .localization-files-buttons {
+    margin-top: 20px;
+  }
+}
+
+
+.ui.list.list-aside {
+
+  .item {
+    color: #234258;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    text-decoration: none;
+    padding: 7px 10px;
+    cursor: default;
+
+    &:hover {
+      color: #000;
+      background-color: #ffdb99;
+
+      .icon {
+        color: #000;
+      }
+    }
+
+    i.icon {
+      font-size: 16px;
+      min-width: 23px;
+      text-align: center;
+    }
+
+    &:active {
+      background: #f5f7f9;
+    }
+
+    &.active {
+      background-color: #00a88e;
+      border: 1px solid #fff;
+      color: #fff;
+
+      .icon {
+        color: #fff;
+      }
+    }
+
+
+    .icon+.content {
+      margin: 0 9px;
+      font-size: 13px;
+      white-space: normal;
+      padding: 0 0 0 .5em;
+      vertical-align: top;
+      display: none;
+    }
+  }
+
+
+  a.item i.icon {
+    color: #234258;
+  }
+}

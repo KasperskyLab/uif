@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true
+  },
+  "component": "Label",
+  "description": "A component for a label, either independent or as part of other components.",
+  "usage": "",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1%3A1586"
+}

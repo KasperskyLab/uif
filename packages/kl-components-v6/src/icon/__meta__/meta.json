@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": true,
+    "storybook": true
+  },
+  "component": "Icon",
+  "desctiption": "Icon displays the desired icon of the desired size",
+  "usage": "Used to display icons from the icon pool with the correct styles and colors",
+  "designLink": ""
+}

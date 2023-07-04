@@ -1,0 +1,14 @@
+<text-field-mapper>
+
+    <div class="ui fluid input { error: !valid }">
+        <input type="text"
+               ref="input"
+               value="{opts.input}"
+               onblur={validate}
+               onchange="{onValueChange}">
+    </div>
+
+    <script>
+        //= include *.tag.js
+    </script>
+</text-field-mapper>

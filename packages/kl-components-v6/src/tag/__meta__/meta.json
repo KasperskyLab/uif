@@ -1,0 +1,15 @@
+{
+    "dod": {
+      "designTokens": true,
+      "useThemedHook": true,
+      "unitTests": true,
+      "screenshotTests": false,
+      "migration": true,
+      "apiTable": true,
+      "storybook": true
+    },
+    "component": "Tag",
+    "desctiption": "Component for categorization or markup.",
+    "usage": "It can be used for labeling by dimension or property as well as categorization.",
+    "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1063%3A13993"
+  }

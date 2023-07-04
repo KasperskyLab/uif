@@ -1,0 +1,28 @@
+{
+  "component": "Search",
+  "v6": "/docs/molecules-search",
+  "v3": [{
+    "prop": "showResults",
+    "changes": {
+      "before": "-",
+      "after": "boolean",
+      "description": "Render layout on keyboard event"
+    }
+  },{
+    "prop": "wrapperRef",
+    "changes": {
+      "before": "-",
+      "after": "MutableRefObject<null | HTMLDivElement>",
+      "description": "ref pointing to layout"
+    }
+  }],
+  "v5": [{
+    "prop": "component props from v3",
+    "changes": {
+      "before": "there is not some props from v3",
+      "after": "the component contains all props from v3",
+      "description": "The component contains the entire set of props from v3"
+    }
+  }],
+  "common": []
+}

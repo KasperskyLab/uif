@@ -1,0 +1,15 @@
+{
+    "dod": {
+      "designTokens": true,
+      "useThemedHook": true,
+      "unitTests": true,
+      "screenshotTests": false,
+      "migration": true,
+      "apiTable": true,
+      "storybook": true
+    },
+    "component": "Toolbar",
+    "desctiption": "A container component for a group of commands or controls.",
+    "usage": "Used to display the toolbar in the table and separately",
+    "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-UI-KIT?node-id=4055%3A17685"
+  }

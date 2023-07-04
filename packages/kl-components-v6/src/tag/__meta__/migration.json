@@ -1,0 +1,48 @@
+{
+  "labels": "New",
+  "component": "Tag",
+  "v6": "/docs/atoms-tag",
+  "v3": [],
+  "v5": [
+    {
+      "prop": "color",
+      "changes": {
+        "before": "color",
+        "after": "the same",
+        "description": "-"
+      }
+    },
+    {
+      "prop": "size",
+      "changes": {
+        "before": "tagSize - obsolete size grid",
+        "after": "size according to the size grid",
+        "description": "Used in accordance with the default dimensional grid"
+      }
+    },
+    {
+      "prop": "textColor",
+      "changes": {
+        "before": "select text color according to primary palette",
+        "after": "text color can be changed through the override property",
+        "description": "text color is now fixed to primary. To customize a property, you need to use props overrides"
+      }
+    },
+    {
+      "prop": "theme",
+      "changes": {
+        "before": "themedColor",
+        "after": "theme",
+        "description": "Ability to drop the theme in props"
+      }
+    },    {
+      "prop": "children",
+      "changes": {
+        "before": "text",
+        "after": "children",
+        "description": ""
+      }
+    }
+  ],
+  "common": []
+}

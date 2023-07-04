@@ -1,0 +1,40 @@
+<grid-items-list>
+    <table class="gil-items-table" if="{gridItems.length > 0}">
+        <tbody>
+            <tr each={gridItem, gridItemIndex in gridItems}>
+                <td>
+                    <span>id: {gridItem.id}.</span>
+                </td>
+                <td class="gil-col-value">
+                    <div class="gil-col-value-row">
+                        <span>areaName:</span>
+                        <select class="gil-col-value-select" onchange="{changeAreaName(gridItemIndex)}" value="{gridItem.areaName}">
+                            <option each={op, areaIndex in areas} value={areas[areaIndex]} selected={gridItem.areaName === areas[areaIndex]}>
+                                {areas[areaIndex]}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="gil-col-value-row">
+                        <span>span:</span>
+                        <input
+                            value={gridItem.span}
+                            type="text"
+                            class="gil-col-value-input"
+                            onchange="{changeSpan(gridItemIndex)}"
+                        >
+                    </div>
+                </td>
+                <td class="gil-col-del">
+                    <i class="bordered uib i-remove icon" onclick="{deleteGridItem(gridItemIndex)}"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="cs-link-ctr">
+        <a href="#" onclick="{addNewgridItem}" class="ui button link add">Add a new markup element</a>
+    </div>
+
+    <script>
+        //= include *.tag.js
+    </script>
+</grid-items-list>

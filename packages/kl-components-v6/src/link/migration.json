@@ -1,0 +1,45 @@
+{
+  "component": "Link",
+  "v6": "/docs/atoms-link--basic",
+  "v3": [
+    {
+      "prop": "decoration",
+      "changes": {
+        "before": "underline | dashed | none",
+        "after": "underline | icon | none"
+      }
+    },
+    {
+      "prop": "secondaryColors",
+      "changes": "Removed"
+    },
+    {
+      "prop": "disabled",
+      "changes":"Added - boolean"
+    }
+  ],
+  "v5": [
+    {
+      "prop": "mode",
+      "changes": "Removed"
+    }
+  ],
+  "common": [
+    {
+      "prop": "typography",
+      "changes": "Removed - use props 'type'"
+    },
+    {
+      "prop": "type",
+      "changes": "Added - instead of typography"
+    },
+    {
+      "prop": "text",
+      "changes": "Added - passing text as children"
+    },
+    {
+      "prop": "iconPosition",
+      "changes": "Added - before | after"
+    }
+  ]
+}

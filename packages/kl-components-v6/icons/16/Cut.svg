@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" fill-rule="evenodd">
+    <g>
+      <circle cx="11" cy="7" r="1.5" transform="matrix(-1 0 0 1 22 0)" />
+      <circle cx="7" cy="11" r="1.5" transform="matrix(-1 0 0 1 14 0)" />
+      <path d="M9.5 7H7L2 4.5" />
+      <path d="M7 9.5V7L4.5 2" />
+    </g>
+  </svg>

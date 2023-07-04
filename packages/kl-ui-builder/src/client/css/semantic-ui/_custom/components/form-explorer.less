@@ -1,0 +1,30 @@
+.form-explorer {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    margin: 0;
+    width: 100%;
+    position: relative;
+    background: @inner-bg;
+
+    .form-explorer-new {
+        position: absolute;
+        font-size: 11px;
+        top: 10px;
+        right: 15px;
+        margin: 0;
+        padding: 7px 10px;
+    }
+
+    .form-explorer-body {
+        flex: 1;
+        display: block;
+        overflow: auto;
+        border-top: 1px solid #d7d7d7;
+        padding-top: 15px;
+    }
+
+    .empty-text {
+        margin-bottom: 10px;
+    }
+}

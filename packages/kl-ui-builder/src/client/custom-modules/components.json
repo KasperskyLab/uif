@@ -1,0 +1,52 @@
+{
+  "grid": {
+    "toolbox": {
+      "type": "grid",
+      "group": "grouping",
+      "title": "Grid",
+      "icon": "uib vendor th"
+    },
+    "propertySet": "grid/grid.property-set.js",
+    "component": "grid/grid.component.jsx"
+  },
+  "search": {
+    "toolbox": {
+      "type": "search",
+      "group": "inputs",
+      "title": "Search",
+      "icon": "search"
+    },
+    "propertySet": "search/search.property-set.js",
+    "component": "search/search.component.tsx"
+  },
+  "textbox": {
+    "toolbox": {
+      "type": "textbox",
+      "group": "inputs",
+      "title": "Text field",
+      "icon": "uib textbox"
+    },
+    "propertySet": "text-field/property-set.js",
+    "template": "text-field/template.html"
+  },
+  "toolbar": {
+    "toolbox": {
+      "type": "toolbar",
+      "group": "buttons",
+      "title": "Toolbar",
+      "icon": "columns"
+    },
+    "propertySet": "toolbar/toolbar.property-set.js",
+    "component": "toolbar/toolbar.component.tsx"
+  },
+  "anchor": {
+    "toolbox": {
+      "type": "anchor",
+      "group": "others",
+      "title": "Acnchor links",
+      "icon": "uib link"
+    },
+    "propertySet": "anchor/anchor.property-set.js",
+    "component": "anchor/anchor.component.tsx"
+  }
+}

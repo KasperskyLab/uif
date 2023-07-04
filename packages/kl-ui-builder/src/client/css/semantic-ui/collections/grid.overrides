@@ -1,0 +1,21 @@
+/*******************************
+         Theme Overrides
+*******************************/
+
+
+.ui.grid {
+  /* remove padds / margins */
+  &.clear {
+    margin: 0;
+
+    > .column {
+      padding: 0;
+      width: auto;
+
+      /* col will take free space */
+      &.width-full {
+        flex: 1;
+      }
+    }
+  }
+}

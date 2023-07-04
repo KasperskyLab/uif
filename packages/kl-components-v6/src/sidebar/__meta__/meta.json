@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true
+  },
+  "component": "Sidebar",
+  "desctiption": "AntdDrawer from the Antd library is used as the basis.",
+  "usage": "Sidebar, navigation area. Appears when you click on an element with an action",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1250%3A84457"
+}

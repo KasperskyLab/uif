@@ -1,0 +1,19 @@
+<file-tree-node>
+    <div class="tree-node" ondblclick="{parent.opts.ondblclick}" onclick="{selectNode}">
+        <span class="tree-node-text { active: active }">
+            <span class="tree-node-expander{childNodes && childNodes.length ? expanded ? ' expanded' : '' : ' hide'}" onclick="{onExpanderClick}"></span>
+            <span>{opts.model[opts.text]}</span>
+            <build-type label="{_.get(opts,'model.customFields.buildType')}"></build-type>
+        </span>
+        <div each="{node in childNodes}" show="{expanded}">
+            <file-tree-node model="{node}"
+                child-nodes-resolver={parent.opts.childNodesResolver}
+                ondblclick="{parent.opts.ondblclick}"
+                onnodeselect="{parent.opts.onnodeselect}"
+                text="{parent.opts.text}"></file-tree-node>
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</file-tree-node>

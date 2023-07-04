@@ -1,0 +1,14 @@
+<optional-text-field>
+    <checkbox-control-pair ref="controlSwitch" label="{opts.label}"
+                           val="{opts.value}" enabled="{opts.value != null}"
+                           onchange="{onValueChange}">
+        <div class="search_list-wrap">
+            <div class="ui input fluid">
+                <input type="text" ref="input" value="{opts.val}">
+            </div>
+        </div>
+    </checkbox-control-pair>
+    <script>
+        //= include *.tag.js
+    </script>
+</optional-text-field>

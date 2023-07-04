@@ -1,0 +1,75 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Docs/Installation and initialization" />
+
+# Installation and initialization
+
+## Package installation
+```
+npm i @kl/components
+```
+Or if you use yarn 
+```
+yarn add @kl/components
+```
+
+## Add global styles
+
+```
+// provide theme color to css vars
+import { GlobalStyle } from '@kl/components/design-system/global-style';
+
+// provide base css
+import '@kl/components/design-system/global-style/styles.css';
+
+// App Root
+const AppRoot = () => (
+  <>
+    <GlobalStyle />
+    <div>...</div>
+  </>
+);
+
+ReactDOM.render(<AppRoot />, document.getElementById('app'));
+```
+
+## Add ConfigProvider
+
+ConfigProvider is an unios of ThemeProvider and LocalizationProvider.
+Accepts theme and locale as props
+
+```
+import React, { useState, useCallback, useEffect } from 'react'
+import { ConfigProvider } from '@kl/components/design-system/context'
+import { ThemeKey } from '@kl/components/design-system/types'
+import { LangType } from '@kl/components/helpers/localization/types'
+
+const Layout = () => {
+  const [theme, setTheme] = useState<ThemeKey>(ThemeKey.Light)
+  const [locale, setLocale] = useState<LangType>('en')
+
+  const onKeyDown = useCallback((e) => {
+    // custom shortcut
+    if (e.keyCode === 88 && e.ctrlKey && e.shiftKey) {
+      if (theme === ThemeKey.Light) {
+        setTheme(ThemeKey.Dark)
+        setLocale('ru')
+      } else {
+        setTheme(ThemeKey.Light)
+        setLocale('en')
+      }
+    }
+  }, [theme])
+
+  useEffect(() => {
+    document.addEventListener('keydown', onKeyDown)
+  }, [onKeyDown])
+
+  return (
+    <ConfigProvider theme={theme} locale={locale}>
+      <div>...</div>
+    </ConfigProvider>
+  )
+}
+
+```

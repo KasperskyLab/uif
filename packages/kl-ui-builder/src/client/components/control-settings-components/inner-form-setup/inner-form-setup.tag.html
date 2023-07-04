@@ -1,0 +1,25 @@
+<inner-form-setup>
+    <div class="offset-v-element">
+
+        <div class="offset-v-element">
+            <select ref="mode" onchange="{onValueChange}" class="ui dropdown fluid">
+                <option value="0" selected="{opts.mode == 0 || true}">For controls</option>
+                <option value="1" selected="{opts.mode == 1}">For form</option>
+            </select>
+        </div>
+        <div class="child-block">
+            <div show="{mode == '1'}" class="offset-v-element child-block-item">
+                <label class="cs-form-label">
+                    Form name
+                </label>
+                <select ref="childFormId" onchange="{onValueChange}" class="ui dropdown fluid">
+                    <option each="{ name, id in forms }" value="{id}" selected="{ id == parent.opts.childFormId }">{name}</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</inner-form-setup>

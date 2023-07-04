@@ -1,0 +1,61 @@
+.modals-uib {
+  &.visible.active {
+    display: flex!important;
+  }
+
+  .ui.modal {
+    animation-duration: 300ms;
+    animation-fill-mode: both;
+    animation-name: signZoomIn;
+
+    > .header:not(.ui) {
+      line-height: 1.28571429em;
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 14px;
+      font-weight: 700;
+      color: #f59e00;
+      border: none;
+
+      .icon {
+        margin-right: 5px;
+        font-size: 18px;
+        color: #00a88e;
+        vertical-align: bottom;
+      }
+    }
+
+    > .content {
+      padding: 0 1.5em;
+    }
+
+    > .actions {
+      border: none;
+      background: none;
+      padding: 1em 1.5em;
+
+      .ui.button {
+        margin: 0;
+      }
+    }
+  }
+
+  .modal-close {
+    position: absolute;
+    right: 5px;
+    top: 10px;
+    cursor: pointer;
+  }
+}
+
+@keyframes signZoomIn {
+  from {
+    opacity: 0.3;
+    -webkit-transform: scale3d(.7, .7, .7);
+    transform: scale3d(.7, .7, .7);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}

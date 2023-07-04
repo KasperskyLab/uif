@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": true,
+    "storybook": true
+  },
+  "component": "AnchorLinks",
+  "desctiption": "The basis is AntdTabs from the Antd library.",
+  "usage": "Switching in one window, between several tabs",
+  "designLink": ""
+}

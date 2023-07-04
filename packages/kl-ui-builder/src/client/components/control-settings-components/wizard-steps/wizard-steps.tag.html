@@ -1,0 +1,113 @@
+<wizard-steps class="wizard-steps">
+
+  <button class="ui button" onclick="{ addStep }">Add step</button>
+
+  <div class='step' each="{ step, index in steps }" data-step="{ index }">
+
+    <div class="fields-section step-section">
+      <div class="fields-section-caption"><span>Step</span> <span class="step-index">{ index + 1 }</span></div>
+
+      <virtual if="{ !pluginMode }">
+
+        <checkbox text='Plugin form' value='{ !!step.pluginId }' onchange='{ pluginizeStep(index) }'></checkbox>
+
+        <div class="offset-v-element" if="{ step.pluginId }">
+          <div class="ui grid clear">
+            <div class="column auto">
+              <i class="uib icon node _node-pos"></i>
+            </div>
+
+
+            <div class="column width-full">
+              <select class='ui dropdown fluid' onchange="{ pluginIdChanged(index) }">
+                <option each="{ pluginList }" value="{ name }" selected="{ name === step.pluginId }">{ name }</option>
+              </select>
+              <div>
+                Form ID
+                <div class="ui input fluid">
+                  <input type="text" onchange="{ formIdChanged(index) }" value="{ step.formId }">
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+        <div class="control-ctr" if="{ !step.pluginId }">
+          <span>
+            <select class='ui dropdown fluid' onchange="{ formIdChanged(index) }">
+              <option value='0' selected="{ !step.formId }" disabled>-- Select --</option>
+              <option each="{ forms }" value="{ id }" selected="{ id === step.formId }">{ name }</option>
+            </select>
+          </span>
+        </div>
+      </virtual>
+      <select class='ui dropdown fluid' onchange="{ formIdChanged(index) }" if="{ pluginMode }">
+        <option value='0' selected="{ !step.formId }" disabled>-- Select --</option>
+        <option each="{ forms }" value="{ id }" selected="{ id === step.formId }">{ name }</option>
+      </select>
+
+      <label class="cs-form-label"> Buttons list</label>
+      <virtual each="{ button, buttonIndex in step.buttons }">
+        <div class="ui grid clear">
+            <div class="column width-full">
+                <checkbox text='{ button.title }' value='{ button.active }' onchange='{ activateButton(index, buttonIndex) }'></checkbox>
+            </div>
+            <div class="column auto align-right">
+                <a href='#' if="{ button.active && !button.useHandler }" class="link link-small" onclick='{ useHandlerForButton(index, buttonIndex) }'>Use own handler</a>
+            </div>
+        </div>
+        <virtual if="{ button.active && button.useHandler }">
+          <div class="offset-v-element">
+              <label><i class="uib icon node _node-pos"></i>When pressed, invoke handler</label>
+          </div>
+          <div class="offset-v-element">
+            <div class="ui grid clear">
+              <div class="column width-full">
+                <div class="ui input fluid">
+                  <input type="text" ref="input" onchange="{ changeButtonHandler(index, buttonIndex) }" value="{ button.onClick }">
+                </div>
+              </div>
+              <div class="column auto">
+                <i class="bordered uib i-remove icon" onclick="{ removeButtonHandler(index, buttonIndex) }"></i>
+              </div>
+            </div>
+          </div>
+        </virtual>
+      </virtual>
+      <hr>
+      <virtual>
+        <div>
+          <checkbox text='Get custom buttons from handler' value='{ step.customButtons }' onchange='{ customizeButtons(index) }'></checkbox>
+        </div>
+        <virtual if="{ step.customButtons }">
+          <div class="offset-v-element">
+            <div class="ui grid clear">
+
+              <div class="column auto">
+                <i class="uib icon node _node-pos"></i>
+              </div>
+
+              <div class="column width-full">
+                <div class="ui fluid input">
+                  <input type="text"
+                         ref="input"
+                         class="custom-buttons-handler"
+                         onchange="{ customButtonsGetterChanged(index) }"
+                         value="{ step.customButtonsGetter }">
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </virtual>
+      </virtual>
+      <i onclick="{ removeStep(index) }" class="icon remove step-remove"></i>
+    </div>
+  </div>
+
+  <script>
+    //= include *.tag.js
+  </script>
+</wizard-steps>

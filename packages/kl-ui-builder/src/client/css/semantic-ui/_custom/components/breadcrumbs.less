@@ -1,0 +1,28 @@
+.ui-bread {
+    display: inline-block;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    &-wrap {
+        display: block;
+        padding: 10px 20px;
+    }
+
+    li {
+        display: inline-block;
+
+        &:before {
+            content: '/';
+            margin-left: 0.3em;
+            margin-right: 0.2em;
+            font-family: Verdana, Arial, sans-serif;
+        }
+
+        &:first-child {
+            &:before {
+                display: none;
+            }
+        }
+    }
+}

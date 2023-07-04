@@ -1,0 +1,50 @@
+{
+  "name": "@kl/runtime",
+  "version": "4.4.0",
+  "description": "Dependency injection and module communication",
+  "browser": "lib/index.js",
+  "main": "lib/server/index.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "test": "./node_modules/.bin/jest --config jest.config.js --colors",
+    "prepublishOnly": "npm run publish:hideReadme && gulp && yarn test",
+    "postpublish": "npm run publish:showReadme && gulp clearLibFolder",
+    "publish:hideReadme": "mv 'README.md' 'NOT-PUBLISHED.md'",
+    "publish:showReadme": "mv 'NOT-PUBLISHED.md' 'README.md'",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix"
+  },
+  "keywords": [
+    "runtime"
+  ],
+  "author": "AO Kaspersky Lab",
+  "license": "ISC",
+  "dependencies": {
+    "lodash.get": "4.4.2",
+    "lodash.set": "4.3.2",
+    "tiny-emitter": "2.1.0"
+  },
+  "devDependencies": {
+    "@kl/dev-tools": "2.9.0",
+    "del": "3.0.0",
+    "dotenv": "8.2.0",
+    "eslint": "7.14.0",
+    "gulp": "4.0.1",
+    "gulp-babel": "8.0.0",
+    "husky": "1.3.1",
+    "jest": "24.1.0",
+    "lint-staged": "8.1.4",
+    "shortid": "2.2.15"
+  },
+  "resolutions": {
+    "@typescript-eslint/*": "5.11.0",
+    "@types/json-schema": "7.0.9",
+    "es-abstract": "1.19.1",
+    "define-properties": "1.1.3",
+    "is-core-module": "2.8.1",
+    "minimist": "1.2.5",
+    "object.values": "1.1.4",
+    "resolve": "1.22.0",
+    "debug": "4.3.3"
+  }
+}

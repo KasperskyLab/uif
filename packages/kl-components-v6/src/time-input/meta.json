@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": false,
+    "useThemedHook": false,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true
+  },
+  "component": "TimeInput",
+  "description": "The time picker component. The TimePicker from the Antd library is used as the basis.",
+  "usage": "Used to select the time",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-UI-KIT?node-id=3828-16437&t=0VHVrMWHGRSyEBcM-0"
+}

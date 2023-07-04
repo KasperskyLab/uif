@@ -1,0 +1,59 @@
+<data-source-mapper>
+    <select ref="dsType" class="ui dropdown fluid" onchange="{onSourceSelect}" value={opts.dsType}>
+        <option value="url">Server method</option>
+        <option if="{opts.hideHandlerOption !== true}" value="function">Function</option>
+        <option value="">The data is set manually</option>
+    </select>
+    <div class="child-block">
+        <div class="child-block-item" show="{sourceType == 'function'}">
+            <span class="child-block-arrow"></span>
+            <label class="cs-form-label">Handler name</label>
+            <search-input search_function="{runtime.memberSearch}"
+                          term="{opts.staticFunctionName}" ref="staticFunctionName" onchange_handler="{onValueChange}"></search-input>
+        </div>
+    </div>
+    <div class="child-block" show="{sourceType == 'url'}">
+        <div class="child-block-item">
+            <span class="child-block-arrow"></span>
+            <label class="cs-form-label">Method name</label>
+            <div class="ui fluid input">
+                <input type="text" ref="serverApiMethod"
+                   value="{opts.defaultServerApiMethod}" readonly disabled>
+            </div>
+        </div>
+        <div class="child-block-item">
+            <span class="child-block-arrow"></span>
+            <div>
+                <label class="cs-form-label">PArameters source type</label>
+                <select class="ui dropdown fluid" onchange="{ onParamsSourceTypeChanged }" value="{ paramsSourceType }">
+                    <option value="static">Object</option>
+                    <option value="function">Handler function</option>
+                </select>
+                <div class="child-block">
+                    <div class="child-block-item" if="{ paramsSourceType === 'static' }">
+                        <span class="child-block-arrow"></span>
+                        <label class="cs-form-label">Object</label>
+                        <div class="ui fluid input">
+                            <input type="text"
+                                    ref="params"
+                                    value="{ opts.params }"
+                                    onchange="{ onValueChange }">
+                        </div>
+                    </div>
+                    <div class="child-block-item" if="{ paramsSourceType === 'function' }">
+                        <span class="child-block-arrow"></span>
+                        <label class="cs-form-label">Handler name</label>
+                        <div class="ui fluid input">
+                            <input type="text"
+                                    value="{ paramsHandler }"
+                                    onchange="{ onParamsHandlerChange }">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</data-source-mapper>

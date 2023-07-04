@@ -1,0 +1,13 @@
+<node>
+    <div class="tree-node">
+        <span class="tree-node-text" ondblclick="{dbClick}">
+            <span>{opts.nodedata.nodeName}</span>
+        </span>
+        <div each="{node in nodesList}" if="{expanded}">
+            <node nodedata="{node}"></node>
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</node>

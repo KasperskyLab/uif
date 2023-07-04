@@ -1,0 +1,22 @@
+<value-list>
+
+    <table class="keyValue-table" if="{rows.length > 0}">
+        <tbody each={row, i in rows}>
+        <tr>
+            <td class="tcl-col-value">
+                <input type="text" class="tcl-col-value-input" value="{row.text}" onchange="{saveRowName}"/>
+            </td>
+            <td class="tcl-col-del">
+                <i class="bordered uib i-remove icon" onclick="{removeRow}"></i>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="cs-link-ctr">
+        <a href="#" onclick="{addNewRow}" class="ui button link add">Add a new path to the structure</a>
+    </div>
+
+    <script>
+      //= include *.tag.js
+    </script>
+</value-list>

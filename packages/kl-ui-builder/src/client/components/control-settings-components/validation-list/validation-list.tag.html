@@ -1,0 +1,18 @@
+<validation-list>
+    <div>
+        <div>
+            <button href="#" onclick="{addValidation}" class="ui button link add">Add new rule</button>
+        </div>
+        <label class="cs-form-label" if="{setupList.length > 1}">
+            <span class="element-info"></span>
+        </label>
+        <select if="{setupList.length > 1}" class="ui dropdown fluid" onchange="{onChangeType}" ref="type" value="{opts.type}">
+            <option value="0" checked="{opts.type == 0}">OR</option>
+            <option value="1" checked="{opts.type == 1}">AND</option>
+        </select>
+        <validation-setup each="{setup, i in setupList}" display_number="{parent.setupList.length > 1}" index="{i}" setup={setup}></validation-setup>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</validation-list>

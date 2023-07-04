@@ -1,0 +1,14 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true
+  },
+  "component": "Grid",
+  "desctiption": "Component for composing elements on the page using the grid system",
+  "usage": "Arrangement of elements on the page and inside independent blocks"
+}

@@ -1,0 +1,58 @@
+{
+  "component": "Button",
+  "v6": "/docs/atoms-button--basic",
+  "v3": [
+    {
+      "prop": "size",
+      "changes": {
+        "before": "small | middle | large",
+        "after": "'small' | 'medium' | 'large' | 'extraLarge",
+        "description": "Changing the size grid in steps of 2 units"
+      }
+    },
+    {
+      "prop": "mode",
+      "changes": {
+        "before": "primary | secondary | danger | tertiary",
+        "after": "primaryBlue | primaryBlack | secondary | tertiary | invertedPrimary | invertedSecondary | invertedTertiary",
+        "description":"Name change, inverted colors added"
+      }
+    }
+  ],
+  "v5": [
+    {
+      "prop": "mode",
+      "changes": {
+        "before": "primaryBlue | primaryBlack | secondary | tertiary",
+        "after": "primaryBlue | primaryBlack | secondary | tertiary | invertedPrimary | invertedSecondary | invertedTertiary",
+        "description": "Added inverted colors"
+      }
+    }
+  ],
+  "common": [
+    {
+      "prop": "block",
+      "changes": "Removed"
+    },
+    {
+      "prop": "danger",
+      "changes": "Removed"
+    },
+    {
+      "prop": "ghost",
+      "changes": "Removed"
+    },
+    {
+      "prop": "shape",
+      "changes": "Removed"
+    },
+    {
+      "prop": "href",
+      "changes": "Removed"
+    },
+    {
+      "prop": "target",
+      "changes": "Removed"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+<center-area class="layout-col-center">
+    <div class="layout-col-top">
+
+        <pills id="artboardModes" ref="artboardModes" items={items} modificator="tabular top-tabs"></pills>
+
+    </div>
+    <div class="layout-col-middle pills-content-wrap">
+        <div class="pills-content" show="{mode==0}">
+            <form-explorer></form-explorer>
+        </div>
+        <div class="pills-content" show="{mode==1}">
+            <div class="art-board-toolbox-col-wrap">
+
+                <section-header text="Form design"></section-header>
+
+                <div class="art-board-toolbox-col">
+                    <toolbox></toolbox>
+                    <art-board state="{state}"></art-board>
+                </div>
+
+            </div>
+            <right-side class="layout-col-tools" id="tools"></right-side>            
+        </div>
+    </div>
+
+    <script>
+        //= include *.tag.js
+    </script>
+</center-area>

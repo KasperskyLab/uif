@@ -1,0 +1,11 @@
+---
+# for help see https://confluence.kaspersky.com/pages/viewpage.action?pageId=447320162
+kl-components-reviewers:
+  enabled: true
+  included_paths:
+    - /*
+  required_users:
+    - '[Corp-KSC]\Reviewers-KSC-WebConsoleContributorsDev' :
+       count: 2
+  optional_users:
+    - '[Corp-KSC]\Reviewers-KSC-Web'

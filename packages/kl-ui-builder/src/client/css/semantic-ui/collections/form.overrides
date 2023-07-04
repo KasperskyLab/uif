@@ -1,0 +1,15 @@
+/*******************************
+         Theme Overrides
+*******************************/
+
+.ui.form .field.error select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+.ui.form .field.error .ui.dropdown,
+.ui.form .field.error select {
+  background-image: url(select-arrow.svg);
+  background-position: 100% center;
+  background-repeat: no-repeat;
+}

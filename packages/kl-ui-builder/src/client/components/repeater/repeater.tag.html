@@ -1,0 +1,13 @@
+<repeater>
+    <div class="ctrl le-ctr ctrl-group">
+        <div class="ui-form-label ui-form-label--group" onclick="{createReceiver}">Loop</div>
+        <div each="{cont, i in containers}" ref="{'wrap_' + i}" hidden="{cont.hidden || isInherited}">
+            <div onclick={selectContainer} class="{selected: i == activeCtrlIndex}">
+                <component-draft parent_setup={parent.opts.setup} ref='{"cd_" + i}'></component-draft>
+            </div>
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</repeater>

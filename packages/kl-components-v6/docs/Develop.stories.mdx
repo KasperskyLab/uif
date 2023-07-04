@@ -1,0 +1,42 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Docs/Components development" />
+
+# Development of components
+
+The UIF platform allows the product team to develop a custom component and use it in their scenarios.
+However, if the developed component can be found in scenarios of other products, it makes sense to transfer it to a single registry (package @kl/components) so that all involved teams can reuse common developments.
+The transferred components are subject to the same set of technical requirements as those already available in the unified registry.
+
+## General requirements for components:
+
+1. Lack of business logic
+2. Scalability and reusability
+3. Minimum area of responsibility (atomic principle)
+4. Accessibility (visual documentation and description of all complex moments in the component logic)
+5. Reliable and transparent code
+
+## General Tips
+
+1. Component View be transparent with respect to native elements (that is, any HTMLAttributes that apply to the container can be passed to the component).
+Required for better usability by end users, as well as the ability to add test attributes.
+2. Instead of writing "generalized" components for all occasions, we write simple and specific implementations.
+Often, an attempt to take into account all possible cases leads to the complication of the code and the inability to maintain it in the future.
+
+## Development and handover process
+
+1. The concept and relevance of the new component are described.
+
+   The transferred component must be approved by the shared library development team.
+   This command is responsible for the completeness and relevance of the set of components.
+
+2. A design is requested for a new component.
+
+3. The team makes an MR with a new component (**considering [DoD](/docs/docs-definition-of-done--page)**), and also creates documentation ([according to the rules](/story/docs-template -component-documentation--page)).
+
+4. Once a component has been moved to the shared library, it is the responsibility of the shared library development team to maintain it.
+
+
+
+
+

@@ -1,0 +1,140 @@
+@hl-color: #fffba3;
+@trigger-height: 16px;
+@trigger-width: 32px;
+@trigger-bull-size: @trigger-height;
+
+@trigger-body-color: #e6fcf6;
+@trigger-border-color: #60b39e;
+
+@trigger-bull-color-off: #fff;
+@trigger-bull-color-on: #519987;
+@trigger-bull-border-color: @trigger-bull-color-on;
+
+.trigger {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: @trigger-height;
+    margin: 2px;
+    transition: all 150ms ease;
+
+    .highlight &,
+    &.highlight {
+        background-color: @hl-color;
+        outline: 5px solid @hl-color;
+    }
+
+    &-wrap {
+        margin-bottom: 10px;
+        position: relative;
+        padding-left: 35px;
+        min-height: 21px;
+
+        [dir="rtl"] & {
+            padding-left: 0;
+            padding-right: 35px;
+
+            .trigger {
+                left: auto;
+                right: 0;
+                margin: 2px;
+            }
+        }
+
+        ~ .trigger-descr {
+            margin-bottom: 10px;
+            margin-top: -10px;
+        }
+
+        .trigger {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        [disabled] &,
+        .disabled & {
+            opacity: 0.5;
+        }
+
+        .table & {
+            margin: 0;
+        }
+
+        .checkbox-text {
+            margin: 2px 0.2em;
+            white-space: normal;
+
+            &.parameter-name {
+                margin: 0 0.2em;
+            }
+        }
+    }
+
+    &-outer,
+    &-box {
+        display: block;
+        position: absolute;
+    }
+
+    &-outer {
+        top:0;
+        left:0;
+        width: @trigger-width;
+        height: @trigger-height;
+        border-radius: 20px;
+        background: @trigger-body-color;
+        border: 1px solid @trigger-border-color;
+        cursor: pointer;
+        transition: all 200ms ease;
+
+        .disabled & {
+            cursor: default;
+        }
+    }
+
+    &-box {
+        width: @trigger-bull-size;
+        height: @trigger-bull-size;
+        border-radius: 50%;
+        background: @trigger-bull-color-off;
+        left: 0;
+        top: 0;
+        transition: all 200ms ease;
+        border: 1px solid @trigger-bull-border-color;
+        cursor: pointer;
+
+        .disabled & {
+          cursor: default;
+        }
+
+        .highlight & {
+            background-color: @hl-color;
+        }
+    }
+
+
+    input {
+        visibility:hidden;
+    }
+
+    input ~ .text-off {
+        display:block;
+    }
+
+    input:checked,
+    input[checked="1"] {
+        ~ .trigger-box {
+            left: 16px;
+            background-color: @trigger-bull-color-on;
+        }
+    }
+
+    [dir=rtl] & {
+        margin: 2px 30px 2px 15px;
+
+        &-box {
+            left: 21px;
+        }
+    }
+}

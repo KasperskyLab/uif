@@ -1,0 +1,13 @@
+<file-tree>
+    <div class="tree">
+        <file-tree-node each="{node in opts.model}"
+            model="{node}"
+            onnodeselect="{parent.opts.onnodeselect}"
+            ondblclick="{parent.opts.ondblclick}"
+            child-nodes-resolver="{parent.opts.childNodesResolver}"
+            text="{parent.opts.text}"></file-tree-node>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</file-tree>

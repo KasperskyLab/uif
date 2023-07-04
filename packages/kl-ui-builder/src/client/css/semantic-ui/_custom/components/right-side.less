@@ -1,0 +1,45 @@
+.right-side {
+  position: relative;
+  display: flex;
+  align-content: stretch;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-direction: column;
+
+  width: 450px;
+  min-width: 410px;
+  margin-left: @outer-width;
+  background: #fff;
+
+  &-top {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    background: #626e77;
+
+    .icon {
+      cursor: pointer;
+      font-size: 1.7rem;
+    }
+  }
+
+  &-middle {
+    flex: 1;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    position: relative;
+    overflow: auto;
+    padding: 10px 0 0 0;
+    border-left: 2px solid #f1f1f1;
+  }
+
+  &-footer {
+    text-align: center;
+    padding: 15px 10px;
+    margin: 0;
+    z-index: 1;
+    border-top: 1px solid #f1f1f1;
+    border-left: 2px solid #f1f1f1;
+  }
+}

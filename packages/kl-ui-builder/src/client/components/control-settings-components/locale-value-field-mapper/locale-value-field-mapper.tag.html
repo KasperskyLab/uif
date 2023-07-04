@@ -1,0 +1,70 @@
+<locale-value-field-mapper>
+    <div class="offset-v-element">
+        <div id="selector" class="offset-v-element">
+            <select ref="slct" value="{opts.slct}" onchange="{onValueSourceTypeChange}" class="ui dropdown fluid">
+                <option value="0" selected={opts.slct != null ? opts.slct== 0 : true}>
+                    Specify a simple value
+                </option>
+                <option value="1" selected={opts.slct == 1}>
+                    Bind to model property
+                </option>
+            </select>
+        </div>
+        <div class="child-block">
+            <div show={ valueSourceType==0 } class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <div class="grid-cols child-block-cb">
+                    <div class="ui fluid input">
+                        <input type="text"
+                               ref="simpleValue"
+                               value="{opts.simpleValue}"
+                               onchange="{onValueChange}">
+                    </div>
+                </div>
+            </div>
+            <div show={ valueSourceType== 1 } class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    <span class="element-info">
+                        <div class="ksc-form-input-balloon"></div>
+                    </span>Property name
+                </label>
+                <div>
+                    <div class="grid-cols ">
+                        <div class="grid-cols-item">
+                            <div class="ui fluid input">
+                                <input type="text"
+                                       ref="keyPropertyName"
+                                       value="{opts.keyPropertyName}"
+                                       onchange="{onValueChange}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div show={ valueSourceType== 1 } class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    <span class="element-info">
+                        <div class="ksc-form-input-balloon"></div>
+                    </span>Plugin property name
+                </label>
+                <div>
+                    <div class="grid-cols ">
+                        <div class="grid-cols-item">
+                            <div class="ui fluid input">
+                                <input type="text"
+                                       ref="pluginPropertyName"
+                                       value="{opts.pluginPropertyName}"
+                                       onchange="{onValueChange}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+      //= include *.tag.js
+    </script>
+</locale-value-field-mapper>

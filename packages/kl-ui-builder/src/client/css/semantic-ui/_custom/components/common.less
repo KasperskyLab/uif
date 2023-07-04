@@ -1,0 +1,74 @@
+.ui-list {
+    font-size: 13px;
+
+    .icon {
+        font-size: 16px;
+        display: inline-block;
+        vertical-align: middle;
+        min-width: 23px;
+        text-align: center;
+        color: #234258;
+    }
+
+    .item {
+        color: #234258;
+        border-radius: 3px;
+        border: 1px solid #fff;
+        text-decoration: none;
+        display: block;
+        padding: 5px 10px;
+        margin: 0 -10px;
+        cursor: default;
+
+        &:hover {
+            color: #00a88e;
+            border: 1px solid #00a88e;
+
+            .icon {
+                color: #00a88e;
+            }
+        }
+
+        &:active {
+            background: #f5f7f9;
+        }
+
+        &:active {
+            cursor: move;
+            cursor: grab;
+            cursor: -moz-grab;
+            cursor: -webkit-grab;
+        }
+        &.active {
+            background-color: #00a88e;
+            border: 1px solid #fff;
+            color: #fff;
+            .icon {
+                color: #fff;
+            }
+        }
+
+        &-text {
+            margin: 0 9px;
+            font-size: 12px;
+        }
+    }
+}
+
+.orange {
+    color: #f59e00;
+}
+.white {
+    color: #fff;
+}
+.bold {
+    font-weight: bold;
+}
+
+.build-type {
+    background-color: #fac462;
+    border-radius   : 8px;
+    padding         : 4px;
+    font-size       : 11px;
+    color           : #212121;
+}

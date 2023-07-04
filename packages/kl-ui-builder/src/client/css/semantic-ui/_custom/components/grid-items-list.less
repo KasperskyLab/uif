@@ -1,0 +1,116 @@
+.gil {
+
+    &-items-table {
+        width: 100%;
+
+        tbody {
+            tr:not(:last-child) {
+                border-bottom: #a3aeb6 solid 1px;
+            }
+
+            tr {
+                td:first-child {
+                    width: 25px;
+                }
+            }
+        }
+    }
+
+    &-col {
+        &-value {
+            &-row {
+                padding-top: 2px;
+                display: block;
+            }
+
+            &-select {
+                width: 100%;
+            }
+
+            font-size: 12px;
+            padding-left: 3px;
+            background-color: #fff;
+
+            td& {
+                padding: 0;
+            }
+
+            &-input {
+                border: #a3aeb6 solid 1px;
+                width: 100%;
+                padding: 2px 7px;
+            }
+        }
+
+        &-del {
+            padding: 0;
+            width: 25px;
+
+            td& {
+                padding: 0;
+            }
+
+            i.i-remove.icon {
+                cursor: pointer;
+                box-shadow: none;
+                margin: 0;
+
+                &:hover {
+                    color: red;
+                    border-color: transparent;
+                }
+
+                &._alt {
+                    &:hover {
+                        border-color: transparent;
+                        background: #f5f7f9;
+                    }
+                }
+            }
+        }
+
+        &-properties {
+            text-align: right;
+            font-size: 11px;
+
+            .properties-list {
+                text-align: left;
+                padding: 10px;
+                margin: 5px;
+
+                > p {
+                    margin-top: 0;
+
+                    &:last-of-type {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+
+        &-settings {
+            border-left: 1px solid #dee0e1;
+            text-align: center;
+            width: 25px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #f5f7f9;
+            }
+
+            &.active {
+                background-color: #f2f2f2;
+                border-color: #f2f2f2;
+            }
+
+            .icon {
+                margin: 2px 0 0 0;
+            }
+        }
+    }
+}
+
+grid-items-list {
+    display: block;
+    margin-bottom: @padding;
+}

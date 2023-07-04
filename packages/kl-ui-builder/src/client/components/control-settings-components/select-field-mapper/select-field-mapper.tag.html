@@ -1,0 +1,12 @@
+<select-field-mapper>
+
+    <select class="ui dropdown fluid"
+            ref="slct"
+            onchange="{onValueChange}">
+        <option value="{item.value}" each="{item in opts.items}" selected="{getSelectedState(item)}">{item.text}</option>
+    </select>
+
+    <script>
+        //= include *.tag.js
+    </script>
+</select-field-mapper>

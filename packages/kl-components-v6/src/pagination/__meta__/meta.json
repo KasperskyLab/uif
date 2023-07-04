@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true
+  },
+  "component": "Pagination",
+  "desctiption": "Component for rendering pagination. The basis is AntdPagination from the Antd library.",
+  "usage": "Structuring a large amount of information by separating it into separate pages",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=507%3A3781"
+}

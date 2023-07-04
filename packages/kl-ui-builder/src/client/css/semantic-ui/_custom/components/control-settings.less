@@ -1,0 +1,351 @@
+.control-settings {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    font-size: 12px;
+    color: #234258;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;     
+    -ms-user-select: none;      
+    user-select: none;
+
+    a {
+        text-decoration: none;
+    }
+
+    .ui.checkbox,
+    .ui.popup {
+        font-size: 1em;
+    }
+
+    .control-settings-body {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 10px 0 0 0;
+        overflow: hidden;
+
+        &.shade-top {
+            &:before {
+                opacity: 1;
+            }
+        }
+
+        &.shade-bottom {
+            &:after {
+                opacity: 1;
+            }
+        }
+
+        &:before,
+        &:after {
+            content: '';
+            display: block;
+            opacity: 0;
+            position: absolute;
+            height: 5px;
+            top: 5px;
+            left: 0;
+            right: 0;
+            box-shadow: 0 2px 1px 0 rgba(0,0,0,.1);
+            z-index: 1;
+            transition: opacity 100ms ease;
+
+        }
+
+        &:after {
+            top: auto;
+            bottom: -5px;
+            box-shadow: 0 -2px 2px 0 rgba(0,0,0,.1);
+        }
+
+
+        &-scroll {
+            height: 100%;
+            overflow: auto;
+            margin: -9px 0;
+        }
+
+        &-container {
+            padding: 1px 0;
+        }
+    }
+
+    .control-settings-offset {
+        padding: 0;
+
+        &:first-child {
+            .fields-section {
+                &:first-child {
+                    margin-top: 0;
+                }
+            }
+        }
+
+        &:last-child {
+            .fields-section {
+                &:last-child {
+                    border-bottom: 2px solid #fff;
+                }
+            }
+        }
+    }
+
+    .expand-button {
+        text-align: right;
+        margin: 0 6px 0 0;
+
+        .icon {
+            padding: 6px 10px;
+            margin: -6px 0;
+            height: auto;
+            width: auto;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    }
+}
+
+
+.property-wrap {
+    &:first-child {
+
+        .property-vertical-offset {
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+
+        .cs-field-set-group {
+            margin-top: 0;
+        }
+    }
+}
+
+.property-vertical-offset {
+    margin: 15px 0;
+}
+
+.property-control-container {
+
+    .property-label,
+    .cs-form-label {
+        margin-top: 10px;
+    }
+}
+
+.control-settings-caption {
+    font-size: 14px;
+    font-weight: 700;
+    padding: 0 15px;
+    // color: #234258;
+
+    .text,
+    .icon {
+        vertical-align: middle;
+    }
+
+    .icon {
+        display: inline-block;
+        font-size: 16px;
+    }
+}
+
+.cs-form-label,
+.property-label {
+    font-weight: 400;
+    display: block;
+    margin-bottom: 3px;
+    position: relative;
+    color: #000;
+
+    .b-icon,
+    .icon {
+        margin-right: 0.3em;
+        top: -0.1em;
+        position: relative;
+        vertical-align: middle;
+    }
+
+    .icon.tooltip {
+        position: absolute;
+        top: 2px;
+        right: 0;
+        cursor: pointer;
+        font-size: 12px;
+    }
+
+    .ui.popup.tooltip {
+        top: 12px;
+        right: -7px;
+    }
+}
+.cs-link-ctr {
+    margin-top: 3px;
+}
+
+.property-control-container {
+    //margin: 15px 0;
+    // background-color: #dce1e4;
+    // border-bottom: 1px dotted #dce1e4;
+
+    label {
+        margin-bottom: 3px;
+    }
+
+    .cs-field-set-group & {
+        margin: 9px 0;
+    }
+
+
+    .child-block {
+        padding-left: 20px;
+        position: relative;
+
+        @tree-color: #f59e00;
+
+        &:before {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 1px;
+            border-left: 1px dotted @tree-color;
+            top: -3px;
+            left: 6px;
+            bottom: 5px;
+        }
+
+        &-cb {
+            margin-top: 10px;
+
+            .custom-checkbox-wrap {
+                margin: 0;
+            }
+        }
+
+        &-arrow {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 5px;
+            left: -8px;
+
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 3px 0 2px 3px;
+            border-color: transparent transparent transparent @tree-color;
+        }
+        &-regexp {
+            padding: 5px;
+            font-size: 1.4em;
+        }
+
+        &-item {
+            position: relative;
+
+            &:before {
+                content: '';
+                display: block;
+                position: absolute;
+                width: 3px;
+                height: 1px;
+                border-bottom: 1px dotted @tree-color;
+                top: 7px;
+                left: -12px;
+                bottom: 0;
+            }
+
+            &:last-child,
+            &.last-child {
+                &:after {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    width: 3px;
+                    background: #fff;
+                    border-left: 1px solid #fff;
+                    left: -14px;
+                    bottom: 0;
+                    top: 8px;
+                }
+            }
+        }
+    }
+}
+.cs-light-label {
+    font-size: 12px;
+    color: #555;
+    padding-bottom: 5px;
+}
+.state-invalid {
+    border: 1px solid red;
+}
+
+.fields-section {
+    padding: 0;
+    margin: 0;
+    border-top: 2px solid #fff;
+
+    &-caption {
+
+        .ui.accordion.control-settings-body &.title {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 10px 15px;
+            margin: 0 -15px;
+            margin: 0;
+            color: #000;
+            background: #dee0e1;
+        }
+    }
+
+    .content {
+
+        .ui.accordion.control-settings-body & {
+            margin: 0;
+            padding: 15px;
+            //border: 2px solid #f1f1f1;
+
+            &:last-child {
+                padding: 15px!important;
+            }
+        }
+    }
+}
+
+
+
+.control-settings-body {
+    &.ui.accordion {
+        .title {
+
+            > .dropdown.icon {
+                transform: rotate(180deg);
+                float: right;
+                margin: 0 -3px 0 5px;
+            }
+
+            &.active {
+
+                > .dropdown.icon {
+                    transform: rotate(90deg);
+                }
+            }
+        }
+
+        .title~.content:not(.ui) {
+            padding: 0;
+        }
+    }
+
+    > .scroll-inner {
+        height: 100%;
+        overflow: auto;
+    }
+}

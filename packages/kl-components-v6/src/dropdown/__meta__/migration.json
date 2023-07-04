@@ -1,0 +1,37 @@
+{
+  "component": "Dropdown",
+  "v6": "/docs/atoms-dropdown--basic",
+  "v3": [
+    {
+      "prop": "onVisibleChange",
+      "changes": "Added"
+    },
+    {
+      "prop": "overlayClassName",
+      "changes": "Added"
+    },
+    {
+      "prop": "trigger",
+      "changes": "Added trigger contextMenu, by clicking on the right mouse button"
+    }
+  ],
+  "v5": [
+    {
+      "prop": "autoFocus",
+      "changes": "Removed"
+    },
+    {
+      "prop": "destroyPopupOnHide",
+      "changes": "Removed"
+    },
+    {
+      "prop": "getPopupContainer",
+      "changes": "Removed"
+    },
+    {
+      "prop": "overlayStyle",
+      "changes": "Removed"
+    }
+  ],
+  "common": []
+}

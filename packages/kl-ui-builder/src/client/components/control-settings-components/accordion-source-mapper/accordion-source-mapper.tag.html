@@ -1,0 +1,14 @@
+<accordion-source-mapper>
+    <checkbox-control-pair ref="controlSwitch" label="{opts.label}"
+                           term="{opts.fncName}"
+                           onchange="{onValueChange}"
+                           options="{accordionSources}" enabled="{opts.accordionSource != null}" accordion="{opts.accordionSource}">
+        <select ref="accordionSourceName" class="ui dropdown fluid" onchange="{onValueChange}">
+            <option each="{opts.options}" value="{id}" selected="{ id == parent.opts.accordion }">{displayName}</option>
+        </select>
+    </checkbox-control-pair>
+
+    <script>
+        //= include *.tag.js
+    </script>
+</accordion-source-mapper>

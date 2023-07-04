@@ -1,0 +1,75 @@
+import { Canvas, Meta, Story } from "@storybook/addon-docs";
+import { badges } from '../../.storybook/badges'
+import { StoryLayout } from '../../.storybook/StoryComponents'
+import { Space, SpaceProps } from '.'
+import { Text } from '../typography'
+
+<Meta
+  title="atoms/Space"
+  component={Space}
+  parameters={{
+    badges: [badges.beta, badges.dev],
+  }}
+/>
+
+# Space
+
+A component for displaying an array of elements with a certain indentation in a certain direction.
+
+## Common
+Basic Component Usage Example.
+
+The props are passed as React.Children and the direction and size props that define the direction and size of the gap between elements, respectively.
+
+<Story
+  name="Common"
+  args={{ theme: 'light', direction: 'horizontal', size: 8, align: 'center' }}
+  argTypes={{
+    theme: {
+      control: { type: 'select', default: 'light' },
+      options: ['light', 'dark']
+    },
+    direction: {
+      control: { type: 'select', default: 'horizontal' },
+      options: ['horizontal', 'vertical']
+    },
+    size: {
+      controls: { type: 'number' }
+    },
+    align: {
+      control: { type: 'select', default: 'center'} ,
+      options: ['center', 'start', 'end', 'self-start', 'self-end', 'flex-start', 'flex-end']
+    },
+    wrap: {
+      control: { type: 'select', default: 'wrap' } ,
+      options: ['nowrap', 'wrap', 'wrap-reverse']
+    }
+  }}
+>
+  {({ theme, ...rest }) => (
+    <StoryLayout theme={theme} style={{width: 200}}>
+      <Space {...rest}>
+        <Text>kek</Text>
+        <Text>foo</Text>
+        <Text>bar</Text>
+        <Text>kek</Text>
+        <Text>foo</Text>
+        <Text>bar</Text>
+        <Text>kek</Text>
+        <Text>foo</Text>
+        <Text>bar</Text>
+        <Text>kek</Text>
+        <Text>foo</Text>
+        <Text>bar</Text>
+      </Space>
+    </StoryLayout>
+  )}
+</Story>
+
+### FAQ
+
+-
+
+### Used by
+
+`TIP`, `Tags`

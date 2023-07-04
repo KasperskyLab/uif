@@ -1,0 +1,11 @@
+node_modules/
+.env
+.gitignore
+gulpfile.js
+CHANGELOG.md
+jest.config.js
+yarn-error.log
+__tests__/
+coverage/
+jest.config.json
+*.md

@@ -1,0 +1,26 @@
+/*******************************
+         Theme Overrides
+*******************************/
+
+.ui.button {
+  font-size: 0.7857rem;
+}
+
+.ui.button.link {
+  background: transparent;
+  border: none;
+  padding: 0;
+  text-transform: none;
+  font-size: 12px;
+  font-weight: 300;
+  color: #4183c4;
+
+  &:hover {
+    color: #1e70bf;
+  }
+
+  &.add,
+  &.remove {
+    margin: 3px 0;
+  }
+}

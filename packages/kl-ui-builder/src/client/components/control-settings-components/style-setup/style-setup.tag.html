@@ -1,0 +1,108 @@
+<style-setup>
+    <div class="offset-v-element">
+
+        <div if="{rules.indent}" class="offset-v-element">
+            <label class="cs-form-label">
+                Nesting level (left indent)
+            </label>
+            <select ref="indent" value="{opts.indent}" onchange="{onValueChange}" class="ui dropdown fluid">
+                <option value="0">None</option>
+                <option value="1">Space 1 (24px)</option>
+                <option value="2">Space 2 (48px)</option>
+                <option value="3">Space 3 (72px)</option>
+                <option value="101">Checkbox width</option>
+                <option value="102">Toggle width</option>
+                <option value="103">Label width</option>
+            </select>
+        </div>
+        <div if="{rules.offsetBottom}" class="offset-v-element">
+            <label class="cs-form-label">
+                Margin bottom
+            </label>
+            <select ref="offsetBottom" value="{opts.offsetBottom}" onchange="{onValueChange}" class="ui dropdown fluid">
+                <option value="0">None</option>
+                <option value="1">Space 1 (12px)</option>
+                <option value="2">Space 2 (24px)</option>
+                <option value="3">Space 3 (36px)</option>
+                <option value="-1">Negative 1 (-12px)</option>
+                <option value="-2" disabled>Negative 2 (-24px)</option>
+                <option value="-3" disabled>Negative 3 (-36px)</option>
+            </select>
+        </div>
+        <div if="{rules.offsetTop}" class="offset-v-element">
+            <label class="cs-form-label">
+                Margin top
+            </label>
+            <select ref="offsetTop" value="{opts.offsetTop}" onchange="{onValueChange}" class="ui dropdown fluid">
+                <option value="0">None</option>
+                <option value="1">Space 1 (12px)</option>
+                <option value="2">Space 2 (24px)</option>
+                <option value="3">Space 3 (36px)</option>
+                <option value="-1">Negative 1 (-12px)</option>
+                <option value="-2" disabled>Negative 2 (-24px)</option>
+                <option value="-3" disabled>Negative 3 (-36px)</option>
+            </select>
+        </div>
+        <div if="{rules.offsetAfter}" class="offset-v-element">
+            <label class="cs-form-label">
+                Margin right
+            </label>
+            <select ref="offsetAfter" value="{opts.offsetAfter}" onchange="{onValueChange}" class="ui dropdown fluid">
+                <option value="0">None</option>
+                <option value="1">Space 1 (24px)</option>
+                <option value="2">Space 2 (48px)</option>
+                <option value="3">Space 3 (72px)</option>
+            </select>
+        </div>
+        <div if="{rules.labelPos}" class="offset-v-element">
+            <label class="cs-form-label">
+                Label position
+            </label>
+            <select ref="labelPos" value="{opts.labelPos}" onchange="{onValueChange}" class="ui dropdown fluid">
+                <option value="0">Left</option>
+                <option value="1">Top</option>
+                <option value="2">Right</option>
+            </select>
+        </div>
+        <div if="{rules.labelType}" class="offset-v-element">
+            <label class="cs-form-label">
+                Label type
+            </label>
+            <select ref="labelType" value="{opts.labelType}" onchange="{onValueChange}" class="ui dropdown fluid">
+                <option value="0">By default</option>
+                <option value="1">full</option>
+                <option value="2">stretch</option>
+            </select>
+        </div>
+        <div if="{rules.width}" class="offset-v-element">
+            <label class="cs-form-label">
+                Control width
+            </label>
+            <div class="ui fluid input">
+                <input ref="width" type="text" value="{opts.width}" onchange="{onValueChange}" class="ksc-form-input">
+            </div>
+        </div>
+        <div if="{rules.state}" class="offset-v-element">
+            <label class="cs-form-label">
+                Control state by default
+            </label>
+            <select ref="state" value="{opts.state}" onchange="{onValueChange}" class="ui dropdown fluid">
+                <option value="0">--</option>
+                <option value="1">Disabled</option>
+                <option value="3">Hidden</option>
+            </select>
+        </div>
+        <div if="{rules.customClass}" class="offset-v-element">
+            <label class="cs-form-label">
+                CSS class
+            </label>
+            <div class="ui fluid input">
+                <input ref="customClass" type="text" value="{opts.customClass}" onchange="{onValueChange}">
+            </div>
+        </div>
+
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</style-setup>

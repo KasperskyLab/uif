@@ -1,0 +1,98 @@
+<key-value-list>
+    <div>
+        <div class="radio-group">
+
+            <radio-button>
+                <div class="ui radio checkbox" onclick="{processClick}">
+                    <input ref="input"
+                           type="radio"
+                           name="cb1"
+                           value="0"
+                           onchange="{onSourceTypeSelect}"
+                           checked="{sourceType == '0'}"
+                           _class="hidden">
+                    <label>Static list</label>
+                </div>
+            </radio-button>
+
+            <radio-button onclick="{processClick}">
+                <div class="ui radio checkbox">
+                    <input ref="input"
+                           type="radio"
+                           name="cb1"
+                           value="1"
+                           onchange="{onSourceTypeSelect}"
+                           checked="{sourceType == '1'}"
+                           _class="hidden">
+                    <label>Dynamic list</label>
+                </div>
+            </radio-button>
+
+            <radio-button onclick="{processClick}">
+                <div class="ui radio checkbox">
+                    <input ref="input"
+                           type="radio"
+                           name="cb1"
+                           value="2"
+                           onchange="{onSourceTypeSelect}"
+                           checked="{sourceType == '2'}"
+                           _class="hidden">
+                    <label>runtime.variable</label>
+                </div>
+            </radio-button>
+
+        </div>
+        <div class="child-block">
+            <div class="child-block-item" if="{sourceType == '0'}">
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    <span class="element-info">List source</span>
+                </label>
+
+                <table class="keyValue-table">
+                    <tr>
+                        <th>Value</th>
+                        <th>Text<i class="uib icon ico-localization"></i></th>
+                    </tr>
+                    <tr each={pair in items} onclick="{editRow}">
+                        <td>
+                            <input type="text" class="kvl-row-item" value="{pair.value}" onkeyup="{saveKeyChange}"/>
+                        </td>
+                        <td>
+                            <input type="text" class="kvl-row-item" value="{pair.text}" onkeyup="{saveValueChange}"/>
+                        </td>
+                    </tr>
+                </table>
+
+                <a href="#" onclick="{addNewItem}" class="ui button link add">Add new element</a>
+
+            </div>
+            <div class="offset-v-element child-block-item"
+                 if="{sourceType == '1'}">
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    <span class="element-info"></span>List source
+                </label>
+                <search-input search_function="{productAPI.runtime.memberSearch}"
+                              term="{opts.source}"
+                              onchange_handler="{onValueChange}"
+                              ref="source"></search-input>
+            </div>
+            <div class="offset-v-element child-block-item"
+                 if="{sourceType == '2'}">
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    <span class="element-info"></span>Variable name
+                </label>
+                <div class="ui fluid input">
+                    <input type="text"
+                           value="{opts.variable}"
+                           onchange="{onValueChange}" ref="variable">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</key-value-list>

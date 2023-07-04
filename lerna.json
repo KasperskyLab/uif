@@ -1,0 +1,24 @@
+{
+  "packages": [
+    "packages/*"
+  ],
+  "version": "independent",
+  "command": {
+    "init": {
+      "exact": true
+    },
+    "version": {
+      "exact": true
+    },
+    "publish": {
+      "exact": true,
+      "allowBranch": ["develop", "feature/*"],
+      "message": "Publish",
+      "ignoreChanges": [
+        "**/tests/**",
+        "**/*.md"
+      ]
+    }
+  },
+  "npmClient": "yarn"
+}

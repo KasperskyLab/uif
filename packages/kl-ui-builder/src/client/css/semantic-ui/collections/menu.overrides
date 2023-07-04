@@ -1,0 +1,161 @@
+/*******************************
+         Theme Overrides
+*******************************/
+
+.ui.menu {
+  &.menu-pills {
+    border: none;
+    margin: 0;
+    box-shadow: none;
+    min-height: 0;
+    align-items: center;
+    justify-content: center;
+
+    > .item {
+      font-weight: 500;
+      color: #234258;
+      padding: 3px 10px;
+      border: none;
+      border-radius: 3px;
+      margin: 0 0 0 5px;
+      cursor: pointer;
+
+
+      &:before,
+      &:after {
+        display: none;
+      }
+
+      &:hover {
+        background: #00a88e;
+        color: #fff;
+      }
+
+      &.active {
+        background: #00a88e;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.right-side {
+  .ui.menu {
+  &.menu-pills {
+    > .item {
+      
+      &:hover {
+        background: #657580;
+      }
+
+      &.active {
+        background: #657580;
+      }
+    }
+  }
+}
+}
+
+.pointing-right {
+  &.ui.menu.secondary.pointing {
+    border-bottom: 1px solid rgba(34,36,38,.15);
+
+    .item {
+      margin: 0 0 -1px;
+    }
+
+    .active.item {
+      border-color: #f59e00;
+    }
+  }
+}
+
+
+.ui.menu {
+  &.top-tabs {
+    border: none;
+    font-size: 11px;
+    margin-bottom: -1px;
+
+
+    > .item {
+      margin: 0;
+      border: none;
+      color: #fff;
+      text-transform: uppercase;
+      font-weight: 600;
+
+      &:before,
+      &:after {
+        display: none;
+      }
+
+      &:hover {
+        color: #f0f0f0;
+      }
+
+      &.active {
+        color: #000;
+        font-weight: 600;
+        margin: 0;
+        border-radius: 0!important;
+
+        .icon {
+          color: #000;
+        }
+      }
+
+      .icon {
+        font-size: 15px;
+        color: orange;
+      }
+    }
+  }
+}
+
+
+.ui.menu {
+  &.right-tabs {
+    border: none;
+    background: transparent;
+    padding: 0 15px;
+    font-size: 11px;
+    min-height: 0;
+
+    > .item {
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #fff;
+      padding: 0.9em 1em 1.0em 1em;
+      margin: 0 0 -1px 0;
+      border: none;
+
+      .icon {
+        font-size: 1rem;
+        color: orange;
+
+      }
+
+      &:before,
+      &:after {
+        display: none;
+      }
+
+      &:hover {
+        color: #fff;
+      }
+
+      &.active {
+        color: #000;
+        font-weight: 600;
+        border-radius: 0!important;
+        margin: 0 0 -1px 0;
+        background-color: #fff;
+
+        .icon {
+          color: #000;
+        }
+      }
+    }
+  }
+}

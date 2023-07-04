@@ -1,0 +1,14 @@
+<control-group-setup>
+    <div class="ctrl le-ctr ctrl-group">
+        <div class="ui-form-label ui-form-label--group" onclick="{createReceiver}">Control group</div>
+        <div each="{cont, i in containers}" ref="{'wrap_' + i}" hidden="{cont.hidden || isInherited}">
+            <div onclick={selectContainer} class="{selected: i == activeCtrlIndex}">
+                <component-draft parent_setup={parent.opts.setup} ref='{"cd_" + i}'></component-draft>
+            </div>
+        </div>
+        <p style="padding: 20px;" if="{ isInherited }">Control group is inhereted from <b>#{ formToInherit }</b></p>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</control-group-setup>

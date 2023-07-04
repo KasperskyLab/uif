@@ -1,0 +1,23 @@
+<form-parameter-setup>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Value</th>
+        </tr>
+        <tr each="{param in params}">
+            <td><input type="text" value="{param.name}"></td>
+            <td>
+                <select value="{param.type}">
+                    <option value="static">Constant value</option>
+                    <option value="runtimeVar">runtime.variable</option>
+                    <option value="member">Handler</option>
+                </select>
+            </td>
+            <td><input type="text" value="{param.value}"></td>
+        </tr>
+    </table>
+    <script>
+        //= include *.tag.js
+    </script>
+</form-parameter-setup>

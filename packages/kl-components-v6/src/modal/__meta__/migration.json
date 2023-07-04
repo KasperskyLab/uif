@@ -1,0 +1,47 @@
+{
+  "component": "Modal",
+  "v6": "/docs/molecules-modal--default",
+  "v3": [],
+  "v5": [{
+      "prop": "header",
+      "changes": {
+        "before": "title",
+        "after": "header",
+        "description": "Changed title --> header due to name collision with antd"
+      }
+    },
+    {
+      "prop": "size",
+      "changes": {
+        "before": "small | large | medium | xlarge | xxlarge",
+        "after": "Removed",
+        "description": "Removed size grid"
+      }
+    },
+    {
+      "prop": "mode",
+      "changes": {
+        "before": "type",
+        "after": "mode",
+        "description": "Changed naming type --> mode"
+      }
+    },
+    {
+      "prop": "actions",
+      "changes": {
+        "before": "footer",
+        "after": "actions",
+        "description": "Changed naming footer (ReactNode) ---> actions (Record<>). Changed how buttons are delivered to the footer"
+      }
+    }
+  ],
+  "common": [{
+      "prop": "componentId",
+      "changes": "new prop"
+    },
+    {
+      "prop": "noIcon",
+      "changes": "new prop"
+    }
+  ]
+}

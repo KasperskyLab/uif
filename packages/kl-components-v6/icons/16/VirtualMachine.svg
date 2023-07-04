@@ -1,0 +1,7 @@
+<svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 8H3V0H13V8H10.5V9H11V11H5V9H5.5V8ZM9.25 8H6.75V9H9.25V8ZM5 6H11V2H5V6Z" fill="currentColor"/>
+<path d="M3.33333 10.332L1 12.6654L3.33333 14.9987" stroke="currentColor" stroke-width="2"/>
+<path d="M12.6667 10.332L15 12.6654L12.6667 14.9987" stroke="currentColor" stroke-width="2"/>
+<circle cx="6" cy="13" r="1" fill="currentColor"/>
+<circle cx="10" cy="13" r="1" fill="currentColor"/>
+</svg>

@@ -1,0 +1,69 @@
+{
+  "ru": {
+    "translation": {
+      "upload": {
+        "dropFileTitle": "Drop file here",
+        "pasteLinkTitle": "Paste link to file her",
+        "helpText": "You can add up to 6 ZIP and RAR files up to 200 MB in size",
+        "placeholder": "placeholder",
+        "addFiles": "Add files",
+        "cancel": "Cancel",
+        "selectAnotherFile": "Select another file",
+        "enterNewURL": "Enter new URL",
+        "repeat": "Repeat",
+        "loadingTitle": "Uploading {{value, number}}%",
+        "loadingDescription": "{{file, fileName}}",
+        "successTitle": "Uploading success",
+        "successDescription": "{{file, fileName}} successfuly uploaded into the server",
+        "errorTitle": "Uploading error",
+        "errorDescription": "{{file, fileName}} could not be loaded due to a connection failure"
+      },
+      "severity": {
+        "critical": "Critical",
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "info": "Info",
+        "positive": "Positive"
+      },
+      "select": {
+        "empty": "No Data"
+      },
+      "pagination": {
+        "total": "Total {{count}} items",
+        "page": "page",
+        "goto": "Go to"
+      },
+      "search": {
+        "raw": "Search",
+        "dotted": "Search..."
+      },
+      "table": {
+        "column": {
+          "name": "First column"
+        },
+        "column2": {
+          "name": "Second column"
+        },
+        "column3": {
+          "name": "Third column"
+        },
+        "columnDropdown": {
+          "ascending": "Ascending",
+          "descending": "Descending",
+          "filters": "Filters",
+          "resetFilters": "Reset filters"
+        },
+        "columnsSettings": {
+          "header": "Columns settings",
+          "selectAll": "Select all",
+          "columns": "Columns",
+          "grouping": "Grouping",
+          "clear": "Clear",
+          "noGrouping": "No grouping"
+        },
+        "groupingEmpty": "Other"
+      }
+    }
+  }
+}

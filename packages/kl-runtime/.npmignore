@@ -1,0 +1,13 @@
+__tests__/
+.vscode/
+.idea/
+.env
+.npmignore
+gulpfile.js
+jest.config.js
+.babelrc
+babel.config.js
+NOT-PUBLISHED.md
+yarn-error.log
+.lintstagedrc
+src/

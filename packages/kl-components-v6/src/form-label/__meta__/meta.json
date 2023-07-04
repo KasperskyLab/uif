@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true
+  },
+  "component": "Form Label",
+  "description": "",
+  "usage": "",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-UI-KIT?type=design&node-id=35101-171488&t=JYGzlCCHNd3uC7VZ-0"
+}

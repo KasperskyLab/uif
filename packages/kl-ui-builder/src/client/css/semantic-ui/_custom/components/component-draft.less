@@ -1,0 +1,115 @@
+
+
+.component-draft {
+    margin: 5px 1px;
+    padding: 3px;
+    border-radius: 3px;
+    // border: 1px dashed #fff;
+    cursor: pointer;
+
+    .ui-form-layout {
+        margin: 0;
+        padding: 0;
+    }
+
+    .no-ctrl {
+        min-height: 33px;
+        // border: 2px dotted white;
+    }
+
+    border: 2px solid transparent;
+
+    &.active {
+        border: 2px solid transparent;
+        background-color: #ffdb99;
+        //background-color: #d2b683;
+        ._ui-placeholder {
+            border: 2px solid orange;
+        }
+        .component-draft {
+            border: 2px solid white;
+            border-radius: 0;
+            &:hover {
+                ._ui-placeholder {
+                    border: 2px solid orange;
+                }
+            }
+            ._ui-placeholder {
+                border: 2px solid #9cabb5;
+            }
+        }
+
+        &:hover {
+            //border: 2px solid orange;
+            background-color: #ffdb99;
+        }
+    }
+    &:hover {
+        border: 2px solid transparent;
+        background-color: #fff6e6;
+
+        ._ui-placeholder {
+            border: 2px solid orange;
+        }
+
+        .component-draft {
+            border: 2px solid white;
+            border-radius: 0;
+            &:hover {
+                ._ui-placeholder {
+                    border: 2px solid orange;
+                }
+            }
+            ._ui-placeholder {
+                border: 2px solid #9cabb5;
+            }
+            &.active {
+                ._ui-placeholder {
+                    border: 2px solid orange;
+                }
+            }
+        }
+    }
+
+    & ._ui-placeholder--text-only,
+    &.active ._ui-placeholder--text-only,
+    &:hover ._ui-placeholder--text-only{
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+    }
+
+    h1, h2, h3 {
+        padding: 0 !important;
+        margin: 0 !important;;
+    }
+}
+.component-draft .ui-form-label {
+    cursor: pointer;
+}
+.le-cell-content {
+    .component-draft {
+        min-height: 27px;
+    }
+}
+
+.component-draft:hover .component-draft {
+    //border-color: #f59e00 !important;
+    //border-style: dotted;
+}
+
+.component-draft .component-draft {
+    border: 2px solid white;
+}
+
+art-board root-ctr.invalid {
+    border: 2px solid red;
+}
+
+.component-draft.invalid > .ctrl {
+    border: 2px solid red;
+}
+
+.component-draft.invalid > .ui-form-layout > ._layout-row-wrap .ctrl {
+    border: 2px solid red !important;
+}

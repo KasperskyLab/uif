@@ -1,0 +1,11 @@
+<toggled-runtime-member-search>
+    <checkbox-control-pair ref="controlSwitch" label="{opts.label}"
+                           member_name="{opts.memberName}"
+                           onchange="{onValueChange}"
+                           enabled="{opts.memberName != null}">
+        <runtime-member-search ref="memberSearch" term="{opts.member_name}" onchange="{onValueChange}"></runtime-member-search>
+    </checkbox-control-pair>
+    <script>
+        //= include *.tag.js
+    </script>
+</toggled-runtime-member-search>

@@ -1,0 +1,15 @@
+{
+    "dod": {
+      "designTokens": true,
+      "useThemedHook": false,
+      "unitTests": false,
+      "screenshotTests": false,
+      "migration": false,
+      "apiTable": false,
+      "storybook": true
+    },
+    "component": "Markdown",
+    "description": "Component for displaying markdown markup",
+    "usage": "",
+    "designLink": ""
+  }

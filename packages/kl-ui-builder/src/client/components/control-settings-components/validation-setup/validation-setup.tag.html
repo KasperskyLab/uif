@@ -1,0 +1,158 @@
+<validation-setup class="{multi: opts.display_number}">
+    <div class="dependency-setup-number" if="{opts.display_number}">{opts.index + 1}</div>
+    <div>
+        <div class="offset-v-element">
+            <label class="cs-form-label">
+                <span class="element-info">Validation type</span>
+            </label>
+            <select class="ui dropdown fluid" onchange="{onChange}" ref="method" value="{opts.setup.method}">
+                <option value="date">Date</option>
+                <option value="email">Email</option>
+                <option value="integer">Integer</option>
+                <option value="float">Number / Float number</option>
+                <option value="ipv4">IPv4</option>
+                <option value="ipv6">IPv6</option>
+                <option value="macAddress">MAC address</option>
+                <option value="path">Path</option>
+                <option value="range">Range</option>
+                <option value="string">String</option>
+                <option value="proxy">Proxy</option>
+                <option value="hostname">Host name</option>
+                <option value="netBiosName">Net bios name</option>
+                <option value="regexp">Regexp</option>
+                <option value="notEmpty">Not empty</option>
+                <option value="length">Length</option>
+                <option value="group">Group</option>
+                <option value="rangeEnum">RangeEnum</option>
+                <option value="ipv4Mask">IPv4Mask</option>
+                <option value="ipv6Mask">IPv6Mask</option>
+                <option value="ipv4SubnetMask">ipv4SubnetMask</option>
+                <option value="ipv6SubnetMask">ipv6SubnetMask</option>
+                <option value="ignoreSpecialChars">Ignore special chars</option>
+                <option value="ignoreKSCSpecialChars">Ignore special chars (NWC)</option>
+                <option value="ignoreKSCSpecialCharsExtended">Ignore special chars (KSC)</option>
+                <option value="ignoreKes4winSpecialChars">Ignore Kes4win special chars</option>
+                <option value="password">Password</option>
+                <option value="ignoreFirstLastSpaces">Ignore first or last spaces</option>
+                <option value="urlInput">URL Input</option>
+                <option value="urlHttpInput">URL http Input</option>
+                <option value="port">Port</option>
+                <option value="function">Custom function</option>
+                <option value="equality">Equality</option>
+                <option value="notEqual">Not equal</option>
+            </select>
+        </div>
+        <div show="{method == 'function'}" class="child-block">
+            <div class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <runtime-member-search ref="customFunctionSearch" onchange="{onFunctionNameChange}" term="{opts.setup.functionName}"></runtime-member-search>
+            </div>
+        </div>
+        <div show={ method == 'length' } class="child-block">
+
+            <div class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    Condition
+                </label>
+                <select class="ui dropdown fluid" onchange="{onValueChange}" ref="condition" value="{opts.setup.condition}">
+                    <option value=">="> >= </option>
+                    <option value=">"> > </option>
+                    <option value="<="> <= </option>
+                    <option value="<"> < </option>
+                    <option value="=="> = </option>
+                </select>
+            </div>
+            <div class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <div class="grid-cols ">
+                    <div class="ui fluid input">
+                        <input type="text"
+                               ref="lengthSize"
+                               value="{opts.setup.lengthSize}"
+                               onchange="{onValueChange}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div show={ method == 'range' || method == 'rangeEnum' } class="child-block">
+            <div show={ method == 'rangeEnum' } class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <div class="grid-cols ">
+                    <checkbox text="Allow empty values"
+                              ref="allowEmptyValue"
+                              onchange="{onValueChange}"
+                              value="{opts.setup.allowEmptyValue}"></checkbox>
+                </div>
+            </div>
+            <div class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    From
+                </label>
+                <div class="ui fluid input">
+                    <input type="text"
+                           ref="from"
+                           value="{opts.setup.from}"
+                           onchange="{onChange}">
+                </div>
+
+            </div>
+            <div class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    To
+                </label>
+                <div class="ui fluid input">
+                    <input type="text"
+                           ref="to"
+                           value="{opts.setup.to}"
+                           onchange="{onChange}">
+                </div>
+            </div>
+            
+        </div>
+        <div show={ method == 'regexp' } class="child-block">
+            <div class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    Regular expression
+                </label>
+                <div class="offset-v-element child-block-item">
+                    <span class="child-block-arrow"></span>
+                    <div class="ui fluid input">
+                        <span class="child-block-regexp">/</span>
+                        <input type="text"
+                               ref="condition"
+                               value="{opts.setup.condition}"
+                               onchange="{onValueChange}">
+                        <span class="child-block-regexp">/</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div show={ method == 'equality' || method == 'notEqual' } class="offset-v-element child-block-item">
+            <div class="offset-v-element child-block-item">
+                <span class="child-block-arrow"></span>
+                <label class="cs-form-label">
+                    { method == 'equality' ? 'Equals' : 'Not equals' }
+                </label>
+                <div class="offset-v-element child-block-item">
+                    <span class="child-block-arrow"></span>
+                    <div class="ui fluid input">
+                        <input type="text"
+                                ref={ method == 'equality' ? 'equalsTo' : 'notEqualsTo' }
+                                value={ method == 'equality' ? opts.setup.equalsTo : opts.setup.notEqualsTo }
+                                onchange="{onValueChange}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <a href="#" onclick="{remove}" class="ui button link remove">Delete rule</a>
+        </div>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</validation-setup>

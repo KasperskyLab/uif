@@ -1,0 +1,40 @@
+{
+  "component": "Badge",
+  "v6": "/docs/atoms-badge--basic",
+  "v3": [
+    {
+      "prop": "search",
+      "changes": "Removed"
+    },
+    {
+      "prop": "icon",
+      "changes": "Removed"
+    },
+    {
+      "prop": "color",
+      "changes": "Removed"
+    },
+    {
+      "prop": "dot",
+      "changes": "Removed - use mode='dot'"
+    },
+    {
+      "prop": "offset",
+      "changes": "Removed"
+    },
+    {
+      "prop": "size",
+      "changes": "Removed"
+    },
+    {
+      "prop": "status",
+      "changes": "Removed"
+    },
+    {
+      "prop": "mode",
+      "changes": "Added - color. new | medium | positive | high | black | dot"
+    }
+  ],
+  "v5": "Not existed",
+  "common": ""
+}

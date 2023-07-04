@@ -1,0 +1,26 @@
+<toolbox class="toolbox {is-visible: visible}">
+
+    <div class="toolbox-toggler">
+        <i class="icon chevron {visible ? 'left' : 'right'}" onclick={toggleToolbox}></i>
+    </div>
+
+    <div class="toolbox-scroll height-full">
+
+        <div class="toolbox-group" each="{group in componentGroups}">
+            <div class="toolbox-group-header">{group.caption}</div>
+            <div class="ui list list-aside">
+                <a href="javascript:void(0)" class="item" draggable="true" title="{title}" ondragstart={parent.notifyDragClients}
+                   each={group.elements} ondblclick="{parent.onItemDblClick}">
+                    <i class="icon {icon}"></i>
+                    <div class="content">{title}</div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+        //= include *.tag.js
+    </script>
+</toolbox>

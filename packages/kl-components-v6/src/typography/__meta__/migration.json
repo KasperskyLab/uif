@@ -1,0 +1,33 @@
+{
+  "component": "Typography",
+  "v6": "/docs/atoms-typography",
+  "v3": [
+    {
+      "prop": "text",
+      "changes": {
+        "before": "string",
+        "after": "depricated",
+        "description": "Changed to type with selection of required text types"
+      }
+    },
+    {
+      "prop": "level",
+      "changes": {
+        "before": "1 | 2 | 3 | 4 | 5 | 6",
+        "after": "depricated",
+        "description": "Moved to separate alias - h1,h2,h3,h4,heading,text"
+      }
+    }
+  ],
+  "v5": [
+    {
+      "prop": "level",
+      "changes": {
+        "before": "Header/H1 | Header/H2 | Header/H3 | Header/H4 | Subheader/S1 | Subheader/S2 | Subheader/S3 | Subheader/S4 | Number/N1 | Number/N2 Link/L1 |  Link/L2 |  Link/L3 |  Link/L4 |  Link/L5  |  BodyTextMedium/1 | BodyTextMedium/2 | BodyTextMedium/3 | BodyTextMedium/4 | BodyTextMedium/5 | BodyTextRegular/1 | BodyTextRegular/2 | BodyTextRegular/3 | BodyTextRegular/4 | BodyTextRegular/5",
+        "after": "depricated",
+        "description": "Moved to prop type : for Heading - H1| H2| H3| H4| S1| S2| S3| S4| N1| N2| N3| N4| N5, for Text - BTM1 | Btm2 | Btm3 | Btm4 | BTM5 | BTR1 | BTR2 | BTR3 | BTR4 | BTR5 | L1 | L2 | L3 | L4 | L5"
+      }
+    }
+  ],
+  "common": []
+}

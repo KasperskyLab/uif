@@ -1,0 +1,7 @@
+export { default as FolderProtect } from './FolderProtect.svg'
+export { default as Layers } from './Layers.svg'
+export { default as Virus } from './Virus.svg'
+export { default as Company } from './Company.svg'
+export { default as Error404 } from './Error404.svg'
+export { default as Error500 } from './Error500.svg'
+export { default as Search } from './Search.svg'

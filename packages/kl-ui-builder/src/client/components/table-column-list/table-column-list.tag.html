@@ -1,0 +1,46 @@
+<table-column-list>
+    <table class="keyValue-table" if="{columns.length > 0}">
+        <tbody each={column, i in columns}>
+            <tr>
+                <td class="tcl-col-value">
+                    <input type="text" class="tcl-col-value-input" value="{column.text}" onkeyup="{saveColumnName}" />
+                </td>
+                <td class="tcl-col-del">
+                    <i class="bordered uib i-remove icon" onclick="{removeColumn}"></i>
+                </td>
+                <td class="tcl-col-settings { active: filtersSettingsOpened[i] }" onclick="{filtersSettingsToggle(i)}">
+                    <i class="uib icon v-menu"></i>
+                </td>
+            </tr>
+            <tr if={filtersSettingsOpened[i]}>
+                <td colspan="3" class="tcl-col-filters">
+                    <div class="filters-list">
+                        <div
+                            each={ field in propertyFields }
+                            class="offset-v-element"
+                            if="{ !field.depends || checkDependency({ depends: field.depends, column: column }) }"
+                        >
+                            <label if="{ field.type !== 'checkbox' }">{ field.label }</label>
+                            <select onchange={ setProperty(i, field.fieldName) } if="{ field.type === 'select' }" >
+                                <option each={ field.items } value={ value } selected={ _.get(column,field.fieldName) === value }>{ text }</option>
+                            </select>
+                            <div class="ui input fluid" if="{ field.type === 'text' }" >
+                                <input type='text' onchange={ setProperty(i, field.fieldName) } value="{ _.get(column,field.fieldName) }">
+                            </div>
+                            <input if="{ field.type === 'checkbox' }" type='checkbox' onchange={ setProperty(i, field.fieldName) } checked={ _.get(column,field.fieldName) }>
+                            <label if="{ field.type === 'checkbox' }">{ field.label }</label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <div class="cs-link-ctr">
+        <a href="#" onclick="{addNewItem}" class="ui button link add">Add new column</a>
+    </div>
+
+    <script>
+        //= include *.tag.js
+    </script>
+</table-column-list>

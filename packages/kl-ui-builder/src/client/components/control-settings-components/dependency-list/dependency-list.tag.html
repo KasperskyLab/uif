@@ -1,0 +1,11 @@
+<dependency-list>
+    <div>
+        <div>
+            <button href="#" onclick="{addDependency}" class="ui button link add">Add new dependency</button>
+        </div>
+        <dependency-setup each="{setup, i in setupList}" display_number="{parent.setupList.length > 1}" index="{i}" setup={setup}></dependency-setup>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</dependency-list>

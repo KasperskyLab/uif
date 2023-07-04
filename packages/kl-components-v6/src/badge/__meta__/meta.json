@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true
+  },
+  "component": "Badge",
+  "desctiption": "A component for rendering a numerical value or the state of UI elements. The base is AntdBadge from the Antd library.",
+  "usage": "Displaying a Numeric Value or State of UI Elements",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1683%3A10717"
+}

@@ -1,0 +1,20 @@
+<wizard-setup>
+  
+  <div class='wizard-setup'>
+    <div class='steps'>
+      <div each="{ steps }" class='step'>
+        <div class='form-content'>
+          <span if="{ formId }">{ 'Form #' + formId + (pluginId && pluginId !== 'web-console' ? ' (' + pluginId + ')' : '') }</span>
+        </div>
+        <div class='buttons'>
+          <button each="{ buttons }" if="{ active }" class="ui-input-button">{ title }<b if="{ useHandler }">*</b></button>
+          <span if="{ customButtons }">...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+      
+  <script>
+    //= include *.tag.js
+  </script>
+</wizard-setup>

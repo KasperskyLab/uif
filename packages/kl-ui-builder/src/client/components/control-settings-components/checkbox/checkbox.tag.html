@@ -1,0 +1,13 @@
+<checkbox>
+    <div class="ui checkbox" onclick="{processClick}">
+        <input ref="input"
+               type="checkbox"
+               checked="{opts.riotValue == true}"
+               onchange="{valueChanged}"
+               class="hidden">
+        <label>{opts.text}</label>
+    </div>
+    <script>
+        //= include *.tag.js
+    </script>
+</checkbox>

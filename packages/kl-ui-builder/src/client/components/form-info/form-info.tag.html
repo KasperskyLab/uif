@@ -1,0 +1,15 @@
+<form-info>
+    <div>
+        <h3>Parent forms</h3>
+        <ul>
+            <li each="{parents}" class="fi-list-item" onclick="{onParentClick}">{name}</li>
+        </ul>
+        <h3>Child forms</h3>
+        <ul>
+            <li each="{children}" class="fi-list-item" onclick="{onParentClick}">{name}</li>
+        </ul>
+    </div>
+    <script>
+    //= include *.tag.js
+    </script>
+</form-info>

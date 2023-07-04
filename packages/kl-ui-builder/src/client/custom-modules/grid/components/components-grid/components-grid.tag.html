@@ -1,0 +1,17 @@
+<components-grid>
+    <div onclick="{createReceiver}">
+        <span class='ui-form-label ui-form-label--group'>GridItem #{gridItemId}</span><br>
+
+        <div each="{controlContainer, controlNum in controls}"
+            onclick={selectContainer(controlNum)}
+            hidden="{controlContainer.hidden}"
+            class="{selected: controlNum == selectedControlNum}"
+        >
+            <component-draft ref='{"cd_" + gridItemId + "_" + controlNum}' parent_setup={parent.opts.setup}></component-draft>
+        </div>
+    </div>
+
+    <script>
+        //= include *.tag.js
+    </script>
+</components-grid>
