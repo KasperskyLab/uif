@@ -2,13 +2,13 @@
 
 ### Screenshot testing
 
-Tests is running with Jest & Puppeteer.
-Tests is placed in [./screenshots](./screenshots).
-Tests are run via docker-compose.
+- tests are placed in [./screenshots](./screenshots) 
+- tests are running via `docker-compose`
+- for new tests please use `Jest` and `Puppeteer`
 
-Stories of components with animation are not suitable for visual testing due to their inconsistency between launches. To exclude such components from visual testing, such `stories` must have the word "animation" in their name. For example - `ButtonLoadingAnimation`.
+Component stories with animation are not suitable for visual testing due to their inconsistency between launches. To exclude such components from visual testing, such `stories` must have the word "animation" in their name. For example - `ButtonLoadingAnimation`.
 
-To test run the command
+To start tests run the command:
 
 ```
 docker-compose up -d screenshots
