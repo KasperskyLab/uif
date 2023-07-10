@@ -22,7 +22,7 @@ const base = {
     'operator-linebreak': ['error', 'after', { overrides: { '?': 'before', ':': 'before', '|>': 'before' } }],
     'no-irregular-whitespace': 'warn',
     'no-console': 'warn',
-    '@typescript-eslint/no-var-requires': 'warn'
+    '@typescript-eslint/no-var-requires': 'off'
   },
   extends: [
     'standard', // Basic set of standardjs

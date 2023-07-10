@@ -1,7 +1,14 @@
 {
-  "name": "@kl/dev-tools",
-  "version": "2.9.1",
-  "description": "KSC Development tools and configs",
+  "name": "@kaspersky/dev-tools",
+  "version": "2.9.3",
+  "description": "Development tools and configs for Babel, ESLint and TypeScript",
+  "author": "AO Kaspersky Lab",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/kasperskylab/uif#readme",
+  "repository": "kasperskylab/uif",
+  "bugs": {
+    "url": "https://github.com/kasperskylab/uif/issues"
+  },
   "main": "src/index.js",
   "scripts": {
     "test": "jest --config jest.config.json --colors",
@@ -56,9 +63,9 @@
     "*.{ts,js,tsx,jsx}": "eslint --fix"
   },
   "keywords": [
-    "ksc",
-    "kl",
-    "dev-tool",
+    "kaspersky",
+    "open single management platform",
+    "dev tools",
     "babel",
     "jest",
     "webpack",
@@ -66,8 +73,6 @@
     "development",
     "tool"
   ],
-  "author": "AO Kaspersky Lab",
-  "license": "ISC",
   "standard": {
     "env": [
       "jest"
