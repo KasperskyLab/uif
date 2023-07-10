@@ -6,8 +6,8 @@ import {
 
 export const ToolbarDocs: React.VFC<Record<string, unknown>> = () => {
   const codeExample = `
-import { Toolbar, Search, Link, Text } from '@kl/components'
-import { ToolbarItemKey, ToolbarItems, ToolbarProps } from '@kl/components/toolbar/types'
+import { Toolbar, Search, Link, Text } from '@kaspersky/components'
+import { ToolbarItemKey, ToolbarItems, ToolbarProps } from '@kaspersky/components/toolbar/types'
 
 const items = [
   {
