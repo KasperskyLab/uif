@@ -2,7 +2,7 @@
 
 ## ESLint
 
-`@kl/dev-tools` contains a set of common configuration files, plugins and extensions for ESLint.
+`@kaspersky/dev-tools` contains a set of common configuration files, plugins and extensions for ESLint.
 
 Additional installation of eslint plugins/configs is not required in your project.
 
@@ -13,7 +13,7 @@ Additional installation of eslint plugins/configs is not required in your projec
 To configure ESLint, you need to create a file `.eslintrc.js ` in the root of the project and connect the necessary set of configs:
 
 ```js
-const { getConfigPath } = require('@kl/dev-tools/src/configs/eslint/patch')
+const { getConfigPath } = require('@kaspersky/dev-tools/src/configs/eslint/patch')
 
 module.exports = {
   extends: [
@@ -29,16 +29,16 @@ module.exports = {
 
 * Option `parserOptions: { tsconfigRootDir: __dirname }` it is only needed for projects where Typescript is used and there is `tsconfig.json`.
 
-* Patch `require('@kl/dev-tools/src/configs/eslint/patch')`  is required for plugins and configs to resolve within this package (eslint by default searches for plugins relative to `.eslintrc.js` in project).
+* Patch `require('@kaspersky/dev-tools/src/configs/eslint/patch')`  is required for plugins and configs to resolve within this package (eslint by default searches for plugins relative to `.eslintrc.js` in project).
 
 **2. Install dependencies **
 
-For ESLint you need to add only 2 dependencies - `@kl/dev-tools` greater than 2.4.0 and `eslint` (6-8 ver), for example:
+For ESLint you need to add only 2 dependencies - `@kaspersky/dev-tools` greater than 2.4.0 and `eslint` (6-8 ver), for example:
 
 ```json
 {
   "devDependencies": {
-    "@kl/dev-tools": "^2.4.0",
+    "@kaspersky/dev-tools": "^2.4.0",
     "eslint": "7.14.0",
     ...
   }
@@ -49,17 +49,17 @@ For ESLint you need to add only 2 dependencies - `@kl/dev-tools` greater than 2.
 
 New configs can be added to the folder `/src/configs/eslint`, for example, these can be configs for the framework (angular, vue, etc.).
 
-At the same time, the necessary packages with eslint plugins and configs need to be added to `dependencies` in package.json, so that when installing the package `@kl/dev-tools` consists in `node_modules`.
+At the same time, the necessary packages with eslint plugins and configs need to be added to `dependencies` in package.json, so that when installing the package `@kaspersky/dev-tools` consists in `node_modules`.
 
 ### Config extension
 
-If you need to add new rules or expand the current config, it is better to do it through this package `@kl/dev-tools`, by extending the current configuration or adding a new one, as described in the paragraph above. Exceptions may be rules that apply only to your project, but do not change the rules of general configs (rules), for ex:s `env`, `globals`, `ignorePatterns`
+If you need to add new rules or expand the current config, it is better to do it through this package `@kaspersky/dev-tools`, by extending the current configuration or adding a new one, as described in the paragraph above. Exceptions may be rules that apply only to your project, but do not change the rules of general configs (rules), for ex:s `env`, `globals`, `ignorePatterns`
 
 ### FAQ
 
 * *After installing the package Eslint does not work in IDE*
   
-Restart the IDE after updating the package @kl/dev-tools. If in the console ESlint writes that he does not find any modules, then try to delete node_modules and do the installation of dependencies again. Check that there are no syntax errors in `.eslintrc.js` file, there is `parserOptions: { tsconfigRootDir: __dirname }` for TS project. It is mandatory to have a patch import `eslint/patch` and usage `getConfigPath` to specify the config name.
+Restart the IDE after updating the package @kaspersky/dev-tools. If in the console ESlint writes that he does not find any modules, then try to delete node_modules and do the installation of dependencies again. Check that there are no syntax errors in `.eslintrc.js` file, there is `parserOptions: { tsconfigRootDir: __dirname }` for TS project. It is mandatory to have a patch import `eslint/patch` and usage `getConfigPath` to specify the config name.
 
 ### Support for different Node.js versions
 
@@ -74,7 +74,7 @@ To set the env variable `NODE_OPTIONS` is used `env-cmd`.
 In your project, you will need to add to `package.json` next script:
 
 ```json
-"set-env": "./node_modules/@kl/dev-tools/node_modules/.bin/env-cmd -f ./node_modules/@kl/dev-tools/src/utils/get-node-options.js"
+"set-env": "./node_modules/@kaspersky/dev-tools/node_modules/.bin/env-cmd -f ./node_modules/@kaspersky/dev-tools/src/utils/get-node-options.js"
 ```
 
 and then into the scripts `build`, `release` and other add `yarn set-env` before the command, for ex.:
