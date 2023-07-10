@@ -22,6 +22,10 @@ module.exports = {
       title: 'Graphs',
       url: 'https://127.0.0.1/graph/',
     },
+    icons: {
+      title: 'Icons',
+      url: 'https://127.0.0.1/icons/',
+    },
   },
   core: {
     builder: 'webpack5'

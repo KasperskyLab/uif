@@ -9,9 +9,9 @@ Accepts `theme` and `locale` as props.
 ### How To Use
 ```
 import React, { useState, useCallback, useEffect } from 'react'
-import { ConfigProvider } from '@kl/components/design-system/context'
-import { ThemeKey } from '@kl/components/design-system/types'
-import { LangType } from '@kl/components/helpers/localization/types'
+import { ConfigProvider } from '@kaspersky/components/design-system/context'
+import { ThemeKey } from '@kaspersky/components/design-system/types'
+import { LangType } from '@kaspersky/components/helpers/localization/types'
 
 const Layout = () => {
   const [theme, setTheme] = useState<ThemeKey>(ThemeKey.Light)
@@ -48,8 +48,8 @@ LocalizationProvider provides locales for all components.
 Based on [I18nextProvider](https://react.i18next.com/latest/i18nextprovider)
 
 All components have localization, where there are elements with text.
-To do this, in @kl/components/helpers/localization, you need to pass an object with new values of text fields.
-The interface of each dictionary is exported from @kl/components/helpers/localization, e.g. `severity`.
+To do this, in @kaspersky/components/helpers/localization, you need to pass an object with new values of text fields.
+The interface of each dictionary is exported from @kaspersky/components/helpers/localization, e.g. `severity`.
 ```
 // ru.json
 {
@@ -94,7 +94,7 @@ Lang by default — English (USA).
 ### How To Use
 
 ```
-import { LocalizationProvider } from '@kl/components/design-system/context'
+import { LocalizationProvider } from '@kaspersky/components/design-system/context'
 
 <LocalizationProvider locale='en'>
   <App />

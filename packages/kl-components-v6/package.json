@@ -1,9 +1,21 @@
 {
-  "name": "@kl/components-v6",
+  "name": "@kaspersky/components",
+  "version": "6.39.0",
+  "description": "Kaspersky Design System UI Kit",
   "author": "AO Kaspersky Lab",
-  "license": "ISC",
-  "version": "0.39.0",
-  "description": "Components for building UI's",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/kasperskylab/uif#readme",
+  "repository": "kasperskylab/uif",
+  "bugs": {
+    "url": "https://github.com/kasperskylab/uif/issues"
+  },
+  "keywords": [
+    "kaspersky",
+    "open single management platform",
+    "design system",
+    "ui kit",
+    "storybook"
+  ],
   "main": "src/index.js",
   "module": "src/index.js",
   "typings": "src/index.d.ts",
@@ -68,13 +80,13 @@
     "styled-components": "5.3.3"
   },
   "devDependencies": {
-    "@kl/dev-tools": "2.9.0",
     "@babel/core": "7.17.5",
     "@babel/plugin-transform-runtime": "7.17.0",
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
     "@babel/runtime": "7.17.2",
     "@geometricpanda/storybook-addon-badges": "0.2.1",
+    "@kaspersky/dev-tools": "2.9.3",
     "@storybook/addon-actions": "6.4.19",
     "@storybook/addon-docs": "6.4.19",
     "@storybook/addon-essentials": "6.4.19",

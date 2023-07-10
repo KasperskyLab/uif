@@ -6,21 +6,21 @@ import { Meta } from '@storybook/addon-docs';
 
 ## Package installation
 ```
-npm i @kl/components
+npm i @kaspersky/components
 ```
 Or if you use yarn 
 ```
-yarn add @kl/components
+yarn add @kaspersky/components
 ```
 
 ## Add global styles
 
 ```
 // provide theme color to css vars
-import { GlobalStyle } from '@kl/components/design-system/global-style';
+import { GlobalStyle } from '@kaspersky/components/design-system/global-style';
 
 // provide base css
-import '@kl/components/design-system/global-style/styles.css';
+import '@kaspersky/components/design-system/global-style/styles.css';
 
 // App Root
 const AppRoot = () => (
@@ -40,9 +40,9 @@ Accepts theme and locale as props
 
 ```
 import React, { useState, useCallback, useEffect } from 'react'
-import { ConfigProvider } from '@kl/components/design-system/context'
-import { ThemeKey } from '@kl/components/design-system/types'
-import { LangType } from '@kl/components/helpers/localization/types'
+import { ConfigProvider } from '@kaspersky/components/design-system/context'
+import { ThemeKey } from '@kaspersky/components/design-system/types'
+import { LangType } from '@kaspersky/components/helpers/localization/types'
 
 const Layout = () => {
   const [theme, setTheme] = useState<ThemeKey>(ThemeKey.Light)

@@ -11,8 +11,8 @@ You can learn more about design tokens [here]('../tokens)
 ### How To Use
 ```
 import React, { useState, useCallback, useEffect } from 'react'
-import { ThemeProvider } from '@kl/components/design-system/theme'
-import { ThemeKey } from '@kl/components/design-system/types'
+import { ThemeProvider } from '@kaspersky/components/design-system/theme'
+import { ThemeKey } from '@kaspersky/components/design-system/types'
 
 const Layout = () => {
   const [theme, setTheme] = useState<ThemeKey>(ThemeKey.Light)
