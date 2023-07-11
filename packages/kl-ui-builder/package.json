@@ -1,6 +1,6 @@
 {
   "name": "@kaspersky/ui-builder",
-  "version": "1.31.2",
+  "version": "1.32.0",
   "description": "WYSIWYG editor for managed HTML forms",
   "author": "AO Kaspersky Lab",
   "license": "Apache-2.0",
