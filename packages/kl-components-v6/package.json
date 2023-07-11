@@ -22,7 +22,7 @@
   "scripts": {
     "build": "npm i && gulp clear && gulp build && tsc --project tsconfig.build.json --outDir ./esm && tsc-alias -v --dir ./esm --project tsconfig.build.json",
     "release": "npm run build && gulp deploy",
-    "build-publish": "npm run build && cd ./esm && npm publish ./ --no-git-tag-version",
+    "build-publish": "npm run build && cd ./esm && npm publish ./ --access public --no-git-tag-version",
     "update-colors": "gulp updateColors",
     "lint": "npm run lint-es && npm run lint-ts",
     "lint-es": "eslint ./src",

@@ -1,31 +1,38 @@
 {
-  "name": "@kl/runtime",
+  "name": "@kaspersky/runtime",
   "version": "4.4.0",
-  "description": "Dependency injection and module communication",
+  "description": "Application bus",
+  "author": "AO Kaspersky Lab",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/kasperskylab/uif#readme",
+  "repository": "kasperskylab/uif",
+  "bugs": {
+    "url": "https://github.com/kasperskylab/uif/issues"
+  },
+  "keywords": [
+    "kaspersky",
+    "open single management platform",
+    "runtime",
+    "service locator",
+    "event bus"
+  ],
   "browser": "lib/index.js",
   "main": "lib/server/index.js",
   "types": "types/index.d.ts",
   "scripts": {
     "test": "./node_modules/.bin/jest --config jest.config.js --colors",
-    "prepublishOnly": "npm run publish:hideReadme && gulp && yarn test",
-    "postpublish": "npm run publish:showReadme && gulp clearLibFolder",
-    "publish:hideReadme": "mv 'README.md' 'NOT-PUBLISHED.md'",
-    "publish:showReadme": "mv 'NOT-PUBLISHED.md' 'README.md'",
+    "prepublishOnly": "gulp && yarn test",
+    "postpublish": "gulp clearLibFolder",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix"
   },
-  "keywords": [
-    "runtime"
-  ],
-  "author": "AO Kaspersky Lab",
-  "license": "ISC",
   "dependencies": {
     "lodash.get": "4.4.2",
     "lodash.set": "4.3.2",
     "tiny-emitter": "2.1.0"
   },
   "devDependencies": {
-    "@kl/dev-tools": "2.9.0",
+    "@kaspersky/dev-tools": "2.9.3",
     "del": "3.0.0",
     "dotenv": "8.2.0",
     "eslint": "7.14.0",
