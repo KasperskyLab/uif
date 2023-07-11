@@ -10,7 +10,7 @@ import {
   TwoColumnsLayout,
   DefaultLayout,
   RiotComponentWrapper
-} from '@kl/components-v6'
+} from '@kaspersky/components'
 
 const Widget = styled.div`
   width: 100%;

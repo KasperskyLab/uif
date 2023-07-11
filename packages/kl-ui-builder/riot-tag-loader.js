@@ -8,7 +8,7 @@ global.riot_loader_cache = {}
 
 function getBabelConfig () {
   const babelConfig = require('./babel.config')
-  if (!babelConfig) throw Error('No @kl/dev-tools package found or no config resolved')
+  if (!babelConfig) throw Error('No @kaspersky/dev-tools package found or no config resolved')
   return { ...babelConfig }
 }
 

@@ -1,8 +1,0 @@
-version: '3'
-services:
-  ui-builder:
-    image: sha256:5d5eb16e61d1414f1892ee1ebb822f22e439625b3ed2b6365380b1566b8c32d2
-    ports:
-      - "7000:7000"
-    volumes:
-      - ./assets/ui:/opt/assets/ui
