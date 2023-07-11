@@ -1,5 +1,5 @@
 import { ComponentThemeContext } from '../config'
-import { BORDER_RADIUS } from '../../../../design-system/theme/themes/variables'
+import { BORDER_RADIUS } from '../variables'
 
 export const accordion = ({ colors }: ComponentThemeContext): any => ({
   borderRadius: `${BORDER_RADIUS[2]}px`,

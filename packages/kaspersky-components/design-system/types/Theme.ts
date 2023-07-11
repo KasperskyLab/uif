@@ -45,7 +45,7 @@ import { PickerColorConfig, PickerInputColorConfig } from '../../src/datepicker/
 import { LabelColorConfig } from '../../src/label/types'
 import { colors } from '../theme/themes/light/colors'
 import { BORDER_RADIUS, SPACES } from '../theme/themes/variables'
-import { ThemeKey } from '../types'
+import { ThemeKey } from '.'
 import {
   InputColorConfig,
   InputSizeConfig

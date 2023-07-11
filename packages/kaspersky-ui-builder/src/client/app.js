@@ -5,7 +5,7 @@ const socket = services.socket()
 let context = {}
 let contextReady = false
 
-require('./templates/artboard-control-templates/')
+require('./templates/artboard-control-templates')
 require('./modules')
 
 // region subscriptions
