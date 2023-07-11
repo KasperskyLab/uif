@@ -6,10 +6,10 @@ An opinionated toolset to build UI and Web Services like so:
 
 Currently available:
 
-* [@kl/components-v6](./packages/kaspersky-components/) — Hexa UI, Kaspersky Design System
-* [@kl/ui-builder](./packages/kaspersky-ui-builder/) — WYSIWYG editor to create HTML forms
-* [@kl/runtime](./packages/kaspersky-runtime/) — Application Bus
-* [@kl/dev-tools](./packages/kaspersky-dev-tools/) — Set of configs for ESLint, Babel, TypeScript
+* [@kaspersky/components](./packages/kaspersky-components/) — Hexa UI, Kaspersky Design System
+* [@kaspersky/ui-builder](./packages/kaspersky-ui-builder/) — WYSIWYG editor to create HTML forms
+* [@kaspersky/runtime](./packages/kaspersky-runtime/) — Application Bus
+* [@kaspersky/dev-tools](./packages/kaspersky-dev-tools/) — Set of configs for ESLint, Babel, TypeScript
 
 ## What? Why? How?
 
