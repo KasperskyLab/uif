@@ -8,7 +8,7 @@ import { ColumnType } from 'antd/lib/table'
 import { TableModule } from '../index'
 import { defaultSortFunction } from './defaultSortFunction'
 import { DropdownColumnTitle } from './DropdownColumnTitle'
-import { saveFilters, loadFilters } from './'
+import { saveFilters, loadFilters } from '.'
 import { useUpdateEffect } from '../../../../helpers/useUpdateEffect'
 import { isColumnReadonly } from '@src/table/helpers'
 
