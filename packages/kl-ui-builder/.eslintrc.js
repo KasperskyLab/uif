@@ -1,4 +1,4 @@
-const { getConfigPath } = require('@kl/dev-tools/src/configs/eslint/patch')
+const { getConfigPath } = require('@kaspersky/dev-tools/src/configs/eslint/patch')
 
 module.exports = {
   extends: [

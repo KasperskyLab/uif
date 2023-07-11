@@ -12,7 +12,7 @@ module.exports = {
       _: 'lodash',
       key: 'keymaster',
       shortid: 'shortid',
-      runtime: '@kl/runtime/lib/instance',
+      runtime: '@kaspersky/runtime/lib/instance',
       BoolField: 'BoolField',
       ButtonsListField: 'ButtonsListField',
       KeyValueListField: 'KeyValueListField',
@@ -243,24 +243,6 @@ module.exports = {
         ]
       },
       { test: /\.css$/, loader: 'style-loader!css-loader' },
-      {
-        test: /\.less$/,
-        include: [
-          path.resolve(__dirname, './src/client/custom-settings'),
-          path.resolve(__dirname, './src/client/custom-modules')
-        ],
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader'
-          },
-          {
-            loader: 'less-loader'
-          }
-        ]
-      },
       {
         test: /\.(woff|eot|woff2|ttf)$/,
         loader: 'file-loader',
