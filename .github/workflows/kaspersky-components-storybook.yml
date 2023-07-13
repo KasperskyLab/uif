@@ -1,4 +1,4 @@
-name: Build and Publish @kaspersky/components storybook to GitHub Pages
+name: "@kaspersky/components Storybook"
 
 on:
   push:
@@ -18,17 +18,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Build
+      - name: Install dependencies
         shell: bash
         run: |
-          echo "::group::Build"
           npm ci
+      - name: Build Storybook
+        shell: bash
+        run: |
           npm run build-storybook
-          echo "::endgroup::"
       - name: Upload
         uses: actions/upload-pages-artifact@v1.0.4
         with: 
-          path: dist/storybook
+          path: ./storybook-static
       - id: Deploy
         name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1
