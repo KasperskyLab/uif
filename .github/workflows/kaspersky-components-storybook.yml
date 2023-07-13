@@ -16,9 +16,21 @@ jobs:
       run:
         working-directory: ./packages/kaspersky-components
     steps:
-      - id: build-publish
-        name: Deploy to GitHub Pages
-        uses: bitovi/github-actions-react-to-ghp@v1.2.0
-        with:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build
+        shell: bash
+        run: |
+          echo "::group::Build"
+          npm ci
+          npm run build-storybook
+          echo "::endgroup::"
+      - name: Upload
+        uses: actions/upload-pages-artifact@v1.0.4
+        with: 
           path: dist/storybook
-          build_command: npm run build-storybook
+      - id: Deploy
+        name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
+        with:
+          token: ${{ github.token }}
