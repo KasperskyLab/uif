@@ -1,209 +1,342 @@
 import React from 'react'
-import styled from 'styled-components'
-import { badges } from '../../../.storybook/badges'
-import { withMeta } from '../../../helpers/hocs/MetaComponent/withMeta'
-import Meta from '../__meta__/meta.json'
-import { Tree } from '../Tree'
-import { ITreeProps } from '../types'
+import { StoryObj as Story, Meta } from '@storybook/react'
+import { badges } from '@sb/badges'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import MetaData from '../__meta__/meta.json'
+import { DataNode, TreeList, TreeListProps, TreeNav, TreeNavProps } from '@src/tree'
+import { TreeProps } from 'antd'
+import { generateTreeData, getKeys } from './utils'
 
-export default {
+const meta: Meta = {
   title: 'Molecules/Tree',
-  component: Tree,
+  argTypes: {
+    ...sbHideControls(['theme'])
+  },
+  args: {
+    testId: 'tree-test-id',
+    klId: 'tree-kl-id'
+  },
   parameters: {
-    badges: [badges.stable, badges.needsDesignReview],
+    badges: [badges.stable],
     docs: {
-      page: withMeta(Meta)
+      page: withMeta(MetaData)
     }
   }
 }
 
-const Wrapper = styled.div`
-  height: 200px;
-`
+export default meta
 
-const FixedHeightWrapper = styled.div`
-  width: 250px;
-  background: #FFFFFF;
-  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.16);
-  border-radius: 4px;
-  padding: 16px;
-  margin-bottom: 20px;
-
-  .ant-tree-list {
-    height: 170px;
-  }
-`
-
-const treeDataMock = [
+const treeDataMock: DataNode[] = [
   {
-    title: 'Drive C:/',
-    key: 'C',
+    title: 'Main',
+    key: '0-0',
     children: [
       {
-        title: 'Windows',
-        key: 'win',
+        title: 'Categorized assets',
+        disabled: true,
+        key: '0-0-0',
         children: [
           {
-            title: 'System 32',
-            key: 's32'
+            title: 'Address space',
+            key: '0-0-0-0',
+            children: [
+              {
+                title: 'Address space',
+                key: '0-0-0-0-0'
+              }
+            ]
           },
           {
-            title: 'Boot',
-            key: 'boot'
+            title: 'Business impact',
+            key: '0-0-0-1'
           },
           {
-            title: 'Fonts',
-            key: 'fonts'
+            title: 'Location',
+            key: '0-0-0-2'
           }
         ]
-      },
-      {
-        title: 'Program files',
-        key: 'ps',
-        children: [
-          {
-            title: 'Apple',
-            key: 'a'
-          },
-          {
-            title: 'Microsoft',
-            key: 'ms'
-          },
-          {
-            title: 'Ubisoft',
-            key: 'ubi'
-          }
-        ]
-      },
-      {
-        title: 'Users',
-        key: 'urs'
-      },
-      {
-        title: 'Documents',
-        key: 'docs'
-      },
-      {
-        title: 'Games',
-        key: 'games'
-      },
-      {
-        title: 'New folder',
-        key: 'nf'
-      },
-      {
-        title: 'New folder (1)',
-        key: 'nf1'
-      },
-      {
-        title: 'New folder (2)',
-        key: 'nf2'
-      },
-      {
-        title: 'New folder (3)',
-        key: 'nf3'
       }
     ]
   },
   {
-    title: 'Drive D:/',
-    key: 'd',
+    title: 'KUMA Updater',
+    key: '0-1',
     children: [
       {
-        title: 'Repo',
-        key: 'repo'
-      },
-      {
-        title: 'Books',
-        key: 'books'
-      },
-      {
-        title: 'Video',
-        key: 'video'
+        title: 'Categorized assets',
+        key: '0-1-0',
+        children: [
+          {
+            title: 'Address space',
+            key: '0-1-0-0'
+          },
+          {
+            title: 'Business impact',
+            key: '0-1-0-1'
+          },
+          {
+            title: 'Location',
+            key: '0-1-0-2'
+          }
+        ]
       }
     ]
   },
   {
-    title: 'Drive Z:/',
-    key: 'zrdv'
+    title: 'Shared',
+    key: '0-2',
+    children: [
+      {
+        title: 'Categorized assets',
+        key: '0-2-0',
+        children: [
+          {
+            title: 'Address space',
+            key: '0-2-0-0'
+          },
+          {
+            title: 'Business impact',
+            key: '0-2-0-1'
+          },
+          {
+            title: 'Location',
+            key: '0-2-0-2'
+          }
+        ]
+      },
+      {
+        title: 'Org chart',
+        key: '0-2-1',
+        children: [
+          {
+            title: 'Shared chart',
+            key: '0-2-1-0'
+          }
+        ]
+      },
+      {
+        title: 'Test chart',
+        key: '0-2-2',
+        children: [
+          {
+            title: 'Test common',
+            key: '0-2-2-0'
+          }
+        ]
+      }
+    ]
   }
 ]
 
-const TreeTemplate = ({
-  treeData = treeDataMock,
-  ...rest
-}: ITreeProps) => {
-  return (
-    <Wrapper>
-      <Tree
-        {...rest}
-        treeData={treeData}
-      />
-    </Wrapper>
+export const TreeListReadOnly: Story = {
+  render: () => (
+    <TreeList
+      mode="readOnly"
+      treeData={treeDataMock}
+      showLine={{ showLeafIcon: false }}
+    />
   )
 }
 
-const TreeCheckableTemplate = ({
-  treeData = treeDataMock,
-  ...rest
-}: ITreeProps) => {
-  return (
-    <Wrapper>
-      <Tree
-        {...rest}
-        checkable
-        treeData={treeData}
-      />
-    </Wrapper>
+export const TreeListSingleChoice: Story = {
+  render: () => (
+    <TreeList
+      mode="singleChoice"
+      treeData={treeDataMock}
+      showLine={{ showLeafIcon: false }}
+    />
   )
 }
 
-const TreeDraggableTemplate = ({
-  treeData = treeDataMock,
-  ...rest
-}: ITreeProps) => {
+export const TreeListMultipleChoice: Story = {
+  render: () => (
+    <TreeList
+      mode="multipleChoice"
+      treeData={treeDataMock}
+      showLine={{ showLeafIcon: false }}
+    />
+  )
+}
+
+function LoadDataAsynchronously ({ Component, ...props }: { Component: typeof TreeList } & Partial<TreeListProps> | { Component: typeof TreeNav } & Partial<TreeNavProps>) {
+  const [treeData, setTreeData] = React.useState<DataNode[]>([
+    { key: '0-0', title: '0-0', checkable: false }
+  ])
+
+  const updateTreeData = (
+    nodes: DataNode[],
+    key: React.Key,
+    children: DataNode[]
+  ): DataNode[] =>
+    nodes.map((node) => {
+      if (node.key === key) {
+        return {
+          ...node,
+          children
+        }
+      }
+
+      if (node.children) {
+        return {
+          ...node,
+          children: updateTreeData(node.children, key, children)
+        }
+      }
+
+      return node
+    })
+
   return (
-    <Wrapper>
-      <Tree
-        {...rest}
+    <Component
+      {...props}
+      loadData={async (node) => {
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+
+        setTreeData(
+          updateTreeData(treeData, node.key, [
+            {
+              key: `${node.key}-0`,
+              title: `${node.title}-0`
+            },
+            {
+              key: `${node.key}-1`,
+              isLeaf: true,
+              title: `${node.title}-1`
+            }
+          ])
+        )
+      }}
+      treeData={treeData}
+    />
+  )
+}
+
+export const TreeListLoadDataAsynchronously: Story = {
+  render: () => <LoadDataAsynchronously Component={TreeList} mode="multipleChoice" />
+}
+
+export const TreeNavSingleChoice: Story = {
+  render: () => (
+    <TreeNav
+      multiple={false}
+      treeData={treeDataMock}
+      showLine={{ showLeafIcon: false }}
+    />
+  )
+}
+
+export const TreeNavMultipleChoice: Story = {
+  render: () => (
+    <TreeNav
+      multiple
+      treeData={treeDataMock}
+      showLine={{ showLeafIcon: false }}
+      onCheck={(checkedKeys) => {
+        console.log(checkedKeys)
+      }}
+    />
+  )
+}
+
+export const TreeNavMultipleChoiceWithALotOfData: Story = {
+  render: () => {
+    const treeData = React.useMemo(() => {
+      return [
+        { key: 'all', title: 'all', children: generateTreeData(400, { depth: 3, width: 10 }) }
+      ]
+    }, [])
+    const defaultExpandedKeys = React.useMemo(() => getKeys(treeData), [treeData])
+
+    return (
+      <TreeNav
+        defaultExpandedKeys={defaultExpandedKeys}
+        multiple
+        treeData={treeData}
+        showLine={{ showLeafIcon: false }}
+      />
+    )
+  }
+}
+
+export const TreeNavLoadDataAsynchronously: Story = {
+  render: () => <LoadDataAsynchronously Component={TreeNav} multiple />
+}
+
+const defaultData: DataNode[] = generateTreeData(20)
+
+export const Draggable: Story = {
+  render: () => {
+    const [gData, setGData] = React.useState(defaultData)
+    const [expandedKeys] = React.useState(['0-0', '0-0-0', '0-0-0-0'])
+
+    const onDrop: TreeProps['onDrop'] = (info) => {
+      const dropKey = info.node.key
+      const dragKey = info.dragNode.key
+      const dropPos = info.node.pos.split('-')
+      const dropPosition =
+        info.dropPosition - Number(dropPos[dropPos.length - 1])
+
+      const loop = (
+        data: DataNode[],
+        key: React.Key,
+        callback: (node: DataNode, i: number, data: DataNode[]) => void
+      ) => {
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].key === key) {
+            return callback(data[i], i, data)
+          }
+          if (data[i].children) {
+            loop(data[i].children!, key, callback)
+          }
+        }
+      }
+      const data = [...gData]
+
+      let dragObj: DataNode
+      loop(data, dragKey, (item, index, arr) => {
+        arr.splice(index, 1)
+        dragObj = item
+      })
+
+      if (!info.dropToGap) {
+        loop(data, dropKey, (item) => {
+          item.children = item.children || []
+          item.children.unshift(dragObj)
+        })
+      } else if (
+        ((info.node as any).props.children || []).length > 0 &&
+        (info.node as any).props.expanded &&
+        dropPosition === 1
+      ) {
+        loop(data, dropKey, (item) => {
+          item.children = item.children || []
+          item.children.unshift(dragObj)
+        })
+      } else {
+        let ar: DataNode[] = []
+        let i: number
+        loop(data, dropKey, (_item, index, arr) => {
+          ar = arr
+          i = index
+        })
+        if (dropPosition === -1) {
+          ar.splice(i!, 0, dragObj!)
+        } else {
+          ar.splice(i! + 1, 0, dragObj!)
+        }
+      }
+      setGData(data)
+    }
+
+    return (
+      <TreeNav
+        defaultExpandedKeys={expandedKeys}
         draggable
-        treeData={treeData}
+        blockNode
+        onDrop={onDrop}
+        treeData={gData}
       />
-    </Wrapper>
-  )
+    )
+  }
 }
-
-const TreeScrollableTemplate = ({
-  treeData = treeDataMock,
-  ...rest
-}: ITreeProps) => {
-  return (
-    <FixedHeightWrapper>
-      <Tree
-        {...rest}
-        treeData={treeData}
-      />
-    </FixedHeightWrapper>
-  )
-}
-
-const TreeDisabledTemplate = ({
-  treeData = treeDataMock,
-  ...rest
-}: ITreeProps) => {
-  return (
-    <Wrapper>
-      <Tree
-        {...rest}
-        disabled={true}
-        treeData={treeData}
-      />
-    </Wrapper>
-  )
-}
-
-export const Basic = TreeTemplate.bind({})
-export const Checkable = TreeCheckableTemplate.bind({})
-export const Draggable = TreeDraggableTemplate.bind({})
-export const Scrollable = TreeScrollableTemplate.bind({})
-export const Disabled = TreeDisabledTemplate.bind({})

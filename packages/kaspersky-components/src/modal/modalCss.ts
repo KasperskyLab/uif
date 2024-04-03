@@ -1,123 +1,138 @@
 import styled, { createGlobalStyle, css } from 'styled-components'
-import {
-  BORDER_RADIUS,
-  SPACES
-} from '../../design-system/theme/themes/variables'
-import { getFromProps } from '../../helpers/getFromProps'
-import { ModalCssConfig, ModalMode, ModalProps } from './types'
-import { TextProps } from '../typography/text'
-import { Space, SpaceProps } from '../space'
-import { Text } from '../typography'
-import { getTextSizes, textLevels } from '../../design-system/tokens'
-
-const maxModalContentHeight = 160
+import { BORDER_RADIUS, SPACES } from '@design-system/theme'
+import { getTextSizes, textLevels } from '@design-system/tokens'
+import { getFromProps } from '@helpers/getFromProps'
+import { ModalCssConfig } from './types'
 
 const fromProps = getFromProps<ModalCssConfig>()
 
-export const IconStyled = styled.span<{
-  mode: ModalMode,
-  cssConfig: ModalCssConfig
-}>`
+const modalSize = {
+  minHeight: '180px',
+  borderWidth: '1px',
+  titlePadding: `${SPACES[12]}px`,
+  footerPadding: `${SPACES[12]}px`
+}
+
+const maxModalContentHeight = (cssConfig: ModalCssConfig, titleHeight: number, footerHeight: number) => `
+  calc(100vh - ${cssConfig.top} * 2 - ${titleHeight}px - ${footerHeight}px -
+    ${modalSize.titlePadding} * 2 - ${modalSize.footerPadding} * 2)
+`
+
+const minModalContentHeight = (titleHeight: number, footerHeight: number) => `
+  calc(${modalSize.minHeight} - ${titleHeight}px - ${footerHeight}px -
+    ${modalSize.titlePadding} * 2 - ${modalSize.footerPadding} * 2)
+`
+
+export const StyledIcon = styled.span<{ cssConfig: ModalCssConfig }>`
+  padding: 0;
+  height: ${getTextSizes(textLevels.H5).lineHeight};
   svg {
-    height: ${SPACES[10]}px;
-    width: ${SPACES[10]}px;
-    fill: ${fromProps('mode.normal.borderColor')};
+    color: ${fromProps('modeBorderColor')};
   }
-
-  display: grid;
-  gap: ${SPACES[4]}px;
-  position: relative;
-  top: ${SPACES[2]}px;
 `
 
-export const SpaceBox = styled(Space)<SpaceProps>`
-  display: flex;
-  gap: 20px;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: baseline;
-  justify-content: space-between;
-  width: 100%;
-`
-
-export const TextBox = styled(Text)<TextProps>`
-  display: flex;
-  flex-direction: column;
-`
-
-export const ModalContent = styled.div<{ height: number }>`
-  ${({ height }) =>
-    height === maxModalContentHeight &&
-    css`
-      padding-right: ${SPACES[7]}px;
-    `};
-  max-height: ${maxModalContentHeight}px;
+export const ModalContent = styled.div<{
+  cssConfig: ModalCssConfig,
+  titleHeight: number,
+  footerHeight: number
+}>`
+  max-height: ${(props) => `${maxModalContentHeight(props.cssConfig, props.titleHeight, props.footerHeight)}`};
+  min-height: ${(props) => `${minModalContentHeight(props.titleHeight, props.footerHeight)}`};
   overflow-y: auto;
+  padding: 0 ${SPACES[12]}px;
 `
 
 export const ModalGlobalStyles = createGlobalStyle<{
   cssConfig: ModalCssConfig,
-  height: number
+  contentHeight: number,
+  titleHeight: number,
+  footerHeight: number,
+  showTopBorder: boolean,
+  showBottomBorder: boolean,
+  closable: boolean
 }>`
-&.ant-modal-close {
-  color: ${fromProps('closeIconColor')};
-}
-
-.ant-modal-close:focus, .ant-modal-close:hover {
-  color: ${fromProps('closeIconColorHover')} !important;
-}
-
-&.ant-modal-content, 
-&.ant-modal-header {
-  background-color: ${fromProps('background')};
-  color: ${fromProps('textColor')};
-}
-&.ant-modal-title {
-  display: flex;
-  gap: ${SPACES[5]}px;
-  color: ${fromProps('textColor')};
-}
-
-&.ant-modal-content {
-  border-top: ${SPACES[2]}px solid;
-  border-top-color: ${fromProps('mode.normal.borderColor')};
-  border-radius: ${() => `${BORDER_RADIUS[2]}px`};
-  box-shadow: 0px 3px 5px rgba(9, 30, 66, 0.2), 0px 0px 1px rgba(9, 30, 66, 0.31);
-}
-  &.ant-modal-header {
-  padding: ${SPACES[8]}px ${SPACES[12]}px;
-  border-bottom: ${({ height }) => (height === maxModalContentHeight ? '1px solid' : 'none')};
-  border-bottom-color: ${fromProps('borderColor')};
-  .ant-modal-title{
-    ${getTextSizes(textLevels.S4)}
+  &.ant-modal-mask {
+    background-color: ${fromProps('maskBackground')};
   }
-}
 
-&.ant-modal-body {
-  max-width: 624px;
-  padding: ${({ height }) =>
-    height === maxModalContentHeight ? `${SPACES[8]}px ${SPACES[12]}px` : `0px ${SPACES[12]}px`};
-  ${getTextSizes(textLevels.BTR3)}
-}
+  &.ant-modal-close {
+    width: auto;
+    height: auto;
+    top: 28px;
+    right: 24px;
 
-&.ant-modal-footer {
-  padding: ${SPACES[12]}px; 
-  border-top: ${({ height }) => (height === maxModalContentHeight ? '1px solid' : 'none')};
-  border-top-color: ${fromProps('borderColor')};
-  border-radius: none;
-}
+    .ant-modal-close-x {
+      width: auto;
+      height: auto;
+      display: flex;
+    }
+  }
+
+  &.ant-modal-content, 
+  &.ant-modal-header,
+  &.ant-modal-footer {
+    background: ${fromProps('background')};
+    color: ${fromProps('color')};
+  }
+
+  &.ant-modal-content {
+    width: 100%;
+    border-radius: ${BORDER_RADIUS[6]}px;
+    box-shadow: ${fromProps('boxShadow')};
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: ${SPACES[2]}px;
+      background-color: ${fromProps('modeBorderColor')};
+    }
+
+    .ant-modal-body {
+      padding: 0;
+      ${getTextSizes(textLevels.BTR3)}
+    }
+  }
+
+  &.ant-modal-header {
+    padding: ${modalSize.titlePadding};
+    border-bottom: ${modalSize.borderWidth} solid;
+    border-bottom-color: ${(props) => props.showTopBorder ? `${fromProps('borderColor')(props)}` : 'transparent'};
+
+    .ant-modal-title div {
+      display: flex;
+      gap: ${SPACES[4]}px;
+      color: ${fromProps('color')};
+      ${(props) => props.closable && 'padding-right: 40px;'}
+      word-wrap: break-word;
+      ${getTextSizes(textLevels.H5)}
+    }
+  }
+
+  &.ant-modal-footer {
+    padding: ${modalSize.titlePadding};
+    border-top: ${modalSize.borderWidth} solid;
+    border-top-color: ${(props) => props.showBottomBorder ? `${fromProps('borderColor')(props)}` : 'transparent'};
+    border-radius: 0;
+
+    && .ant-btn + .ant-btn {
+      margin-left: 0;
+    }
+  }
 `
 
-export const modalCss = css<ModalProps>`
+export const modalCss = css`
   display: flex;
-  padding: ${`${SPACES[12]}px`};
+  padding: 0;
+  margin: 0 auto;
   flex-direction: row;
-  ${({ noIcon }) =>
-    !noIcon && {
-      gap: `${SPACES[4]}px`
-    }};
   align-items: baseline;
   position: relative;
-  border-radius: ${() => `${BORDER_RADIUS[2]}px`};
-  width: ${({ width }) => (width ? `${width}px` : '624px')};
+  top: ${fromProps('top')};
+  width: ${fromProps('width')};
+  min-width: ${fromProps('width')};
+  max-width: ${fromProps('width')};
 `

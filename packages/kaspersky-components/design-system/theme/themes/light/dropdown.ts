@@ -1,35 +1,27 @@
-import { DropdownColorConfig, DropdownSizeConfig } from '../../../../src/dropdown/types'
+import { DropdownColorConfig } from '@src/dropdown/types'
 import { ComponentThemeContext } from '../config'
-import { BORDER_RADIUS, SPACES } from '../variables'
-import { getTextSizes, TextTypes } from './typography'
 
 export const dropdown = ({ colors }: ComponentThemeContext): DropdownColorConfig => ({
+  boxShadow: '0px 3px 5px 0px #091e4233',
+  boxShadowLine: '0px 0px 1px 0px #091e42a3',
   normal: {
-    background: colors.background,
-    color: colors.textIconsElements.primary
+    bgColor: colors.bg.base,
+    color: colors.textIconsElements.primary,
+    actionColor: colors.mainInteractPrimary
   },
   hover: {
-    background: colors.bg.alternative2
+    bgColor: colors.elements['separator-solid'],
+    actionColor: colors.mainInteractSecondary
   },
-  item: {
-    selected: {
-      background: colors.background
-    },
-    hover: {
-      background: colors.textIconsElements['secondary2-invert']
-    },
-    disabled: {
-      color: colors.textIconsElements.disabled,
-      background: colors.bg.alternative
-    }
+  selected: {
+    bgColor: colors.mainInteractPrimaryInverted,
+    color: colors.mainInteractPrimary,
+    actionColor: colors.mainInteractTertiary
+  },
+  disabled: {
+    color: colors.textIconsElements['disabled-solid']
+  },
+  group: {
+    color: colors.textIconsElements.secondary2
   }
 })
-
-export const dropdownSize: DropdownSizeConfig = {
-  padding: `${SPACES[2]}px ${SPACES[8]}px ${SPACES[2]}px ${SPACES[6]}px`,
-  gap: `${SPACES[5]}px`,
-  borderRadius: `${BORDER_RADIUS[2]}px`,
-  itemPadding: `${SPACES[3]}px ${SPACES[6]}px`,
-  itemTextSizes: getTextSizes(TextTypes.BTR4),
-  ...getTextSizes(TextTypes.BTR3)
-}

@@ -1,184 +1,138 @@
 import React, { useState } from 'react'
-import { Search } from '../Search'
 import styled from 'styled-components'
-import { badges } from '../../../.storybook/badges'
-import { withMeta } from '../../../helpers/hocs/MetaComponent/withMeta'
-import Meta from '../__meta__/meta.json'
-import { ISearchProps } from '../types'
-import { Space } from '../../space'
-import { Button } from '../../button'
+import { badges } from '@sb/badges'
 import { action } from '@storybook/addon-actions'
-import { Text } from '../../typography'
+import { Meta, StoryObj } from '@storybook/react'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import MetaData from '../__meta__/meta.json'
+import { SearchProps } from '../types'
+import { Search } from '@src/search'
+import { Text } from '@src/typography'
 
 const Wrapper = styled.div`
-  width: 240px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `
 
-export default {
+const meta: Meta<SearchProps> = {
   title: 'Molecules/Search',
   component: Search,
   argTypes: {
-    placeholder: {
-      defaultValue: 'placeholder',
-      options: 'text'
-    },
-    disabled: { table: { disable: true } },
-    onChange: { table: { disable: true } },
-    theme: { table: { disable: true } },
-    size: { table: { disable: true } },
-    error: { table: { disable: true } },
-    value: { table: { disable: true } },
-    maskOptions: { table: { disable: true } },
-    klId: { table: { disable: true } }
+    placeholder: { description: 'Placeholder text' },
+    className: { description: 'Textbox class name' },
+    prefix: { description: 'Component before text' },
+    suffix: { description: 'Component after text' },
+    ...sbHideControls(['maskOptions', 'theme', 'size', 'error', 'tags', 'prefix', 'suffix', 'dropdownOverlay'])
+  },
+  args: {
+    disabled: false,
+    placeholder: 'Search...',
+    testId: 'search-test-id',
+    klId: 'search-kl-id'
   },
   parameters: {
-    badges: [badges.dev],
+    badges: [badges.dev, badges.reviewedByDesign],
     docs: {
-      page: withMeta(Meta)
-    }
+      page: withMeta(MetaData)
+    },
+    design: MetaData.figmaView
+  }
+}
+export default meta
+
+type Story = StoryObj<SearchProps>
+
+export const Basic: Story = {
+  render: (args: SearchProps) => {
+    const [value, setValue] = useState('')
+    return (
+      <Wrapper>
+        <Search
+          {...args}
+          onChange={(value) => setValue(value as string)}
+          onClearClick={() => setValue('')}
+          value={value}
+        />
+      </Wrapper>
+    )
   }
 }
 
-const BasicTemplate = () => {
-  const [value, setValue] = useState('')
-  return (
-    <Wrapper>
-      <Search onChange={(value) => setValue(value as string)} value={value} />
-    </Wrapper>
-  )
+export const Custom: Story = {
+  render: (args: SearchProps) => {
+    const [value, setValue] = useState('')
+    const onClearClick = () => setValue('')
+    return (
+      <Wrapper>
+        <Text type='BTM2'>
+          НЕ ПРЕДСТАВЛЕНЫ В ДИЗАЙНЕ
+        </Text>
+        <Search.WithButton
+          {...args}
+          btnText="Search"
+          placeholder='Search with button'
+          onClearClick={onClearClick}
+          onChange={(value) => setValue(value as string)}
+          value={value}
+        />
+        <Search.WithIconLeft
+          {...args}
+          placeholder='Search with left icon'
+          onClearClick={onClearClick}
+          onChange={(value) => setValue(value as string)}
+          value={value}
+        />
+        <Search.WithIconRight
+          {...args}
+          placeholder='Search with right icon'
+          onClearClick={onClearClick}
+          onChange={(value) => setValue(value as string)}
+          value={value}
+        />
+        <Search.WithConfiguration
+          {...args}
+          placeholder='Search with configuration'
+          onClearClick={onClearClick}
+          onChange={(value) => setValue(value as string)}
+          value={value}
+        />
+        <Search.WithDropdown
+          {...args}
+          placeholder='Search with button dropdown'
+          onClearClick={onClearClick}
+          onChange={(value) => setValue(value as string)}
+          value={value}
+          overlay={[{ children: 'Dropdown content' }]}
+        />
+      </Wrapper>
+    )
+  }
 }
 
-export const Basic = BasicTemplate
+const SearchResultsMock = Array.from({ length: 10 }).map((_, index) => ({ children: `result ${index}` }))
 
-const WithButtonTemplate = (props: ISearchProps) => {
-  const [value, setValue] = useState('')
+export const WithResult: Story = {
+  render: (props: SearchProps) => {
+    const [value, setValue] = useState('')
+    const onFocus = action('onFocus')
+    const onBlur = action('onBlur')
+    const overlay = SearchResultsMock.filter((item) => item.children.indexOf(value) >= 0)
 
-  return (
-    <Wrapper>
-      <Search.WithButton
-        btnText="Search"
-        {...props}
-        onChange={(value) => setValue(value as string)}
-        value={value}
-      />
-    </Wrapper>
-  )
+    return (
+      <Wrapper>
+        <Search
+          {...props}
+          onChange={(value) => setValue(value as string)}
+          onClearClick={() => setValue('')}
+          value={value}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          dropdownOverlay={overlay.length ? overlay : [{ children: 'Nothing found' }] }
+        />
+      </Wrapper>
+    )
+  }
 }
-
-export const WithButton = WithButtonTemplate
-
-const WithIconLeftTemplate = (props: ISearchProps) => {
-  const [value, setValue] = useState('')
-  return (
-    <Wrapper>
-      <Search.WithIconLeft
-        {...props}
-        onChange={(value) => setValue(value as string)}
-        value={value}
-      />
-    </Wrapper>
-  )
-}
-
-export const WithIconLeft = WithIconLeftTemplate
-
-const WithIconRightTemplate = (props: ISearchProps) => {
-  const [value, setValue] = useState('')
-  return (
-    <Wrapper>
-      <Search.WithIconRight
-        {...props}
-        onChange={(value) => setValue(value as string)}
-        value={value}
-      />
-    </Wrapper>
-  )
-}
-
-export const WithIconRight = WithIconRightTemplate
-
-const WithConfigurationTemplate = (props: ISearchProps) => {
-  const [value, setValue] = useState('')
-  return (
-    <Wrapper>
-      <Search.WithConfiguration
-        {...props}
-        onChange={(value) => setValue(value as string)}
-        value={value}
-      />
-    </Wrapper>
-  )
-}
-
-export const WithConfiguration = WithConfigurationTemplate
-
-const WithDropdownTemplate = (props: ISearchProps) => {
-  const [value, setValue] = useState('')
-  return (
-    <Wrapper>
-      <Search.WithDropdown
-        {...props}
-        onChange={(value) => setValue(value as string)}
-        value={value}
-        overlay={<h3>Dropdown content</h3>}
-      />
-    </Wrapper>
-  )
-}
-
-export const WithDropdown = WithDropdownTemplate
-
-const SearchResults = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  width: 100%;
-`
-
-const SearchResultsMock = () => (
-  <SearchResults>
-    <Text type="L3">Search only in</Text>
-    <Space size={8} direction="horizontal" width="100%">
-      <Button
-        mode="primaryBlack"
-        text="Foo"
-        onClick={() => console.log('foo')}
-      />
-      <Button
-        mode="primaryBlack"
-        text="Bar"
-        onClick={() => console.log('bar')}
-      />
-      <Button
-        mode="primaryBlack"
-        text="Lorem"
-        onClick={() => console.log('lorem')}
-      />
-      <Button
-        mode="primaryBlack"
-        text="Ipsum"
-        onClick={() => console.log('ipsum')}
-      />
-    </Space>
-    <Button mode="secondary">Show all results</Button>
-  </SearchResults>
-)
-
-const WithResultTemplate = (props: ISearchProps) => {
-  const [value, setValue] = useState('')
-  const onFocus = action('onFocus')
-  const onBlur = action('onBlur')
-
-  return (
-    <Search
-      {...props}
-      onChange={(value) => setValue(value as string)}
-      onFocus={onFocus}
-      onBlur={onBlur}
-    >
-      {value && <SearchResultsMock />}
-    </Search>
-  )
-}
-
-export const WithResult = WithResultTemplate

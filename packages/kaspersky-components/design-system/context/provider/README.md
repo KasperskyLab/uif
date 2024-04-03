@@ -2,9 +2,9 @@
 
 ## Config Provider
 
-ConfigProvider is union of [ThemeProvider](../../theme/README.md) and LocalizationProvider.
-It provides unified support for localization and theming of the component base.
-Accepts `theme` and `locale` as props.
+ConfigProvider является интеграцией [ThemeProvider](../../theme/README.md) и LocalizationProvider.
+Он обеспечивает единую поддержку локализации и темизации компонентной базы.
+В качестве props принимает `theme` и `locale` 
 
 ### How To Use
 ```
@@ -15,17 +15,17 @@ import { LangType } from '@kaspersky/components/helpers/localization/types'
 
 const Layout = () => {
   const [theme, setTheme] = useState<ThemeKey>(ThemeKey.Light)
-  const [locale, setLocale] = useState<LangType>('en')
+  const [locale, setLocale] = useState<LangType>('en-us')
 
   const onKeyDown = useCallback((e) => {
     // custom shortcut
     if (e.keyCode === 88 && e.ctrlKey && e.shiftKey) {
       if (theme === ThemeKey.Light) {
         setTheme(ThemeKey.Dark)
-        setLocale('ru')
+        setLocale('ru-ru')
       } else {
         setTheme(ThemeKey.Light)
-        setLocale('en')
+        setLocale('en-us')
       }
     }
   }, [theme])
@@ -44,59 +44,56 @@ const Layout = () => {
 
 ## Localization Provider
 
-LocalizationProvider provides locales for all components.
+LocalizationProvider обеспечивает поддержку локализации для всей компонентной базы.
 Based on [I18nextProvider](https://react.i18next.com/latest/i18nextprovider)
 
-All components have localization, where there are elements with text.
-To do this, in @kaspersky/components/helpers/localization, you need to pass an object with new values of text fields.
-The interface of each dictionary is exported from @kaspersky/components/helpers/localization, e.g. `severity`.
+Локализация есть у всех компонентов, где есть элементы с текстом. 
+Для этого в @kaspersky/components/helpers/localization необходимо передать объект с новыми значениями текстовых полей. 
+Интерфейс каждого словаря экпортируется из @kaspersky/components/helpers/localization, например, `severity`
 ```
 // ru.json
 {
-  "ru": {
-    "translation": {
-      "severity": {
-        "critical": "Critical",
-        "low": "Low",
-        "medium": "Medium",
-        "high": "High",
-        "info": "Info",
-        "positive": "Positive"
-      },
-    }
+  "translation": {
+    "severity": {
+      "critical": "Critical",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "info": "Info",
+      "positive": "Positive"
+    },
   }
 }
+
 
 //en.json
 
 {
-  "en": {
-    "translation": {
-      "severity": {
-        "critical": "Critical",
-        "low": "Low",
-        "medium": "Medium",
-        "high": "High",
-        "info": "Info",
-        "positive": "Positive"
-      },
-      "select": {
-        "empty": "No Data"
-      }
+  "translation": {
+    "severity": {
+      "critical": "Critical",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "info": "Info",
+      "positive": "Positive"
+    },
+    "select": {
+      "empty": "No Data"
     }
   }
 }
 
 ```
-In most cases it would be used with [ThemeProvider](../../theme/README.md) and ConfigProvider
-Lang by default — English (USA). 
+В большинстве случаев будет использоваться совместо с [ThemeProvider](../../theme/README.md) и ConfigProvider
+Языковой стандарт по умолчанию — английский (США). 
 
 ### How To Use
 
 ```
 import { LocalizationProvider } from '@kaspersky/components/design-system/context'
 
-<LocalizationProvider locale='en'>
+<LocalizationProvider locale='en-us'>
   <App />
 </LocalizationProvider>;
 

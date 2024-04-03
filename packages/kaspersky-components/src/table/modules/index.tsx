@@ -12,11 +12,13 @@ import { Groups } from './Groups'
 import { DraggableTable } from './Draggable'
 import { Reductions } from './Reductions'
 import { TableContextProvider } from '../context/TableContext'
+import { FilterSidebar } from './Filters'
 
 export type TableModule = (Component: typeof Table) => typeof Table
 
 export const composeWithModules = (Component: typeof Table, modules: TableModule[]) => {
-  return modules.reduce((Component, module) => module(Component), Component)
+  const TableWithModules = modules.reduce((Component, module) => module(Component), Component)
+  return TableContextProvider(TableWithModules)
 }
 
 /**
@@ -28,15 +30,15 @@ export const tableModules: TableModule[] = [
   // ExpandableRows,
   Pagination,
   SortingAndFilters,
+  Reductions,
   LocalizeColumnTitles,
   ResizableColumns,
   TableAccordion,
   DraggableTable,
   ColumnsSelection,
+  FilterSidebar,
   InfiniteScroll,
-  ToolbarIntegration,
-  Reductions,
-  TableContextProvider
+  ToolbarIntegration
 ]
 
 export { useTableModules } from './hooks'

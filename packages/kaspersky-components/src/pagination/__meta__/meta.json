@@ -6,10 +6,12 @@
     "screenshotTests": false,
     "migration": true,
     "apiTable": true,
-    "storybook": true
+    "storybook": true,
+    "designLink": true
   },
   "component": "Pagination",
-  "desctiption": "Component for rendering pagination. The basis is AntdPagination from the Antd library.",
-  "usage": "Structuring a large amount of information by separating it into separate pages",
-  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=507%3A3781"
+  "description": "Компонент для отрисовки пагинации. В качестве основы используется AntdPagination из библиотеки Antd.",
+  "usage": "Структурирование большого объема информации, путем ее разделения на отдельные страницы",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=507%3A3781",
+  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F01-%255BB2B%255D-Hexa-UI-Components%3Ftype%3Ddesign%26node-id%3D1063%253A4211%26mode%3Ddev"
 }

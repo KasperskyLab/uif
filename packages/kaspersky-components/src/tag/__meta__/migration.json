@@ -15,17 +15,17 @@
     {
       "prop": "size",
       "changes": {
-        "before": "tagSize - obsolete size grid",
-        "after": "size according to the size grid",
-        "description": "Used in accordance with the default dimensional grid"
+        "before": "tagSize - устаревшая размерная сетка",
+        "after": "size по размерной сетке",
+        "description": "Используется в соответствии с дефолтной размерной сеткой"
       }
     },
     {
       "prop": "textColor",
       "changes": {
-        "before": "select text color according to primary palette",
-        "after": "text color can be changed through the override property",
-        "description": "text color is now fixed to primary. To customize a property, you need to use props overrides"
+        "before": "выбор цвета текста в соответствии с primary палитрой",
+        "after": "цвет текста можно менять через свойство override",
+        "description": "цвет текста теперь зафиксирован в primary. Чтобы кастомизировать свойство необходимо восппользоваться props overrides"
       }
     },
     {
@@ -33,7 +33,7 @@
       "changes": {
         "before": "themedColor",
         "after": "theme",
-        "description": "Ability to drop the theme in props"
+        "description": "Возможность прокидывать тему в props"
       }
     },    {
       "prop": "children",

@@ -1,29 +1,29 @@
-import { Meta } from '@storybook/addon-docs';
+import { Meta } from '@storybook/blocks'
 
-<Meta title="Docs/Component Architecture" />
+<Meta title="Docs/Архитектура компонентов" />
 
-# Component Architecture
+# Архитектура компонентов
 
-All components consist of several structural parts
+Все компоненты состоят из несколько структурных частей:
 
 `Component` + `Component View` + `Css config` + `Themed Hook` + `Hooks` = `Component`
 
-Component - the entry point to the component. At a minimum, it uses `Themed Hook` and `Component View`.
+Component - точка входа в компонент. Как минимум, использует `Themed Hook` и `Component View`.
 
-Component View - is the basis of the component, contains the minimum amount of logic required. For styling, wraps the used component in `styled-components` which uses `Component css`.
-Must be a fully functioning component.
+Component View – является основой компонента, содержит минимальное необходимо количество логики. Для стилизации оборачивает используемый компонент в `styled-components`, который использует `Component css`.
+Должен быть полностью функционирующем компонентом.
 
-Component css - css styles of the component. Uses `Css config`.
+Component css - css стили компонента. Использует `Css config`.
 
-Css config is the component's styling configuration, which includes the required colors, sizes, and typography for the elements.
-Returns data as an object, making it easy to override one or more variables as needed.
-(Each theme has a separate configuration)
+Css config – конфигурация стилей компонента, которая включает в себя необходимые цвета, размеры и типографику для элементов.
+Возвращает данные в виде объекта, позволяя легко переопределить одну или несколько переменных при необходимости.
+(Каждой теме соответствует отдельная конфигурация)
 
-Themed Hook - component theming, creating component style configuration object - `Css config`.
+Themed Hook - темизация компонента, создание объекта конфигурации стилей компонента - `Css config`.
 
-Hooks - the internal logic of the component. Contains logic that is not “essential” for the component.
-Allows end users to override the logic of the component.
+Hooks – внутренняя логика компонента. Содержит в себе логику, которая не является “жизненно необходимой” для компонента.
+Позволяет переопределять логику работы компонента конечным пользователям.
 
-## Example
+## Пример
 
 ```src/button```

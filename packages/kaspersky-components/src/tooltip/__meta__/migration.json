@@ -1,0 +1,25 @@
+{
+  "component": "Tooltip",
+  "v6": "/docs/atoms-tooltip",
+  "v3": [
+    {
+      "prop": "text",
+      "changes": {
+        "before": "title",
+        "after": "text",
+        "description": "Изменено название title --> text"
+      }
+    }
+  ],
+  "v5": [
+    {
+      "prop": "text",
+      "changes": {
+        "before": "title",
+        "after": "text",
+        "description": "Изменено название title --> text"
+      }
+    }
+  ],
+  "common": []
+}

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { gridItemCss } from './gridCss'
 
-export interface IGridItemProps {
+export type GridItemProps = {
   areaName?: string,
   span?: number,
   className?: string,
@@ -9,6 +9,9 @@ export interface IGridItemProps {
   rowSpan?: number
 }
 
-export const GridItem = styled.div.withConfig<IGridItemProps>({
-  shouldForwardProp: prop => ['className', 'kl-id', 'children'].includes(prop)
+export const GridItem = styled.div.withConfig<GridItemProps>({
+  shouldForwardProp: prop => ['className', 'data-testid', 'kl-id', 'children'].includes(prop)
 })`${gridItemCss}`
+
+/** @deprecated Use GridItemProps instead */
+export type IGridItemProps = GridItemProps

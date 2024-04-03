@@ -1,48 +1,56 @@
 import React from 'react'
-import { ComponentStory } from '@storybook/react'
-import { badges } from '../../../.storybook/badges'
-import { StoryLayout } from '../../../.storybook/StoryComponents'
-import { withMeta } from '../../../helpers/hocs/MetaComponent/withMeta'
-import Meta from '../meta.json'
-import { useTheme } from '../../../design-system/theme/hooks'
+import styled from 'styled-components'
+import { Meta, StoryObj } from '@storybook/react'
+import { badges } from '@sb/badges'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import MetaData from '../meta.json'
 import { TimeInput } from '../TimeInput'
-import { parse } from 'date-fns'
+import { TimeInputProps } from '../types'
 
-export default {
+const meta: Meta<TimeInputProps> = {
   title: 'Atoms/TimeInput',
   component: TimeInput,
+  argTypes: {
+    ...sbHideControls(['theme', 'error', 'positive'])
+  },
   args: {
-    theme: 'light',
     disabled: false,
-    vertical: false
+    testId: 'time-input-test-id',
+    klId: 'time-input-kl-id'
   },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
     docs: {
-      page: withMeta(Meta)
+      page: withMeta(MetaData)
     }
+  },
+  decorators: [
+    (Story, context) => (
+      <Wrapper>
+        <Story {...context} />
+      </Wrapper>
+    )
+  ]
+}
+export default meta
+
+const Wrapper = styled.div`
+  width: 300px;
+`
+
+export const Basic: StoryObj<TimeInputProps> = {
+  args: {
+    klId: 'time-input'
   }
 }
 
-export const Basic: ComponentStory<typeof TimeInput> = ({
-  theme: themeProps,
-  ...rest
-}) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <TimeInput
-        {...rest}
-        format={'HH:mm'}
-        klId='test-id'
-        defaultValue={parse('12:18', 'HH:mm', new Date())}
-      />
-    </StoryLayout>
-  )
-}
-
-Basic.parameters = {
-  docs: {
-    storyDescription: 'Basic Component Usage Example'
-  }
+export const Variants: StoryObj<TimeInputProps> = {
+  render: (args) => <>
+    HH:mm <TimeInput {...args} format={'HH:mm'} placeholder={'00:00'} />
+    <br />
+    HH:mm:ss <TimeInput {...args} format={'HH:mm:ss'} placeholder={'00:00:00'} />
+    <br />
+    HH:mm:ss:ms <TimeInput {...args} format={'HH:mm:ss:ms'} placeholder={'00:00:00:000'} />
+  </>
 }

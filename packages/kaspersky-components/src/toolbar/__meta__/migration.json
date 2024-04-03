@@ -7,7 +7,7 @@
       "changes": {
         "before": "boolean",
         "after": "-",
-        "description": "prop is missing from the new design"
+        "description": "prop отсутствует в новом дизайне"
       }
     },
     {
@@ -15,7 +15,7 @@
       "changes": {
         "before": "-",
         "after": "string",
-        "description":"The unique id of the component"
+        "description":"Уникальный id компонента"
       }
     },
     {
@@ -23,7 +23,7 @@
       "changes": {
         "before": "React.ReactNode",
         "after": "ToolbarItems<ToolbarItemKey>[]",
-        "description":"The unique id of the component"
+        "description":"Уникальный id компонента"
       }
     },
     {
@@ -31,7 +31,7 @@
       "changes": {
         "before": "React.ReactNode",
         "after": "ToolbarItems<ToolbarItemKey>[]",
-        "description":"The unique id of the component"
+        "description":"Уникальный id компонента"
       }
     }
   ],
@@ -42,7 +42,7 @@
       "changes": {
         "before": "-",
         "after": "React.FC<IButtonProps>",
-        "description":"Filter button often used in context with a table"
+        "description":"Кнопка с фильтром зачастую для использования в контексте с таблицей"
       }
     },
     {
@@ -50,7 +50,7 @@
       "changes": {
         "before": "-",
         "after": "React.FC<IButtonProps>",
-        "description":"A button with an active filter state, often for use in context with a table"
+        "description":"Кнопка с активным состонием фильтра зачастую для использования в контексте с таблицей"
       }
     },
     {
@@ -58,7 +58,7 @@
       "changes": {
         "before": "-",
         "after": "React.FC<IButtonProps>",
-        "description":"Button with settings often for use in context with a table"
+        "description":"Кнопка с настройками зачастую для использования в контексте с таблицей"
       }
     },
     {
@@ -66,7 +66,7 @@
       "changes": {
         "before": "-",
         "after": "React.FC<IButtonProps>",
-        "description":"Scale button often used in context with a table"
+        "description":"Scale кнопка зачастую для использования в контексте с таблицей"
       }
     },
     {

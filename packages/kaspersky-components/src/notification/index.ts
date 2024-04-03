@@ -1,2 +1,2 @@
 export * from './Notification'
-export * from './NotificationService'
+export { openNotification, notificationDestroy } from './NotificationService'

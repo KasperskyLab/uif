@@ -1,50 +1,55 @@
-import React from 'react'
+import React, { useState } from 'react'
+import styled from 'styled-components'
 import { Textbox } from '../Textbox'
-import { withMeta } from '../../../helpers/hocs/MetaComponent/withMeta'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
 import MetaData from '../__meta__/meta.json'
-import { badges } from '../../../.storybook/badges'
-import { StoryLayout } from '../../../.storybook/StoryComponents'
-import { UserOutlined } from '@ant-design/icons'
-import { useTheme } from '@design-system/theme/hooks'
-import { ITextboxProps, IUrlInputProps } from '../types'
+import { badges } from '@sb/badges'
+import {
+  TextboxProps,
+  TextboxMaskedProps,
+  TextboxNumberProps,
+  TextboxPasswordProps,
+  TextboxTextareaProps
+} from '../types'
+import { Meta, StoryObj } from '@storybook/react'
 
-export default {
+const meta: Meta<TextboxProps> = {
   title: 'Atoms/Input',
   component: Textbox,
   argTypes: {
-    mask: {
-      control: { type: 'select', default: 'None' },
-      options: ['None', 'Date', 'Number', 'Phone', 'Pattern', 'Email', 'IP', 'MAC']
-    },
-    disabled: 'boolean',
-    readOnly: 'boolean',
-    error: 'boolean',
-    positive: 'boolean',
-    placeholder: 'string',
-    // disable autogeneric control
-    onChange: { table: { disable: true } },
-    value: { table: { disable: true } },
-    maskOptions: { table: { disable: true } },
-    klId: { table: { disable: true } }
+    ...sbHideControls(['theme', 'size', 'error', 'positive', 'maskOptions'])
   },
   args: {
     disabled: false,
     readOnly: false,
-    mask: 'None',
-    error: false,
-    positive: false,
-    placeholder: 'Placeholder'
+    invalid: false,
+    valid: false,
+    placeholder: 'Placeholder',
+    className: '',
+    testId: 'input-test-id',
+    klId: 'input-kl-id'
   },
   parameters: {
-    badges: [badges.stable, badges.dev],
+    badges: [badges.stable, badges.reviewedByDesign],
     docs: {
       page: withMeta(MetaData)
     },
-    controls: {
-      exclude: ['size']
-    }
-  }
+    design: MetaData.figmaView
+  },
+  decorators: [
+    (Story, context) => (
+      <Wrapper>
+        <Story {...context} />
+      </Wrapper>
+    )
+  ]
 }
+export default meta
+
+const Wrapper = styled.div`
+  width: 300px;
+`
 
 const getMaskOptions = (type: unknown) => ({
   Date: {
@@ -99,125 +104,77 @@ const getMaskOptions = (type: unknown) => ({
   }
 }[type as string])
 
-export const Basic = (args: ITextboxProps & {mask: string}) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Textbox
-        maskOptions={getMaskOptions(args.mask)}
-        {...args}
-      />
-    </StoryLayout>
-  )
-}
+// Basic
+export const Basic: StoryObj<TextboxProps> = {}
 
-Basic.parameters = {
-  docs: {
-    storyDescription: 'Basic Component Usage Example'
-  }
-}
-
-export const Icon = (args: ITextboxProps) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Textbox
-        suffix={<UserOutlined />}
-        {...args}
-      />
-    </StoryLayout>
-  )
-}
-
-Icon.parameters = {
-  docs: {
-    storyDescription: 'Icons can be used to determine what a given input field is for.'
-  }
-}
-
-export const InputNumber = (args: ITextboxProps) => {
-  const { value, onChange, ...rest } = args
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Textbox.Number {...rest}/>
-    </StoryLayout>
-  )
-}
-
-InputNumber.parameters = {
-  docs: {
-    description: {
-      story: 'Based on [InputNumber](https://ant.design/components/input-number/) from the Antd library.\nAllows you to enter a number and control the value using the mouse (number buttons) or keyboard.'
+// Masked
+type TextboxMaskedPropsForStory = TextboxMaskedProps & { mask: string }
+export const MaskedTextbox: StoryObj<TextboxMaskedPropsForStory> = {
+  render: (args: TextboxMaskedPropsForStory) => (
+    <Textbox.Masked
+      maskOptions={getMaskOptions(args.mask)}
+      {...args}
+    />
+  ),
+  argTypes: {
+    mask: {
+      control: { type: 'select', default: 'None' },
+      options: ['None', 'Date', 'Number', 'Phone', 'Pattern', 'Email', 'IP', 'MAC']
     }
   }
 }
 
-export const Textarea = (args: ITextboxProps) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
+// Number
+export const NumberTextbox: StoryObj<TextboxNumberProps> = {
+  render: (args: TextboxNumberProps) => {
+    const [value, setValue] = useState(0)
+    return (
+      <Textbox.Number
+        {...args}
+        value={value}
+        onChange={valueNumber => setValue(valueNumber)}
+      />
+    )
+  }
+}
+
+// Password
+type TextboxPasswordPropsForStory = TextboxPasswordProps & { readOnly: boolean }
+export const PasswordTextbox: StoryObj<TextboxPasswordPropsForStory> = {
+  render: (args: TextboxPasswordPropsForStory) => {
+    const [value, setValue] = useState('')
+    return (
+      <Textbox.Password
+        {...args}
+        value={value}
+        onChange={value => setValue(value)}
+      />
+    )
+  },
+  argTypes: {
+    readOnly: { table: { disable: true } }
+  }
+}
+
+// Textarea
+export const TextareaTextbox: StoryObj<TextboxTextareaProps> = {
+  render: (args: TextboxTextareaProps) => {
+    const [value, setValue] = useState('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.')
+    return (
       <Textbox.Textarea
-        rows={3}
-        value={'1\n2\n3'}
-        disabled={args.disabled}
-        readOnly={args.readOnly}
-        error={args.error}
-        positive={args.positive}
-        placeholder={args.placeholder}/>
-    </StoryLayout>
-  )
-}
-
-Textarea.parameters = {
-  docs: {
-    description: {
-      story: 'Multiline text input field.'
-    }
-  }
-}
-
-Textarea.argTypes = {
-  mask: { table: { disable: true } },
-  placeholder: { table: { disable: true } }
-}
-
-export const Password = (args: ITextboxProps) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Textbox.Password {...args}/>
-    </StoryLayout>
-  )
-}
-Password.argTypes = {
-  mask: { table: { disable: true } }
-}
-
-Password.parameters = {
-  docs: {
-    description: {
-      story: 'Password field. It is possible to show/hide the entered value.'
-    }
-  }
-}
-
-export const Url = (args: IUrlInputProps) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Textbox.Url klId={'url-input'} {...args}/>
-    </StoryLayout>
-  )
-}
-Url.argTypes = {
-  mask: { table: { disable: true } }
-}
-
-Url.parameters = {
-  docs: {
-    description: {
-      story: 'Fields for entering url / port.'
-    }
+        {...args}
+        value={value}
+        onChange={(value) => setValue(value)}
+      />
+    )
+  },
+  argTypes: {
+    maxLength: { type: 'number' },
+    rows: { type: 'number' },
+    showCount: { type: 'boolean' }
+  },
+  args: {
+    showCount: false,
+    maxLength: 1024
   }
 }

@@ -1,48 +1,45 @@
 import React from 'react'
 import { Title, Subtitle, Description } from '@storybook/addon-docs'
-import { Space } from '../../space'
+import { Space } from '@src/space'
 import { Text } from '../Typography'
-import { StoryLayout } from '../../../.storybook/StoryComponents'
+import { StoryLayout } from '@sb/StoryComponents'
 import { TextProps } from 'antd/lib/typography/Text'
-import { useTheme } from '../../../design-system/theme/hooks'
+import { useTheme } from '@design-system/theme/hooks'
 
 export const TextDocs: React.VFC<TextProps> = () => {
-  const theme = useTheme()
-
+  const theme = useTheme().key
   return (
     <>
-      <Title>Text</Title>
-      <Subtitle>Main text</Subtitle>
+      <Title>Body Text</Title>
+      <Subtitle>Основной текст</Subtitle>
       <Description>
-        Styles are used on smaller elements such as body text and headlines
+        Стили используются в некрупных элементах, таких как основной текст и
+        заголовки
       </Description>
-      <StoryLayout theme={theme.key}>
+      <StoryLayout theme={theme}>
         <Space size={16} direction="vertical" align="flex-start">
-          <Text type="BTR1" themedColor="primary">
-            Body Text/P1 Regular
-          </Text>
           <Text type="BTR2">Body Text/P2 Regular</Text>
           <Text type="BTR3">Body Text/P3 Regular</Text>
           <Text type="BTR4">Body Text/P4 Regular</Text>
           <Text type="BTR5">Body Text/P5 Regular</Text>
         </Space>
       </StoryLayout>
-      <StoryLayout theme={theme.key}>
+      <StoryLayout theme={theme}>
         <Space size={16} direction="vertical" align="flex-start">
-          <Text type="BTM1">Body Text/P1 Medium</Text>
           <Text type="BTM2">Body Text/P2 Medium</Text>
           <Text type="BTM3">Body Text/P3 Medium</Text>
           <Text type="BTM4">Body Text/P4 Medium</Text>
           <Text type="BTM5">Body Text/P5 Medium</Text>
         </Space>
       </StoryLayout>
-      <StoryLayout theme={theme.key}>
+      <Subtitle>Mono текст</Subtitle>
+      <Description>
+        Как тест в компоненте input password, code viewer
+      </Description>
+      <StoryLayout theme={theme}>
         <Space size={16} direction="vertical" align="flex-start">
-          <Text type="L1">Link/L1</Text>
-          <Text type="L2">Link/L2</Text>
-          <Text type="L3">Link/L3</Text>
-          <Text type="L4">Link/L4</Text>
-          <Text type="L5">Link/L5</Text>
+          <Text type='MTR3'>Mono Text/P3 Regular</Text>
+          <Text type='MTR4'>Mono Text/P4 Regular</Text>
         </Space>
       </StoryLayout>
     </>

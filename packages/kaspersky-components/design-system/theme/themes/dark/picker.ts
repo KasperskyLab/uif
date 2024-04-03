@@ -1,54 +1,12 @@
-import { picker as defaultPickerCreator, pickerInput as defaultPickerInputCreator } from '../light/picker'
+import { picker as defaultPickerCreator } from '../light/picker'
 import { ComponentThemeContext } from '../config'
+import { PickerColorConfig } from '@src/datepicker/types'
 
-export const picker = ({ colors }: ComponentThemeContext): any => {
+export const picker = ({ colors }: ComponentThemeContext): PickerColorConfig => {
   const defaultPicker = defaultPickerCreator({ colors })
 
   return {
     ...defaultPicker,
-    normal: {
-      background: colors.bg.base,
-      color: colors.textIconsElements.primary,
-      iconColor: colors.textIconsElements.baseicon,
-      separatorColor: colors.elements.seporator
-    },
-    hover: {
-      background: colors.bg.alternative2
-    },
-    active: {
-      color: colors.textIconsElements['primary-invert'],
-      background: colors.elements['accent-link']
-    },
-    inRange: {
-      color: colors.textIconsElements.primary,
-      background: colors.bg.alternative2
-    },
-    disabled: {
-      color: colors.textIconsElements.disabled
-    }
-  }
-}
-
-export const pickerInput = ({ colors }: ComponentThemeContext): any => {
-  const defaultPickerInput = defaultPickerInputCreator({ colors })
-
-  return {
-    ...defaultPickerInput,
-    normal: {
-      background: colors.bg.base,
-      color: colors.textIconsElements.secondary2,
-      outline: colors.elements.seporatorbold
-    },
-    hover: {
-      outline: colors.mainInteractFocus
-    },
-    focus: {
-      outline: colors.mainInteractFocus
-    },
-    active: {},
-    disabled: {
-      background: colors.elements.seporator,
-      color: colors.textIconsElements.secondary2
-    }
+    boxShadow: '0px 3px 5px 0px rgba(24, 24, 34, 0.60), 0px 0px 1px 0px rgba(247, 248, 249, 0.64)'
   }
 }

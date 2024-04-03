@@ -1,55 +1,50 @@
-import React, { ComponentProps, ReactElement } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 import { InputNumber as AntdInputNumber } from 'antd'
-import { numberInputStyles } from './inputCss'
-import classnames from 'classnames'
+import { inputNumberStyles, inputStyles } from './inputCss'
 import { useThemedTextbox } from './useThemedTextbox'
-import { ThemeKey } from '../../design-system/types'
-import { SizeType } from 'antd/lib/config-provider/SizeContext'
-import { InputCssConfig, ISizeType } from './types'
+import { useClassNamedTextbox } from './useClassNamedTextbox'
+import { TextboxNumberProps, TextboxNumberMappedProps, TextboxNumberViewProps } from './types'
+import { ArrowDownMicro, ArrowUpMicro } from '@kaspersky/icons/16'
+import { WithGlobalStyles } from '@helpers/hocs/WithGlobalStyles'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
 const StyledInputNumber = styled(AntdInputNumber).withConfig({
   shouldForwardProp: prop => !['cssConfig'].includes(prop)
 })`
-  ${numberInputStyles}
+  ${inputStyles}
+  ${inputNumberStyles}
 `
 
-interface IInputNumberProps extends Omit<ComponentProps<typeof AntdInputNumber>, 'onChange' | 'size'> {
-  /** error flag */
-  error?: boolean,
-  /** handler  */
-  onChange?: (value: number) => void,
-  /** theme  options */
-  theme?: ThemeKey,
-  /** unique id  */
-  klId?: string,
-  size?: ISizeType
-}
-
-export const InputNumber = (rawProps: IInputNumberProps): ReactElement<IInputNumberProps> => {
-  const props = useThemedTextbox(rawProps)
+export const InputNumberComponent: FC<TextboxNumberProps> = (rawProps: TextboxNumberProps) => {
+  const mappedProps: TextboxNumberMappedProps = useClassNamedTextbox<TextboxNumberProps>(rawProps)
+  const themedProps: TextboxNumberViewProps = useThemedTextbox(mappedProps)
+  const props = useTestAttribute(themedProps)
   return <InputNumberView {...props} />
 }
 
-export const InputNumberView = ({
-  error,
-  disabled,
+export const InputNumberView: FC<TextboxNumberViewProps> = ({
   onChange,
-  className,
-  theme,
-  klId,
-  size,
+  controls,
+  value,
+  testAttributes,
   ...rest
-}: IInputNumberProps & { cssConfig: InputCssConfig }): ReactElement<IInputNumberProps> => {
-  const mappedSize: SizeType = size === 'medium' ? 'middle' : size
+}: TextboxNumberViewProps) => {
   return (
     <StyledInputNumber
-      kl-id={klId}
-      size={mappedSize}
-      className={classnames({ error: error && !disabled }, className)}
-      disabled={disabled}
-      onChange={value => onChange?.(Number(value))}
+      upHandler={controls?.upIcon || <ArrowUpMicro/>}
+      downHandler={controls?.downIcon || <ArrowDownMicro/>}
+      {...testAttributes}
       {...rest}
+      onChange={value => onChange?.(Number(value))}
+      value={value}
+      onKeyPress={(event) => {
+        if (!/\d|[.]|-/.test(event.key)) {
+          event.preventDefault()
+        }
+      }}
     />
   )
 }
+
+export const InputNumber = WithGlobalStyles(InputNumberComponent)

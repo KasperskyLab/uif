@@ -1,17 +1,18 @@
 import { get } from 'lodash'
+import { Sorter } from '@src/table'
 
 type TDate = {
   type: string,
   value: string
 }
 
-export const defaultSortFunction = (data: any[], propName: string, isAsc: boolean): any[] => {
-  return [...data.sort((rowA, rowB) => {
+export const defaultSortFunction: Sorter = <T extends Record<string, unknown>>(rows: T[], propName: keyof T, isAsc: boolean): T[] => {
+  return [...(rows).sort((rowA, rowB) => {
     let parseValue = (v: any) => (typeof v === 'string') ? v.toUpperCase() : v
 
     const propValueA = get(rowA, propName)
     const propValueB = get(rowB, propName)
-    if (propValueA?.type === 'datetime' && propValueB?.type === 'datetime') {
+    if ((propValueA as any)?.type === 'datetime' && (propValueB as any)?.type === 'datetime') {
       parseValue = (v: TDate) => new Date(v.value).getTime()
     }
     const parsedPropValueA = parseValue(propValueA)

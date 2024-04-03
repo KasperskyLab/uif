@@ -4,7 +4,7 @@ import { TableModule } from '../modules'
 import { TableCssConfig } from '../types'
 import { useThemedTableProps } from '../useThemedTable'
 
-type TableContextProviderProps = {
+export type TableContextProviderProps = {
   cssConfig: TableCssConfig | null
 }
 

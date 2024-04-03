@@ -1,25 +1,27 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react'
-import { NotificationCssConfig, NotificationProps } from './types'
-import { useThemedNotification } from './useThemeNotification'
+import React, { FC } from 'react'
+import { NotificationContainerProps, NotificationContainerViewProps } from './types'
+import { useThemedNotification } from './useThemedNotification'
 import styled from 'styled-components'
 import { NotificationCss } from './notificationCss'
+import { defaultContainerId } from './NotificationService'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
 const StyledNotification = styled('div').withConfig({
-  shouldForwardProp: prop => !['cssConfig', 'noIcon', 'componentId'].includes(prop)
+  shouldForwardProp: prop => !['cssConfig', 'noIcon'].includes(prop)
 })`
  ${NotificationCss}
 `
 
-export const Notification = (rawProps: NotificationProps): JSX.Element => {
-  const props = useThemedNotification(rawProps)
-  return <NotificationView data-component-id={props.componentId} {...props} />
+export const Notification: FC<NotificationContainerProps> = (rawProps: NotificationContainerProps) => {
+  const themedProps = useThemedNotification(rawProps)
+  const props = useTestAttribute(themedProps)
+  return <NotificationView {...props} />
 }
 
-const NotificationView: React.FC<NotificationProps & {
-  cssConfig: NotificationCssConfig
-}> = (props): JSX.Element => {
-  return <StyledNotification {...props} />
+const NotificationView: FC<NotificationContainerViewProps> = ({
+  id = defaultContainerId, testAttributes, ...props
+}: NotificationContainerViewProps) => {
+  return <StyledNotification {...testAttributes} {...props} id={id} />
 }
 
 Notification.displayName = 'Notification'

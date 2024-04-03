@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": true,
+    "storybook": true,
+    "figmaView": true
+  },
+  "component": "Status",
+  "description": "Компонент для цветовой индикации статуса.",
+  "usage": "В компоненте используется либо иконка, либо индикатор.",
+  "designLink": "https://www.figma.com/file/7TGvGlgGfTltMG1OBgLq8p/00-%5BB2B%5D-Hexa-UI-Kit?node-id=45733%3A263233&mode=dev",
+  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7TGvGlgGfTltMG1OBgLq8p%2F00-%255BB2B%255D-Hexa-UI-Kit%3Ftype%3Ddesign%26node-id%3D45733%253A263233%26mode%3Ddev"
+}

@@ -7,6 +7,7 @@
   "exclude": [
     "**/*.stories.tsx",
     "**/_story",
-    ".storybook/StoryComponents.tsx"
+    ".storybook",
+    "docs"
   ]
 }

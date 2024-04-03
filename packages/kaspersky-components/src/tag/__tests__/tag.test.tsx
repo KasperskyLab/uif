@@ -1,21 +1,71 @@
 import React from 'react'
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Tag from '../Tag'
 import { ThemeKey } from '../../../design-system/types'
 import 'jest-styled-components'
 import { ThemeProvider } from '../../../design-system/theme'
-import { themeColors } from '../../../design-system/tokens'
 
 describe('Tag ', () => {
   const klId = 'test-tag-id'
+
   test('should recieve kl-id prop', () => {
-    const { getByTestId } = render(
+    const { container, getByTestId } = render(
       <ThemeProvider theme={ThemeKey.Light}>
-        <Tag klId={klId}>hello</Tag>
+        <Tag klId={klId} testId="test-id">hello</Tag>
       </ThemeProvider>
     )
+
     expect(getByTestId(klId)).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
+  })
+
+  test('should render icon if passed', async () => {
+    const { findByTestId } = render(
+      <ThemeProvider theme={ThemeKey.Light}>
+        <Tag icon={<div kl-id="test-icon">Icon</div>}>hello</Tag>
+      </ThemeProvider>
+    )
+    const iconElement = await findByTestId('test-icon')
+    expect(iconElement).toBeInTheDocument()
+  })
+
+  test('should render invalid icon when tag is invalid', () => {
+    const { container } = render(
+      <Tag invalid>Tag invalid</Tag>
+    )
+    const invalidIcon = container.querySelector('.tag-invalid-icon')
+    expect(invalidIcon).toBeInTheDocument()
+  })
+
+  test('should call onClose when close button is clicked', () => {
+    const onCloseMock = jest.fn()
+    const { container } = render(
+      <ThemeProvider theme={ThemeKey.Light}>
+        <Tag testId="test-tag-id" closable onClose={onCloseMock}>
+          hello
+        </Tag>
+      </ThemeProvider>
+    )
+
+    const closeButton = container.querySelector('.kl-action-button')
+    closeButton && fireEvent.click(closeButton)
+    expect(onCloseMock).toHaveBeenCalled()
+  })
+
+  test('should not call onClose when tag is disabled', () => {
+    const onCloseMock = jest.fn()
+    const { container } = render(
+      <ThemeProvider theme={ThemeKey.Light}>
+        <Tag testId="test-tag-id" closable disabled onClose={onCloseMock}>
+          hello
+        </Tag>
+      </ThemeProvider>
+    )
+
+    const closeButton = container.querySelector('.kl-action-button')
+    closeButton && fireEvent.click(closeButton)
+    expect(onCloseMock).not.toHaveBeenCalled()
   })
 
   test('render without passing any props', () => {
@@ -28,41 +78,10 @@ describe('Tag ', () => {
     expect(getByTestId(klId)).toHaveTextContent('hello')
   })
 
-  test('render with color marina', () => {
-    const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Tag backgroundColor='marina' klId={klId}>
-          hello
-        </Tag>
-      </ThemeProvider>
-    )
-
-    expect(getByTestId(klId)).toHaveTextContent('hello')
-    // @ts-ignore
-    expect(getByTestId(klId)).toHaveStyleRule({
-      color: themeColors.tags.marina
-    })
-  })
-
-  test('render with icon', () => {
-    const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Tag klId={klId} icon='Add'>
-          hello
-        </Tag>
-      </ThemeProvider>
-    )
-
-    const icon = getByTestId('tag-icon')
-    expect(icon).toBeTruthy()
-  })
-
   test('render without icon', () => {
     const { queryByTestId } = render(
       <ThemeProvider theme={ThemeKey.Light}>
-        <Tag klId={klId}>
-          hello
-        </Tag>
+        <Tag klId={klId}>hello</Tag>
       </ThemeProvider>
     )
 
@@ -70,7 +89,7 @@ describe('Tag ', () => {
     expect(icon).not.toBeTruthy()
   })
 
-  test('render with closable icon', () => {
+  test('should render with closable icon when closable is true', () => {
     const { container } = render(
       <ThemeProvider theme={ThemeKey.Light}>
         <Tag klId={klId} closable>
@@ -79,20 +98,7 @@ describe('Tag ', () => {
       </ThemeProvider>
     )
 
-    const closableIcon = container.querySelector('.anticon-close')
-    expect(closableIcon).toBeTruthy()
-  })
-
-  test('render without closable icon', () => {
-    const { container } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Tag klId={klId}>
-          hello
-        </Tag>
-      </ThemeProvider>
-    )
-
-    const closableIcon = container.querySelector('.anticon-close')
-    expect(closableIcon).not.toBeTruthy()
+    const closeIcon = container.querySelector('.kl-action-button')
+    expect(closeIcon).toBeInTheDocument()
   })
 })

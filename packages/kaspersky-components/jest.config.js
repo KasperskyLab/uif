@@ -18,7 +18,8 @@ module.exports = {
   },
   preset: 'ts-jest',
   roots: [
-    '<rootDir>/src'
+    '<rootDir>/src',
+    '<rootDir>/helpers'
   ],
   setupFilesAfterEnv: ['<rootDir>/setupTests.js'],
   transformIgnorePatterns: ['/node_modules/', '\\.pnp\\.[^\\/]+$']

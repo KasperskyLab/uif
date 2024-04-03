@@ -1,79 +1,57 @@
 import React, { useState } from 'react'
-import { ComponentStory } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { badges } from '../../.storybook/badges'
-import { StoryColumn, StoryLayout } from '../../.storybook/StoryComponents'
+import { badges } from '@sb/badges'
+import { StoryColumn } from '@sb/StoryComponents'
 import { Toggle } from './Toggle'
-import { Text } from '../typography/text'
-import { withMeta } from '../../helpers/hocs/MetaComponent/withMeta'
-import Meta from './meta.json'
-import { useTheme } from '../../design-system/theme/hooks'
+import { Text } from '@src/typography/text'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import MetaData from './meta.json'
+import { ToggleProps } from './types'
 
-export default {
+const meta: Meta<ToggleProps> = {
   title: 'Atoms/Toggle',
   component: Toggle,
   argTypes: {
-    theme: {
-      control: { type: 'select', default: 'light' },
-      options: ['light', 'dark'],
-      description: 'Color Palette Theme'
-    },
-    disabled: {
-      control: { type: 'boolean' },
-      description: 'Is the switch disabled'
-    },
-    loading: {
-      control: { type: 'boolean' },
-      description: 'Loader visible'
-    }
+    ...sbHideControls(['theme', 'tooltip', 'icon'])
   },
   args: {
-    theme: 'light',
     disabled: false,
-    loading: false
+    readonly: false,
+    loading: false,
+    testId: 'toggle-test-id',
+    klId: 'toggle-kl-id'
   },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
     docs: {
-      page: withMeta(Meta)
-    }
+      page: withMeta(MetaData)
+    },
+    design: MetaData.figmaView
+  }
+}
+export default meta
+
+type Story = StoryObj<ToggleProps>
+
+export const Basic: Story = {
+  args: {
+    children: 'Label'
   }
 }
 
-export const Basic: ComponentStory<typeof Toggle> = ({
-  theme: themeProps,
-  ...rest
-}) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <StoryColumn>
-        <Toggle size='small' {...rest}>
-          Toggle me small
-        </Toggle>
-        <Toggle size='default' {...rest}>Toggle me default</Toggle>
-      </StoryColumn>
-    </StoryLayout>
-  )
-}
+export const Control: Story = {
+  render: (args: ToggleProps) => {
+    const [first, setFirst] = useState<boolean>(true)
+    const [second, setSecond] = useState<boolean>(true)
+    const getLabel = (value: boolean) => (value ? 'On' : 'Off')
+    const changeState = action('update state')
 
-Basic.parameters = {
-  docs: {
-    storyDescription: 'Basic Component Usage Example'
-  }
-}
-
-export const Control: ComponentStory<typeof Toggle> = ({ theme: themeProps, ...rest }) => {
-  const [first, setFirst] = useState<boolean>(true)
-  const [second, setSecond] = useState<boolean>(true)
-  const getLabel = (value: boolean) => (value ? 'On' : 'Off')
-  const changeState = action('update state')
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
+    return (
       <StoryColumn>
         <Toggle
-          {...rest}
+          {...args}
           checked={first}
           onChange={(value) => {
             setFirst(value)
@@ -82,9 +60,9 @@ export const Control: ComponentStory<typeof Toggle> = ({ theme: themeProps, ...r
         >
           {getLabel(first)}
         </Toggle>
-        {!first && <Text>second onChange not work</Text>}
+        {!first && <Text>second onChange does not work</Text>}
         <Toggle
-          {...rest}
+          {...args}
           checked={second}
           onChange={(value) => {
             if (!first) return
@@ -95,12 +73,6 @@ export const Control: ComponentStory<typeof Toggle> = ({ theme: themeProps, ...r
           {getLabel(first)}
         </Toggle>
       </StoryColumn>
-    </StoryLayout>
-  )
-}
-
-Control.parameters = {
-  docs: {
-    storyDescription: 'Controllable Component Example'
+    )
   }
 }

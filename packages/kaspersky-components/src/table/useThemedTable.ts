@@ -1,15 +1,10 @@
-import { useMemo } from 'react'
-import { ITableProps, TableCssConfig, ThemedTableProps } from './types'
-import { THEME_CONFIG } from '../../design-system/theme/themes/config'
-import { useTheme } from '../../design-system/theme/hooks'
+import { ITableProps, TableCssConfig, TableThemeProps, TableViewProps } from './types'
+import { useThemedComponent } from '@helpers/useThemedComponent'
 
-export const useThemedTableProps = ({ theme: themeFromProps, ...rest }: ITableProps): ThemedTableProps => {
-  const theme = useTheme({ theme: themeFromProps })
-
-  const cssConfig = useMemo<TableCssConfig>(() => ({
-    ...THEME_CONFIG[theme.key].components.table.colors,
-    ...THEME_CONFIG[theme.key].components.table.sizes
-  }), [theme])
-
-  return { ...rest, cssConfig, theme: theme.key }
-}
+export const useThemedTableProps = (props: ITableProps): TableViewProps => (
+  useThemedComponent<ITableProps, TableCssConfig, TableThemeProps>(props, {
+    componentName: 'table',
+    defaultValues: {},
+    propsToDrill: ['theme']
+  }) as TableViewProps
+)

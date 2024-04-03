@@ -1,112 +1,183 @@
-import React, { useMemo, useRef } from 'react'
-import { ModalProps, ModalMode, ModalCssConfig } from './types'
+import React, { useMemo, useRef, useEffect, FC, useState } from 'react'
 import styled from 'styled-components'
+import { Modal as AntdModal } from 'antd'
+import { Cross } from '@kaspersky/icons/16'
+import { Button } from '@src/button'
+import { Space } from '@src/space'
+import {
+  StatusWarningOutline,
+  StatusDangerOutline,
+  StatusOkOutline
+} from '@kaspersky/icons/24'
+import useDimension from '@helpers/hooks/useDimension'
+import { ModalProps, ModalMode, ModalViewProps } from './types'
 import {
   ModalContent,
   modalCss,
-  IconStyled,
-  SpaceBox,
+  StyledIcon,
   ModalGlobalStyles
 } from './modalCss'
-import { useThemeModal } from './useThemeModal'
-import { Modal as AntdModal } from 'antd'
-import { Button } from '../button'
-import { Space } from '../space'
-import useDimension from '../../helpers/hooks/useDimension'
-import { IconWarning, IconInfo } from './assets/icons'
+import { useThemedModal } from './useThemedModal'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import { shouldForwardProp } from '@helpers/shouldForwardProp'
+import { ActionButtonCustomProps, ActionButtonProps, useThemedActionButton } from '@src/action-button'
+import ActionButtonCSS from '@src/action-button/ActionButtonCSS'
 
-export const IconMap: {
-  [key in Exclude<ModalMode, 'default'>]: React.FC | null;
-} = {
-  warning: () => <IconWarning componentId="icon-warning" />,
-  error: () => <IconInfo componentId="icon-error" />
+const StyledCloseIcon = styled(Cross).withConfig({ shouldForwardProp })`
+  ${ActionButtonCSS}
+`
+
+export const CloseIcon = (rawProps: ActionButtonProps): JSX.Element => {
+  const themedProps = useThemedActionButton({ ...rawProps, interactive: true })
+  const props = useTestAttribute(themedProps)
+  return <StyledCloseIcon {...props as ActionButtonCustomProps} cssConfig={themedProps.cssConfig} />
 }
 
 const StyledModal = styled(AntdModal).withConfig({
-  shouldForwardProp: (prop) =>
-    !['cssConfig', 'noIcon', 'componentId'].includes(prop)
-})`
-  ${modalCss}
-`
+  shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
+})`${modalCss}`
 
-export const Modal = (rawProps: ModalProps): JSX.Element => {
-  const props = useThemeModal(rawProps)
-  return (
-    <ModalView data-component-id={props.componentId} {...props} />
-  )
+export const Modal: FC<ModalProps> = (rawProps: ModalProps) => {
+  const themedProps = useThemedModal(rawProps)
+  const props = useTestAttribute(themedProps)
+  return <ModalView {...props} />
 }
 
-export const ModalView: React.FC<
-ModalProps & {
-  cssConfig: ModalCssConfig
-}
-> = (props): JSX.Element => {
+export const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
   const {
     mode,
-    noIcon,
     header,
     content,
     actions,
     cssConfig,
     visible,
-    withOverlay
+    centered = true,
+    closable = true,
+    testAttributes,
+    customButtons
   } = props
-  const IconComponent = mode !== 'default' && IconMap[mode]
-  const ref = useRef<HTMLDivElement>(null)
-  const { height } = useDimension(ref, [visible])
+
+  const iconMap = useMemo((): { [key in Exclude<ModalMode, 'default'>]: React.FC; } => {
+    return {
+      warning: () => <StatusWarningOutline testId="modal-warning-icon" klId="icon-warning" />,
+      error: () => <StatusDangerOutline testId="modal-error-icon" klId="icon-error" />,
+      success: () => <StatusOkOutline testId="modal-success-icon" klId="icon-success" />
+    }
+  }, [])
+
+  const IconComponent = useMemo(() => mode !== 'default' && iconMap[mode], [iconMap, mode])
+
+  const contentRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLDivElement>(null)
+  const footerRef = useRef<HTMLDivElement>(null)
+
+  const { height: contentHeight } = useDimension(contentRef, [visible])
+  const { height: titleHeight } = useDimension(titleRef, [visible])
+  const { height: footerHeight } = useDimension(footerRef, [visible])
+
+  useEffect(() => {
+    if (visible && footerRef.current) {
+      const firstFooterButton: HTMLButtonElement | null = footerRef.current.querySelector('button')
+
+      setTimeout(() => {
+        firstFooterButton?.focus()
+      })
+    }
+  }, [visible])
 
   const titleMemoized = useMemo(() => {
     return (
-      <>
-        {!noIcon && IconComponent && (
-          <IconStyled cssConfig={cssConfig} mode={mode}>
+      <div ref={titleRef}>
+        {IconComponent && (
+          <StyledIcon cssConfig={cssConfig}>
             {<IconComponent />}
-          </IconStyled>
+          </StyledIcon>
         )}
-
         {header}
-      </>
+      </div>
     )
-  }, [header, noIcon, mode])
+  }, [header, IconComponent, cssConfig])
 
   const footerMemoized = useMemo(() => {
     return (
-      actions && (
-        <>
-          <Space size={4} direction="horizontal">
-            {actions.FIRST_ACTION && (
-              <Button
-                size="medium"
-                {...actions.FIRST_ACTION}
-              >
+      (actions || customButtons) && (
+        <div ref={footerRef}>
+          <Space size={16} direction="horizontal">
+            {actions?.FIRST_ACTION && (
+              <Button size="medium" {...actions.FIRST_ACTION}>
                 {actions.FIRST_ACTION.text}
               </Button>
             )}
-            {actions.SECOND_ACTION && (
-              <Button mode="secondary" size="medium" {...actions.SECOND_ACTION}>
+            {actions?.SECOND_ACTION && (
+              <Button size="medium" mode="secondary" {...actions.SECOND_ACTION}>
                 {actions.SECOND_ACTION.text}
               </Button>
             )}
+            {actions?.THIRD_ACTION && (
+              <Button size="medium" mode="secondary" {...actions.THIRD_ACTION}>
+                {actions.THIRD_ACTION.text}
+              </Button>
+            )}
+            {customButtons && customButtons.map(({ text, ...rest }, i) => (
+              <Button
+                key={`modalCustomButton${i}`}
+                size="medium"
+                mode="secondary"
+                {...rest}
+              >
+                {text}
+              </Button>
+            ))}
           </Space>
-        </>
+        </div>
       )
     )
   }, [actions])
 
+  const [showTopBorder, setShowTopBorder] = useState(false)
+  const [showBottomBorder, setShowBottomBorder] = useState(false)
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement
+
+    const bottom = target.scrollHeight - target.scrollTop === target.clientHeight
+    setShowBottomBorder(!bottom)
+
+    const top = target.scrollTop === 0
+    setShowTopBorder(!top)
+  }
+
   return (
     <>
-      <ModalGlobalStyles cssConfig={cssConfig} height={height} />
+      <ModalGlobalStyles
+        cssConfig={cssConfig}
+        contentHeight={contentHeight}
+        titleHeight={titleHeight}
+        footerHeight={footerHeight}
+        showTopBorder={showTopBorder}
+        showBottomBorder={showBottomBorder}
+        closable={closable}
+      />
       <StyledModal
         title={titleMemoized}
         footer={footerMemoized}
-        mask={withOverlay}
+        mask
+        maskClosable={false}
+        keyboard={false}
+        centered={centered}
+        closeIcon={<CloseIcon />}
+        {...testAttributes}
         {...props}
       >
-        <SpaceBox size={8} direction="vertical" align="flex-start" width="auto">
-          <ModalContent ref={ref} height={height}>
-            {content}
-          </ModalContent>
-        </SpaceBox>
+        <ModalContent
+          ref={contentRef}
+          cssConfig={cssConfig}
+          titleHeight={titleHeight}
+          footerHeight={footerHeight}
+          onScroll={handleScroll}
+        >
+          {content}
+        </ModalContent>
       </StyledModal>
     </>
   )

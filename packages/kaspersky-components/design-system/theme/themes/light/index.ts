@@ -2,36 +2,52 @@ import { ThemeKey, ThemeConfig } from '../../../types'
 import { COMMON_THEME } from '../common-theme'
 import { alert } from './alert'
 import { button, buttonSize } from './button'
+import { segmentedButton, segmentedButtonSize } from './segmentedButton'
 import { colors } from './colors'
-import { dropdown, dropdownSize } from './dropdown'
-import { badge, badgeSize } from './badge'
+import { dropdown } from './dropdown'
+import { badge } from './badge'
 import { sidebar, sidebarSize } from './sidebar'
-import { divider, dividerSize } from './divider'
+import { divider } from './divider'
 import { link, linkSize } from './link'
+import { chip, chipSize } from './chip'
+import { informationCard, informationCardSize } from './informationCard'
 import { loader, loaderSize } from './loader'
-import { select, selectSizes } from './select'
+import { select } from './select'
 import { notification } from './notification'
 import { severity } from './severity'
-import { tagSize } from './tag'
+import { tag, tagSize } from './tag'
 import { checkbox } from './checkbox'
+import { sectionMessage } from './sectionMessage'
 import { radio } from './radio'
 import { toggle } from './toggle'
-import { tabs, tabsSize } from './tabs'
+import { tabs } from './tabs'
+import { indicator } from './indicator'
+import { status } from './status'
 import { input, inputSize } from './input'
+import { codeViewer } from './codeViewer'
 import { field } from './field'
-import { pagination, paginationSize } from './pagination'
+import { pagination } from './pagination'
 import { toolbar } from './toolbar'
-import { search } from './search'
-import { modal } from './modal'
+import { tooltip } from './tooltip'
+import { modal, modalSize } from './modal'
 import { keyValue } from './keyValue'
-import { table, tableSizes } from './table'
-import { tree, treeSize } from './tree'
-import { accordion } from './accordion'
-import { anchors, anchorsSize } from './anchor'
-import { picker, pickerInput } from './picker'
+import { table } from './table'
+import { tree } from './tree'
+import { treeSelect } from './treeSelect'
+import { accordion, accordionSize } from './accordion'
+import { anchor } from './anchor'
+import { picker } from './picker'
 import { label } from './label'
+import { tenantFilter } from './tenantFilter'
 import { icon } from './icon'
 import { formLabel } from './formLabel'
+import { actionButton, actionButtonSize } from './actionButton'
+import { helpMessage } from './helpMessage'
+import { popover } from './popover'
+import { expandableText } from './expandableText'
+import { scrollbar } from './scrollbar'
+import { timeInput } from './timeInput'
+import { weeklySchedule } from './weeklySchedule'
 
 export const LIGHT_THEME: ThemeConfig = {
   ...COMMON_THEME,
@@ -42,26 +58,45 @@ export const LIGHT_THEME: ThemeConfig = {
       colors: button({ colors }),
       sizes: buttonSize
     },
+    segmentedButton: {
+      colors: segmentedButton({ colors }),
+      sizes: segmentedButtonSize
+    },
     link: {
       colors: link({ colors }),
       sizes: linkSize
     },
     badge: {
-      colors: badge({ colors }),
-      sizes: badgeSize
+      colors: badge({ colors })
     },
     sidebar: {
       colors: sidebar({ colors }),
       sizes: sidebarSize
     },
     dropdown: {
-      colors: dropdown({ colors }),
-      sizes: dropdownSize
+      colors: dropdown({ colors })
     },
     tag: {
+      colors: tag({ colors }),
       sizes: tagSize
     },
-    severity: severity({ colors }),
+    chip: {
+      colors: chip({ colors }),
+      sizes: chipSize
+    },
+    expandableText: {
+      colors: expandableText({ colors })
+    },
+    scrollbar: {
+      colors: scrollbar({ colors })
+    },
+    informationCard: {
+      colors: informationCard({ colors }),
+      sizes: informationCardSize
+    },
+    severity: {
+      colors: severity({ colors })
+    },
     checkbox: {
       colors: checkbox({ colors })
     },
@@ -69,12 +104,10 @@ export const LIGHT_THEME: ThemeConfig = {
       colors: radio({ colors })
     },
     select: {
-      colors: select({ colors }),
-      sizes: selectSizes
+      colors: select({ colors })
     },
     divider: {
-      colors: divider({ colors }),
-      sizes: dividerSize
+      colors: divider({ colors })
     },
     loader: {
       colors: loader({ colors }),
@@ -84,48 +117,70 @@ export const LIGHT_THEME: ThemeConfig = {
       colors: toggle({ colors })
     },
     tabs: {
-      colors: tabs({ colors }),
-      sizes: tabsSize
+      colors: tabs({ colors })
     },
     notification: {
       colors: notification({ colors }),
       sizes: undefined
     },
     alert: {
-      colors: alert({ colors }),
-      sizes: undefined
+      colors: alert({ colors })
+    },
+    sectionMessage: {
+      colors: sectionMessage({ colors })
+    },
+    indicator: {
+      colors: indicator({ colors })
+    },
+    status: {
+      colors: status({ colors })
     },
     input: {
       colors: input({ colors }),
       sizes: inputSize
     },
+    codeViewer: {
+      colors: codeViewer({ colors })
+    },
     field: {
       colors: field({ colors })
     },
-    pagination: {
-      colors: pagination({ colors }),
-      sizes: paginationSize
-    },
+    pagination: { colors: pagination({ colors }) },
     toolbar: { colors: toolbar({ colors }) },
-    search: { colors: search({ colors }) },
-    modal: { colors: modal({ colors }) },
+    tooltip: { colors: tooltip({ colors }) },
+    modal: {
+      colors: modal({ colors }),
+      sizes: modalSize
+    },
     keyValue: { colors: keyValue({ colors }) },
     table: {
-      colors: table({ colors }),
-      sizes: tableSizes
+      colors: table({ colors })
     },
     tree: {
-      colors: tree({ colors }),
-      sizes: treeSize
+      colors: tree({ colors })
     },
-    accordion: { colors: accordion({ colors }) },
-    anchors: { colors: anchors({ colors }), sizes: anchorsSize },
+    treeSelect: {
+      colors: treeSelect({ colors })
+    },
+    helpMessage: { colors: helpMessage({ colors }) },
+    accordion: { colors: accordion({ colors }), sizes: accordionSize },
+    anchors: { colors: anchor({ colors }) },
     picker: { colors: picker({ colors }) },
-    pickerInput: { colors: pickerInput({ colors }) },
     label: { colors: label({ colors }) },
+    tenantFilter: { colors: tenantFilter({ colors }) },
     icon: icon({ colors }),
     formLabel: {
       colors: formLabel({ colors })
+    },
+    actionButton: { colors: actionButton({ colors }), sizes: actionButtonSize },
+    popover: {
+      colors: popover({ colors })
+    },
+    timeInput: {
+      colors: timeInput({ colors })
+    },
+    weeklySchedule: {
+      colors: weeklySchedule({ colors })
     }
   }
 }

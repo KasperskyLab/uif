@@ -1,207 +1,166 @@
-import React from 'react'
-import {
-  Title,
-  Subtitle,
-  Subheading,
-  Description,
-  ArgsTable,
-  Stories,
-  PRIMARY_STORY
-} from '@storybook/addon-docs'
-import { Space } from '../space'
-import { ComponentStory } from '@storybook/react'
-import { badges } from '../../.storybook/badges'
-import { StoryLayout } from '../../.storybook/StoryComponents'
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import { Meta, StoryObj } from '@storybook/react'
+import { badges } from '@sb/badges'
+import { StoryColumn } from '@sb/StoryComponents'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import MetaData from './__meta__/meta.json'
 import { InformationCard } from './InformationCard'
-import { Icon } from '../icon'
-import { Tag } from '../tag'
-import { TextTypes, HeadingTypes } from '../../design-system/tokens/typography'
+import { InformationCardProps } from '@src/informationCard/types'
+import { Badge } from '@src/badge'
+import { Button } from '@src/button'
+import { Checkbox } from '@src/checkbox'
+import { Radio } from '@src/radio'
+import { Space } from '@src/space'
+import { Tag } from '@src/tag'
+import { Toggle } from '@src/toggle'
+import { Connection } from '@kaspersky/icons/32'
 
-export default {
+const StyledIconWithBadge = styled.div`
+  position: relative;
+`
+
+const StyledBadge = styled(Badge)`
+  position: absolute;
+  top: 0;
+  right: -8px;
+`
+
+const IconWithBadge = () => {
+  return (
+    <StyledIconWithBadge>
+      <Connection />
+      <StyledBadge count={9} mode='high' />
+    </StyledIconWithBadge>
+  )
+}
+
+const meta: Meta<InformationCardProps> = {
   title: 'Organisms/InformationCard',
   component: InformationCard,
   argTypes: {
-    theme: {
-      control: { type: 'select' },
-      options: ['light', 'dark'],
-      description: 'Color Palette Theme'
+    title: {
+      control: { type: 'text' }
     },
     width: {
-      control: { type: 'range', min: 100, max: 1000, step: 10 },
-      description: 'Width'
-    },
-    title: {
-      control: { type: 'text' },
-      description: 'Header'
-    },
-    titleLevel: {
-      control: { type: 'select' },
-      options: [undefined, ...Object.keys(HeadingTypes)],
-      description: 'Header Text Styling'
-    },
-    titleIcon: {
-      control: { type: 'select' },
-      mapping: {
-        undefined: undefined,
-        Icon: <Icon size="large" name="AccountID" color="#5c5c5c" />
-      },
-      options: ['undefined', 'Icon'],
-      description: 'Header icon'
+      control: { type: 'range', min: 100, max: 1000, step: 10 }
     },
     leftSide: {
       control: { type: 'select' },
       mapping: {
         undefined: undefined,
-        'Text example': 'Text of left side',
-        Icon: <Icon size="medium" name="Apps" color="#5c5c5c" />
+        icon: <Connection />,
+        iconWithBadge: <IconWithBadge />
       },
-      options: ['undefined', 'Text example', 'Icon'],
-      description: 'Left side content'
+      options: ['undefined', 'icon', 'iconWithBadge']
     },
-    rightCorner: {
-      control: { type: 'select' },
-      mapping: {
-        undefined: undefined,
-        Tag: <Tag backgroundColor='emerald'>Trusted</Tag>
-      },
-      options: ['undefined', 'Tag'],
-      description: 'Upper right corner content'
-    },
-    children: {
-      control: { type: 'text' },
-      description: 'Main content content'
-    },
-    contentLevel: {
-      control: { type: 'select' },
-      options: [undefined, ...Object.keys(TextTypes)],
-      description: 'Styling the main content text'
-    },
-    footer: {
-      control: { type: 'select' },
-      mapping: {
-        undefined: undefined,
-        Tags: (
-          <Space size={16} direction="horizontal">
-            <Tag>250–1000</Tag>
-            <Tag>Hosts</Tag>
-            <Tag>Mail</Tag>
-            <Tag>Security Foundation</Tag>
-          </Space>
-        )
-      },
-      options: ['undefined', 'Tags'],
-      description: 'Footer content'
-    },
-    className: { table: { disable: true } },
-    leftSideClassName: { table: { disable: true } },
-    titleClassName: { table: { disable: true } },
-    rightCornerClassName: { table: { disable: true } },
-    contentClassName: { table: { disable: true } },
-    footerClassName: { table: { disable: true } },
-    style: { table: { disable: true } },
-    dataTestId: { table: { disable: true } }
+    ...sbHideControls([
+      'footer', 'rightCorner', 'theme', 'titleLevel', 'titleIcon', 'children', 'contentLevel', 'className',
+      'leftSideClassName', 'titleClassName', 'descriptionClassName', 'rightCornerClassName', 'contentClassName',
+      'footerClassName', 'style'
+    ])
   },
   args: {
-    theme: 'light',
+    type: 'vertical',
     width: 450,
     title: 'Heading',
-    titleIcon: 'undefined',
+    description: 'To protect your mailboxes, OneDrive files, and SharePoint Online sites, Kaspersky Security for Microsoft Office 365 needs limited access to Office 365.',
     leftSide: 'undefined',
-    rightCorner: 'undefined',
-    children: 'To protect your mailboxes, OneDrive files, and SharePoint Online sites, Kaspersky Security for Microsoft Office 365 needs limited access to Office 365.',
-    footer: 'undefined'
+    size: 'medium',
+    selected: false,
+    disabled: false,
+    interactive: false,
+    testId: 'information-card-test-id',
+    klId: 'information-card-kl-id'
   },
   parameters: {
     badges: [badges.beta, badges.needsDesignReview],
     docs: {
-      page: () => {
-        return (
-          <>
-            <Title />
+      page: withMeta(MetaData)
+    },
+    design: MetaData.figmaView
+  }
+}
+export default meta
 
-            <Subtitle>
-              Info card component.
-            </Subtitle>
-            <Description>
-              A card with ready-made stylized slots for displaying content (`leftSide`, `title`, `footer` and so on).
-            </Description>
-            <a target="_blank" href="https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=7976%3A37024">
-              Design
-            </a>
+type Story = StoryObj<InformationCardProps>
 
-            <ArgsTable story={PRIMARY_STORY} />
-            <Stories includePrimary />
+export const Basic: Story = {}
 
-            <Subheading>
-              FAQ
-            </Subheading>
-            <Description>
-              -
-            </Description>
-
-            <Subheading>
-              Used by
-            </Subheading>
-            <Description>
-              -
-            </Description>
-          </>
-        )
-      }
-    }
+export const WithLeftSideAndFooter: Story = {
+  render: (args: InformationCardProps) => (
+    <InformationCard {...args} footer={
+      <Space size={16} direction="horizontal">
+        <Button mode='primary' disabled={args.disabled}>First</Button>
+        <Button mode='secondary' disabled={args.disabled}>Second</Button>
+      </Space>}
+    />
+  ),
+  args: {
+    leftSide: 'iconWithBadge'
   }
 }
 
-export const Basic: ComponentStory<typeof InformationCard> = ({ theme, ...rest }) => {
-  return (
-    <StoryLayout theme={theme}>
-      <InformationCard theme={theme} {...rest} />
-    </StoryLayout>
-  )
-}
-
-Basic.parameters = {
-  docs: {
-    storyDescription: 'Basic Component Usage Example'
+export const WithChildren: Story = {
+  render: (args: InformationCardProps) => (
+    <InformationCard {...args} footer={
+      <Space size={16} direction="horizontal">
+        <Button mode='primary' disabled={args.disabled}>First</Button>
+        <Button mode='secondary' disabled={args.disabled}>Second</Button>
+      </Space>}
+    >
+      <Tag mode='purple' interactive outlined disabled={args.disabled}>Custom content</Tag>
+      <Tag mode='violet' interactive outlined disabled={args.disabled}>More custom content</Tag>
+    </InformationCard>
+  ),
+  args: {
+    leftSide: 'icon'
   }
 }
 
-export const WithLeftSideAndFooter: ComponentStory<typeof InformationCard> = ({ theme, ...rest }) => {
-  return (
-    <StoryLayout theme={theme}>
-      <InformationCard theme={theme} {...rest} />
-    </StoryLayout>
-  )
-}
+export const Controllable: Story = {
+  render: (args: InformationCardProps) => {
+    const [selectedCheckbox, setSelectedCheckbox] = useState(false)
+    const [selectedToggle, setSelectedToggle] = useState(false)
+    const [selectedRadio, setSelectedRadio] = useState(false)
 
-WithLeftSideAndFooter.parameters = {
-  docs: {
-    storyDescription: 'Example showing left side and footer'
+    return (
+      <StoryColumn>
+        <InformationCard
+          {...args}
+          selected={selectedCheckbox}
+          onClick={() => setSelectedCheckbox(v => !v)}
+          rightCorner={(
+            <Checkbox
+              disabled={args.disabled}
+              checked={selectedCheckbox}
+            />
+          )}
+        />
+        <InformationCard
+          {...args}
+          selected={selectedToggle}
+          onClick={() => setSelectedToggle(v => !v)}
+          rightCorner={(
+            <Toggle
+              disabled={args.disabled}
+              checked={selectedToggle}
+            />
+          )}
+        />
+        <InformationCard
+          {...args}
+          selected={selectedRadio}
+          onClick={() => setSelectedRadio(v => !v)}
+          rightCorner={(
+            <Radio
+              disabled={args.disabled}
+              options={[{ label: '', value: '' }]}
+            />
+          )}
+        />
+      </StoryColumn>
+    )
   }
-}
-
-WithLeftSideAndFooter.args = {
-  title: undefined,
-  leftSide: 'Icon',
-  footer: 'Tags'
-}
-
-export const WithTitleIconAndRightCorner: ComponentStory<typeof InformationCard> = ({ theme, ...rest }) => {
-  return (
-    <StoryLayout theme={theme}>
-      <InformationCard theme={theme} {...rest} />
-    </StoryLayout>
-  )
-}
-
-WithTitleIconAndRightCorner.parameters = {
-  docs: {
-    storyDescription: 'An example with displaying an icon in the header and content in the right corner'
-  }
-}
-
-WithTitleIconAndRightCorner.args = {
-  titleIcon: 'Icon',
-  rightCorner: 'Tag',
-  footer: 'Tags'
 }

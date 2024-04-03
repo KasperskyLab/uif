@@ -3,13 +3,19 @@ import MarkdownIt from 'markdown-it'
 import _ from 'lodash'
 import { MarkdownProps } from './types'
 import { StyledText } from './markdownCss'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
 export const Markdown = ({
   value,
   ...restProps
 }: MarkdownProps & React.ComponentProps<typeof StyledText>) => {
+  const { testAttributes, ...rest } = useTestAttribute(restProps)
   return (
-    <StyledText {...restProps} dangerouslySetInnerHTML={{ __html: md.render(value) }} />
+    <StyledText
+      {...testAttributes}
+      {...rest}
+      dangerouslySetInnerHTML={{ __html: md.render(value) }}
+    />
   )
 }
 

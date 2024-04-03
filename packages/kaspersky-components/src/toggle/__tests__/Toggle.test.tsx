@@ -17,9 +17,11 @@ describe('Toggle', () => {
     expect(getToggle()).toBeInTheDocument()
   })
 
-  test('should recieve kl-id prop', () => {
-    render(<Toggle klId={defaultProps.klId}>{defaultProps.text}</Toggle>)
+  test('should receive qa props', () => {
+    const { container } = render(<Toggle klId={defaultProps.klId} testId="test-id">{defaultProps.text}</Toggle>)
+
     expect(screen.getByTestId(defaultProps.klId)).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
 
   test('should call onChange when clicked', () => {
@@ -32,11 +34,5 @@ describe('Toggle', () => {
   test('should be disabled with disabled prop', () => {
     render(<Toggle disabled>{defaultProps.text}</Toggle>)
     expect(getToggleSwitch()).toBeDisabled()
-  })
-
-  test('should be small then size prop is "small"', () => {
-    const SmallClassName = 'ant-switch-small'
-    render(<Toggle size='small'/>)
-    expect(getToggleSwitch()).toHaveClass(SmallClassName)
   })
 })

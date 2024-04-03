@@ -29,23 +29,43 @@ const keysToLowerCase = (data) => {
   }))
 }
 
-const resolveUpdatedJson = ({ currentData, latestData }) => {
-  const deprecatedMap = {
-    seporator: 'separator',
-    seporatorbold: 'separatorbold',
-    'seporator-invert': 'separator-invert',
-    'seporatorbold-invert': 'separatorbold-invert'
-  }
+const excludedGroups = ['light', 'dark', 'helpers']
 
+const deprecatedMap = {
+  seporator: 'separator',
+  seporatorbold: 'separator-bold',
+  'seporator-invert': 'separator-invert',
+  'seporatorbold-invert': 'separator-bold-invert',
+  baseicon: 'base-icon',
+  inprogress: 'in-progress',
+  resolved_solved: 'resolved-solved',
+  inincedent: 'in-incident',
+  primarywhite: 'primary-white',
+  secondarywhite: 'secondary-white',
+  secondary2white: 'secondary2-white',
+  disabledwhite: 'disabled-white',
+  linewhite: 'line-white',
+  baseiconwhite: 'base-icon-white',
+  'baseicon-invert': 'base-icon-invert',
+  seporatorwhite: 'separator-white',
+  seporatorboldwhite: 'separator-bold-white',
+  alternative2white: 'alternative2-white',
+  alternativewhite: 'alternative-white',
+  basewhite: 'base-white'
+}
+
+const resolveUpdatedJson = ({ currentData, latestData }) => {
   console.log(`
   Starting update colors
   
   deprecatedMap: ${JSON.stringify(deprecatedMap, null, '\t')}
   
+  excluded: ${excludedGroups.join(', ')}
+  
   `)
 
-  return Object.fromEntries(
-    Object.entries(currentData || {}).map(([groupKey, groupValue]) => {
+  return Object.fromEntries([
+    ...Object.entries(currentData || {}).map(([groupKey, groupValue]) => {
       return [
         groupKey,
         {
@@ -53,12 +73,12 @@ const resolveUpdatedJson = ({ currentData, latestData }) => {
           ...Object.fromEntries(
             Object.entries(groupValue || {}).map(([colorKey, colorValue]) => {
               console.log(`     Color ${groupKey}.${colorKey} updated`)
+              delete colorValue.comment
               return colorValue.type
                 ? [
                     colorKey.toLowerCase(),
                     {
                       ...colorValue,
-                      comment: latestData[groupKey][colorKey]?.description || colorValue.comment,
                       ...latestData[groupKey][colorKey],
                       ...latestData[groupKey][deprecatedMap[colorKey]]
                     }
@@ -84,7 +104,13 @@ const resolveUpdatedJson = ({ currentData, latestData }) => {
           )
         }
       ]
+    }),
+    ...Object.entries(latestData || {}).filter(([groupKey, groupValue]) => {
+      return !Object.keys(currentData || {}).some((existedKey) => {
+        return existedKey === groupKey || excludedGroups.includes(groupKey)
+      })
     })
+  ]
   )
 }
 

@@ -1,59 +1,75 @@
 import React from 'react'
-import { ComponentStory } from '@storybook/react'
-import { badges } from '../../.storybook/badges'
-import { StoryColumn, StoryLayout } from '../../.storybook/StoryComponents'
-import { Button } from '../button'
+import { Meta, StoryObj } from '@storybook/react'
+import { badges } from '@sb/badges'
+import { StoryColumn } from '@sb/StoryComponents'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import MetaData from './__meta__/meta.json'
 import { Tooltip } from './Tooltip'
-import { withMeta } from '../../helpers/hocs/MetaComponent/withMeta'
-import Meta from './meta.json'
-import { useTheme } from '../../design-system/theme/hooks'
+import { TooltipProps } from './types'
 import { Text } from '../typography'
+import { Button } from '../button'
 
-export default {
+const meta: Meta<TooltipProps> = {
   title: 'Atoms/Tooltip',
   component: Tooltip,
   argTypes: {
-    theme: {
-      control: { type: 'select', default: 'light' },
-      options: ['light', 'dark'],
-      description: 'Color Palette Theme'
-    }
+    text: {
+      control: { type: 'text' }
+    },
+    ...sbHideControls(['theme'])
   },
   args: {
-    theme: 'light'
+    text: 'Lorem ipsum'
   },
   parameters: {
-    badges: [badges.stable, badges.needsDesignReview],
+    badges: [badges.stable, badges.reviewedByDesign],
     docs: {
-      page: withMeta(Meta)
-    }
+      page: withMeta(MetaData)
+    },
+    design: MetaData.figmaView
   }
 }
+export default meta
 
-export const Basic: ComponentStory<typeof Tooltip> = () => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <StoryColumn>
-        <Text type="BTM5" themedColor="primary">
-          Tooltip here:
-        </Text>
-        <Tooltip
-          title={
-            <>
-              Not link. <a>Link</a>
-            </>
-          }
-        >
-          <Button>hover me to see Tooltip</Button>
-        </Tooltip>
-      </StoryColumn>
-    </StoryLayout>
+type Story = StoryObj<TooltipProps>
+
+export const Basic: Story = {
+  render: (args: TooltipProps) => (
+    <StoryColumn style={{ paddingLeft: '200px' }}>
+      <Text type="BTM5" themedColor="primary">
+        Tooltip here:
+      </Text>
+      <Tooltip {...args}>
+        <Button>hover me to see Tooltip</Button>
+      </Tooltip>
+    </StoryColumn>
   )
 }
 
-Basic.parameters = {
-  docs: {
-    storyDescription: 'Basic Component Usage Example'
+export const PerformanceExample: Story = {
+  render: (args: TooltipProps) => {
+    const tooltips = React.useMemo(() => {
+      const arr: number[] = []
+      for (let i = 0; i <= 1000; i++) {
+        arr.push(i)
+      }
+      return arr
+    }, [])
+
+    return (
+      <StoryColumn>
+        {tooltips.map((t) => (
+          <Tooltip
+            {...args}
+            key={t}
+            text={t}
+            destroyTooltipOnHide={{ keepParent: false }}
+          >
+            <Text>{t}: hover me to see Tooltip</Text>
+          </Tooltip>
+        ))}
+      </StoryColumn>
+    )
   }
 }

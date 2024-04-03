@@ -1,15 +1,15 @@
 {
   "component": "Divider",
   "v6": "/docs/atoms-divider--basic",
-  "v3": "Not existed",
+  "v3": "Компонента не было",
   "v5": [
     {
       "prop": "color",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "thickness",
-      "changes": "Removed"
+      "changes": "Убран"
     }
   ],
   "common": []

@@ -9,11 +9,11 @@ import {
 import userEvent from '@testing-library/user-event'
 
 import { Dropdown } from '../Dropdown'
-import { IDropdownProps, Trigger } from '../types'
+import { DropdownProps, Trigger } from '../types'
 
-import { Button } from '../../button'
-import { Link } from '../../link'
-import { Text } from '../../typography'
+import { Button } from '@src/button'
+import { Link } from '@src/link'
+import { Text } from '@src/typography'
 
 const overlay = [
   {
@@ -38,10 +38,11 @@ const defaultProps = {
   overlay,
   children: <Button klId={buttonKlId}>Trigger Dropdown</Button>,
   klId: 'test-dropdown',
+  testId: 'test-dropdown',
   trigger: ['click'] as Trigger[]
 }
 
-const DefaultDropdown = (props: Partial<IDropdownProps>) => (
+const DefaultDropdown = (props: Partial<DropdownProps>) => (
   <Dropdown {...defaultProps} {...props} />
 )
 
@@ -68,8 +69,11 @@ const getDropdownAfterAction = async (
 
 describe('Dropdown', () => {
   test('should render', () => {
-    render(<DefaultDropdown visible />)
+    const { baseElement } = render(<DefaultDropdown visible />)
+
     expect(getDropdown()).toBeInTheDocument()
+    expect(baseElement.querySelector(`[kl-id="${defaultProps.klId}"]`)).toBeInTheDocument()
+    expect(baseElement.querySelector(`[data-testid="${defaultProps.testId}"]`)).toBeInTheDocument()
   })
 
   test('should not render without visible and action', () => {
@@ -127,28 +131,5 @@ describe('Dropdown', () => {
     render(<DefaultDropdown />)
     await getDropdownAfterAction('click')
     expect(document.body.childElementCount).toEqual(bodyChildrenCount)
-  })
-
-  test('should render popup to parent if shouldUsePortal equals to false', async () => {
-    const bodyChildrenCount = 2
-
-    render(<DefaultDropdown shouldUsePortal={false} />)
-    await getDropdownAfterAction('click')
-
-    expect(document.body.childElementCount).toEqual(bodyChildrenCount)
-  })
-
-  test('should render popup in custom container', async () => {
-    const bodyChildrenCount = 2
-
-    render(
-      <div id={'container'}>
-        <DefaultDropdown getPopupContainer={() => document.querySelector('#container') as HTMLElement} />
-      </div>
-    )
-    await getDropdownAfterAction('click')
-
-    expect(document.body.childElementCount).toEqual(bodyChildrenCount)
-    expect(document.querySelector(`[kl-id=${buttonKlId}]`)?.nextElementSibling).toBe(null)
   })
 })

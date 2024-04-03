@@ -1,0 +1,80 @@
+{
+  "translation": {
+    "common": {
+      "empty": "데이터 없음"
+    },
+    "upload": {
+      "dropFileTitle": "여기에 드롭",
+      "pasteLinkTitle": "여기에 파일 링크 붙여넣기",
+      "helpText": "최대 200MB의 ZIP 및 RAR 파일을 최대 6개까지 추가할 수 있습니다",
+      "placeholder": "플레이스홀더",
+      "addFiles": "파일 추가",
+      "cancel": "취소",
+      "selectAnotherFile": "다른 파일 선택",
+      "enterNewURL": "새 URL 입력",
+      "repeat": "반복",
+      "loadingTitle": "업로드 {{value, number}}%",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "업로드 성공",
+      "successDescription": "서버에 {{file, fileName}} 업로드 완료",
+      "errorTitle": "업로드 오류",
+      "errorDescription": "연결 오류로 {{file, fileName}} 업로드 불가"
+    },
+    "severity": {
+      "critical": "심각",
+      "low": "낮음",
+      "medium": "중간",
+      "high": "높음",
+      "info": "정보",
+      "positive": "양호"
+    },
+    "select": {
+      "empty": "데이터 없음"
+    },
+    "pagination": {
+      "total": "총 {{count}}개",
+      "selected": "{{count}}개 선택",
+      "page": "페이지",
+      "goto": "다음으로 가기"
+    },
+    "search": {
+      "raw": "검색",
+      "dotted": "검색..."
+    },
+    "table": {
+      "column": {
+        "name": "첫 번째 열"
+      },
+      "column2": {
+        "name": "두 번째 열"
+      },
+      "column3": {
+        "name": "세 번째 열"
+      },
+      "columnDropdown": {
+        "ascending": "오름차순",
+        "descending": "내림차순",
+        "sorting": "정렬",
+        "filters": "필터",
+        "resetFilters": "필터 초기화"
+      },
+      "columnsSettings": {
+        "header": "열 설정",
+        "selectAll": "모두 선택",
+        "columns": "열",
+        "grouping": "그룹화",
+        "clear": "지우기",
+        "noGrouping": "그룹화 안 됨"
+      },
+      "groupingEmpty": "기타"
+    },
+    "timeInput": {
+      "placeholder": "시간 선택"
+    },
+    "actionBar": {
+      "unsavedChanges": "대기 중인 변경 사항",
+      "save": "저장",
+      "cancel": "취소"
+    }
+  }
+}

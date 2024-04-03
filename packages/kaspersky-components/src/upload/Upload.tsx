@@ -12,7 +12,7 @@ import { StyledDragger, UploadHeading, UploadText } from './Wrappers'
 import { UploadDraggerProps } from './types'
 import { convertFileSize } from './convertFileSize'
 import { useTranslation } from 'react-i18next'
-import { Size } from '../../design-system/types'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
 const Column = styled.div`
   display: flex;
@@ -35,10 +35,10 @@ const Row = styled.div`
 
 const UploadView: React.FC<UploadDraggerProps> = (props) => {
   const { t } = useTranslation()
+  const { testAttributes } = useTestAttribute(props)
   const {
     width,
     height = 400,
-    componentId,
     status = 'none',
     disabled,
     icon,
@@ -62,13 +62,13 @@ const UploadView: React.FC<UploadDraggerProps> = (props) => {
   const config = useUploaderColors()
   return (
     <StyledDragger
-      data-component-id={componentId}
       disabled={disabled}
       showUploadList={false}
       width={width}
       height={height}
       config={config}
       cssConfig={config}
+      {...testAttributes}
       {...rest}
     >
       {
@@ -105,7 +105,7 @@ const UploadView: React.FC<UploadDraggerProps> = (props) => {
                       <Button
                         key={pos}
                         {...props}
-                        text={t(props.text as string)}
+                        text={t(props.text as string) as string}
                         disabled={disabled}
                       />
                     ))}
@@ -126,7 +126,7 @@ const UploadView: React.FC<UploadDraggerProps> = (props) => {
           ),
           pending: (
             <Column>
-              <Loader size={Size.Large} />
+              <Loader size={'large'} />
               {typeof loadingTitle === 'string'
                 ? (
                   <UploadHeading
@@ -158,7 +158,7 @@ const UploadView: React.FC<UploadDraggerProps> = (props) => {
                     <Button
                       key={pos}
                       {...props}
-                      text={t(props.text as string)}
+                      text={t(props.text as string) as string}
                       disabled={disabled}
                     />
                   ))}
@@ -195,7 +195,7 @@ const UploadView: React.FC<UploadDraggerProps> = (props) => {
                     <Button
                       key={pos}
                       {...props}
-                      text={t(props.text as string)}
+                      text={t(props.text as string) as string}
                       disabled={disabled}
                     />
                   ))}
@@ -233,7 +233,7 @@ const UploadView: React.FC<UploadDraggerProps> = (props) => {
                     <Button
                       key={pos}
                       {...props}
-                      text={t(props.text as string)}
+                      text={t(props.text as string) as string}
                       disabled={disabled}
                     />
                   ))}
@@ -276,7 +276,7 @@ const UploadView: React.FC<UploadDraggerProps> = (props) => {
                     <Button
                       key={pos}
                       {...props}
-                      text={t(props.text as string)}
+                      text={t(props.text as string) as string}
                       disabled={disabled}
                     />
                   ))}

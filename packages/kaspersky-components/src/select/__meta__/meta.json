@@ -6,10 +6,13 @@
     "screenshotTests": false,
     "migration": true,
     "apiTable": true,
-    "storybook": true
+    "storybook": true,
+    "designLink": true,
+    "figmaView": true
   },
   "component": "Select",
-  "desctiption": "The basis is AntdSelect from the Antd library.",
-  "usage": "A component that allows you to select a value from options",
-  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=506%3A3971"
+  "description": "В качестве основы используется AntdSelect из библиотеки Antd.",
+  "usage": "Компонент, который позволяет выбрать значение из вариантов",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=506%3A3971",
+  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F01-%255BB2B%255D-Hexa-UI-Components%3Ftype%3Ddesign%26node-id%3D53702%253A192721%26mode%3Ddev"
 }

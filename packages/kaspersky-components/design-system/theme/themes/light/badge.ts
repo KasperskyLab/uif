@@ -1,9 +1,7 @@
-import { BadgeMode, BadgeSizeConfig, BadgeStateProps } from '../../../../src/badge'
+import { BadgeMode, BadgeColorConfig } from '@src/badge'
 import { ComponentThemeContext } from '../config'
-import { BORDER_RADIUS, SPACES } from '../variables'
-import { getTextSizes, TextTypes } from './typography'
 
-export const badge = ({ colors }: ComponentThemeContext): Record<BadgeMode, BadgeStateProps> => ({
+export const badge = ({ colors }: ComponentThemeContext): Record<BadgeMode, BadgeColorConfig> => ({
   neutral: {
     background: colors.elements.separator,
     color: colors.textIconsElements.primary
@@ -13,7 +11,7 @@ export const badge = ({ colors }: ComponentThemeContext): Record<BadgeMode, Badg
     color: colors.textIconsElements['primary-invert']
   },
   accent: {
-    background: colors.foregroundColor,
+    background: colors.mainInteractPrimary,
     color: colors.textIconsElements['primary-invert']
   },
   positive: {
@@ -33,17 +31,35 @@ export const badge = ({ colors }: ComponentThemeContext): Record<BadgeMode, Badg
     color: colors.textIconsElements['primary-invert']
   },
   new: {
-    background: colors.mainInteractPrimary,
+    background: colors.statestatuses.new,
     color: colors.textIconsElements['primary-invert']
   },
   dot: {
     background: colors.criticalitystatuses.high,
     color: colors.textIconsElements['primary-invert']
+  },
+  update: {
+    background: colors.statestatuses.update,
+    color: colors.textIconsElements['primary-invert']
+  },
+  'in-progress': {
+    background: colors.statestatuses['in-progress'],
+    color: colors.textIconsElements['primary-invert']
+  },
+  resolved: {
+    background: colors.statestatuses.resolved_solved,
+    color: colors.textIconsElements['primary-invert']
+  },
+  'in-incident': {
+    background: colors.statestatuses['in-incident'],
+    color: colors.textIconsElements['primary-invert']
+  },
+  low: {
+    background: colors.criticalitystatuses.low,
+    color: colors.textIconsElements['primary-invert']
+  },
+  info: {
+    background: colors.criticalitystatuses.info,
+    color: colors.textIconsElements['primary-invert']
   }
 })
-
-export const badgeSize: BadgeSizeConfig = {
-  padding: `0px ${SPACES[3]}px`,
-  borderRadius: `${BORDER_RADIUS[4]}px`,
-  ...getTextSizes(TextTypes.L4)
-}

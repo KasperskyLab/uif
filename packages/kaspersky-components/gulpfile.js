@@ -17,13 +17,6 @@ const reactAssetFolders = [
   'illustrations'
 ]
 
-const iconImportFiles = [
-  'icons/16.js',
-  'icons/24.js',
-  'icons/48.js',
-  'icons/micro.js'
-]
-
 const buildReactHelpers = []
   .concat(...reactAssetFolders.map(folder => {
     return [
@@ -41,11 +34,6 @@ const buildReactHelpers = []
         .pipe(dest(`./${esmPath}/${folder}`))
     ]
   }))
-  .concat([
-    () => src(iconImportFiles)
-      .pipe(babel())
-      .pipe(dest(`./${esmPath}/icons`))
-  ])
 
 function buildStyles (cb) {
   const src = './style/styles.less'
@@ -62,6 +50,11 @@ function buildStyles (cb) {
       fs.writeFile(`./${esmPath}/${reactDesignSystemFolder}/global-style/styles.css`, output.css, cb)
     }
   )
+}
+
+function copyFonts () {
+  return src('./design-system/assets/fonts/**/*')
+    .pipe(dest(`./${esmPath}/design-system/assets/fonts`))
 }
 
 function buildReactComponents () {
@@ -85,7 +78,8 @@ const build = series(
   ...buildReactHelpers,
   buildStyles,
   buildReactComponents,
-  copyPackageJson
+  copyPackageJson,
+  copyFonts
 )
 
 function clearLibFolder (cb) {
@@ -128,7 +122,7 @@ const otherParser = (obj, palette, path = '') => Object.entries(obj).reduce((acc
   let newPath = path ? path + '_' + key : key
   if (vObj.type === 'color') {
     const theme = path.match(/(__dark)|(__light)/g)
-    const link = vObj && vObj.comment && vObj.comment.split('/').pop().toLowerCase()
+    const link = vObj && vObj.description && vObj.description.split('/').pop().toLowerCase()
 
     if (theme) {
       const themePath = theme[0].replace('__', '')
@@ -168,7 +162,7 @@ const getGroupedThemes = (data) => {
   }).map(([key, value]) => {
     return [
       key, Object.fromEntries(Object.entries(value).map(([color, colorValue]) => {
-        const paletteValueArr = colorValue.comment?.split('/')
+        const paletteValueArr = colorValue.description?.split('/')
         const paletteValue = Array.isArray(paletteValueArr)
           ? palette[`${paletteValueArr[paletteValueArr?.length - 1].toLowerCase()}`]
           : colorValue.value
@@ -206,7 +200,7 @@ const getShortcuts = data => {
   }).map(([key, value]) => {
     return [
       key, Object.fromEntries(Object.entries(value).map(([color, colorValue]) => {
-        const paletteValueArr = colorValue.comment?.split('/')
+        const paletteValueArr = colorValue.description?.split('/')
         const paletteValue = Array.isArray(paletteValueArr)
           ? palette[`${paletteValueArr[paletteValueArr?.length - 1].toLowerCase()}`]
           : colorValue.value

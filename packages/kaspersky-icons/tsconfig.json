@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationDir": "build",
+    "jsx": "react",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noEmit": true,
+    "outDir": "build",
+    "rootDir": "src",
+    "sourceMap": true,
+    "target": "esnext",
+    "strict": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "lib": [
+      "es6",
+      "es2016",
+      "es2017",
+      "dom",
+      "esnext"
+    ]
+  },
+  "exclude": [
+    "src/types/*"
+  ],
+  "include": [
+    "src/8/*",
+    "src/12/*",
+    "src/16/*",
+    "src/24/*",
+    "src/32/*",
+    "src/40/*",
+    "src/48/*"
+  ]
+}

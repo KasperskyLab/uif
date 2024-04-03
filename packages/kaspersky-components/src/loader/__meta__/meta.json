@@ -10,7 +10,8 @@
     "figmaView": true
   },
   "component": "Loader",
-  "desctiption": "The basis is AntdSpin from the Antd library.",
-  "usage": "Component responsible for loading and launching new processes",
-  "designLink": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F%255BB2B%255D-UI-KIT%3Fnode-id%3D33851%253A105411"
+  "description": "В качестве основы используется AntdSpin из библиотеки Antd.",
+  "usage": "Компонент отвечающий за загрузку и запуск новых процессов",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-UI-KIT?node-id=33851%3A105411",
+  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7TGvGlgGfTltMG1OBgLq8p%2F00-%255BB2B%255D-Hexa-UI-Kit%3Ftype%3Ddesign%26node-id%3D33851%253A105411%26mode%3Ddev"
 }

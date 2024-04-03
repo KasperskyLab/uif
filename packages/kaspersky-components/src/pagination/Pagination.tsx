@@ -1,22 +1,18 @@
-import React, { FC, KeyboardEventHandler, useState } from 'react'
-
+import React, { FC, useCallback, useMemo } from 'react'
 import { Pagination as PaginationAntd } from 'antd'
 import { SelectValue } from 'antd/es/select'
 import styled from 'styled-components'
-import { TFunction, useTranslation } from 'react-i18next'
-import { containerCss, jumperCss, jumperTextCss, paginationCss, selectCss, textBoxCss, totalCss } from './paginationCss'
-import { IPaginationProps, IPaginationViewProps } from './types'
+import { TFunction } from 'i18next'
+import { useTranslation } from 'react-i18next'
+import { containerCss, paginationCss } from './paginationCss'
+import { PaginationProps, PaginationViewProps } from './types'
 import { useThemedPagination } from './useThemedPagination'
 import { Text } from '../typography'
-import { Link } from '../link'
-import { Icon } from '../icon'
-import { Select } from '../select'
-import { Textbox } from '../input'
-import { ITextboxProps } from '../input/types'
+import { ArrowLeft, ArrowRight } from '@kaspersky/icons/16'
+import { Select } from '@src/select'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
-const PaginationContainer = styled.div`
-  ${containerCss}
-`
+const PaginationContainer = styled.div`${containerCss}`
 
 const StyledPagination = styled(PaginationAntd).withConfig({
   shouldForwardProp: prop => !['cssConfig'].includes(prop)
@@ -25,60 +21,14 @@ const StyledPagination = styled(PaginationAntd).withConfig({
 `
 
 const StyledTotal = styled(Text)`
-  ${totalCss}
+  white-space: nowrap;
 `
-
-const StyledSelect = styled(Select).withConfig({
-  shouldForwardProp: prop => !['cssConfig'].includes(prop as any)
-})`
-  ${selectCss}
-`
-
-const StyledTextbox = styled(Textbox)`
-  ${textBoxCss}
-`
-
-const StyledJumper = styled.div`
-  ${jumperCss}
-`
-
-const StyledJumperText = styled(Text)`
-  ${jumperTextCss}
-`
-
-const renderTotal = (t: TFunction<'translation', undefined>) => (
-  total = 0
-) => {
-  return (
-    <StyledTotal
-      data-component-id='total'
-    >
-      {t('pagination.total', { count: total })}
-    </StyledTotal>
-  )
-}
 
 const icons = {
-  nextIcon: () => (
-    <Link klId="next-page" >
-      <Icon size='small' name='Right' />
-    </Link>
-  ),
-  prevIcon: () => (
-    <Link klId="previous-page">
-      <Icon size='small' name='Left' />
-    </Link>
-  ),
-  jumpNextIcon: () => (
-    <Link klId="jump-next">
-      <Text>…</Text>
-    </Link>
-  ),
-  jumpPrevIcon: () => (
-    <Link klId="jump-prev">
-      <Text>…</Text>
-    </Link>
-  )
+  nextIcon: <ArrowRight/>,
+  prevIcon: <ArrowLeft/>,
+  jumpNextIcon: <>...</>,
+  jumpPrevIcon: <>...</>
 }
 
 export const getPageSizeOptions = (t: TFunction<'translation', undefined>, pageSizeOptions: string[]) => pageSizeOptions.map((v) => ({
@@ -86,26 +36,41 @@ export const getPageSizeOptions = (t: TFunction<'translation', undefined>, pageS
   value: parseInt(v)
 }))
 
-export const PaginationView: FC<IPaginationViewProps> = ({
+export const PaginationView: FC<PaginationViewProps> = ({
   current = 1,
   pageSize = 10,
   pageSizeOptions = ['10', '20', '50', '100'],
   total = 0,
+  selected = 0,
   onChange,
   onShowSizeChange: customOnShowSizeChange,
-  showTotal,
-  showSizeChanger,
-  showQuickJumper,
-  disabled,
+  showSizeChanger = false,
+  disabled = false,
   cssConfig,
-  klId,
-  hideOnSinglePage,
-  simple,
+  hideOnSinglePage = false,
+  simple = false,
+  testAttributes,
   ...props
-}) => {
+}: PaginationViewProps) => {
+  if (hideOnSinglePage && total <= pageSize) {
+    return null
+  }
+
   const { t } = useTranslation()
-  const parsedPageSizeOptions = getPageSizeOptions(t, pageSizeOptions)
-  const [jumperValue, setJumperValue] = useState<string>()
+  const totalText = useMemo(() => (
+    `${t('pagination.total', { count: total })}`
+  ), [t, total])
+  const selectedText = useMemo(() => (
+    `${t('pagination.selected', { count: selected })}`
+  ), [t, selected])
+
+  const parsedPageSizeOptions = useMemo(() => (
+    getPageSizeOptions(t, pageSizeOptions)
+  ), [t, pageSizeOptions])
+
+  const itemRender = useCallback((_, type, originalElement) => (
+    type === 'page' ? <Text>{originalElement}</Text> : originalElement
+  ), [])
 
   const onShowSizeChange = (pageSize: SelectValue) => {
     const pageSizeNum = Number(pageSize)
@@ -120,96 +85,48 @@ export const PaginationView: FC<IPaginationViewProps> = ({
     }
   }
 
-  const getValidValue = () => {
-    const maxPage = Math.ceil(total / pageSize)
-    return !jumperValue || Number.isNaN(jumperValue) || Number(jumperValue) <= 0
-      ? 1
-      : Math.min(Number(jumperValue), maxPage)
-  }
-
-  const handleQuickJumperChange = (value: string) => {
-    setJumperValue(value)
-  }
-
-  const handleQuickJumperBlur = () => {
-    if (jumperValue === '') {
-      return
-    }
-
-    onChange?.(getValidValue(), pageSize)
-  }
-
-  const handleQuickJumperKeyUp: KeyboardEventHandler<HTMLInputElement> = (event) => {
-    if (jumperValue === '') {
-      return
-    }
-
-    if (event.code === 'Enter' || event.type === 'click') {
-      onChange?.(getValidValue(), pageSize)
-    }
-  }
-
-  if (hideOnSinglePage && total <= pageSize) {
-    return null
-  }
-
   return (
     <PaginationContainer
-      data-component-id={klId}
-      cssConfig={cssConfig}
       aria-disabled={disabled}
+      {...testAttributes}
     >
-      <StyledPagination
-        showTotal={showTotal || !simple ? renderTotal(t) : undefined}
-        showQuickJumper={false}
-        showSizeChanger={false}
-        current={current}
-        pageSize={pageSize}
-        total={total}
-        disabled={disabled}
-        onChange={onChange}
-        cssConfig={cssConfig}
-        {...icons}
-        {...props}
-      />
-      {(showSizeChanger || !simple) && (
-        <StyledSelect
-          data-component-id='select'
-          value={pageSize}
-          options={parsedPageSizeOptions}
-          onChange={onShowSizeChange}
-          disabled={disabled}
-          isItemSelectedIconVisible={false}
-          placement='topLeft'
-          cssConfig={cssConfig}
-          virtual={false}
-        />
-      )}
-      {(showQuickJumper || !simple) && (
-        <StyledJumper data-component-id='jumper'>
-          <StyledJumperText type='BTR3'>{t('pagination.goto')}</StyledJumperText>
-          <StyledTextbox
-            placeholder='0'
-            maskOptions={{
-              mask: Number,
-              lazy: false,
-              overwrite: true,
-              autofix: true
-            }}
+      <StyledTotal testId='total'>
+        {`${totalText} / ${selectedText}`}
+      </StyledTotal>
+      {!simple && (
+        <div className='kl6-pagination-right'>
+          <StyledPagination
+            showQuickJumper={false}
+            showSizeChanger={false}
+            itemRender={itemRender}
+            current={current}
+            pageSize={pageSize}
+            total={total}
             disabled={disabled}
-            value={jumperValue}
-            onChange={handleQuickJumperChange as ITextboxProps['onChange']}
-            onBlur={handleQuickJumperBlur}
-            onKeyUp={handleQuickJumperKeyUp}
+            onChange={onChange}
             cssConfig={cssConfig}
+            {...icons}
+            {...props}
           />
-        </StyledJumper>
+          {showSizeChanger && (
+            <Select
+              testId='select'
+              value={pageSize}
+              options={parsedPageSizeOptions}
+              onChange={onShowSizeChange}
+              disabled={disabled}
+              placement='topLeft'
+              virtual={false}
+            />
+          )}
+        </div>
       )}
     </PaginationContainer>
   )
 }
 
-export const Pagination: FC<IPaginationProps> = (props) => {
-  const propsWithCssConfig = useThemedPagination(props)
-  return <PaginationView {...propsWithCssConfig}/>
+export const Pagination: FC<PaginationProps> = (rawProps: PaginationProps) => {
+  const themedProps = useThemedPagination(rawProps)
+  const props = useTestAttribute(themedProps)
+  return <PaginationView {...props} />
 }

@@ -6,51 +6,51 @@
   "common": [
     {
       "prop": "addIcon",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "animated",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "centered",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "hideAdd",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "popupClassName",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "renderTabBar",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "size",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "tabBarExtraContent",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "tabBarGutter",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "tabBarStyle",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "onEdit",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "onTabScroll",
-      "changes": "Removed"
+      "changes": "Убран"
     }
   ]
 }

@@ -1,11 +1,40 @@
 import { ComponentProps } from 'react'
-import { Text } from '../typography'
+import { Text } from '@src/typography'
+import { ToViewProps } from '@helpers/typesHelpers'
+import { Theme } from '@design-system/types'
+import { Focus } from '@design-system/tokens/focus'
 
-export interface IExpandableTextProps extends ComponentProps<typeof Text> {
+type StateProps = {
+  color?: string
+}
+
+export type ExpandableTextColorConfig = Focus & {
+  normal?: StateProps
+}
+
+export type ExpandableTextCssConfig = ExpandableTextColorConfig
+
+export type ExpandableTextThemeProps = {
+  /** Custom theme */
+  theme?: Theme
+}
+
+export type ExpandableTextProps = ComponentProps<typeof Text> & ExpandableTextThemeProps & {
+  /** Alternative text */
   altText?: string
 }
 
-export interface IStyledTextProps {
+export type ExpandableTextViewProps = ToViewProps<ExpandableTextProps, ExpandableTextCssConfig, ExpandableTextThemeProps>
+
+export type StyledTextProps = {
   expanded: boolean,
-  clipped: boolean
+  clipped: boolean,
+  cssConfig: ExpandableTextCssConfig
 }
+
+/** @deprecated Use ExpandableTextProps instead */
+export type IExpandableTextProps = ExpandableTextProps
+/** @deprecated Use ExpandableTextViewProps instead */
+export type IExpandableTextViewProps = ExpandableTextViewProps
+/** @deprecated Use StyledTextProps instead */
+export type IStyledTextProps = StyledTextProps

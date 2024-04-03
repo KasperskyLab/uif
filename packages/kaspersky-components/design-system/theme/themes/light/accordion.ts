@@ -1,21 +1,33 @@
 import { ComponentThemeContext } from '../config'
-import { BORDER_RADIUS } from '../variables'
+import { AccordionColorConfig, AccordionPanelSizeConfig, AccordionTitleSize } from '@src/accordion/types'
+import { getTextSizes, HeadingTypes } from './typography'
+import { focus } from '@design-system/tokens/focus'
 
-export const accordion = ({ colors }: ComponentThemeContext): any => ({
-  borderRadius: `${BORDER_RADIUS[2]}px`,
-  upBorderRadius: `${BORDER_RADIUS[2]}px ${BORDER_RADIUS[2]}px 0 0`,
-  downBorderRadius: `0 0 ${BORDER_RADIUS[2]}px ${BORDER_RADIUS[2]}px`,
-  borderColor: colors.elements.seporatorbold,
-  default: {
-    titleBackground: colors.bg.base,
-    contentBackground: colors.bg.base
-  },
-  active: {
-    titleBackground: colors.bg.base,
-    contentBackground: colors.bg.base
-  },
-  disabled: {
-    titleBackground: colors.bg.base,
-    contentBackground: colors.bg.base
+export const accordion = ({ colors }: ComponentThemeContext): AccordionColorConfig => {
+  return {
+    default: {
+      background: 'transparent',
+      color: colors.textIconsElements.primary,
+      borderColor: colors.elements['separator-bold-solid'],
+      additionalTextColor: colors.textIconsElements.secondary2
+    },
+    disabled: {
+      background: colors.elements['separator-solid'],
+      color: colors.textIconsElements['disabled-solid'],
+      borderColor: colors.elements['separator-solid']
+    },
+    ...focus({ colors })
   }
-})
+}
+
+export const accordionSize: Record<AccordionTitleSize, AccordionPanelSizeConfig> = {
+  small: {
+    ...getTextSizes(HeadingTypes.H6)
+  },
+  medium: {
+    ...getTextSizes(HeadingTypes.H5)
+  },
+  large: {
+    ...getTextSizes(HeadingTypes.H4)
+  }
+}

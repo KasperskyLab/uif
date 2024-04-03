@@ -1,20 +1,26 @@
-## Testing
+## Тестирование
 
-### Screenshot testing
+### Установка зависимостей
 
-- tests are placed in [./screenshots](./screenshots) 
-- tests are running via `docker-compose`
-- for new tests please use `Jest` and `Puppeteer`
+```
+npm ci
+```
 
-Component stories with animation are not suitable for visual testing due to their inconsistency between launches. To exclude such components from visual testing, such `stories` must have the word "animation" in their name. For example - `ButtonLoadingAnimation`.
+### Screenshot тестирование
 
-To start tests run the command:
+Тестирование выпролняется с использованием Jest и Puppeteer.
+Тесты лежат в .\screenshots
+Тесты запускаются через docker-compose
+
+* Стори компонентов с анимацией не подходят для визуального тестирования из-за их неконсистентности между запусками. Чтобы исключить такие компоненты из визуального тестирования, такие `stories` должны иметь слово "animation" в своем названии. К примеру - `ButtonLoadingAnimation`.
+
+Для запуска тестов выполнить команду:
 
 ```
 docker-compose up -d screenshots
 ```
 
-To update screenshots run the command:
+Для обновления скриншотов выполнить команду:
 
 ```
 docker-compose up -d screenshots-update

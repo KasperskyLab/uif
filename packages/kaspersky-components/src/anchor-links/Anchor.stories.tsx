@@ -1,56 +1,104 @@
 import React from 'react'
-import Meta from './__meta__/meta.json'
-import { Anchor, AnchorLink } from './Anchor'
-import { badges } from '../../.storybook/badges'
-import { withMeta } from '../../helpers/hocs/MetaComponent/withMeta'
-import { useTheme } from '../../design-system/theme/hooks'
-import { StoryLayout } from '../../.storybook/StoryComponents'
+import { AnchorProps } from './Anchor/types'
+import { Meta, StoryObj } from '@storybook/react'
+import { badges } from '@sb/badges'
+import { useTheme } from '@design-system/theme'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import { sbSetDefaultValue, sbHideControls } from '@helpers/storybookHelpers'
+import MetaData from './__meta__/meta.json'
+import { Anchor } from './Anchor/Anchor'
 
-export default {
+const meta: Meta<AnchorProps> = {
   title: 'Atoms/Anchor',
   component: Anchor,
+  argTypes: {
+    affix: {
+      ...sbSetDefaultValue('true'),
+      control: { type: 'boolean' }
+    },
+    offsetTop: {
+      ...sbSetDefaultValue('0'),
+      control: { type: 'number' }
+    },
+    items: {
+      table: {
+        type: {
+          summary: 'AnchorLinkProps[]',
+          detail: `
+[
+  {
+    href: string;
+    title: string;
+    counter?: number;
+    hasNotification?: boolean;
+  }
+]
+        `
+        }
+      }
+    },
+    ...sbHideControls(['theme'])
+  },
+  args: {
+    items: [
+      { href: '#anchor-1', title: 'Simple title' },
+      { href: '#anchor-2', title: 'With counter', counter: 10 },
+      { href: '#anchor-3', title: 'With notification', hasNotification: true },
+      {
+        href: '#anchor-4',
+        title: 'With counter & notification',
+        counter: 25,
+        hasNotification: true
+      },
+      {
+        href: '#anchor-5',
+        title: 'Anchor 5',
+        counter: 20
+      }, {
+        href: '#anchor-6',
+        title: 'Anchor 6',
+        hasNotification: true
+      }
+    ],
+    testId: 'anchor-test-id',
+    klId: 'anchor-kl-id'
+  },
   parameters: {
     badges: [badges.needsDesignReview],
     docs: {
-      page: withMeta(Meta)
-    }
+      page: withMeta(MetaData)
+    },
+    design: MetaData.figmaView
   }
 }
+export default meta
 
-export const Default = () => {
-  const theme = useTheme()
-  console.log(theme)
-  const baseBlockStyle = {
-    height: '120vw',
-    border: `1px solid ${theme.colors['text-icons-elements'].primary}`,
-    color: theme.colors['text-icons-elements'].primary,
-    verticalAlign: 'middle',
-    lineHeight: '100vw'
+type Story = StoryObj<AnchorProps>
+
+export const Basic: Story = {
+  render: (args: AnchorProps) => {
+    const theme = useTheme()
+
+    const baseBlockStyle = {
+      height: '120vw',
+      border: `1px solid ${theme.colors['text-icons-elements'].primary}`,
+      color: theme.colors['text-icons-elements'].primary,
+      verticalAlign: 'middle',
+      lineHeight: '100vw',
+      textAlign: 'center'
+    }
+
+    return (
+      <div style={{ minWidth: '90vw' }}>
+        <Anchor {...args} />
+        {
+          [...Array(10).keys()].map(item => (
+            <div id={`anchor-${item}`} style={{ ...baseBlockStyle, textAlign: 'center' }} key={item}>
+              {item}
+            </div>
+          ))
+        }
+      </div>
+    )
   }
-  return <StoryLayout theme={theme.key}>
-    <div style={{ minWidth: '90vw' }}>
-      <Anchor affix={true} >
-        <AnchorLink href="#option-1" title='General' />
-        <AnchorLink href="#option-2" title='Source' />
-        <AnchorLink href="#option-3" title='Destination' />
-        <AnchorLink href="#option-4" title='Service' />
-      </Anchor>
-      <div
-        id="option-1"
-        style={{ ...baseBlockStyle, textAlign: 'center' }}
-      >1</div>
-      <div
-        id="option-2"
-        style={{ ...baseBlockStyle, textAlign: 'center' }}
-      >2</div>
-      <div
-        id="option-3"
-        style={{ ...baseBlockStyle, textAlign: 'center' }}
-      >3</div>
-      <div
-        id="option-4"
-        style={{ ...baseBlockStyle, textAlign: 'center' }}
-      >4</div>
-    </div>
-  </StoryLayout>
 }

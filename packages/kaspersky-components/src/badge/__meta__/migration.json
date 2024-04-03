@@ -4,37 +4,37 @@
   "v3": [
     {
       "prop": "search",
-      "changes": "Removed"
+      "changes": "Убрано"
     },
     {
       "prop": "icon",
-      "changes": "Removed"
+      "changes": "Убрано"
     },
     {
       "prop": "color",
-      "changes": "Removed"
+      "changes": "Убрано"
     },
     {
       "prop": "dot",
-      "changes": "Removed - use mode='dot'"
+      "changes": "Убрано - использовать mode='dot'"
     },
     {
       "prop": "offset",
-      "changes": "Removed"
+      "changes": "Убрано"
     },
     {
       "prop": "size",
-      "changes": "Removed"
+      "changes": "Убрано"
     },
     {
       "prop": "status",
-      "changes": "Removed"
+      "changes": "Убрано"
     },
     {
       "prop": "mode",
-      "changes": "Added - color. new | medium | positive | high | black | dot"
+      "changes": "Добавлено - цвет. new | medium | positive | high | black | dot"
     }
   ],
-  "v5": "Not existed",
+  "v5": "Компонента не было",
   "common": ""
 }

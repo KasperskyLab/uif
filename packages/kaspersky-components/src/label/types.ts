@@ -1,60 +1,43 @@
 import { HTMLAttributes, ReactNode } from 'react'
-import { ThemeKey } from '@design-system/types'
+import { Theme } from '@design-system/types'
 import { LabelPosition, LabelType } from '@design-system/tokens'
+import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 
 export type LabelColorConfig = {
   requiredColor: string
 }
 
-export type LabelStyleCssConfig = {
-  readonly theme?: ThemeKey
+export type LabelCssConfig = LabelColorConfig
+
+export type LabelThemeProps = {
+  /** Custom theme */
+  theme?: Theme
 }
 
-export type LabelCssConfig = LabelStyleCssConfig & LabelColorConfig;
-
-export interface ILabelProps extends HTMLAttributes<HTMLLabelElement>{
-  /**
-   * Test id
-   */
-  klId?: string,
-  /**
-   * Component theme
-   */
-  theme?: ThemeKey,
-  /**
-   * Position of label 'none' | 'top' | 'aside' | 'right'
-   */
+export type LabelProps = HTMLAttributes<HTMLLabelElement> & {
+  /** Position of label 'none' | 'top' | 'aside' | 'right' */
   position?: LabelPosition,
-  /**
-   * Text of label, required not wotks with ReactNode
-   */
+  /** Text of label, required not works with ReactNode */
   text?: ReactNode | string,
-  /**
-   * Text under label
-   */
+  /** Text under label */
   errorText?: string,
-  /**
-   * Prop that disable label
-   */
+  /** Prop that disable label */
   disabled?: boolean,
-  /**
-   * children of label
-   */
+  /** React children */
   children?: ReactNode,
-  /**
-   * className of label
-   */
+  /** Custom class name */
   className?: string,
-  /**
-   * Size of label in page 'default' | 'full' | 'stretch'
-   */
+  /** Size of label in page 'default' | 'full' | 'stretch' */
   type?: LabelType,
-  /**
-   * 'i' icon with tooltip after text in label
-   */
+  /** 'i' icon with tooltip after text in label */
   tooltip?: ReactNode,
-  /**
-   * Indication that label is required works only with text type 'string'
-   */
-  required?: boolean
-}
+  /** Indication that label is required works only with text type 'string' */
+  required?: boolean,
+  /** Sets the object to which the given label object is assigned */
+  htmlFor?: HTMLLabelElement['htmlFor']
+} & LabelThemeProps & TestingProps
+
+export type LabelViewProps = ToViewProps<LabelProps, LabelCssConfig, LabelThemeProps>
+
+/** @deprecated Use LabelProps instead */
+export type ILabelProps = LabelProps

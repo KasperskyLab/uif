@@ -1,12 +1,9 @@
-import { useTheme } from '../../design-system/theme/hooks'
-import { useMemo } from 'react'
-import { IToggleProps } from './types'
-import { THEME_CONFIG } from '../../design-system/theme/themes/config'
+import { ToggleProps, ToggleViewProps, ToggleCssConfig, ToggleThemeProps } from './types'
+import { useThemedComponent } from '@helpers/useThemedComponent'
 
-export const useThemedToggle = (props: IToggleProps): IToggleProps => {
-  const theme = useTheme(props)
-  const cssConfig = useMemo(() => ({
-    ...(THEME_CONFIG[theme.key].components.toggle.colors)
-  }), [theme])
-  return { ...props, cssConfig }
-}
+export const useThemedToggle = (props: ToggleProps): ToggleViewProps => (
+  useThemedComponent<ToggleProps, ToggleCssConfig, ToggleThemeProps>(props, {
+    componentName: 'toggle',
+    defaultValues: {}
+  })
+)

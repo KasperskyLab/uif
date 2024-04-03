@@ -1,7 +1,7 @@
 import classnames from 'classnames'
 import * as React from 'react'
 
-interface IconProps {
+type IconProps = {
   className?: string
 }
 

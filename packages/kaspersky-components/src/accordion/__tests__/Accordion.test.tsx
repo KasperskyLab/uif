@@ -2,20 +2,21 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Accordion, AccordionPanel } from '../Accordion'
-import { Text } from '../../typography'
-import { IAccordionProps, IAccordionPanelProps } from '../types'
+import { Text } from '@src/typography'
+import { AccordionProps, AccordionPanelProps, AccordionTitleSize } from '../types'
 
 const defaultProps = {
   klId: 'test-accordion'
 }
 const defaultPanelProps = {
-  header: <Text>Header text content</Text>,
+  title: 'Header text content',
+  titleSize: 'medium' as AccordionTitleSize,
   key: '1'
 }
 
 const getAccordionFirstPanel = () => screen.getByRole('button')
 
-const DefaultAccordion = (props: Partial<IAccordionProps>, panelProps: Partial<IAccordionPanelProps>) =>
+const DefaultAccordion = (props: Partial<AccordionProps>, panelProps: Partial<AccordionPanelProps>) =>
   <Accordion
     {...props}
   >
@@ -33,9 +34,11 @@ describe('Accordion', () => {
     screen.getByText('Header text content')
   })
 
-  test('should receive kl-id prop', () => {
-    render(<DefaultAccordion klId={'some-kl-id'} />)
-    expect(screen.getByTestId('some-kl-id')).toBeInTheDocument()
+  test('should receive qa props', () => {
+    const { container } = render(<DefaultAccordion klId="kl-id" testId="test-id" />)
+
+    expect(container.querySelector('[kl-id="kl-id"]')).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
 
   test('should call onChange when clicked', () => {

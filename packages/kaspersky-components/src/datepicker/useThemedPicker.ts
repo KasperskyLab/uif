@@ -1,20 +1,31 @@
 import { useMemo } from 'react'
-import { useTheme } from '../../design-system/theme/hooks'
-import { THEME_CONFIG } from '../../design-system/theme/themes/config'
-import { ICalendarProps } from './types'
+import {
+  CalendarProps,
+  CalendarViewProps,
+  RangePickerProps,
+  RangePickerViewProps,
+  PickerThemeProps,
+  PickerCssConfig
+} from './types'
+import { useThemedComponent } from '@helpers/useThemedComponent'
+import { useThemedTextbox } from '@src/input'
 
-export const useThemedPicker = (props: ICalendarProps) => {
-  const theme = useTheme(props)
-  const cssConfig = useMemo(() => ({
-    ...(THEME_CONFIG[theme.key].components.picker.colors)
-  }), [theme])
-  return { ...props, cssConfig }
-}
+export const useThemedPicker = <T extends CalendarProps | RangePickerProps>(props: T): T extends CalendarProps ? CalendarViewProps : RangePickerViewProps => {
+  const { cssConfig: pickerCssConfig, ...rest } = useThemedComponent<
+    T,
+    PickerCssConfig,
+    PickerThemeProps
+  >(props, {
+    componentName: 'picker',
+    defaultValues: {}
+  })
 
-export const useThemedPickerInput = (props: ICalendarProps) => {
-  const theme = useTheme(props)
-  const cssConfig = useMemo(() => ({
-    ...(THEME_CONFIG[theme.key].components.pickerInput.colors)
-  }), [theme])
-  return { ...props, cssConfig }
+  const { cssConfig: inputCssConfig } = useThemedTextbox(props)
+
+  const cssConfig = useMemo(
+    () => ({ inputCssConfig, pickerCssConfig }),
+    [inputCssConfig, pickerCssConfig]
+  )
+
+  return { ...rest, cssConfig }
 }

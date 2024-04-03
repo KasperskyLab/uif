@@ -1,11 +1,10 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Button } from '../../button'
-import { Icon } from '../../icon'
-
+import { Button } from '@src/button'
+import { Icon } from '@src/icon'
 import { Sidebar } from '../Sidebar'
-import { ISidebarProps } from '../types'
+import { SidebarProps } from '../types'
 
 const defaultProps = {
   klId: 'test-slider'
@@ -13,12 +12,14 @@ const defaultProps = {
 
 const getSidebar = (klId: string = defaultProps.klId) => screen.getByTestId(klId)
 
-const DefaultSidebar = (props: ISidebarProps) => <Sidebar visible {...defaultProps} {...props} />
+const DefaultSidebar = (props: SidebarProps) => <Sidebar visible {...defaultProps} {...props} />
 
 describe('Sidebar', () => {
   test('should render', () => {
-    render(<DefaultSidebar />)
+    const { baseElement } = render(<DefaultSidebar testId="test-id" />)
+
     expect(getSidebar()).toBeInTheDocument()
+    expect(baseElement.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
 
   test('should render title', () => {
@@ -34,9 +35,26 @@ describe('Sidebar', () => {
   })
 
   test('should render close button', () => {
-    const klId = 'test-close-icon'
-    const closeIcon = <Icon size='small' klId={klId} name='Close' />
-    render(<DefaultSidebar closeIcon={closeIcon} />)
+    const klId = 'close-icon'
+    render(<DefaultSidebar />)
+    expect(screen.getByTestId(klId)).toBeInTheDocument()
+  })
+
+  test('should render subtitle', () => {
+    const klId = 'title-test-id'
+    render(<DefaultSidebar subtitle={<div kl-id={klId} />} />)
+    expect(screen.getByTestId(klId)).toBeInTheDocument()
+  })
+
+  test('should render title postfix', () => {
+    const klId = 'title-postfix-test-id'
+    render(<DefaultSidebar titlePostfix={<div kl-id={klId} />} />)
+    expect(screen.getByTestId(klId)).toBeInTheDocument()
+  })
+
+  test('should render title prefix', () => {
+    const klId = 'title-prefix-test-id'
+    render(<DefaultSidebar titlePrefix={<div kl-id={klId} />} />)
     expect(screen.getByTestId(klId)).toBeInTheDocument()
   })
 

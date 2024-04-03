@@ -1,32 +1,49 @@
-import * as React from 'react'
+import React, { FC } from 'react'
 import { Tooltip as AntdTooltip } from 'antd'
-
-import { Text } from '../typography/text'
 import { useThemedTooltip } from './useThemedTooltip'
-import { ITooltipProps } from './types'
-import { TooltipStyles } from './tooltipCss'
+import { TooltipProps, TooltipViewProps } from './types'
+import { ALIGNS } from './tooltipCss'
+import { WithGlobalComponentStyles } from '@helpers/hocs/WithGlobalComponentStyles'
+import { getTooltipGlobalStyles } from '@src/tooltip/tooltipGlobalStyles'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
-// used for automatically render <Text /> when string title is passed to component
-const renderTitle = (title: React.ComponentProps<typeof AntdTooltip>['title']) => {
-  if (typeof title === 'string') {
-    return <Text type='BTM4'>{title}</Text>
-  }
-
-  return title
+export const Tooltip: FC<TooltipProps> = ({
+  placement = 'top',
+  ...rawProps
+}: TooltipProps) => {
+  const themedProps = useThemedTooltip(rawProps)
+  const props = useTestAttribute(themedProps)
+  return (
+    <TooltipView
+      align={ALIGNS[placement]}
+      placement={placement}
+      {...props}
+    />
+  )
 }
 
-export const Tooltip: React.FC<ITooltipProps> = (props) => {
-  const { cssConfig, title, ...rest } = useThemedTooltip(props)
-
+const TooltipViewComponent: FC<TooltipViewProps> = ({
+  cssConfig,
+  rootHashClass,
+  text,
+  testAttributes,
+  ...rest
+}: TooltipViewProps) => {
   return (
     <>
-      <TooltipStyles cssConfig={cssConfig} />
       <AntdTooltip
-        overlayClassName="kl-tooltip"
-        placement="bottomLeft"
+        mouseEnterDelay={0.2}
+        mouseLeaveDelay={0}
+        overlayClassName={rootHashClass}
+        title={text}
+        {...testAttributes}
         {...rest}
-        title={renderTitle(title)}
       />
     </>
   )
 }
+
+const TooltipView = WithGlobalComponentStyles(
+  TooltipViewComponent,
+  getTooltipGlobalStyles
+)

@@ -1,40 +1,42 @@
-import { ToggleColorConfig } from '../../../../src/toggle/types'
+import { ToggleColorConfig } from '@src/toggle/types'
 import { ComponentThemeContext } from '../config'
+import { focus } from '@design-system/tokens/focus'
 
 export const toggle = ({ colors }: ComponentThemeContext): ToggleColorConfig => {
   return {
     normal: {
       color: colors.textIconsElements.primary,
       bgOn: colors.mainInteractPrimary,
-      bgOff: colors.textIconsElements.disabled,
+      bgOff: colors.elements['separator-bold-solid'],
       dotColorOn: colors.bg.base,
       dotColorOff: colors.bg.base
     },
     hover: {
       bgOn: colors.mainInteractSecondary,
-      bgOff: colors.elements.line,
+      bgOff: colors.elements['line-solid'],
       dotColorOn: colors.bg.base,
       dotColorOff: colors.bg.base
     },
     active: {
       bgOn: colors.mainInteractTertiary,
-      bgOff: colors.textIconsElements.secondary,
+      bgOff: colors.textIconsElements['base-icon-solid'],
       dotColorOn: colors.bg.base,
       dotColorOff: colors.bg.base
     },
-    focus: {
-      bgOn: colors.mainInteractPrimary,
-      bgOff: colors.textIconsElements.disabled,
-      dotColorOn: colors.bg.base,
-      dotColorOff: colors.bg.base,
-      outline: `0 0 0 2px ${colors.mainInteractFocus}`
-    },
     disabled: {
-      color: colors.textIconsElements.disabled,
-      bgOn: colors.elements.seporatorbold,
-      bgOff: colors.elements.seporatorbold,
-      dotColorOn: colors.bg.alternative,
-      dotColorOff: colors.bg.alternative
-    }
+      color: colors.textIconsElements['disabled-solid'],
+      bgOn: colors.elements['separator-solid'],
+      bgOff: colors.elements['separator-solid'],
+      dotColorOn: colors.elements['separator-bold-solid'],
+      dotColorOff: colors.elements['separator-bold-solid']
+    },
+    readonly: {
+      color: colors.textIconsElements['secondary2-solid'],
+      bgOn: colors.elements['separator-solid'],
+      bgOff: colors.elements['separator-solid'],
+      dotColorOn: colors.elements['separator-bold-solid'],
+      dotColorOff: colors.elements['separator-bold-solid']
+    },
+    ...focus({ colors })
   }
 }

@@ -1,136 +1,321 @@
 import { css } from 'styled-components'
-import { getFromProps } from '../../helpers/getFromProps'
-import { SPACES } from '../../design-system/theme/themes/variables'
-import { TreeCssConfig } from './types'
+import { getFromProps } from '@helpers/getFromProps'
+import { SPACES } from '@design-system/theme'
+import { ITreeProps, TreeCssConfig } from './types'
+import { getTextSizes, TextTypes } from '@design-system/tokens'
 
 const fromProps = getFromProps<TreeCssConfig>()
 
-export const treeCss = css`
+const textSizes = getTextSizes(TextTypes.BTR3)
 
-  overflow-y: auto;
+export const treeCss = css<{ cssConfig: TreeCssConfig, checkable?: boolean, disableNodeBg?: boolean }>`
+  && {
+    background: none;
+    border-radius: 8px;
 
-  // list styles
-
-  .ant-tree-list .ant-tree-node-content-wrapper .ant-tree-title{
-    font-family: ${fromProps('fontFamily')};
-    font-size: ${fromProps('fontSize')};
-    line-height: ${fromProps('lineHeight')};
-    font-weight: ${fromProps('fontWeight')};
-    font-style: ${fromProps('fontStyle')};
-  }
-
-  .ant-tree-list .ant-tree-node-content-wrapper:hover,
-    .ant-tree-list .ant-tree-node-selected 
-    {
-      background-color: ${fromProps('default.bgColor')};
-      color: ${fromProps('default.color')};
+    &.ant-tree-focused {
+      background: ${fromProps('focus.background')};
     }
 
-  // checkbox styles
+    .ant-tree-drop-indicator {
+      background-color: ${fromProps('dropIndicator.background')};
 
-  & .ant-checkbox-inner {
-    height: ${SPACES[7]}px;
-    width: ${SPACES[7]}px;
-    border-color: ${fromProps('normal.borderColor')};
-    background-color: ${fromProps('normal.bgColor')};
-  }
-  & .ant-checkbox-checked .ant-checkbox-inner {
-    border-color: ${fromProps('normal.checkBgColor')};
-    background-color: ${fromProps('normal.checkBgColor')};
-    &::after {
-      border-color: ${fromProps('normal.checkColor')};
-      border-radius: 1px;
-      border-bottom-left-radius: 2px;
-      border-top-right-radius: 2px;
-      width: 5px;
-      height: 7.5px;
+      &:after {
+        border-color: ${fromProps('dropIndicator.background')};
+      }
     }
-  }
-  & .ant-checkbox-checked::after {
-    border: none;
-  }
-  & .ant-checkbox-indeterminate .ant-checkbox-inner::after {
-    background-color: ${fromProps('normal.checkColor')};
-    width: ${SPACES[4]}px;
-    height: ${SPACES[1]}px;
-    border-radius: ${fromProps('normal.radius')};
-  }
-  // hover
-  &.ant-checkbox-wrapper:hover .ant-checkbox-inner,
-  & .ant-checkbox:hover .ant-checkbox-inner {
-    border-color: ${fromProps('hover.borderColor')};
-    background-color: ${fromProps('hover.bgColor')};
-  }
-  &.ant-checkbox-wrapper:hover .ant-checkbox-checked .ant-checkbox-inner,
-  & .ant-checkbox-checked:hover .ant-checkbox-inner {
-    background-color: ${fromProps('hover.checkBgColor')};
-    border-color: transparent;
-    &::after {
-      border-color: ${fromProps('hover.iconColor')};
-    }
-  }
-  &.ant-checkbox-wrapper-checked:hover .ant-checkbox-indeterminate .ant-checkbox-inner::after ,
-  & .ant-checkbox-indeterminate:hover .ant-checkbox-inner::after  {
-    background-color: ${fromProps('hover.checkColor')};
-  }
 
-  // active
-  &.ant-checkbox-wrapper:active .ant-checkbox-inner,
-  & .ant-checkbox-input:active + .ant-checkbox-inner {
-    background-color: ${fromProps('active.bgColor')};
-    border-color: ${fromProps('active.borderColor')};
-  }
-  
-  &.ant-checkbox-wrapper:active .ant-checkbox-inner,
-  &.ant-checkbox-wrapper:active:hover .ant-checkbox-inner,
-  & .ant-checkbox-checked .ant-checkbox-input:active + .ant-checkbox-inner,
-  & .ant-checkbox-checked .ant-checkbox-input:active:focus + .ant-checkbox-inner {
-    background-color: ${fromProps('active.checkBgColor')};
-    box-shadow: ${fromProps('active.outline')};
-    border-color: ${fromProps('active.borderColor')};
-    
-    &::after {
-      border-color: ${fromProps('active.checkColor')};
+    .ant-tree-list .ant-tree-node-content-wrapper .ant-tree-title {
+      font-family: ${textSizes.fontFamily};
+      font-size: ${textSizes.fontSize};
+      line-height: ${textSizes.lineHeight};
+      font-weight: ${textSizes.fontWeight};
+      font-style: ${textSizes.fontStyle};
+      letter-spacing: ${textSizes.letterSpacing};
     }
-  }
-  
-  &.ant-checkbox-wrapper:active .ant-checkbox-indeterminate .ant-checkbox-inner,
-  &.ant-checkbox-wrapper:active:hover .ant-checkbox-indeterminate .ant-checkbox-inner,
-  & .ant-checkbox-indeterminate .ant-checkbox-input:active + .ant-checkbox-inner {
-    &:after {
-      background-color: ${fromProps('active.checkColor')};
-    }
-  }
-  // focus
-  & .ant-checkbox-input:focus-visible + .ant-checkbox-inner {
-    border-color: transparent;
-    box-shadow: ${fromProps('focus.outline')};
-  }
-  & .ant-checkbox-checked .ant-checkbox-input:focus-visible + .ant-checkbox-inner {
-    background-color: ${fromProps('focus.checkBgColor')};
-    &::after {
-      border-color: ${fromProps('focus.checkColor')};
-    }
-  }
-  & .ant-checkbox-indeterminate .ant-checkbox-input:focus-visible + .ant-checkbox-inner::after {
-    background-color: ${fromProps('focus.checkColor')};
-  }
-  // disabled
-  & .ant-checkbox-disabled + span {
-    color:  ${fromProps('disabled.color')};
-  }
-  & .ant-checkbox-disabled .ant-checkbox-inner {
-    border-color: ${fromProps('disabled.borderColor')} !important;
-    background-color: ${fromProps('disabled.bgColor')} !important;
-  }
-  & .ant-checkbox-checked.ant-checkbox-disabled .ant-checkbox-inner {
-    background-color: ${fromProps('disabled.checkBgColor')} !important;
-    &::after {
-      border-color: ${fromProps('disabled.checkColor')} !important;
-    }
-  }
-  & .ant-checkbox-disabled.ant-checkbox-indeterminate .ant-checkbox-inner::after {
-    background-color: ${fromProps('disabled.checkColor')} !important;
-  }
 
+    .ant-tree-list .ant-tree-node-content-wrapper:hover,
+    .ant-tree-list .ant-tree-node-selected {
+      background-color: transparent;
+    }
+
+    .ant-tree-node-content-wrapper {
+      padding-left: 3px;
+      cursor: ${(props: ITreeProps) =>
+        props.disableNodeBg ? 'default' : 'pointer'};
+      flex: 1;
+    }
+
+    .ant-tree-draggable-icon + .ant-tree-switcher-noop {
+      display: none;
+    }
+
+    .ant-tree-checkbox + .ant-tree-node-content-wrapper {
+      padding-left: ${SPACES[3]}px;
+      cursor: pointer;
+    }
+
+    .anticon-file,
+    .ant-tree-draggable-icon,
+    .ant-tree-switcher-icon {
+      opacity: 1;
+      color: ${fromProps('normal.arrowColor')};
+    }
+
+    .ant-tree-switcher {
+      width: 16px;
+      background: none;
+    }
+
+    .ant-tree-switcher-loading-icon {
+      display: none;
+    }
+
+    .ant-tree-treenode {
+      position: relative;
+      margin: 1px 0;
+      padding: ${SPACES[1]}px ${SPACES[5]}px ${SPACES[1]}px ${SPACES[1]}px;
+      width: 100%;
+      border-radius: 8px;
+      transition-duration: 0.2s;
+      border: 2px solid transparent;
+      background: none;
+
+      &:not(.ant-tree-treenode-selected):not(.ant-tree-treenode-checkbox-checked) {
+        .ant-tree-title {
+          color: ${fromProps('treeNode.unselected.normal.textColor')};
+        }
+
+        &:hover {
+          &,
+          & .ant-checkbox-inner {
+            background-color: ${(props: ITreeProps) =>
+              !props.disableNodeBg && (props.selectable || props.checkable)
+                ? fromProps('treeNode.unselected.hover.background')
+                : fromProps('treeNode.unselected.normal.background')};
+          }
+        }
+
+        &:active {
+          &,
+          & .ant-checkbox-inner {
+            background-color: ${(props: ITreeProps) =>
+              !props.disableNodeBg &&
+              (props.selectable || props.checkable)
+                ? fromProps('treeNode.unselected.active.background')
+                : fromProps('treeNode.unselected.normal.background')};
+          }
+        }
+
+        &.ant-tree-treenode-active {
+          border-color: ${fromProps('treeNode.unselected.focus.borderColor')};
+          background: none;
+
+          .ant-tree-node-content-wrapper {
+            background: transparent;
+          }
+        }
+
+        &.ant-tree-treenode-disabled {
+          background: none;
+
+          .ant-tree-title {
+            color: ${fromProps('treeNode.unselected.disabled.textColor')};
+          }
+        }
+      }
+
+      &.ant-tree-treenode-selected,
+      &.ant-tree-treenode-checkbox-checked {
+        background-color: ${(props: ITreeProps) =>
+          props.disableNodeBg
+            ? fromProps('treeNode.unselected.normal.background')
+            : fromProps('treeNode.selected.normal.background')};
+
+        .ant-tree-title {
+          color: ${(props: ITreeProps) =>
+            props.disableNodeBg
+              ? fromProps('treeNode.unselected.normal.textColor')
+              : fromProps('treeNode.selected.normal.textColor')};
+        }
+
+        &:hover {
+          & {
+            background-color: ${(props: ITreeProps) =>
+              props.disableNodeBg
+                ? fromProps('treeNode.unselected.normal.background')
+                : fromProps('treeNode.selected.hover.background')};
+          }
+
+          .ant-tree-title {
+            color: ${(props: ITreeProps) =>
+              props.disableNodeBg
+                ? fromProps('treeNode.unselected.normal.textColor')
+                : fromProps('treeNode.selected.hover.textColor')};
+          }
+        }
+
+        &:active {
+          & {
+            background-color: ${(props: ITreeProps) =>
+              props.disableNodeBg
+                ? fromProps('treeNode.unselected.normal.background')
+                : fromProps('treeNode.selected.active.background')};
+          }
+
+          .ant-tree-title {
+            color: ${(props: ITreeProps) =>
+              props.disableNodeBg
+                ? fromProps('treeNode.unselected.normal.textColor')
+                : fromProps('treeNode.selected.active.textColor')};
+          }
+        }
+
+        &.ant-tree-treenode-active {
+          border-color: ${fromProps('treeNode.selected.focus.borderColor')};
+          background-color: ${fromProps('treeNode.selected.normal.background')};
+
+          .ant-tree-title {
+            color: ${fromProps('treeNode.selected.normal.textColor')};
+          }
+
+          .ant-tree-node-content-wrapper {
+            background: transparent;
+          }
+        }
+
+        &.ant-tree-treenode-disabled {
+          background-color: ${(props: ITreeProps) => props.disableNodeBg ? fromProps('treeNode.unselected.disabled.background') : fromProps('treeNode.selected.disabled.background')};
+
+          .ant-tree-title {
+            color: ${(props: ITreeProps) => props.disableNodeBg ? fromProps('treeNode.unselected.disabled.textColor') : fromProps('treeNode.selected.disabled.textColor')};
+          }
+        }
+      }
+
+      .ant-tree-indent-unit {
+        width: 18px;
+
+        &:before {
+          top: -8px;
+          right: 10px;
+          bottom: -2px;
+          border-color: ${fromProps('normal.lineColor')};
+        }
+      }
+
+      &.dragging {
+        background-color: ${fromProps('treeNode.unselected.drag.background')};
+
+        .ant-tree-title {
+          color: ${fromProps('treeNode.unselected.drag.textColor')};
+        }
+
+        &:after {
+          display: none;
+        }
+      }
+
+      &:not(.ant-tree-treenode-draggable) .ant-tree-draggable-icon {
+        opacity: 0.5;
+      }
+
+      &[draggable="true"] {
+        .ant-tree-indent-unit {
+          &:before {
+            top: -10px;
+            right: ${SPACES[3]}px;
+          }
+        }
+      }
+
+      .ant-tree-switcher-icon {
+        transform: rotate(0) translateY(-1px);
+        transition: transform 0.25s ease-in-out;
+      }
+
+      &.ant-tree-treenode-switcher-close {
+        .ant-tree-switcher {
+          .ant-tree-switcher-icon {
+            transform: rotate(-90deg) translate(1px, 0);
+          }
+        }
+      }
+
+      .ant-tree-switcher-leaf-line {
+        &:before {
+          bottom: -2px;
+          right: 8px;
+          top: -8px;
+          border-color: ${fromProps('normal.lineColor')};
+        }
+
+        &:after {
+          display: none;
+        }
+      }
+
+      &.ant-tree-treenode-leaf-last {
+        .ant-tree-switcher-leaf-line {
+          &:before {
+            top: -8px !important;
+            height: 23px !important;
+          }
+        }
+      }
+
+      &.ant-tree-treenode-checkbox-indeterminate .kl-v6-checkbox-icon-normal,
+      &:not(.ant-tree-treenode-checkbox-indeterminate)
+        .kl-v6-checkbox-icon-indeterminate {
+        display: none;
+      }
+
+      .ant-radio-group {
+        transform: translateY(2px);
+      }
+
+      &:not(.ant-tree-treenode-checkbox-checked) {
+        .ant-radio-wrapper.ant-radio-wrapper-checked {
+          display: none;
+        }
+      }
+
+      &.ant-tree-treenode-checkbox-checked {
+        .ant-radio-wrapper:not(.ant-radio-wrapper-checked) {
+          display: none;
+        }
+      }
+    }
+
+    .ant-tree-checkbox {
+      margin: 0 0 0 -20px;
+      padding: 0;
+      transform: translate(19px, 2px);
+      opacity: 0;
+      z-index: 2;
+    }
+
+    .ant-tree-iconEle:not(:empty) + .ant-tree-title {
+      padding-left: ${SPACES[2]}px;
+    }
+
+    .ant-tree-node-content-wrapper .ant-tree-iconEle {
+      width: 14px;
+      height: 14px;
+
+      .ant-checkbox {
+        top: ${SPACES[1]}px;
+      }
+    }
+
+    .ant-checkbox-wrapper {
+      & + .kl-v6-checkbox-icon-indeterminate {
+        margin-left: 0;
+      }
+    }
+
+    .ant-checkbox-checked::after {
+      border: none;
+    }
+  }
 `

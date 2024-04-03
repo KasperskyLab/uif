@@ -18,32 +18,34 @@ const ActionsButtons: AlertProps['actions'] = {
 }
 
 describe('Alert', () => {
-  const componentId = 'alert-test-id'
+  const testId = 'alert-test-id'
 
-  test('should recieve componentId prop', () => {
+  it('should receive qa props', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} title={'Check!'} mode="success" type="alert">
-          Success Alert
-        </Alert>
-      </ConfigProvider>
+      <Alert
+        klId="kl-id"
+        mode="success"
+        testId="test-id"
+        type="alert"
+      >
+        Success Alert
+      </Alert>
     )
-    const alert = container.querySelector(
-      `[data-component-id="${componentId}"]`
-    )
-    expect(alert).toBeInTheDocument()
+
+    expect(container.querySelector('[kl-id="kl-id"]')).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
 
   test('should render the success alert component', () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} title={'Check!'} mode="success" type="alert">
+        <Alert testId={testId} title={'Check!'} mode="success" type="alert">
           Success Alert
         </Alert>
       </ConfigProvider>
     )
     const alert = container.querySelector(
-      `[data-component-id="${componentId}"]`
+      `[data-testid="${testId}"]`
     )
     expect(alert).toBeInTheDocument()
   })
@@ -51,13 +53,13 @@ describe('Alert', () => {
   test('should render the warning alert component', () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} title={'Check!'} mode="warning" type="alert">
+        <Alert testId={testId} title={'Check!'} mode="warning" type="alert">
           Warning Alert
         </Alert>
       </ConfigProvider>
     )
     const alert = container.querySelector(
-      `[data-component-id="${componentId}"]`
+      `[data-testid="${testId}"]`
     )
     expect(alert).toBeInTheDocument()
   })
@@ -65,45 +67,26 @@ describe('Alert', () => {
   test('should render the error alert component', () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} title={'Check!'} mode="error" type="alert">
+        <Alert testId={testId} title={'Check!'} mode="error" type="alert">
           Error Alert
         </Alert>
       </ConfigProvider>
     )
     const alert = container.querySelector(
-      `[data-component-id="${componentId}"]`
+      `[data-testid="${testId}"]`
     )
     expect(alert).toBeInTheDocument()
   })
   test('should render the info alert component', () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} title={'Check!'} mode="info" type="alert">
+        <Alert testId={testId} title={'Check!'} mode="info" type="alert">
           Info Alert
         </Alert>
       </ConfigProvider>
     )
     const alert = container.querySelector(
-      `[data-component-id="${componentId}"]`
-    )
-    expect(alert).toBeInTheDocument()
-  })
-
-  test('should render the infoAccent alert component', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert
-          componentId={componentId}
-          title={'Check!'}
-          mode="infoAccent"
-          type="alert"
-        >
-          infoAccent Alert
-        </Alert>
-      </ConfigProvider>
-    )
-    const alert = container.querySelector(
-      `[data-component-id="${componentId}"]`
+      `[data-testid="${testId}"]`
     )
     expect(alert).toBeInTheDocument()
   })
@@ -112,41 +95,42 @@ describe('Alert', () => {
     render(
       <ConfigProvider theme={ThemeKey.Light} >
         <Alert
-          componentId="alert"
+          testId="alert"
           title={'Check!'}
-          mode="infoAccent"
+          mode="info"
           type="alert"
         >
-          infoAccent Alert
+          Info Alert
         </Alert>
       </ConfigProvider>
     )
-    expect(screen.getByText('infoAccent Alert')).toBeInTheDocument()
+    expect(screen.getByText('Info Alert')).toBeInTheDocument()
   })
 
   test('should render with title', async () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
         <Alert
-          componentId="alert"
+          testId="alert"
           title={'Check!'}
-          mode="infoAccent"
+          mode="info"
           type='sectionMessage'
         >
-          infoAccent Alert
+          Info Alert
         </Alert>
       </ConfigProvider>
     )
     const title = container.querySelector(
-      '[kl-id="alert-title"]'
+      '[data-testid="alert-title"]'
     )
     await expect(title).toBeInTheDocument()
   })
+
   test('should render without title', async () => {
     render(
       <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} mode="infoAccent" type="alert">
-          infoAccent Alert
+        <Alert testId={testId} mode="info" type="alert">
+          Info Alert
         </Alert>
       </ConfigProvider>
     )
@@ -158,7 +142,7 @@ describe('Alert', () => {
   test('should render with icon / info', () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} mode="info" type="alert">
+        <Alert testId={testId} mode="info" type="alert">
           Info Alert
         </Alert>
       </ConfigProvider>
@@ -169,24 +153,10 @@ describe('Alert', () => {
     expect(icon).toBeInTheDocument()
   })
 
-  test('should render with icon / info-accent', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} mode="infoAccent" type="alert">
-          infoAccent Alert
-        </Alert>
-      </ConfigProvider>
-    )
-    const icon = container.querySelector(
-      '[data-component-id="icon-info-accent"]'
-    )
-    expect(icon).toBeInTheDocument()
-  })
-
   test('should render with icon / success', () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} mode="success" type="alert">
+        <Alert testId={testId} mode="success" type="alert">
           Success Alert
         </Alert>
       </ConfigProvider>
@@ -200,7 +170,7 @@ describe('Alert', () => {
   test('should render with icon / error', () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} mode="error" type="alert">
+        <Alert testId={testId} mode="error" type="alert">
           Error Alert
         </Alert>
       </ConfigProvider>
@@ -214,7 +184,7 @@ describe('Alert', () => {
   test('should render with icon / warning', () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} mode="warning" type="alert">
+        <Alert testId={testId} mode="warning" type="alert">
           Warning Alert
         </Alert>
       </ConfigProvider>
@@ -225,25 +195,10 @@ describe('Alert', () => {
     expect(icon).toBeInTheDocument()
   })
 
-  test('should render without icon', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} mode="success" type="alert" noIcon>
-          alert text
-        </Alert>
-      </ConfigProvider>
-    )
-
-    const icon = container.querySelector(
-      '[data-component-id="icon-success"]'
-    )
-    expect(icon).not.toBeInTheDocument()
-  })
-
   test('should render with actions', () => {
     render(
       <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} mode="success" type="alert" actions={ActionsButtons} >
+        <Alert testId={testId} mode="success" type="alert" actions={ActionsButtons} >
           alert text
         </Alert>
       </ConfigProvider>
@@ -251,20 +206,5 @@ describe('Alert', () => {
 
     const button = screen.queryByText('Action1')
     expect(button).toBeInTheDocument()
-  })
-
-  test('should correctly render when type is sectionMessage', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert componentId={componentId} mode="success" type="alert" noIcon>
-          alert text
-        </Alert>
-      </ConfigProvider>
-    )
-
-    const icon = container.querySelector(
-      '[data-component-id="icon-success"]'
-    )
-    expect(icon).not.toBeInTheDocument()
   })
 })

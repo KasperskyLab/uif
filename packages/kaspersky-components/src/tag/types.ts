@@ -1,104 +1,102 @@
-import { ReactNode, MouseEvent, HTMLAttributes } from 'react'
-import { IconProps } from '../icon'
-import { SizingType, Theme } from '../../design-system/types'
-import { TextSizes, themeColors } from '../../design-system/tokens'
+import { ReactNode, MouseEvent, HTMLAttributes, RefAttributes } from 'react'
+import { SizingType, Theme } from '@design-system/types'
+import { TextSizes } from '@design-system/tokens'
+import { TooltipProps } from '@src/tooltip/types'
+import { Focus } from '@design-system/tokens/focus'
+import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+
+export const tagModes = [
+  'neutral',
+  'purple',
+  'grey',
+  'marina',
+  'red',
+  'marengo',
+  'emerald',
+  'orange',
+  'yellow',
+  'violet',
+  'grass'
+] as const
+
+export type TagMode = typeof tagModes[number]
+
+type StateProps = {
+  background?: string,
+  color?: string,
+  border?: string,
+  iconColor?: string
+}
+
+export type TagColorStates = Focus & {
+  normal?: StateProps,
+  hover?: StateProps,
+  active?: StateProps
+}
+
+export type TagBaseColorConfig = {
+  disabled?: StateProps,
+  readOnly?: StateProps,
+  invalid?: StateProps
+}
+
+export type TagColorConfig = Record<'filled' | 'outlined', TagColorStates> & TagBaseColorConfig
 
 export type TagSize = Extract<SizingType, 'small' | 'medium'>
 
 export type TagSizeConfig = TextSizes & {
   padding: string,
   gap: string,
-  borderRadius: string
+  borderRadius: string,
+  height: string
 }
 
-export type TagColorConfig = {
-  iconColor: string,
-  closableIconColor: string,
-  backgroundColor:string,
-  color: string,
-  disabled: {
-    backgroundColor: string,
-    color: string
-  }
+export type TagThemeProps = {
+  /** Size */
+  size?: TagSize,
+  /** Custom theme */
+  theme?: Theme,
+  /** Color mode */
+  mode?: TagMode
 }
 
 export type TagCssConfig = TagColorConfig & TagSizeConfig
 
-export type TextColor = keyof typeof themeColors['text-icons-elements'];
-export type BackgroundColor = keyof typeof themeColors['tags']
-export type TagProps = HTMLAttributes<HTMLSpanElement> & {
-  /**
-    * content
-    */
-  children?: ReactNode,
-  /**
-     *  component unique id
-     */
-  klId?: string,
-  /**
-     *  size
-     */
-  size?: TagSize,
-  /**
-     *  text color
-     */
-
-  icon?: IconProps['name'],
-  /**
-     *  theme
-     */
-  theme?: Theme,
-  /**
-     *  background color
-     */
-  backgroundColor?: BackgroundColor,
-  /**
-     *  is it closable?
-     */
-  closable?: boolean,
-
-  /**
-   *  custom style
-   */
-  overrides?: {
-  /**
-     *  custom text color
-     */
-    textColor?: string,
-    /**
-     *  custom background color
-     */
-    backgroundColor?: string,
-    /**
-     *  custom icon color
-     */
-    iconColor?: string,
-    /**
-     *  custom closable icon color
-     */
-    closableIconColor?: string,
-    /**
-     *  custom text color in disabled state
-     */
-    disabledTextColor?: string,
-    /**
-     *  custom background color in disabled state
-     */
-    disabledBackgroundColor?: string
-  },
-
-  /**
-   *  label
-   */
-  label?: ReactNode,
-
-  /**
-   *  is disabled
-   */
-  disabled?: boolean,
-
-  /**
-   *  onClose event if closable
-   */
-  onClose?: (event?: MouseEvent<HTMLElement, MouseEvent>) => void
+type TruncationProps = {
+  /** Maximum number of characters allowed in the tag content */
+  maxChars?: number,
+  /** Truncation symbol */
+  truncationSymbol?: string,
+  /** Position of the tooltip when content is truncated */
+  tooltipPosition?: TooltipProps['placement']
 }
+
+export type TagProps = TagThemeProps & RefAttributes<HTMLSpanElement> & HTMLAttributes<HTMLSpanElement> & {
+  /** Content */
+  children?: ReactNode,
+  /** Icon */
+  icon?: ReactNode,
+  /** Is it closable? */
+  closable?: boolean,
+  /** Config for tag truncation */
+  truncation?: TruncationProps,
+  /** Is outlined */
+  outlined?: boolean,
+  /** Make tag interactive */
+  interactive?: boolean,
+  /** Label */
+  label?: ReactNode,
+  /** Is disabled */
+  disabled?: boolean,
+  /** Is readonly */
+  readOnly?: boolean,
+  /** Is invalid */
+  invalid?: null | boolean,
+  /** Callback executed when tag is closed */
+  onClose?: (e?: MouseEvent<HTMLElement, globalThis.MouseEvent>) => void
+} & TestingProps
+
+export type TagViewProps = ToViewProps<TagProps, TagCssConfig, Omit<TagThemeProps, 'size' | 'mode'>>
+
+/** @deprecated Use TagThemeProps instead */
+export type BaseThemedTagProps = TagThemeProps

@@ -1,23 +1,26 @@
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react'
 import { act } from 'react-test-renderer'
-import { ConfigProvider } from '../../../design-system/context/provider/ConfigProvider'
-import { ThemeKey } from '../../../design-system/types/ThemeKey'
+import { ConfigProvider } from '@design-system/context'
+import { ThemeKey } from '@design-system/types'
 import { getPageSizeOptions, Pagination } from '../Pagination'
-import { IPaginationProps } from '../types'
+import { PaginationProps } from '../types'
+import { TFunction } from 'i18next'
 
 const defaultProps = {
   klId: 'test-pagination',
   defaultCurrent: 1,
+  onChange: () => undefined,
+  testId: 'test-pagination',
   total: 500
 }
 
-const getByComponentId = (container: HTMLElement, klId = defaultProps.klId) => container.querySelector(
-  `[data-component-id="${klId}"]`
+const getByComponentId = (container: HTMLElement, testId = defaultProps.testId) => container.querySelector(
+  `[data-testid="${testId}"]`
 )
 
-const DefaultPagination = (props: IPaginationProps) => (
-  <ConfigProvider theme={ThemeKey.Light} locale='en'>
+const DefaultPagination = (props: PaginationProps) => (
+  <ConfigProvider theme={ThemeKey.Light} locale='en-us'>
     <Pagination {...defaultProps} {...props} />
   </ConfigProvider>
 )
@@ -44,7 +47,9 @@ describe('Pagination', () => {
 
   test('should render', () => {
     const { container } = render(<DefaultPagination />)
+
     expect(getByComponentId(container)).toBeInTheDocument()
+    expect(container.querySelector(`[data-testid="${defaultProps.testId}"]`)).toBeInTheDocument()
   })
 
   test('should correctly set current value', () => {
@@ -71,19 +76,6 @@ describe('Pagination', () => {
     expect(pages?.length).toBe(numberOfPages)
   })
 
-  test('should correctly set defaultPageSize', () => {
-    const total = 40
-    const defaultPageSize = 10
-    const numberOfPages = Math.ceil(total / defaultPageSize)
-
-    const { container } = render(<DefaultPagination total={total} defaultPageSize={defaultPageSize} />)
-
-    const pages = getByComponentId(container)
-      ?.querySelectorAll('.ant-pagination-item')
-
-    expect(pages?.length).toBe(numberOfPages)
-  })
-
   test('should be disabled with disabled true', () => {
     const { container } = render(<DefaultPagination disabled />)
     expect(getByComponentId(container)).toHaveAttribute('aria-disabled', 'true')
@@ -102,7 +94,7 @@ describe('Pagination', () => {
     const { container } = render(<DefaultPagination pageSizeOptions={pageSizeOptions} showSizeChanger />)
 
     act(() => {
-      const select = getByComponentId(container, 'select')?.firstElementChild
+      const select = container.querySelector('[data-testid="select"]')?.firstElementChild
       if (select) {
         fireEvent.mouseDown(select)
       }
@@ -114,33 +106,21 @@ describe('Pagination', () => {
 
     expect(optionsContent)
       .toStrictEqual(
-        getPageSizeOptions(t, pageSizeOptions).map(({ label }) => label)
+        getPageSizeOptions(t as unknown as TFunction<'translation', undefined>, pageSizeOptions).map(({ label }) => label)
       )
-  })
-
-  test('should show quick jumper with showQuickJumper true', () => {
-    const { container } = render(<DefaultPagination showQuickJumper />)
-
-    expect(getByComponentId(container, 'jumper')).toBeInTheDocument()
   })
 
   test('should show select with showSizeChanger true', () => {
     const { container } = render(<DefaultPagination showSizeChanger />)
 
-    expect(getByComponentId(container, 'select')).toBeInTheDocument()
-  })
-
-  test('should show total with showTotal true', () => {
-    const { container } = render(<DefaultPagination showTotal />)
-
-    expect(getByComponentId(container, 'total')).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="select"]')).toBeInTheDocument()
   })
 
   test('should correctly show total number of elements', () => {
     const total = 1000
-    const { container } = render(<DefaultPagination showTotal total={total} />)
+    const { container } = render(<DefaultPagination total={total} />)
 
-    const totalContainer = getByComponentId(container, 'total')
+    const totalContainer = container.querySelector('[data-testid="total"]')
     expect(totalContainer?.textContent?.includes(total.toString())).toBeTruthy()
   })
 
@@ -161,7 +141,7 @@ describe('Pagination', () => {
     const { container } = render(<DefaultPagination showSizeChanger onShowSizeChange={onShowSizeChange} />)
 
     act(() => {
-      const select = getByComponentId(container, 'select')?.firstElementChild
+      const select = container.querySelector('[data-testid="select"]')?.firstElementChild
       if (select) {
         fireEvent.mouseDown(select)
       }

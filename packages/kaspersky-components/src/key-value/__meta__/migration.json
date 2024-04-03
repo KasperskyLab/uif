@@ -7,7 +7,7 @@
       "changes": {
         "before": "-",
         "after": "string",
-        "description": "The unique id of the component"
+        "description": "Уникальный id компонента"
       }
     },
     {

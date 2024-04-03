@@ -1,95 +1,114 @@
 import React from 'react'
-import { Story, Meta } from '@storybook/react'
-import { badges } from '../../../.storybook/badges'
-import { StoryLayout } from '../../../.storybook/StoryComponents'
-import { useTheme } from '../../../design-system/theme/hooks'
-import { HeadingTypes } from '../../../design-system/tokens'
-import { colors, themeColors } from '../../../design-system/tokens/palette'
-import { ThemeKey } from '../../../design-system/types'
-import { withMeta } from '../../../helpers/hocs/MetaComponent/withMeta'
-import { Space } from '../../space'
+import { Meta, StoryObj } from '@storybook/react'
+import { badges } from '@sb/badges'
+import { useTheme } from '@design-system/theme/hooks'
+import { colors, themeColors } from '@design-system/tokens'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import { sbHideControls, sbSetDefaultValue } from '@helpers/storybookHelpers'
+import { Space } from '@src/space'
 import { Heading, HeadingProps } from '../heading'
 import MetaData from '../__meta__/meta.json'
 import { HeaderDocs } from './HeaderDocs'
 
-export default {
+const meta: Meta<HeadingProps> = {
   title: 'Atoms/Typography/Heading',
   component: Heading,
+  argTypes: {
+    ...sbHideControls(['theme', 'as', 'forwardedAs', 'ref'])
+  },
+  args: {
+    testId: 'heading-test-id',
+    klId: 'heading-kl-id'
+  },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
     docs: {
       page: withMeta(MetaData, HeaderDocs)
-    }
-  }
-} as Meta
-
-export const Default: Story<HeadingProps> = (args) => {
-  return (
-    <StoryLayout theme={ThemeKey.Light}>
-      <Space size={16} direction="vertical">
-        <Heading color={args.color} type={args.type} {...args}>
-          I'm header with type {args.type}
-        </Heading>
-      </Space>
-    </StoryLayout>
-  )
-}
-
-Default.args = {
-  type: 'H1',
-  color: 'lga100'
-}
-
-Default.argTypes = {
-  color: {
-    options: Object.keys(colors),
-    control: { type: 'select' }
+    },
+    design: MetaData.figmaView
   },
-  type: {
-    options: Object.keys(HeadingTypes),
-    control: { type: 'select' }
-  }
-}
-
-export const WithTheme: Story<HeadingProps> = (args) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
+  decorators: [
+    (Story, context) => (
       <Space size={16} direction="vertical">
-        <Heading {...args}>
-          I'm header with type {args.type}, color - {args.themedColor} theme -{' '}
-          {theme.key}
-        </Heading>
+        <Story {...context}/>
       </Space>
-    </StoryLayout>
-  )
+    )
+  ]
+}
+export default meta
+
+type Story = StoryObj<HeadingProps>
+
+const defaultTypes = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6']
+
+const defaultATColor = {
+  options: Object.keys(colors),
+  control: { type: 'select' }
 }
 
-WithTheme.args = {
-  type: 'H1',
-  themedColor: 'primary'
+const defaultATType = {
+  options: defaultTypes,
+  control: { type: 'select' },
+  ...sbSetDefaultValue('H1')
 }
 
-WithTheme.argTypes = {
-  themedColor: {
-    options: Object.keys(themeColors['text-icons-elements']),
-    control: { type: 'select' },
-    defaultValue: 'primary'
+export const Basic: Story = {
+  render: (args: HeadingProps) => (
+    <Heading color={args.color} type={args.type} {...args}>
+      I&apos;m header with type {args.type}
+    </Heading>
+  ),
+  args: {
+    type: 'H1',
+    color: 'lga100'
   },
-  type: {
-    options: Object.keys(HeadingTypes),
-    control: { type: 'select' }
+  argTypes: {
+    color: { ...defaultATColor },
+    type: { ...defaultATType },
+    ...sbHideControls(['themedColor'])
   }
 }
 
-Default.parameters = {
-  controls: {
-    exclude: ['themedColor', 'theme', 'as', 'forwardedAs', 'ref']
+export const AllTypes: Story = {
+  render: (args: HeadingProps) => (
+    <div>
+      {defaultTypes.map(type => (
+        <Heading key={type} color={args.color} type={type} {...args}>
+          I&apos;m header with type {type}
+        </Heading>
+      ))}
+    </div>
+  ),
+  args: {
+    color: 'lga100'
+  },
+  argTypes: {
+    color: { ...defaultATColor },
+    ...sbHideControls(['type', 'themedColor'])
   }
 }
 
-WithTheme.parameters = {
-  controls: {
-    exclude: ['color', 'theme', 'as', 'forwardedAs', 'ref']
+export const WithTheme: Story = {
+  render: (args: HeadingProps) => {
+    const theme = useTheme()
+    return (
+      <Heading {...args}>
+        I&apos;m header with type {args.type}, color - {args.themedColor} theme -{' '}
+        {theme.key}
+      </Heading>
+    )
+  },
+  args: {
+    type: 'H1',
+    themedColor: 'primary'
+  },
+  argTypes: {
+    themedColor: {
+      options: Object.keys(themeColors['text-icons-elements']),
+      control: { type: 'select' },
+      ...sbSetDefaultValue('primary')
+    },
+    type: { ...defaultATType },
+    ...sbHideControls(['color'])
   }
 }

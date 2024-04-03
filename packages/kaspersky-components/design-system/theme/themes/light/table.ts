@@ -1,13 +1,18 @@
-import { TableColorConfig, TableSizeConfig } from '../../../../src/table/types'
+import { TableColorConfig } from '@src/table'
 import { ComponentThemeContext } from '../config'
-import { getTextSizes, TextTypes } from './typography'
 import { checkbox } from './checkbox'
-import { SPACES } from '../variables'
+import { radio } from './radio'
 
 export const table = ({ colors }: ComponentThemeContext): TableColorConfig => ({
   headCell: {
     normal: {
       borderColor: colors.textIconsElements.primary
+    },
+    hover: {
+      backgroundColor: colors.elements['separator-solid']
+    },
+    active: {
+      backgroundColor: colors.elements['separator-bold-solid']
     }
   },
   cell: {
@@ -31,13 +36,17 @@ export const table = ({ colors }: ComponentThemeContext): TableColorConfig => ({
   selected: {
     backgroundColor: colors.surface.marina
   },
-  checkbox: checkbox({ colors })
-})
-
-export const tableSizes: TableSizeConfig = {
-  headSizes: getTextSizes(TextTypes.L3),
-  cellSizes: getTextSizes(TextTypes.BTR3),
-  dragHandler: {
-    size: `${SPACES[19]}`
+  checkbox: checkbox({ colors }),
+  radio: radio({ colors }).default,
+  filters: {
+    toolbar: {
+      backgroundColor: colors.elements.separator
+    },
+    item: {
+      backgroundColor: colors.bg.alternative2,
+      title: {
+        color: colors.textIconsElements['secondary2-solid']
+      }
+    }
   }
-}
+})

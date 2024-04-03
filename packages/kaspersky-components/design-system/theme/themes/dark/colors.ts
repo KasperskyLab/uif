@@ -14,7 +14,10 @@ const {
     statestatuses,
     criticalitystatuses,
     tags,
-    surface
+    tagsoutlined,
+    surface,
+    'main-interact': mainInteract,
+    'danger-interact': dangerInteract
   }
 } = shortcuts
 
@@ -23,11 +26,26 @@ export const colors = {
   foregroundColor: textIconsElements.primary,
   foregroundInvertedColor: textIconsElements['primary-invert'],
   background: bg.base,
-  mainInteractPrimary: defaultPalette.marina500,
-  mainInteractSecondary: defaultPalette.marina400,
-  mainInteractTertiary: defaultPalette.marina600,
-  mainInteractFocus: defaultPalette.marina300,
+
+  mainInteractPrimary: mainInteract.primary,
+  mainInteractSecondary: mainInteract.secondary,
+  mainInteractTertiary: mainInteract.tertiary,
+  mainInteractFocus: mainInteract.focus,
   mainInteractPressed: defaultPalette.marina200,
+
+  mainInteractPrimaryInverted: mainInteract['primary-invert'],
+  mainInteractSecondaryInverted: mainInteract['secondary-invert'],
+  mainInteractTertiaryInverted: mainInteract['tertiary-invert'],
+  mainInteractBorderInverted: mainInteract['border-invert'],
+
+  dangerInteractPrimary: dangerInteract.primary,
+  dangerInteractSecondary: dangerInteract.secondary,
+  dangerInteractTertiary: dangerInteract.tertiary,
+
+  dangerInteractPrimaryInverted: dangerInteract['primary-invert'],
+  dangerInteractSecondaryInverted: dangerInteract['secondary-invert'],
+  dangerInteractTertiaryInverted: dangerInteract['tertiary-invert'],
+  dangerInteractBorderInverted: dangerInteract['border-invert'],
 
   positiveBackgroundPrimary: defaultPalette.emerald600,
   errorBackgroundPrimary: defaultPalette.red600,
@@ -40,6 +58,9 @@ export const colors = {
   statestatuses,
   criticalitystatuses,
   tags,
+  tagsoutlined,
   surface,
+  mainInteract,
+  dangerInteract,
   defaultPalette
 }

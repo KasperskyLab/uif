@@ -1,29 +1,17 @@
 import React from 'react'
-import { timeInputStyles } from './timeInputCss'
-import { useThemedTextbox } from '../input'
-import { InputCssConfig, IInputStyleProps, ISizeType } from '../input/types'
-import { ITimeInput } from './types'
-import generatePicker from 'antd/lib/date-picker/generatePicker'
-import type { GenerateConfig } from 'rc-picker/lib/generate'
-import config from 'rc-picker/lib/generate/dateFns'
-import styled from 'styled-components'
+import { Textbox } from '../input'
+import { TimeInputProps } from './types'
+import { IMaskInputProps } from 'react-imask'
+import { generateTimeIMaskOptions } from '@helpers/imaskDateOptionsGenerator'
+import { DEFAULT_TIME_FORMAT } from '@design-system/tokens'
 
-const DatePicker = generatePicker<Date>(config as GenerateConfig<Date>)
+export const TimeInput: React.FC<TimeInputProps> = ({
+  format = DEFAULT_TIME_FORMAT,
+  ...rest
+}: TimeInputProps) => {
+  const maskOptions: IMaskInputProps = React.useMemo(() => {
+    return generateTimeIMaskOptions(format)
+  }, [format])
 
-const TimePicker = React.forwardRef<any, ITimeInput>((props, ref) => {
-  return <DatePicker {...props} picker="time" mode={undefined} ref={ref} />
-})
-
-TimePicker.displayName = 'TimePicker'
-
-const StyledTimeInput = styled(TimePicker).withConfig<ITimeInput & { cssConfig: InputCssConfig, size?: ISizeType & unknown }
-  >({
-    shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
-  })`
-  ${timeInputStyles}
-`
-
-export const TimeInput = (rawProps: ITimeInput & IInputStyleProps): JSX.Element => {
-  const props = useThemedTextbox(rawProps)
-  return <StyledTimeInput {...props} />
+  return <Textbox.Masked {...rest} maskOptions={maskOptions} />
 }

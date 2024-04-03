@@ -1,17 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button } from '../button/Button'
-import { Textbox } from '../input'
-import { Checkbox } from '../checkbox'
-import { Toggle } from '../toggle'
-import { Radio } from '../radio'
+import { Meta, StoryObj } from '@storybook/react'
+import { Button } from '@src/button'
+import { Textbox } from '@src/input'
+import { Checkbox } from '@src/checkbox'
+import { Toggle } from '@src/toggle'
+import { Radio } from '@src/radio'
 
-export default {
+const meta: Meta = {
   title: 'Organisms/Form'
 }
+export default meta
 
-export const BasicForm = ({ ...rest }) => {
-  return (
+export const BasicForm: StoryObj = {
+  render: (args) => (
     <form>
       <FormRow>
         <div>Login</div>
@@ -29,7 +31,7 @@ export const BasicForm = ({ ...rest }) => {
       </FormRow>
       <FormRow>
         <Radio
-          {...rest}
+          {...args}
           options={[
             { label: 'First', value: '1' },
             { label: 'Second', value: '2' }
@@ -39,8 +41,8 @@ export const BasicForm = ({ ...rest }) => {
         />
       </FormRow>
       <FormRow>
-        <ButtonSubmit text='Ok' mode='primaryBlue' {...rest} />
-        <ButtonSubmit text='Cancel' mode='secondary' {...rest} />
+        <ButtonSubmit text='Ok' mode='primaryBlue' {...args} />
+        <ButtonSubmit text='Cancel' mode='secondary' {...args} />
       </FormRow>
     </form>
   )

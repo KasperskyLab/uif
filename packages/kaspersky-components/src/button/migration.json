@@ -7,7 +7,7 @@
       "changes": {
         "before": "small | middle | large",
         "after": "'small' | 'medium' | 'large' | 'extraLarge",
-        "description": "Changing the size grid in steps of 2 units"
+        "description": "Изменение размерной сетки c шагом в 2 units"
       }
     },
     {
@@ -15,7 +15,7 @@
       "changes": {
         "before": "primary | secondary | danger | tertiary",
         "after": "primaryBlue | primaryBlack | secondary | tertiary | invertedPrimary | invertedSecondary | invertedTertiary",
-        "description":"Name change, inverted colors added"
+        "description":"Изменение названий, добавлены инвертированные цвета"
       }
     }
   ],
@@ -25,34 +25,34 @@
       "changes": {
         "before": "primaryBlue | primaryBlack | secondary | tertiary",
         "after": "primaryBlue | primaryBlack | secondary | tertiary | invertedPrimary | invertedSecondary | invertedTertiary",
-        "description": "Added inverted colors"
+        "description": "Добавлены инвертированные цвета"
       }
     }
   ],
   "common": [
     {
       "prop": "block",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "danger",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "ghost",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "shape",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "href",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "target",
-      "changes": "Removed"
+      "changes": "Убран"
     }
   ]
 }

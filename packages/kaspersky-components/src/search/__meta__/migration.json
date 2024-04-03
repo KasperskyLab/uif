@@ -6,14 +6,14 @@
     "changes": {
       "before": "-",
       "after": "boolean",
-      "description": "Render layout on keyboard event"
+      "description": "Рендеринг layout при событии keyboard"
     }
   },{
     "prop": "wrapperRef",
     "changes": {
       "before": "-",
       "after": "MutableRefObject<null | HTMLDivElement>",
-      "description": "ref pointing to layout"
+      "description": "ref с указанием на layout"
     }
   }],
   "v5": [{
@@ -21,7 +21,7 @@
     "changes": {
       "before": "there is not some props from v3",
       "after": "the component contains all props from v3",
-      "description": "The component contains the entire set of props from v3"
+      "description": "Компонент содержит весь набор props из v3"
     }
   }],
   "common": []

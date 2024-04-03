@@ -2,17 +2,10 @@ import styled, { css } from 'styled-components'
 import { BORDER_RADIUS, SPACES } from '../../design-system/theme/themes/variables'
 import { getTextSizes, textLevels } from '../../design-system/tokens'
 import { getFromProps } from '../../helpers/getFromProps'
-import { NotificationCssConfig } from './types'
-import { CloseOutlined } from '@ant-design/icons'
+import { NotificationCssConfig, NotificationMode, NotificationModeArray } from './types'
 
 const fromProps = getFromProps<NotificationCssConfig>()
-
-export const CloseBox = styled(CloseOutlined)`
-  svg {
-    width: ${SPACES[6]}px;
-    height: ${SPACES[6]}px;
-  }
-`
+const TOAST_WIDTH = 520
 
 export const Box = styled.div`
   display: flex;
@@ -24,23 +17,62 @@ export const NotificationCss = css`
   .ant-notification-notice-description {
     ${getTextSizes(textLevels.BTR3)};
     gap: ${SPACES[16]}px;
-    color: ${({ theme }) =>
-    theme.colors.fixedNeutralColors.fixedneutralcolor_primarywhite};
-  }
-  .ant-notification-notice-close {
-    color: ${fromProps('iconColor')};
-    position: initial;
   }
 
   .ant-notification-notice {
+    width: ${TOAST_WIDTH}px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: ${SPACES[7]}px ${SPACES[9]}px ${SPACES[7]}px ${SPACES[7]}px;
+    padding: ${SPACES[7]}px ${SPACES[8]}px;
     gap: ${SPACES[4]}px;
-    border-radius: ${BORDER_RADIUS[2]}px;
-    background: ${fromProps('normal.background')};
-    color: ${fromProps('normal.color')};
+    border-radius: ${BORDER_RADIUS[4]}px;
+  }
+  
+  ${(props: { cssConfig:NotificationCssConfig, title?: string, noIcon?: boolean }) => {
+    const modes:NotificationMode[] = [...NotificationModeArray]
+
+    return modes.map(mode => {
+      return `
+      .ant-notification-notice-${mode} {
+        background: ${fromProps(`${mode}.background`)(props)};
+        color: ${fromProps(`${mode}.color`)(props)};
+        
+        .ant-notification-notice-description {
+          color: ${fromProps(`${mode}.color`)(props)};
+          padding-right: 0px;
+        }
+
+        .ant-notification-notice-close {
+          position: initial;
+          height: ${SPACES[10]}px;
+        }
+
+        .toast-action-button {
+          padding: 0;
+          white-space: nowrap;
+
+          &:after {
+            background:  ${fromProps(`${mode}.separator`)(props)};
+          }
+        }
+      }
+    `
+    }).join('')
+  }}
+
+  .toast-action-button {
+    &:after {
+      display: block;
+      content: '';
+      width: 1px;
+      margin-left: ${SPACES[4]}px;
+      height: 20px;
+    }
+
+    .kl-action-button-icon {
+      display: none;
+    }
   }
 
   .ant-notification-notice-content {
@@ -52,8 +84,9 @@ export const NotificationCss = css`
     justify-content: flex-start;
     align-items: center;
     margin-left: 0px;
-    gap: ${SPACES[5]}px;
+    gap: ${SPACES[4]}px;
   }
+
   .ant-notification-notice-description {
     display: flex;
     align-items: center;
@@ -62,56 +95,29 @@ export const NotificationCss = css`
     margin-left: 0px;
   }
 
-
   .ant-notification-notice-message {
-    margin-left: 0px;
-    ${(props: { cssConfig:NotificationCssConfig, title?: string, noIcon?: boolean }) => {
-    return (
-      props.title &&
-              css`
-                margin-left: ${!props.noIcon ? `${SPACES[16]}px` : '0px'};
-                margin-right: 0px;
-                margin-bottom: 0px;
-                margin-top: 0px;
-              `
-    )
-  }}}
-  
-    .ant-notification-notice-with-icon .ant-notification-notice-description {
-    ${({ noIcon }) => {
-    return (
-      noIcon &&
-        css`
-          margin-left: 0px;
-        `
-    )
-  }}
-  }
-
-  .ant-notification-notice-closable .ant-notification-notice-message {
-    ${({ noIcon }) => {
-    return (
-      noIcon &&
-        css`
-          padding-right: 0px;
-        `
-    )
-  }}
+    display: none;
   }
 
   .ant-notification-notice-icon {
-    font-size: ${SPACES[10]}px;
-
-    ${({ noIcon }) => {
-    return (
-      noIcon &&
-        css`
-          position: absolute;
-          display: none;
-        `
-    )
-  }}
+    position: relative;
+    margin-left: 0px;
+    height: ${SPACES[10]}px;
+    line-height: ${SPACES[10]}px;
   }
 
-  color: ${fromProps('iconColor')};
+  ${({ noIcon }) => {
+  return (
+    noIcon && css`
+    .ant-notification-notice-with-icon .ant-notification-notice-description {
+      margin-left: 0px;
+    }
+    .ant-notification-notice-closable .ant-notification-notice-message {
+      padding-right: 0px;
+    }
+    .ant-notification-notice-icon {
+      display: none;
+    }`
+    )
+  }}
 `

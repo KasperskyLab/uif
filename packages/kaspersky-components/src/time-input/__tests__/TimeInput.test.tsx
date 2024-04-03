@@ -1,47 +1,73 @@
 import React from 'react'
-import { render, screen, fireEvent, within, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { render, screen } from '@testing-library/react'
 import { TimeInput } from '../TimeInput'
+import userEvent from '@testing-library/user-event'
+
+const testId = 'test-time-input-id'
 
 describe('TimeInput', () => {
   test('renders without crashing', () => {
-    render(<TimeInput />)
+    const { container } = render(<TimeInput testId={testId} />)
+
+    expect(
+      container.querySelector(`[data-testid="${testId}"]`)
+    ).toBeInTheDocument()
   })
 
   test('displays the provided value', () => {
-    const testValue = new Date('2023-04-21T15:30:00')
-    render(<TimeInput value={testValue} />)
-    const timeInputElement = screen.getByDisplayValue('15:30:00')
+    render(<TimeInput value="10:30" format="HH:mm" />)
+    const timeInputElement = screen.getByDisplayValue('10:30')
     expect(timeInputElement).toBeInTheDocument()
   })
 
-  test('calls onChange when the hours value changes', async () => {
-    const testValue = new Date('2023-04-21T15:30:00')
-    const handleChange = jest.fn()
-    render(<TimeInput value={testValue} onChange={handleChange} />)
-    const timeInputElement = screen.getByDisplayValue('15:30:00')
+  test('should check the display of the custom placeholder', () => {
+    render(<TimeInput testId={testId} placeholder="Time" />)
 
-    userEvent.click(timeInputElement)
+    const timeInputElement = screen.getByPlaceholderText('Time')
+    expect(timeInputElement).toBeInTheDocument()
+  })
 
-    await waitFor(() => {
-      expect(document.querySelector('.ant-picker-dropdown')).toBeInTheDocument()
-    })
+  test('should proper mask Hours and Minutes format', async () => {
+    const { getByTestId } = render(
+      <TimeInput format="HH:mm" testId={testId} klId={testId} />
+    )
+    const inputPhone = getByTestId(testId)
+    await userEvent.clear(inputPhone)
+    await userEvent.type(inputPhone, '1020')
 
-    const timePickerDropdown = document.querySelector('.ant-picker-dropdown') as HTMLElement
+    expect(inputPhone).toHaveValue('10:20')
+  })
 
-    timePickerDropdown.style.opacity = '1'
-    timePickerDropdown.style.pointerEvents = 'auto'
+  test('should proper mask with Seconds format', async () => {
+    const { getByTestId } = render(
+      <TimeInput format="HH:mm:ss" testId={testId} klId={testId} />
+    )
+    const inputPhone = getByTestId(testId)
+    await userEvent.clear(inputPhone)
+    await userEvent.type(inputPhone, '102030')
 
-    const hourColumn = timePickerDropdown.querySelector('.ant-picker-time-panel-column:first-child') as HTMLElement
-    const desiredTime = within(hourColumn).getByText('16')
-    userEvent.click(desiredTime)
+    expect(inputPhone).toHaveValue('10:20:30')
+  })
 
-    const newTimeInputElement = screen.getByDisplayValue('16:30:00')
-    expect(newTimeInputElement).toBeInTheDocument()
+  test('should proper mask with Milliseconds format', async () => {
+    const { getByTestId } = render(
+      <TimeInput format="HH:mm:ss:ms" testId={testId} klId={testId} />
+    )
+    const inputPhone = getByTestId(testId)
+    await userEvent.clear(inputPhone)
+    await userEvent.type(inputPhone, '102030120')
 
-    const okButton = within(timePickerDropdown).getByText('Ok')
-    userEvent.click(okButton)
+    expect(inputPhone).toHaveValue('10:20:30:120')
+  })
 
-    expect(handleChange).toHaveBeenCalledTimes(1)
+  test('should cut extra symbols', async () => {
+    const { getByTestId } = render(
+      <TimeInput format="HH:mm" testId={testId} klId={testId} />
+    )
+    const inputPhone = getByTestId(testId)
+    await userEvent.clear(inputPhone)
+    await userEvent.type(inputPhone, '102030120')
+
+    expect(inputPhone).toHaveValue('10:20')
   })
 })

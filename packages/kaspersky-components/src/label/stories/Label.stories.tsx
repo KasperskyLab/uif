@@ -1,120 +1,82 @@
 import React from 'react'
+import { Meta, StoryObj } from '@storybook/react'
 import { Label } from '../Label'
-import Meta from '../__meta__/meta.json'
+import MetaData from '../__meta__/meta.json'
+import { sbHideControls } from '@helpers/storybookHelpers'
 import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
 import { badges } from '@sb/badges'
-import { StoryLayout } from '@sb/StoryComponents'
-import { useTheme } from '@design-system/theme/hooks'
 import { Text } from '@src/typography/text'
 import { Textbox } from '@src/input'
+import { LabelProps } from '@src/label/types'
 
-export default {
+const meta: Meta<LabelProps> = {
   title: 'Atoms/Label',
   component: Label,
   argTypes: {
-    theme: {
-      control: { type: 'select', default: 'light' },
-      options: ['light', 'dark'],
-      description: 'Theme'
-    }
+    ...sbHideControls(['theme'])
   },
   args: {
     text: <Text type='BTM5'>Custom label text style</Text>,
     disabled: false,
     theme: 'light',
-    errorText: ''
+    errorText: '',
+    children: <Textbox />,
+    testId: 'label-test-id',
+    klId: 'label-kl-id'
   },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
     docs: {
-      page: withMeta(Meta)
+      page: withMeta(MetaData)
     }
   }
 }
+export default meta
 
-export const Basic = ({ ...rest }) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Label {...rest} >
-        <Textbox/>
-      </Label>
-    </StoryLayout>
-  )
-}
+type Story = StoryObj<LabelProps>
 
-export const Position = () => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Label text='Default label text style'>
-        <Textbox/>
-      </Label>
-      <Label text='Default label text style position none' position={'none'}>
+export const Basic: Story = {}
+
+export const Position: Story = {
+  render: (args: LabelProps) => (
+    <>
+      <Label {...args} text='Default label text style'/>
+      <Label {...args} text='Default label text style position none' position={'none'}>
         <Textbox value={'Label position none'}/>
       </Label>
-      <Label text='Default label text style position top' position={'top'}>
-        <Textbox/>
-      </Label>
-      <Label text='Default label text style position aside' position={'aside'}>
-        <Textbox/>
-      </Label>
-      <Label text='Default label text style position right' position={'right'}>
-        <Textbox/>
-      </Label>
-    </StoryLayout>
+      <Label {...args} text='Default label text style position top' position={'top'} />
+      <Label {...args} text='Default label text style position aside' position={'aside'} />
+      <Label {...args} text='Default label text style position right' position={'right'} />
+    </>
   )
 }
 
-export const Type = () => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Label text='Default label text style'>
-        <Textbox/>
-      </Label>
-      <Label text='Default label text style type default' type={'default'}>
-        <Textbox/>
-      </Label>
-      <Label text='Default label text style type top' type={'full'}>
-        <Textbox/>
-      </Label>
-      <Label text='Default label text style type stretch' type={'stretch'}>
-        <Textbox/>
-      </Label>
-    </StoryLayout>
+export const Type: Story = {
+  render: (args: LabelProps) => (
+    <>
+      <Label {...args} text='Default label text style'/>
+      <Label {...args} text='Default label text style type default' type={'default'}/>
+      <Label {...args} text='Default label text style type top' type={'full'}/>
+      <Label {...args} text='Default label text style type stretch' type={'stretch'}/>
+    </>
   )
 }
 
-export const Other = () => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Label text='Default label text style with error text' errorText={'Error text'}>
-        <Textbox/>
-      </Label>
-      <Label text='Default label text with tooltip' tooltip='Tooltip text ...'>
-        <Textbox/>
-      </Label>
-      <Label text='Required label text' required={true}>
-        <Textbox/>
-      </Label>
+export const Other = {
+  render: (args: LabelProps) => (
+    <>
+      <Label {...args} text='Default label text style with error text' errorText={'Error text'}/>
+      <Label {...args} text='Default label text with tooltip' tooltip='Tooltip text ...'/>
+      <Label {...args} text='Required label text' required={true}/>
       <Label
+        {...args}
         text='Label with all props above, position right, type stretch'
         errorText='Error text'
         tooltip='Tooltip text ...'
         required={true}
         position='right'
         type='stretch'
-      >
-        <Textbox/>
-      </Label>
-    </StoryLayout>
+      />
+    </>
   )
-}
-
-Basic.parameters = {
-  docs: {
-    storyDescription: 'Basic usage example'
-  }
 }

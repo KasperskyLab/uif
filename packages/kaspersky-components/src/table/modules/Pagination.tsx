@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react'
 
 import { TableModule } from '.'
 import styled from 'styled-components'
-import { SPACES } from '../../../design-system/theme/themes/variables'
-import { Pagination } from '../../pagination'
+import { SPACES } from '@design-system/theme'
+import { Pagination } from '@src/pagination'
+import { PaginationProps } from '../types'
 
 const StyledPaginationContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
   margin: ${SPACES[10]}px 0;
 `
 
 const getData = ({ data = [], current, pageSize }: {
-  data?: readonly Record<string, unknown>[],
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  data?: readonly object[],
   current: number,
   pageSize: number
 }) => {
@@ -22,21 +22,14 @@ const getData = ({ data = [], current, pageSize }: {
 const FIRST_PAGE = 1
 const DEFAULT_PAGE_SIZE = 20
 
-interface IOnChange {
-  (currentPage: number, pageSize: number): unknown
-}
-
-interface IOnShowSizeChange {
-  (currentPage: number, pageSize: number): unknown
-}
-
+// eslint-disable-next-line react/display-name
 const PaginationModule: TableModule = Component => props => {
   const [usePagination, setUsePagination] = useState(true)
   const [current, setCurrent] = useState(FIRST_PAGE)
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
   const [total, setTotal] = useState((props.dataSource || []).length)
-  const [onChange, setOnChange] = useState<null | IOnChange>(null)
-  const [onShowSizeChange, setOnShowSizeChange] = useState<null | IOnShowSizeChange>(null)
+  const [onChange, setOnChange] = useState<null |((current?: number, pageSize?: number) => void)>(null)
+  const [onShowSizeChange, setOnShowSizeChange] = useState<null |((current?: number, size?: number) => void)>(null)
   const isCurrentPageInRage = Math.ceil(total / pageSize) < current
   const [simple, setSimple] = useState(false)
 
@@ -85,7 +78,7 @@ const PaginationModule: TableModule = Component => props => {
     const { pagination } = props
 
     if (pagination) {
-      const restoreCurrentWhenDataChange = pagination.restoreCurrentWhenDataChange
+      const restoreCurrentWhenDataChange = (pagination as PaginationProps)?.restoreCurrentWhenDataChange
 
       if (restoreCurrentWhenDataChange) setCurrent(FIRST_PAGE)
     }
@@ -106,8 +99,8 @@ const PaginationModule: TableModule = Component => props => {
       }
     />
     {
-      usePagination && <StyledPaginationContainer className='ant-pagination-container'>
-        <div kl-id="table-pagination">
+      usePagination && <StyledPaginationContainer className="ant-pagination-container">
+        <div data-testid="table-pagination" kl-id="table-pagination">
           <Pagination
             simple={simple}
             total={total}

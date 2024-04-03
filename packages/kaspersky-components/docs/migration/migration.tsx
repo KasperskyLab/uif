@@ -31,7 +31,7 @@ const StyledIcon = styled(Icon)`
 `
 
 const Changes = (change: Change[] | string | undefined) => {
-  if (!change) return <Text>No changes</Text>
+  if (!change) return <Text>Нет изменений</Text>
 
   if (typeof change === 'string') {
     return <Text>{change}</Text>
@@ -65,7 +65,7 @@ const Changes = (change: Change[] | string | undefined) => {
 
 export const columns = [
   {
-    title: 'Component',
+    title: 'Компонент',
     dataIndex: 'component',
     width: 100,
     render: (component: string) => {
@@ -81,21 +81,21 @@ export const columns = [
     }
   },
   {
-    title: 'From v3',
+    title: 'Переход с v3',
     dataIndex: 'v3',
     width: 300,
     align: 'right' as const,
     render: Changes
   },
   {
-    title: 'From v5',
+    title: 'Переход с v5',
     dataIndex: 'v5',
     width: 300,
     align: 'right' as const,
     render: Changes
   },
   {
-    title: 'Common',
+    title: 'Общее',
     dataIndex: 'common',
     width: 300,
     align: 'right' as const,

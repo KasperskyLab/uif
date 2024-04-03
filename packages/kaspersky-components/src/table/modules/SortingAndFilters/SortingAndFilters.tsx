@@ -5,19 +5,21 @@ import React, {
   useRef
 } from 'react'
 import { ColumnType } from 'antd/lib/table'
+import { useUpdateEffect } from '@helpers/useUpdateEffect'
+import { isColumnReadonly } from '../../helpers/common'
+import { TableCustomColumn } from '../../types'
 import { TableModule } from '../index'
 import { defaultSortFunction } from './defaultSortFunction'
 import { DropdownColumnTitle } from './DropdownColumnTitle'
-import { saveFilters, loadFilters } from '.'
-import { useUpdateEffect } from '../../../../helpers/useUpdateEffect'
-import { isColumnReadonly } from '@src/table/helpers'
+import { saveFilters, loadFilters } from './'
+import { useInitTableSorters } from '@src/table/modules/hooks/useInitTableSorters'
 
 export type Filter = {
   name: string,
   filter: (arg0: any) => boolean
 }
 
-export type Column = ColumnType<Record<string, unknown>> & {
+export type Column = ColumnType<Record<string, any>[]> & {
   title: string | React.ReactElement,
   dataIndex: string,
   isSortable?: boolean,
@@ -66,16 +68,17 @@ export const SortingAndFilters: TableModule = Component => ({
     return <Component {...props} columns={columns} dataSource={dataSource} />
   }
 
-  type PreparedDataSetter = Record<string, unknown>[] | ((oldState: Record<string, unknown>[]) => Record<string, unknown>[])
+  type PreparedDataSetter = Record<string, any>[] | ((oldState: Record<string, any>[]) => Record<string, any>[])
   type ActiveFilterSetter = ActiveFilter | ((oldState: ActiveFilter) => ActiveFilter)
 
   let initialFilters: ActiveFilter = props.initialFilters || EMPTY_OBJ
   const initialSorting: ActiveSorting = props.initialSorting || EMPTY_OBJ
 
-  const [preparedData, setPreparedData]: [Record<string, unknown>[], (val: PreparedDataSetter) => void] = useState(dataSource)
+  const [preparedData, setPreparedData]: [Record<string, any>[], (val: PreparedDataSetter) => void] = useState(dataSource as Record<string, any>[])
   const [activeFilters, setActiveFilters]: [ActiveFilter, (val: ActiveFilterSetter) => void] = useState(initialFilters)
   const [activeOriginalFilters, setActiveOriginalFilters] = useState<unknown[]>([])
   const [activeSorting, setActiveSorting] = useState<ActiveSorting>(initialSorting as ActiveSorting)
+  const { columnsSortersConfig } = useInitTableSorters({ columns })
 
   const processColumn = (column: any) : Column => {
     if (!(column.isSortable || column.filters) || isColumnReadonly(column)) {
@@ -174,7 +177,7 @@ export const SortingAndFilters: TableModule = Component => ({
     const shouldFilter = Object.keys(activeFilters).length > 0
     const shouldSort = 'field' in (sortingWithExternal) && !isDefaultSortDisabled
 
-    let preparedData = dataSource
+    let preparedData: Record<string, any>[] = (dataSource as Record<string, any>[])
 
     if (shouldFilter) {
       preparedData = preparedData.filter((row) => {
@@ -189,12 +192,20 @@ export const SortingAndFilters: TableModule = Component => ({
 
     if (shouldSort) {
       const field = sortingWithExternal.columnId || sortingWithExternal.field
-      const sortWithNestedItems = (data: Record<string, unknown>[]) => {
-        const sortedData = defaultSortFunction(
+
+      const sortWithNestedItems = (data: Record<string, any>[]) => {
+        if (!field) {
+          return data
+        }
+
+        const sortFunction = columnsSortersConfig.get(field) || defaultSortFunction
+
+        const sortedData = sortFunction(
           data,
           field as string,
           sortingWithExternal.direction === 'asc'
         )
+
         sortedData.forEach(item => {
           if (item._hasChildren) {
             item.children = sortWithNestedItems(item.children)
@@ -203,7 +214,7 @@ export const SortingAndFilters: TableModule = Component => ({
         return sortedData
       }
 
-      preparedData = sortWithNestedItems(preparedData)
+      preparedData = sortWithNestedItems(preparedData as Record<string, any>[])
     }
 
     setPreparedData(preparedData)
@@ -216,6 +227,6 @@ export const SortingAndFilters: TableModule = Component => ({
   return <Component
     {...props}
     dataSource={preparedData}
-    columns={processedColumns}
+    columns={(processedColumns as TableCustomColumn[])}
   />
 }

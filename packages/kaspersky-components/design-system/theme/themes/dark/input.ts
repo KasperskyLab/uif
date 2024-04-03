@@ -3,8 +3,8 @@ import {
   input as defaultInput,
   inputSize as defaultInputSize
 } from '../light/input'
+import { InputColorConfig, InputSizeConfig } from '@src/input/types'
 
-export const input = ({ colors }: ComponentThemeContext) =>
-  defaultInput({ colors })
+export const input = ({ colors }: ComponentThemeContext): InputColorConfig => defaultInput({ colors })
 
-export const inputSize = defaultInputSize
+export const inputSize: InputSizeConfig = defaultInputSize

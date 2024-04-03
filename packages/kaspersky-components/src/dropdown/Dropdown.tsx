@@ -1,94 +1,68 @@
-import { useMemo, createContext, useContext } from 'react'
-import * as React from 'react'
-import styled from 'styled-components'
-
-import {
-  DividerProps,
-  Dropdown as AntDropdown,
-  Menu,
-  MenuItemProps,
-  MenuProps,
-  SubMenuProps
-} from 'antd'
-
-import { selectDropdownCss, itemStylesCss } from './selectDropdownCss'
+import React, { FC, useCallback } from 'react'
+import { Dropdown as AntDropdown, Menu, MenuProps, SubMenuProps } from 'antd'
+import { useMappedContent } from './useMappedContent'
 import { useThemedDropdown } from './useThemedDropdown'
-import { DropdownCssConfig, IDropdownProps } from './types'
+import { WithGlobalStyles } from '@helpers/hocs/WithGlobalStyles'
+import { DropdownProps, DropdownVariants, DropdownViewProps } from './types'
+import { DropdownItem } from './DropdownItem'
+import { getDropdownCss, StyledDivider } from './dropdownCss'
+import cn from 'classnames'
+import { WithGlobalComponentStyles } from '@helpers/hocs/WithGlobalComponentStyles'
+import { DividerProps } from '@src/divider/types'
 
-const StyledMenu = styled(Menu as any).withConfig({
-  shouldForwardProp: (prop) => !['cssConfig'].includes(prop as string)
-})`
-  ${selectDropdownCss}
-`
+export const Dropdown: FC<DropdownProps> & DropdownVariants = (rawProps: DropdownProps) => {
+  const props = useThemedDropdown(rawProps)
+  return <DropdownView {...props} />
+}
 
-const StyledItem = styled(Menu.Item as any).withConfig({
-  shouldForwardProp: (prop) => !['cssConfig'].includes(prop as string)
-})`
-  ${itemStylesCss}
-`
-
-const StyledSubMenu = styled(Menu.SubMenu).withConfig({
-  shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
-})`
-  ${itemStylesCss}
-`
-
-const DropdownContext = createContext<{ cssConfig: DropdownCssConfig | null }>({
-  cssConfig: null
-})
-
-const Container = styled.div`
-  position: relative;
-`
-
-export const Dropdown = ({
-  overlay,
-  klId,
-  shouldUsePortal = true,
+const DropdownViewComponent: FC<DropdownViewProps> = ({
+  onVisibleChange,
+  overlayClassName,
+  rootHashClass,
   ...rest
-}: IDropdownProps) => {
-  const { cssConfig, ...restThemedProps } = useThemedDropdown({ ...rest })
+}: DropdownViewProps) => {
+  const newOverlayClassName = cn(overlayClassName, rootHashClass, 'kl6-dropdown-popup')
+  const props = useMappedContent({ ...rest, overlayClassName: newOverlayClassName })
 
-  const content = useMemo(
-    () =>
-      !Array.isArray(overlay) ? (
-        overlay
-      ) : (
-        <StyledMenu cssConfig={cssConfig} kl-id={klId}>
-          {overlay.map((itemProps, pos) => (
-            <Menu.Item key={pos} {...itemProps} />
-          ))}
-        </StyledMenu>
-      ),
-    [overlay, cssConfig]
-  )
-
-  return (
-    <DropdownContext.Provider value={{ cssConfig }}>
-      <Container>
-        <AntDropdown
-          overlay={content}
-          getPopupContainer={shouldUsePortal ? undefined : (triggerNode) => triggerNode.parentNode as HTMLElement}
-          {...restThemedProps}
-        />
-      </Container>
-    </DropdownContext.Provider>
-  )
+  const focusOnFirstItem = useCallback(() => {
+    setTimeout(() => {
+      const elementFoFocus = document.querySelector('.ant-dropdown:not(.ant-dropdown-hidden) li')?.firstChild as HTMLElement
+      elementFoFocus?.focus?.()
+    }, 0)
+  }, [])
+  const newOnVisibleChange = useCallback((opened: boolean) => {
+    focusOnFirstItem()
+    onVisibleChange?.(opened)
+  }, [onVisibleChange, focusOnFirstItem])
+  return <AntDropdown {...props} onVisibleChange={newOnVisibleChange} />
 }
 
-Dropdown.Menu = (props: MenuProps) => {
-  const { cssConfig } = useContext(DropdownContext)
-  if (!cssConfig) return null
-  return <StyledMenu {...props} cssConfig={cssConfig} />
-}
-Dropdown.SubMenu = (props: SubMenuProps) => {
-  const { cssConfig } = useContext(DropdownContext)
-  if (!cssConfig) return null
-  return <StyledSubMenu {...props} cssConfig={cssConfig} />
-}
-Dropdown.MenuItem = (props: MenuItemProps) => {
-  const { cssConfig } = useContext(DropdownContext)
-  if (!cssConfig) return null
-  return <StyledItem {...props} cssConfig={cssConfig} />
-}
-Dropdown.MenuDivider = StyledMenu.Divider as React.FC<DividerProps>
+DropdownViewComponent.displayName = 'DropdownView'
+
+const DropdownView = WithGlobalComponentStyles(
+  WithGlobalStyles(DropdownViewComponent),
+  (cssConfig, rootHashClass) => getDropdownCss(cssConfig, rootHashClass).join('')
+)
+
+export const DropdownMenu: FC<MenuProps> = (props: MenuProps) => <Menu {...props} />
+
+export const DropdownSubmenu: FC<SubMenuProps> = ({ className, ...rest }: SubMenuProps) => (
+  <Menu.SubMenu popupClassName={className} {...rest} />
+)
+
+export const DropdownGroup: FC = (props) => <li {...props} className="kl6-dropdown-group-title" />
+
+export const DropdownDivider: FC<DividerProps> = (props) => <StyledDivider {...props} />
+
+Dropdown.Menu = DropdownMenu
+Dropdown.SubMenu = DropdownSubmenu
+Dropdown.MenuItem = DropdownItem
+Dropdown.MenuDivider = DropdownDivider
+Dropdown.GroupTitle = DropdownGroup
+
+Dropdown.displayName = 'Dropdown'
+Dropdown.Menu.displayName = 'Dropdown.Menu'
+Dropdown.SubMenu.displayName = 'Dropdown.SubMenu'
+Dropdown.MenuItem.displayName = 'Dropdown.MenuItem'
+Dropdown.MenuDivider.displayName = 'Dropdown.MenuDivider'
+Dropdown.GroupTitle.displayName = 'Dropdown.GroupTitle'

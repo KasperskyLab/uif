@@ -1,0 +1,37 @@
+# @kaspersky/icons
+
+**Библиотека иконок имеет две основные реализации:**
+- *со стороны Design System:* svg пак иконок в [Figma](https://www.figma.com/file/sFYnrrW2tEOurX8rL2OCki/Icons?type=design&mode=design&t=SLAwY6QlYlkBdfPc-0). Обновлением иконок в Figma и поддержкой пака иконок в актуальном состоянии занимается команда дизайнеров DRO.
+- *со стороны UI Kit:* npm пакет содержащий все иконки из дизайн системы. Поддержкой npm пакета иконок @kaspersky/icons занимается команда разработки UIF.
+- [StoryBook](https://kasperskylab.github.io/uif/icons/)
+
+## Установка
+``` js
+npm install @kaspersky/icons
+yarn add @kaspersky/icons
+
+```## Важно
+**Не используйте** версии паке **1.5.3** и **1.5.7**
+
+## Использование в проекте
+**Импорт из размера:**
+``` js
+import { AccountIdentity } from '@kaspersky/icons/24'
+import { AccountIdentity, Like } from '@kaspersky/icons/24'
+```
+**Импорт обекта иконок одного размера для обращения к иконке по key крайне не желателен:**
+В последствии эта функция будет отключена, не используйте её, она делает невозможным treeShaking.
+Вместо передачи ключа иконки через цепочку пропов, передавайте React компонент и используете его в конечной точке.
+``` js
+// ToDo: Я так делать не буду и помечу что так сделал, что бы потом поправили
+import Icons24 from '@kaspersky/icons/24'
+```
+
+
+**Пример использования всех вышепредставленных импортов:**
+``` js
+`<AccountIdentity />`
+`<AccountIdentity color="red" />`
+`<AccountIdentity data-testid="test-icon" />`
+`<Icons24.AccountIdentity" />`
+```

@@ -1,77 +1,86 @@
-import React, { ComponentProps, MouseEventHandler, ReactNode } from 'react' // eslint-disable-line @typescript-eslint/no-unused-vars
-import { ThemeKey } from '../../design-system/types'
-import { Modal as AntdModal } from 'antd'
+import { MouseEventHandler, ReactNode } from 'react'
+import { Theme } from '@design-system/types'
+import { ModalProps as AntdModalProps } from 'antd'
+import { ButtonModeActual as ButtonMode } from '@src/button/types'
+import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 
-export type ModalMode = 'default' | 'warning' | 'error'
+type CustomButtons = {
+  text: string,
+  disabled?: boolean,
+  mode?: ButtonMode,
+  loading?: boolean,
+  iconBefore?: ReactNode,
+  iconAfter?: ReactNode,
+  onClick: () => void,
+  id?: string,
+  className?: string
+} & TestingProps
+
 type ActionType = {
-  readonly text?: string,
-  readonly onClick?: MouseEventHandler<HTMLElement> | undefined
-}
+  text?: string,
+  mode?: ButtonMode,
+  loading?: boolean,
+  disabled?: boolean,
+  iconBefore?: ReactNode,
+  iconAfter?: ReactNode,
+  onClick?: MouseEventHandler<HTMLElement> | undefined,
+  className?: string
+} & TestingProps
 
 export enum ActionsMap {
   FIRST_ACTION = 'firstAction',
-  SECOND_ACTION = 'secondAction'
+  SECOND_ACTION = 'secondAction',
+  THIRD_ACTION = 'thirdAction'
 }
 
 type ActionConfig = Partial<Record<keyof typeof ActionsMap, ActionType>>
 
-type StateProps = {
-  color?: string,
-  borderColor?: string
-};
-
-export type ModalCommonModeCssProps = {
-  background?: string,
-  closeIconColor?: string,
-  closeIconColorHover?: string,
-  borderColor?: string,
-  textColor?: string
-};
-
 export type ModalColorConfig = {
-  mode: {
-    normal: StateProps
-  }
-};
-
-export type ModalCssConfig = ModalColorConfig & ModalCommonModeCssProps;
-
-export interface ModalProps extends Omit<ComponentProps<typeof AntdModal>, 'title' | 'className' | 'okText' | 'cancelText' | 'maskClosable' | 'footer' | 'type' | 'onOk' | 'okButtonProps'> {
-  /**
-   * component unique id
-   */
-  readonly componentId: string,
-  /**
-   * component theme
-   */
-  readonly theme?: ThemeKey,
-  /**
-   * header
-   */
-  readonly header?: ReactNode,
-  /**
-   * Variants
-   */
-  readonly mode: ModalMode,
-  /**
-   * is show overlay?
-   */
-  readonly withOverlay?: boolean,
-  /**
-   * Actions set
-   * Use the actions prop to let users act on the content in the modal.
-   */
-  readonly actions?: ActionConfig,
-  /**
-   * without default mode icon
-   */
-  readonly noIcon?: boolean,
-  /**
- * width
- */
-  readonly width?: string | number,
-  /**
-   * content
-   */
-  readonly content?: ReactNode
+  background?: string,
+  borderColor?: string,
+  color?: string,
+  boxShadow?: string,
+  maskBackground?: string,
+  modeBorderColor: string
 }
+
+export type ModalSizeConfig = {
+  width?: string,
+  top?: string
+}
+
+export type ModalCssConfig = ModalColorConfig & ModalSizeConfig
+
+export type ModalMode = 'default' | 'warning' | 'error' | 'success'
+
+export type ModalSize = 'small' | 'large'
+
+export type ModalThemeProps = {
+  /** Custom theme */
+  theme?: Theme,
+  /** Color mode */
+  mode: ModalMode,
+  /** Size */
+  size?: ModalSize
+}
+
+type AntdModalPropsToOmit = 'title' | 'className' | 'okText' | 'cancelText' | 'maskClosable' | 'footer' | 'type' | 'onOk' | 'okButtonProps' | 'cancelButtonProps' | 'mask' | 'keyboard'
+
+export type ModalProps = Omit<AntdModalProps, AntdModalPropsToOmit> & {
+  /** Header */
+  header?: ReactNode,
+  /** Content */
+  content?: ReactNode,
+  /** @deprecated The modal always has the overlay */
+  withOverlay?: boolean,
+  /** Actions set, use the actions prop to let users act on the content in the modal */
+  actions?: ActionConfig,
+  /** @deprecated In any mode except the default mode the modal has icon */
+  noIcon?: boolean,
+  /** Width */
+  width?: string | number,
+  /** More buttons for modal, need for backward compatibility with console Confirmation Popup */
+  customButtons?: CustomButtons[]
+} & ModalThemeProps & TestingProps
+
+export type ModalViewProps = ToViewProps<ModalProps, ModalCssConfig, Omit<ModalThemeProps, 'mode'>>

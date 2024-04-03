@@ -1,93 +1,68 @@
 import React from 'react'
-import { Story, Meta } from '@storybook/react'
-import { badges } from '../../../.storybook/badges'
-import { StoryLayout } from '../../../.storybook/StoryComponents'
-import { useTheme } from '../../../design-system/theme/hooks'
-import { themeColors } from '../../../design-system/tokens'
-import { withMeta } from '../../../helpers/hocs/MetaComponent/withMeta'
-import { Space } from '../../space'
-import Severity from '../Severity'
+import { Meta, StoryObj } from '@storybook/react'
+import { badges } from '@sb/badges'
+import { themeColors } from '@design-system/tokens'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import { sbHideControls, sbSetDefaultValue } from '@helpers/storybookHelpers'
+import { Space } from '@src/space'
+import { Severity } from '../Severity'
 import { SeverityDocs } from './SeverityDocs'
 import MetaData from '../__meta__/meta.json'
 import { SeverityProps } from '../types'
 
-export default {
+const meta: Meta<SeverityProps> = {
   title: 'Atoms/Severity',
   component: Severity,
+  argTypes: {
+    ...sbHideControls(['theme', 'icon'])
+  },
+  args: {
+    testId: 'severity-test-id',
+    klId: 'severity-kl-id'
+  },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
     docs: {
       page: withMeta(MetaData, SeverityDocs)
     }
   }
-} as Meta
-
-export const Default: Story<SeverityProps> = (args) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Space size={4} direction="horizontal">
-        {Object.keys(themeColors.criticalitystatuses)
-          .map((status) =>
-            <Severity {...args} icon={args.icon} mode={status as SeverityProps['mode']}>{status}</Severity>)}
-      </Space>
-    </StoryLayout>
-  )
 }
+export default meta
 
-Default.argTypes = {
-  mode: {
-    options: Object.keys(themeColors.criticalitystatuses),
-    control: false
-  }
-}
-Default.parameters = {
-  controls: {
-    exclude: ['theme', 'backgroundColor', 'children']
+type Story = StoryObj<SeverityProps>
+
+export const Basic: Story = {
+  render: (args: SeverityProps) => (
+    <Space size={4} direction="horizontal">
+      {Object.keys(themeColors.criticalitystatuses)
+        .map((status, i) =>
+          <Severity {...args} key={i} icon={args.icon} mode={status as SeverityProps['mode']}>{status}</Severity>)}
+    </Space>
+  ),
+  argTypes: {
+    mode: {
+      options: Object.keys(themeColors.criticalitystatuses),
+      control: false
+    }
   }
 }
 
-export const L18n: Story<SeverityProps> = (args) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Space size={4} direction="horizontal">
-        <Severity {...args}/>
-      </Space>
-    </StoryLayout>
-  )
-}
-
-L18n.argTypes = {
-  mode: {
-    options: Object.keys(themeColors.criticalitystatuses),
-    defaultValue: 'positive'
-  }
-}
-L18n.parameters = {
-  controls: {
-    exclude: ['theme', 'backgroundColor', 'children']
+export const L18n: Story = {
+  argTypes: {
+    mode: {
+      options: Object.keys(themeColors.criticalitystatuses),
+      ...sbSetDefaultValue('positive')
+    }
   }
 }
 
-export const Interactive: Story<SeverityProps> = (args) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Space size={4} direction="horizontal">
-        <Severity {...args}>Severity</Severity>
-      </Space>
-    </StoryLayout>
-  )
-}
-
-Interactive.argTypes = {
-  mode: {
-    options: Object.keys(themeColors.criticalitystatuses)
-  }
-}
-Interactive.parameters = {
-  controls: {
-    exclude: ['theme', 'backgroundColor']
+export const Interactive: Story = {
+  args: {
+    children: 'Severity'
+  },
+  argTypes: {
+    mode: {
+      options: Object.keys(themeColors.criticalitystatuses)
+    }
   }
 }

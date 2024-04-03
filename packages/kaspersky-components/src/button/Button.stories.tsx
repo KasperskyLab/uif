@@ -1,111 +1,184 @@
 import React from 'react'
+import { Meta, StoryObj } from '@storybook/react'
 import styled from 'styled-components'
-import { badges } from '../../.storybook/badges'
+import { badges } from '@sb/badges'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import { sbSetDefaultValue, sbHideControl, sbHideControls } from '@helpers/storybookHelpers'
+import { Size } from '@design-system/types'
 import { Button } from './Button'
-import { ButtonMode, ButtonSize, IButtonProps } from './types'
-import { withMeta } from '../../helpers/hocs/MetaComponent/withMeta'
-import { Icon } from '../icon'
-import Meta from './meta.json'
-import { Size } from '../../design-system/types'
+import { Placeholder } from '@kaspersky/icons/16'
+import { ButtonModeActual, ButtonProps, ButtonSize } from './types'
+import MetaData from './meta.json'
 
-export default {
-  title: 'Atoms/Button',
-  component: Button,
-  parameters: {
-    badges: [badges.stable, badges.needsDesignReview],
-    docs: {
-      page: withMeta(Meta)
-    }
-  }
-}
-
-const defaultText = 'Button'
-
-const ButtonTemplate = ({
-  text = defaultText,
-  ...rest
-}: IButtonProps) => {
-  return (
-    <Button text={text} {...rest} />
-  )
-}
-
-export const Basic = ButtonTemplate.bind({})
-
-const ButtonWithIconTemplate = ({
-  text = defaultText,
-  ...rest
-}: IButtonProps) => {
-  return (<>
-      <Button text={text} icon={<Icon name="Add" size="small" />} {...rest} />
-      <br />
-      <Button icon={<Icon name="Add" size="small" />} {...rest} />
-    </>
-  )
-}
-
-export const WithCustomIcon = ButtonWithIconTemplate.bind({})
-
-const ButtonLoadingAnimationTemplate = ({
-  text = defaultText,
-  ...rest
-}: IButtonProps) => {
-  return (
-    <>
-      <Button text={text} loading {...rest} />
-    </>
-  )
-}
-
-export const ButtonLoadingAnimation = ButtonLoadingAnimationTemplate.bind({})
+// default values
+const defaultIcon = <Placeholder klId='button-icon' />
+const defaultSizes: Size[] = [
+  Size.Small, Size.Medium,
+  Size.Large, Size.ExtraLarge
+]
+const defaultModes: ButtonModeActual[] = [
+  'primary', 'secondary', 'tertiary',
+  'dangerOutlined', 'dangerFilled'
+]
 
 const ButtonContainer = styled.div`
   display: flex;
   gap: 12px;
 `
 
-const ButtonSizesTemplate = (props: IButtonProps) => {
-  const sizes: ButtonSize[] = [Size.Small, Size.Medium, Size.Large, Size.ExtraLarge]
+// meta
+const meta: Meta<ButtonProps> = {
+  title: 'Atoms/Button',
+  component: Button,
+  argTypes: {
+    size: {
+      options: defaultSizes,
+      control: { type: 'select' }
+    },
+    mode: {
+      options: defaultModes
+    },
+    loading: {
+      // should be used when there is no possibility to set
+      // default value for specific prop in Component or ComponentView
+      ...sbSetDefaultValue('false')
+    },
+    disabled: {
+      ...sbSetDefaultValue('false')
+    },
+    // shortcut to hide a single control
+    klId: sbHideControl,
+    // shortcut to hide multiple controls
+    ...sbHideControls(['iconBefore', 'iconAfter', 'icon', 'onClick', 'theme'])
+  },
+  args: {
+    text: 'Button',
+    size: Size.Medium,
+    mode: 'primary',
+    disabled: false,
+    loading: false,
+    type: 'button',
+    testId: 'button-test-id',
+    klId: 'button-kl-id'
+  },
+  parameters: {
+    badges: [badges.stable, badges.reviewedByDesign],
+    docs: {
+      page: withMeta(MetaData)
+    },
+    design: MetaData.figmaView
+  }
+}
+export default meta
 
-  return (
+type Story = StoryObj<ButtonProps>
+
+// Basic
+export const Basic: Story = {}
+// equals to:
+// export const Basic: Story = (args: ButtonProps) => {
+//   return <Button {...args}/>
+// }
+
+// WithCustomIcon
+export const WithCustomIcon = {
+  render: ({
+    text,
+    iconBefore,
+    iconAfter,
+    ...rest
+  }: ButtonProps) => (
     <ButtonContainer>
-      {sizes.map((size) => (
-        <Button text={size} size={size} {...props} />
+      <Button {...rest}
+              text={text}
+              iconBefore={iconBefore}
+              iconAfter={iconAfter}
+      />
+      <Button {...rest}
+              text={text}
+              iconBefore={iconBefore}
+      />
+      <Button {...rest}
+              text={text}
+              iconAfter={iconAfter}
+      />
+      <Button {...rest}
+              text={text}
+      />
+      <Button {...rest}
+              iconBefore={iconBefore}
+      />
+    </ButtonContainer>
+  ),
+  args: {
+    iconBefore: defaultIcon,
+    iconAfter: defaultIcon
+  }
+}
+
+// Button Loading
+export const ButtonLoading: Story = {
+  render: ({
+    text,
+    iconBefore,
+    ...rest
+  }: ButtonProps) => (
+    <ButtonContainer>
+      <Button
+        {...rest}
+        text={text}
+      />
+      <Button
+        {...rest}
+        iconBefore={iconBefore}
+      />
+    </ButtonContainer>
+  ),
+  args: {
+    loading: true,
+    iconBefore: defaultIcon
+  }
+}
+
+// Button Sizes
+export const ButtonSizes: Story = {
+  render: (args: ButtonProps) => (
+    <ButtonContainer>
+      {defaultSizes.map((size) => (
+        <Button
+          key={size}
+          {...args}
+          text={size}
+          size={size as ButtonSize}
+        />
       ))}
     </ButtonContainer>
   )
 }
 
-export const ButtonSizes = ButtonSizesTemplate.bind({})
-
-const ButtonModesTemplate = (props: IButtonProps) => {
-  const modes: ButtonMode[] = ['primaryBlue', 'primaryBlack', 'secondary', 'tertiary', 'danger', 'invertedPrimary', 'invertedSecondary', 'invertedTertiary']
-
-  return (
+// Button modes
+export const ButtonModes: Story = {
+  render: (args: ButtonProps) => (
     <ButtonContainer>
-      {modes.map(mode => (
-        <Button text={mode} mode={mode} {...props} />
+      {defaultModes.map(mode => (
+        <Button
+          key={mode}
+          {...args}
+          text={mode}
+          mode={mode}
+        />
       ))}
     </ButtonContainer>
   )
 }
 
-export const ButtonModes = ButtonModesTemplate.bind({})
-
-const ButtonGroupTemplate = ({
-  text,
-  ...rest
-}: IButtonProps) => {
-  return (
+// Button group
+export const ButtonGroup: Story = {
+  render: (args: ButtonProps) => (
     <Button.Group>
-      <Button
-        text='First' {...rest} />
-      <Button
-        text='Second' {...rest} />
-      <Button
-        text='Third' {...rest} />
+      <Button {...args} text='First'/>
+      <Button {...args} text='Second'/>
+      <Button {...args} text='Third'/>
     </Button.Group>
   )
 }
-
-export const ButtonGroup = ButtonGroupTemplate.bind({})

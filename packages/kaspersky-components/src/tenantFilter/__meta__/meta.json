@@ -9,7 +9,7 @@
     "storybook": true
   },
   "component": "TenantFilter",
-  "desctiption": "Composite component. Includes Label, Search, Tree, Button",
-  "usage": "The TenantFilter component is designed to filter data by tenants. `runtime.trigger('interface.tenant-filter.toggle', params)` - call from NWC codes. `runtime.app.features.tenantFilter.openTenantFilter(params)` - call from plugins. `params: {treeData, defaultCheckedKeys, handler}`",
+  "description": "Составной компонент. Включает в себя Label, Search, Tree, Button",
+  "usage": "Компонент TenantFilter предназначен для фильтрации данных по тенантам. `runtime.trigger('interface.tenant-filter.toggle', params)` - вызов из кодов NWC. `runtime.app.features.tenantFilter.openTenantFilter(params)` - вызов из плагинов. `params: {treeData, defaultCheckedKeys, handler}`",
   "designLink": "https://www.figma.com/file/o7vdftt3lbgQBw5gPB6ufz/IRP-On-prem-(xDR)?node-id=18211-307102&t=Lr8TrsREnLuSETHG-0"
 }

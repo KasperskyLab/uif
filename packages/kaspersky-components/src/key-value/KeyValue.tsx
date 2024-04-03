@@ -1,102 +1,106 @@
-import React, { useMemo } from 'react'
-import styled from 'styled-components'
-import { SPACES } from '../../design-system/theme/themes/variables'
+import React, { FC } from 'react'
+import { v4 as uuidv4 } from 'uuid'
+import { SPACES } from '@design-system/theme/themes/variables'
+import { KeyValueComponent, KeyValueWrapper, Key, Value } from './KeyValueCss'
+import { KeyValuePair, KeyValueProps, KeyValueViewProps, KeyWithIconProps } from './types'
+import { useThemedKeyValue } from './useThemedKeyValue'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { Icon } from '../icon'
 import { Space } from '../space'
-import {
-  Key,
-  Value,
-  KeyValueComponent,
-  keysContainerCss,
-  valuesContainerCss
-} from './KeyValueCss'
-import {
-  KeyContainerStyledProps,
-  KeyValuePair,
-  KeyValueProps,
-  KeyValueStyledProps,
-  KeyWithIconProps,
-  ValueContainerStyledProps
-} from './types'
-import { useThemedKeyValue } from './useThemedKeyValue'
+import { Button } from '@src/button'
+import { FormLabel } from '@src/form-label'
+import { Textbox } from '@src/input'
 
-const KeysContainer = styled.div.withConfig<KeyContainerStyledProps>({
-  shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
-})`
-  ${keysContainerCss}
-`
-const ValuesContainer = styled.div.withConfig<ValueContainerStyledProps>({
-  shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
-})`
-  ${valuesContainerCss}
-`
-export const KeyWithIcon: React.FC<KeyWithIconProps> = (rawProps) => {
-  const props = useThemedKeyValue(rawProps)
-  const { icon, children, cssConfig } = props
-  return (
-    <Space size={SPACES[4]} direction='horizontal' width='max-content'>
-      <Icon name={icon} size='small' color={cssConfig.normal.iconColor} />
-      {children}
-    </Space>
-  )
-}
-
-export const KeyValue = (rawProps: KeyValueProps) => {
-  const props = useThemedKeyValue(rawProps)
+export const KeyValue: FC<KeyValueProps> = (rawProps: KeyValueProps) => {
+  const themedProps = useThemedKeyValue(rawProps)
+  const props = useTestAttribute(themedProps)
   return <KeyValueView {...props} />
 }
 
-const KeyValueView: React.FC<KeyValueStyledProps> = ({
-  data,
-  rowHeight = SPACES[20],
-  padding = SPACES[15],
-  keysMargin = SPACES[6],
-  wrapperClasses = {},
-  cssConfig,
-  componentId
-}) => {
-  const keys = data.map((pair: KeyValuePair, i: number) => {
-    const { pairKey } = pair
-    return (
-      <Key
-        key={i}
-        rowHeight={rowHeight}
-        className={wrapperClasses.keyClassName}
-        cssConfig={cssConfig}
-      >
-        {pairKey instanceof String ? <span>{pairKey}</span> : pairKey}
-      </Key>
-    )
-  })
-  const values = data.map((pair: KeyValuePair, i: number) => {
-    const { pairValue } = pair
+export const KeyValueView: FC<KeyValueViewProps> = (props) => {
+  const {
+    data,
+    padding = SPACES[7],
+    wrapperClasses = {},
+    cssConfig,
+    labelPosition = 'aside',
+    gridLayout,
+    keysMargin = 16,
+    keyRequired = false,
+    keyMode = 'secondary',
+    keyTooltip,
+    testAttributes
+  } = props
 
-    return (
-      <Value
-        key={i}
-        rowHeight={rowHeight}
-        className={wrapperClasses.valueClassName}
-        cssConfig={cssConfig}
-      >
-        {pairValue instanceof String
-          ? (
-            <span>{pairValue}</span>
-            )
-          : (
-              pairValue
-            )}
-      </Value>
+  const getVerticalOffset = (node: React.ReactNode): number => (
+    React.isValidElement(node) && (
+      node?.type === Button ||
+      node?.type === Textbox ||
+      node?.type === Textbox.Textarea
     )
-  })
-
-  const keyValueHeight = useMemo(() => rowHeight * keys.length + padding, [rowHeight, padding])
+      ? 6
+      : 0
+  )
 
   return (
-    <KeyValueComponent data-component-id={componentId} style={{ height: `${keyValueHeight}px` }}>
-      <KeysContainer margin={keysMargin} cssConfig={cssConfig}>
-        {keys}
-      </KeysContainer>
-      <ValuesContainer cssConfig={cssConfig}>{values}</ValuesContainer>
+    <KeyValueComponent
+      {...testAttributes}
+      padding={padding}
+      gridLayout={gridLayout}
+    >
+      {data?.map((pair: KeyValuePair) => {
+        const uid: string = uuidv4()
+        return (
+          <KeyValueWrapper key={uid} labelPosition={labelPosition} gridLayout={gridLayout} >
+            <Key
+              gridLayout={Boolean(gridLayout)}
+              className={wrapperClasses.keyClassName}
+              cssConfig={cssConfig}
+              labelPosition={labelPosition}
+              keysMargin={keysMargin}
+              verticalOffset={getVerticalOffset(pair.pairValue)}
+            >
+              <FormLabel
+                required={keyRequired}
+                mode={keyMode}
+                tooltip={keyTooltip}
+              >
+                {pair.pairKey}
+              </FormLabel>
+            </Key>
+            <Value
+              className={wrapperClasses.valueClassName}
+              cssConfig={cssConfig}
+            >
+              {pair.pairValue instanceof String
+                ? <span>{pair.pairValue}</span>
+                : pair.pairValue
+              }
+            </Value>
+          </KeyValueWrapper>
+        )
+      })}
     </KeyValueComponent>
+  )
+}
+
+/** @deprecated Not present in design system */
+export const KeyWithIcon: FC<KeyWithIconProps> = ({
+  icon,
+  children,
+  ...rest
+}: KeyWithIconProps) => {
+  const props = useThemedKeyValue(rest)
+  const { cssConfig } = props
+
+  return (
+    <Space size={SPACES[4]} direction="horizontal" width="max-content">
+      <Icon
+        name={icon || 'Info'}
+        size="small"
+        color={cssConfig.normal.keyColor}
+      />
+      {children}
+    </Space>
   )
 }

@@ -1,21 +1,11 @@
 import { css } from 'styled-components'
-import { InputCssConfig, ITextboxProps } from './types'
-import { getFromProps } from '../../helpers/getFromProps'
+import { InputCssConfig, TextboxViewProps } from './types'
+import { getFromProps } from '@helpers/getFromProps'
+import { getTextSizes, MonoTextTypes, TextSizes } from '@design-system/tokens'
 
 const fromProps = getFromProps<InputCssConfig>()
 
-const inputFontStyles = css`
-  font-family: ${fromProps('fontFamily')};
-  font-size: ${fromProps('fontSize')};
-  line-height: ${fromProps('lineHeight')};
-  font-weight: ${fromProps('fontWeight')};
-  font-style: ${fromProps('fontStyle')};
-  letter-spacing: ${fromProps('letterSpacing')};
-`
-
-export const inputAddonStyles = css<
-  ITextboxProps & { cssConfig: InputCssConfig }
->`
+export const inputAddonStyles = css<TextboxViewProps>`
   ${({ addonAfter }) => {
     return addonAfter
       ? `
@@ -52,7 +42,7 @@ export const inputAddonStyles = css<
         }
       
         & .ant-input {
-          border-color: ${fromProps('normal.outline')};
+          border-color: ${fromProps('normal.borderColor')};
           border-radius: ${fromProps('borderRadius')};
         }
       `
@@ -61,182 +51,226 @@ export const inputAddonStyles = css<
 `
 
 export const inputStyles = css`
-  &,
-  &.ant-input-affix-wrapper {
+  &&& {
     height: ${fromProps('height')};
     padding: ${fromProps('padding')};
-    border-radius: ${fromProps('borderRadius')};
-    color: ${fromProps('normal.color')};
-    background-color: ${fromProps('normal.background')};
-    border: 1px solid ${fromProps('normal.outline')};
     outline: unset;
     width: 100%;
-  
-    &[readonly],
-    &.ant-input-number-readonly,
-    &.ant-input-affix-wrapper-readonly,
-    &[disabled],
-    &.ant-input-affix-wrapper-disabled,
-    &.ant-input-number-disabled {
+
+    // font styles
+    &, & input {
+      font-family: ${fromProps('fontFamily')};
+      font-size: ${fromProps('fontSize')};
+      line-height: ${fromProps('lineHeight')};
+      font-weight: ${fromProps('fontWeight')};
+      font-style: ${fromProps('fontStyle')};
+      letter-spacing: ${fromProps('letterSpacing')};
+      color: ${fromProps('normal.color')};
+      background-color: ${fromProps('normal.background')};
+
+      ::placeholder {
+        color: ${fromProps('normal.placeholderColor')};
+      }
+    }
+
+    // normal
+    border-radius: ${fromProps('borderRadius')};
+    background-color: ${fromProps('normal.background')};
+    border: 1px solid ${fromProps('normal.borderColor')};
+    box-shadow: unset;
+
+    // hover
+    &:hover {
+      border-color: ${fromProps('hover.borderColor')};
+    }
+
+    // active & focus
+    &:focus-within {
+      box-shadow: ${fromProps('focus.boxShadow')};
+      border-color: ${fromProps('normal.borderColor')};
+    }
+
+    // invalid & valid
+    &:not(.kl-disabled):not(.kl-readonly) {
+      &, &:hover, &:active, &:focus-within {
+        &.invalid {
+          box-shadow: none;
+          border-color: ${fromProps('invalid.borderColor')};
+        }
+
+        &.valid {
+          box-shadow: none;
+          border-color: ${fromProps('valid.borderColor')};
+        }
+      }
+    }
+
+    // disabled & readonly
+    &.kl6-textbox-disabled, &.kl6-textbox-readonly {
       background-color: ${fromProps('disabled.background')};
       color: ${fromProps('disabled.color')};
-      border-color: ${fromProps('disabled.outline')};
+      border-color: ${fromProps('disabled.borderColor')};
+
+      &:hover {
+        border-color: ${fromProps('disabled.borderColor')};
+      }
+
       svg {
         color: ${fromProps('disabled.color')};
       }
-      &:hover {
-        border-color: ${fromProps('disabled.outline')};
+
+      &, & input {
+        color: ${fromProps('disabled.color')};
+
+        ::placeholder {
+          color: ${fromProps('disabled.color')};
+        }
       }
     }
-  
-    &[readonly],
-    &.ant-input-number-readonly,
-    &.ant-input-affix-wrapper-readonly {
-      &,
-      &.ant-input:focus,
-      &.ant-input-focused,
-      &.ant-input-number:focus,
-      &.ant-input-number-focused,
-      & :focus {
-        color: ${fromProps('readonly.color')};
-        border-color: ${fromProps('readonly.outline')};
+
+    &.kl6-textbox-readonly {
+      color: ${fromProps('readonly.color')};
+
+      &:focus-within {
         box-shadow: none;
       }
-      .ant-input {
-        background-color: transparent;
+
+      &, & input {
+        color: ${fromProps('readonly.color')};
+
+        &::placeholder {
+          color: ${fromProps('readonly.color')};
+        }
       }
     }
-  
-    &:hover {
-      border: 1px solid ${fromProps('hover.outline')};
-    }
-  
-    &.ant-input:focus,
-    &.ant-input-focused,
-    &.ant-input-number:focus,
-    &.ant-input-number-focused,
-    &.ant-input-affix-wrapper-focused:not(.ant-input-affix-wrapper-readonly),
-    &:focus {
-      border: 1px solid ${fromProps('focus.outline')};
-      box-shadow: 0 0 0 2px ${fromProps('focus.outline')};
-    }
-  
+
+    // other
     & .ant-input-group-addon {
       padding: 0;
     }
+
     & .ant-input-group-wrapper {
       border-radius: ${fromProps('borderRadius')} !important;
     }
-  
-    &.error,
-    &.error {
-      &,
-      &.ant-input:focus,
-      &.ant-input-focused,
-      &.ant-input-number:focus,
-      &.ant-input-number-focused,
-      &:focus {
-        border: 1px solid ${fromProps('negative.outline')};
-      }
-    }
-  
-    &.positive,
-    &.positive {
-      &,
-      &.ant-input:focus,
-      &.ant-input-focused,
-      &.ant-input-number:focus,
-      &.ant-input-number-focused,
-      &:focus {
-        border: 1px solid ${fromProps('positive.outline')};
-      }
-    }
-  
-    &,
-    & input {
-      ${inputFontStyles};
-    }
-  
-    &:not([readonly]):not(.ant-input-number-readonly):not(.ant-input-affix-wrapper-readonly):not([disabled]):not(.ant-input-affix-wrapper-disabled):not(.ant-input-number-disabled) {
-      &,
-      & input {
-        background: ${fromProps('normal.background')};
-        color: ${fromProps('normal.color')};
-        &::placeholder,
-        &::-webkit-input-placeholder {
-          color: ${fromProps('normal.placeholderColor')};
-        }
-        &::-ms-input-placeholder {
-          color: ${fromProps('normal.placeholderColor')};
-        }
-      }
-    }
-  
+
+    // Fix Autocomplete Styles in WebKit Browsers
+    // https://css-tricks.com/snippets/css/change-autocomplete-styles-webkit-browsers/
     & {
-      // Fix Autocomplete Styles in WebKit Browsers
-      // https://css-tricks.com/snippets/css/change-autocomplete-styles-webkit-browsers/
       --autofill-color: ${fromProps('normal.color')};
       --autifill-bg-color: ${fromProps('normal.background')};
+
       [readonly],
       :disabled {
         --autofill-color: ${fromProps('disabled.color')};
         --autifill-bg-color: ${fromProps('disabled.background')};
       }
+
       :-webkit-autofill,
       :-webkit-autofill:hover,
       :-webkit-autofill:focus {
         -webkit-text-fill-color: var(--autofill-color);
         caret-color: var(--autofill-color);
-  
+
         -webkit-box-shadow: 0 0 0 1000px var(--autifill-bg-color) inset !important;
         box-shadow: 0 0 0 1000px var(--autifill-bg-color) inset !important;
         transition: background-color 5000s ease-in-out 0s;
       }
     }
-  
-    &.ant-input-password > .ant-input-suffix > span {
-      color: ${fromProps('normal.outline')};
-      &:hover {
-        color: ${fromProps('hover.outline')};
-      }
-    }
   }
 `
 
-export const numberInputStyles = css`
+const inputPasswordFont: TextSizes = getTextSizes(MonoTextTypes.MTR3)
+export const inputPasswordStyles = css`
+  && input, && input::placeholder {
+    font-family: ${inputPasswordFont.fontFamily};
+    font-size: ${inputPasswordFont.fontSize};
+    line-height: ${inputPasswordFont.lineHeight};
+    font-weight: ${inputPasswordFont.fontWeight};
+    font-style: ${inputPasswordFont.fontStyle};
+    letter-spacing: ${inputPasswordFont.letterSpacing};
+  }
+  && input {
+    color: ${fromProps('normal.color')};
+  }
+  svg {
+    color: ${fromProps('normal.color')};
+  }
+  &.kl-disabled .ant-input-password-icon {
+    cursor: not-allowed !important;
+  }
+`
+
+export const inputNumberStyles = css`
   .ant-input-number-input {
     padding: unset;
     height: unset;
   }
-
-  & .ant-input-number-handler-wrap {
+  
+  .ant-input-number-handler-wrap {
     opacity: 1;
+    display: block;
+    background: transparent;
+    margin-right: 12px;
+    width: max-content;
     border: none;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: ${fromProps('borderRadius')};
-    border-bottom-right-radius: ${fromProps('borderRadius')};
-
-    &:hover .ant-input-number-handler {
-      height: 50%;
-    }
-  }
-
-  & .ant-input-number-handler-down {
-    border-top: none;
+    
     &:hover {
-      height: 50% !important;
+      .ant-input-number-handler {
+        height: 50% !important;
+      }
+    }
+    
+    .ant-input-number-handler {
+      border: none;
+      color: ${fromProps('normal.color')};
+      
+      &:active {
+        background: transparent;
+      }
+    }
+  }
+  
+  &.kl-disabled, &.kl-readonly {
+    .ant-input-number-handler {
+      cursor: not-allowed;
+      color: ${fromProps('disabled.color')};
+    }
+  } 
+`
+
+export const inputTextareaStyles = css`
+  border: none;
+  padding: 0;
+  :focus {
+    box-shadow: none;
+  }
+`
+
+export const inputTextareaContainerStyles = css`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  
+  textarea {
+    padding: 6px 12px;
+  }
+
+  &.kl6-textbox-textarea-has-counter {
+    textarea {
+      padding-bottom: 26px; 
     }
   }
 
-  & .ant-input-number-handler-up:hover {
-    height: 50% !important;
+  .kl6-textbox-textarea-counter {
+    width: calc(100% - 20px);
+    position: absolute;
+    bottom: 1px;
+    left: 1px;
+    border-radius: 8px;
+    padding-top: 4px;
+    padding-bottom: 5px;
+    padding-left: 11px;
+    background-color: ${fromProps('normal.background')};
   }
-
-  .ant-input-number-handler:hover .ant-input-number-handler-up-inner,
-  .ant-input-number-handler:hover .ant-input-number-handler-down-inner {
-    color: ${fromProps('hover.outline')};
-  }
-
-  ${inputStyles}
 `

@@ -5,6 +5,7 @@ gulpfile.js
 .npmignore
 .babelrc
 CHANGELOG.md
+todo.txt
 jest.config.js
 yarn-error.log
 __tests__/

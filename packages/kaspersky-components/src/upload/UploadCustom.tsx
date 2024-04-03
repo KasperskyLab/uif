@@ -7,12 +7,11 @@ import { UploadDraggerProps } from './types'
 import { StyledFileUploader, Column, Row, Wrapper, StretchHelper, UploadText, UploadHeading } from './Wrappers'
 import { convertFileSize } from './convertFileSize'
 import { useTranslation } from 'react-i18next'
-import { Size } from '../../design-system/types'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
 const UploadView: React.VFC<UploadDraggerProps> = (props) => {
   const { t } = useTranslation()
   const {
-    componentId,
     width,
     status = 'none',
     disabled,
@@ -36,8 +35,9 @@ const UploadView: React.VFC<UploadDraggerProps> = (props) => {
     ...rest
   } = props
   const config = useUploaderColors()
+  const { testAttributes } = useTestAttribute(props)
   return (
-    <StretchHelper width={width} data-component-id={componentId}>
+    <StretchHelper width={width} {...testAttributes}>
       <StyledFileUploader
         disabled={disabled}
         showUploadList={false}
@@ -78,7 +78,7 @@ const UploadView: React.VFC<UploadDraggerProps> = (props) => {
           pending: (
             <Wrapper>
               <Row>
-                <Loader size={Size.Large} />
+                <Loader size={'large'} />
                 <Column>
                   <UploadHeading
                     className='upload-text-primary'
@@ -100,7 +100,7 @@ const UploadView: React.VFC<UploadDraggerProps> = (props) => {
               </Row>
               <Row>
                 <Row>{loadingButtons && loadingButtons.map((props, pos) =>
-                  <Button key={pos} {...props} text={t(props.text as string)} disabled={disabled} />)}</Row>
+                  <Button key={pos} {...props} text={t(props.text as string) as string} disabled={disabled} />)}</Row>
               </Row>
             </Wrapper>
           ),
@@ -128,7 +128,7 @@ const UploadView: React.VFC<UploadDraggerProps> = (props) => {
               </Column>
               <Column>
                 <Row>{ errorButtons && errorButtons.map((props, pos) =>
-                  <Button key={pos} {...props} text={t(props.text as string)} disabled={disabled} />)}</Row>
+                  <Button key={pos} {...props} text={t(props.text as string) as string} disabled={disabled} />)}</Row>
               </Column>
             </Wrapper>
           ),
@@ -156,7 +156,7 @@ const UploadView: React.VFC<UploadDraggerProps> = (props) => {
               </Column>
               <Column>
                 <Row>{ successButtons && successButtons.map((props, pos) =>
-                  <Button key={pos} {...props} text={t(props.text as string)} disabled={disabled} />)}</Row>
+                  <Button key={pos} {...props} text={t(props.text as string) as string} disabled={disabled} />)}</Row>
               </Column>
             </Wrapper>
           ),
@@ -186,7 +186,7 @@ const UploadView: React.VFC<UploadDraggerProps> = (props) => {
               </Row>
               <Column>
                 <Row>{ fileButtons && fileButtons.map((props, pos) =>
-                  <Button key={pos} {...props} text={t(props.text as string)} disabled={disabled} />)}</Row>
+                  <Button key={pos} {...props} text={t(props.text as string) as string} disabled={disabled} />)}</Row>
               </Column>
             </Wrapper>
           )

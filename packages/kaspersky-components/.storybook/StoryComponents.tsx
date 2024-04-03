@@ -1,33 +1,25 @@
 import { HTMLAttributes } from 'react'
 import * as React from 'react'
 import styled from 'styled-components'
-import { GlobalStyle } from '../design-system/global-style'
-import { Theme, ThemeKey } from '../design-system/types'
-import { useTheme } from '../design-system/theme/hooks'
+import { GlobalStyle } from '@design-system/global-style'
+import { Theme, ThemeKey } from '@design-system/types'
+import { useTheme } from '@design-system/theme'
+import { StoryLayoutContainer } from '@sb/decorators/withThemeProvider'
 
-const GlobalStyleProxy: any = GlobalStyle
-const Container = styled.div<HTMLAttributes<HTMLDivElement>>(
-  (props: { theme: ThemeKey }) => ({
-    display: 'flex',
-    gap: '10px',
-    flexWrap: 'wrap',
-    padding: '1.5rem',
-    background: props.theme === ThemeKey.Light ? '#FFFFFF' : '#0D0D15',
-    '& > div > h3': {
-      color: props.theme !== ThemeKey.Light ? '#FFFFFF' : '#0D0D15'
-    }
-  })
-)
 
+/**
+ * @deprecated Story is wrapped by StoryLayout by default.
+ * Go to '.storybook/decorators to see details'
+*/
 export const StoryLayout: React.FC<
-  HTMLAttributes<HTMLDivElement> & { theme?: ThemeKey | Theme }
+  HTMLAttributes<HTMLDivElement> & { theme?: ThemeKey | Theme, inverted?: boolean }
 > = (props) => {
 
   const theme = useTheme()
   return (
     <>
-      <GlobalStyleProxy />
-      <Container theme={props.theme || theme.key} {...props} />
+      <GlobalStyle />
+      <StoryLayoutContainer theme={props.theme || theme.key} {...props} />
     </>
   )
 }

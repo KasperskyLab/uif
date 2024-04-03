@@ -6,10 +6,13 @@
       "screenshotTests": false,
       "migration": true,
       "apiTable": true,
-      "storybook": true
+      "storybook": true,
+      "designLink": true,
+      "figmaView": true
     },
     "component": "Input",
-    "desctiption": "Text input field. It has various modifications. Based on [Input](https://ant.design/components/input/) from the Antd library",
-    "usage": "It can be used for labeling by dimension or property as well as categorization.",
-    "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1063%3A4210"
+    "description": "Поле текстового ввода. Имеет различные модификации. Основано на [Input](https://ant.design/components/input/) из библиотеки Antd",
+    "usage": "Предполагается использование внутри Field. Textbox можно использовать для маркировки по измерению или свойству а так же при категоризации.",
+    "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1063%3A4210",
+    "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F01-%255BB2B%255D-Hexa-UI-Components%3Ftype%3Ddesign%26node-id%3D53702%253A192722%26mode%3Ddev"
   }

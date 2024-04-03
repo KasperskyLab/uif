@@ -11,352 +11,107 @@ import userEvent from '@testing-library/user-event'
 
 describe('Notification', () => {
   const componentId = 'notification-test-id'
+  const notificationProps: NotificationProps = {
+    id: componentId,
+    duration: 10,
+    description: 'notification text',
+    mode: 'success'
+  }
+
+  function Wrapper (rawProps: Partial<NotificationProps>) {
+    const props: NotificationProps = {
+      ...notificationProps,
+      ...rawProps
+    }
+
+    return (
+      <ConfigProvider theme={ThemeKey.Light}>
+        <Notification id={props.id} />
+        <Button
+          klId="button"
+          onClick={() => openNotification(props)}
+        >
+          Open the notification box
+        </Button>
+      </ConfigProvider>
+    )
+  }
 
   afterEach(() => {
     notificationDestroy()
   })
 
-  test('should recieve componentId prop', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification
-          id={componentId}
-          componentId={componentId}
-          mode="infoAccent"
-        />
-      </ConfigProvider>
-    )
-    const notification = container.querySelector(
-      `[data-component-id="${componentId}"]`
-    )
-    expect(notification).toBeInTheDocument()
+  test('should render container', () => {
+    const { container } = render(<Wrapper />)
+
+    expect(container.querySelector(`[id="${componentId}"]`)).toBeInTheDocument()
   })
 
-  test('should render the info notification component', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification id={componentId} componentId={componentId} mode="info" />
-      </ConfigProvider>
-    )
-    const notification = container.querySelector(
-      `[data-component-id="${componentId}"]`
-    )
-    expect(notification).toBeInTheDocument()
+  test('should render error', async () => {
+    const { container } = render(<Wrapper mode="error" />)
+    const notification = container.querySelector(`[id="${notificationProps.id}"]`) as HTMLElement
+    const button = container.querySelector('[kl-id="button"]')!
+
+    await userEvent.click(button)
+
+    expect(notification.querySelector('[data-component-id="icon-error"]')).toBeInTheDocument()
   })
 
-  test('should render the infoAccent notification component', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification
-          id={componentId}
-          componentId={componentId}
-          mode="infoAccent"
-        />
-      </ConfigProvider>
-    )
-    const notification = container.querySelector(
-      `[data-component-id="${componentId}"]`
-    )
-    expect(notification).toBeInTheDocument()
+  test('should render warning', async () => {
+    const { container } = render(<Wrapper mode="warning" />)
+    const notification = container.querySelector(`[id="${notificationProps.id}"]`) as HTMLElement
+    const button = container.querySelector('[kl-id="button"]')!
+
+    await userEvent.click(button)
+
+    expect(notification.querySelector('[data-component-id="icon-warning"]')).toBeInTheDocument()
   })
 
-  test('should render the success notification component', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification
-          id={componentId}
-          componentId={componentId}
-          mode="success"
-        />
-      </ConfigProvider>
-    )
-    const notification = container.querySelector(
-      `[data-component-id="${componentId}"]`
-    )
-    expect(notification).toBeInTheDocument()
+  test('should render success', async () => {
+    const { container } = render(<Wrapper mode="success" />)
+    const notification = container.querySelector(`[id="${notificationProps.id}"]`) as HTMLElement
+    const button = container.querySelector('[kl-id="button"]')!
+
+    await userEvent.click(button)
+
+    expect(notification.querySelector('[data-component-id="icon-success"]')).toBeInTheDocument()
   })
 
-  test('should render the error notification component', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification id={componentId} componentId={componentId} mode="error" />
-      </ConfigProvider>
-    )
-    const notification = container.querySelector(
-      `[data-component-id="${componentId}"]`
-    )
-    expect(notification).toBeInTheDocument()
+  test('should render info', async () => {
+    const { container } = render(<Wrapper mode="info" />)
+    const notification = container.querySelector(`[id="${notificationProps.id}"]`)!
+    const button = container.querySelector('[kl-id="button"]')!
+
+    await userEvent.click(button)
+
+    expect(notification.querySelector('[data-component-id="icon-info"]')).toBeInTheDocument()
   })
 
-  test('should render the description', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification
-          id={componentId}
-          componentId={componentId}
-          mode="error"
-          description="some text"
-        />
-      </ConfigProvider>
-    )
+  test('should render without close icon', () => {
+    const { container } = render(<Wrapper mode="success" noIcon />)
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const notification = container.querySelector(
-      `[data-component-id="${componentId}"]`
-    )!
-
-    const descriprion = notification.getAttribute('description')
-    expect(descriprion).toEqual('some text')
-  })
-
-  test('should render without antd prop title', async () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification
-          id={componentId}
-          componentId={componentId}
-          mode="error"
-          description="some text"
-        />
-      </ConfigProvider>
-    )
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const notification = container.querySelector(
-      `[data-component-id="${componentId}"]`
-    )!
-
-    const title = notification.getAttribute('title')
-    expect(title).not.toBeInTheDocument()
-  })
-
-  test('should render with icon / info', async () => {
-    const notificationProps: NotificationProps = {
-      id: 'notify-1',
-      componentId: 'component-notify-1',
-      mode: 'info',
-      delay: 10,
-      description: 'notificationText'
-    }
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification {...notificationProps} />
-        <Button
-          klId="button"
-          onClick={() => openNotification(notificationProps)}
-        >
-          {' '}
-          Open the notification box
-        </Button>
-      </ConfigProvider>
-    )
-    const notification = container.querySelector(
-      '[data-component-id="' + notificationProps.componentId + '"]'
-    ) as HTMLElement
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const buttonElement = await container.querySelector('[kl-id="button"]')!
-    await userEvent.click(buttonElement)
-    expect(await notification).toBeInTheDocument()
-
-    const icon = notification.querySelector(
-      '[data-component-id="icon-info"]'
-    ) as HTMLElement
-    expect(icon).toBeInTheDocument()
-  })
-
-  test('should render with icon / info-accent', async () => {
-    const notificationProps: NotificationProps = {
-      id: 'notify-1',
-      componentId: 'component-notify-1',
-      mode: 'infoAccent',
-      delay: 10,
-      description: 'notificationText'
-    }
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification {...notificationProps} />
-        <Button
-          klId="button"
-          onClick={() => openNotification(notificationProps)}
-        >
-          {' '}
-          Open the notification box
-        </Button>
-      </ConfigProvider>
-    )
-    const notification = container.querySelector(
-      '[data-component-id="' + notificationProps.componentId + '"]'
-    ) as HTMLElement
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const buttonElement = await container.querySelector('[kl-id="button"]')!
-    await userEvent.click(buttonElement)
-    expect(await notification).toBeInTheDocument()
-
-    const icon = notification.querySelector(
-      '[data-component-id="icon-info-accent"]'
-    ) as HTMLElement
-    expect(icon).toBeInTheDocument()
-  })
-
-  test('should render with icon / success', async () => {
-    const notificationProps: NotificationProps = {
-      id: 'notify-1',
-      componentId: 'component-notify-1',
-      mode: 'success',
-      delay: 10,
-      description: 'notificationText'
-    }
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification {...notificationProps} />
-        <Button
-          klId="button"
-          onClick={() => openNotification(notificationProps)}
-        >
-          {' '}
-          Open the notification box
-        </Button>
-      </ConfigProvider>
-    )
-    const notification = container.querySelector(
-      '[data-component-id="' + notificationProps.componentId + '"]'
-    ) as HTMLElement
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const buttonElement = await container.querySelector('[kl-id="button"]')!
-    await userEvent.click(buttonElement)
-    expect(await notification).toBeInTheDocument()
-
-    const icon = notification.querySelector(
-      '[data-component-id="icon-success"]'
-    ) as HTMLElement
-    expect(icon).toBeInTheDocument()
-  })
-
-  test('should render with icon / error', async () => {
-    const notificationProps: NotificationProps = {
-      id: 'notify-1',
-      componentId: 'component-notify-1',
-      mode: 'error',
-      delay: 10,
-      description: 'notificationText'
-    }
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification {...notificationProps} />
-        <Button
-          klId="button"
-          onClick={() => openNotification(notificationProps)}
-        >
-          {' '}
-          Open the notification box
-        </Button>
-      </ConfigProvider>
-    )
-    const notification = container.querySelector(
-      '[data-component-id="' + notificationProps.componentId + '"]'
-    ) as HTMLElement
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const buttonElement = await container.querySelector('[kl-id="button"]')!
-    await userEvent.click(buttonElement)
-    expect(await notification).toBeInTheDocument()
-
-    const icon = notification.querySelector(
-      '[data-component-id="icon-error"]'
-    ) as HTMLElement
-    expect(icon).toBeInTheDocument()
-  })
-
-  test('should render without icon', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification
-          id={componentId}
-          componentId={componentId}
-          mode="success"
-          description="some text"
-          noIcon
-        />
-      </ConfigProvider>
-    )
-
-    const icon = container.querySelector(
-      '[data-component-id="icon-success"]'
-    ) as HTMLElement
+    const icon = container.querySelector('.ant-notification-notice-icon') as HTMLElement
     expect(icon).not.toBeInTheDocument()
   })
 
-  test('should render after call notification service', async () => {
-    const notificationProps: NotificationProps = {
-      id: 'notify-1',
-      componentId: 'component-notify-1',
-      mode: 'error',
-      delay: 10,
-      description: 'notificationText'
-    }
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification {...notificationProps} />
-        <Button
-          klId="button"
-          onClick={() => openNotification(notificationProps)}
-        >
-          {' '}
-          Open the notification box
-        </Button>
-      </ConfigProvider>
-    )
-    expect(
-      await container.querySelector('.ant-notification-notice')
-    ).not.toBeInTheDocument()
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const buttonElement = await container.querySelector('[kl-id="button"]')!
-    await userEvent.click(buttonElement)
-    expect(
-      await container.querySelector('.ant-notification-notice')
-    ).toBeInTheDocument()
+  test('should render a notification after calling the notification service', async () => {
+    const { container } = render(<Wrapper mode="error" />)
+    expect(container.querySelector('.ant-notification-notice')).not.toBeInTheDocument()
+    const button = container.querySelector('[kl-id="button"]')!
+
+    await userEvent.click(button)
+
+    expect(container.querySelector('.ant-notification-notice')).toBeInTheDocument()
+    expect(container.querySelector('.ant-notification-notice-close')).toBeInTheDocument()
   })
 
-  test('notification should close after click to close icon', async () => {
-    const notificationProps: NotificationProps = {
-      id: 'notify-1',
-      componentId: 'component-notify-1',
-      mode: 'error',
-      delay: 10,
-      description: 'notificationText'
-    }
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light}>
-        <Notification {...notificationProps} />
-        <Button
-          klId="button"
-          onClick={() => openNotification(notificationProps)}
-        >
-          {' '}
-          Open the notification box
-        </Button>
-      </ConfigProvider>
-    )
-    expect(
-      await container.querySelector('.ant-notification-notice')
-    ).not.toBeInTheDocument()
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const buttonElement = await container.querySelector('[kl-id="button"]')!
-    await userEvent.click(buttonElement)
+  test('should remove notification after click on the close icon', async () => {
+    const { container } = render(<Wrapper mode="error" />)
+    const button = container.querySelector('[kl-id="button"]')!
 
-    expect(
-      await container.querySelector('.ant-notification-notice')
-    ).toBeInTheDocument()
+    await userEvent.click(button)
+    await userEvent.click(container.querySelector('.ant-notification-notice-close')!)
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const btnClose = container.querySelector('.ant-notification-notice-close')!
-    expect(await btnClose).toBeInTheDocument()
-    await userEvent.click(btnClose)
-    expect(
-      await container.querySelector('.ant-notification-notice')
-    ).not.toBeInTheDocument()
+    expect(container.querySelector('.ant-notification-notice')).not.toBeInTheDocument()
   })
 })

@@ -1,19 +1,19 @@
-import { Meta } from '@storybook/addon-docs';
+import { Meta } from '@storybook/blocks'
 
-<Meta title="Docs/Installation and initialization" />
+<Meta title="Docs/Установка и инициализация" />
 
-# Installation and initialization
+# Установка и инициализация
 
-## Package installation
+## Установка пакета
 ```
 npm i @kaspersky/components
 ```
-Or if you use yarn 
+Or if you use yarn
 ```
 yarn add @kaspersky/components
 ```
 
-## Add global styles
+## Добавление глобальных стилей
 
 ```
 // provide theme color to css vars
@@ -26,50 +26,147 @@ import '@kaspersky/components/design-system/global-style/styles.css';
 const AppRoot = () => (
   <>
     <GlobalStyle />
-    <div>...</div>
+    <Layout />
   </>
 );
 
 ReactDOM.render(<AppRoot />, document.getElementById('app'));
 ```
 
-## Add ConfigProvider
+## Импорт компонента
+```
+import React from 'react'
 
-ConfigProvider is an unios of ThemeProvider and LocalizationProvider.
-Accepts theme and locale as props
+import { Button } from '@kaspersky/components'
+
+const Layout = () => {
+  return (
+    <Button
+      text='Click me!'
+      mode='secondary'
+      size='large'
+    />
+  )
+}
+```
+
+## Providers
+
+### ThemeProvider
+ThemeProvider принимает проп `theme` и позволяет в дальнейшем взаимодействовать с темами приложения.
+```
+import React, { useState } from 'react'
+
+import { Button } from '@kaspersky/components'
+
+import { ThemeProvider } from '@kaspersky/components/design-system/theme'
+import { ThemeKey } from '@kaspersky/components/design-system/types'
+
+const Layout = () => {
+  const [theme, setTheme] = useState<ThemeKey>(ThemeKey.light)
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Button
+        text='Click me!'
+        mode='secondary'
+        size='large'
+      />
+    </ThemeProvider>
+  )
+}
+```
+
+### LocalizationProvider
+LocalizationProvider принимает проп `locale` (язык) и `i18n` (объект i18n). Позволяет в дальнейшем взаимодействовать с
+системой локализационных ключей.
+```
+import React, { useState } from 'react'
+
+import { Button } from '@kaspersky/components'
+
+import { ThemeProvider } from '@kaspersky/components/design-system/theme'
+import { LocalizationProvider } from '@kaspersky/components/design-system/context'
+import i18n from '@kaspersky/components/helpers/localization/i18n'
+
+import { ThemeKey } from '@kaspersky/components/design-system/types'
+import { LangType } from '@kaspersky/components/helpers/localization/types'
+
+const Layout = () => {
+  const [theme, setTheme] = useState<ThemeKey>(ThemeKey.light)
+  const [locale, setLocale] = useState<LangType>('en-us')
+
+  return (
+    <LocalizationProvider locale={locale} i18n={i18n}>
+      <ThemeProvider theme={theme}>
+        <Button
+          text='Click me!'
+          mode='secondary'
+          size='large'
+        />
+      </ThemeProvider>
+    </LocalizationProvider>
+  )
+}
+```
+
+### ConfigProvider
+ConfigProvider является интеграцией ThemeProvider и LocalizationProvider.
+В качестве пропов принимает `theme` и `locale`.
 
 ```
 import React, { useState, useCallback, useEffect } from 'react'
+
+import { Button } from '@kaspersky/components'
+
 import { ConfigProvider } from '@kaspersky/components/design-system/context'
+
 import { ThemeKey } from '@kaspersky/components/design-system/types'
 import { LangType } from '@kaspersky/components/helpers/localization/types'
 
 const Layout = () => {
   const [theme, setTheme] = useState<ThemeKey>(ThemeKey.Light)
-  const [locale, setLocale] = useState<LangType>('en')
-
-  const onKeyDown = useCallback((e) => {
-    // custom shortcut
-    if (e.keyCode === 88 && e.ctrlKey && e.shiftKey) {
-      if (theme === ThemeKey.Light) {
-        setTheme(ThemeKey.Dark)
-        setLocale('ru')
-      } else {
-        setTheme(ThemeKey.Light)
-        setLocale('en')
-      }
-    }
-  }, [theme])
-
-  useEffect(() => {
-    document.addEventListener('keydown', onKeyDown)
-  }, [onKeyDown])
+  const [locale, setLocale] = useState<LangType>('en-us')
 
   return (
     <ConfigProvider theme={theme} locale={locale}>
-      <div>...</div>
+      <Button
+        text='Click me!'
+        mode='secondary'
+        size='large'
+      />
     </ConfigProvider>
   )
 }
+```
 
+## Переключение темы и локализации
+```
+import React, { useState, useCallback, useEffect } from 'react'
+
+import { Button } from '@kaspersky/components'
+
+import { ConfigProvider } from '@kaspersky/components/design-system/context'
+
+import { ThemeKey } from '@kaspersky/components/design-system/types'
+import { LangType } from '@kaspersky/components/helpers/localization/types'
+
+const Layout = () => {
+  const [theme, setTheme] = useState<ThemeKey>(ThemeKey.Light)
+  const [locale, setLocale] = useState<LangType>('en-us')
+
+  const setLight = useCallback(() => setTheme('light'), [])
+  const setDark = useCallback(() => setTheme('dark'), [])
+  const setEn = useCallback(() => setLocale('en-us'), [])
+  const setRu = useCallback(() => setLocale('ru-ru'), [])
+
+  return (
+    <ConfigProvider theme={theme} locale={locale}>
+      <Button text='Set light' onClick={setLight} />
+      <Button text='Set dark' onClick={setDark} />
+      <Button text='Set en' onClick={setEn} />
+      <Button text='Set ru' onClick={setRu} />
+    </ConfigProvider>
+  )
+}
 ```

@@ -1,0 +1,80 @@
+{
+  "translation": {
+    "common": {
+      "empty": "Нет информации"
+    },
+    "upload": {
+      "dropFileTitle": "Перетащить файл сюда",
+      "pasteLinkTitle": "Вставьте ссылку на файл сюда",
+      "helpText": "Вы можете добавить до 6 файлов ZIP и RAR размером до 200 МБ",
+      "placeholder": "плейсхолдер",
+      "addFiles": "Добавить файлы",
+      "cancel": "Отмена",
+      "selectAnotherFile": "Выберите другой файл",
+      "enterNewURL": "Введите новый веб-адрес",
+      "repeat": "Повторить",
+      "loadingTitle": "Загрузка {{value, number}}%",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "Загрузка завершена успешно",
+      "successDescription": "{{file, fileName}} успешно загружен на сервер",
+      "errorTitle": "Ошибка загрузки",
+      "errorDescription": "Не удалось загрузить {{file, fileName}} из-за сбоя соединения"
+    },
+    "severity": {
+      "critical": "Критический",
+      "low": "Низкий",
+      "medium": "Средний",
+      "high": "Высокий",
+      "info": "Информационное сообщение",
+      "positive": "Положительный"
+    },
+    "select": {
+      "empty": "Нет информации"
+    },
+    "pagination": {
+      "total": "Всего {{count}}",
+      "selected": "Выбрано {{count}}",
+      "page": "страница",
+      "goto": "Перейти к"
+    },
+    "search": {
+      "raw": "Поиск",
+      "dotted": "Поиск..."
+    },
+    "table": {
+      "column": {
+        "name": "Первый столбец"
+      },
+      "column2": {
+        "name": "Второй столбец"
+      },
+      "column3": {
+        "name": "Третий столбец"
+      },
+      "columnDropdown": {
+        "ascending": "По возрастанию",
+        "descending": "По убыванию",
+        "sorting": "Сортировать",
+        "filters": "Фильтр",
+        "resetFilters": "Сбросить фильтр"
+      },
+      "columnsSettings": {
+        "header": "Параметры столбцов",
+        "selectAll": "Выделить все",
+        "columns": "Столбцы",
+        "grouping": "Группировка",
+        "clear": "Очистить",
+        "noGrouping": "Без группировки"
+      },
+      "groupingEmpty": "Другое"
+    },
+    "timeInput": {
+      "placeholder": "Выбор времени"
+    },
+    "actionBar": {
+      "unsavedChanges": "Изменения, ожидающие подтверждения",
+      "save": "Сохранить",
+      "cancel": "Отмена"
+    }
+  }
+}

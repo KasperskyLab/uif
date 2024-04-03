@@ -1,18 +1,24 @@
 import React from 'react'
-import { Story } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react'
 import { withKnobs } from '@storybook/addon-knobs'
 import styled from 'styled-components'
-import { Repeater } from '../Repeater'
+import { IRepeaterProps, Repeater } from '../Repeater'
 
 const Wrapper = styled.div`
   width: 700px;
 `
 
-export default {
+type RepeaterPropsStory = Omit<IRepeaterProps, 'component'> & {
+  componentName: keyof typeof components,
+  components?: React.ReactNode
+}
+
+const meta: Meta<IRepeaterProps> = {
   title: 'Unsorted/Repeater',
   component: Repeater,
   decorators: [withKnobs]
 }
+export default meta
 
 interface IExampleComponent {
   name?: string,
@@ -42,19 +48,22 @@ const components = {
   Text: TextComponent
 } as const
 
-export const Basic: Story<{componentName: keyof typeof components}> = ({ componentName }): JSX.Element => {
-  const data = [{ name: 'item 1', className: 'cls1' }, { name: 'item 2', className: 'cls2' }]
-
-  return (
+export const Basic: StoryObj<RepeaterPropsStory> = {
+  render: ({
+    componentName,
+    ...rest
+  }: RepeaterPropsStory) => (
     <Wrapper>
-      <Repeater component={components[componentName]} data={data} />
+      <Repeater {...rest} component={components[componentName]} />
     </Wrapper>
-  )
-}
-
-Basic.argTypes = {
-  componentName: {
-    options: Object.keys(components),
-    control: { type: 'select' }
+  ),
+  args: {
+    data: [{ name: 'item 1', className: 'cls1' }, { name: 'item 2', className: 'cls2' }]
+  },
+  argTypes: {
+    componentName: {
+      options: Object.keys(components),
+      control: { type: 'select' }
+    }
   }
 }

@@ -1,9 +1,9 @@
 import styled from 'styled-components'
-import { ILayoutProps } from '../types'
+import { LayoutProps } from '../types'
 import { layoutBaseCss, singleRowLayoutCss, twoColumnsLayoutCss, defaultLayoutCss } from './layoutsCss'
 
-export const LayoutBase = styled.div.withConfig<ILayoutProps>({
-  shouldForwardProp: prop => ['className', 'kl-id', 'children'].includes(prop)
+export const LayoutBase = styled.div.withConfig<LayoutProps>({
+  shouldForwardProp: prop => ['className', 'data-testid', 'kl-id', 'children', 'data-component-version'].includes(prop)
 })`${layoutBaseCss}`
 
 export const SingleRowLayout = styled(LayoutBase)`${singleRowLayoutCss}`

@@ -1,7 +1,7 @@
 import { css } from 'styled-components'
-import { ILayoutBaseProps } from '../types'
+import { LayoutBaseProps } from '../types'
 
-export const layoutBaseCss = css<ILayoutBaseProps>`
+export const layoutBaseCss = css<LayoutBaseProps>`
   display: grid;
   gap: ${({ gap }) => `${gap}px`};
   row-gap: ${({ rowGap }) => rowGap ? `${rowGap}px` : ''};

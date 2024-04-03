@@ -1,112 +1,94 @@
-import React from 'react'
-import { AlertProps, AlertMode, AlertCssConfig } from '@src/alert/types'
+import React, { useState, FC } from 'react'
+import { AlertProps, AlertMode, AlertViewProps, AlertType } from './types'
 import styled from 'styled-components'
 import { alertCss, IconStyled, SpaceBox } from './alertCss'
-import { useThemedAlert } from './useThemeAlert'
-import {
-  CheckCircleOutlined,
-  WarningOutlined,
-  InfoCircleOutlined
-} from '@ant-design/icons'
-import { Button } from '@src/button'
+import { useThemedAlert } from './useThemedAlert'
+import { StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/icons/16'
 import { Space } from '@src/space'
+import { ActionButton } from '@src/action-button'
 import { Link } from '@src/link'
-import { Text } from '@src/typography/text'
+import cn from 'classnames'
+import { SectionMessage } from '@src/section-message'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
-export const IconMap: { [key in AlertMode]: React.FC } = {
-  info: () => <InfoCircleOutlined data-component-id="icon-info" />,
-  infoAccent: () => <InfoCircleOutlined data-component-id="icon-info-accent" />,
-  success: () => <CheckCircleOutlined data-component-id="icon-success" />,
-  error: () => <InfoCircleOutlined data-component-id="icon-error" />,
-  warning: () => <WarningOutlined data-component-id="icon-warning" />
+const IconMap: { [key in AlertMode]: React.FC } = {
+  error: () => <StatusWarningOutline data-testid="alert-error-icon" data-component-id="icon-error" />,
+  warning: () => <StatusWarningOutline data-testid="alert-warning-icon" data-component-id="icon-warning" />,
+  success: () => <StatusOkOutline data-testid="alert-success-icon" data-component-id="icon-success" />,
+  info: () => <StatusInfoOutline data-testid="alert-info-icon" data-component-id="icon-info" />
 }
 
 const StyledAlert = styled.div.withConfig({
   shouldForwardProp: (prop) =>
-    !['cssConfig', 'noIcon', 'componentId'].includes(prop)
+    !['cssConfig', 'componentId'].includes(prop)
 })`
   ${alertCss}
 `
 
-export const Alert = (rawProps: AlertProps): JSX.Element => {
-  const props = useThemedAlert(rawProps)
-  return <AlertView data-component-id={props.componentId} {...props} />
+export const Alert = (rawProps: AlertProps & {type?: AlertType}): JSX.Element => {
+  const { type, mode, ...notDeprecatedProps } = rawProps
+  let notDeprecatedMode = mode
+  if (type === 'sectionMessage') {
+    // ToDo: move warn to helper @DeprecatedWarn
+    console.warn('Deprecated "type" prop value "sectionMessage" use component SectionMessage instead')
+    return <SectionMessage {...rawProps}></SectionMessage>
+  }
+  if (mode === 'infoAccent') {
+    // ToDo: move warn to helper @DeprecatedWarn
+    console.warn('Deprecated "mode" prop value "infoAccent" use "info" instead')
+    notDeprecatedMode = 'info'
+  }
+
+  const themedProps = useThemedAlert({ ...notDeprecatedProps, mode: notDeprecatedMode })
+  const props = useTestAttribute(themedProps)
+  return <AlertView {...props} />
 }
 
-export const AlertView: React.FC<
-AlertProps & {
-  cssConfig: AlertCssConfig
-}
-> = (props): JSX.Element => {
-  const { mode, noIcon, type, title, children, actions, cssConfig } = props
-  const IconComponent = IconMap[mode]
+const AlertView: FC<AlertViewProps> = (props: AlertViewProps) => {
+  const { mode, closable, children, cssConfig } = props
+  const { actions, testAttributes, ...forwardedProps } = props
+  const [visibility, setVisibility] = useState(true)
+  const IconComponent = IconMap[mode as AlertMode]
+
+  const closeNotification = () => {
+    if (props.onClose) props.onClose()
+    setVisibility(false)
+  }
+
+  if (!visibility) return null
 
   return (
-    <StyledAlert {...props}>
-      {!noIcon && (
-        <IconStyled mode={mode} cssConfig={cssConfig}>
-          <IconComponent />
-        </IconStyled>
-      )}
+    <StyledAlert {...testAttributes} {...forwardedProps}>
+      <IconStyled cssConfig={cssConfig}>
+        <IconComponent/>
+      </IconStyled>
       <SpaceBox
         size={8}
-        direction={type === 'alert' ? 'horizontal' : 'vertical'}
+        direction={'horizontal'}
         align="flex-start"
       >
-        {type !== 'alert' && title && (
-          <Text klId="alert-title" type="BTM2">
-            {title}
-          </Text>
-        )}
-
         <SpaceBox
           size={24}
-          direction={type === 'alert' ? 'horizontal' : 'vertical'}
+          direction={'horizontal'}
           align="flex-start"
         >
           {children}
-
           {actions && (
-            <Space size={8} direction="horizontal">
-              {type === 'sectionMessage' && (
-                <>
-                  {actions.FIRST_ACTION && (
-                    <Button
-                      mode="primaryBlack"
-                      size="medium"
-                      {...actions.FIRST_ACTION}
-                    >
-                      {actions.FIRST_ACTION.text}
-                    </Button>
-                  )}
-                  {actions.SECOND_ACTION && (
-                    <Button
-                      mode="tertiary"
-                      size="medium"
-                      {...actions.SECOND_ACTION}
-                    >
-                      {actions.SECOND_ACTION.text}
-                    </Button>
-                  )}
-                </>
+            <Space size={8} className={cn(closable && 'alert-action-separator')} direction="horizontal">
+              {actions.FIRST_ACTION && (
+                <Link {...actions.FIRST_ACTION}>
+                  {actions.FIRST_ACTION.text}
+                </Link>
               )}
-              {type === 'alert' && (
-                <>
-                  {actions.FIRST_ACTION && (
-                    <Link {...actions.FIRST_ACTION}>
-                      {actions.FIRST_ACTION.text}
-                    </Link>
-                  )}
-                  {actions.SECOND_ACTION && (
-                    <Link {...actions.SECOND_ACTION}>
-                      {actions.SECOND_ACTION.text}
-                    </Link>
-                  )}
-                </>
+              {actions.SECOND_ACTION && (
+                <Link {...actions.SECOND_ACTION}>
+                  {actions.SECOND_ACTION.text}
+                </Link>
               )}
             </Space>
           )}
         </SpaceBox>
+        {closable && <ActionButton size={'large'} onClick={() => closeNotification()}/>}
       </SpaceBox>
     </StyledAlert>
   )

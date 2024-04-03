@@ -6,19 +6,17 @@ export const sidebar = ({ colors }: ComponentThemeContext): SidebarColorConfig =
   normal: {
     drawer: {
       background: colors.background,
-      borderColor: colors.elements.seporator
+      borderColor: colors.elements['separator-bold-solid']
     },
     mask: {
       background: colors.textIconsElements.disabled
-    },
-    icon: {
-      color: colors.textIconsElements.primary
     }
   }
 })
 
 const commonSizes = {
-  padding: `${SPACES[12]}px ${SPACES[6]}px ${SPACES[12]}px ${SPACES[12]}px`,
+  padding: `${SPACES[12]}px`,
+  flexMarginLeft: SPACES[20],
   gap: `${SPACES[8]}px`
 }
 
