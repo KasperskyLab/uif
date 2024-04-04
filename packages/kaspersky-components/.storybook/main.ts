@@ -4,6 +4,7 @@ import { StorybookConfig } from '@storybook/react-webpack5'
 
 const config: StorybookConfig = {
   stories: [
+    '../docs/Intro.stories.mdx',
     '../docs/**/*.stories.@(js|jsx|ts|tsx|mdx)',
     '../docs/*.stories.@(js|jsx|ts|tsx|mdx)',
     '../src/**/*.stories.@(js|jsx|ts|tsx|mdx)'
