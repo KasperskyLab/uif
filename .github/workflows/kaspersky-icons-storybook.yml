@@ -34,7 +34,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: packages/kaspersky-icons/storybook/icons
+          publish_dir: ./packages/kaspersky-icons/storybook/icons
           destination_dir: icons
       # - name: Upload
       #   uses: actions/upload-pages-artifact@v2.0.0
