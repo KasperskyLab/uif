@@ -1,5 +1,5 @@
-import React, { CSSProperties, FC } from 'react'
-
+import React, { CSSProperties, forwardRef } from 'react'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import styled from 'styled-components'
 
 const SpaceContainer = styled.div<SpaceProps>`
@@ -13,26 +13,37 @@ const SpaceContainer = styled.div<SpaceProps>`
   width: ${({ width }) => width || 'inherit'};
 `
 
-export interface SpaceProps {
+export type SpaceProps = {
   [key: string]: any,
+  /** Direction */
   direction?: 'horizontal' | 'vertical',
+  /** Gap between elements */
   size: number,
+  /** Custom class name */
   className?: string,
+  /** Flex wrap */
   wrap?: CSSProperties['flexWrap'],
+  /** Flex align */
   align?: CSSProperties['alignItems'],
+  /** Justify content */
   justify?: CSSProperties['justifyContent'],
+  /** Width */
   width?: string
 }
 
-export const Space: FC<SpaceProps> = ({
+const Space = forwardRef<HTMLDivElement, SpaceProps>(({
   children,
   align = 'center',
   wrap = 'wrap',
-  ...rest
-}) => {
+  ...props
+}, ref) => {
+  const { testAttributes, ...rest } = useTestAttribute(props)
   return (
-    <SpaceContainer align={align} wrap={wrap} {...rest}>
+    <SpaceContainer ref={ref} align={align} wrap={wrap} {...testAttributes} {...rest}>
       {children}
     </SpaceContainer>
   )
-}
+})
+Space.displayName = 'Space'
+
+export { Space }

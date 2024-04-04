@@ -1,76 +1,53 @@
-import styled from 'styled-components'
 import React from 'react'
+import styled from 'styled-components'
+import { Meta, StoryObj } from '@storybook/react'
+import { StoryColumn, StoryWrapper } from '@sb/StoryComponents'
+import { badges } from '@sb/badges'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import MetaData from './__meta__/meta.json'
 import { Divider } from './Divider'
-import { IDividerProps } from './types'
-import Meta from './__meta__/meta.json'
+import { DividerProps } from './types'
 
-import { badges } from '../../.storybook/badges'
-import { withMeta } from '../../helpers/hocs/MetaComponent/withMeta'
-import { StoryColumn, StoryWrapper } from '../../.storybook/StoryComponents'
-
-export default {
+const meta: Meta<DividerProps> = {
   title: 'Atoms/Divider',
   component: Divider,
+  args: {
+    mode: 'normal',
+    direction: 'horizontal',
+    testId: 'divider-test-id',
+    klId: 'divider-kl-id'
+  },
+  argTypes: {
+    ...sbHideControls(['theme', 'margin', 'kind'])
+  },
   parameters: {
-    badges: [badges.stable, badges.needsDesignReview],
+    badges: [badges.stable, badges.reviewedByDesign],
     docs: {
-      page: withMeta(Meta)
-    }
+      page: withMeta(MetaData)
+    },
+    design: MetaData.figmaView
   }
 }
+export default meta
 
-const DummyContentView = styled.div`
+const SomeContent = styled.div`
   width: 50px;
   height: 50px;
-  background: aqua;
+  background: grey;
 `
 
-const DividerTemplate = (props: IDividerProps) => {
-  const Wrapper = props.kind === 'horizontal' ? StoryColumn : StoryWrapper
-  return (
-    <Wrapper>
-      <DummyContentView/>
-      <Divider {...props} />
-      <DummyContentView/>
-      <Divider {...props} />
-      <DummyContentView/>
-    </Wrapper>
-  )
+export const Basic: StoryObj<DividerProps> = {
+  render: (args: DividerProps) => {
+    const Wrapper = args.direction === 'horizontal' ? StoryColumn : StoryWrapper
+    return (
+      <Wrapper>
+        <SomeContent />
+        <Divider {...args} />
+        <SomeContent />
+        <Divider {...args} />
+        <SomeContent />
+      </Wrapper>
+    )
+  }
 }
-
-export const Basic = DividerTemplate.bind({})
-
-const ModesTemplate = (props: IDividerProps) => {
-  const Wrapper = props.kind === 'horizontal' ? StoryColumn : StoryWrapper
-  return (
-    <Wrapper>
-      <DummyContentView/>
-      <Divider mode='normal' {...props} />
-      <DummyContentView/>
-      <Divider mode='light' {...props} />
-      <DummyContentView/>
-      <Divider mode='bold' {...props} />
-      <DummyContentView/>
-    </Wrapper>
-  )
-}
-
-export const Modes = ModesTemplate.bind({})
-
-const VerticalTemplate = ({
-  kind = 'vertical',
-  ...props
-}: IDividerProps) => {
-  const Wrapper = kind === 'horizontal' ? StoryColumn : StoryWrapper
-  return (
-    <Wrapper>
-      <DummyContentView/>
-      <Divider kind={kind} {...props} />
-      <DummyContentView/>
-      <Divider kind={kind} {...props} />
-      <DummyContentView/>
-    </Wrapper>
-  )
-}
-
-export const Vertical = VerticalTemplate.bind({})

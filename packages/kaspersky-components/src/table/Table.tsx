@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { useEffect, useMemo, useRef, useState, FC } from 'react'
 import { Empty, Table as AntTable } from 'antd'
 import styled from 'styled-components'
 import { Loader } from '../loader'
 import { Locale } from '../locale'
 import { rowDraggingContainerCss, scrollableContainerCss, tableCss } from './tableCss'
 import { useTableContext } from './context/TableContext'
-import { ITableProps, ThemedTableProps } from './types'
+import { ITableProps, TableViewProps } from './types'
 import { useTableModules } from './modules'
+import { safeColumns } from './helpers/common'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import * as rowSelectionHelpers from './helpers/row-selection'
 
-const StyledTable = styled(AntTable).withConfig<ThemedTableProps>({
+const StyledTable = styled(AntTable).withConfig<TableViewProps>({
   shouldForwardProp: prop => !['cssConfig'].includes(prop)
 })`
   ${tableCss}
@@ -33,31 +36,68 @@ const EmptyData = () => {
   )
 }
 
-export const Table: React.FC<ITableProps> = props => {
+export const Table: FC<ITableProps> = props => {
   const { cssConfig } = useTableContext()
   const { expandableConfig } = useTableModules(props)
+  const { testAttributes } = useTestAttribute(props)
+  const tableRef = useRef<HTMLTableElement>(null)
+  const [tableWidth, setTableWidth] = useState<number>(0)
 
-  const { loaderProps = { indicator: <Loader /> }, loading, expandable, ...tableProps } = props
+  useEffect(() => {
+    if (tableRef.current) {
+      setTableWidth(tableRef.current.offsetWidth)
+    }
+  }, [])
+
+  const {
+    loaderProps = { indicator: <Loader /> },
+    loading,
+    expandable,
+    emptyText = EmptyData,
+    showSorterTooltip = false,
+    columns: _columns,
+    rowSelection: _rowSelection,
+    klId,
+    testId,
+    ...tableProps
+  } = props
 
   const rowDraggingContainer = tableProps.useDragDrop
     ? <RowDraggingContainer className='row-dragging-container' />
     : ''
+
+  const columns = useMemo(() => {
+    if (props.columns) {
+      return safeColumns(props.columns, tableWidth)
+    }
+  }, [props.columns, tableWidth])
+
+  const rowSelection = useMemo(() => {
+    const { withAdditionalProps } = rowSelectionHelpers
+
+    return withAdditionalProps(props.rowSelection, props.disabled)
+  }, [props.rowSelection, props.disabled])
 
   if (!cssConfig) return null
 
   return <ScrollableContainer
     className='table-scrolling-wrapper'
     resizingMode={tableProps.resizingMode}
+    {...testAttributes}
   >
     <>
       <StyledTable
         {...tableProps}
-        // @ts-ignore
-        expandable={expandableConfig}
-        locale={{ emptyText: <EmptyData /> }}
-        size='small'
-        loading={loading && loaderProps}
+        ref={tableRef}
+        columns={columns}
+        rowSelection={rowSelection}
         cssConfig={cssConfig}
+        expandable={expandableConfig}
+        kl-id={klId}
+        loading={loading && loaderProps}
+        locale={{ emptyText }}
+        showSorterTooltip={showSorterTooltip}
+        size='small'
       />
       {rowDraggingContainer}
     </>

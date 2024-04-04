@@ -1,5 +1,5 @@
 import { ComponentThemeContext } from '../config'
-import { tree as treeUpload, treeSize as treeSizeUpload } from '../light/tree'
+import { TreeColorConfig } from '@src/tree/types'
+import { tree as defaultTree } from '../light/tree'
 
-export const tree = ({ colors }: ComponentThemeContext) => treeUpload({ colors })
-export const treeSize = treeSizeUpload
+export const tree = ({ colors }: ComponentThemeContext): TreeColorConfig => defaultTree({ colors })

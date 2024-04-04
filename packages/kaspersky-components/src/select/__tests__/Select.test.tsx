@@ -1,41 +1,51 @@
 import React from 'react'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-
+import { ConfigProvider } from '@design-system/context'
 import { Button } from '../../button'
+import { Tag } from '../../tag'
 import { Text } from '../../typography'
 import { Select } from '../Select'
-import { ISelectProps } from '../types'
+import { SelectProps } from '../types'
 
 const defaultProps = {
   options: [
-    { label: 'first option', value: 1 },
-    { label: 'second option', value: 2 },
-    { label: 'third option', value: 3 }
+    { label: 'first option', value: '1' },
+    { label: 'second option', value: '2' },
+    { label: 'third option', value: '3' }
   ],
-  defaultValue: 1,
+  defaultValue: ['1'],
   klId: 'test-select',
-  mode: 'multiple' as ISelectProps['mode'],
-  open: true
+  mode: 'multiple' as SelectProps['mode'],
+  open: true,
+  testId: 'test-id'
 }
 
 const getFirstOption = (container: HTMLElement) => container.querySelector('.ant-select-item')
 
-const waitForDropdown = async () => {
-  await waitFor(() => screen.getByTestId('dropdown-menu'))
+const waitForDropdown = async (klId = defaultProps.klId) => {
+  const dropdownKlId = `${klId}-select-dropdown`
+  await waitFor(() => screen.getByTestId(dropdownKlId))
+  return screen.getByTestId(dropdownKlId)
 }
 
 const getSelect = async (klId = defaultProps.klId) => {
-  await waitForDropdown()
+  await waitForDropdown(klId)
   return screen.getByTestId(klId)
 }
 
-const DefaultSelect = (props: ISelectProps) => <Select {...defaultProps} {...props} />
+const DefaultSelect = (props: SelectProps) => (
+  <ConfigProvider>
+    <Select {...defaultProps} {...props} />
+  </ConfigProvider>
+)
 
 describe('Select', () => {
   test('should render', async () => {
-    render(<DefaultSelect />)
+    const { baseElement } = render(<DefaultSelect />)
+
     expect(await getSelect()).toBeInTheDocument()
+    expect(baseElement.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
 
   test('should render footer with renderFooter prop', async () => {
@@ -48,18 +58,9 @@ describe('Select', () => {
     expect(screen.getByTestId(klId)).toBeInTheDocument()
   })
 
-  test('should render selected item icon with isItemSelectedIconVisible prop', async () => {
-    const klId = 'item-selected-icon'
-    render(<DefaultSelect isItemSelectedIconVisible />)
-
-    await waitForDropdown()
-
-    expect(screen.getByTestId(klId)).toBeInTheDocument()
-  })
-
-  test('should show clear button with allowClear prop', () => {
+  test('should show clear button with multiselect or tags mode', () => {
     const klId = 'clear-icon'
-    render(<DefaultSelect allowClear />)
+    render(<DefaultSelect mode='tags' />)
     expect(screen.getByTestId(klId)).toBeInTheDocument()
   })
 
@@ -104,7 +105,7 @@ describe('Select', () => {
   })
 
   test('should sort options with filterSort function', async () => {
-    const filterSort: ISelectProps['filterSort'] = (optionA: unknown, optionB: unknown) => {
+    const filterSort: SelectProps['filterSort'] = (optionA: unknown, optionB: unknown) => {
       const { label: a } = optionA as { label: string }
       const { label: b } = optionB as { label: string }
 
@@ -144,7 +145,7 @@ describe('Select', () => {
 
   test('should not render dropdown with open false', async () => {
     render(<DefaultSelect open={false} />)
-    expect(screen.queryByTestId('dropdown-menu')).not.toBeInTheDocument()
+    expect(screen.queryByTestId(`${defaultProps.klId}-select-dropdown`)).not.toBeInTheDocument()
   })
 
   test('should change prop value of option to show as content of select with optionLabelProp', async () => {
@@ -190,9 +191,16 @@ describe('Select', () => {
   test('should have defined number of tags if maxTagCount is provided', () => {
     const value = defaultProps.options.map(({ value }) => value)
     const maxTagCount = 1
-    const { container } = render(<DefaultSelect open={false} value={value} maxTagCount={maxTagCount} />)
+    const { container } = render(
+      <DefaultSelect
+        open={false}
+        value={value}
+        maxTagCount={maxTagCount}
+        tagRender={props => <Tag {...props} className="my-custom-tag" />}
+      />
+    )
 
-    expect(container.querySelectorAll('.kl-components-tag-text')).toHaveLength(maxTagCount)
+    expect(container.querySelectorAll('.my-custom-tag')).toHaveLength(maxTagCount)
   })
 
   test('should have correct placeholder with maxTagPlaceholder prop', () => {
@@ -224,8 +232,8 @@ describe('Select', () => {
 
     await waitForDropdown()
 
-    const ellipsedLabel = value.label.substring(0, maxTagTextLength) + '...'
-    expect(container.querySelector('.kl-components-tag-text')).toHaveTextContent(ellipsedLabel)
+    const trimmedLabel = value.label.substring(0, maxTagTextLength) + '...'
+    expect(container.querySelector('.kl-components-tag-text')).toHaveTextContent(trimmedLabel)
   })
 
   test('should use correct prop value of option for filter if optionFilterProp is set', async () => {
@@ -367,5 +375,36 @@ describe('Select', () => {
     })
 
     expect(onClear).toHaveBeenCalledTimes(1)
+  })
+
+  test('dropdown should be rendered in the select ancestor', async () => {
+    render(<DefaultSelect open />)
+    const dropdown = await waitForDropdown()
+    const select = await getSelect()
+
+    expect(dropdown).toBeInTheDocument()
+    expect(select.parentNode).toContainElement(dropdown)
+  })
+
+  test('usePortal should render dropdown in document.body', async () => {
+    render(<DefaultSelect open usePortal />)
+    const dropdown = await waitForDropdown()
+    const select = await getSelect()
+
+    expect(dropdown).toBeInTheDocument()
+    expect(select.parentNode).not.toContainElement(dropdown)
+  })
+
+  test('should receive test attributes', async () => {
+    const testId = 'test-select'
+
+    const { container } = render(<DefaultSelect open klId={testId} testId={testId}/>)
+    const dropdown = await waitForDropdown(testId)
+    const select = await getSelect(testId)
+    const firstItem = container.querySelector('[role="option"][data-value="1"]')
+
+    expect(select).toBeInTheDocument()
+    expect(dropdown).toBeInTheDocument()
+    expect(firstItem).toBeInTheDocument()
   })
 })

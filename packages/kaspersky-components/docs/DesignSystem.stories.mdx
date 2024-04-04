@@ -1,26 +1,28 @@
-import { Meta } from '@storybook/addon-docs';
+import { Meta } from '@storybook/blocks'
 
 <Meta title="Design/Design System" />
 
-# Design System
+# Дизайн Система
 
-Description of approaches in using the design system. Resources are located along the path `design-system/`
+Описание подходов в использовании дизайн системы. Ресурсы находятся по пути `design-system/`
 
-[Link to the design system in Figma](https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit)
+[Ссылка на дизайн систему в Figma](https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit)
 
-## Links
+## Ссылки
 
 - [Colors](/docs/design-colors--palette)
 - [Sizing](/docs/design-sizing--common)
 - [Shapes](/docs/design-shapes--common)
 
-## Tokens
+<br/>
 
-1. Export the color palette from figma is placed in the file `tokens/figma-colors-tokens.json`.
-2. Based on it, gulp task - updateColors builds a file with color tokens `tokens/palette.ts`.
-3. For each theme, based on tokens, you need to create a file with aliases (aliases). For example, `themes/light/colors.ts`.
-4. If the component uses a color palette for it, you need to create a separate file in the `themes/` folder for each theme. For example, `themes/light/button.ts`
-5. Objects with colors and sizes (if necessary) are created to style the component. If the component has several states, for example, active, focus, pressed - the object looks like:
+## Токены
+
+1. Выгрузка цветовой палитры из фигмы производится в файл `tokens/figma-colors-tokens.json`.
+2. На его основании gulp task - updateColors строит файл с токенами цвета `tokens/palette.ts`.
+3. Для каждой темы, на основании токенов, необходимо создать файл c псевдонимами (aliases). Например, `themes/light/colors.ts`.
+4. Если компонент изпользует цветовую палитру для него необходимо создать отдельный файл в папке `themes/` для каждой темы. Например, `themes/light/button.ts`
+5. Для стилизации компонента создаются объекты с цветами и размерами (если необходимо). Если у компонента несколько состояний, например, active, focus, pressed - объект имеет вид:
 ```
 const component = {
   active: {
@@ -35,19 +37,19 @@ const component = {
 }
 ```
 
-### Structure
+### Структура
 
-- `tokens/palette.ts` - Global tokens
+- `tokens/palette.ts` - Глобальные токены
 - `themes/*theme*/colors.ts` - Aliases
-- `themes/*theme*/*component*` - Component tokens
-- `themes/light` - Base theme. All other themes extend the base
+- `themes/*theme*/*component*` - Токены компонент
+- `themes/light` - Базовая тема. Все другие темы расширяют базовую
 
-### Usage
+### Использование
 
-**Only Component Tokens** are used to style the component.
+Для стилизации компонента используются **только Токены компонента**.
 
-1. If the component uses design tokens, you must create a component token file for each theme.
-2. Use Component Tokens in `Themed Hook` to build `Css config`.
-3. `Component View` pipe `Css config` into `styled-components` components.
-4. Use `Css config` to build `Component css`.
-
+1. Если компонент использует дизайн-токены, необходимо создать файл Токенов компонента для каждой темы.
+2. Использовать Токены компонента в `Themed Hook` для построения `Css config`.
+3. `Component View` прокидывает `Css config` в стилизованные `styled-components` компоненты.
+4. Использовать `Css config` для построения `Component css`.
+```

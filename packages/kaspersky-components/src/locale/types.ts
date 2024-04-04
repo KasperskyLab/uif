@@ -1,3 +1,7 @@
-export interface ILocaleProps {
+export type LocaleProps = {
+  /** Localization key */
   localizationKey: string
 }
+
+/** @deprecated Use LocaleProps instead */
+export type ILocaleProps = LocaleProps

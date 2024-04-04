@@ -5,21 +5,23 @@ import {
   SortableElement as sortableElement,
   SortableHandle as sortableHandle
 } from 'react-sortable-hoc'
-import { Checkbox } from '../../../checkbox'
-import { Icon } from '../../../icon'
-import { Text } from '../../../typography'
-import { Locale } from '../../../locale'
+import { Checkbox } from '@src/checkbox'
+import { DragDrop } from '@kaspersky/icons/16'
+import { Text } from '@src/typography'
+import { Locale } from '@src/locale'
 import { SelectorWrapper } from './SelectorWrapper'
-import { SPACES } from '../../../../design-system/theme/themes/variables'
-import { isColumnReadonly } from '@src/table/helpers'
+import { SPACES } from '@design-system/theme'
+import { isColumnReadonly } from '../../helpers/common'
 
-const DragHandle = sortableHandle(() => (
-  <span>
-    <Icon size="small" name="DragDrop" />
-  </span>
-))
+const DragHandleIcon = styled(DragDrop)`
+  display: block;
+`
 
-const ItemsContainer = styled.div``
+const DragHandle = sortableHandle(() => <DragHandleIcon name="DragDrop" />)
+
+const ItemsContainer = styled.div`
+  padding-top: 4px;
+`
 
 const Dragger = styled.div`
   cursor: pointer;
@@ -31,25 +33,21 @@ const ItemLabel = styled.div`
 
 const Item = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  height: 20px;
   z-index: 700;
-  margin-top: ${SPACES[6]}px;
+  margin-top: 8px;
   align-items: center;
+  line-height: 1;
+  gap: 4px;
 
   p {
     margin-top: ${SPACES[1]}px;
     margin-left: ${SPACES[4]}px;
   }
-  svg {
-    margin-top: ${SPACES[1]}px;
-  }
 `
 
 const CheckboxRow = styled.div`
   display: flex;
-  gap: ${SPACES[4]}px;
+  gap: 4px;
   align-items: center;
 `
 
@@ -61,20 +59,18 @@ interface SortableItemProps {
 const SortableItem = sortableElement(
   ({ value }: { value: SortableItemProps }) => (
     <Item className="selector-item">
+      <Dragger>
+        <DragHandle />
+      </Dragger>
       <CheckboxRow>
         <Checkbox
           checked={value.column.show}
           onChange={() => value.onChange(value.column)}
         />
         <ItemLabel>
-          <Text type='BTM3'>{value.column.title}</Text>
+          <Text type="BTM3">{value.column.title}</Text>
         </ItemLabel>
       </CheckboxRow>
-      <Dragger>
-        {/*
- // @ts-ignore */}
-        <DragHandle />
-      </Dragger>
     </Item>
   )
 )
@@ -102,7 +98,7 @@ const arrayMove = (array: any[], from: number, to: number) => {
   return array
 }
 
-function hasSelected (columns: any[]) {
+export function hasSelected (columns: any[]): boolean {
   return columns.reduce(
     (acc: boolean, current: any) => (acc = acc || current.show),
     false
@@ -110,25 +106,20 @@ function hasSelected (columns: any[]) {
 }
 
 function areAllSelected (columns: any[]) {
-  const filteredColumns = columns.filter(column => !isColumnReadonly(column))
+  const filteredColumns = columns.filter((column) => !isColumnReadonly(column))
   return filteredColumns.every(({ show }) => show)
 }
 
 export interface ColumnsSelectorProps {
   columns: any[],
-  setColumns: (value: any[]) => void,
-  onSave: (value: any[]) => void,
-  onClose: () => void
+  setColumns: (value: any[]) => void
 }
 
 export const ColumnsSelector = ({
   columns,
-  setColumns,
-  onSave,
-  onClose
+  setColumns
 }: ColumnsSelectorProps) => {
   const [selectAll, setAllSelected] = useState(areAllSelected(columns))
-  const [isSaveDisabled, setSaveDisabled] = useState(!hasSelected(columns))
 
   const onSortEnd = ({
     oldIndex,
@@ -152,12 +143,12 @@ export const ColumnsSelector = ({
 
     setAllSelected(!selectAll)
     setColumns(newColumns)
-    setSaveDisabled(!hasSelected(newColumns))
   }
 
   const onColumnSelect = (selectedColumn: any) => {
     const columnIndex = columns.findIndex(
-      (column) => column.dataIndex?.localeCompare(selectedColumn.dataIndex) === 0
+      (column) =>
+        column.dataIndex?.localeCompare(selectedColumn.dataIndex) === 0
     )
     const newColumns = [...columns]
 
@@ -168,31 +159,26 @@ export const ColumnsSelector = ({
     }
 
     setColumns(newColumns)
-    setSaveDisabled(!hasSelected(newColumns))
     setAllSelected(areAllSelected(newColumns))
   }
 
-  const filteredColumns = useMemo(() => columns.filter(column => !isColumnReadonly(column)), [columns])
+  const filteredColumns = useMemo(
+    () => columns.filter((column) => !isColumnReadonly(column)),
+    [columns]
+  )
 
   return (
-    <SelectorWrapper
-      isSaveDisabled={isSaveDisabled}
-      onSave={onSave}
-      onClose={onClose}
-    >
+    <SelectorWrapper>
       <Item className="selector-item select-all-item">
         <CheckboxRow>
           <Checkbox checked={selectAll} onChange={onSelectAll} />
-          <Text type='BTM3'>
+          <Text type="BTM3">
             <Locale localizationKey="table.columnsSettings.selectAll" />
           </Text>
         </CheckboxRow>
       </Item>
-      {/*
- // @ts-ignore */}
       <SortableContainer distance={2} onSortEnd={onSortEnd}>
         {filteredColumns.map((value, index) => (
-          // @ts-ignore
           <SortableItem
             key={`item-${value.dataIndex}-${index}`}
             index={index}

@@ -1,43 +1,34 @@
-import React, { ComponentProps, FC, MouseEventHandler, ReactNode } from 'react'
-
+import React, { FC } from 'react'
+import styled from 'styled-components'
 import { Search } from './Search'
-import { StyledButtonSearch } from './searchCss'
-import { StyledButton } from './types'
-import { useThemedSearch } from './useThemedSearch'
-import { ITextboxProps } from '../input/types'
+import { SearchWithButtonProps } from '@src/search/types'
+import { Button } from '@src/button'
 
-type SearchWithButtonProps = ITextboxProps & {
-  onClick?: MouseEventHandler<HTMLElement>,
-  btnText?: string | ReactNode
-}
+export const StyledButtonSearch = styled(Button)`
+  z-index: 1;
+  &&&:focus, &&&:active {
+    box-shadow: none;
+  }
+`
 
-const ButtonSearch: FC<StyledButton> = (props) => {
-  return (
-    <StyledButtonSearch
-      {...props}
-    />
-  )
-}
-export const WithButton: FC<SearchWithButtonProps & ComponentProps<typeof Search>> = ({
-  onPressEnter,
+/** @deprecated Not used in design system */
+export const WithButton: FC<SearchWithButtonProps> = ({
   onClick,
   btnText,
-  ...otherProps
-}) => {
-  const { cssConfig } = useThemedSearch(otherProps)
-
+  ...rest
+}: SearchWithButtonProps) => {
   return (
-    <Search className="custom-search btn-right"
-      addonAfter={
-        <ButtonSearch
+    <Search
+      className='kl6-search-button-right'
+      suffix={
+        <StyledButtonSearch
           onClick={onClick}
-          disabled={otherProps.disabled}
+          disabled={rest.disabled}
           mode='tertiary'
-          cssConfig={cssConfig}>
+        >
           {btnText}
-        </ButtonSearch>}
-      onPressEnter={onPressEnter}
-      {...otherProps}
+        </StyledButtonSearch>}
+      {...rest}
     />
   )
 }

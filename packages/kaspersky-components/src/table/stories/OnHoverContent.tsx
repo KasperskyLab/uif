@@ -1,11 +1,6 @@
 import React from 'react'
-import { Table } from '..'
 import styled from 'styled-components'
-
-const Wrapper = styled.div`
-  background-color: #F6F6F6;
-  padding: 50px;
-`
+import { BasicTableStory, basicDataSource, basicTwoColumns, basicArgTypes, Story } from './_commonConstants'
 
 const ActionCell = styled.a`
   visibility: hidden;
@@ -17,47 +12,30 @@ const ActionCell = styled.a`
   }
 `
 
-const columns = [{
-  title: 'table.column.name',
-  dataIndex: 'name',
-  width: 300
-}, {
-  title: 'table.column2.name',
-  dataIndex: 'description',
-  width: 200
-}, {
-  title: 'table.column3.name',
-  dataIndex: 'actions',
-  render: (text: string) => {
-    return <ActionCell>{text}</ActionCell>
+const columns = [
+  ...basicTwoColumns,
+  {
+    title: 'table.column3.name',
+    dataIndex: 'actions',
+    key: 'actions',
+    width: 200,
+    render: (text: string) => <ActionCell>{text}</ActionCell>
   }
-}]
+]
 
-type row = { name: string, description: string, actions: string }
+const dataSource = basicDataSource.slice(0, 5).map((item, index) => ({
+  ...item,
+  actions: `Delete ${index + 1}`
+}))
 
-const data: row[] = [{
-  name: 'Value',
-  description: 'Value',
-  actions: 'Delete'
-}]
-
-export const OnHoverContent = () => {
-  const rows: row[] = []
-  const generatedRows = Array.from({ length: 3 }).map(() => data)
-  const dataSource = rows.concat(...generatedRows)
-    .map((item, index) => ({
-      name: item.name + ' ' + (index + 1),
-      description: item.description + ' ' + (index + 1),
-      actions: item.actions,
-      key: index
-    }))
-  return (
-    <Wrapper>
-      <Table
-        rowSelection={{}}
-        rowClassName='row'
-        dataSource={dataSource}
-        columns={columns} />
-    </Wrapper>
-  )
+export const OnHoverContent: Story = {
+  render: BasicTableStory.bind({}),
+  args: {
+    rowClassName: 'row',
+    dataSource,
+    columns
+  },
+  argTypes: {
+    rowClassName: basicArgTypes.rowClassName
+  }
 }

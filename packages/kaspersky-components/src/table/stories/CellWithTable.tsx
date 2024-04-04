@@ -1,77 +1,60 @@
 import React from 'react'
-import { Table } from '..'
-import styled from 'styled-components'
+import { Text } from '@src/typography'
+import { Table } from '@src/table'
+import { ITableProps } from '@src/table/types'
+import { Wrapper, basicTwoColumns, basicDataSource, genArgType, Story } from './_commonConstants'
 
-const Wrapper = styled.div`
-  background-color: #F6F6F6;
-  padding: 50px;
-`
-
-const columns = [{
-  title: 'table.column.name',
-  dataIndex: 'name',
-  width: 100
-}, {
-  title: 'Inner Table',
-  key: 'action',
-  dataIndex: 'description',
-  render: () => <Table
-    pagination={false}
+const InnerTable = () => (
+  <Table
     rowSelection={{}}
-    dataSource={anotherDataSource}
-    columns={anotherColumns} />,
-  width: 102
-}]
+    pagination={false}
+    dataSource={basicDataSource.slice(0, 2)}
+    columns={basicTwoColumns}
+  />
+)
 
-type row = { name: string, description: string }
+const customColumns = [
+  basicTwoColumns[0],
+  {
+    key: 'description',
+    title: 'Description',
+    dataIndex: 'description',
+    render: () => <InnerTable />
+  }
+]
 
-const data: row[] = [{
-  name: 'Value',
-  description: 'Value'
-}]
+const customDataSource = basicDataSource.slice(0, 2).map(item => ({
+  ...item,
+  description: <InnerTable />
+}))
 
-const anotherColumns = [{
-  title: 'table.column.name',
-  dataIndex: 'name',
-  width: 300
-}, {
-  title: 'table.column2.name',
-  dataIndex: 'description',
-  width: 200
-}]
-
-const anotherData: row[] = [{
-  name: 'Inner data',
-  description: 'Inner data'
-}]
-
-const anotherRows: row[] = []
-const anotherDataSource = anotherRows
-  .concat(...anotherData)
-  .map((item, index) => ({
-    name: item.name + ' ' + (index + 1),
-    description: item.description,
-    key: index
-  }))
-
-const rows: row[] = []
-const generatedRows = Array.from({ length: 2 }).map(() => data)
-const dataSource = rows
-  .concat(...generatedRows)
-  .map((item, index) => ({
-    name: item.name + ' ' + (index + 1),
-    description: item.description,
-    key: index
-  }))
-
-export const CellWithTable = () => {
-  return (
+export const CellWithTable: Story = {
+  render: (args: ITableProps) => (
     <Wrapper>
+      <Text type="H6" style={{ padding: '10px 0' }}>
+        Using columns render
+      </Text>
       <Table
-        pagination={{ pageSize: 20 }}
-        rowSelection={{}}
-        dataSource={dataSource}
-        columns={columns} />
+        {...args}
+        columns={customColumns}
+        dataSource={basicDataSource.slice(0, 2)}
+      />
+      <Text type="H6" style={{ padding: '10px 0' }}>
+        Using dataSource
+      </Text>
+      <Table
+        {...args}
+        dataSource={customDataSource}
+      />
     </Wrapper>
-  )
+  ),
+  args: {
+    pagination: false,
+    rowSelection: {}
+  },
+  argTypes: {
+    columns: genArgType('For rendering table in each cell you can put "(innerArgs) => InnerTableReactNode" in columns[n].render'),
+    dataSource: genArgType('For rendering table in specific cell put table in corresponding property, for example, dataSource[n].description')
+  },
+  parameters: { controls: { exclude: ['pagination', 'rowSelection'] } }
 }

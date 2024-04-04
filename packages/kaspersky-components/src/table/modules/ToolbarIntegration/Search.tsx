@@ -1,6 +1,6 @@
 import React, { Key, ReactElement, SetStateAction, useState } from 'react'
 import Mark from 'mark.js'
-import { extractText } from '../../helpers'
+import { extractText } from '../../helpers/common'
 import { Search } from '../../../search'
 import { SearchProps } from '../../../search/types'
 
@@ -141,6 +141,7 @@ const SearchModule = ({
   }
 
   return <Search
+    testId="table-search"
     klId='table-search'
     value={searchValue}
     onChange={setSearchValue as SearchProps['onChange']}

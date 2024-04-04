@@ -1,10 +1,10 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import { Icon } from '../../icon'
+import { Placeholder } from '@kaspersky/icons/16'
 import { Button } from '../Button'
 import userEvent from '@testing-library/user-event'
 import { ButtonHTMLType } from 'antd/es/button/button'
-import { IButtonProps } from '../types'
+import { ButtonProps } from '../types'
 
 const defaultProps = {
   text: 'Test Button'
@@ -12,7 +12,7 @@ const defaultProps = {
 
 const getButton = (name: string = defaultProps.text) => screen.getByRole('button', { name })
 
-const DefaultButton = (props: IButtonProps) => <Button {...defaultProps} {...props} />
+const DefaultButton = (props: ButtonProps) => <Button {...defaultProps} {...props} />
 
 describe('Button', () => {
   test('should render', () => {
@@ -20,10 +20,11 @@ describe('Button', () => {
     expect(getButton()).toBeInTheDocument()
   })
 
-  test('should receive kl-id prop', () => {
-    const klId = 'test-button'
-    render(<DefaultButton klId={klId} />)
-    expect(screen.getByTestId(klId)).toBeInTheDocument()
+  test('should receive qa props', () => {
+    const { container } = render(<DefaultButton klId="kl-id" testId="test-id" />)
+
+    expect(container.querySelector('[kl-id="kl-id"]')).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
 
   test('should call onClick when clicked', () => {
@@ -35,7 +36,19 @@ describe('Button', () => {
 
   test('should render icon', () => {
     const iconKlId = 'test-icon'
-    render(<DefaultButton icon={<Icon name='Add' size='small' klId={iconKlId} />} />)
+    render(<DefaultButton icon={<Placeholder klId={iconKlId} />} />)
+    expect(screen.queryByTestId(iconKlId)).toBeInTheDocument()
+  })
+
+  test('should render iconBefore', () => {
+    const iconKlId = 'test-iconBefore'
+    render(<DefaultButton iconBefore={<Placeholder klId={iconKlId} />} />)
+    expect(screen.queryByTestId(iconKlId)).toBeInTheDocument()
+  })
+
+  test('should render iconAfter', () => {
+    const iconKlId = 'test-iconAfter'
+    render(<DefaultButton iconAfter={<Placeholder klId={iconKlId} />} />)
     expect(screen.queryByTestId(iconKlId)).toBeInTheDocument()
   })
 

@@ -1,83 +1,37 @@
-import React from 'react'
-import { Story, Meta } from '@storybook/react'
-import { StoryLayout } from '@sb/StoryComponents'
+import { StoryObj, Meta } from '@storybook/react'
 import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import { sbHideControls } from '@helpers/storybookHelpers'
 import MetaData from './__meta__/meta.json'
-import { useTheme } from '@design-system/theme/hooks'
 import { FormLabel } from './FormLabel'
+import { FormLabelProps } from '@src/form-label/types'
 
-type StoryArguments = {
-  mode: 'primary' | 'secondary',
-  text: string,
-  required: boolean,
-  disabled: boolean,
-  tooltip: string
-};
-
-export default {
+const meta: Meta<FormLabelProps> = {
   title: 'Molecules/Form Label',
-  viewMode: 'docs',
-  parameters: {
-    docs: {
-      page: withMeta(MetaData)
-    }
-  },
+  component: FormLabel,
   argTypes: {
-    text: {
-      defaultValue: 'My text',
-      control: { type: 'text' }
-    },
-    mode: {
-      options: ['primary', 'secondary'],
-      control: { type: 'radio' }
-    },
-    required: {
-      control: { type: 'boolean' }
-    },
-    disabled: {
-      control: { type: 'boolean' }
-    },
     tooltip: {
-      defaultValue: 'Type something',
       control: { type: 'text' }
-    }
+    },
+    ...sbHideControls(['theme'])
   },
   args: {
     mode: 'primary',
+    children: 'My text',
+    tooltip: 'Replace me',
     required: false,
-    disabled: false
+    disabled: false,
+    testId: 'form-label-test-id',
+    klId: 'form-label-kl-id'
+  },
+  parameters: {
+    docs: {
+      page: withMeta(MetaData)
+    },
+    design: MetaData.figmaView
   }
-} as Meta
-
-export const Figma: Story = () => (
-  <iframe
-    style={{ border: '1px solid rgba(0, 0, 0, 0.1)' }}
-    width="100%"
-    height={450}
-    src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F%255BB2B%255D-UI-KIT%3Ftype%3Ddesign%26node-id%3D45814%253A330383%26t%3DDFyrId4CiMpn7Jt4-1"
-    allowFullScreen
-  ></iframe>
-)
-
-export const Default: Story<StoryArguments> = ({
-  required,
-  mode,
-  tooltip,
-  disabled,
-  text
-}) => {
-  const theme = useTheme()
-
-  return (
-    <StoryLayout theme={theme.key}>
-      <FormLabel
-        disabled={disabled}
-        mode={mode}
-        required={required}
-        tooltip={tooltip.length ? tooltip : undefined}
-      >
-        <span style={{ whiteSpace: 'pre-line' }}>{text}</span>
-      </FormLabel>
-    </StoryLayout>
-  )
 }
+export default meta
+
+type Story = StoryObj<FormLabelProps>
+
+export const Basic: Story = {}

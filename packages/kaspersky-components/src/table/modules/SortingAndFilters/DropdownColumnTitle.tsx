@@ -1,80 +1,69 @@
-import React from 'react'
+import React, { useState } from 'react'
 import cn from 'classnames'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+import { ArrowDownMini, Filter, Sort2, Sort3 } from '@kaspersky/icons/16'
 import { Dropdown } from '../../../dropdown'
 import { Checkbox } from '../../../checkbox'
-import { Icon } from '../../../icon'
 import { ActiveFilter, ActiveSorting, SortType } from './SortingAndFilters'
 import { Locale } from '../../../locale'
 import { useTableContext } from '../../context/TableContext'
 import { TableCssConfig } from '../../types'
 import { fromTableProps } from '../../tableCss'
-import { BORDER_RADIUS, SPACES } from '../../../../design-system/theme/themes/variables'
+import { SPACES } from '../../../../design-system/theme/themes/variables'
 
-const StyledColumn = styled.div.withConfig<{ cssConfig: TableCssConfig }>({
-  shouldForwardProp: prop => !['cssConfig'].includes(prop)
+const iconCss = css`
+  min-width: fit-content;
+`
+
+const StyledArrowDownMini = styled(ArrowDownMini)`${iconCss}`
+const StyledFilter = styled(Filter)`${iconCss}`
+const StyledSort2 = styled(Sort2)`${iconCss}`
+const StyledSort3 = styled(Sort3)`${iconCss}`
+
+const StyledColumn = styled.div.withConfig<{
+  cssConfig: TableCssConfig,
+  isPressed?: boolean
+}>({
+  shouldForwardProp: prop => !['cssConfig', 'isPressed'].includes(prop)
 })`
   color: ${fromTableProps('root.color')};
   cursor: pointer;
+  padding: ${SPACES[5]}px 0;
   width: fit-content;
-  padding: ${SPACES[2]}px ${SPACES[2]}px 0;
-  margin-left: -${SPACES[2]}px;
   max-width: 100%;
-  line-height: 1;
   
   &:hover {
-    color: ${fromTableProps('root.color')};
-    > span {
-      border-bottom: 1px dashed ${fromTableProps('root.color')};
-    }
+    background: ${fromTableProps('headCell.hover.backgroundColor')};
   }
   
-  &.ant-dropdown-open {
-    color: ${fromTableProps('root.color')};
-    > span {
-      border-bottom: 1px dashed ${fromTableProps('root.color')};
-    }
+  &:active {
+    background: ${fromTableProps('headCell.active.backgroundColor')};
   }
-  
-  &.filtered {
-    background-color: ${fromTableProps('root.backgroundColor')};
-    border-radius: ${BORDER_RADIUS[2]}px;
-    color: ${fromTableProps('root.color')};
-  }
-  
-  .icon {
-    background-color: transparent!important;
-    padding: 0!important;
-    border: none!important;
-    position: relative;
-    top: -${SPACES[1]}px;
-  }
+
+  ${(props) => props.isPressed && `
+    background: ${fromTableProps('headCell.active.backgroundColor')(props)};
+  `}
 `
 
-const StyledDropDown = styled(Dropdown.Menu)`
-  .ant-dropdown-menu-item {
-    >span {
-      margin-left: ${SPACES[4]}px;
-    }
-    .icon {
-      float: right;
-    }
-  }
-`
+const StyledDropdown = styled(Dropdown.Menu)``
 
 const StyledFilterRow = styled.div`
   display: flex;
-  gap: ${SPACES[4]}px;
+  align-items: center;
+  gap: ${SPACES[2]}px;
 `
 
 const TitleLine = styled.div`
   display: flex;
   flex-direction: row;
-
+  align-items: center;
+  gap: ${SPACES[2]}px;
 `
+
 interface ISortInfo {
   key: SortType,
-  name: React.ReactNode
+  name: React.ReactNode,
+  icon: React.ReactElement
 }
 
 interface IDropdownColumnTitleProps {
@@ -107,6 +96,8 @@ export const DropdownColumnTitle: React.FC<IDropdownColumnTitleProps> = (
   }): React.ReactElement => {
   const { cssConfig } = useTableContext()
 
+  const [dropdownOpened, setDropdownOpened] = useState(false)
+
   const resetFilters = (dataIndex: string) => {
     const newFilters = { ...activeFilters, [dataIndex]: {} }
 
@@ -137,7 +128,7 @@ export const DropdownColumnTitle: React.FC<IDropdownColumnTitleProps> = (
     return activeFilters
   }
 
-  const classNames: {[className: string]: boolean} = {}
+  const classNames: {[className: string]: boolean} = { 'kl6-table-dropdown': true }
   let filterItems: null | React.ReactElement[] = null
 
   if (filters && activeFilters && setActiveFilters) {
@@ -191,6 +182,7 @@ export const DropdownColumnTitle: React.FC<IDropdownColumnTitleProps> = (
       if (allowMultipleFilters) {
         return (
           <Dropdown.MenuItem
+            className={isChecked ? 'ant-dropdown-menu-item-selected' : ''}
             onClick={() => { changeFilterState(!isChecked) }}
             key={filter.name}
           >
@@ -206,7 +198,7 @@ export const DropdownColumnTitle: React.FC<IDropdownColumnTitleProps> = (
         <Dropdown.MenuItem key={filter.name}
           onClick={() => { changeFilterState(!isChecked) }}
         >
-          {filter.name} {isChecked ? <Icon size='small' name='Check' /> : null }
+          {filter.name}
         </Dropdown.MenuItem>)
     })
 
@@ -217,16 +209,19 @@ export const DropdownColumnTitle: React.FC<IDropdownColumnTitleProps> = (
 
   let sortItems: null | React.ReactElement[] = null
   let sortIcon: null | React.ReactElement = null
+  const filterIcon: undefined | React.ReactElement = activeFilters?.[dataIndex] && <StyledFilter />
 
   if (isSortable && setActiveSorting) {
     const defaultSortTypes: ISortInfo[] = [
       {
         key: 'asc',
-        name: <Locale localizationKey='table.columnDropdown.ascending' />
+        name: <Locale localizationKey='table.columnDropdown.ascending' />,
+        icon: <StyledSort3 />
       },
       {
         key: 'desc',
-        name: <Locale localizationKey='table.columnDropdown.descending' />
+        name: <Locale localizationKey='table.columnDropdown.descending' />,
+        icon: <StyledSort2 />
       }
     ]
 
@@ -235,6 +230,7 @@ export const DropdownColumnTitle: React.FC<IDropdownColumnTitleProps> = (
 
       return (
         <Dropdown.MenuItem
+          className={isSortingSelected ? 'ant-dropdown-menu-item-selected' : ''}
           key={sortType.key}
           onClick={() => {
             setActiveSorting({
@@ -245,17 +241,15 @@ export const DropdownColumnTitle: React.FC<IDropdownColumnTitleProps> = (
             })
           }}
         >
-          {sortType.name} {isSortingSelected ? <Icon size='small' name='Check' /> : null}
+          <StyledFilterRow>
+            {sortType.icon} {sortType.name}
+          </StyledFilterRow>
         </Dropdown.MenuItem>
       )
     })
 
     if (activeSorting && activeSorting.field === dataIndex) {
-      if (activeSorting.direction === 'asc') {
-        sortIcon = <Icon name='Arrowdown' size='small' />
-      } else {
-        sortIcon = <Icon name='Arrowup' size='small' />
-      }
+      sortIcon = activeSorting.direction === 'asc' ? <StyledSort3 /> : <StyledSort2 />
     }
   }
 
@@ -265,19 +259,30 @@ export const DropdownColumnTitle: React.FC<IDropdownColumnTitleProps> = (
 
   return (
     <Dropdown
-      shouldUsePortal={false}
       trigger={['click']}
+      onVisibleChange={open => setDropdownOpened(open)}
       overlay={
-        <StyledDropDown multiple={false}>
+        <StyledDropdown multiple={false} onClick={() => setDropdownOpened(false)}>
+          {
+            sortItems && [
+              <Dropdown.GroupTitle key="sorting">
+                <Locale localizationKey="table.columnDropdown.sorting" />
+              </Dropdown.GroupTitle>
+            ]
+          }
           {
             sortItems
           }
           {
             sortItems && filterItems && [
-              <Dropdown.MenuDivider key='filterDivider' />,
-              <Dropdown.MenuItem key="filters" disabled={true}>
-                <Locale localizationKey='table.columnDropdown.filters' />
-              </Dropdown.MenuItem>
+              <Dropdown.MenuDivider key="filterDivider" />
+            ]
+          }
+          {
+            filterItems && [
+              <Dropdown.GroupTitle key="filters">
+                <Locale localizationKey="table.columnDropdown.filters" />
+              </Dropdown.GroupTitle>
             ]
           }
           {
@@ -285,18 +290,22 @@ export const DropdownColumnTitle: React.FC<IDropdownColumnTitleProps> = (
           }
           {
             filterItems && [
-              <Dropdown.MenuDivider key='resetFiltersDivider' />,
-              <Dropdown.MenuItem key='resetFiltresButton' onClick={() => resetFilters(dataIndex)}>
-                <Locale localizationKey='table.columnDropdown.resetFilters' />
+              <Dropdown.MenuDivider key="resetFiltersDivider" />,
+              <Dropdown.MenuItem
+                className="kl6-dropdown-item-action"
+                key="resetFiltresButton"
+                onClick={() => resetFilters(dataIndex)}
+              >
+                <Locale localizationKey="table.columnDropdown.resetFilters" />
               </Dropdown.MenuItem>
             ]
           }
-        </StyledDropDown>
+        </StyledDropdown>
       }
     >
-      <StyledColumn className={cn(classNames)} cssConfig={cssConfig}>
+      <StyledColumn className={cn(classNames)} cssConfig={cssConfig} isPressed={dropdownOpened}>
         <TitleLine>
-          <span>{title}</span> {sortIcon}
+          {title} {!sortIcon && !filterIcon && <StyledArrowDownMini />} {sortIcon} {filterIcon}
         </TitleLine>
       </StyledColumn>
     </Dropdown>

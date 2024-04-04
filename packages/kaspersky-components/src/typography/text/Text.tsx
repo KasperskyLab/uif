@@ -1,18 +1,26 @@
 import React, { forwardRef } from 'react'
-import { textLevels, textStyle } from '../../../design-system/tokens'
+import cn from 'classnames'
+import { textLevels, textStyle } from '@design-system/tokens'
 import { TextProps } from './types'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
-export const TextTag = forwardRef<HTMLParagraphElement, TextProps>((props, ref): JSX.Element => {
-  const { type = 'BTM1', themedColor, klId, color, ...attr } = props
+export const TextTag = forwardRef<HTMLParagraphElement, TextProps>(({
+  type = 'BTR3',
+  themedColor,
+  color,
+  htmlTag,
+  className,
+  ...props
+}, ref): JSX.Element => {
+  const { testAttributes, ...rest } = useTestAttribute<TextProps>(props)
 
-  const element = React.createElement(
-    textStyle[textLevels[type || 'BTM1']].htmlTag,
+  return React.createElement(
+    htmlTag || textStyle[textLevels[type]].htmlTag,
     {
-      ...attr,
       ref,
-      'kl-id': klId
+      className: cn(className, 'kl6-text'),
+      ...testAttributes,
+      ...rest
     }
   )
-
-  return element
 })

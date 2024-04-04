@@ -4,11 +4,11 @@
   "v3": [
     {
       "prop": "layout",
-      "changes": "Removed unused alignItems and justifyItems"
+      "changes": "Убраны неиспользуемые alignItems и justifyItems"
     },
     {
       "prop": "layoutProperty",
-      "changes": "Added - gap, rowGap, columnGap"
+      "changes": "Добавлены - gap, rowGap, columnGap"
     }
   ],
   "v5": [],

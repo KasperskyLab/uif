@@ -1,0 +1,170 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta title="Docs/Конфигурирование THEME_CONFIG" />
+
+# THEME_CONFIG
+> Перед чтением рекомендуется ознакомиться с разделом [Типизация компонентов](?path=/story/docs-типизация-компонентов--page)
+
+`THEME_CONFIG` является главным хранилищем информации о дизайн-системе, в частности, о цветах и размерах всех компонентов.
+К нему обращается хук `useThemeComponent` и достает оттуда необходимые компоненту значения (подробнее об этом позже).
+## Типизация
+Выглядит `THEME_CONFIG` так:
+```
+/design-system/theme/themes/config.ts
+
+export const THEME_CONFIG = {
+  [ThemeKey.Light]: LIGHT_THEME,
+  [ThemeKey.Dark]: DARK_THEME
+}
+```
+`LIGHT_THEME` и `DARK_THEME` обладают одинаковой структурой, которая задается типом `ThemeConfig`
+```
+/design-system/types/Theme.ts
+
+export type ThemeConfig = {
+  readonly key: ThemeKey,
+  readonly colors: typeof colors,
+  readonly shapes: {
+    readonly borderRadius: typeof BORDER_RADIUS
+  },
+  readonly spaces: typeof SPACES,
+  readonly components: {
+    readonly button: { ... },
+    readonly checkbox: { ... },
+    ...
+  }
+}
+```
+Нас интересует поле `components`, ключами которого являются названия компонентов. Представим себе абстрактный
+несуществующий компонент `Flower`. Тогда тип будет выглядеть так:
+```
+/design-system/types/Theme.ts
+
+readonly flower: {
+  colors: Record<FlowerMode, FlowerColorConfig>,
+  sizes: Record<FlowerSize, FlowerSizeConfig>
+}
+```
+Если у компонента нет цветового мода, то `colors: FlowerColorConfig`. Если у компонента нет разных размеров
+(small, medium etc.), значит у него не должно быть SizeConfig, а все размеры должны проставляться внутри
+`flowerCss.ts`.
+Эту запись можно упростить до эквивалентной:
+```
+/design-system/types/Theme.ts
+
+readonly flower: ComponentConfig<
+  Record<FlowerMode, FlowerColorConfig>,
+  Record<FlowerSize, FlowerSizeConfig>
+>
+```
+Для примера возьмем `LIGHT_THEME`, для `DARK_THEME` все будет аналогично. `LIGHT_THEME` имеет тип `ThemeConfig`,
+описанный выше, а конфигурируется в `/design-system/theme/themes/light/index.ts`:
+```
+/design-system/theme/themes/light/index.ts
+
+import { ThemeKey, ThemeConfig } from '@design-system/types'
+import { COMMON_THEME } from '../common-theme'
+import { colors } from './colors'
+...
+import { flower, flowerSize /* если есть */) } from './flower'
+...
+
+export const LIGHT_THEME: ThemeConfig = {
+  ...COMMON_THEME,
+  key: ThemeKey.Light,
+  colors,
+  components: {
+    flower: {
+      colors: flower({ colors }),
+      sizes: flowerSize /* если есть */
+    },
+    ...
+  }
+}
+```
+
+## Конфигурация light/flower.ts
+У компонента `Flower` должен быть файл в директории `/design-system/theme/themes/light/` с названием `flower.ts`,
+в котором и определяется использованная выше функция `flower`, в которые попадут цвета светлой темы, а также объект
+`flowerSize`.
+```
+/design-system/theme/themes/light/flower.ts
+
+export const flower = ({ colors }: ComponentThemeContext): Record<FlowerMode, FlowerColorConfig> => ({
+  primary: {
+    color: colors.textIconsElements.secondary2
+  },
+  secondary: {
+    color: colors.textIconsElements['secondary2-invert']
+  }
+})
+
+export const FlowerSize: Record<FlowerSize, FlowerSizeConfig> = {
+  small: {
+    width: '8px',
+    height: '8px',
+    gap: '2px',
+    ...getTextSizes(TextTypes.BTR4)
+  },
+  medium: {
+    width: '16px',
+    height: '16px',
+    gap: '4px',
+    ...getTextSizes(TextTypes.BTR3)
+  }
+}
+```
+Функция `flower` принимает в себя цвета из палитры, где для каждого токена есть вариант для темной и светлой темы.
+Соответственно в `/design-system/theme/themes/light/flower.ts` попадут цвета для светлой темы.
+Возвращает функция объект, у которого при наличии цветового мода полями являются названия модов, при отсутствии -
+сами свойства (пример в компоненте checkbox). У `flowerSize` так же полями являются названия размеров. Если размеров нет,
+то и все сайзинги должны быть вынесены в `flowerCss.ts`.
+
+Теперь посмотрим на `dark/flower.ts`:
+```
+/design-system/theme/themes/dark/flower.ts
+
+import { flower as defaultFlower, flowerSize as defaultFlowerSize } from '../light/flower'
+
+export const flower = ({ colors }: ComponentThemeContext): Record<FlowerMode, FlowerColorConfig> => defaultFlower({ colors })
+
+export const FlowerSize = defaultFlowerSize
+```
+В идеале `dark/flower.ts` файлы должны выглядеть так. Тут мы просто пользуемся функцией `flower` из светлой темы,
+так как в идеале токены (названия цветов), должны совпадать в темной и светлой теме. Сюда из
+`/design-system/theme/themes/dark/flower.ts` попадут цвета для темной темы, а затем просто пробросятся в функцию
+в светлой теме. Сайзинги же от темы не зависят, поэтому просто дублируем то, что есть в
+`/design-system/theme/themes/light/flower.ts`.
+
+На выходе в `THEME_CONFIG.light.components.flower` мы получим объект следующего содержания:
+```
+THEME_CONFIG.light.components.flower
+
+{
+  colors: {
+    default: {
+      color: "#2a3541b3"
+    },
+    inverted: {
+      color: "#e7eef7a8"
+    }
+  },
+  sizes: {
+    medium: {
+      fontFamily: "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif"
+      fontSize: "16px",
+      fontStyle: "normal",
+      fontWeight: 400,
+      gap: "4px",
+      height: "16px",
+      letterSpacing: "0px",
+      lineHeight: "24px",
+      width: "16px"
+    },
+    small: { ... },
+  }
+}
+```
+Что в дальнейшем будет использовано в `useThemedFlower` хуке для получения `cssConfig` для компонента.
+
+

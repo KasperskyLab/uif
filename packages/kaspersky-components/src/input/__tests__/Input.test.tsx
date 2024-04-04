@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react'
-import { ThemeKey } from '../../../design-system/types'
-import { ThemeProvider } from '../../../design-system/theme'
+import { ThemeKey } from '@design-system/types'
+import { ThemeProvider } from '@design-system/theme'
 import '@testing-library/jest-dom'
 import 'jest-styled-components'
 import { Textbox } from '../Textbox'
@@ -9,15 +9,12 @@ import userEvent from '@testing-library/user-event'
 
 describe('Input - Textbox - Basic ', () => {
   const klId = 'input-id'
-  test('should recieve kl-id prop', () => {
-    const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox
-          klId={klId}
-        />
-      </ThemeProvider>
-    )
-    expect(getByTestId(klId)).toBeInTheDocument()
+
+  test('should receive qa props', () => {
+    const { container } = render(<Textbox klId={klId} testId="test-id" />)
+
+    expect(container.querySelector(`[kl-id="${klId}"]`)).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
 
   test('should render with mask Date', async () => {

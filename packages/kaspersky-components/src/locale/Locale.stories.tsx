@@ -1,31 +1,34 @@
 import React from 'react'
+import { Meta, StoryObj } from '@storybook/react'
 import { Locale } from './Locale'
-import { ConfigProvider } from '../../design-system/context'
+import { ConfigProvider } from '@design-system/context'
 import { Text } from '../typography'
-import { badges } from '../../.storybook/badges'
-import { withMeta } from '../../helpers/hocs/MetaComponent/withMeta'
-import Meta from './__meta__/meta.json'
-import { ILocaleProps } from './types'
+import { badges } from '@sb/badges'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import MetaData from './__meta__/meta.json'
+import { LocaleProps } from './types'
 
-export default {
+const meta: Meta<LocaleProps> = {
   title: 'Atoms/Locale',
   component: Locale,
   parameters: {
     badges: [badges.dev],
     docs: {
-      page: withMeta(Meta)
+      page: withMeta(MetaData)
     }
   }
 }
+export default meta
 
-export const Basic = ({
-  localizationKey = 'severity.high'
-}: ILocaleProps) => {
-  return (
+export const Basic: StoryObj<LocaleProps> = {
+  render: (args: LocaleProps) => (
     <ConfigProvider>
       <Text>
-        <Locale localizationKey={localizationKey} />
+        <Locale {...args} />
       </Text>
     </ConfigProvider>
-  )
+  ),
+  args: {
+    localizationKey: 'severity.high'
+  }
 }

@@ -1,40 +1,40 @@
-import { Meta } from '@storybook/addon-docs';
+import { Meta } from '@storybook/blocks'
 
-<Meta title="Docs/Components development" />
+<Meta title="Docs/Разработка компонентов" />
 
-# Development of components
+# Разработка компонентов
 
-The UIF platform allows the product team to develop a custom component and use it in their scenarios.
-However, if the developed component can be found in scenarios of other products, it makes sense to transfer it to a single registry (package @kaspersky/components) so that all involved teams can reuse common developments.
-The transferred components are subject to the same set of technical requirements as those already available in the unified registry.
+Платформа UIF позволяет продуктовой команде разработать кастомный компонент и использовать его в своих сценариях.
+Однако, если разработанный компонент может встретиться в сценариях других продуктов, есть смысл передать его в единый реестр (пакет @kaspersky/components), чтобы все причастные команды смогли переиспользовать общие наработки.
+К передаваемым компонентам предъявляется тот же набор технических требований, что и к уже имеющимся в едином реестре.
 
-## General requirements for components:
+## Общие требования, предъявляемые к компонентам:
 
-1. Lack of business logic
-2. Scalability and reusability
-3. Minimum area of responsibility (atomic principle)
-4. Accessibility (visual documentation and description of all complex moments in the component logic)
-5. Reliable and transparent code
+1.	Отсутствие бизнес логики
+2.	Масштабируемость и переиспользуемость
+3.	Минимальная зона ответственности (атомарный принцип)
+4.	Доступность (наглядная документация и описание всех сложных моментов в логике компонента)
+5.	Надежный и прозрачный код
 
-## General Tips
+## Общие советы
 
-1. Component View be transparent with respect to native elements (that is, any HTMLAttributes that apply to the container can be passed to the component).
-Required for better usability by end users, as well as the ability to add test attributes.
-2. Instead of writing "generalized" components for all occasions, we write simple and specific implementations.
-Often, an attempt to take into account all possible cases leads to the complication of the code and the inability to maintain it in the future.
+1. Component View быть прозрачным относительно нативных элементов (т.е в компонент можно передать любые HTMLAttributes, которые применяться на контейнер).
+Необходимо для более удобного использования конечными пользователями, а также для возможности добавления тестовых атрибутов.
+2. Вместо написания "обобщенных" компонентов на все случаи жизни пишем простые и конкретные реализации.
+Зачастую попытка учесть все возможные случаи приводит к усложнению кода и невозможности его поддерживать в дальнейшем.
 
-## Development and handover process
+## Процесс разработки и передачи
 
-1. The concept and relevance of the new component are described.
+1. Описывается концепция и актуальность нового компонента.
 
-   The transferred component must be approved by the shared library development team.
-   This command is responsible for the completeness and relevance of the set of components.
+  Передаваемая компонента в обязательном порядке должна быть утверждено командой разработки общей библиотеки.
+  Данная команда отвечает за полноту и актуальность набора компонентов.
 
-2. A design is requested for a new component.
+2. Запрашивается дизайн для нового компонента.
 
-3. The team makes an MR with a new component (**considering [DoD](/docs/docs-definition-of-done--page)**), and also creates documentation ([according to the rules](/story/docs-template -component-documentation--page)).
+3. Команда делает MR с новым компонентом (**учитывая [DoD](/docs/docs-definition-of-done--page)**), а также создает документацию ([согласно правилам](/story/docs-шаблон-документации-компонентов--page)).
 
-4. Once a component has been moved to the shared library, it is the responsibility of the shared library development team to maintain it.
+4. После переноса компонента в общую библиотеку, его поддержка ложится на команду разработки общей библиотеки.
 
 
 

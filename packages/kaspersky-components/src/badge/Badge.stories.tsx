@@ -1,74 +1,80 @@
 import React from 'react'
-import { badges } from '../../.storybook/badges'
-import { BadgeMode, IBadgeProps } from './types'
-import { withMeta } from '../../helpers/hocs/MetaComponent/withMeta'
-import Meta from './__meta__/meta.json'
+import { StoryObj, Meta } from '@storybook/react'
+import { badges } from '@sb/badges'
+import { BadgeMode, BadgeProps } from './types'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import MetaData from './__meta__/meta.json'
 import { Badge } from './Badge'
-import styled from 'styled-components'
+import { Space } from '@src/space'
 
-export default {
+const meta: Meta<BadgeProps> = {
   title: 'Atoms/Badge',
   component: Badge,
+  argTypes: {
+    ...sbHideControls(['theme'])
+  },
+  args: {
+    count: 1,
+    testId: 'badge-test-id',
+    klId: 'badge-kl-id'
+  },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
     docs: {
-      page: withMeta(Meta)
-    }
+      page: withMeta(MetaData)
+    },
+    design: MetaData.figmaView
   }
 }
 
-const defaultCount = 10
+export default meta
 
-const BadgeTemplate = ({
-  count = defaultCount,
-  ...rest
-}: IBadgeProps) => {
-  return (
-    <Badge count={count} {...rest} />
-  )
+type Story = StoryObj<BadgeProps>
+
+export const Basic: Story = {}
+
+export const WithText: Story = {
+  args: {
+    text: 'Badge'
+  }
 }
 
-export const Basic = BadgeTemplate.bind({})
-
-const BadgeWithTextTemplate = ({
-  ...rest
-}: IBadgeProps) => {
-  return (
-    <Badge text='Badge' {...rest} />
-  )
+export const WithOverflow: Story = {
+  args: {
+    overflowCount: 9
+  }
 }
 
-export const WithText = BadgeWithTextTemplate.bind({})
+export const BadgeModes = {
+  render: (args: BadgeProps) => {
+    const modes: BadgeMode[] = [
+      'neutral',
+      'accent',
+      'positive',
+      'medium',
+      'high',
+      'critical',
+      'new',
+      'update',
+      'in-progress',
+      'resolved',
+      'in-incident',
+      'low',
+      'info'
+    ]
 
-const BadgeWithOverflowTemplate = ({
-  count = defaultCount,
-  ...rest
-}: IBadgeProps) => {
-  return (
-    <Badge count={count} overflowCount={9} {...rest} />
-  )
+    return (
+      <Space size={12}>
+        {modes.map((mode) => (
+          <Badge
+            {...args}
+            key={mode}
+            text={mode.charAt(0).toUpperCase() + mode.slice(1)}
+            mode={mode}
+          />
+        ))}
+      </Space>
+    )
+  }
 }
-
-export const WithOverflow = BadgeWithOverflowTemplate.bind({})
-
-const BadgesContainer = styled.div`
-  display: flex;
-  gap: 12px;
-`
-
-const BadgeModesTemplate = ({
-  count = defaultCount,
-  ...rest
-}: IBadgeProps) => {
-  const modes: BadgeMode[] = ['neutral', 'accent', 'positive', 'medium', 'high', 'critical', 'new', 'dot']
-
-  return (
-    <BadgesContainer>
-      {modes.map(mode => (
-        <Badge count={count} mode={mode} {...rest} />
-      ))}
-    </BadgesContainer>
-  )
-}
-
-export const BadgeModes = BadgeModesTemplate.bind({})

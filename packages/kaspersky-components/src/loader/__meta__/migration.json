@@ -4,39 +4,39 @@
   "v3": [
     {
       "prop": "type",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "className",
-      "changes": "Removed"
+      "changes": "Убран"
     }
   ],
   "v5": [
     {
       "prop": "color",
-      "changes": "Removed"
+      "changes": "Убран"
     }
   ],
   "common": [
     {
       "prop": "indicator",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "size",
       "changes": {
         "before": "small | default | large",
         "after": "extraSmall | small | medium | large | extraLarge",
-        "description": "Changing the size grid"
+        "description": "Изменение размерной сетки"
       }
     },
     {
       "prop": "tip",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "wrapperClassName",
-      "changes": "Removed"
+      "changes": "Убран"
     }
   ]
 }

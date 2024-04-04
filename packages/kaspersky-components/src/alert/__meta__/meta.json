@@ -4,12 +4,12 @@
     "useThemedHook": true,
     "unitTests": true,
     "screenshotTests": false,
-    "migration": true,
+    "migration": false,
     "apiTable": true,
     "storybook": true
   },
   "component": "Alert",
-  "desctiption": "Alert is used as a static notification to highlight information in content that requires attention or action.",
-  "usage": "Used for inline notifications. Placed in the body of the page, Alert does not disappear over time.",
-  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-UI-KIT?node-id=3795%3A16214"
+  "description": "Alert это уведомление вверху страницы.",
+  "usage": "Используется для инлайн уведомлений. Размещается в теле страницы, Алерт не пропадает с течением времени.",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/%E2%9A%99%EF%B8%8F-Hexa-UI-Components?type=design&node-id=43881-240386&mode=design&t=wOvhS9CYVLfKjuss-0"
 }

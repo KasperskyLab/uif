@@ -1,76 +1,136 @@
-import React, { ForwardRefExoticComponent, MouseEventHandler, ReactNode, RefAttributes } from 'react'
-import { ThemeKey } from '../../design-system/types'
-import { IDropdownProps } from '../dropdown/types'
-import { IconProps } from '../icon'
-import { ILinkProps } from '../link/types'
+import { FC, ForwardRefExoticComponent, MouseEventHandler, PropsWithChildren, ReactNode, RefAttributes } from 'react'
+import { ThemeKey } from '@design-system/types'
+import { Focus } from '@design-system/tokens/focus'
+import { DropdownProps } from '@src/dropdown/types'
+import { IconProps } from '@src/icon/types'
+import { LinkProps } from '@src/link/types'
+import { ButtonProps } from '@src/button/types'
+import { SearchProps } from '@src/search/types'
+import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 
-export type ToolbarStyleProps = {
+export type ToolbarThemeProps = {
+  /** Custom theme */
   theme?: ThemeKey
 }
 
-export enum ToolbarItemKey {
-  BUTTON = 'button',
-  LINK = 'link',
-  ICON = 'icon',
-  DROPDOWN = 'dropdown',
-  CHILDREN = 'children',
-}
+export const ToolbarItemKeyConst = {
+  BUTTON: 'button',
+  LINK: 'link',
+  ICON: 'icon',
+  DROPDOWN: 'dropdown',
+  DIVIDER: 'divider',
+  CHILDREN: 'children'
+} as const
+
+export type ToolbarItemKey = (typeof ToolbarItemKeyConst)[keyof typeof ToolbarItemKeyConst]
 
 export type ToolbarItems<T extends ToolbarItemKey = ToolbarItemKey> = {
-  readonly key: string,
-  readonly children?: React.ReactNode,
-  readonly type: T
+  key: string,
+  children?: ReactNode,
+  type: T,
+  testId?: string,
+  visible?: boolean
 } & (
   {
-    readonly type: ToolbarItemKey.BUTTON,
-    readonly label?: React.ReactNode,
-    readonly className?: string,
-    readonly icon?: JSX.Element,
-    readonly disabled?: boolean,
-    readonly onClick?: MouseEventHandler<HTMLElement>
-  } | IDropdownProps & {
-    readonly type: ToolbarItemKey.DROPDOWN,
-    readonly label?: React.ReactNode,
-    readonly className?: string
+    type: (typeof ToolbarItemKeyConst)['BUTTON'],
+    label?: ReactNode,
+    className?: string,
+    /** @deprecated Button icon - use iconBefore and iconAfter props */
+    icon?: JSX.Element,
+    iconBefore?: JSX.Element,
+    iconAfter?: JSX.Element,
+    disabled?: boolean,
+    onClick?: MouseEventHandler<HTMLElement>
+  } | DropdownProps & {
+    type: (typeof ToolbarItemKeyConst)['DROPDOWN'],
+    iconBefore?: JSX.Element,
+    label?: ReactNode
   } | Omit<IconProps, 'name'> & {
-    readonly type: ToolbarItemKey.ICON,
-    readonly icon?: IconProps['name'],
-    readonly label?: React.ReactNode,
-    readonly className?: string
-  } | ForwardRefExoticComponent<ILinkProps & {
+    type: (typeof ToolbarItemKeyConst)['ICON'],
+    icon?: IconProps['name'],
+    label?: ReactNode,
+    className?: string
+  } | ForwardRefExoticComponent<LinkProps & {
     children?: ReactNode
   } & RefAttributes<HTMLAnchorElement>> & {
-    readonly type: ToolbarItemKey.LINK,
-    readonly label?: React.ReactNode,
-    readonly href?: string
+    type: (typeof ToolbarItemKeyConst)['LINK'],
+    label?: ReactNode,
+    href?: string
   } | {
-    readonly type: ToolbarItemKey.CHILDREN
+    type: (typeof ToolbarItemKeyConst)['DIVIDER']
+  } | {
+    type: (typeof ToolbarItemKeyConst)['CHILDREN']
   }
 )
 
-export type ToolbarProps = {
-  /** unique id */
-  componentId: string,
-  /** items in left part */
+export type ToolbarVariants = {
+  Search: FC<SearchProps>,
+  CollapsibleSearch: FC<SearchProps>,
+  FilterItem: FC<ButtonProps>,
+  FilterActiveItem: FC<ButtonProps>,
+  SettingsItem: FC<ButtonProps>,
+  FilterSidebar: FC<ButtonProps>,
+  ScaleItem: FC<ButtonProps>,
+  Divider: FC
+}
+
+export type ToolbarProps = PropsWithChildren<{
+  /** Items in left part */
   left?: ToolbarItems[],
-  /** items in right part */
+  /** Style properties for items in left part */
+  styleLeft?: React.CSSProperties,
+  /** Items in right part */
   right?: ToolbarItems[],
+  /** Style properties for items in right part */
+  styleRight?: React.CSSProperties,
   /** Limit of left part items */
   leftLimit?: number,
-  /** sticky position */
-  sticky?: number
-} & ToolbarStyleProps
+  /** Sticky position */
+  sticky?: number,
+  /** Automatic dropdown enabled */
+  autoDropdown?: boolean
+}> & ToolbarThemeProps & TestingProps
+
+export type ToolbarViewProps = ToViewProps<ToolbarProps, ToolbarCssConfig, ToolbarThemeProps>
+
+export type ToolbarSearchViewProps = ToViewProps<SearchProps, ToolbarCssConfig, ToolbarThemeProps>
 
 type StateProps = {
   background?: string,
   color?: string,
-  iconColor?: string
-};
+  border?: string
+}
 
-export type ToolbarColorConfig = {
-  mode: {
-    normal: StateProps
+export type ToolbarColorConfig = StateProps & {
+  divider: StateProps,
+  input: Focus & {
+    normal: StateProps,
+    hover: StateProps
+  },
+  button: {
+    hover: StateProps,
+    active: StateProps
   }
-};
+}
 
-export type ToolbarCssConfig = ToolbarColorConfig;
+export type ToolbarCssConfig = ToolbarColorConfig
+
+export type ToolbarBlockSide = 'left' | 'right'
+
+export type StyledToolbarProps = {
+  cssConfig: ToolbarCssConfig,
+  sticky?: number,
+  autoDropdown?: boolean,
+  dropdownedCount?: number
+}
+
+export type AutoDropdownProps = {
+  enabled: boolean,
+  keyProperty: string,
+  items: ToolbarItems[]
+}
+
+export type AutoDropdownResultProps = {
+  containerRef: React.RefObject<HTMLDivElement>,
+  dropdowned: string[]
+}

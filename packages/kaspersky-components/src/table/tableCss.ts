@@ -1,13 +1,37 @@
 import { css } from 'styled-components'
-import { SPACES } from '../../design-system/theme/themes/variables'
+import { SPACES } from '@design-system/theme'
 // ts issue https://github.com/microsoft/TypeScript/issues/5711
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { getFromProps, getFromInnerProps, GenericObject } from '../../helpers/getFromProps'
+import { getFromProps, getFromInnerProps, GenericObject } from '@helpers/getFromProps'
 import { getCheckboxCss } from '../checkbox/checkboxCss'
-import { ITableProps, TableCssConfig, ThemedTableProps } from './types'
+import { getRadioCss } from '../radio/radioCss'
+import { ITableProps, TableCssConfig, TableViewProps } from './types'
+import { getTextSizes, TextTypes } from '@design-system/tokens'
 
-export const fromTableProps = getFromProps<TableCssConfig, ThemedTableProps>()
+export const fromTableProps = getFromProps<TableCssConfig, TableViewProps>()
 const fromCheckboxProps = getFromInnerProps<TableCssConfig>('checkbox')
+const fromRadioProps = getFromInnerProps<TableCssConfig>('radio')
+
+const tableSizes = {
+  headSizes: getTextSizes(TextTypes.BTM3),
+  cellSizes: getTextSizes(TextTypes.BTR3),
+  dragHandler: {
+    size: `${SPACES[19]}`
+  }
+}
+
+const getRowModeCss = (props: ITableProps) => {
+  const { rowMode = 'standard' } = props
+  return rowMode === 'standard'
+    ? css`
+      height: 40px;
+      padding: ${SPACES[5]}px ${SPACES[4]}px 9px ${SPACES[4]}px;
+    `
+    : css`
+      height: 32px;
+      padding: ${SPACES[3]}px ${SPACES[4]}px 5px ${SPACES[4]}px;
+    `
+}
 
 const getThCss = (props: ITableProps) => {
   const stickyCss = Number(props.stickyHeader) > -1000 && props.resizingMode !== 'scroll'
@@ -18,13 +42,20 @@ const getThCss = (props: ITableProps) => {
     : ''
 
   const thCss = css`
-    background: ${fromTableProps('cell.normal.backgroundColor')};
-    height: 40px;
     z-index: 3;
   `
   return css`
     ${thCss}
     ${stickyCss}
+    ${getRowModeCss(props)}
+  `
+}
+
+const getTdCss = (props: ITableProps) => {
+  const { columnVerticalAlign = 'top' } = props
+  return css`
+    vertical-align: ${columnVerticalAlign};
+    ${getRowModeCss(props)}
   `
 }
 
@@ -42,41 +73,44 @@ const scrollableResizingCss = css`
   }
 `
 
-export const tableCss = css<ThemedTableProps>`
+export const tableCss = css<TableViewProps>`
   .ant-table {
     background-color: ${fromTableProps('root.backgroundColor')};
     color: ${fromTableProps('root.color')};
 
-    tr {
-      height: 40px;
-    }
-
     .ant-table-thead > tr > th {
         background-color: transparent;
-        padding: ${SPACES[6]}px ${SPACES[4]}px ${SPACES[3]}px ${SPACES[4]}px;
+        padding: ${SPACES[5]}px ${SPACES[4]}px;
+        
+        &:has(.kl6-table-dropdown) {
+          padding: 0 ${SPACES[4]}px;
+        }
+
         border-bottom: none;
         color: inherit;
         
-        font-family: ${fromTableProps('headSizes.fontFamily')};
-        font-size: ${fromTableProps('headSizes.fontSize')};
-        line-height: ${fromTableProps('headSizes.lineHeight')};
-        font-weight: ${fromTableProps('headSizes.fontWeight')};
-        font-style: ${fromTableProps('headSizes.fontStyle')};
-        letter-spacing: ${fromTableProps('headSizes.letterSpacing')};
-
-        &:first-child {
-          &::after {
-            left: 0;
-          }
-        }
+        font-family: ${tableSizes.headSizes.fontFamily};
+        font-size: ${tableSizes.headSizes.fontSize};
+        line-height: ${tableSizes.headSizes.lineHeight};
+        font-weight: ${tableSizes.headSizes.fontWeight};
+        font-style: ${tableSizes.headSizes.fontStyle};
+        letter-spacing: ${tableSizes.headSizes.letterSpacing};
 
         &::after {
           content: "";
-          border-bottom: 2px solid ${fromTableProps('headCell.normal.borderColor')};
-          left: ${({ theme }: ThemedTableProps) => theme === 'light' ? '8px' : 0};
+          border-bottom: 1px solid ${fromTableProps('headCell.normal.borderColor')};
           position: absolute;
+          left: 8px;
           bottom: 0;
           right: 8px;
+        }
+
+        &:first-child::after {
+          left: 0;
+        }
+
+        &:last-child::after {
+          right: 0;
         }
 
         &:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
@@ -87,20 +121,20 @@ export const tableCss = css<ThemedTableProps>`
     .ant-table-tbody > tr > td {
         padding: ${SPACES[4]}px;
         max-width: 100px;
-        font-family: ${fromTableProps('cellSizes.fontFamily')};
-        font-size: ${fromTableProps('cellSizes.fontSize')};
-        line-height: ${fromTableProps('cellSizes.lineHeight')};
-        font-weight: ${fromTableProps('cellSizes.fontWeight')};
-        font-style: ${fromTableProps('cellSizes.fontStyle')};
-        letter-spacing: ${fromTableProps('cellSizes.letterSpacing')};
+        font-family: ${tableSizes.cellSizes.fontFamily};
+        font-size: ${tableSizes.cellSizes.fontSize};
+        line-height: ${tableSizes.cellSizes.lineHeight};
+        font-weight: ${tableSizes.cellSizes.fontWeight};
+        font-style: ${tableSizes.cellSizes.fontStyle};
+        letter-spacing: ${tableSizes.cellSizes.letterSpacing};
         position: static;
 
         border-bottom-color: ${fromTableProps('cell.normal.borderColor')};
 
         .drag-handle {
           position: absolute;
-          left: -${fromTableProps('dragHandler.size')}px;
-          width: ${fromTableProps('dragHandler.size')}px;
+          left: -${tableSizes.dragHandler.size}px;
+          width: ${tableSizes.dragHandler.size}px;
           height: 100%;
           opacity: 0;
           text-align: center;
@@ -125,7 +159,7 @@ export const tableCss = css<ThemedTableProps>`
 
   
   &.table-draggable .ant-table {
-    padding-left: ${fromTableProps('dragHandler.size')}px;
+    padding-left: ${tableSizes.dragHandler.size}px;
   }
 
   .ant-table-content {
@@ -156,10 +190,10 @@ export const tableCss = css<ThemedTableProps>`
   .react-resizable-handle {
     position: absolute;
     right: -5px;
-    bottom: 0;
+    bottom: 3px;
     z-index: 1;
     width: 10px;
-    height: 100%;
+    height: calc(100% - 3px);
     cursor: col-resize;
     display: flex;
     flex-direction: column;
@@ -177,14 +211,25 @@ export const tableCss = css<ThemedTableProps>`
     }
   }
 
-  .table-accordion-icon {
-    position: absolute;
-    left: 18px;
-    top: 10px;
+  .ant-table-column-sorter {
+    display: none;
+  }
+
+  .ant-dropdown-trigger {
+    width: 100%;
   }
 
   .ant-checkbox-wrapper {
     ${getCheckboxCss(fromCheckboxProps)}
+  }
+
+  .ant-radio-wrapper {
+    ${getRadioCss(fromRadioProps)}
+    justify-content: center;
+    &:not(.kl-radio-button-group) {
+      line-height: unset;
+      gap: unset;
+    }
   }
 
   &&& {
@@ -197,11 +242,23 @@ export const tableCss = css<ThemedTableProps>`
       ${(props: ITableProps) => getThCss(props)}
     }
 
-    ${(props: ITableProps) => props.useAccordion
-    ? `.ant-table .ant-table-thead > tr > th:first-child, .ant-table .ant-table-tbody > tr > td:first-child {
-        padding-left: 50px;
-      }`
-    : ''}
+    && td.ant-table-cell {
+      ${(props: ITableProps) => getTdCss(props)}
+    }
+
+    .ant-table-thead th:not(.ant-table-selection-column) {
+      min-width: 100px;
+    }
+
+    .ant-table-thead > tr > th,
+    && .ant-table-tbody > tr > td {
+      &:first-child {
+        padding-left: 0;
+      }
+      &:last-child {
+        padding-right: 0;
+      }
+    }
 
     ${(props: ITableProps) => props.useDragDrop
     ? `.drag-handle {
@@ -224,6 +281,7 @@ export const tableCss = css<ThemedTableProps>`
 
       label {
         opacity: 0;
+        pointer-events: none;
       }
 
       &:hover {
@@ -246,6 +304,11 @@ export const tableCss = css<ThemedTableProps>`
     ${(props: ITableProps) => props.resizingMode === 'scroll' ? scrollableResizingCss : ''}
   }
 
+  col.ant-table-selection-col, .ant-table-selection-column  {
+    width: 30px;
+    min-width: 22px;
+  }
+  
   .ant-empty,
   .ant-empty-normal {
     color: var(--text-color);

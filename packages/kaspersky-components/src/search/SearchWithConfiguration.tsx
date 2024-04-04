@@ -1,29 +1,29 @@
-import React, { ComponentProps } from 'react'
-
-import { Icon } from '../icon'
+import React, { FC } from 'react'
+import styled from 'styled-components'
 import { Search } from './Search'
 import { SearchWithButtonProps } from './types'
-import { useThemedSearch } from './useThemedSearch'
+import { Settings2 } from '@kaspersky/icons/16'
 
-export const WithConfiguration = ({
-  onPressEnter,
+const StyledSpan = styled.span`
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
+
+/** @deprecated Not used in design system */
+export const WithConfiguration: FC<SearchWithButtonProps> = ({
   onClick,
   ...otherProps
-}: SearchWithButtonProps & ComponentProps<typeof Search>) => {
-  const { cssConfig } = useThemedSearch(otherProps)
-
+}: SearchWithButtonProps) => {
   return (
     <Search
-      prefix={
-        <Icon
-          name="Configure"
-          size="small"
-          onClick={onClick}
-          color={cssConfig.mode.normal.iconColor}
-        />
-      }
-      onPressEnter={onPressEnter}
       {...otherProps}
+      prefix={
+        <StyledSpan onClick={onClick}>
+          <Settings2 />
+        </StyledSpan>
+      }
     />
   )
 }

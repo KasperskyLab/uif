@@ -4,117 +4,117 @@
   "v3": [
     {
       "prop": "sidebarSize",
-      "changes": "Now prop 'size' - extraSmall | small | medium | large"
+      "changes": "Теперь prop 'size' - extraSmall | small | medium | large"
     },
     {
       "prop": "content",
-      "changes": "Now through children"
+      "changes": "Теперь через children"
     },
     {
       "prop": "show",
-      "changes": "Now visible"
+      "changes": "Теперь visible"
     },
     {
       "prop": "toolbar",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "header",
-      "changes": "Now title - ReactNode"
+      "changes": "Теперь title - ReactNode"
     },
     {
       "prop": "onBackButtonClick",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "blockInteraction",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "index",
-      "changes": "Now zIndex"
+      "changes": "Tеперь zIndex"
     },
     {
       "prop": "closeIconVisible",
-      "changes": "Now closable"
+      "changes": "Tеперь closable"
     }
   ],
   "v5": [
     {
       "prop": "autoFocus",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "afterVisibleChange",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "bodyStyle",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "contentWrapperStyle",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "destroyOnClose",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "drawerStyle",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "extra",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "footerStyle",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "forceRender",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "getContainer",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "headerStyle",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "height",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "maskStyle",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "placement",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "push",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "style",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "size",
       "changes": {
         "before": "large | big | medium | small | xsmall",
         "after": "extraSmall | small | medium | large",
-        "description": "Changing the size grid in steps of 2 units"
+        "description": "Изменение размерной сетки c шагом в 2 units"
       }
     },
     {
       "prop": "width",
-      "changes": "Removed"
+      "changes": "Убран"
     }
   ],
   "common": []

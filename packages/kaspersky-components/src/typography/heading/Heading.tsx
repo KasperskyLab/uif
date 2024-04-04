@@ -1,22 +1,24 @@
-import React from 'react'
-import { textLevels, textStyle } from '../../../design-system/tokens'
+import React, { FC } from 'react'
+import { textLevels, textStyle } from '@design-system/tokens'
 import { StyledHeading } from './Heading.styled'
 import { HeadingProps } from './types'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
-export const HTag: React.FC<HeadingProps> = (
-  props: HeadingProps
-): JSX.Element => {
-  const { type = 'H1', themedColor, klId, color, ...attr } = props
+export const HTag: FC<HeadingProps> = ({
+  type = 'H1',
+  themedColor,
+  color,
+  ...props
+}) => {
+  const { testAttributes, ...rest } = useTestAttribute(props)
 
-  const element = React.createElement(
+  return React.createElement(
     textStyle[textLevels[type || 'H1']].htmlTag,
     {
-      ...attr,
-      'kl-id': klId
+      ...testAttributes,
+      ...rest
     }
   )
-
-  return element
 }
 
 export { StyledHeading as Heading }

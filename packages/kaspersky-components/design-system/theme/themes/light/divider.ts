@@ -1,35 +1,14 @@
 import { ComponentThemeContext } from '../config'
-import { DividerColorConfig, DividerMode, DividerSizeConfig, DividerType } from '../../../../src/divider/types'
-import { SPACES, BORDER_RADIUS } from '../variables'
+import { DividerColorConfig, DividerMode } from '@src/divider/types'
 
-export const divider = ({ colors }: ComponentThemeContext): DividerColorConfig => ({
+export const divider = ({ colors }: ComponentThemeContext): Record<DividerMode, DividerColorConfig> => ({
   normal: {
-    color: colors.elements.seporatorbold
+    color: colors.elements['separator-bold-solid']
   },
   light: {
-    color: colors.elements.seporator
+    color: colors.elements['separator-solid']
   },
   bold: {
-    color: colors.textIconsElements.primary
+    color: colors.elements['line-solid']
   }
 })
-
-export const dividerSize: Record<DividerMode | DividerType, DividerSizeConfig> = {
-  normal: {
-    thickness: '1px'
-  },
-  light: {
-    thickness: '1px'
-  },
-  bold: {
-    thickness: '2px',
-    radius: '2px'
-
-  },
-  horizontal: {
-    margin: SPACES[8]
-  },
-  vertical: {
-    margin: SPACES[4]
-  }
-}

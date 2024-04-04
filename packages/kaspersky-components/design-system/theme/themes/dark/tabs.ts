@@ -1,6 +1,5 @@
-import { tabs as defaultTabs, tabsSize as defaultTabsSize } from '../light/tabs'
 import { ComponentThemeContext } from '../config'
+import { TabsColorConfig } from '@src/tabs/types'
+import { tabs as defaultTabs } from '../light/tabs'
 
-export const tabs = ({ colors }: ComponentThemeContext) => defaultTabs({ colors })
-
-export const tabsSize = defaultTabsSize
+export const tabs = ({ colors }: ComponentThemeContext): TabsColorConfig => defaultTabs({ colors })

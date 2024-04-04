@@ -1,11 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
 import { I18nContext } from 'react-i18next'
-import { createI18n } from './i18n'
+import i18n from './i18n'
 
-const defaultLanguage = 'en'
-const i18n = createI18n()
-
-export const useLocalization = (key: string, lng = defaultLanguage) => {
+export const useLocalization = (key: string, lng = 'en-us') => {
   const { i18n: contextI18n } = useContext(I18nContext) ?? i18n
 
   const [text, setText] = useState('')
@@ -24,7 +21,7 @@ export const useLocalization = (key: string, lng = defaultLanguage) => {
 
   function getTranslation () {
     if (contextI18n !== i18n) {
-      console.warn('LocalizatonProvider was not found. Using the default English translation.')
+      console.warn('LocalizationProvider was not found. Using the default English translation.')
     }
     if (contextI18n) {
       return contextI18n.exists(key) ? contextI18n.t(key) : contextI18n.t(key, { lng })

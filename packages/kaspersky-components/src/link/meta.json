@@ -10,8 +10,8 @@
     "figmaView": true
   },
   "component": "Link",
-  "description": "The component for rendering the link. The HTML Anchor element is used as the basis",
-  "usage": "Indicates the ability to navigate to another page",
+  "description": "Компонент для отрисовки ссылки. В качестве основы используется HTML элемент Anchor.",
+  "usage": "Обозначает возможность перехода на другую страницу.",
   "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1%3A2273",
-  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2FB2B-UI-KIT%3Fnode-id%3D33444%253A130132%26t%3D8p7kG6o1QctkHetZ-1"
+  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7TGvGlgGfTltMG1OBgLq8p%2F00-%255BB2B%255D-Hexa-UI-Kit%3Ftype%3Ddesign%26node-id%3D33293%253A116703%26mode%3Ddev"
 }

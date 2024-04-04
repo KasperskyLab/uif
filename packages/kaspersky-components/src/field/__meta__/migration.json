@@ -7,7 +7,7 @@
       "changes": {
         "before": "titleText - string",
         "after": "title - string",
-        "description": "Prop name changed"
+        "description": "Изменилось наименование prop"
       }
     },
     {
@@ -15,7 +15,7 @@
       "changes": {
         "before": "buttonText - string",
         "after": "IButtonProps[]",
-        "description": "Button rendering business logic changed"
+        "description": "Изменилась бизнес логика рендера кнопок"
       }
     },
     {

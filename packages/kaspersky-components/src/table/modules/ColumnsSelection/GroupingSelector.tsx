@@ -1,23 +1,18 @@
 import React from 'react'
-import { Locale } from '../../../locale'
-import { Radio } from '../../../radio'
+import { Locale } from '@src/locale'
+import { Radio } from '@src/radio'
 import { SelectorWrapper } from './SelectorWrapper'
-import { Text } from '../../../typography'
+import { Text } from '@src/typography'
 
 export interface GroupingSelectorProps {
   groupBy: any,
   setGroupBy: (value: string) => void,
-  options: any[],
-  onSave: (value: string) => void,
-  onClose: () => void
+  options: any[]
 }
 
-export const GroupingSelector = ({ groupBy, setGroupBy, options, onSave, onClose }: GroupingSelectorProps) => {
+export const GroupingSelector = ({ groupBy, setGroupBy, options }: GroupingSelectorProps) => {
   return (
-    <SelectorWrapper
-      onSave={onSave}
-      onClose={onClose}
-    >
+    <SelectorWrapper>
       <Radio
         vertical
         className="grouping-item"

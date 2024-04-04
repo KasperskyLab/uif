@@ -7,11 +7,12 @@ import { UploadUrlProps } from './types'
 import { useUploaderColors } from './useUploaderColors'
 import { StyledUrlUploader, Column, Row, Wrapper, UploadText, UploadHeading } from './Wrappers'
 import { useTranslation } from 'react-i18next'
-import { Size } from '../../design-system/types'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
 const UploadUrlView: React.VFC<UploadUrlProps> = (props) => {
   const { t } = useTranslation()
   const {
+    testId,
     componentId,
     width,
     height,
@@ -36,6 +37,7 @@ const UploadUrlView: React.VFC<UploadUrlProps> = (props) => {
     ...rest
   } = props
   const config = useUploaderColors()
+  const { testAttributes } = useTestAttribute(props)
   return (
     <StyledUrlUploader
       width={width}
@@ -44,7 +46,7 @@ const UploadUrlView: React.VFC<UploadUrlProps> = (props) => {
       openFileDialogOnClick={false}
       config={config}
       cssConfig={config}
-      data-component-id={componentId}
+      {...testAttributes}
       {...rest}
     >
       {({
@@ -65,12 +67,8 @@ const UploadUrlView: React.VFC<UploadUrlProps> = (props) => {
               <Textbox
                 value={value}
                 disabled={disabled}
-                placeholder={helpText as string || t('upload.placeholder', '')}
-                onChange={(value: string | React.ChangeEvent<HTMLInputElement>) => {
-                  if (onChange && typeof onChange === 'function' && typeof value === 'string') {
-                    onChange(value)
-                  }
-                }}
+                placeholder={helpText as string || t('upload.placeholder', '') as string}
+                onChange={onChange}
               />
             </Column>
           </Wrapper>
@@ -101,14 +99,14 @@ const UploadUrlView: React.VFC<UploadUrlProps> = (props) => {
             </Row>
             <Row>
               { errorButtons && errorButtons.map((props, pos) =>
-                <Button key={pos} {...props} text={t(props.text as string)} disabled={disabled} />) }
+                <Button key={pos} {...props} text={t(props.text as string) as string} disabled={disabled} />) }
             </Row>
           </Wrapper>
         ),
         pending: (
           <Wrapper>
             <Row>
-              <Loader size={Size.Large} />
+              <Loader size={'large'} />
               <Column>
                 <UploadHeading
                   className='upload-text-primary'
@@ -130,7 +128,7 @@ const UploadUrlView: React.VFC<UploadUrlProps> = (props) => {
             </Row>
             <Row>
               { loadingButtons && loadingButtons.map((props, pos) =>
-                <Button key={pos} {...props} text={t(props.text as string)} disabled={disabled} />) }
+                <Button key={pos} {...props} text={t(props.text as string) as string} disabled={disabled} />) }
             </Row>
           </Wrapper>
         ),
@@ -158,7 +156,7 @@ const UploadUrlView: React.VFC<UploadUrlProps> = (props) => {
             </Row>
             <Column>
               <Row>{ successButtons && successButtons.map((props, pos) =>
-                <Button key={pos} {...props} text={t(props.text as string)} disabled={disabled} />) }</Row>
+                <Button key={pos} {...props} text={t(props.text as string) as string} disabled={disabled} />) }</Row>
             </Column>
           </Wrapper>
         ),

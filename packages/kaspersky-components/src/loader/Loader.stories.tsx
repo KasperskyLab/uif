@@ -1,86 +1,80 @@
 import React from 'react'
+import { Meta, StoryObj } from '@storybook/react'
 import styled from 'styled-components'
 import { Loader } from './Loader'
-import { ILoaderProps, LoaderMode, LoaderSize } from './types'
-import Meta from './__meta__/meta.json'
+import { LoaderProps, LoaderMode, LoaderSize } from './types'
+import MetaData from './__meta__/meta.json'
 
-import { badges } from '../../.storybook/badges'
-import { withMeta } from '../../helpers/hocs/MetaComponent/withMeta'
-import { Size } from '../../design-system/types'
-import { useTheme } from '@design-system/theme/hooks'
-import { StoryLayout } from '@sb/StoryComponents'
+import { badges } from '@sb/badges'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import { Size } from '@design-system/types'
 
-export default {
+const meta: Meta<LoaderProps> = {
   title: 'Atoms/Loader',
   component: Loader,
+  argTypes: {
+    ...sbHideControls(['theme', 'tip'])
+  },
+  args: {
+    testId: 'loader-test-id',
+    klId: 'loader-kl-id'
+  },
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
     docs: {
-      page: withMeta(Meta)
-    }
+      page: withMeta(MetaData)
+    },
+    design: MetaData.figmaView
   }
 }
+export default meta
 
-const LoaderTemplate = (props: ILoaderProps) => {
-  const theme = useTheme()
+type Story = StoryObj<LoaderProps>
 
-  return (
-    <StoryLayout theme={theme.key}>
-      <Loader {...props} />
-    </StoryLayout>
-  )
+export const Basic: Story = {}
+
+export const Centered: Story = {
+  render: (args) => (
+    <div style={{ height: 'calc(100vh - 16 * 2px)' }}>
+      <Loader {...args} />
+    </div>
+  ),
+  args: {
+    centered: true
+  }
 }
-
-export const Basic = LoaderTemplate.bind({})
-
-const CenteredTemplate = ({
-  centered = true,
-  ...props
-}: ILoaderProps) => {
-  const theme = useTheme()
-
-  return (
-    <StoryLayout theme={theme.key} style={{ height: 'calc(100vh - 16 * 2px)' }}>
-      <Loader centered={centered} {...props} />
-    </StoryLayout>
-  )
-}
-
-export const Centered = CenteredTemplate.bind({})
 
 const LoadersContainer = styled.div`
   display: flex;
   gap: 12px;
 `
 
-const ModesTemplate = (props: ILoaderProps) => {
-  const theme = useTheme()
-  const modes: LoaderMode[] = ['default', 'inverted']
-  return (
-    <StoryLayout theme={theme.key}>
+export const Modes: Story = {
+  render: (args: LoaderProps) => {
+    const modes: LoaderMode[] = ['default', 'inverted']
+    return (
       <LoadersContainer>
         {modes.map(mode => (
-          <Loader key={mode} mode={mode} {...props} />
+          <Loader key={mode} mode={mode} {...args} />
         ))}
       </LoadersContainer>
-    </StoryLayout>
-  )
+    )
+  }
 }
 
-export const Modes = ModesTemplate.bind({})
-
-const SizesTemplate = (props: ILoaderProps) => {
-  const theme = useTheme()
-  const sizes: LoaderSize[] = [Size.ExtraSmall, Size.Small, Size.Medium, Size.Large, Size.ExtraLarge]
-  return (
-    <StoryLayout theme={theme.key}>
+export const Sizes: Story = {
+  render: (args: LoaderProps) => {
+    const sizes: LoaderSize[] = [Size.ExtraSmall, Size.Small, Size.Medium, Size.Large, Size.ExtraLarge]
+    return (
       <LoadersContainer>
         {sizes.map(size => (
-          <Loader key={size} size={size} {...props} />
+          <Loader key={size} {...args} size={size} />
         ))}
       </LoadersContainer>
-    </StoryLayout>
-  )
+    )
+  },
+  args: {
+    tip: 'Loader with Text'
+  }
 }
-
-export const Sizes = SizesTemplate.bind({})

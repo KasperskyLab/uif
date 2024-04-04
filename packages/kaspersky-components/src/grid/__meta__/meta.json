@@ -9,6 +9,6 @@
     "storybook": true
   },
   "component": "Grid",
-  "desctiption": "Component for composing elements on the page using the grid system",
-  "usage": "Arrangement of elements on the page and inside independent blocks"
+  "description": "Компонент для композиции элементов на странице с помощью грид системы",
+  "usage": "Расположение элементов на странице и внутри самостоятельных блоков"
 }

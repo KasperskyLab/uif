@@ -1,10 +1,9 @@
-import { KeyValueCssConfig } from '../../../../src/key-value/types'
 import { ComponentThemeContext } from '../config'
+import { KeyValueColorConfig } from '@src/key-value/types'
 
-export const keyValue = ({ colors }: ComponentThemeContext): KeyValueCssConfig => ({
+export const keyValue = ({ colors }: ComponentThemeContext): KeyValueColorConfig => ({
   normal: {
     keyColor: colors.textIconsElements.secondary,
-    valueColor: colors.textIconsElements.primary,
-    iconColor: colors.textIconsElements.primary
+    valueColor: colors.textIconsElements.primary
   }
 })

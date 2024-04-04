@@ -1,22 +1,34 @@
-import { useMemo } from 'react'
-import { useTheme } from '../../design-system/theme/hooks'
-import { THEME_CONFIG } from '../../design-system/theme/themes/config'
-import { AccordionCssConfig, IAccordionProps } from './types'
+import {
+  AccordionProps,
+  AccordionViewProps,
+  AccordionCssConfig,
+  AccordionPanelProps,
+  AccordionPanelViewProps,
+  AccordionPanelCssConfig,
+  AccordionTitleSize,
+  AccordionStyleConfig,
+  AccordionPanelThemeProps
+} from './types'
+import { useThemedComponent } from '@helpers/useThemedComponent'
 
-export const useThemedAccordion = (props: IAccordionProps) => {
-  const {
-    state = 'default',
-    expandIconPosition = 'right',
-    theme: themeFromProps,
-    ...rest
-  } = props
+export const useThemedAccordion = (props: AccordionProps): AccordionViewProps => (
+  useThemedComponent<AccordionProps, AccordionCssConfig, AccordionStyleConfig>(props, {
+    componentName: 'accordion',
+    defaultValues: {}
+  })
+)
 
-  const theme = useTheme({ theme: themeFromProps })
-
-  const cssConfig = useMemo<AccordionCssConfig>(() => ({
-    ...(THEME_CONFIG[theme.key].components.accordion.colors),
-    ...(THEME_CONFIG[theme.key].components.accordion.colors[state])
-  }), [state, theme])
-
-  return { expandIconPosition, ...rest, cssConfig }
-}
+type ToThemeProps<T> = Omit<T, 'titleSize'> & { size?: AccordionTitleSize }
+export const useThemedAccordionPanel = ({
+  titleSize = 'small',
+  ...rest
+}: AccordionPanelProps): AccordionPanelViewProps => (
+  useThemedComponent<
+    ToThemeProps<AccordionPanelProps>,
+    AccordionPanelCssConfig,
+    ToThemeProps<AccordionPanelThemeProps>
+  >({ ...rest, size: titleSize }, {
+    componentName: 'accordion',
+    defaultValues: { size: 'small' }
+  })
+)

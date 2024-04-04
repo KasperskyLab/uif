@@ -54,7 +54,7 @@ declare module 'react-imask' {
 }
 
 declare module 'react' {
-  interface HTMLAttributes<T> extends React.AriaAttributes, React.DOMAttributes<T> {
+  interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
     // extends React's HTMLAttributes
     'kl-id'?: string
   }

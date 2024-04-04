@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from 'react'
 
 import { TableModule } from '..'
 import styled from 'styled-components'
-import { Loader } from '../../../loader'
+import { Loader } from '@src/loader'
+import { SPACES } from '@design-system/theme'
+import { TableCssConfig, PaginationProps } from '../../types'
+import { fromTableProps } from '../../tableCss'
 import { EndOfTable } from './EndOfTable'
 import { Error } from './Error'
 import { useTableContext } from '../../context/TableContext'
-import { TableCssConfig } from '../../types'
-import { fromTableProps } from '../../tableCss'
-import { SPACES } from '../../../../design-system/theme/themes/variables'
 
 const StyledLoaderContainer = styled.div.withConfig<{ cssConfig: TableCssConfig }>({
   shouldForwardProp: prop => !['cssConfig'].includes(prop)
@@ -24,7 +24,7 @@ export const InfiniteScroll: TableModule = Component => props => {
   const [finished, setFinished] = useState(false)
   const [loading, setLoading] = useState(false)
   const [pageGetter, setPageGetter] = useState<(
-  (page: number) => null | Record<string, unknown>[] | Promise<null | Record<string, unknown>[]>
+  (page: number) => null | Record<string, any>[] | Promise<Record<string, any>[] | null>
   ) | null>(null)
   const [rows, setRows] = useState(props.dataSource || [])
   const [page, setPage] = useState(
@@ -37,7 +37,7 @@ export const InfiniteScroll: TableModule = Component => props => {
   useEffect(() => {
     const pageGetter = (
       props.pagination &&
-      props.pagination.infiniteScrollPageGetter
+      (props.pagination as PaginationProps)?.infiniteScrollPageGetter
     ) || null
     setPageGetter((
       pageGetter &&

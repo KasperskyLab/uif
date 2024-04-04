@@ -1,55 +1,71 @@
-import React, { ComponentProps, ReactElement } from 'react'
-
+import React, { FC } from 'react'
 import styled from 'styled-components'
 import { Input } from 'antd'
-import { inputStyles } from './inputCss'
-import classnames from 'classnames'
+import { inputStyles, inputTextareaContainerStyles } from './inputCss'
 import { useThemedTextbox } from './useThemedTextbox'
-import { ThemeKey } from '../../design-system/types'
-import { InputCssConfig } from './types'
+import { useClassNamedTextbox } from './useClassNamedTextbox'
+import { TextboxTextareaProps, TextboxTextareaMappedProps, TextboxTextareaViewProps } from './types'
+import { P } from '@src/typography'
+import cn from 'classnames'
+import { WithGlobalStyles } from '@helpers/hocs/WithGlobalStyles'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
 const StyledTextArea = styled(Input.TextArea).withConfig({
   shouldForwardProp: prop => !['cssConfig'].includes(prop)
 })`
   ${inputStyles}
+  
+  && {
+    height: unset;
+  }
 `
 
-interface ITextareaProps extends Omit<ComponentProps<typeof Input.TextArea>, 'onChange' | 'size'> {
-  /** handler  */
-  onChange?: (value: string) => void,
-  /** error flag */
-  error?: boolean,
-  positive?: boolean,
-  /** value  */
-  value?: string,
-  /** theme  options */
-  theme?: ThemeKey,
-  /** unique id  */
-  klId?: string
-}
+const StyledTextareaContainer = styled.div.withConfig({
+  shouldForwardProp: prop => !['cssConfig'].includes(prop)
+})`
+  ${inputTextareaContainerStyles}
+`
 
-export const Textarea = (rawProps: ITextareaProps): ReactElement<ITextareaProps> => {
-  const props = useThemedTextbox(rawProps)
+export const TextareaComponent: FC<TextboxTextareaProps> = (rawProps: TextboxTextareaProps) => {
+  const mappedProps: TextboxTextareaMappedProps = useClassNamedTextbox<TextboxTextareaProps>(rawProps)
+  const themedProps: TextboxTextareaViewProps = useThemedTextbox(mappedProps)
+  const props = useTestAttribute(themedProps)
   return <TextareaView {...props} />
 }
 
-export const TextareaView = ({
-  error,
-  disabled,
+export const TextareaView: FC<TextboxTextareaViewProps> = ({
   onChange,
+  cssConfig,
+  showCount,
+  maxLength,
+  value,
   className,
-  theme,
-  klId,
+  testAttributes,
   ...rest
-}: ITextareaProps & { cssConfig: InputCssConfig }): ReactElement<ITextareaProps> => {
+}: TextboxTextareaViewProps) => {
   return (
-    <StyledTextArea
-      kl-id={klId}
-      onChange={({ target: { value } }) => onChange?.(value)}
-      rows={3}
-      disabled={disabled}
-      className={classnames({ error: error && !disabled }, className)}
-      {...rest}
-    />
+    <StyledTextareaContainer
+      cssConfig={cssConfig}
+      className={cn({
+        'kl6-textbox-textarea-has-counter': showCount
+      })}
+    >
+      <StyledTextArea
+        data-component-version="v6"
+        className={cn('kl-v6-textarea', className)}
+        onChange={({ target: { value } }) => onChange?.(value)}
+        value={value}
+        rows={3}
+        maxLength={maxLength}
+        cssConfig={cssConfig}
+        {...testAttributes}
+        {...rest}
+      />
+      {showCount && <P type='BTR4' themedColor='baseicon' className='kl6-textbox-textarea-counter'>
+        {value?.length || 0} from {maxLength}
+      </P>}
+    </StyledTextareaContainer>
   )
 }
+
+export const Textarea = WithGlobalStyles(TextareaComponent)

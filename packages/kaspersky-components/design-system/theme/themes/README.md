@@ -2,12 +2,12 @@
 
 ### Border radius & Spacings
 
-* The size grid is the same for all sections within the UI Kit project
-* As a rule, the component inherits the dimensions from the base light theme in other themes
-* There is a base value ( `QUANTUM` ) of 2 units, which is multiplied by a certain number of items in the size grid.
-* In the case of `SPACES` we have a dimensional grid up to 64px, `BORDER_RADIUS` - 16px
+* Размерная сетка является единой для всех тем внутри проекта ui-kit
+* Как правило компонент наследует размеры от базовой light темы в остальных темах
+* Существует базовая величина ( `QUANTUM` ) в 2 units, которая умножается на определенное число элементов в размерной сетке. 
+* В случае с `SPACES` имеем размерную сетку до 64px, `BORDER_RADIUS` - 16px 
 
-An example of using a size grid in a Button component
+Пример использования размерной сетки в компоненте Button 
 
 ```javascript
 
@@ -34,7 +34,7 @@ export const buttonSize: Record<Size, SizeConfig> = {
 
 ### Sizings
 
-The size of the components is represented by the following grid:
+Размер компонентов представлен следующей сеткой:
 
 ```javascript
 
@@ -47,24 +47,24 @@ export enum Size {
 }
 
 ```
-> A component does not need to have all dimensions. When developing, you should focus on Figma layouts
+> У компонента не обязательно должно быть наличие всех размеров. При разработке следует ориентироваться на Figma макеты
 
-This size grid is abstract in terms of the values stored within each size.
-So, for a Button component, the size of `medium` is
+Данная размерная сетка носит абстрактный характер с точки зрения хранимых внутри каждого размера значений.
+Так, для компонента Button размер `medium` является 
 
 ```padding: `${SPACES[3]}px ${SPACES[6]}px`,
     height: `${SPACES[16]}px`,
     borderRadius: `${BORDER_RADIUS[2]}px`,
     ...getTextSizes(TextTypes.L3)```
 
-For an Input component, the `medium` size is
+Для компонента Input размер `medium` это
 
 ```padding: `${SPACES[3]}px ${SPACES[4]}px`,
     height: `${SPACES[16]}px`,
     borderRadius: `${BORDER_RADIUS[3]}px`,
     ...getTextSizes(TextTypes.BTR3)```
     
-The following is an example of the specified sizes for the Button component
+Ниже приведен пример заданных размеров для компонента Button
 
 ```javascript
 // design-system/theme/themes/light/button.ts

@@ -1,21 +1,55 @@
 import React, {
-  useMemo
+  useMemo,
+  useState,
+  useEffect,
+  useRef,
+  RefObject,
+  VFC,
+  PropsWithChildren
 } from 'react'
-import { ColumnType } from 'antd/lib/table'
 import { TableModule } from './index'
-import { Tooltip } from '../../tooltip'
-import { Text } from '../../typography'
+import { Tooltip } from '@src/tooltip'
+import { TableCustomColumn } from '../types'
+import styled from 'styled-components'
 
-export type Column = ColumnType<Record<string, unknown>> & {
-  title: string | React.ReactElement,
-  dataIndex: string,
-  ellipsis?: boolean
-}
+export type Column = TableCustomColumn
 
 const hasEllipsis = (columns: Column[]) => {
   return columns.reduce(
-    (acc, curr) => acc || Boolean(curr.ellipsis),
-    false
+    (acc, curr) => acc || curr.ellipsis === false,
+    true
+  )
+}
+
+const TooltipWrapper = styled.div`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+`
+
+type OverflowSpanProps = PropsWithChildren<{
+  containerRef: RefObject<HTMLSpanElement>
+}>
+
+export const OverflowSpan: VFC<OverflowSpanProps> = ({ containerRef, children }) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const [hasOverflow, setHasOverflow] = useState(false)
+  useEffect(() => {
+    if (!containerRef.current) return
+    const container = containerRef.current
+    const resizeObserver = new ResizeObserver(() => {
+      if (!ref.current) return
+      const isEllipsisActive = ref.current.offsetWidth < ref.current.scrollWidth
+      setHasOverflow(isEllipsisActive)
+    })
+    resizeObserver.observe(container)
+  }, [containerRef])
+
+  return (
+    <Tooltip text={hasOverflow ? children : null}>
+      <TooltipWrapper ref={ref}>{children}</TooltipWrapper>
+    </Tooltip>
   )
 }
 
@@ -31,22 +65,21 @@ export const Reductions: TableModule = Component => ({
     return <Component {...props} columns={columns} />
   }
 
+  const containerRef = useRef<HTMLDivElement>(null)
+
   const processColumn = (column: Column) : Column => {
-    if (!column.ellipsis || !column.title) {
+    if (!column.title) {
       return column
     }
     return {
       ...column,
+      ellipsis: true,
       title: (
-        <Tooltip title={<>
-          <Text type='BTR4'>
+        <div ref={containerRef} style={{ overflowX: 'hidden' }}>
+          <OverflowSpan containerRef={containerRef}>
             {column.title}
-          </Text>
-        </>}>
-          <span>
-            {column.title}
-          </span>
-        </Tooltip>
+          </OverflowSpan>
+        </div>
       )
     }
   }
@@ -55,8 +88,10 @@ export const Reductions: TableModule = Component => ({
     [columns]
   )
 
-  return <Component
-    {...props}
-    columns={processedColumns}
-  />
+  return (
+    <Component
+      {...props}
+      columns={processedColumns}
+    />
+  )
 }

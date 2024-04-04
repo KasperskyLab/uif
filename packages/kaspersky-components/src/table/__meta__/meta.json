@@ -9,7 +9,7 @@
       "storybook": true
     },
     "component": "Table",
-    "desctiption": "A container component for a group of commands or controls.",
+    "description": "Компонент-контейнер для группы команд или элементов управления. ",
     "usage": "",
     "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-UI-KIT?node-id=4055%3A17685"
   }

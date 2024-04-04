@@ -6,30 +6,30 @@
   "common": [
     {
       "prop": "defaultCurrent",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "itemRender",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "responsive",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "showLessItems",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "showTitle",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "size",
       "changes": {
         "before": "default | small",
         "after": "small | medium",
-        "description": "Changing the size grid"
+        "description": "Изменение размерной сетки"
       }
     }
   ]

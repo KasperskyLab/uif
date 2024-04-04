@@ -9,7 +9,7 @@
     "storybook": true
   },
   "component": "Label",
-  "description": "A component for a label, either independent or as part of other components.",
+  "description": "Компонент для лэйбла, как независимого, так и в составе других компонентов.",
   "usage": "",
   "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1%3A1586"
 }

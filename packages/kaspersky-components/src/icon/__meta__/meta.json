@@ -9,7 +9,7 @@
     "storybook": true
   },
   "component": "Icon",
-  "desctiption": "Icon displays the desired icon of the desired size",
-  "usage": "Used to display icons from the icon pool with the correct styles and colors",
+  "description": "Icon выводит нужную иконку нужного размера",
+  "usage": "Используется для отображения иконок из пула иконок с правильными стилями и цветами",
   "designLink": ""
 }

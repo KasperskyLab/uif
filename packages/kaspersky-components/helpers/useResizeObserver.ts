@@ -1,20 +1,20 @@
-import { RefObject, useEffect, useState } from 'react'
+import { RefObject, useEffect, useLayoutEffect, useState } from 'react'
 import ResizeObserver from 'resize-observer-polyfill'
 
-type Dimensions = {
-  width: number,
-  height: number,
-} | undefined
+export const useResizeObserver = (ref: RefObject<Element>): DOMRect => {
+  const [dimensions, setDimensions] = useState<DOMRect>()
 
-export const useResizeObserver = (ref: RefObject<Element>): Dimensions => {
-  const [dimensions, setDimensions] = useState<Dimensions>()
+  useLayoutEffect(() => {
+    setDimensions(ref.current?.getBoundingClientRect())
+  }, [ref])
+
   useEffect(() => {
     const observeTarget = ref.current
     if (observeTarget === null) return
 
     const resizeObserver = new ResizeObserver(entries => {
       entries.forEach(entry => {
-        setDimensions(entry.contentRect)
+        setDimensions(entry.target.getBoundingClientRect())
       })
     })
     resizeObserver.observe(observeTarget)
@@ -23,5 +23,5 @@ export const useResizeObserver = (ref: RefObject<Element>): Dimensions => {
     }
   }, [ref])
 
-  return dimensions || ref.current?.getBoundingClientRect()
+  return dimensions as DOMRect
 }

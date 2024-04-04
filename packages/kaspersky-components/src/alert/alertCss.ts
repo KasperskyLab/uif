@@ -1,29 +1,20 @@
-import { SPACES, BORDER_RADIUS } from '@design-system/theme/themes/variables'
+import { SPACES } from '@design-system/theme/themes/variables'
 import { getTextSizes, TextTypes } from '@design-system/tokens'
 import { getFromProps } from '@helpers/getFromProps'
 import styled, { css } from 'styled-components'
-import { AlertCssConfig, AlertMode, AlertSizeConfig, AlertType } from './types'
-import { Space, SpaceProps } from '..'
-import { Text, TextProps } from '@src/typography/text'
+import { AlertCssConfig, AlertSizeConfig } from './types'
+import { Space, SpaceProps } from '@src/space'
 
 const fromProps = getFromProps<AlertCssConfig>()
 
-export const IconStyled = styled.span<{
-  cssConfig: AlertCssConfig,
-  mode: AlertMode
-}>`
-  .anticon {
-    svg {
-      height: ${SPACES[10]}px;
-      width: ${SPACES[10]}px;
-    }
+export const IconStyled = styled.span`
+  min-width: ${SPACES[8]}px;
+  height: ${SPACES[10]}px;
+
+  svg {
+    color: ${fromProps('icon.color')};
+    transform: translateY(${SPACES[1]}px);
   }
-  display: grid;
-  gap: ${SPACES[4]}px;
-  position: relative;
-  margin-right: ${SPACES[4]}px;
-  top: ${SPACES[2]}px;
-  color: ${fromProps('icon.color')};
 `
 
 export const SpaceBox = styled(Space)<SpaceProps>`
@@ -34,7 +25,7 @@ export const SpaceBox = styled(Space)<SpaceProps>`
         gridTemplateColumns: '1fr auto',
         flexDirection: 'row',
         flexWrap: 'nowrap',
-        alignItems: 'center',
+        alignItems: 'start',
         justifyContent: 'space-between',
         width: '100%'
       }
@@ -52,35 +43,26 @@ export const alertSize: AlertSizeConfig = {
   ...getTextSizes(TextTypes.BTR3)
 }
 
-export const TextBox = styled(Text)<TextProps>`
+export const alertCss = css<{
+  cssConfig: AlertCssConfig,
+  width?: string | number
+}>`
   display: flex;
-  flex-direction: column;
-`
-
-export const alertCss = css`
-  display: flex;
-  padding: ${(props: {
-    cssConfig: AlertCssConfig,
-    type: AlertType,
-    noIcon?: boolean,
-    width?: string | number
-  }) =>
-    props.type === 'alert'
-      ? `${SPACES[5]}px ${SPACES[6]}px ${SPACES[5]}px ${SPACES[6]}px`
-      : `${SPACES[8]}px ${SPACES[8]}px ${SPACES[8]}px ${SPACES[9]}px`};
-  flex-direction: row;
-  ${({ noIcon }) =>
-    !noIcon && {
-      gap: `${SPACES[2]}px`
-    }};
+  gap: ${SPACES[4]}px;
+  padding: ${SPACES[6]}px ${SPACES[8]}px ${SPACES[6] - 1}px ${SPACES[8]}px;
   align-items: baseline;
   position: relative;
-  border-radius: ${() => `${BORDER_RADIUS[4]}px`};
-  border-top: ${({ type }) =>
-    type !== 'alert' ? `${SPACES[2]}px solid` : 'none'};
-  background: ${fromProps('mode.normal.background')};
-  color: ${fromProps('mode.normal.color')};
-  border-color: ${fromProps('mode.normal.borderColor')};
-  width: ${({ width }) => (width ? `${width}px` : '624px')};
+  border-bottom: 1px solid ${fromProps('alert.borderColor')};
+  background: ${fromProps('alert.background')};
+  color: ${fromProps('alert.color')};
+  width: ${({ width }) => (width ? `${width}px` : '100%')};
   ${alertSize};
+  
+  .alert-action-separator:after {
+    display: block;
+    content: '';
+    width: 1px;
+    height: 20px;
+    background: ${fromProps('alert.separator')};
+  }
 `

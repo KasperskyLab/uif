@@ -4,33 +4,33 @@
   "v3": [
     {
       "prop": "onVisibleChange",
-      "changes": "Added"
+      "changes": "Добавлен"
     },
     {
       "prop": "overlayClassName",
-      "changes": "Added"
+      "changes": "Добавлен"
     },
     {
       "prop": "trigger",
-      "changes": "Added trigger contextMenu, by clicking on the right mouse button"
+      "changes": "Добавлен триггер contextMenu, по нажатию на правую кнопку мыши"
     }
   ],
   "v5": [
     {
       "prop": "autoFocus",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "destroyPopupOnHide",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "getPopupContainer",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "overlayStyle",
-      "changes": "Removed"
+      "changes": "Убран"
     }
   ],
   "common": []

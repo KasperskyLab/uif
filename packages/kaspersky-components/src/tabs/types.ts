@@ -1,104 +1,104 @@
-import { ReactNode, KeyboardEvent, MouseEvent, CSSProperties } from 'react'
-import { TextSizes } from '../../design-system/tokens/typography'
-import { Theme } from '../../design-system/types/Theme'
+import {
+  PropsWithChildren,
+  ReactNode,
+  KeyboardEvent,
+  MouseEvent,
+  CSSProperties,
+  FC
+} from 'react'
+import { SpaceProps } from '@src/space'
+import { Theme } from '@design-system/types/Theme'
+import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TabPaneProps } from 'antd'
+import { Focus } from '@design-system/tokens/focus'
 
 type StateProps = {
   color?: string,
-  border?: string
+  border?: string,
+  background?: string
 }
 
-export type TabsColorConfig = {
-  active: StateProps,
-  normal: StateProps & {
-    background: string,
-    paneNumber: StateProps
-  },
-  hover: StateProps & {
-    dropdown: {
-      background: string
-    }
-  },
-  disabled: StateProps
+type TabsStateConfig = {
+  enabled?: StateProps,
+  hover?: StateProps,
+  pressed?: StateProps,
+  disabled?: StateProps
 }
 
-export type TabsSizeConfig = {
-  card: {
-    padding: string,
-    borderRadius: string
-  },
-  leftTabs: {
-    padding: string,
-    borderRadius: string,
-    textSizes: TextSizes
-  },
-  tabs: {
-    list: {
-      padding: string
-    },
-    more: {
-      padding: string
-    },
-    linkBar: {
-      borderRadius: string
-    },
-    disabled: {
-      borderRadius: string
-    }
-  },
-  pane: {
-    gap: string
-  },
-  dropdown: {
-    borderRadius: string
-  }
-} & TextSizes
+export type TabsColorConfig = Focus & {
+  selected: TabsStateConfig,
+  unSelected: TabsStateConfig,
+  divider: StateProps
+}
 
-export type TabsCssConfig = TabsColorConfig & TabsSizeConfig
+export type TabsCssConfig = TabsColorConfig
 
-export type TabsStyleProps = {
+export type TabsThemeProps = {
   /** Custom theme */
   theme?: Theme
 }
 
-export type ITabsProps = {
-  /** Tabs type */
+export type TabsVariants = {
+  TabPane: FC<TabPaneProps>,
+  TabPaneHead: FC<TabPaneHeadProps>
+}
+
+export type TabsProps = TabsThemeProps & PropsWithChildren<{
+  /** @deprecated Tabs type - card tabs are not supported */
   type?: 'line' | 'card',
+  /** Extra content at left and right side of tabs. Intends should be set manually (until design review) */
+  tabBarExtraContent?: ReactNode | { right?: ReactNode, left?: ReactNode },
+  /** TabPane's className */
+  className?: string,
   /** Tabs position */
   tabPosition?: 'top' | 'left',
   /** Current TabPane's key */
   activeKey?: string,
-  /**
-   * Initial active TabPane's key, if activeKey is not set
-   */
+  /** Initial active TabPane's key, if activeKey is not set */
   defaultActiveKey?: string,
-  /**
-   * Callback executed when active tab is changed
-   */
+  /** Callback executed when active tab is changed */
   onChange?: (activeKey: string) => void,
-  /**
-   * Callback executed when tab is clicked
-   */
+  /** Callback executed when tab is clicked */
   onTabClick?: (activeKey: string, e: KeyboardEvent | MouseEvent) => void,
   /** Style properties */
   style?: CSSProperties,
-  /**
-   * Whether destroy inactive TabPane when change tab
-   */
-  destroyInactiveTabPane?: boolean,
-  /** Test id */
-  klId?: string
-} & TabsStyleProps
+  /** Whether destroy inactive TabPane when change tab */
+  destroyInactiveTabPane?: boolean
+}> & TestingProps
 
-export type ITabsViewProps = Omit<ITabsProps, keyof TabsStyleProps> & {
-  moreIcon?: ReactNode
-} & {
-  cssConfig: TabsCssConfig
-}
+type TabsToViewProps<T> = ToViewProps<T, TabsCssConfig>
 
-export type ITabPaneHeadProps = {
+export type TabsViewProps = TabsToViewProps<TabsProps> & { rootHashClass?: string }
+
+export type TabPaneHeadProps = {
   text: string,
   icon?: ReactNode,
   number?: number,
+  indicator?: boolean,
   cssConfig?: TabsCssConfig,
+  /** @deprecated Disabled state - use TabPane disabled prop instead */
   disabled?: boolean
 }
+
+export type StyledTabPanedHeadProps = SpaceProps & { cssConfig: TabsCssConfig }
+
+export type TabPaneHeaderProps = PropsWithChildren<{
+  divider?: boolean,
+  dividerClassName?: string,
+  title?: ReactNode
+}> & TabPaneProps
+
+export type GroupTabsProps = Omit<TabsProps, 'tabPosition'>
+
+export type GroupTabsVariants = {
+  TabPaneHeader: FC<TabPaneHeaderProps>
+}
+
+/** @deprecated Use TabsProps instead */
+export type ITabsProps = TabsProps
+/** @deprecated Use TabsViewProps instead */
+export type ITabsViewProps = TabsViewProps
+/** @deprecated Use TabPaneHeadProps instead */
+export type ITabPaneHeadProps = TabPaneHeadProps
+/** @deprecated Use TabThemeProps instead */
+export type TabsStyleProps = TabsThemeProps

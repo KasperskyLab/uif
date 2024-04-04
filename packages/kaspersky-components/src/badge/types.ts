@@ -1,8 +1,8 @@
-import { TextSizes } from '../../design-system/tokens'
-import { Theme } from '../../design-system/types'
+import { Theme } from '@design-system/types'
+import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 
 export type BadgeMode =
-  'neutral'
+  | 'neutral'
   | 'accent'
   | 'black'
   | 'positive'
@@ -11,24 +11,28 @@ export type BadgeMode =
   | 'critical'
   | 'new'
   | 'dot'
+  | 'update'
+  | 'in-progress'
+  | 'resolved'
+  | 'in-incident'
+  | 'low'
+  | 'info';
 
-export type BadgeStateProps = {
+export type BadgeColorConfig = {
   background?: string,
   color?: string
 }
 
-export type BadgeCssConfig = BadgeStateProps & BadgeSizeConfig
+export type BadgeCssConfig = BadgeColorConfig
 
-export type BadgeSizeConfig = TextSizes & {
-  padding: string,
-  borderRadius: string
-}
-
-export type IBadgeProps = {
+export type BadgeThemeProps = {
   /** Color mode */
   mode?: BadgeMode,
   /** Custom theme */
-  theme?: Theme,
+  theme?: Theme
+}
+
+export type BadgeProps = {
   /** Displayed number */
   count?: number,
   /** Displayed text (instead of count) */
@@ -37,10 +41,16 @@ export type IBadgeProps = {
   overflowCount?: number,
   /** Text to show when hovering over the badge */
   title?: string,
-  /** Test id */
-  klId?: string,
   /** Whether to show badge when count is zero */
   showZero?: boolean
+} & BadgeThemeProps & TestingProps
+
+export type BadgeViewProps = ToViewProps<BadgeProps, BadgeCssConfig, BadgeThemeProps> & {
+  dot?: boolean
 }
 
-export type ThemedBadgeProps = Omit<IBadgeProps, 'theme'> & { cssConfig: BadgeCssConfig }
+/** @deprecated Use BadgeViewProps instead */
+export type ThemedBadgeProps = Omit<BadgeProps, 'theme'> & { cssConfig: BadgeCssConfig }
+
+/** @deprecated Use BadgeProps instead */
+export type IBadgeProps = BadgeProps

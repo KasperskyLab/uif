@@ -1,27 +1,30 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import { H1, H2, H3, H4, Text } from '../Typography'
-import { ThemeKey } from '../../../design-system/types'
+import { H1, H2, H3, H4, H5, H6, Text } from '../Typography'
+import { ThemeKey } from '@design-system/types'
 import {
   colors,
   getTextSizes,
   HeadingTypes,
   TextTypes
-} from '../../../design-system/tokens'
+} from '@design-system/tokens'
 import 'jest-styled-components'
-import { ThemeProvider } from '../../../design-system/theme'
-import { THEME_CONFIG } from '../../../design-system/theme/themes/config'
+import { ThemeProvider } from '@design-system/theme'
+import { THEME_CONFIG } from '@design-system/theme/themes/config'
 
 describe('Typography - Text', () => {
   const klId = 'test-text-id'
-  test('should receive kl-id prop', () => {
-    const { getByTestId } = render(
+
+  test('should render', () => {
+    const { container, getByTestId } = render(
       <ThemeProvider theme={ThemeKey.Light}>
-        <Text klId={klId}>hello</Text>
+        <Text klId={klId} testId="test-id">hello</Text>
       </ThemeProvider>
     )
+
     expect(getByTestId(klId)).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
 
   test('render without passing any props', () => {
@@ -266,5 +269,31 @@ describe('Typography - Heading', () => {
 
     // @ts-ignore
     expect(getByRole('heading', { level: 4 })).toBeInTheDocument()
+  })
+
+  test('render H5 with correctly semantic tag', () => {
+    const { getByRole } = render(
+      <ThemeProvider theme={ThemeKey.Light}>
+        <H5 color="cg100" klId={klId}>
+          hello
+        </H5>
+      </ThemeProvider>
+    )
+
+    // @ts-ignore
+    expect(getByRole('heading', { level: 5 })).toBeInTheDocument()
+  })
+
+  test('render H6 with correctly semantic tag', () => {
+    const { getByRole } = render(
+      <ThemeProvider theme={ThemeKey.Light}>
+        <H6 color="cg100" klId={klId}>
+          hello
+        </H6>
+      </ThemeProvider>
+    )
+
+    // @ts-ignore
+    expect(getByRole('heading', { level: 6 })).toBeInTheDocument()
   })
 })

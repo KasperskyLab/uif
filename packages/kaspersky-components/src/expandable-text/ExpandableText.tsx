@@ -2,19 +2,28 @@ import React, { useLayoutEffect, useRef, useState } from 'react'
 import ResizeObserver from 'resize-observer-polyfill'
 import styled from 'styled-components'
 import { TextExpander } from './TextExpander'
-import { Text } from '../typography'
+import { Text } from '@src/typography'
 import { expandableTextCss } from './expandableTextCss'
-import { IExpandableTextProps } from './types'
+import { ExpandableTextProps, ExpandableTextViewProps } from './types'
 import { isEllipsisActive, resizeThrottle } from './helpers'
+import { useThemedExpandableText } from './useThemedExpandableText'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
-const StyledText = styled(Text)`
-  ${expandableTextCss}
-`
+const StyledText = styled(Text).withConfig<ExpandableTextViewProps>({
+  shouldForwardProp: (prop) => !['cssConfig'].includes(prop as string)
+})`${expandableTextCss}`
 
-export const ExpandableText = ({
+export const ExpandableText: React.FC<ExpandableTextProps> = (rawProps: ExpandableTextProps) => {
+  const themedProps = useThemedExpandableText(rawProps)
+  const props = useTestAttribute(themedProps)
+  return <ExpandableTextView {...props} />
+}
+
+export const ExpandableTextView = ({
   type = 'BTR3',
+  testAttributes,
   ...props
-}: IExpandableTextProps) => {
+}: ExpandableTextViewProps) => {
   const ref = useRef<HTMLParagraphElement>()
   const [clipped, setClipped] = useState<boolean>(false)
   const [expanded, setExpanded] = useState<boolean>(false)
@@ -43,29 +52,37 @@ export const ExpandableText = ({
     if (!element) return
 
     element.title = clipped
-      ? props.altText ?? String(props.children)
+      ? props.altText ?? typeof props.children === 'string' ? String(props.children) : ''
       : ''
 
     if (!clipped) setExpanded(false)
   }, [clipped, props.altText])
 
-  const childrenWithExpander = [
-    ...React.Children.toArray(props.children),
-    <TextExpander style={{ visibility: (clipped && !expanded) ? 'visible' : 'hidden' }} onClick={(e) => {
-      e.stopPropagation()
-      if (ref.current) {
-        contentWidth.current = ref.current.scrollWidth
-      }
-      setExpanded(true)
-    }} />
-  ]
+  const expand = React.useCallback(() => {
+    if (expanded) {
+      setExpanded(false)
+      setClipped(true)
+      return
+    }
 
-  return <StyledText
-    {...props}
-    ref={ref}
-    clipped={clipped}
-    expanded={expanded}
-    children = {childrenWithExpander}
-    type={type}
-  />
+    if (ref.current) {
+      contentWidth.current = ref.current.scrollWidth
+    }
+    setExpanded(true)
+  }, [expanded])
+
+  return (
+    <StyledText
+      ref={ref}
+      clipped={clipped}
+      expanded={expanded}
+      type={type}
+      tabIndex={0}
+      {...testAttributes}
+      {...props}
+    >
+      {props.children}
+      <TextExpander onClick={expand}/>
+    </StyledText>
+  )
 }

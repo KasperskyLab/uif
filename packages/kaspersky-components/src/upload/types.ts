@@ -1,19 +1,19 @@
 import * as React from 'react'
-import { IconProps } from '../icon'
 import { ReactNode } from 'react'
 import { UploadProps as AntdUploadProps } from 'antd/es/upload/interface'
 import { Upload as AntdUpload } from 'antd'
-import { IButtonProps } from '../button/types'
-import { upload } from '../../design-system/theme/themes/light/upload'
+import { ButtonProps } from '@src/button/types'
+import { IconProps } from '@src/icon'
+import { upload } from '@design-system/theme/themes/light/upload'
+import { TestingProps } from '@helpers/typesHelpers'
 
-export interface UploadProps {
+export type UploadProps = TestingProps & {
   width?: number,
-  componentId?: string,
   height?: number,
   icon?: null | IconProps,
   iconFile?: null | IconProps,
   title?: ReactNode,
-  buttons?: IButtonProps[],
+  buttons?: ButtonProps[],
   helpText?: ReactNode,
   disabled?: boolean,
   config?: ReturnType<typeof upload>,
@@ -23,24 +23,25 @@ export interface UploadProps {
     size?: number
   },
   percent?: number,
-  fileButtons?: IButtonProps[],
+  fileButtons?: ButtonProps[],
 
   errorTitle?: ReactNode,
   errorDescription?: ReactNode,
-  errorButtons?: IButtonProps[],
+  errorButtons?: ButtonProps[],
 
   loadingTitle?: ReactNode,
   loadingDescription?: ReactNode,
-  loadingButtons?: IButtonProps[],
+  loadingButtons?: ButtonProps[],
 
   successTitle?: ReactNode,
   successDescription?: ReactNode,
-  successButtons?: IButtonProps[],
+  successButtons?: ButtonProps[],
   status?: 'none' | 'error' | 'pending' | 'success' | 'selected'
 }
 
-export interface UploadDraggerProps extends UploadProps, React.ComponentProps<typeof AntdUpload.Dragger> {}
-export interface UploadUrlProps extends Omit<AntdUploadProps & UploadProps, 'onChange'> {
+export type UploadDraggerProps = UploadProps & React.ComponentProps<typeof AntdUpload.Dragger>
+
+export type UploadUrlProps = Omit<AntdUploadProps & UploadProps, 'onChange'> & {
   onChange?: (value: string) => void,
   value?: string
 }

@@ -2,7 +2,7 @@ import React from 'react'
 
 export interface IRepeaterProps {
   component: React.ReactNode,
-  data: Array<Record<string, unknown>>
+  data: Array<any>
 }
 
 export const Repeater = ({

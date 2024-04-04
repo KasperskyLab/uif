@@ -1,58 +1,71 @@
-import { AnchorHTMLAttributes, ReactNode } from 'react'
-import { TextSizes, TextTypes } from '../../design-system/tokens'
-import { Theme } from '../../design-system/types'
+import { AnchorHTMLAttributes, HTMLAttributeAnchorTarget, ReactNode } from 'react'
+import { Theme } from '@design-system/types'
+import { TextSizes, TextTypes } from '@design-system/tokens'
+import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { Focus } from '@design-system/tokens/focus'
 
 type StateProps = {
   color: string
 }
 
-export type LinkColorConfig = {
+export type LinkColorConfig = Focus & {
   normal: StateProps,
+  visited: StateProps,
   hover: StateProps,
-  focus: StateProps,
   active: StateProps,
-  disabled: StateProps,
-  focusOutline: StateProps
+  disabled: StateProps
 }
 
-export type LinkSizeConfig = {
-  gap: string,
+export type LinkSizeConfig = Partial<TextSizes> & {
   borderRadius: string,
-  outlineWidth: string
+  borderWidth: string
 }
 
-export type LinkStyleProps = {
+export type LinkThemeProps = {
   /** Custom theme */
   theme?: Theme,
-  /** Text type */
-  type?: keyof typeof TextTypes
+  /** Link text size */
+  size?: LinkSize
 }
 
-export type LinkCssConfig = LinkColorConfig & LinkSizeConfig & TextSizes
+export type LinkCssConfig = LinkColorConfig & LinkSizeConfig
 
-export type ILinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & LinkStyleProps & {
-  /** Text */
+export type LinkSize = 'medium' | 'large' | 'noSize'
+
+export type LinkDecorationType = 'icon' | 'none'
+
+export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+  /** Link text */
   text?: string,
-  /** Underline */
-  decoration?: 'underline' | 'icon' | 'none',
+  /** With icon or not */
+  decoration?: LinkDecorationType,
   /** Disabled state */
   disabled?: boolean,
-  /** Test id */
-  klId?: string,
+  /** Link can be visited */
+  visited?: boolean,
+  /** Icon */
+  icon?: ReactNode,
+  /** Icon Position */
+  iconPosition?: 'before' | 'after',
   /** Link */
   href?: string,
   /** Same as 'target' <a> attribute */
-  target?: string,
+  target?: HTMLAttributeAnchorTarget,
   /** Css class */
   className?: string,
   /** Name for anchor */
   name?: string,
   /** HTML attribute 'title' */
   title?: string,
-  /** Icon */
-  icon?: ReactNode,
-  /** Icon Position */
-  iconPosition?: 'before' | 'after'
-}
+  /** @deprecated Text type - use size instead */
+  type?: keyof typeof TextTypes
+} & LinkThemeProps & TestingProps
 
-export type ILinkViewProps = Omit<ILinkProps, keyof LinkStyleProps> & { cssConfig: LinkCssConfig }
+export type LinkViewProps = ToViewProps<LinkProps, LinkCssConfig, LinkThemeProps>
+
+/** @deprecated Use LinkThemeProps instead */
+export type LinkStyleProps = LinkThemeProps
+/** @deprecated Use LinkProps instead */
+export type ILinkProps = LinkProps
+/** @deprecated Use LinkViewProps instead */
+export type ILinkViewProps = LinkViewProps

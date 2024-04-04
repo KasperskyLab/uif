@@ -7,22 +7,23 @@ import '@testing-library/jest-dom'
 import 'jest-styled-components'
 import { ConfigProvider } from '../../../design-system/context'
 import { localization } from '../../../helpers/localization'
-import { renderHook } from '@testing-library/react-hooks'
-import { useTranslation } from 'react-i18next'
 import { convertFileSize } from '../convertFileSize'
 
 describe('Input - Upload - Basic ', () => {
-  const componentId = 'upload-test-id'
-  test('should recieve componentId prop', () => {
+  const locale = localization['en-us'].translation
+  const testId = 'upload-test-id'
+
+  test('should render', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale='en'>
-        <Upload status='success'
-          componentId={componentId}
+      <ConfigProvider theme={ThemeKey.Light} locale='en-us'>
+        <Upload
+          testId={testId}
+          status='success'
         />
       </ConfigProvider>
     )
-    const upload = container.querySelector(`[data-component-id="${componentId}"]`)
-    expect(upload).toBeInTheDocument()
+
+    expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
   })
 
   test('upload file', async () => {
@@ -31,21 +32,21 @@ describe('Input - Upload - Basic ', () => {
     })
 
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale='en'>
+      <ConfigProvider theme={ThemeKey.Light} locale='en-us'>
         <Upload
-          componentId={componentId}
+          testId={testId}
           status='success'
         />
       </ConfigProvider>
     )
 
-    const uploadInput = container.querySelector(`[data-component-id="${componentId}"]`) as HTMLElement
+    const uploadInput = container.querySelector(`[data-testid="${testId}"]`) as HTMLElement
     if (uploadInput) {
       userEvent.upload(uploadInput, mockValidCSV)
 
       await waitFor(() => {
         expect(
-          screen.getByText('Uploading success')
+          screen.getByText(locale.upload.successTitle)
         ).toBeInTheDocument()
       })
     }
@@ -57,21 +58,21 @@ describe('Input - Upload - Basic ', () => {
     })
 
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale='en'>
+      <ConfigProvider theme={ThemeKey.Light} locale='en-us'>
         <Upload
-          componentId={componentId}
+          testId={testId}
           status='error'
         />
       </ConfigProvider>
     )
 
-    const uploadInput = container.querySelector(`[data-component-id="${componentId}"]`) as HTMLElement
+    const uploadInput = container.querySelector(`[data-testid="${testId}"]`) as HTMLElement
     if (uploadInput) {
       userEvent.upload(uploadInput, mockValidCSV)
 
       await waitFor(() => {
         expect(
-          screen.getByText('Uploading error')
+          screen.getByText(locale.upload.errorTitle)
         ).toBeInTheDocument()
       })
     }
@@ -79,16 +80,16 @@ describe('Input - Upload - Basic ', () => {
 
   test('upload file pending', async () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale='en'>
+      <ConfigProvider theme={ThemeKey.Light} locale='en-us'>
         <Upload
-          componentId={componentId}
+          testId={testId}
           status='pending'
           loadingDescription = 'monster-file.exe.zip'
         />
       </ConfigProvider>
     )
 
-    const uploadInput = container.querySelector(`[data-component-id="${componentId}"]`) as HTMLElement
+    const uploadInput = container.querySelector(`[data-testid="${testId}"]`) as HTMLElement
     expect(uploadInput).toHaveStyle('display: none')
     expect(
       screen.getByText('monster-file.exe.zip')
@@ -97,9 +98,9 @@ describe('Input - Upload - Basic ', () => {
 
   test('upload file selected', async () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale='en'>
+      <ConfigProvider theme={ThemeKey.Light} locale='en-us'>
         <Upload
-          componentId={componentId}
+          testId={testId}
           status='selected'
           file = {
             { name: 'monster-file.exe', size: 123456 }
@@ -108,7 +109,7 @@ describe('Input - Upload - Basic ', () => {
       </ConfigProvider>
     )
 
-    const uploadInput = container.querySelector(`[data-component-id="${componentId}"]`) as HTMLElement
+    const uploadInput = container.querySelector(`[data-testid="${testId}"]`) as HTMLElement
     expect(uploadInput).toHaveStyle('display: none')
     expect(
       screen.getByText('monster-file.exe')
@@ -116,22 +117,16 @@ describe('Input - Upload - Basic ', () => {
   })
 
   test('render without l18n', () => {
-    // @ts-ignore
-    const enUploadTextStatus = localization.en.translation.upload.successDescription
+    const enUploadTextStatus = locale.upload.successDescription
     render(
-      <ConfigProvider theme={ThemeKey.Light} locale='en'>
-        <Upload
-          componentId={componentId}
-          status='success'
-        />
-      </ConfigProvider>
+      <Upload
+        testId={testId}
+        status='success'
+      />
     )
 
-    const { result } = renderHook(() => useTranslation())
-    const locText = result.current.t(enUploadTextStatus)
-    expect(enUploadTextStatus).toEqual(locText)
     expect(
-      screen.getByText(locText)
+      screen.getByText(enUploadTextStatus)
     ).toBeInTheDocument()
   })
 

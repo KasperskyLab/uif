@@ -1,15 +1,18 @@
 {
-    "dod": {
-      "designTokens": true,
-      "useThemedHook": true,
-      "unitTests": true,
-      "screenshotTests": false,
-      "migration": true,
-      "apiTable": true,
-      "storybook": true
-    },
-    "component": "Typography",
-    "desctiption": "A component for displaying stylized text.",
-    "usage": "Component for displaying stylized text.",
-    "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=14560%3A87552"
-  }
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "designLink": true,
+    "figmaView": true
+  },
+  "component": "Typography",
+  "description": "Компонент для отображения стилизованного текста.",
+  "usage": "Компонент для отображения стилизованного текста.",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=14560%3A87552",
+  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7TGvGlgGfTltMG1OBgLq8p%2F00-%255BB2B%255D-Hexa-UI-Kit%3Ftype%3Ddesign%26node-id%3D14560%253A87552%26mode%3Ddev"
+}

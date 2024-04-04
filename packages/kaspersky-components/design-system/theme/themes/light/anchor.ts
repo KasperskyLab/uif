@@ -1,34 +1,24 @@
-import { AnchorColorConfig, AnchorSizeConfig, AnchorLinkSizeConfig, AnchorLinkColorConfig } from '../../../../src/anchor-links/types'
+import { AnchorColorConfig } from '@src/anchor-links/Anchor/types'
+import { AnchorLinkColorConfig } from '@src/anchor-links/AnchorLink/types'
 import { ComponentThemeContext } from '../config'
-import { BORDER_RADIUS, SPACES } from '../variables'
-import { getTextSizes, textLevels } from './typography'
+import { focus } from '@design-system/tokens/focus'
 
-export const anchors = ({ colors }: ComponentThemeContext): AnchorColorConfig & AnchorLinkColorConfig => ({
+export const anchor = ({ colors }: ComponentThemeContext): AnchorColorConfig & AnchorLinkColorConfig => ({
   background: colors.bg.alternative2,
-  active: {
-    color: colors.textIconsElements.primary,
-    background: colors.bg.base,
-    hover: {
-      color: colors.textIconsElements.primary,
-      background: colors.bg.base
-    }
-  },
-  normal: {
-    color: colors.textIconsElements.primary,
-    hover: {
+  default: {
+    enabled: {
       color: colors.textIconsElements.primary
+    },
+    hover: {
+      background: colors.elements['separator-solid']
+    },
+    pressed: {
+      background: colors.elements['separator-bold-solid']
     }
-  }
-})
-
-export const anchorsSize: AnchorSizeConfig & AnchorLinkSizeConfig = {
-  wrapper: {
-    padding: `${SPACES[2]}px`,
-    borderRadius: `${BORDER_RADIUS[6]}px`
   },
-  links: {
-    padding: `${SPACES[5]}px ${SPACES[8]}px`,
-    borderRadius: `${BORDER_RADIUS[4]}px`,
-    fontSize: getTextSizes(textLevels.L3).fontSize
-  }
-}
+  active: {
+    background: colors.bg.base
+  },
+  boxShadow: '0px 0px 1px 0px rgba(9, 30, 66, 0.31), 0px 1px 1px 0px rgba(9, 30, 66, 0.25)',
+  ...focus({ colors })
+})

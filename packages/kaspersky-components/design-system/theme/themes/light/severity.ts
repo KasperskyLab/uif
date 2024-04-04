@@ -23,7 +23,7 @@ export const severity = ({ colors }: ComponentThemeContext): Record<SeverityMode
   low: {
     normal: {
       background: colors.tags.neutral,
-      color: colors.textIconsElements.primary
+      color: colors.textIconsElements['primary-invert']
     }
   },
   info: {

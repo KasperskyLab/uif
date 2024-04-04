@@ -1,16 +1,41 @@
 import { css } from 'styled-components'
-import { ILayoutDescriptor } from './types'
+import { GridCssProps } from './types'
 import { IGridItemProps } from './GridItem'
+import { SPACES } from '@design-system/theme'
 
-export const gridCss = css<ILayoutDescriptor>`
-  grid-auto-flow: ${({ direction }) => direction};
-  grid-template-columns: ${({ cols = [] }) => cols.join(' ')};
-  grid-template-rows: ${({ rows = [] }) => rows.join(' ')};
-  grid-template-areas: "${({ areas = [[]] }) => areas.map(a => a.join(' ')).join('" "')}";
+const GRID_WIDTH_FIX = '872px'
+const GRID_WIDTH_STRETCH_MAX = '1592px'
+const GRID_WIDTH_STRETCH_MIN = '672px'
+const GRID_WIDTH_SIDEBAR = '100%'
+const GRID_PADDING = `0 ${SPACES[12]}px`
+
+export const gridCss = css<GridCssProps>`
+  ${({ direction }) => direction ? `grid-auto-flow: ${direction};` : ''}
+  ${({ cols }) => cols ? `grid-template-columns: ${cols.join(' ')};` : ''}
+  ${({ rows }) => rows ? `grid-template-rows: ${rows.join(' ')};` : ''}
+  ${({ areas }) => areas ? `grid-template-areas: "${areas.map(a => a.join(' ')).join('" "')}";` : ''}
+  ${({ withPadding }) => withPadding
+    ? `padding: ${GRID_PADDING};
+      box-sizing: content-box;`
+    : ''
+  }
+  ${({ gridType }) => {
+    switch (gridType) {
+      case 'fix':
+        return `width: ${GRID_WIDTH_FIX};`
+      case 'sidebar':
+        return `width: ${GRID_WIDTH_SIDEBAR};`
+      default:
+        return `max-width: ${GRID_WIDTH_STRETCH_MAX};
+          min-width: ${GRID_WIDTH_STRETCH_MIN};
+          width: 100%;
+        `
+    }
+  }}
 `
 
 export const gridItemCss = css<IGridItemProps>`
-  grid-area: ${({ areaName }) => areaName};
-  grid-column: ${({ span, columnSpan }) => span || columnSpan ? `span ${span || columnSpan}` : ''};
-  grid-row: ${({ rowSpan }) => rowSpan ? `span ${rowSpan}` : ''};
+  ${({ areaName }) => areaName ? `grid-area: ${areaName};` : ''}
+  ${({ rowSpan }) => rowSpan ? `grid-row: span ${rowSpan};` : ''}
+  ${({ span, columnSpan }) => span || columnSpan ? `grid-column: span ${span || columnSpan};` : ''}
 `

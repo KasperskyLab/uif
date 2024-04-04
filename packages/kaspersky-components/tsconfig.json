@@ -34,7 +34,7 @@
     "./assets/**/*",
     "./icons/**/*",
     "./illustrations/**/*",
-    ".storybook/StoryComponents.tsx",
+    "./.storybook/**/*",
     "./screenshots/**/*"
   ],
   "exclude": [

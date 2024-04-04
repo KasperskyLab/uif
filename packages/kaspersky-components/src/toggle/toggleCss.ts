@@ -1,34 +1,71 @@
-import { css } from 'styled-components'
-import { ToggleCssConfig } from './types'
-import { getFromProps } from '../../helpers/getFromProps'
+import styled, { css } from 'styled-components'
+import { ToggleCssConfig, ToggleProps } from './types'
+import { getFromProps } from '@helpers/getFromProps'
+import { SPACES } from '@design-system/theme/themes/variables'
 
 const fromProps = getFromProps<ToggleCssConfig>()
 
-export const toggleCss = css`
+export const toggleCss = css<{
+  cssConfig: ToggleCssConfig,
+  readonly?: boolean,
+  labelPosition?: 'after' | 'before'
+}>`
   background-color: ${fromProps('normal.bgOff')};
   box-shadow: none;
-  order: 1;
+  ${({ labelPosition }) => {
+    switch (labelPosition) {
+      case 'before':
+        return { order: 100, margin: `0 0 0 ${SPACES[4]}px;` }
+      case 'after':
+      default:
+        return { order: 0, margin: `0 ${SPACES[4]}px 0 0;` }
+    }
+  }}
   
-  & .ant-switch-handle::before {
+  &:last-child {
+    translate: none;
+  }
+
+  &:not(.ant-switch-small) {
+    height: 20px;
+    min-width: 32px;
+    
+    & .ant-switch-handle {
+      width: 16px;
+      height: 16px;
+    }
+
+    & .ant-switch-loading-icon.anticon {
+      top: 2px;
+    }
+  }
+  
+  & .ant-switch-handle {
     &::before {
-      box-shadow: unset;
+      box-shadow: none;
       background-color: ${fromProps('normal.dotColorOff')};
     }
   }
   &.ant-switch-checked {
     background-color: ${fromProps('normal.bgOn')};
     & .ant-switch-handle::before {
-      box-shadow: unset;
+      box-shadow: none;
       background-color: ${fromProps('normal.dotColorOn')};
     }
+
+    &:not(.ant-switch-small) {
+      & .ant-switch-handle {
+        left: calc(100% - 16px - 2px);
+      }
+    }
   }
-  & .ant-click-animating-node{
-    display: none; // disable animation
+  & .ant-click-animating-node {
+    display: none;
   }
 
   // hover
-  &:hover,
-  .ant-toggle-wrapper:hover & {
+  &:hover:not(:disabled),
+  .ant-toggle-wrapper:hover &:not(:disabled) {
     background-color: ${fromProps('hover.bgOff')};
     &.ant-switch-checked {
       background-color: ${fromProps('hover.bgOn')};
@@ -40,77 +77,92 @@ export const toggleCss = css`
   &:active,
   .ant-toggle-wrapper:active &,
   .ant-toggle-wrapper:hover:active & {
-    background-color: ${fromProps('active.bgOff')};
-    &.ant-switch-checked{
-      background-color: ${fromProps('active.bgOn')};
+    &:not(:disabled) {
+      background-color: ${fromProps('active.bgOff')};
+      &.ant-switch-checked {
+        background-color: ${fromProps('active.bgOn')};
+        .ant-switch-handle:before {
+          left: 0;
+        }
+      }
+      .ant-switch-handle:before {
+        right: 0;
+      }
     }
-  }
-  &:not(.ant-switch-disabled):active .ant-switch-handle::before,
-  &:not(.ant-switch-disabled):active.ant-switch-checked .ant-switch-handle::before{
-    right: 0;
-    left: 0;
   }
 
   // focus
-  &:focus-visible {
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      margin: -2px;
-      border-radius: 100px;
-      box-shadow: ${fromProps('focus.outline')};
-    }
-    box-shadow: none;
-    background-color: ${fromProps('focus.bgOff')};
-    &.ant-switch-checked {
-      box-shadow: none;
-      background-color: ${fromProps('focus.bgOn')};
-      &::before {
-        box-shadow: ${fromProps('focus.outline')};
+  &:not(:disabled) {
+    &, &:hover, &:active {
+      &:focus, &:focus-within {
+        outline: none;
+        box-shadow: none;
+      }
+      &:focus-visible {
+        outline: none;
+        box-shadow: ${fromProps('focus.boxShadow')};
       }
     }
   }
+
   // disabled
   &.ant-switch-disabled, &:disabled {
+    opacity: 1;
     background-color: ${fromProps('disabled.bgOff')};
-    & .ant-switch-handle::before {
+    & .ant-switch-handle:before {
       background-color: ${fromProps('disabled.dotColorOff')};
+      box-shadow: none;
     }
-    &.ant-switch-checked{
+    &.ant-switch-checked {
       background-color: ${fromProps('disabled.bgOn')};
-      & .ant-switch-handle::before {
+      & .ant-switch-handle:before {
         background-color: ${fromProps('disabled.dotColorOn')};
+        box-shadow: none;
       }
     }
   }
 
-  &.ant-switch-disabled ~ .ant-switch-label {
+  &.ant-switch-disabled ~ .toggle-label span {
     color: ${fromProps('disabled.color')};
-  }
-`
-export const toggleLabelCss = css`
- &&{
-  display: inline-block;
-  font-family: ${fromProps('fontFamily')};
-  font-size: ${fromProps('fontSize')};
-  line-height: ${fromProps('lineHeight')};
-  font-weight: ${fromProps('fontWeight')};
-  font-style: ${fromProps('fontStyle')};
-  letter-spacing: ${fromProps('letterSpacing')};
-  margin: 0 0 0 8px;
-  order: 2;
-   
-  &.ant-switch-label-before {
-    order: 0;
-    margin: 0 8px 0 0;
   }
 
-  &[disabled] {
-    cursor: not-allowed;
-    color: ${fromProps('disabled.color')};
+  // readonly
+  ${props => props.readonly && `
+  && {
+    background-color: ${fromProps('readonly.bgOff')(props)};
+    .ant-switch-handle::before {
+      background-color: ${fromProps('readonly.dotColorOff')(props)};
+    }
+
+    &, * {
+      cursor: default;
+    }
   }
-}`
+  &&.ant-switch-checked {
+    background-color: ${fromProps('readonly.bgOn')(props)};
+    .ant-switch-handle::before {
+      background-color: ${fromProps('readonly.dotColorOn')(props)};
+    }
+  }
+
+  && ~ .toggle-label span {
+    color: ${fromProps('readonly.color')(props)};
+  }
+  `}
+  
+  &:not(:disabled) + .toggle-label {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &:disabled + .toggle-label {
+    cursor: not-allowed;
+    user-select: none;
+  }
+`
+
+export const ToggleWrapper = styled.div<ToggleProps>`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+`

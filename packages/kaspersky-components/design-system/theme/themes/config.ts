@@ -9,5 +9,5 @@ export const THEME_CONFIG: StyleHelpers.KeyValueMap<ThemeKey, ThemeConfig> = {
   [ThemeKey.Dark]: DARK_THEME
 }
 export type ComponentThemeContext = {
-  colors: typeof colors,
+  colors: typeof colors
 }

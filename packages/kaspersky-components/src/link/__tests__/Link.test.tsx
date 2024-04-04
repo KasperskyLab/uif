@@ -14,14 +14,11 @@ const DefaultLink = (props: ILinkProps) => <Link {...defaultProps} {...props} />
 
 describe('Link', () => {
   test('should render', () => {
-    render(<DefaultLink {...defaultProps} />)
-    expect(getLink()).toBeInTheDocument()
-  })
+    const { container } = render(<DefaultLink {...defaultProps} klId="kl-id" testId="test-id" />)
 
-  test('should receive kl-id prop', () => {
-    const klId = 'test-link'
-    render(<DefaultLink klId={klId} />)
-    expect(screen.getByTestId(klId)).toBeInTheDocument()
+    expect(getLink()).toBeInTheDocument()
+    expect(container.querySelector('[kl-id="kl-id"]')).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
 
   test('should pass target attribute', () => {

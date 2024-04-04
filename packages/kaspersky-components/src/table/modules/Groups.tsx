@@ -2,8 +2,9 @@ import _ from 'lodash'
 import React from 'react'
 import { Text } from '../../typography'
 import { TableModule } from '.'
-import { isColumnReadonly } from '../helpers'
-import { ITableProps } from '../types'
+import { isColumnReadonly } from '../helpers/common'
+import { TableCustomColumn, ITableProps } from '../types'
+import classnames from 'classnames'
 
 export const groupTitleRenderer = (
   columnIndex: number,
@@ -28,26 +29,21 @@ export const groupTitleRenderer = (
 }
 
 export const Groups: TableModule = Component => (props: ITableProps) => {
-  const { groupBy, dataSource, columns, groupTitleRender, rowSelection } = props
+  const { groupBy, dataSource, columns, groupTitleRender, rowSelection, disabled } = props
 
   if (!(groupBy && Array.isArray(dataSource))) {
     return <Component { ...props } />
   }
 
-  interface IColumn {
-    [key: string]: {
-      [key: string]: unknown
-    }
-  }
-
-  const comparer = (field: string) => (columnA: IColumn, columnB: IColumn): number => {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  const comparer = (field: string) => (columnA: object, columnB: object): number => {
     const columnValueA = _.get(columnA, field) || ''
     const columnValueB = _.get(columnB, field) || ''
     let result
-    if (typeof columnValueA.text === 'string' && typeof columnValueB.text === 'string') {
-      result = columnValueA.text.localeCompare(columnValueB.text)
-    } else if (typeof columnValueA === 'string' && typeof columnValueB === 'string') {
-      result = (columnValueA as string).localeCompare(columnValueB)
+    if (!!columnValueA.text || typeof columnValueA === 'string') {
+      result = columnValueA.text
+        ? columnValueA.text.localeCompare(columnValueB.text)
+        : columnValueA.localeCompare(columnValueB)
     } else {
       result = columnValueA === columnValueB
         ? 0
@@ -64,9 +60,8 @@ export const Groups: TableModule = Component => (props: ITableProps) => {
     const key = dataSource.length + index
     const titleText = _.get(item, groupBy, '') || ''
 
-    const groupTitleRender: (text: string) => JSX.Element | React.ReactNode = (columns?.find(column => {
-      return column.dataIndex === groupBy
-    }) as any)?.renderGroupTitle
+    const groupTitleRender: (text: string) => JSX.Element | React.ReactNode =
+    (columns?.find((column: TableCustomColumn) => column.dataIndex === groupBy) as TableCustomColumn)?.renderGroupTitle
 
     const groupTitleItem = {
       accordeon: null,
@@ -94,20 +89,28 @@ export const Groups: TableModule = Component => (props: ITableProps) => {
       : { ...column, render: groupTitleRenderer(index, columns.length, column.render, groupTitleRender) }
   })
 
-  const resultRowSelection = rowSelection &&
-    {
-      ...rowSelection,
-      getCheckboxProps: (row: any) => ({
-        disabled: Boolean(row.getGroupTitleText),
-        name: row.name
-      })
+  const resultRowSelection = rowSelection && {
+    ...rowSelection,
+    getCheckboxProps: (row: any) => ({
+      disabled: disabled || Boolean(row.getGroupTitleText),
+      name: row.name
+    })
+  }
+
+  const rowClassName = (record: any) => {
+    const isGroupTitle = Boolean(record.getGroupTitleText)
+    if (isGroupTitle) {
+      return 'group-title-row'
     }
+
+    return classnames('row-class', record.rowClassName)
+  }
 
   return <Component
     { ...props }
     columns={resultColumns}
     dataSource={resultDataSource}
     rowSelection={resultRowSelection}
-    rowClassName={(record: any) => { return record.getGroupTitleText ? 'group-title-row' : 'row-class' }}
+    rowClassName={rowClassName}
   />
 }

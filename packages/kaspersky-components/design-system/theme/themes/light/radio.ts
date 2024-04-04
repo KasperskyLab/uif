@@ -1,5 +1,6 @@
 import { ComponentThemeContext } from '../config'
 import { RadioColorConfig as Scope, RadioMode as Type } from '../../../../src/radio/types'
+import { focus } from '@design-system/tokens/focus'
 
 export const radio = ({ colors }: ComponentThemeContext): Record<Type, Scope> => {
   return {
@@ -7,37 +8,43 @@ export const radio = ({ colors }: ComponentThemeContext): Record<Type, Scope> =>
       normal: {
         color: colors.textIconsElements.primary,
         bgColor: colors.bg.base,
-        borderColor: colors.elements.line,
+        borderColor: colors.elements['line-solid'],
         dotColor: colors.mainInteractPrimary
       },
       hover: {
-        bgColor: colors.bg.alternative2,
-        borderColor: colors.elements.line,
+        bgColor: colors.elements['separator-solid'],
+        borderColor: colors.elements['line-solid'],
         dotColor: colors.mainInteractSecondary
       },
       active: {
-        bgColor: colors.mainInteractPressed,
-        borderColor: colors.mainInteractPressed,
-        dotColor: colors.mainInteractSecondary
-      },
-      focus: {
-        bgColor: colors.bg.alternative,
-        borderColor: 'transparent',
-        dotColor: colors.mainInteractSecondary,
-        outline: `0 0 0 2px ${colors.mainInteractFocus}`
+        bgColor: colors.elements['separator-bold-solid'],
+        borderColor: colors.elements['line-solid'],
+        dotColor: colors.mainInteractTertiary
       },
       disabled: {
         color: colors.textIconsElements.disabled,
-        bgColor: colors.elements.seporatorbold,
-        borderColor: colors.elements.seporatorbold,
+        bgColor: colors.elements.separator,
+        borderColor: 'transparent',
         dotColor: colors.textIconsElements.disabled
-      }
+      },
+      readonly: {
+        color: colors.textIconsElements['secondary2-solid'],
+        bgColor: colors.elements.separator,
+        borderColor: 'transparent',
+        dotColor: colors.textIconsElements.disabled
+      },
+      invalid: {
+        borderColor: colors.dangerInteract.primary,
+        dotColor: colors.dangerInteract.primary
+      },
+      ...focus({ colors })
     },
+    /** @deprecated  */
     button: {
       normal: {
         background: 'transparent',
         color: colors.textIconsElements.primary,
-        border: `${colors.elements.seporatorbold}`
+        border: `${colors.elements['separator-bold']}`
       },
       hover: {
         background: colors.bg.alternative2
@@ -46,15 +53,12 @@ export const radio = ({ colors }: ComponentThemeContext): Record<Type, Scope> =>
         background: colors.textIconsElements['secondary-invert'],
         border: `${colors.mainInteractFocus}`
       },
-      focus: {
-        background: colors.elements.seporator,
-        border: `${colors.elements.seporatorbold}`
-      },
       disabled: {
         background: colors.bg.alternative,
         color: colors.textIconsElements.disabled,
-        border: `${colors.elements.seporator}`
-      }
+        border: `${colors.elements.separator}`
+      },
+      ...focus({ colors })
     }
   }
 }

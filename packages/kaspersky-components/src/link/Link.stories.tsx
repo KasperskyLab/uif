@@ -1,79 +1,65 @@
 import React from 'react'
-import { badges } from '../../.storybook/badges'
-import { withMeta } from '../../helpers/hocs/MetaComponent/withMeta'
-import Meta from './meta.json'
+import { Meta, StoryObj } from '@storybook/react'
+import { badges } from '@sb/badges'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import MetaData from './meta.json'
 import { Link } from './Link'
-import { ILinkProps } from './types'
-import { Icon } from '../icon'
+import { LinkProps } from './types'
 
-export default {
+const meta: Meta<LinkProps> = {
   title: 'Atoms/Link',
   component: Link,
+  argTypes: {
+    title: {
+      control: { type: 'text' }
+    },
+    ...sbHideControls(['theme', 'type'])
+  },
+  args: {
+    disabled: false,
+    iconPosition: 'after',
+    size: 'medium',
+    text: 'Link',
+    visited: false,
+    testId: 'link-test-id',
+    klId: 'link-kl-id'
+  },
   parameters: {
-    badges: [badges.stable, badges.needsDesignReview],
+    badges: [badges.stable, badges.reviewedByDesign],
     docs: {
-      page: withMeta(Meta)
-    }
+      page: withMeta(MetaData)
+    },
+    design: MetaData.figmaView
+  }
+}
+export default meta
+
+type Story = StoryObj<LinkProps>
+
+export const Basic: Story = {
+  args: {
+    href: '#',
+    target: '_top'
   }
 }
 
-const defaultProps = {
-  text: 'Link',
-  href: '#'
+export const WithIcon: Story = {
+  args: {
+    href: 'https://www.kaspersky.com',
+    target: '_blank',
+    decoration: 'icon'
+  }
 }
 
-const LinkTemplate = ({
-  text = defaultProps.text,
-  href = defaultProps.href,
-  ...rest
-}: ILinkProps) => {
-  return (
-    <Link text={text} href={href} {...rest} />
+export const InText: Story = {
+  render: (args: LinkProps) => (
+    <div>
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+      been the industry&apos;s standard dummy text ever since the 1500s, <Link {...args} /> when
+      an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
+      survived not only five centuries, but also the leap into electronic typesetting, remaining
+      essentially unchanged.
+    </div>
   )
 }
-
-export const Basic = LinkTemplate.bind({})
-
-const LinkDisabledTemplate = ({
-  text = defaultProps.text,
-  href = defaultProps.href,
-  ...rest
-}: ILinkProps) => {
-  return (
-    <Link text={text} href={href} disabled {...rest} />
-  )
-}
-
-export const LinkDisabled = LinkDisabledTemplate.bind({})
-
-const LinkUnderlineTemplate = ({
-  text = defaultProps.text,
-  href = defaultProps.href,
-  ...rest
-}: ILinkProps) => {
-  return (
-    <Link text={text} href={href} decoration='underline' {...rest} />
-  )
-}
-
-export const LinkUnderline = LinkUnderlineTemplate.bind({})
-
-const LinkIconTemplate = ({
-  text = defaultProps.text,
-  href = defaultProps.href,
-  ...rest
-}: ILinkProps) => {
-  return (
-    <Link
-      text={text}
-      href={href}
-      decoration='icon'
-      icon={
-        <Icon name='Copy' size='small' />
-      }
-      {...rest}
-    />
-  )
-}
-
-export const LinkIcon = LinkIconTemplate.bind({})

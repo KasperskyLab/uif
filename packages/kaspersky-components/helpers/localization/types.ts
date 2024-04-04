@@ -1,21 +1,36 @@
 export enum LangVariants {
-  En = 'en',
-  Ru = 'ru'
+  EnUs = 'en-us',
+  RuRu = 'ru-ru',
+  ArAe = 'ar-ae',
+  DeDe = 'de-de',
+  EsEs = 'es-es',
+  EsMx = 'es-mx',
+  FrFr = 'fr-fr',
+  HashId = 'hash-id',
+  ItIt = 'it-it',
+  JaJp = 'ja-jp',
+  KkKz = 'kk-kz',
+  KoKr = 'ko-kr',
+  PlPl = 'pl-pl',
+  PtBr = 'pt-br',
+  TrTr = 'tr-tr',
+  ZhHans = 'zh-hans',
+  ZhHant = 'zh-hant'
 }
 
 export type LangType = `${LangVariants}`
 
 export type Localization = {
-  [key in LangVariants]: Loc;
-};
+  [key in LangVariants]: Loc
+}
 
 export interface Loc {
-  translation: Translation,
+  translation: Translation
 }
 
 export interface Translation {
   upload: Upload,
-  severity: Severity,
+  severity: Severity
 }
 
 export interface Upload {
@@ -33,7 +48,7 @@ export interface Upload {
   successTitle: string,
   successDescription: string,
   errorTitle: string,
-  errorDescription: string,
+  errorDescription: string
 }
 
 export interface Severity {
@@ -42,15 +57,15 @@ export interface Severity {
   medium: string,
   high: string,
   info: string,
-  positive: string,
+  positive: string
 }
 
 export interface Resource {
-  [language: string]: ResourceLanguage,
+  [language: string]: ResourceLanguage
 }
 
 export interface ResourceLanguage {
-  [namespace: string]: ResourceKey,
+  [namespace: string]: ResourceKey
 }
 
 export type ResourceKey = string| {[key: string]: any} | any

@@ -2,41 +2,41 @@ import styled from 'styled-components'
 import React, { useState } from 'react'
 import classnames from 'classnames'
 import { TableModule } from '.'
-import { Icon } from '../../icon'
+import { ArrowDown1, ArrowRight } from '@kaspersky/icons/16'
 import { TableCssConfig } from '../types'
 import { useTableContext } from '../context/TableContext'
 import { fromTableProps } from '../tableCss'
-import { SPACES } from '../../../design-system/theme/themes/variables'
-import { isColumnReadonly } from '../helpers'
+import { isColumnReadonly } from '../helpers/common'
 
-const AccordeonWrapper = styled.div`
-`
+const AccordionWrapper = styled.div``
 
-const AccordeonHeader = styled.div`
+const AccordionHeader = styled.div`
   &:hover {
     cursor: pointer;
   }
 
-  padding-top: ${SPACES[2]}px;
-  padding-bottom: ${SPACES[2]}px;
-  
+  padding-top: 4px;
+  padding-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `
 
-const AccordeonIcon = styled.span.withConfig<{ className: string, cssConfig: TableCssConfig }>({
+const AccordionIcon = styled.span.withConfig<{ cssConfig: TableCssConfig }>({
   shouldForwardProp: prop => !['cssConfig'].includes(prop)
 })`
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: ${fromTableProps('root.backgroundColor')};
+  background: transparent;
 
   svg {
     color: ${fromTableProps('root.color')};
   }
 `
 
-const AccordeonContent = styled.div`
-  margin-top: ${SPACES[4]}px;
+const AccordionContent = styled.div`
+  margin-top: 8px;
 `
 
 interface AccordionProps {
@@ -48,19 +48,19 @@ const Accordion = (props: React.PropsWithChildren<AccordionProps>) => {
   const [show, setShow] = useState(false)
 
   return (
-    <AccordeonWrapper>
-      <AccordeonHeader onClick={() => setShow(!show)}>
-        <AccordeonIcon className='table-accordion-icon' cssConfig={props.cssConfig}>
-          <Icon size='small' name={show ? 'DownMini' : 'RightMini'} />
-        </AccordeonIcon>
+    <AccordionWrapper>
+      <AccordionHeader onClick={() => setShow(!show)}>
+        <AccordionIcon className='table-accordion-icon' cssConfig={props.cssConfig}>
+          {show ? <ArrowDown1 /> : <ArrowRight />}
+        </AccordionIcon>
         {props.title}
-      </AccordeonHeader>
-      {show ? <AccordeonContent>{props.children}</AccordeonContent> : null}
-    </AccordeonWrapper>
+      </AccordionHeader>
+      {show ? <AccordionContent>{props.children}</AccordionContent> : null}
+    </AccordionWrapper>
   )
 }
 
-export const accordeonRenderer = (columnIndex: number, columnsCount: number, cssConfig: TableCssConfig) => (value: any, row: any): any => {
+export const accordionRenderer = (columnIndex: number, columnsCount: number, cssConfig: TableCssConfig) => (value: any, row: any): any => {
   const columnData = {
     children: value,
     props: { className: 'table-cell-with-accordeon', colSpan: 1 }
@@ -87,7 +87,7 @@ export const TableAccordion: TableModule = Component => (props: any) => {
   }
 
   const columns = props.columns.map((column: any, index: number) => {
-    return isColumnReadonly(column) ? column : { ...column, render: accordeonRenderer(index, props.columns.length, cssConfig) }
+    return isColumnReadonly(column) ? column : { ...column, render: accordionRenderer(index, props.columns.length, cssConfig) }
   })
 
   return <Component { ...props } columns={columns} />

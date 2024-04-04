@@ -1,9 +1,33 @@
-import React, { ComponentProps } from 'react'
+import React from 'react'
+import { ArrowDoubleRight } from '@kaspersky/icons/16'
+import { ActionButton } from '@src/action-button'
+import { v4 as uiidv4 } from 'uuid'
+import styled from 'styled-components'
 
-import { Link } from '../link'
+export const StyledTextExpander = styled(ActionButton)`
+  transform: translateY(2px);
+`
 
-export const TextExpander = (props: ComponentProps<typeof Link>) => {
-  return <Link { ...props } className='text-expander'>
-    {'>>'}
-  </Link>
+type TextExpanderProps = {
+  onClick: () => void
+}
+
+export const TextExpander: React.FC<TextExpanderProps> = ({ onClick }) => {
+  return (
+    <StyledTextExpander
+      key={uiidv4()}
+      onClick={e => {
+        e.stopPropagation()
+        onClick()
+      }}
+      onKeyDown={e => {
+        if (e.key === 'Enter') {
+          onClick()
+        }
+      }}
+      size="large"
+      icon={<ArrowDoubleRight />}
+      className="text-expander"
+    />
+  )
 }

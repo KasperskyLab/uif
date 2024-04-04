@@ -1,88 +1,139 @@
-import styled from 'styled-components'
+import { css } from 'styled-components'
+import { getFromProps } from '@helpers/getFromProps'
+import { FieldCssConfig, FieldViewProps } from './types'
 import {
-  SPACES
-} from '../../design-system/theme/themes/variables'
+  FIELD_MAX_WIDTH,
+  FIELD_LABEL_DEFAULT_WIDTH,
+  FIELD_CONTROL_MIN_WIDTH,
+  inputLikeControlsClassnames
+} from './constants'
 
-export const FieldFlexContainer = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
-})`
+const fromProps = getFromProps<FieldCssConfig>()
+
+export const fieldCss = css<FieldViewProps>`
   width: 100%;
-  max-width: 910px;
-  margin: ${SPACES[10]}px 0;
+  max-width: ${FIELD_MAX_WIDTH};
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
 
-  .field-label {
-    width: auto;
-    min-width: auto;
-    padding: ${SPACES[2]}px 0;
-
-    .label-text {
-      padding: 0;
-    }
-  }
-  
-  .field-control-wrapper {
+  .kl6-field-control-wrapper {
     display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
+    flex-direction: column;
+    max-width: 100%;
+    gap: 4px;
+
+    .kl6-field-control-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      ${({ controlWidth }) => (
+        controlWidth
+          ? `width: ${controlWidth}px; flex: none;`
+          : `min-width: ${FIELD_CONTROL_MIN_WIDTH};`
+      )}
+
+      .kl6-field-control-additional {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+
+        .kl6-field-help-icon {
+          color: ${fromProps('helpIconColor')};
+        }
+      }
+    }
   }
 
-  .field-control {
-    flex: 0 auto;
+  // control should stretch when there is no label
+  &&:not(:has( > .kl6-field-label)) .kl6-field-control-wrapper {
+    flex: 1;
   }
 
-  .field-helpTrigger {
-    padding: 0 ${SPACES[2]}px;
-    margin: 0 ${SPACES[2]}px;
+  // offset for different controls
+  .kl6-field-control-wrapper:has( > div > .ant-checkbox-wrapper, .ant-checkbox-group, .ant-radio-group) {
+    > :not(.kl6-field-control-box) {
+      margin-left: 18px;
+    }
+  }
+
+  .kl6-field-control-wrapper:has( > div > .ant-toggle-wrapper > .form-label) {
+    > :not(.kl6-field-control-box) {
+      margin-left: 40px;
+    }
+  }
+
+  // Label positions
+  &.kl6-field-label-position-before {
+    .kl6-field-label {
+      padding-right: 16px;
+    }
+  }
+
+  &.kl6-field-label-position-after {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+
+    .kl6-field-label {
+      padding-left: 16px;
+    }
+  }
+
+  &.kl6-field-label-position-top {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &.kl6-field-label-position-before {
+    &.kl6-field-label-type-default {
+      .kl6-field-label {
+        width: ${FIELD_LABEL_DEFAULT_WIDTH};
+      }
+      .kl6-field-control-wrapper {
+        flex: 1;
+      }
+    }
+
+    &.kl6-field-label-type-full {
+      .kl6-field-label {
+        flex: 1;
+        min-width: ${FIELD_LABEL_DEFAULT_WIDTH});
+      }
+      .kl6-field-control-wrapper {
+        flex: none;
+      }
+    }
+
+    &.kl6-field-label-type-stretch {
+      .kl6-field-label {
+        min-width: auto;
+      }
+      .kl6-field-control-wrapper {
+        flex: 1;
+      }
+    }
   }
   
-  .field-subtext {
-    display: block;
-    width: 100%;
-    margin-top: ${SPACES[2]}px;
+  &.kl6-field-grid-layout {
+    display: grid;
+    grid-template-columns: ${({ gridLayout, controlWidth }) => (
+      `${gridLayout?.firstCol || FIELD_LABEL_DEFAULT_WIDTH} ${controlWidth || gridLayout?.secondCol || 'auto'}`
+    )}
   }
 
-  .field-control-wrapper:has(.ant-checkbox) ~ .field-subtext {
-    margin-left: 23px;
-  }
-
-  .field-control-wrapper:has(.ant-switch.ant-switch-small) ~ .field-subtext {
-    margin-left: 36px;
-  }
-
-  .field-control-wrapper:has(.ant-switch) ~ .field-subtext {
-    margin-left: 52px;
-  }
-
-  &._label-before {
-    .field-label {
-      width: 235px;
-      margin-right: ${SPACES[4]}px;
+  &.kl6-field-grid-layout,
+  &.kl6-field-label-position-before,
+  &.kl6-field-label-position-after {
+    &.kl6-field-label-type-default,
+    &.kl6-field-label-type-full {
+      .kl6-field-label + .kl6-field-control-wrapper {
+        max-width: ${({ controlWidth }) => (
+          controlWidth || `calc(${FIELD_MAX_WIDTH} - ${FIELD_LABEL_DEFAULT_WIDTH})`
+        )};
+      }
+    }
+    &:has(.kl6-field-control-box > ${inputLikeControlsClassnames.join(', ')}) .kl6-field-label {
+      padding-top: 6px;
     }
   }
 
-  &._label-after {
-    .field-label {
-      padding: ${SPACES[2]}px ${SPACES[4]}px;
-    }
-    
-    .field-control {
-      order: -1;
-    }
-  }
-
-  &._label-top {
-    .field-label {
-      width: 100%;
-      padding: 0;
-    }
-  }
-
-  &._stretch {
-    .field-control {
-      flex: 1;
-    }
-  }
+  ${({ controlWidth }) => controlWidth && '&& .kl6-field-control-wrapper { flex: none; }'}
 `

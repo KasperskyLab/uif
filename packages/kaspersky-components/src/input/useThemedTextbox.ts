@@ -1,19 +1,10 @@
-import { useMemo } from 'react'
-import { useTheme } from '../../design-system/theme/hooks'
-import { THEME_CONFIG } from '../../design-system/theme/themes/config'
-import { IInputStyleProps, InputCssConfig } from './types'
+import { InputCssConfig, TextboxProps, TextboxThemedProps, TextboxToViewProps } from './types'
+import { useThemedComponent } from '@helpers/useThemedComponent'
 
-export const useThemedTextbox = <T extends IInputStyleProps>(props: T) => {
-  const {
-    theme: themeFromProps,
-    size = 'medium',
-    ...rest
-  } = props
-  const theme = useTheme({ theme: themeFromProps })
-
-  const cssConfig = useMemo<InputCssConfig>(() => ({
-    ...(THEME_CONFIG[theme.key].components.input.colors),
-    ...(THEME_CONFIG[theme.key].components.input.sizes[size])
-  }), [theme, size])
-  return { ...rest, size, cssConfig }
-}
+export const useThemedTextbox = <Props, >(props: Props): TextboxToViewProps<Props> & { size?: TextboxProps['size'] } => (
+  useThemedComponent<Props, InputCssConfig, TextboxThemedProps>(props, {
+    componentName: 'input',
+    defaultValues: { size: 'medium' },
+    propsToDrill: ['size']
+  })
+)

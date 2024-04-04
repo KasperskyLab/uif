@@ -1,32 +1,25 @@
-import { NotificationColorConfig, NotificationCommonModeCssProps, NotificationMode } from '../../../../src/notification/types'
+import { NotificationColorConfig, NotificationMode } from '../../../../src/notification/types'
 import { ComponentThemeContext } from '../config'
 
-export const notification = ({ colors }: ComponentThemeContext): Record<NotificationMode, NotificationColorConfig> & {common: NotificationCommonModeCssProps} => ({
-  info: {
-    normal: {
-      background: colors.statestatuses.resolved_solved,
-      color: colors.fixedNeutralColors.fixedneutralcolor_primarywhite
-    }
+export const notification = ({ colors }: ComponentThemeContext): Record<NotificationMode, NotificationColorConfig> => ({
+  error: {
+    background: colors.criticalitystatuses.critical,
+    color: colors.fixedNeutralColors.fixedneutralcolor_primarywhite,
+    separator: colors.elements['separator-invert']
+  },
+  warning: {
+    background: colors.criticalitystatuses.medium,
+    color: colors.fixedNeutralColors.fixedneutralcolor_base,
+    separator: colors.elements['separator-bold']
   },
   success: {
-    normal: {
-      background: colors.criticalitystatuses.positive,
-      color: colors.fixedNeutralColors.fixedneutralcolor_primarywhite
-    }
+    background: colors.criticalitystatuses.positive,
+    color: colors.fixedNeutralColors.fixedneutralcolor_primarywhite,
+    separator: colors.elements['separator-invert']
   },
-  error: {
-    normal: {
-      background: colors.criticalitystatuses.critical,
-      color: colors.fixedNeutralColors.fixedneutralcolor_primarywhite
-    }
-  },
-  infoAccent: {
-    normal: {
-      background: colors.statestatuses.inincedent,
-      color: colors.fixedNeutralColors.fixedneutralcolor_primarywhite
-    }
-  },
-  common: {
-    iconColor: colors.fixedNeutralColors.fixedneutralcolor_primarywhite
+  info: {
+    background: colors.statestatuses.new,
+    color: colors.fixedNeutralColors.fixedneutralcolor_base,
+    separator: colors.elements['separator-bold']
   }
 })

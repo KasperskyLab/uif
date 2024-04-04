@@ -1,9 +1,9 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { renderHook } from '@testing-library/react-hooks'
 import { Badge } from '../Badge'
 import { useOverflowCount } from '../hooks'
-import { IBadgeProps } from '../types'
+import { BadgeProps } from '../types'
 
 const defaultProps = {
   count: 10
@@ -14,7 +14,7 @@ const getBadge = (container: HTMLElement) => container.querySelector('.ant-badge
 const matchBadgeContent = (container: HTMLElement, count: string | number = defaultProps.count) =>
   getBadge(container)?.textContent === count.toString()
 
-const DefaultBadge = (props: IBadgeProps) => <Badge {...defaultProps} {...props} />
+const DefaultBadge = (props: BadgeProps) => <Badge {...defaultProps} {...props} />
 
 describe('Badge', () => {
   test('should render', () => {
@@ -22,10 +22,11 @@ describe('Badge', () => {
     expect(matchBadgeContent(container)).toBeTruthy()
   })
 
-  test('should recieve kl-id prop', () => {
-    const klId = 'test-badge'
-    render(<DefaultBadge klId={klId} />)
-    expect(screen.getByTestId(klId)).toBeInTheDocument()
+  test('should receive qa props', () => {
+    const { container } = render(<DefaultBadge klId="kl-id" testId="test-id" />)
+
+    expect(container.querySelector('[kl-id="kl-id"]')).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
 
   test('should use overflowCount instead of count if count is higher', () => {

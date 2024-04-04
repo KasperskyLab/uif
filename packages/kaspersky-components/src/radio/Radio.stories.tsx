@@ -1,89 +1,116 @@
-import React, { useState } from 'react'
-
-import { ComponentStory } from '@storybook/react'
-import { badges } from '../../.storybook/badges'
+import React, { useEffect, useState } from 'react'
+import { Meta, StoryObj } from '@storybook/react'
+import { badges } from '@sb/badges'
 import { Radio } from './Radio'
-import { StoryLayout } from '../../.storybook/StoryComponents'
-import { withMeta } from '../../helpers/hocs/MetaComponent/withMeta'
-import Meta from './meta.json'
-import { useTheme } from '../../design-system/theme/hooks'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import MetaData from './meta.json'
+import { RadioProps } from '@src/radio/types'
+import { Tag } from '@src/tag'
 
-export default {
+const meta: Meta<RadioProps> = {
   title: 'Atoms/Radio',
   component: Radio,
+  argTypes: {
+    ...sbHideControls(['theme', 'optionType', 'mode'])
+  },
   args: {
-    theme: 'light',
     disabled: false,
-    vertical: true
+    readonly: false,
+    vertical: true,
+    invalid: false,
+    name: 'first',
+    testId: 'radio-test-id',
+    klId: 'radio-kl-id'
   },
   parameters: {
-    badges: [badges.stable, badges.needsDesignReview],
+    badges: [badges.stable, badges.reviewedByDesign],
     docs: {
-      page: withMeta(Meta)
+      page: withMeta(MetaData)
     }
   }
 }
+export default meta
 
-const options = [
+type Story = StoryObj<RadioProps>
+
+const radioOptions = [
   { label: 'First', value: '1' },
-  { label: 'Second', value: '2' }
+  { label: 'Second', value: '2' },
+  { label: 'Third', value: '3', disabled: true }
 ]
 
-export const Basic: ComponentStory<typeof Radio> = ({
-  theme: themeProps,
-  ...rest
-}) => {
-  const [radioState, changeRadioState] = useState('2')
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
+export const Basic: Story = {
+  render: (args: RadioProps) => {
+    const [radioState, changeRadioState] = useState<string>()
+    return (
       <Radio
-        {...rest}
-        options={options}
-        name="first"
-        data-component-id="test-id"
+        {...args}
         onChange={(e) => {
           changeRadioState(e.target.value)
         }}
         value={radioState}
       />
-    </StoryLayout>
-  )
+    )
+  },
+  args: {
+    options: radioOptions
+  }
 }
 
-export const RadioModes: ComponentStory<typeof Radio> = ({
-  theme: themeProps,
-  ...rest
-}) => {
-  const [radioState, changeRadioState] = useState('2')
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
+const radioOptionsCustomizing = [
+  { label: 'Required', value: '1', required: true },
+  { label: 'With tooltip', value: '2', tooltip: 'tooltip text' },
+  { label: 'Disabled', value: '3', disabled: true },
+  {
+    label: (
+      <div>
+        <Tag>Four</Tag>
+        React Element<br />with multiple lines
+      </div>
+    ),
+    value: '4'
+  },
+  { label: 'Readonly', value: '5', readonly: true }
+]
+
+export const Customizing: Story = {
+  render: (args: RadioProps) => {
+    const [radioState, changeRadioState] = useState<string>()
+    return (
       <Radio
-        {...rest}
-        options={options}
-        name="key"
+        {...args}
         onChange={(e) => {
           changeRadioState(e.target.value)
         }}
         value={radioState}
       />
-      <Radio
-        {...rest}
-        options={options}
-        optionType="button"
-        name="key"
-        onChange={(e) => {
-          changeRadioState(e.target.value)
-        }}
-        value={radioState}
-      />
-    </StoryLayout>
-  )
+    )
+  },
+  args: {
+    options: radioOptionsCustomizing
+  }
 }
 
-Basic.parameters = {
-  docs: {
-    storyDescription: 'Basic Component Usage Example'
+export const WithAsyncSetValue: Story = {
+  render: ({
+    value,
+    ...rest
+  }: RadioProps) => {
+    const [currentValue, setCurrentValue] = useState<string>()
+    useEffect(() => {
+      setTimeout(() => { setCurrentValue('1') }, 3000)
+    }, [])
+    return (
+      <Radio
+        {...rest}
+        onChange={ e => setCurrentValue(e.target.value) }
+        value={currentValue}
+      />
+    )
+  },
+  args: {
+    options: radioOptions,
+    value: null
   }
 }

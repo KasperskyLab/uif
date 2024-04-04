@@ -1,18 +1,22 @@
 import React from 'react'
+import { TestingProps } from '@helpers/typesHelpers'
 
 export const enum FormTriggerType {
   Link = 'link',
   Button = 'button'
 }
 
-export interface IFormTriggerProps {
+export type FormTriggerProps = TestingProps & {
+  /** Button text */
   actionText?: React.ReactNode,
+  /** Description */
   description?: React.ReactNode,
+  /** Called after clicking */
   onClick: React.MouseEventHandler<HTMLElement>,
+  /** Title */
   title: React.ReactNode,
+  /** Link or Button type */
   type: FormTriggerType,
-  componentId?: string,
+  /** HTML role */
   role?: string
 }
-
-export type TFormTriggerVariantProps = Omit<IFormTriggerProps, 'type'>

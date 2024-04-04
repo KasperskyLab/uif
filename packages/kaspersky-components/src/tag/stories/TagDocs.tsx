@@ -16,36 +16,33 @@ export const TagDocs: React.VFC<Record<string, unknown>> = () => {
       <Title>
               Examples
       </Title>
-      <Subtitle>Base</Subtitle>
+      <Subtitle>Базовый</Subtitle>
       <StoryLayout theme={ThemeKey.Light}>
         <Space size={8} direction='vertical' align='flex-start' >
           <Text>Medium</Text>
           <Space size={4} direction='horizontal' align='flex-start' >
-            <Tag backgroundColor='grass' >Grass</Tag>
-            <Tag backgroundColor='emerald' >Emerald</Tag>
-            <Tag backgroundColor='marengo' >Marengo</Tag>
-            <Tag backgroundColor='marina'>Marina</Tag>
-            <Tag backgroundColor='orange'>Orange</Tag>
+            <Tag mode='emerald' >Emerald</Tag>
+            <Tag mode='marengo' >Marengo</Tag>
+            <Tag mode='marina'>Marina</Tag>
+            <Tag mode='orange'>Orange</Tag>
           </Space>
           <Text>Small</Text>
           <Space size={4} direction='horizontal' align='flex-start' >
-            <Tag backgroundColor='grass' size='small'>Grass</Tag>
-            <Tag backgroundColor='emerald' size='small'>Emerald</Tag>
-            <Tag backgroundColor='marengo' size='small'>Marengo</Tag>
-            <Tag backgroundColor='marina' size='small'>Marina</Tag>
-            <Tag backgroundColor='orange' size='small'>Orange</Tag>
+            <Tag mode='emerald' size='small'>Emerald</Tag>
+            <Tag mode='marengo' size='small'>Marengo</Tag>
+            <Tag mode='marina' size='small'>Marina</Tag>
+            <Tag mode='orange' size='small'>Orange</Tag>
           </Space>
         </Space>
       </StoryLayout>
       <Subtitle>Closable</Subtitle>
-      <Description>How to use closable tags can be found here - https://codesandbox.io/s/3f2i24?file=/demo.js</Description>
+      <Description>О том как использовать closable тэги можно узнать тут - https://codesandbox.io/s/3f2i24?file=/demo.js</Description>
       <StoryLayout theme={ThemeKey.Light}>
         <Space size={4} direction='horizontal' align='flex-start' >
-          <Tag backgroundColor='grass' closable>Grass</Tag>
-          <Tag backgroundColor='emerald' closable>Emerald</Tag>
-          <Tag backgroundColor='marengo' closable>Marengo</Tag>
-          <Tag backgroundColor='marina' closable>Marina</Tag>
-          <Tag backgroundColor='orange' closable>Orange</Tag>
+          <Tag mode='emerald' closable>Emerald</Tag>
+          <Tag mode='marengo' closable>Marengo</Tag>
+          <Tag mode='marina' closable>Marina</Tag>
+          <Tag mode='orange' closable>Orange</Tag>
         </Space>
       </StoryLayout>
     </>

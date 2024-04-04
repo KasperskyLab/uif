@@ -1,6 +1,5 @@
 import { ComponentThemeContext } from '../config'
-import { pagination as defaultPagination, paginationSize as defaultPaginationSize } from '../light/pagination'
+import { pagination as defaultPagination } from '../light/pagination'
+import { PaginationColorConfig } from '@src/pagination/types'
 
-export const pagination = ({ colors }: ComponentThemeContext) => defaultPagination({ colors })
-
-export const paginationSize = defaultPaginationSize
+export const pagination = ({ colors }: ComponentThemeContext): PaginationColorConfig => defaultPagination({ colors })

@@ -1,40 +1,35 @@
-import React, { Children, isValidElement, cloneElement, useEffect, useState } from 'react'
+import React, { Children, isValidElement, cloneElement, useEffect, useState, FC } from 'react'
 import { Switch as SwitchAntd } from 'antd'
 import styled from 'styled-components'
 import { useThemedToggle } from './useThemedToggle'
-import { IToggleProps, ToggleCssConfig } from './types'
-import { Label } from '../label'
-import { toggleCss, toggleLabelCss } from './toggleCss'
+import { ToggleProps, ToggleViewProps } from './types'
+import { toggleCss, ToggleWrapper } from './toggleCss'
+import { FormLabel } from '@src/form-label'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
 const StyledToggle = styled(SwitchAntd).withConfig({
   shouldForwardProp: prop => !['cssConfig'].includes(prop)
 })`${toggleCss}`
 
-const ToggleWrapper = styled.div<IToggleProps>`
-  display: flex;
-  flex-direction: row;
-`
-
-const ToggleLabel = styled(Label).withConfig({
-  shouldForwardProp: prop => !['cssConfig'].includes(prop)
-})`${toggleLabelCss}`
-
-export const Toggle = (rawProps: IToggleProps): JSX.Element => {
-  const props = useThemedToggle(rawProps)
+export const Toggle: FC<ToggleProps> = (rawProps: ToggleProps) => {
+  const themedProps = useThemedToggle(rawProps)
+  const props = useTestAttribute(themedProps)
   return <ToggleView {...props} />
 }
 
-export const ToggleView = ({
+export const ToggleView: FC<ToggleViewProps> = ({
   onChange,
   checked,
   children,
   disabled,
+  readonly,
   cssConfig,
   labelPosition = 'after',
-  size = 'small',
-  klId,
+  required,
+  tooltip,
+  testAttributes,
   ...rest
-}: ReturnType<typeof useThemedToggle>): JSX.Element => {
+}: ToggleViewProps) => {
   const [isChecked, setChecked] = useState(!!checked)
 
   useEffect(() => {
@@ -47,41 +42,39 @@ export const ToggleView = ({
     checked === undefined && setChecked(check)
   }
 
-  const labelPositionCssClasses = {
-    after: null,
-    before: 'ant-switch-label-before'
-  }
-
-  const labelCssClassList = ['ant-switch-label', labelPositionCssClasses[labelPosition]].filter(Boolean).join(' ')
-
-  return <ToggleWrapper
-    className='ant-toggle-wrapper'
-    role='toggle'
-    labelPosition={labelPosition}
-  >
-    <StyledToggle
-      onChange={toggleValue}
-      checked={isChecked}
-      cssConfig={cssConfig as ToggleCssConfig}
-      disabled={disabled}
-      size={size}
-      kl-id={klId}
-      {...rest}
-    />
-    {typeof children === 'string'
-      ? <ToggleLabel
-        cssConfig={cssConfig as ToggleCssConfig}
-        className={labelCssClassList}
-        onClick={() => !disabled && toggleValue(!isChecked, new MouseEvent('click'))}
-        disabled={disabled}>
-        {children}
-      </ToggleLabel>
-      : Children
-        .map(children, child =>
-          isValidElement(child)
-            ? cloneElement(child, { onClick: () => !disabled && toggleValue(!isChecked, new MouseEvent('click')) })
-            : child
-        )
-    }
-  </ToggleWrapper>
+  return (
+    <ToggleWrapper
+      className="ant-toggle-wrapper"
+      role="toggle"
+      labelPosition={labelPosition}
+    >
+      <StyledToggle
+        onChange={toggleValue}
+        checked={isChecked}
+        cssConfig={cssConfig}
+        disabled={disabled || readonly}
+        readonly={readonly}
+        labelPosition={labelPosition}
+        {...testAttributes}
+        {...rest}
+      />
+      {typeof children === 'string'
+        ? <FormLabel
+          onClick={ () => !disabled && !readonly && toggleValue(!isChecked, new MouseEvent('click')) }
+          className="toggle-label"
+          disabled={disabled}
+          required={required}
+          tooltip={tooltip}
+        >
+          {children}
+        </FormLabel>
+        : Children
+          .map(children, child =>
+            isValidElement(child)
+              ? cloneElement(child, { onClick: () => !disabled && toggleValue(!isChecked, new MouseEvent('click')) })
+              : child
+          )
+      }
+    </ToggleWrapper>
+  )
 }

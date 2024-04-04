@@ -1,61 +1,73 @@
 import React, { ReactElement, forwardRef, MouseEventHandler, PropsWithChildren } from 'react'
-
-import styled from 'styled-components'
-import { linkCss } from './linkCss'
-import { useThemedLink } from './useThemedLink'
 import cn from 'classnames'
-import { ILinkProps, ILinkViewProps } from './types'
+import { IconWrapper, StyledLink, TextWrapper } from './linkCss'
+import { useThemedLink } from './useThemedLink'
+import { LinkProps, LinkViewProps } from './types'
+import { LinkExternal } from '@kaspersky/icons/16'
+import { Tooltip } from '@src/tooltip'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
-const StyledLink = styled.a.withConfig({
-  shouldForwardProp: prop => !['cssConfig', 'decoration'].includes(prop)
-})`
- ${linkCss}
-`
-
-export const Link = forwardRef<HTMLAnchorElement, PropsWithChildren<ILinkProps>>((rawProps, ref): ReactElement<ILinkProps> => {
-  const props = useThemedLink(rawProps)
-  return <LinkView ref={ref} {...props} />
+export const Link = forwardRef<HTMLAnchorElement, PropsWithChildren<LinkProps>>((rawProps, ref)
+  : ReactElement<LinkProps> => {
+  const themedProps = useThemedLink(rawProps)
+  const props = useTestAttribute(themedProps)
+  return !props.disabled && props.decoration === 'icon'
+    ? <Tooltip text={props.href}>
+        <LinkView ref={ref} {...props} />
+      </Tooltip>
+    : <LinkView ref={ref} {...props} />
 })
 
-export const LinkView = forwardRef<HTMLAnchorElement, ILinkViewProps>(({
+export const LinkView = forwardRef<HTMLAnchorElement, LinkViewProps>(({
   text,
   children,
-  klId,
   disabled,
+  visited,
   onClick,
-  icon,
-  iconPosition = 'before',
+  className,
   decoration = 'none',
+  icon = <LinkExternal />,
+  iconPosition = 'after',
+  target = '_self',
+  testAttributes,
   ...rest
-}, ref) => {
+}: LinkViewProps, ref) => {
   const onClickDisabled: MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault()
   }
 
+  const showIcon = decoration === 'icon' && icon
+
   return (
     <StyledLink
-      kl-id={klId}
       ref={ref}
       onClick={disabled ? onClickDisabled : onClick}
-      className={cn(disabled && 'kl-components-link_disabled')}
-      tabIndex={disabled ? -1 : undefined}
+      className={cn(className, 'kl6-link', {
+        'kl-components-link_disabled': disabled,
+        'kl-components-link_visited': visited
+      })}
+      tabIndex={disabled ? -1 : 0}
       aria-disabled={disabled}
-      decoration={decoration === 'underline'}
+      target={target}
+      {...testAttributes}
       {...rest}
     >
-      {decoration === 'icon' && iconPosition === 'before' && icon && (
-        <span className='kl-components-link-icon kl-components-link-icon__before'>
+      {showIcon && iconPosition === 'before' && (
+        <IconWrapper>
           {icon}
-        </span>
+        </IconWrapper>
       )}
-      <span className='kl-components-link-text'>
+      <TextWrapper>
         {text || children}
-      </span>
-      {decoration === 'icon' && iconPosition === 'after' && icon && (
-        <span className='kl-components-link-icon kl-components-link-icon__after'>
+      </TextWrapper>
+      {showIcon && iconPosition === 'after' && (
+        <IconWrapper>
           {icon}
-        </span>
+        </IconWrapper>
       )}
     </StyledLink>
   )
 })
+
+Link.displayName = 'Link'
+LinkView.displayName = 'LinkView'

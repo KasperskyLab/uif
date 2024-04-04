@@ -2,11 +2,11 @@
 
 Based on `styled-components`
 
-ThemeProvider — wrapper for styling components based on design tokens
-This component provides a theme for all components via a context API.
+ThemeProvider - компонент wrapper для стилизации компонентов на основе дизайн-токентов
+Этот компонент предоставляет тему для всех компонентов через контекстный API.
 
-For more information on existing themes, see [here]('../theme)
-You can learn more about design tokens [here]('../tokens)
+Более подробно ознакомиться с существующими темами можно [здесь]('../theme)
+Более подробно ознакомиться с дизайн-токенами можно [здесь]('../tokens)
 
 ### How To Use
 ```
@@ -40,7 +40,6 @@ const Layout = () => {
 }
 ```
 
-In the render tree, all styled components will have access to the provided theme, even if they are multiple levels deep.
-
-This is provided using the theme configurator [THEME_CONFIG](../../design-system/theme/themes/config.ts)
-and hook [useTheme](../../design-system/theme/hooks'), providing access to component tokens.
+В дереве рендеринга все стилизованные компоненты будут иметь доступ к предоставленной теме, даже если они имеют несколько уровней глубины.
+Обеспечивается это благодаря конфигуратору тем [THEME_CONFIG](../../design-system/theme/themes/config.ts)
+а так же хуку [useTheme](../../design-system/theme/hooks'), предоставляющим доступ к наборам токенов каждого компонента.

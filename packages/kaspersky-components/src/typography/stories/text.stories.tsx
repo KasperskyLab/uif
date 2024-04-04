@@ -1,95 +1,116 @@
 import React from 'react'
-import { Story, Meta } from '@storybook/react'
-import { badges } from '../../../.storybook/badges'
-import { StoryLayout } from '../../../.storybook/StoryComponents'
-import { useTheme } from '../../../design-system/theme/hooks'
-import { TextTypes } from '../../../design-system/tokens'
-import { colors, themeColors } from '../../../design-system/tokens/palette'
-import { ThemeKey } from '../../../design-system/types'
-import { withMeta } from '../../../helpers/hocs/MetaComponent/withMeta'
-import { Space } from '../../space'
+import { Meta, StoryObj } from '@storybook/react'
+import { badges } from '@sb/badges'
+import { useTheme } from '@design-system/theme/hooks'
+import { colors, themeColors } from '@design-system/tokens'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import { Space } from '@src/space'
 import { Text, TextProps } from '../text'
 import MetaData from '../__meta__/meta.json'
 import { TextDocs } from './TextDocs'
 
-export default {
+const meta: Meta<TextProps> = {
   title: 'Atoms/Typography/Text',
   component: Text,
+  argTypes: {
+    ...sbHideControls(['theme', 'as', 'forwardedAs', 'ref'])
+  },
+  args: {
+    testId: 'text-test-id',
+    klId: 'text-kl-id'
+  },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
     docs: {
       page: withMeta(MetaData, TextDocs)
-    }
-  }
-} as Meta
-
-export const Default: Story<TextProps> = (args) => {
-  return (
-    <StoryLayout theme={ThemeKey.Light}>
-      <Space size={16} direction="vertical">
-        <Text color={args.color} type={args.type} {...args}>
-          I'm text with type {args.type}
-        </Text>
-      </Space>
-    </StoryLayout>
-  )
-}
-
-Default.args = {
-  type: 'BTM1',
-  color: 'lg100'
-}
-
-Default.argTypes = {
-  color: {
-    options: Object.keys(colors),
-    control: { type: 'select' }
+    },
+    design: MetaData.figmaView
   },
-  type: {
-    options: Object.keys(TextTypes),
-    control: { type: 'select' }
-  }
-}
-
-export const WithTheme: Story<TextProps> = (args) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
+  decorators: [
+    (Story, context) => (
       <Space size={16} direction="vertical">
-        <Text {...args}>
-          I'm text with type {args.type}, color - {args.themedColor} theme -{' '}
-          {theme.key}
-        </Text>
+        <Story {...context}/>
       </Space>
-    </StoryLayout>
-  )
+    )
+  ]
+}
+export default meta
+
+type Story = StoryObj<TextProps>
+
+const defaultTypes = [
+  'BTR2', 'BTR3', 'BTR4', 'BTR5',
+  'BTM2', 'BTM3', 'BTM4', 'BTM5',
+  'MTR3', 'MTR4'
+]
+
+const defaultATColor = {
+  options: Object.keys(colors),
+  control: { type: 'select' }
 }
 
-WithTheme.args = {
-  type: 'BTM1',
-  themedColor: 'primary'
+const defaultATType = {
+  options: Object.keys(colors),
+  control: { type: 'select' }
 }
 
-WithTheme.argTypes = {
-  themedColor: {
-    options: Object.keys(themeColors['text-icons-elements']),
-    control: { type: 'select' },
-    defaultValue: themeColors['text-icons-elements'].primary
+export const Basic: Story = {
+  render: (args: TextProps) => (
+    <Text color={args.color} type={args.type} {...args}>
+      I&apos;m text with type {args.type}
+    </Text>
+  ),
+  args: {
+    type: 'BTR3',
+    color: 'lg100'
   },
-  type: {
-    options: Object.keys(TextTypes),
-    control: { type: 'select' }
+  argTypes: {
+    color: { ...defaultATColor },
+    type: { ...defaultATType },
+    ...sbHideControls(['themedColor'])
   }
 }
 
-Default.parameters = {
-  controls: {
-    exclude: ['themedColor', 'theme', 'as', 'forwardedAs']
+export const AllTypes: Story = {
+  render: (args: TextProps) => (
+    <div>
+      {defaultTypes.map(type => (
+        <Text key={type} color={args.color} type={type} {...args}>
+          I&apos;m header with type {type}
+        </Text>
+      ))}
+    </div>
+  ),
+  args: {
+    color: 'lga100'
+  },
+  argTypes: {
+    color: { ...defaultATColor },
+    ...sbHideControls(['type', 'themedColor'])
   }
 }
 
-WithTheme.parameters = {
-  controls: {
-    exclude: ['color', 'theme', 'as', 'forwardedAs']
+export const WithTheme: Story = {
+  render: (args: TextProps) => {
+    const theme = useTheme()
+    return (
+      <Text {...args}>
+        I&apos;m text with type {args.type}, color - {args.themedColor} theme -{' '}
+        {theme.key}
+      </Text>
+    )
+  },
+  args: {
+    type: 'BTR3',
+    themedColor: 'primary'
+  },
+  argTypes: {
+    themedColor: {
+      options: Object.keys(themeColors['text-icons-elements']),
+      control: { type: 'select' }
+    },
+    type: { ...defaultATType },
+    ...sbHideControls(['color'])
   }
 }

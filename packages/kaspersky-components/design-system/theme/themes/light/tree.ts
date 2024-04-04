@@ -1,50 +1,58 @@
 import { ComponentThemeContext } from '../config'
-import { TreeColorConfig } from '../../../../src/tree/types'
-import { SPACES } from '../variables'
-import { getTextSizes, TextTypes, TextSizes } from './typography'
+import { TreeColorConfig } from '@src/tree/types'
 
 export const tree = ({ colors }: ComponentThemeContext): TreeColorConfig => ({
-  default: {
-    bgColor: colors.defaultPalette.marina500,
-    color: colors['text-icons-elements']['primary-invert']
-  },
   normal: {
-    color: colors.textIconsElements.primary,
-    radius: `${SPACES[2]}px`,
-    bgColor: colors.bg.base,
-    borderColor: colors.elements.line,
-    checkColor: colors.foregroundInvertedColor,
-    checkBgColor: colors.mainInteractPrimary
-  },
-  hover: {
-    bgColor: colors.bg.alternative2,
-    borderColor: colors.elements.line,
-    checkColor: colors.foregroundInvertedColor,
-    checkBgColor: colors.mainInteractSecondary
-  },
-  active: {
-    bgColor: colors.mainInteractPressed,
-    borderColor: colors.mainInteractPressed,
-    checkColor: colors.mainInteractPrimary,
-    checkBgColor: colors.mainInteractPressed,
-    outline: 'none'
+    textColor: colors.textIconsElements.primary,
+    lineColor: colors.elements.seporatorbold,
+    arrowColor: colors.textIconsElements.secondary
   },
   focus: {
-    bgColor: colors.bg.alternative,
-    borderColor: 'red',
-    checkColor: colors.foregroundInvertedColor,
-    checkBgColor: colors.mainInteractPrimary,
-    outline: `0 0 0 ${SPACES[1]}px ${colors.mainInteractFocus}`
+    borderColor: colors.mainInteractFocus
   },
-  disabled: {
-    color: colors.textIconsElements.disabled,
-    bgColor: colors.elements.seporatorbold,
-    borderColor: colors.elements.seporatorbold,
-    checkColor: colors.textIconsElements.disabled,
-    checkBgColor: colors.elements.seporatorbold
+  dropIndicator: {
+    background: colors.mainInteractFocus
+  },
+  treeNode: {
+    unselected: {
+      normal: {
+        textColor: colors.textIconsElements.primary
+      },
+      hover: {
+        background: colors.elements['separator-solid']
+      },
+      active: {
+        background: colors.elements['separator-bold-solid']
+      },
+      focus: {
+        borderColor: colors.mainInteractFocus
+      },
+      disabled: {
+        textColor: colors.textIconsElements['disabled-solid']
+      }
+    },
+    selected: {
+      normal: {
+        textColor: colors.mainInteractPrimary,
+        background: colors.mainInteractPrimaryInverted
+      },
+      hover: {
+        textColor: colors.mainInteractSecondary,
+        background: colors.mainInteractSecondaryInverted
+      },
+      active: {
+        textColor: colors.mainInteractTertiary,
+        background: colors.mainInteractTertiaryInverted
+      },
+      focus: {
+        textColor: colors.mainInteractPrimary,
+        background: colors.mainInteractPrimaryInverted,
+        borderColor: colors.mainInteractFocus
+      },
+      disabled: {
+        textColor: colors.textIconsElements['disabled-solid'],
+        background: colors.elements['separator-solid']
+      }
+    }
   }
 })
-
-export const treeSize: TextSizes = {
-  ...getTextSizes(TextTypes.L4)
-}

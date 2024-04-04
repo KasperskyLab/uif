@@ -11,35 +11,35 @@
     },
     {
       "prop": "secondaryColors",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "disabled",
-      "changes":"Added - boolean"
+      "changes":"Добавлен - boolean"
     }
   ],
   "v5": [
     {
       "prop": "mode",
-      "changes": "Removed"
+      "changes": "Убран"
     }
   ],
   "common": [
     {
       "prop": "typography",
-      "changes": "Removed - use props 'type'"
+      "changes": "Убран - использовать пропс 'type'"
     },
     {
       "prop": "type",
-      "changes": "Added - instead of typography"
+      "changes": "Добавлен - вместо typography"
     },
     {
       "prop": "text",
-      "changes": "Added - passing text as children"
+      "changes": "Добавлен - передача текста как children"
     },
     {
       "prop": "iconPosition",
-      "changes": "Added - before | after"
+      "changes": "Добавлен - before | after"
     }
   ]
 }

@@ -1,24 +1,41 @@
-import React from 'react'
+import React, { FC } from 'react'
+import cn from 'classnames'
 import styled from 'styled-components'
 import { FormLabelProps, FormLabelViewProps } from './types'
 import { useThemedFormLabel } from './useThemedFormLabel'
-import { Text } from '../typography/text'
-import { Tooltip } from '@src/tooltip'
-import { Icon } from '../icon'
+import { ActionButton } from '@src/action-button'
+import { Text } from '@src/typography/text'
+import { Popover } from '@src/popover'
+import { StatusInfoOutline } from '@kaspersky/icons/16'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import FormLabelCSS from './FormLabelCSS'
 
 export const StyledFormLabel = styled('label').withConfig({
   shouldForwardProp: prop => !['cssConfig'].includes(prop)
 })`${FormLabelCSS}`
 
-export const FormLabel = (rawProps: FormLabelProps): JSX.Element => {
-  const props = useThemedFormLabel(rawProps)
+export const FormLabel: FC<FormLabelProps> = (rawProps: FormLabelProps) => {
+  const { disabled, mode, ...rest } = rawProps
+  const themedProps = useThemedFormLabel({ ...rest, disabled, mode: disabled ? 'disabled' : mode })
+  const props = useTestAttribute(themedProps)
   return <FormLabelView {...props} />
 }
 
-export const FormLabelView = ({ children, required, disabled, tooltip, klId, ...props }: FormLabelViewProps): JSX.Element => {
+const FormLabelView: FC<FormLabelViewProps> = ({
+  children,
+  className,
+  disabled,
+  required,
+  tooltip,
+  testAttributes,
+  ...props
+}: FormLabelViewProps) => {
   return (
-    <StyledFormLabel {...props} className="form-label" data-component-id={klId}>
+    <StyledFormLabel
+      {...props}
+      {...testAttributes}
+      className={cn('form-label', className)}
+    >
       <Text type="BTR3" className="form-label-text">
         {children}
       </Text>
@@ -27,14 +44,14 @@ export const FormLabelView = ({ children, required, disabled, tooltip, klId, ...
           *
         </Text>
       )}
-      {tooltip !== undefined && (
-        <Tooltip autoAdjustOverflow={false} arrowPointAtCenter title={tooltip}>
-          <Icon
-            size="extraSmall"
-            name="InfoLabel"
+      {tooltip && (
+        <Popover content={tooltip}>
+          <ActionButton
+            interactive={false}
+            icon={<StatusInfoOutline />}
             className="form-label-info-icon"
           />
-        </Tooltip>
+        </Popover>
       )}
     </StyledFormLabel>
   )

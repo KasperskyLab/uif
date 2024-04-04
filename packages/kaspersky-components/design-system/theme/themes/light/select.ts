@@ -1,62 +1,51 @@
 import { ComponentThemeContext } from '../config'
-import { SelectColorConfig, SelectSizeConfig } from '../../../../src/select/types'
-import { BORDER_RADIUS } from '../variables'
-import { getTextSizes, textLevels } from './typography'
+import { SelectColorConfig } from '@src/select/types'
+import { focus } from '@design-system/tokens/focus'
 
 export const select = ({ colors }: ComponentThemeContext): SelectColorConfig => ({
   normal: {
-    background: colors.background,
-    focusBorder: colors.mainInteractFocus,
+    background: colors.bg.base,
     color: colors.textIconsElements.primary,
-    borderColor: colors.elements.seporatorbold,
+    borderColor: colors.elements['line-solid'],
+    addButton: {
+      color: colors.mainInteractPrimary
+    },
     placeholder: {
-      color: colors.textIconsElements.secondary2
+      color: colors.textIconsElements['secondary2-solid']
     },
     dropdown: {
-      background: colors.background,
-      alignTop: 8
+      background: colors.bg.base,
+      boxShadow: '0px 0px 1px 0px rgba(9, 30, 66, 0.64), 0px 3px 5px 0px rgba(9, 30, 66, 0.20)'
     },
     option: {
       color: colors.textIconsElements.primary
-    },
-    icon: {
-      color: colors.textIconsElements.secondary
     }
   },
   hover: {
+    borderColor: colors.mainInteractSecondary,
     option: {
-      background: colors.textIconsElements['secondary2-invert'],
+      background: colors.elements['separator-solid'],
       color: colors.textIconsElements.primary
     }
   },
   disabled: {
-    color: colors.textIconsElements.disabled,
-    background: colors.elements.seporator
-  },
-  selected: {
-    color: colors.textIconsElements.primary,
-    background: colors.textIconsElements['secondary-invert'],
+    color: colors.textIconsElements['disabled-solid'],
+    background: colors.elements['separator-solid'],
+    placeholder: {
+      color: colors.textIconsElements['disabled-solid']
+    },
     option: {
-      background: colors.background
+      color: colors.textIconsElements['disabled-solid']
     }
   },
-  active: {
-    focusBorder: colors.mainInteractFocus,
+  selected: {
     option: {
-      background: colors.bg.alternative2
+      background: colors.mainInteractPrimaryInverted,
+      color: colors.mainInteractPrimary
     }
   },
   error: {
-    borderColor: colors.criticalitystatuses.high,
-  }
+    borderColor: colors.dangerInteract.primary
+  },
+  ...focus({ colors })
 })
-
-export const selectSizes: SelectSizeConfig = {
-  input: {
-    borderRadius: `${BORDER_RADIUS[4]}px`
-  },
-  dropdown: {
-    borderRadius: `${BORDER_RADIUS[2]}px`
-  },
-  ...getTextSizes(textLevels.BTR3)
-}

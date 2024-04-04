@@ -1,156 +1,73 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-
-import { Textbox } from '../input'
-import { Icon } from '../icon'
-import { useLocalization } from '../../helpers/localization/useLocalization'
-import { ISearchViewProps, SearchCssConfig, SearchProps } from './types'
-import { useThemedSearch } from './useThemedSearch'
+import React, { FC, ReactElement, useMemo } from 'react'
+import styled from 'styled-components'
+import { searchCss, searchAddonCss } from './searchCss'
+import { SearchProps, SearchVariantsProps } from './types'
+import { useLocalization } from '@helpers/localization/useLocalization'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { WithButton } from './SearchWithButton'
 import { WithIconLeft, WithIconRight } from './SearchWithIcon'
 import { WithConfiguration } from './SearchWithConfiguration'
 import { WithDropdown } from './SearchWithDropdown'
-import { IconSearch } from './assets/icons/IconSearch'
-import {
-  IconStyled,
-  resultCss,
-  searchCss,
-  StyledContainer,
-  addonAfterCss,
-  addonBeforeCss
-} from './searchCss'
-import { useOnClickOutside } from '../../helpers'
-import { ITextboxProps } from '../input/types'
-import styled, { css } from 'styled-components'
+import { IconSearch } from './IconSearch'
+import { Textbox } from '@src/input'
+import { Dropdown } from '@src/dropdown'
+import { ActionButton } from '@src/action-button'
 
-const Results = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
-})`
-  ${resultCss}
-`
-
-const StyledTextbox = styled(Textbox).withConfig({
-  shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
-})`
+const StyledTextbox = styled(Textbox)`
   ${searchCss}
-  ${({ addonAfter }) =>
-    addonAfter &&
-    css`
-      ${addonAfterCss}
-    `}
-  ${({ addonBefore }) =>
-    addonBefore &&
-    css`
-      ${addonBeforeCss}
-    `}
+  ${searchAddonCss}
 `
 
-export const useSearch = (props: ITextboxProps & { tags?: string[] }) => {
-  const [showResults, setShowResults] = useState(false)
-  const isInitialized = useRef(false)
-  const wrapperRef = useRef(null)
-
-  const handleHideResults = useCallback(() => setShowResults(false), [])
-
-  const handleClickInput = useCallback(() => {
-    if (isInitialized.current) {
-      setShowResults(true)
-    }
-  }, [isInitialized.current])
-
-  useOnClickOutside(wrapperRef, handleHideResults)
-
-  useEffect(() => {
-    if (props.children && !showResults && !isInitialized.current) {
-      setShowResults(true)
-
-      isInitialized.current = true
-    }
-  }, [props.children, showResults])
-
-  useEffect(() => {
-    if (isInitialized.current) {
-      setShowResults(true)
-    }
-  }, [props.children, isInitialized.current])
-
-  return {
-    showResults,
-    wrapperRef,
-    handleClickInput
-  }
-}
-
-export const Search = (rawProps: SearchProps) => {
-  const props = useThemedSearch(rawProps)
-  const behavior = useSearch(rawProps)
-
-  return <SearchView data-component-id={props.klId} {...props} {...behavior} />
-}
-
-const SearchPrefix = ({ cssConfig }: { cssConfig: SearchCssConfig }) => (
-  <IconStyled cssConfig={cssConfig}>
-    <IconSearch componentId="icon-search" />
-  </IconStyled>
-)
-
-export const SearchView = ({
-  disabled,
-  error,
-  value,
-  addonAfter,
-  addonBefore,
-  placeholder = 'search.dotted',
-  wrapperRef,
-  onChange,
-  onPressEnter,
-  onClearClick,
-  showResults,
-  onFocus,
-  onBlur,
-  cssConfig,
-  className,
-  children,
-  prefix = <SearchPrefix cssConfig={cssConfig} />,
-  suffix,
-  klId
-}: ISearchViewProps & ReturnType<typeof useSearch>) => {
+export const Search: FC<SearchProps> & SearchVariantsProps = (props: SearchProps) => {
+  const {
+    value,
+    placeholder = 'search.dotted',
+    dropdownOverlay,
+    children,
+    onClearClick,
+    prefix,
+    suffix = <IconSearch testId="search-icon" componentId="icon-search" />,
+    testId,
+    invalid,
+    error,
+    klId,
+    ...rest
+  } = props
+  const { testAttributes } = useTestAttribute(props)
   const localizedPlaceholder = useLocalization(placeholder)
-
+  const newSuffix = useMemo(() => (
+    value && value.length
+      ? <ActionButton
+          testId="search-clear"
+          klId="clear"
+          onClick={onClearClick}
+          mode="filled"
+        />
+      : !prefix && suffix
+  ), [value, prefix, suffix, onClearClick])
+  const SearchTextbox = (
+    <StyledTextbox
+      invalid={invalid || error}
+      placeholder={localizedPlaceholder}
+      value={value}
+      prefix={prefix}
+      allowClear={false}
+      suffix={newSuffix}
+      {...testAttributes}
+      {...rest}
+    />
+  )
   return (
-    <StyledContainer kl-id={klId} ref={wrapperRef}>
-      <StyledTextbox
-        className={className}
-        cssConfig={cssConfig}
-        placeholder={localizedPlaceholder}
-        onChange={onChange}
-        onPressEnter={onPressEnter}
-        value={value}
-        disabled={disabled}
-        error={error}
-        addonAfter={addonAfter}
-        addonBefore={addonBefore}
-        prefix={prefix}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        allowClear={false}
-        suffix={
-          suffix ||
-          (!suffix && value && value.length && (
-            <Icon
-              color={cssConfig.mode.normal.iconColor}
-              kl-id="clear"
-              onClick={onClearClick}
-              size="small"
-              name="Clear"
-            />
-          ))
-        }
-        klId={klId}
-      />
-      {showResults && children && (
-        <Results cssConfig={cssConfig}>{children}</Results>
-      )}
-    </StyledContainer>
+    children || dropdownOverlay
+      ? <Dropdown
+          klId={`${klId}-dropdown`}
+          overlay={children as ReactElement || dropdownOverlay}
+          testId={`${testId}-dropdown'`}
+          trigger={['click']}
+        >
+          { SearchTextbox }
+        </Dropdown>
+      : SearchTextbox
   )
 }
 

@@ -55,8 +55,10 @@ const StyledTableContainer = styled.div`
   }}
 `
 
-function checkRows (rows: readonly Record<string, unknown>[]) {
-  return rows.some(({ children }: { children?: readonly Record<string, unknown>[] }) => Array.isArray(children))
+// eslint-disable-next-line @typescript-eslint/ban-types
+function checkRows (rows: readonly object[]) {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  return rows.some(({ children }: { children?: readonly object[] }) => Array.isArray(children))
 }
 
 export const ExpandableRows: TableModule = Component => props => {

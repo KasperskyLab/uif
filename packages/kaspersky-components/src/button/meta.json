@@ -6,10 +6,12 @@
     "screenshotTests": false,
     "migration": true,
     "apiTable": true,
-    "storybook": true
+    "storybook": true,
+    "figmaView": true
   },
   "component": "Button",
-  "desctiption": "Button rendering component. The basis is AntdButton from the Antd library.",
-  "usage": "An element that, when clicked, performs some action",
-  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1%3A747"
+  "description": "Компонент для отрисовки кнопок. В качестве основы используется AntdButton из библиотеки Antd. Моды primaryBlue, primaryBlack, invertedPrimary, invertedSecondary, invertedTertiary являются устаревшими",
+  "usage": "Элемент, при нажатии на который происходит какое-то действие",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1%3A747",
+  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7TGvGlgGfTltMG1OBgLq8p%2F00-%255BB2B%255D-Hexa-UI-Kit%3Ftype%3Ddesign%26node-id%3D1063%253A4154%26mode%3Ddesign%26t%3DAq9sAgGeMSfebrzW-1"
 }

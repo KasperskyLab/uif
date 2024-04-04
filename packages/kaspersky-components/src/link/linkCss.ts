@@ -1,85 +1,62 @@
-import { css } from 'styled-components'
-import { getFromProps } from '../../helpers/getFromProps'
+import styled from 'styled-components'
+import { SPACES } from '@design-system/theme'
+import { getFromProps } from '@helpers/getFromProps'
 import { LinkCssConfig } from './types'
 
 const fromProps = getFromProps<LinkCssConfig>()
 
-const getDashedStyle = (color: Parameters<typeof fromProps>[0]) => css`
-  ${(props: { cssConfig: LinkCssConfig, decoration?: boolean }) => props.decoration
-    ? `border-bottom: 1px solid ${fromProps(color)(props)}`
-    : ''}
+export const TextWrapper = styled.span``
+
+export const IconWrapper = styled.span`
+  vertical-align: text-top;
 `
 
-export const linkCss = css`
-  width: fit-content;
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: ${fromProps('gap')};
-
-  .kl-components-link-text {
-    font-family: ${fromProps('fontFamily')};
-    ${getDashedStyle('normal.color')};
-  }
-      
-  .kl-components-link-text, .kl-components-link-icon svg {
-    color: ${fromProps('focus.color')};
-  }
-  
+export const StyledLink = styled.a.withConfig({
+  shouldForwardProp: prop => !['cssConfig'].includes(prop)
+})<{
+  cssConfig: LinkCssConfig
+}>`
   text-decoration: none;
+
+  font-family: ${fromProps('fontFamily')};
+  font-size: ${fromProps('fontSize')};
+  line-height: ${fromProps('lineHeight')};
+  font-style: ${fromProps('fontStyle')};
+  font-weight: ${fromProps('fontWeight')};
   
-  &:focus {
-    .kl-components-link-text {
-      ${getDashedStyle('focus.color')};
-    }
+  &, &:not(.kl-components-link_visited):visited {
+    color: ${fromProps('normal.color')};
 
-    .kl-components-link-text, .kl-components-link-icon svg {
-      color: ${fromProps('focus.color')};
-    }
+    outline: none;
+    border: none;
+  }
 
-    outline: ${fromProps('outlineWidth')} solid ${fromProps('focusOutline.color')};
+  &&:focus-visible {
+    box-shadow: ${fromProps('focus.boxShadow')};
+    outline: none;
     border-radius: ${fromProps('borderRadius')};
   }
 
-  &:hover {
-    .kl-components-link-text {
-      ${getDashedStyle('hover.color')}
-    }
-      
-    .kl-components-link-text, .kl-components-link-icon svg {
-      color: ${fromProps('hover.color')};
-    }
+  &.kl-components-link_visited:visited {
+    color: ${fromProps('visited.color')};
   }
 
-  &:active {
-    .kl-components-link-text {
-      ${getDashedStyle('active.color')};
-    }
-      
-    .kl-components-link-text, .kl-components-link-icon svg {
-      color: ${fromProps('active.color')};
-    }
+  &&:hover {
+    color: ${fromProps('hover.color')};
   }
 
-  &.kl-components-link_disabled {
-    .kl-components-link-text {
-      ${getDashedStyle('disabled.color')};
-    }
+  &&:active {
+    color: ${fromProps('active.color')};
+  }
+
+  &&.kl-components-link_disabled {
+    color: ${fromProps('disabled.color')};
       
-    .kl-components-link-text, .kl-components-link-icon svg {
-      color: ${fromProps('disabled.color')};
-    }
-    
     outline: none;
     cursor: default;
   }
-
-  .kl-components-link-icon {
-    & > span {
-      cursor: pointer !important;
-    }
-
-    display: flex;
-    align-items: center;
+  
+  & > :not(:first-child) {
+    margin-left: ${SPACES[2]}px;
   }
 `

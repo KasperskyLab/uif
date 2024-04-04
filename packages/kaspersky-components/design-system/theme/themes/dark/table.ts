@@ -1,11 +1,5 @@
-import { TableColorConfig } from '../../../../src/table/types'
+import { TableColorConfig } from '@src/table'
 import { ComponentThemeContext } from '../config'
-import { table as defaultTableCreator, tableSizes as defaultTableSizes } from '../light/table'
+import { table as defaultTable } from '../light/table'
 
-export const table = ({ colors }: ComponentThemeContext): TableColorConfig => {
-  const defaultTable = defaultTableCreator({ colors })
-
-  return defaultTable
-}
-
-export const tableSizes = defaultTableSizes
+export const table = ({ colors }: ComponentThemeContext): TableColorConfig => defaultTable({ colors })

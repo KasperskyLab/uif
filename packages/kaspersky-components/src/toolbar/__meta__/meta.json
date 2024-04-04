@@ -1,15 +1,18 @@
 {
-    "dod": {
-      "designTokens": true,
-      "useThemedHook": true,
-      "unitTests": true,
-      "screenshotTests": false,
-      "migration": true,
-      "apiTable": true,
-      "storybook": true
-    },
-    "component": "Toolbar",
-    "desctiption": "A container component for a group of commands or controls.",
-    "usage": "Used to display the toolbar in the table and separately",
-    "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-UI-KIT?node-id=4055%3A17685"
-  }
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "designLink": true,
+    "figmaView": true
+  },
+  "component": "Toolbar",
+  "description": "Компонент-контейнер для группы команд или элементов управления.",
+  "usage": "Панель инструментов используется сверху от оcновной таблицы.",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-UI-KIT?node-id=4055%3A17685",
+  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F01-%255BB2B%255D-Hexa-UI-Components%3Ftype%3Ddesign%26node-id%3D4055%253A16529%26mode%3Ddev"
+}

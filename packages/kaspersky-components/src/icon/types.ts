@@ -1,8 +1,11 @@
-import { HTMLAttributes } from 'react'
+import { HTMLAttributes, CSSProperties } from 'react'
 import { icons, themeColorsType, themeColors } from '@design-system/tokens'
 import { SizingType } from '@design-system/types'
+import { TestingProps } from '@helpers/typesHelpers'
 
 export type IconSizes = Exclude<SizingType, 'extraLarge' >
+
+export type IconPackSizes = 8 | 12 | 16 | 24 | 48
 
 export type IconCssConfig = {
   color?: string
@@ -10,28 +13,15 @@ export type IconCssConfig = {
 
 export type IconProps = HTMLAttributes<HTMLSpanElement> & {
   [key: string]: any,
-  /**
-   * Hard set color of icon,
-   */
-  color?: string,
-  /**
-   * Size of icon 'extraSmall' | 'small' | 'medium' | 'large' | 'extraLarge'
-   */
+  /** Hard set color of icon */
+  color?: CSSProperties['color'],
+  /** Size of icon 'extraSmall' | 'small' | 'medium' | 'large' | 'extraLarge' */
   size: IconSizes,
-  /**
-   * Name of Icon
-   */
+  /** Name of Icon */
   name: typeof icons[IconProps['size']][number],
-  // name: typeof icons[keyof typeof icons][number],
-  /**
-   * Themed Color
-   */
-  themedColor?: keyof typeof themeColors['text-icons-elements'],
-  /**
-   * Test id
-   */
-  klId?: string
-}
+  /** Themed Color */
+  themedColor?: keyof typeof themeColors['text-icons-elements']
+} & TestingProps
 
 export type IconColorConfig = {
   color?: themeColorsType

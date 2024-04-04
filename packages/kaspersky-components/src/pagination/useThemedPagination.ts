@@ -1,16 +1,9 @@
-import { useMemo } from 'react'
-import { useTheme } from '../../design-system/theme/hooks'
-import { THEME_CONFIG } from '../../design-system/theme/themes/config'
-import { PaginationCssConfig, PaginationStyleProps } from './types'
+import { PaginationProps, PaginationViewProps, PaginationCssConfig, PaginationThemeProps } from './types'
+import { useThemedComponent } from '@helpers/useThemedComponent'
 
-export const useThemedPagination = <T extends PaginationStyleProps>(props: T): Omit<T, keyof PaginationStyleProps> & {cssConfig: PaginationCssConfig} => {
-  const { size = 'medium', theme: themeFromProps, ...rest } = props
-
-  const theme = useTheme(props)
-  const cssConfig = useMemo(() => ({
-    ...(THEME_CONFIG[theme.key].components.pagination.colors),
-    ...(THEME_CONFIG[theme.key].components.pagination.sizes[size])
-  }), [theme])
-
-  return { cssConfig, size, ...rest }
-}
+export const useThemedPagination = (props: PaginationProps): PaginationViewProps => (
+  useThemedComponent<PaginationProps, PaginationCssConfig, PaginationThemeProps>(props, {
+    componentName: 'pagination',
+    defaultValues: {}
+  })
+)

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { colors, getTextSizes, textLevels } from '../../../design-system/tokens'
+import { colors, getTextSizes, textLevels } from '@design-system/tokens'
 import { HeadingProps } from './types'
 import { HTag } from './Heading'
 export const StyledHeading = styled((props: HeadingProps) => <HTag {...props} />)`
@@ -11,7 +11,7 @@ export const StyledHeading = styled((props: HeadingProps) => <HTag {...props} />
     if (theme?.colors) {
       return theme.colors.textIconsElements[themedColor || 'primary']
     }
-  }};
+  }} !important;
   ${({ type }) => getTextSizes(textLevels[type || 'H1'])};
   margin-bottom: 0;
 `

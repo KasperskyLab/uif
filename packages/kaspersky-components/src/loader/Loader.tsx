@@ -1,35 +1,45 @@
-import * as React from 'react'
+import React, { FC } from 'react'
 import { Spin as SpinAntd } from 'antd'
 import styled from 'styled-components'
-
+import cn from 'classnames'
 import { LoaderIcon as Icon } from './LoaderIcon'
 import { iconCss, loaderCss } from './loaderCss'
-import { ILoaderProps, ILoaderViewProps } from './types'
+import { LoaderProps, LoaderViewProps } from './types'
 import { useThemedLoader } from './useThemedLoader'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 
 const StyledSpin = styled(SpinAntd).withConfig({
-  shouldForwardProp: prop => !['centered', 'cssConfig'].includes(prop)
-})`${loaderCss}`
+  shouldForwardProp: (prop) => !['centered', 'cssConfig'].includes(prop)
+})`
+  ${loaderCss}
+`
 
-const StyledIcon = styled(Icon)`${iconCss}`
+const StyledIcon = styled(Icon)`
+  ${iconCss}
+`
 
-export const Loader: React.FC<ILoaderProps> = (rawProps) => {
-  const props = useThemedLoader(rawProps)
+export const Loader: FC<LoaderProps> = (rawProps: LoaderProps) => {
+  const themedProps = useThemedLoader(rawProps)
+  const props = useTestAttribute(themedProps)
   return <LoaderView {...props} />
 }
 
-export const LoaderView: React.FC<ILoaderViewProps> = ({
+export const LoaderView: FC<LoaderViewProps> = ({
   spinning = true,
-  klId,
   cssConfig,
+  className,
+  centered,
+  testAttributes,
   ...rest
-}) => {
+}: LoaderViewProps) => {
   return (
     <StyledSpin
-      kl-id={klId}
+      className={cn(className, { 'ant-spinner-centered': centered })}
+      centered={centered}
       indicator={<StyledIcon color={cssConfig.color} />}
       spinning={spinning}
       cssConfig={cssConfig}
+      {...testAttributes}
       {...rest}
     />
   )

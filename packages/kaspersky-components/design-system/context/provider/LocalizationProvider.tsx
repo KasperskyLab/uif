@@ -11,7 +11,7 @@ interface Props {
 export const LocalizationProvider: React.FC<Props> = ({
   children,
   i18n,
-  locale = 'en'
+  locale = 'en-us'
 }) => {
   React.useEffect(() => {
     i18n.changeLanguage(locale)

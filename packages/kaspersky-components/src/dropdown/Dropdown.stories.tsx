@@ -1,121 +1,210 @@
 import React, { CSSProperties, useRef } from 'react'
 import styled from 'styled-components'
-import { badges } from '../../.storybook/badges'
-import { withMeta } from '../../helpers/hocs/MetaComponent/withMeta'
-import { Button } from '../button'
-import { Icon } from '../icon'
-import { Link } from '../link'
-import { Text } from '../typography'
-import Meta from './__meta__/meta.json'
+import { Meta, StoryObj } from '@storybook/react'
+import { badges } from '@sb/badges'
+import { StoryColumn } from '@sb/StoryComponents'
+import MetaData from './__meta__/meta.json'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import { DropdownProps, DropdownItemProps, Placement } from './types'
+import { Button } from '@src/button'
+import { Badge } from '@src/badge'
+import { Indicator } from '@src/indicator'
+import { Text } from '@src/typography'
 import { Dropdown } from './Dropdown'
-import { IDropdownProps, Placement } from './types'
+import { Placeholder, Menu3 } from '@kaspersky/icons/16'
 
-export default {
-  title: 'Atoms/Dropdown',
-  component: Dropdown,
-  parameters: {
-    badges: [badges.stable, badges.needsDesignReview],
-    docs: {
-      page: withMeta(Meta)
-    }
-  }
-}
-
-const items = [
+const defaultOverlay: DropdownItemProps[] = [
   {
-    children: (
-      <Link target="_blank" href="#">
-        1st menu item
-      </Link>
-    )
+    title: 'Submenu',
+    type: 'submenu',
+    children: [
+      {
+        active: true,
+        title: 'SubSubmenu',
+        type: 'submenu',
+        children: [
+          {
+            type: 'action',
+            // check https://4x.ant.design/components/menu/#API for more info
+            onClick: (menuInfo) => {
+              alert(`some action ${menuInfo}`)
+            },
+            children: 'action item'
+          },
+          {
+            children: (
+              <Text type="BTR5">Typography item</Text>
+            )
+          },
+          {
+            children: (
+              <Button>Button item</Button>
+            )
+          }
+        ]
+      },
+      {
+        disabled: true,
+        componentsBefore: [
+          <Placeholder key='UserAccount icon' />
+        ],
+        componentsAfter: [
+          <Badge key='badge' mode='neutral' text='25'/>
+        ],
+        children: 'Disabled'
+      },
+      {
+        title: 'Disabled submenu',
+        type: 'submenu',
+        disabled: true,
+        children: [
+          { children: 'you cant see that' }
+        ]
+      }
+    ]
   },
   {
-    children: <Button>2nd menu item</Button>
+    title: 'Additional components',
+    type: 'group',
+    children: [
+      {
+        componentsBefore: [
+          <Indicator key='indicator' mode='high'/>,
+          <Placeholder key='UserAccount icon' />
+        ],
+        children: 'With components before'
+      },
+      {
+        componentsAfter: [
+          <Placeholder key='UserAccount icon' />,
+          <Badge key='badge' mode='neutral' text='25'/>
+        ],
+        children: 'With components after'
+      },
+      {
+        componentsAfter: [
+          <Badge key='badge1' mode='neutral' text='25'/>
+        ],
+        componentsBefore: [
+          <Placeholder key='UserAccount icon1' />
+        ],
+        children: 'Before and After'
+      }
+    ]
   },
   {
-    children: <Text type="BTR3">3rd menu item</Text>,
-    disabled: true
+    type: 'submenu',
+    title: 'Submenu with after',
+    componentsAfter: [
+      <Badge key='badge2' mode='neutral' text='25'/>
+    ],
+    children: [
+      { children: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a ligula tempor orci consectetur pellentesque. Quisque quis felis in odio feugiat luctus. Ut sodales, mi at lacinia ultricies, tortor dolor imperdiet sapien, sit amet tristique erat eros sed nisl. In hac habitasse platea dictumst. Sed vel erat ligula. Vivamus a nisi id purus tempor venenatis non nec odio. Ut orci.' },
+      { children: 'Default item 2' }
+    ]
   }
 ]
 
-const DropdownTemplate = ({ overlay = items, ...rest }: IDropdownProps) => {
-  return (
-    <Dropdown trigger={['click']} overlay={overlay} {...rest}>
-      <Button>Trigger Dropdown</Button>
-    </Dropdown>
-  )
+const meta: Meta<DropdownProps> = {
+  title: 'Atoms/Dropdown',
+  component: Dropdown,
+  argTypes: {
+    ...sbHideControls(['theme'])
+  },
+  args: {
+    overlay: defaultOverlay,
+    disabled: false,
+    loading: false,
+    placement: 'bottomLeft',
+    trigger: ['hover'],
+    testId: 'dropdown-test-id',
+    klId: 'dropdown-kl-id'
+  },
+  parameters: {
+    badges: [badges.stable, badges.reviewedByDesign],
+    docs: {
+      page: withMeta(MetaData)
+    },
+    design: MetaData.figmaView
+  }
+}
+export default meta
+
+type Story = StoryObj<DropdownProps>
+
+export const Basic: Story = {
+  render: (args: DropdownProps) => (
+    <StoryColumn>
+      <Dropdown {...args}>
+        <Button>Click on button</Button>
+      </Dropdown>
+      <Dropdown {...args}>
+        <Text>Click on span</Text>
+      </Dropdown>
+    </StoryColumn>
+  ),
+  args: {
+    trigger: ['click']
+  }
 }
 
-export const Basic = DropdownTemplate.bind({})
-
-const HoverTemplate = ({ overlay = items, ...rest }: IDropdownProps) => {
-  return (
-    <Dropdown trigger={['hover']} overlay={overlay} {...rest}>
-      <Button>Hover</Button>
-    </Dropdown>
-  )
+export const Hover: Story = {
+  args: {
+    children: <Button text='Hover'/>
+  }
 }
 
-export const Hover = HoverTemplate.bind({})
-
-const DisabledTemplate = ({ overlay = items, ...rest }: IDropdownProps) => {
-  return (
-    <Dropdown trigger={['hover']} overlay={overlay} disabled {...rest}>
-      <Button>Trigger Dropdown</Button>
-    </Dropdown>
-  )
+export const Disabled: Story = {
+  args: {
+    disabled: true,
+    children: <Button text='Disabled'/>
+  }
 }
-
-export const Disabled = DisabledTemplate.bind({})
 
 const DropdownsContainer = styled.div`
+  width: 100%;
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
 `
 
-const PlacementsTemplate = ({ overlay = items, ...rest }: IDropdownProps) => {
-  const placements: Placement[] = [
-    'topLeft',
-    'topRight',
-    'topCenter',
-    'bottomLeft',
-    'bottomRight',
-    'bottomCenter'
-  ]
+export const Placements: Story = {
+  render: (args: DropdownProps) => {
+    const placements: Placement[] = [
+      'bottomLeft',
+      'bottomRight',
+      'bottomCenter',
+      'topLeft',
+      'topRight',
+      'topCenter'
+    ]
 
-  return (
-    <DropdownsContainer>
-      {placements.map((placement) => (
-        <Dropdown
-          trigger={['hover']}
-          overlay={overlay}
-          placement={placement}
-          {...rest}
-        >
-          <Button>{placement}</Button>
-        </Dropdown>
-      ))}
-    </DropdownsContainer>
-  )
+    return (
+      <DropdownsContainer>
+        {placements.map((placement) => (
+          <Dropdown
+            key={placement}
+            {...args}
+            placement={placement}
+          >
+            <Button>{placement}</Button>
+          </Dropdown>
+        ))}
+      </DropdownsContainer>
+    )
+  },
+  parameters: {
+    layout: 'centered'
+  }
 }
 
-export const Placements = PlacementsTemplate.bind({})
-
-const ContextMenuTemplate = ({ overlay = items, ...rest }: IDropdownProps) => {
-  return (
-    <>
-      <Dropdown trigger={['click']} overlay={overlay} {...rest}>
-        <Button
-          mode="tertiary"
-          icon={<Icon name="Menu03" size="small" />}
-          {...rest}
-        />
-      </Dropdown>
-    </>
-  )
+export const ContextMenu: Story = {
+  args: {
+    children: <Button mode="tertiary" iconBefore={<Menu3 />}/>
+  }
 }
-
-export const ContextMenu = ContextMenuTemplate.bind({})
 
 const ScrollableContainer = styled.div`
   height: 500px;
@@ -128,61 +217,47 @@ const ContentContainer = styled.div`
   padding: 20px;
 `
 
-const WithinScrollableContainerTemplate = ({
-  overlay = items,
-  shouldUsePortal = false,
-  ...rest
-}) => {
-  return (
+export const WithinScrollableContainer: Story = {
+  render: (args: DropdownProps) => (
     <ScrollableContainer>
       <ContentContainer>
-        <Dropdown
-          trigger={['click']}
-          overlay={overlay}
-          shouldUsePortal={shouldUsePortal}
-          {...rest}
-        >
-          <Button>Click me and scroll my container</Button>
-        </Dropdown>
+        <Dropdown {...args} />
       </ContentContainer>
     </ScrollableContainer>
-  )
+  ),
+  args: {
+    children: <Button>Click me and scroll my container</Button>,
+    trigger: ['click']
+  }
 }
 
-export const WithinScrollableContainer = WithinScrollableContainerTemplate.bind(
-  {}
-)
+export const CustomPopupContainer: Story = {
+  render: (args: DropdownProps) => {
+    const containerRef = useRef<HTMLDivElement | null>(null)
 
-const CustomPopupContainerTemplate = ({ overlay = items, ...rest }) => {
-  const containerRef = useRef<HTMLDivElement | null>(null)
+    const containerStyle: CSSProperties = {
+      padding: '20px',
+      border: '1px solid green'
+    }
 
-  const containerStyle: CSSProperties = {
-    padding: '20px',
-    border: '1px solid green'
-  }
+    const hiddenContainer: CSSProperties = {
+      overflow: 'hidden',
+      height: '50px',
+      border: '1px solid gray'
+    }
 
-  const hiddenContainer: CSSProperties = {
-    overflow: 'hidden',
-    height: '50px',
-    border: '1px solid gray'
-  }
-
-  return (
-    <div style={containerStyle} ref={containerRef}>
-      <span>popup container</span>
-      <div style={hiddenContainer}>
-        <Dropdown
-          trigger={['click']}
-          overlay={overlay}
-          getPopupContainer={() => containerRef.current as HTMLElement}
-          {...rest}
-        >
-          <Button>Click</Button>
-        </Dropdown>
-        <span>overflow: hidden</span>
+    return (
+      <div style={containerStyle} ref={containerRef}>
+        <span>popup container</span>
+        <div style={hiddenContainer}>
+          <Dropdown {...args} />
+          <span>overflow: hidden</span>
+        </div>
       </div>
-    </div>
-  )
+    )
+  },
+  args: {
+    children: <Button>Click</Button>,
+    trigger: ['click']
+  }
 }
-
-export const CustomPopupContainer = CustomPopupContainerTemplate.bind({})

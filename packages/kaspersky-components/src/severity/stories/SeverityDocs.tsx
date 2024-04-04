@@ -6,7 +6,7 @@ import {
 import { Space } from '../../space'
 import { StoryLayout } from '../../../.storybook/StoryComponents'
 import { ThemeKey } from '../../../design-system/types'
-import Severity from '../Severity'
+import { Severity } from '../Severity'
 import { Text } from '../../typography/text'
 import { themeColors } from '../../../design-system/tokens'
 import { SeverityProps } from '../types'
@@ -17,7 +17,7 @@ export const SeverityDocs: React.VFC = () => {
       <Title>
               Examples
       </Title>
-      <Subtitle>Base</Subtitle>
+      <Subtitle>Базовый</Subtitle>
       <StoryLayout theme={ThemeKey.Light}>
         <Space size={8} direction='vertical' align='flex-start' >
           <Text>Medium</Text>

@@ -1,26 +1,54 @@
-import React from 'react'
 import { Markdown } from '../Markdown'
 import { MarkdownProps } from '../types'
-import { badges } from '../../../.storybook/badges'
-import { withMeta } from '../../../helpers/hocs/MetaComponent/withMeta'
-import { StoryLayout } from '../../../.storybook/StoryComponents'
-import Meta from '../__meta__/meta.json'
-import { useTheme } from '../../../design-system/theme/hooks'
+import { badges } from '@sb/badges'
+import { sbHideControls } from '@helpers/storybookHelpers'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import MetaData from '../__meta__/meta.json'
+import { Meta } from '@storybook/react'
 
 const mdVariants = {
-  common: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do [eiusmod tempor incididunt](http://www.kaspersky.com) ut labore et dolore magna aliqua
+  common: `# Заголовок первого уровня
 
-**This is bold text**
+## Заголовок второго уровня
 
-__This is bold text__
+### Заголовок третьего уровня
 
-*This is italic text*
+#### Заголовок четвертого уровня
 
-_This is italic text_
+##### Заголовок пятого уровня
+
+###### Заголовок шестого уровня
+
+Абзацы создаются с помощью пустой строки.
+
+*Курсив* или _Курсив_
+
+**Жирный** или __Жирный__
+
+***Жирный курсив*** или ___Жирный курсив___
+
+- Неупорядоченный список
+  - Подпункт
+    - Подподпункт
+
+1. Упорядоченный список
+   1. Подпункт
+      1. Подподпункт
+
+\`Код в строке\`
+
+\`\`\`javascript
+// Код в блоке
+function helloWorld() {
+    console.log("Hello, world!");
+}
+\`\`\`
 
 ~~Strikethrough~~
 
-[Lorem ipsum](http://www.kaspersky.com)
+[Internal link](#/internal-hash-tag)
+
+[External link](http://www.kaspersky.com)
 `,
   table: `
 | id | Vale | Description                                                                                                                                               | Site                                                  |
@@ -36,74 +64,45 @@ _This is italic text_
   quote: '> Text that is a quote'
 }
 
-export default {
+const meta: Meta<MarkdownProps> = {
   title: 'Atoms/Markdown',
   component: Markdown,
   argTypes: {
-    theme: {
-      control: { type: 'radio', default: 'light' },
-      options: ['light', 'dark'],
-      description: 'Color Palette Theme'
-    },
-    value: {
-      control: { type: 'text' }
-    }
+    ...sbHideControls(['theme', 'as', 'forwardedAs'])
   },
   args: {
-    theme: 'light'
+    testId: 'markdown-test-id',
+    klId: 'markdown-kl-id'
   },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
     docs: {
-      page: withMeta(Meta)
+      page: withMeta(MetaData)
     }
   }
 }
+export default meta
 
-export const Basic = ({
-  value = mdVariants.common,
-  ...rest
-}: MarkdownProps) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Markdown {...rest} value={value}/>
-    </StoryLayout>
-  )
+export const Basic = {
+  args: {
+    value: mdVariants.common
+  }
 }
 
-export const MDTable = ({
-  value = mdVariants.table,
-  ...rest
-}: MarkdownProps) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Markdown {...rest} value={value}/>
-    </StoryLayout>
-  )
+export const MDTable = {
+  args: {
+    value: mdVariants.table
+  }
 }
 
-export const MDList = ({
-  value = mdVariants.list,
-  ...rest
-}: MarkdownProps) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Markdown {...rest} value={value}/>
-    </StoryLayout>
-  )
+export const MDList = {
+  args: {
+    value: mdVariants.list
+  }
 }
 
-export const MDQuote = ({
-  value = mdVariants.quote,
-  ...rest
-}: MarkdownProps) => {
-  const theme = useTheme()
-  return (
-    <StoryLayout theme={theme.key}>
-      <Markdown {...rest} value={value}/>
-    </StoryLayout>
-  )
+export const MDQuote = {
+  args: {
+    value: mdVariants.quote
+  }
 }

@@ -4,21 +4,21 @@
   "v3": [
     {
       "prop": "error",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "prefixIcon",
-      "changes": "Removed"
+      "changes": "Убран"
     },
     {
       "prop": "className",
-      "changes": "Now - dropdownClassName"
+      "changes": "Теперь - dropdownClassName"
     },
     {
       "prop": "fluid",
-      "changes": "Removed"
+      "changes": "Убран"
     }
   ],
-  "v5": "No longer extends the interface Antd - SelectProps<SelectValue>",
+  "v5": "Больше не расширяет интерфейс Antd - SelectProps<SelectValue>",
   "common": "-"
 }

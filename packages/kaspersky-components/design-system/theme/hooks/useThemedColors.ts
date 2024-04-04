@@ -1,5 +1,5 @@
+import { useTheme } from './useTheme'
 import { themeColors } from '../../tokens/palette'
-import { THEME_CONFIG } from '../themes/config'
 import { Theme } from '../../types'
 
 export type ThemedColors = {
@@ -9,6 +9,7 @@ export type ThemedColors = {
 }
 
 export const useThemedColors = (_theme?: Theme) => {
-  const theme = THEME_CONFIG[_theme || 'light']
-  return THEME_CONFIG[theme.key].colors
+  const theme = useTheme({ theme: _theme })
+
+  return theme.colors
 }

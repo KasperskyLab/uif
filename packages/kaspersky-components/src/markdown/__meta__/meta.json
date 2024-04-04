@@ -9,7 +9,7 @@
       "storybook": true
     },
     "component": "Markdown",
-    "description": "Component for displaying markdown markup",
+    "description": "Компонент для отображения маркдаун-разметки",
     "usage": "",
     "designLink": ""
   }

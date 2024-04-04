@@ -1,22 +1,17 @@
-import { Theme } from '../../design-system/types'
+import { Theme } from '@design-system/types'
+import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+
+export type DividerToViewProps<T> = ToViewProps<T, DividerCssConfig, DividerStyleProps>
 
 export type DividerMode = 'normal' | 'light' | 'bold'
 
-export type DividerType = 'horizontal' | 'vertical'
+export type DividerDirection = 'horizontal' | 'vertical'
 
-type StateProps = {
+export type DividerColorConfig = {
   color?: string
 }
 
-export type DividerColorConfig = Record<DividerMode, StateProps>
-
-export type DividerSizeConfig = {
-  thickness?: string,
-  margin?: number,
-  radius?: string
-}
-
-export type DividerCssConfig = DividerColorConfig[DividerMode] & DividerSizeConfig
+export type DividerCssConfig = DividerColorConfig
 
 export type DividerStyleProps = {
   /** Custom theme */
@@ -25,9 +20,7 @@ export type DividerStyleProps = {
   mode?: DividerMode
 }
 
-export type IDividerProps = DividerStyleProps & {
-  /** Direction */
-  kind?: DividerType,
+export type DividerProps = DividerStyleProps & {
   /**
    * use `[number, number]` if you need unequal margin
    *
@@ -36,8 +29,17 @@ export type IDividerProps = DividerStyleProps & {
    * second - bottom / right margin
    */
   margin?: number | [number, number],
-  /** Test id */
-  klId?: string
-}
+  /** Custom class name */
+  className?: string,
+  /** Direction */
+  direction?: DividerDirection,
+  /** @deprecated Use 'direction' prop instead */
+  kind?: DividerDirection
+} & TestingProps
 
-export type IDividerViewProps = Omit<IDividerProps, keyof DividerStyleProps> & { cssConfig: DividerCssConfig }
+export type DividerViewProps = DividerToViewProps<DividerProps>
+
+/** @deprecated Use DividerProps instead */
+export type IDividerProps = Omit<DividerProps, 'direction'> & { kind?: DividerDirection }
+/** @deprecated Use DividerViewProps instead */
+export type IDividerViewProps = DividerToViewProps<DividerProps>

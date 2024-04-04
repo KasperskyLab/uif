@@ -3,13 +3,13 @@ import { cloneDeepWith } from 'lodash'
 
 import { Resizable } from 'react-resizable'
 import { TableModule } from '.'
-import { useUpdateEffect } from '../../../helpers/useUpdateEffect'
-import { isColumnReadonly } from '../helpers'
-import { ITableProps } from '../types'
+import { useUpdateEffect } from '@helpers/useUpdateEffect'
+import { isColumnReadonly } from '../helpers/common'
+import { ITableProps, TableCustomColumn } from '../types'
 
 const DEFAULT_COLUMN_WIDTH = 220
 
-const cloneColumns = (columns: ITableProps['columns']): Required<ITableProps>['columns'] =>
+const cloneColumns = (columns: TableCustomColumn[]): Required<ITableProps>['columns'] =>
   cloneDeepWith(columns, column => isColumnReadonly(column) ? column : undefined)
 
 const ResizableTitle = (props: any) => {
@@ -48,7 +48,7 @@ const ResizableTitle = (props: any) => {
   )
 }
 
-function removeWidthFromLastColumn (columns: any[]): any[] {
+function removeWidthFromLastColumn (columns: TableCustomColumn[]): any[] {
   const columnsCopy = cloneColumns(columns)
 
   if (columns.length >= 1) {
@@ -79,14 +79,14 @@ function removeWidthFromLastColumn (columns: any[]): any[] {
     }
 
     if (needRemoveWidth) {
-      columnsCopy[columnIndex].width = null
+      (columnsCopy[columnIndex].width as string | number | undefined | null) = null
     }
   }
 
   return columnsCopy
 }
 
-function removeWidthFromMaxColumn (columns: any[]): any[] {
+function removeWidthFromMaxColumn (columns: TableCustomColumn[]): any[] {
   const columnsCopy = cloneColumns(columns)
 
   let maxColumnIndex = 0
@@ -107,68 +107,75 @@ function removeWidthFromMaxColumn (columns: any[]): any[] {
     if (isResizingDisabled) {
       continue
     } else {
-      if (columnsCopy[i].width > maxColumnWidth) {
+      const width = columnsCopy[i].width as number
+      if (width > maxColumnWidth) {
         maxColumnIndex = i
-        maxColumnWidth = columnsCopy[i].width
+        maxColumnWidth = width
       }
     }
   }
 
   if (columnsCopy.length >= 1 && maxColumnIndex >= 0) {
-    columnsCopy[maxColumnIndex].width = null
+    (columnsCopy[maxColumnIndex].width as string | number | undefined | null) = null
   }
 
   return columnsCopy
 }
 
 function applyResizingMode (columns: any[], resizingMode: string, defaultWidth?: number) {
-  const setDefaultWidth = () => {
+  const applyDefaultWidth = (columns: any[]) => {
     return columns.map((column) => {
       return isColumnReadonly(column) ? column : { ...column, width: column.width ? column.width : defaultWidth }
     })
   }
 
-  const columnsWithWidth = defaultWidth ? setDefaultWidth() : columns
-
   switch (resizingMode) {
     case 'max':
-      return removeWidthFromMaxColumn(columnsWithWidth)
+      return removeWidthFromMaxColumn(columns)
     case 'last':
-      return removeWidthFromLastColumn(columnsWithWidth)
+      return removeWidthFromLastColumn(
+        applyDefaultWidth(columns)
+      )
     default:
-      return columnsWithWidth
+      return applyDefaultWidth(columns)
   }
 }
 
-const resizeColumns = (index: number, columnWidth: number, columns: any) => {
+const resizeColumns = (
+  index: number,
+  columnWidth: number,
+  columns: any,
+  onManualColumnResize?: (column: Record<string, any>) => void
+) => {
   const nextColumns = [...columns]
   nextColumns[index] = {
     ...nextColumns[index],
     width: columnWidth
   }
 
-  return { columns: nextColumns }
+  onManualColumnResize?.(nextColumns[index])
+
+  return nextColumns
 }
 
 const handleResize = (
   index: number,
-  tableColumns: { columns: any[] },
-  setTableColumns: (columns: { columns: any[] }) => void
+  tableColumns: any[],
+  setTableColumns: (columns: any[]) => void,
+  onManualColumnResize?: (column: Record<string, any>) => void
 ) => (e: any, cell: any) => {
-  const newColumns = resizeColumns(index, cell.size.width, tableColumns.columns)
+  const newColumns = resizeColumns(index, cell.size.width, tableColumns, onManualColumnResize)
   setTableColumns(newColumns)
 }
 
-interface IResizeColumnCallback {
-  (column: unknown): unknown
-}
-
 const mapColumns = (
-  tableColumns: { columns: any[] },
-  setTableColumns: (columns: { columns: any[] }) => void,
-  resizeColumnCallback: IResizeColumnCallback | null
+  tableColumns: any[],
+  setTableColumns: (columns: any[]) => void,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  resizeColumnCallback: Function | null,
+  onManualColumnResize?: (column: Record<string, any>) => void
 ) => {
-  return tableColumns.columns.map((col, index) => isColumnReadonly(col)
+  return tableColumns.map((col, index) => isColumnReadonly(col)
     ? col
     : ({
         ...col,
@@ -177,7 +184,7 @@ const mapColumns = (
           return ({
             resizing: column.resizing,
             width: column.width,
-            onResize: handleResize(index, tableColumns, setTableColumns)
+            onResize: handleResize(index, tableColumns, setTableColumns, onManualColumnResize)
           })
         }
       }))
@@ -195,6 +202,7 @@ const selectAutoResizingMode = function (columns: any[], resizingMode: string, m
   return 'last'
 }
 
+// eslint-disable-next-line react/display-name
 export const ResizableColumns: TableModule = Component => (props: any) => {
   const components = { ...props.components }
   components.header = { cell: ResizableTitle }
@@ -205,25 +213,42 @@ export const ResizableColumns: TableModule = Component => (props: any) => {
 
   resizingMode = selectAutoResizingMode(props.columns, resizingMode, maxColumnsForAutoResizing)
 
-  const [tableColumns, setTableColumns] = useState({ columns: applyResizingMode(props.columns, resizingMode, defaultColumnWidth) })
-  const [resizeColumnCallback, setResizeColumnCallback] = useState<IResizeColumnCallback | null>(null)
+  const [columns, setColumns] = useState(
+    applyResizingMode(props.columns, resizingMode, defaultColumnWidth)
+  )
+
   const [resizableColumns, setResizableColumns] = useState(
-    mapColumns(tableColumns, setTableColumns, resizeColumnCallback)
+    mapColumns(columns, setColumns, props.onColumnResize, props.onManualColumnResize)
   )
 
   useEffect(() => {
-    setResizeColumnCallback(() => props.onColumnResize)
-    const columns = props.columns.map((col: any, index: number) => {
-      return isColumnReadonly(col) ? col : { ...col, width: tableColumns?.columns[index]?.width }
+    setColumns((prevState) => {
+      const columns = props.columns.map((column: any) => {
+        if (isColumnReadonly(column)) {
+          return column
+        }
+
+        const prevColumnState = prevState.find((c) => c.key === column.key)
+
+        if (!prevColumnState) {
+          return column
+        }
+
+        return {
+          ...column,
+          width: prevColumnState.width
+        }
+      })
+
+      return applyResizingMode(columns, resizingMode, defaultColumnWidth)
     })
-    setTableColumns({ columns: applyResizingMode(columns, resizingMode, defaultColumnWidth) })
-  }, [props.columns, props.onColumnResize])
+  }, [props.columns, resizingMode, defaultColumnWidth])
 
   useUpdateEffect(() => {
     setResizableColumns(
-      mapColumns(tableColumns, setTableColumns, resizeColumnCallback)
+      mapColumns(columns, setColumns, props.onColumnResize, props.onManualColumnResize)
     )
-  }, [tableColumns])
+  }, [columns, props.onColumnResize, props.onManualColumnResize])
 
   return <Component
     { ...props }

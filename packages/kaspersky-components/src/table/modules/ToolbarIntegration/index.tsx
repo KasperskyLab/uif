@@ -1,23 +1,25 @@
 import React, { Key, useEffect, useRef, useState, ReactNode } from 'react'
-import { Toolbar } from '../../../toolbar'
-import { ToolbarItemKey, ToolbarItems } from '../../../toolbar/types'
+import { Toolbar } from '@src/toolbar'
+import { ToolbarItemKey, ToolbarItems } from '@src/toolbar/types'
 import { TableModule } from '../index'
 import { Search } from './Search'
 import { FilterItems } from './FilterItems'
 
 export interface ToolbarProps {
+  leftLimit?: number,
   left?: ToolbarItems<ToolbarItemKey>[],
   right?: (existingElements: ReactNode[]) => ReactNode[],
   showSearch?: boolean,
   showFilter?: boolean,
   showGrouping?: boolean,
   showColumns?: boolean,
+  showFilterSidebar?: boolean,
   sticky?: React.ComponentProps<typeof Toolbar>['sticky']
 }
 
 const createToolbarElements = (nodes: ReactNode[]): ToolbarItems<ToolbarItemKey>[] => {
   return nodes.map((node, i) => ({
-    type: ToolbarItemKey.CHILDREN,
+    type: 'children',
     key: `item-${i}`,
     children: node
   }))
@@ -26,7 +28,8 @@ const createToolbarElements = (nodes: ReactNode[]): ToolbarItems<ToolbarItemKey>
 const ToolbarIntegrationModule: TableModule = Component => props => {
   const [filteredRows, setFilteredRows] = useState(props.dataSource)
   const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([])
-  const [openColumnsSelector, setOpenColomnsSelector] = useState(false)
+  const [openColumnsSelector, setOpenColumnsSelector] = useState(false)
+  const [openFilterSidebar, setOpenFilterSidebar] = useState(false)
   const [table, setTable] = useState(null as HTMLDivElement | null)
 
   const additionalElements: ReactNode[] = []
@@ -56,8 +59,16 @@ const ToolbarIntegrationModule: TableModule = Component => props => {
     const showConfigurationPanel = props.toolbar.showColumns || props.toolbar.showGrouping
     showConfigurationPanel && additionalElements.push(
       <Toolbar.SettingsItem
+        testId="table-settings"
         klId='table-configuration'
-        onClick={() => setOpenColomnsSelector(true)}
+        onClick={() => setOpenColumnsSelector(true)}
+      />
+    )
+
+    props.toolbar.showFilterSidebar && additionalElements.push(
+      <Toolbar.FilterSidebar
+        testId="table-filter-sidebar"
+        onClick={() => setOpenFilterSidebar(true)}
       />
     )
   }
@@ -65,20 +76,24 @@ const ToolbarIntegrationModule: TableModule = Component => props => {
   if (props.toolbar) {
     return (<>
       <Toolbar
+        testId="table-toolbar"
         componentId='table-toolbar'
         sticky={props.toolbar.sticky}
+        leftLimit={props.toolbar.leftLimit}
         left={props.toolbar.left ?? []}
         right={
           props.toolbar.right
             ? createToolbarElements(props.toolbar.right(additionalElements))
             : createToolbarElements(additionalElements)
         }/>
-      <FilterItems items={props.filterItems} />
+      <FilterItems items={props?.filterItems?.items} clearLinkText={props?.filterItems?.clearLinkText} onClear={props?.filterItems?.onClear} />
       <div ref={tableRef}>
         <Component
           {...props}
           showColumnsSelector={openColumnsSelector}
-          onCloseColumnsSelector={() => setOpenColomnsSelector(false)}
+          onCloseColumnsSelector={() => setOpenColumnsSelector(false)}
+          showFilterSidebar={openFilterSidebar}
+          onCloseFilterSidebar={() => setOpenFilterSidebar(false)}
           dataSource={filteredRows}
           expandedRowKeys={expandedRowKeys}
           onExpand={(expanded, newRow: { key?: Key, [propName: string]: any }) => {

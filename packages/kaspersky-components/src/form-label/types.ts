@@ -1,17 +1,24 @@
 import React from 'react'
 import { Theme } from '@design-system/types'
+import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 
-export type FormLabelMode = 'primary' | 'secondary'
-export type FormLabelColorMode = FormLabelMode & 'disabled'
+export type FormLabelMode = 'primary' | 'secondary' | 'disabled'
 
-export interface FormLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
-  klId?: string,
+export type FormLabelThemeProps = {
+  /** Custom theme */
   theme?: Theme,
-  mode?: FormLabelMode,
-  required?: boolean,
-  disabled?: boolean,
-  tooltip?: React.ReactNode
+  /** Color mode */
+  mode?: FormLabelMode
 }
+
+export type FormLabelProps = React.LabelHTMLAttributes<HTMLLabelElement> & {
+  /** Is required */
+  required?: boolean,
+  /** Is disabled */
+  disabled?: boolean,
+  /** Tooltip content */
+  tooltip?: React.ReactNode
+} & FormLabelThemeProps & TestingProps
 
 export type FormLabelColorConfig = {
   text?: string,
@@ -25,6 +32,4 @@ export type FormLabelStateProps = {
   disabled: FormLabelColorConfig
 }
 
-export type FormLabelViewProps = FormLabelProps & {
-  cssConfig: FormLabelColorConfig
-}
+export type FormLabelViewProps = ToViewProps<FormLabelProps, FormLabelColorConfig, FormLabelThemeProps>

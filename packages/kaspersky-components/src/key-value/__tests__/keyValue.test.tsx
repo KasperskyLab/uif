@@ -1,12 +1,12 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import { ThemeKey } from '../../../design-system/types'
-import { ThemeProvider } from '../../../design-system/theme'
+import { ThemeKey } from '@design-system/types'
+import { ThemeProvider } from '@design-system/theme'
 import { KeyValue } from '../KeyValue'
-import { Icon } from '../../icon'
+import { Icon } from '@src/icon'
 import { KeyValuePair } from '../types'
-import { Space } from '../../space'
-import { Button } from '../../button'
+import { Space } from '@src/space'
+import { Button } from '@src/button'
 import '@testing-library/jest-dom'
 import 'jest-styled-components'
 
@@ -43,24 +43,42 @@ describe('KeyValue ', () => {
     }
   ]
 
-  test('should recieve componentId prop', () => {
+  test('should render', () => {
     const { container } = render(
-      <ThemeProvider theme={ThemeKey.Light} >
-        <KeyValue componentId={componentId} data={data}/>
-      </ThemeProvider>
+      <KeyValue
+        data={data}
+        klId="kl-id"
+        testId="test-id"
+      />
     )
-    const keyValue = container.querySelector(
-      `[data-component-id="${componentId}"]`
-    )
-    expect(keyValue).toBeInTheDocument()
+
+    expect(container.querySelector('[kl-id="kl-id"]')).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
+
   test('should recieve data prop', () => {
     render(
-      <ThemeProvider theme={ThemeKey.Light} >
-        <KeyValue componentId={componentId} data={data}/>
+      <ThemeProvider theme={ThemeKey.Light}>
+        <KeyValue componentId={componentId} data={data} />
       </ThemeProvider>
     )
     const keyItem = screen.getByText('Copy')
+    const valueItem = screen.getByText('SideCopy')
     expect(keyItem).toBeInTheDocument()
+    expect(valueItem).toBeInTheDocument()
+  })
+
+  test('should handle custom components in key and value', () => {
+    render(
+      <ThemeProvider theme={ThemeKey.Light}>
+        <KeyValue componentId={componentId} data={data} />
+      </ThemeProvider>
+    )
+    const button = screen.getByRole('button', { name: 'Button' })
+    const url = screen.getByText(
+      'side.copy.google.com/user7773578ixh1092090.appspot.com/index.html'
+    )
+    expect(button).toBeInTheDocument()
+    expect(url).toBeInTheDocument()
   })
 })
