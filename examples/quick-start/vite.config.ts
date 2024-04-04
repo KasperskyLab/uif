@@ -13,5 +13,8 @@ export default defineConfig({
         javascriptEnabled: true
       },
     },
-  }
+  },
+  build: {
+    assetsInlineLimit: 100000,
+  },
 })
