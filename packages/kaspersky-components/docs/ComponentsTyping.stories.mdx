@@ -42,7 +42,7 @@ export type FlowerProps = {
 ```
 ## ComponentThemeProps
 С `FlowerProps` соединяются пропы `FlowerThemeProps`, которые должны быть темезированы в хуке `useThemedFlower`
-([подробнее](?path=/story/docs-использование-usethemedcomponent--page)).
+([подробнее](?path=/story/docs-использование-usethemedcomponent--docs)).
 ```
 /src/flower/types.ts
 
@@ -138,7 +138,7 @@ export type FlowerColorConfig = {
 Если у компонента подразумевается цветовой мод, то `export type FlowerMode = 'mode1' | 'mode2' | ... | 'modeN'`.
 При этом не нужно включать `FlowerMode` в `FlowerColorConfig`, так как в `cssConfig`, полученный в `useThemedFlower`,
 будут включены только значения, относящиеся к выбранному разработчиком извне `mode`. `FlowerMode` будет использован
-в [конфигурировании THEME_CONFIG](?path=/story/docs-конфигурирование-theme-config--page).
+в [конфигурировании THEME_CONFIG](?path=/story/docs-конфигурирование-theme-config--docs).
 ### ComponentSizeConfig
 Без наличия разных размеров у компонента, `FlowerSizeConfig` бессмысленен. В таком случае все размеры должны быть проставлены
 непосредственно в `flowerCss.ts`. Задать `FlowerSize` можно двумя способами:
