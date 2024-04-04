@@ -3,7 +3,9 @@ name: "@kaspersky/icons Storybook"
 on:
   push:
     branches:
-      - "master"
+      - 'master'
+    paths:
+      - 'packages/kaspersky-icons/**'
   workflow_dispatch:
 
 jobs:
@@ -36,10 +38,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages/kaspersky-icons/storybook/icons
           destination_dir: icons
-      # - name: Upload
-      #   uses: actions/upload-pages-artifact@v2.0.0
-      #   with: 
-      #     path: packages/kaspersky-icons/storybook
-      # - id: Deploy
-      #   name: Deploy to GitHub Pages
-      #   uses: actions/deploy-pages@v2.0.3
