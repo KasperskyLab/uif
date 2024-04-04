@@ -52,15 +52,15 @@
     "icons:prepare": "node src/helpers/prepareIconsFolders.js",
     "icons:transform": "svgr --config-file ./svgr.config.js --out-dir src -- ./src/iconsSVGs",
     "icons:updateImports": "node src/helpers/updateImports.js",
-    "icons:create": "yarn run icons:clean && yarn run iconsSVGs:clean && yarn run icons:prepare && yarn run icons:transform && yarn run icons:updateImports",
-    "icons:tsx-create": "yarn run icons:clean && yarn run icons:transform && yarn run iconsArtifacts:clean && yarn run icons:updateImports",
-    "prepublishOnly": "yarn run icons:tsx-create && rollup -c --bundleConfigAsCjs",
-    "build": "yarn run icons:create && yarn run prepublishOnly",
+    "icons:create": "npm run icons:clean && npm run iconsSVGs:clean && npm run icons:prepare && npm run icons:transform && npm run icons:updateImports",
+    "icons:tsx-create": "npm run icons:clean && npm run icons:transform && npm run iconsArtifacts:clean && npm run icons:updateImports",
+    "prepublishOnly": "npm run icons:tsx-create && rollup -c --bundleConfigAsCjs",
+    "build": "npm run icons:create && npm run prepublishOnly",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
-    "test": "yarn run icons:tsx-create && jest",
+    "test": "npm run icons:tsx-create && jest",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "yarn run icons:tsx-create && storybook build -o public"
+    "build-storybook": "npm run icons:tsx-create && storybook build -o storybook/icons"
   },
   "devDependencies": {
     "@kaspersky/dev-tools": "2.9.3",
