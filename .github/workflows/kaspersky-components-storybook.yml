@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - "master"
+    paths:
+      - 'packages/kaspersky-components/**'
+      - '.github/workflows/kaspersky-components-storybook.yml'
   workflow_dispatch:
 
 jobs:
@@ -30,10 +33,9 @@ jobs:
         shell: bash
         run: |
           npm run build-storybook
-      - name: Upload
-        uses: actions/upload-pages-artifact@v2.0.0
-        with: 
-          path: packages/kaspersky-components/storybook
-      - id: Deploy
-        name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2.0.3
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./packages/kaspersky-components/storybook/components
+          destination_dir: icons
