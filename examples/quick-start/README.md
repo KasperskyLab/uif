@@ -32,21 +32,21 @@
 
 4. Define initial rendering in main.tsx:
 
-```typescript
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './App.tsx'
-import './index.css'
+    ```typescript
+    import React from 'react'
+    import ReactDOM from 'react-dom'
+    import App from './App.tsx'
+    import './index.css'
 
-const container = document.getElementById('root')!
+    const container = document.getElementById('root')!
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  container
-)
-```
+    ReactDOM.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+      container
+    )
+    ```
 
 5. Wrap your root layout component (for ex.: App.tsx) by the `ConfigProvider`, add `GlobalStyles` and `Notification` service:
 
