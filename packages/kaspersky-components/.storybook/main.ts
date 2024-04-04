@@ -22,10 +22,6 @@ const config: StorybookConfig = {
     autodocs: true
   },
   refs: {
-    graphs: {
-      title: 'Graphs',
-      url: 'https://kasperskylab.github.io/uif/graph/',
-    },
     icons: {
       title: 'Icons',
       url: 'https://kasperskylab.github.io/uif/icons/',
