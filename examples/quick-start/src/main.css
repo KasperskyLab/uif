@@ -1,0 +1,7 @@
+@import "antd/lib/style/themes/default.less";
+@import "antd/dist/antd.less";
+
+* {
+    font-family: "Kaspersky Sans Text", "Kaspersky Sans", Arial, sans-serif;
+    box-sizing: border-box;
+}
