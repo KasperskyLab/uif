@@ -161,7 +161,7 @@
     "webpack": "5.89.0"
   },
   "peerDependencies": {
-    "@kl/icons": "2.2.0",
+    "@kaspersky/icons": "2.3.0",
     "eslint": "^6.0.0 || ^7.0.0 || ^8.0.0",
     "react": "16.x || 17.x",
     "react-dom": "16.x || 17.x",
