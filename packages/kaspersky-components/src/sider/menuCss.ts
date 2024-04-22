@@ -29,6 +29,10 @@ export const menuItemCss = css`
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: pointer;
+    
+    .title-ellipsis {
+      white-space: nowrap;
+    }
   }
 
   .uif-menu-item-entry-arrow {
@@ -65,23 +69,33 @@ export const menuItemCss = css`
   }
 
   .menu-collapsed & {
-    .uif-menu-item-entry-arrow {
+    .uif-menu-item-entry-arrow,
+    .uif-menu-item-entry-title {
       display: none;
     }
 
     &.expanded,
     .expanded {
       & > .uif-menu-item-subs {
+        opacity: 1;
         display: block;
+        
+        .uif-menu-item-entry-title {
+          display: block;
+        } 
       }
     }
 
     .uif-menu-item-subs {
       position: absolute;
-      left: 66px;
+      left: 45px;
       margin-top: -32px;
-      background-color: ${colors.bg.base};
-      border-radius: ${SPACES[4]}px;
+      
+      .uif-menu-item-subs-wrapper {
+        background-color: ${colors.bg.base};
+        border-radius: ${SPACES[4]}px;
+        translate: 20px 0;
+      }
 
       .uif-menu-item-entry-title {
         margin: 0;

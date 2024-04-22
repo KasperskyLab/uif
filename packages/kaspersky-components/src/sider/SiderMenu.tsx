@@ -12,7 +12,7 @@ type MenuProps = {
 }
 
 const MenuComponent = ({ menuItems, className, collapsed }: MenuProps) => (
-  <nav className={cn(className, 'uif-menu', collapsed && 'menu-collapsed')}>
+  <nav className={cn(className, 'uif-menu uif-menu-user', collapsed && 'menu-collapsed')}>
     {
       menuItems.map((item: MenuItemProps) => {
         return <MenuItem key={item.key} data={item} />
@@ -22,5 +22,10 @@ const MenuComponent = ({ menuItems, className, collapsed }: MenuProps) => (
 )
 
 export const Menu = styled(MenuComponent)`
+  ${menuCss}
+`
+
+export const UserMenu = styled(MenuComponent)`
+  margin-top: auto;
   ${menuCss}
 `
