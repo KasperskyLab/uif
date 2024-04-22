@@ -31,7 +31,7 @@ const MenuItemComponent = ({
         haveSubs && <div className='uif-menu-item-subs'>
           <div className='uif-menu-item-subs-wrapper'>
             { data.items?.map((item: MenuItemData) => {
-              return <MenuItemComponent key={`${item.key}-subs`} data={item}/>
+              return <MenuItemComponent {...item} data={item} key={`${item.key}-subs`} />
             }) }
           </div>
         </div>
