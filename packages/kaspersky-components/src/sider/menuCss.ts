@@ -14,8 +14,11 @@ export const menuItemCss = css`
     user-select: none;
 
     &:hover {
-      color: ${colors.mainInteract.secondary};
-      background: ${colors.mainInteract['secondary-invert']};
+      background: ${colors.elements['separator-solid']};
+    }
+
+    &:active {
+      background: ${colors.elements['separator-bold-solid']};
     }
   }
 
@@ -65,6 +68,21 @@ export const menuItemCss = css`
 
     > .uif-menu-item-subs {
       grid-template-rows: 1fr;
+    }
+  }
+
+  &.active,
+  .active {
+    color: ${colors.mainInteract.primary};
+    background: ${colors.mainInteract['primary-invert']};
+    
+    &:hover {
+      color: ${colors.mainInteract.secondary};
+      background: ${colors.mainInteract['secondary-invert']};
+    }
+    &:active {
+      color: ${colors.mainInteract.tertiary};
+      background: ${colors.mainInteract['tertiary-invert']};
     }
   }
 

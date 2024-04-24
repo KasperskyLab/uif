@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import cn from 'classnames'
 import { ArrowRightMini } from '@kaspersky/icons/16'
@@ -8,17 +8,29 @@ import { MenuItemProps, MenuItemData } from './types'
 const MenuItemComponent = ({
   data,
   className,
-  onClick
+  menuState
 }: MenuItemProps) => {
   const MenuItemIcon = data.icon
   const haveSubs = Boolean(data.items && data.items.length)
-  const [expanded, setExpanded] = useState(false)
-  const entryClick = () => {
-    haveSubs ? setExpanded(!expanded) : onClick && onClick()
+
+  const toggleItem = (item: string) => {
+    menuState.updateMenuState({ toggleExpandItem: item })
   }
+
+  const itemClick = () => {
+    menuState.updateMenuState({ activateItem: data.state })
+    menuState.setActive(data.state)
+    alert('Active item: ' + data.state)
+    data.onClick && data.onClick()
+  }
+
+  const entryClick = () => {
+    haveSubs ? toggleItem(data.state as string) : itemClick()
+  }
+
   return (
-    <div className={cn(className, 'uif-menu-item', expanded && 'expanded')}>
-      <div className='uif-menu-item-entry' onClick={entryClick}>
+    <div className={cn(className, 'uif-menu-item', data.expanded && 'expanded')}>
+      <div className={cn(className, 'uif-menu-item-entry', data.active && 'active')} onClick={entryClick}>
         { data.icon && <div className='uif-menu-item-entry-icon'>
           <MenuItemIcon/>
         </div> }
@@ -31,7 +43,7 @@ const MenuItemComponent = ({
         haveSubs && <div className='uif-menu-item-subs'>
           <div className='uif-menu-item-subs-wrapper'>
             { data.items?.map((item: MenuItemData) => {
-              return <MenuItemComponent {...item} data={item} key={`${item.key}-subs`} />
+              return <MenuItemComponent key={`${item.key}-subs`} data={item} menuState={menuState}/>
             }) }
           </div>
         </div>
