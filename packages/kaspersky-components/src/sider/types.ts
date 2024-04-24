@@ -18,18 +18,28 @@ export type MenuItemData = {
   additionalElements?: React.ReactNode,
   groupsTree?: boolean,
   isRoot?: boolean,
-  isNew?: boolean
+  isNew?: boolean,
+  expanded?: boolean,
+  active?: boolean
 }
 
 export type MenuItemProps = {
   className?: string,
   key: string,
   data: MenuItemData,
-  onClick?: () => void
+  onClick?: () => void,
+  menuState?: any
 }
 
 export type MenuProps = {
   menuItems: any,
   className?: string,
-  collapsed?: boolean
+  minimized?: boolean
+}
+
+export type StateActions = {
+  toggleExpandItem?: string,
+  toggleExpandItemOne?: string,
+  activateItem?: string,
+  collapseAll?: boolean
 }

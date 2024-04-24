@@ -8,7 +8,7 @@ import { Menu, UserMenu } from './SiderMenu'
 import { badges } from '@sb/badges'
 import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
 import { colors } from '@design-system/theme/themes/dark/colors'
-import { Grid, UserGroup, Desktop, Store, Search, Server, AppUpdate, UserAccount, Settings2 } from '@kaspersky/icons/16'
+import { Grid, UserGroup, Desktop, Store, Search, Server, AppUpdate, UserAccount, Settings2, Help, Alarm as AlarmIcon } from '@kaspersky/icons/16'
 
 const meta: Meta<SiderProps> = {
   title: 'Organisms/Sider',
@@ -35,6 +35,10 @@ const ServicesMenu = styled.div`
   .item {
     cursor: pointer;
     margin: 8px;
+  }
+
+  .left {
+    margin-right: auto;
   }
 `
 
@@ -200,35 +204,31 @@ const menuItems: Record<string, unknown>[] = [
       weight: 100,
       key: 'Dashboard',
       klId: 'navigation.monitoring.dashboard',
-      onClick: () => alert(123)
+      onClick: () => console.log('Dashboard')
     },
     {
       state: 'reports',
       weight: 200,
       key: 'Reports',
-      klId: 'navigation.monitoring.reports',
-      onClick: () => alert(123)
+      klId: 'navigation.monitoring.reports'
     },
     {
       state: 'events',
       weight: 300,
       key: 'Event selections',
-      klId: 'navigation.selections.events',
-      onClick: () => alert(123)
+      klId: 'navigation.selections.events'
     },
     {
       state: 'notifications',
       weight: 400,
       key: 'Notifications',
-      klId: 'navigation.selections.notifications',
-      onClick: () => alert(123)
+      klId: 'navigation.selections.notifications'
     },
     {
       state: 'announcements',
       weight: 500,
       key: 'Kaspersky announcements',
-      klId: 'navigation.selections.announcements',
-      onClick: () => alert(123)
+      klId: 'navigation.selections.announcements'
     }
     ]
   },
@@ -245,16 +245,14 @@ const menuItems: Record<string, unknown>[] = [
       weight: 100,
       key: 'Policies & profiles',
       klId: 'navigation.management.policies',
-      groupsTree: true,
-      onClick: () => alert(123)
+      groupsTree: true
     },
     {
       state: 'tasks',
       weight: 200,
       key: 'Tasks',
       klId: 'navigation.management.tasks',
-      groupsTree: true,
-      onClick: () => alert(123)
+      groupsTree: true
     },
     {
       state: 'hosts',
@@ -262,8 +260,7 @@ const menuItems: Record<string, unknown>[] = [
       key: 'Managed devices',
       itemClass: null,
       klId: 'navigation.management.hosts',
-      groupsTree: true,
-      onClick: () => alert(123)
+      groupsTree: true
     },
     {
       state: 'distributionPoints',
@@ -271,16 +268,14 @@ const menuItems: Record<string, unknown>[] = [
       key: 'navigation.main.distributionPoints',
       itemClass: '',
       klId: 'navigation.management.distributionPoints',
-      groupsTree: true,
-      onClick: () => alert(123)
+      groupsTree: true
     },
     {
       state: 'device-relocation-rules-management',
       weight: 500,
       key: 'Moving rules',
       klId: 'relocationRules.displayName',
-      groupsTree: true,
-      onClick: () => alert(123)
+      groupsTree: true
     },
     {
       state: 'device-selections',
@@ -288,8 +283,7 @@ const menuItems: Record<string, unknown>[] = [
       key: 'Device selections',
       itemClass: null,
       klId: 'navigation.selections.deviceSelections',
-      groupsTree: true,
-      onClick: () => alert(123)
+      groupsTree: true
     },
     {
       state: 'all-tags',
@@ -301,15 +295,13 @@ const menuItems: Record<string, unknown>[] = [
         state: 'hosts-tags',
         weight: 100,
         key: 'Device tags',
-        klId: 'navigation.operations.tags.hostsTags',
-        onClick: () => alert(123)
+        klId: 'navigation.operations.tags.hostsTags'
       },
       {
         state: 'autotagging-rules',
         weight: 200,
         key: 'Auto-tagging rules',
-        klId: 'navigation.operations.tags.autotaggingRules',
-        onClick: () => alert(123)
+        klId: 'navigation.operations.tags.autotaggingRules'
       }
       ]
     },
@@ -318,8 +310,7 @@ const menuItems: Record<string, unknown>[] = [
       weight: 800,
       key: 'Hierarchy of groups',
       itemClass: null,
-      klId: 'navigation.management.administration-groups',
-      onClick: () => alert(123)
+      klId: 'navigation.management.administration-groups'
     }
     ]
   },
@@ -332,8 +323,7 @@ const menuItems: Record<string, unknown>[] = [
     icon: AppUpdate,
     klId: 'navigation.main.applicationsAndServices',
     items: [],
-    isRoot: true,
-    onClick: () => alert(123)
+    isRoot: true
   },
   {
     state: 'users-and-roles',
@@ -349,16 +339,286 @@ const menuItems: Record<string, unknown>[] = [
       weight: 100,
       key: 'Users & groups',
       itemClass: null,
-      klId: 'navigation.users-and-roles.users',
-      onClick: () => alert(123)
+      klId: 'navigation.users-and-roles.users'
     },
     {
       state: 'roles',
       weight: 200,
       key: 'Roles',
       itemClass: null,
-      klId: 'navigation.users-and-roles.roles',
-      onClick: () => alert(123)
+      klId: 'navigation.users-and-roles.roles'
+    }
+    ]
+  },
+  {
+    state: 'operations',
+    weight: 500,
+    key: 'Operations',
+    iconClass: 'operations',
+    itemClass: 'js-tutorial-welcome-step-15-selector',
+    icon: Server,
+    klId: 'navigation.main.operations',
+    isRoot: true,
+    items: [{
+      state: 'licensing',
+      weight: 100,
+      key: 'Kaspersky licenses',
+      itemClass: null,
+      klId: 'navigation.operations.licensing',
+      items: [{
+        state: 'LicensingKl',
+        weight: 100,
+        key: 'navigation.main.licensingKl',
+        klId: 'navigation.operations.licensing.kl'
+      }]
+    },
+    {
+      state: 'applications',
+      weight: 200,
+      key: 'Third-party applications',
+      itemClass: null,
+      klId: 'navigation.operations.applications',
+      items: [{
+        state: 'applications-categories',
+        weight: 100,
+        key: 'Application categories',
+        klId: 'navigation.operations.applications.applicationsCategories'
+      },
+      {
+        state: 'ApplicationsRegistry',
+        weight: 200,
+        key: 'Applications registry',
+        klId: 'navigation.operations.applications.applicationsRegistry'
+      },
+      {
+        state: 'ApplicationsTags',
+        weight: 300,
+        key: 'Application tags',
+        klId: 'navigation.operations.applications.applicationsTags'
+      },
+      {
+        state: 'exec-files',
+        weight: 400,
+        key: 'Executable files',
+        klId: 'navigation.operations.applications.executables'
+      },
+      {
+        state: 'MonitoredApplications',
+        weight: 500,
+        key: 'Monitored applications',
+        klId: 'navigation.operations.applications.monitoredApplications'
+      }
+      ]
+    },
+    {
+      state: 'stores',
+      weight: 300,
+      key: 'Repositories',
+      itemClass: null,
+      klId: 'navigation.operations.storages',
+      items: [{
+        state: 'backup',
+        weight: 100,
+        key: 'Backup',
+        klId: 'navigation.operations.storages.backup'
+      },
+      {
+        state: 'quarantine',
+        weight: 200,
+        key: 'Quarantine',
+        klId: 'navigation.operations.storages.quarantine'
+      },
+      {
+        state: 'unprocessed-files',
+        weight: 300,
+        key: 'Active threats',
+        klId: 'navigation.operations.storages.unprocessed'
+      },
+      {
+        state: 'distributives-in-stores',
+        weight: 400,
+        key: 'Installation packages',
+        klId: 'navigation.network.deploymentAndAssignment.distributives'
+      },
+      {
+        state: 'hardware',
+        weight: 500,
+        key: 'Hardware',
+        klId: 'navigation.operations.storages.hardware'
+      },
+      {
+        state: 'deleted-objects',
+        weight: 600,
+        key: 'Deleted objects',
+        klId: 'navigation.operations.storages.deleted-objects'
+      },
+      {
+        state: 'adaptive-security',
+        weight: 700,
+        key: 'Triggering of rules in smart training state',
+        klId: 'navigation.operations.storages.adaptive-security'
+      }
+      ]
+    },
+    {
+      state: 'kl-applications',
+      weight: 400,
+      key: 'Kaspersky applications',
+      itemClass: null,
+      klId: 'navigation.operations.applications',
+      items: [
+        {
+          state: 'seamless-updates',
+          weight: 200,
+          key: 'Seamless updates',
+          klId: 'navigation.operations.vapm.seamlessUpdates'
+        },
+        {
+          key: 'Current application versions',
+          weight: 300,
+          klId: 'navigation.operations.klever'
+        }
+      ]
+    },
+    {
+      state: 'patch-managment',
+      weight: 500,
+      key: 'Patch management',
+      klId: 'navigation.operations.patch-managment',
+      items: [{
+        state: 'software-vulnerabilities',
+        weight: 100,
+        key: 'Software vulnerabilities',
+        klId: 'navigation.operations.app-management.software-vulnerabilities'
+      }, {
+        state: 'software-updates',
+        weight: 200,
+        key: 'Software updates',
+        klId: 'navigation.operations.patch-managment.updates'
+      }]
+    },
+    {
+      state: 'encryption',
+      weight: 600,
+      key: 'Data encryption and protection',
+      klId: 'navigation.operations.encryption',
+      items: [
+        {
+          state: 'encrypted-devices',
+          weight: 100,
+          key: 'Encrypted drives',
+          klId: 'navigation.operations.encryption.encrypted-devices'
+        },
+        {
+          state: 'encryption-events',
+          weight: 200,
+          key: 'Encryption events',
+          klId: 'navigation.operations.encryption.encryption-events'
+        }
+      ]
+    },
+    {
+      state: 'migration',
+      weight: 700,
+      key: 'Migration',
+      klId: 'navigation.operations.migration',
+      itemClass: 'js-tutorial-welcome-step-migration-selector'
+    }]
+  },
+  {
+    state: 'network',
+    weight: 600,
+    key: 'Discovery & deployment',
+    iconClass: 'deploymentAssignment',
+    itemClass: 'js-tutorial-welcome-step-4-selector',
+    icon: Search,
+    klId: 'navigation.main.network',
+    isRoot: true,
+    items: [{
+      state: 'unassigned-devices',
+      weight: 100,
+      key: 'Unassigned devices',
+      itemClass: 'js-tutorial-welcome-step-6-selector',
+      klId: 'navigation.network.unassignedDevices'
+    },
+    {
+      state: 'scanning-tasks',
+      weight: 200,
+      key: 'Discovery',
+      itemClass: 'js-tutorial-welcome-step-5-selector',
+      klId: 'navigation.network.scanningTasks',
+      items: [
+        {
+          state: 'ip-poll',
+          weight: 100,
+          key: 'IP ranges',
+          klId: 'navigation.network.scanningTasks.ipPoll'
+        },
+        {
+          state: 'windows-domains',
+          weight: 200,
+          key: 'Windows domains',
+          klId: 'navigation.network.scanningTasks.winDomains'
+        },
+        {
+          state: 'active-directory',
+          weight: 300,
+          key: 'Domain controllers',
+          klId: 'navigation.network.scanningTasks.domainControllers'
+        },
+        {
+          state: 'cloud',
+          weight: 400,
+          key: 'Cloud',
+          klId: 'navigation.network.scanningTasks.cloud'
+        }
+      ]
+    },
+    {
+      state: 'deployment-assignment',
+      weight: 300,
+      key: 'Deployment & assignment',
+      iconClass: 'deploymentAssignment',
+      itemClass: 'js-tutorial-welcome-step-7-selector',
+      klId: 'navigation.network.deploymentAndAssignment',
+      items: [{
+        state: 'device-relocation-rules',
+        weight: 100,
+        key: 'Moving rules',
+        klId: 'navigation.network.deploymentAndAssignment.relocationRules'
+      },
+      {
+        state: 'deployment-wizard',
+        weight: 200,
+        key: 'Protection deployment wizard',
+        klId: 'navigation.network.deploymentAndAssignment.deploymentWizard'
+      },
+      {
+        state: 'quick-start-wizard',
+        weight: 300,
+        key: 'Quick start wizard',
+        klId: 'navigation.network.deploymentAndAssignment.quickStartWizard'
+      },
+      {
+        state: 'cloud-protection-wizard',
+        weight: 400,
+        key: 'Configure cloud environment',
+        klId: 'navigation.network.deploymentAndAssignment.cloudProtectionWizard'
+      },
+      {
+        state: 'distributives',
+        weight: 500,
+        key: 'Installation packages',
+        klId: 'navigation.network.deploymentAndAssignment.distributives'
+      }
+      ]
+    },
+    {
+      state: 'device-selections',
+      weight: 400,
+      key: 'Device selections',
+      itemClass: null,
+      klId: 'navigation.network.deviceSelections'
     }
     ]
   },
@@ -369,8 +629,7 @@ const menuItems: Record<string, unknown>[] = [
     weight: 700,
     key: 'Marketplace',
     klId: 'navigation.monitoring.marketplace',
-    isRoot: true,
-    onClick: () => alert(123)
+    isRoot: true
   }
 ]
 
@@ -395,18 +654,54 @@ const menuUserItems: Record<string, unknown>[] = [
   }
 ]
 
+function getNotificationsIcon (hasNotifications: boolean): React.ReactNode {
+  let icon = null
+  // @if BUILD_TARGET='local'
+  icon = <NotificationButton
+    className={`item js-tutorial-notifications header-notification${hasNotifications ? ' active' : ''}`}
+    role='button'
+    onClick={() => alert('Notifications')}
+  >
+    <AlarmIcon/>
+  </NotificationButton>
+  // @endif
+  return icon
+}
+
+const NotificationButton = styled.span`
+  position: relative;
+  display: inline-block;
+  height: 16px;
+
+  &.active {
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      right: -5px;
+      top: -6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: ${colors.criticalitystatuses.high};
+    }
+  }
+`
+
 export const SiderWithMenu: StoryObj<SiderProps> = {
   render: (args: SiderProps) => {
-    const [menuCollapsed, setMenuCollapsed] = useState(false)
+    const [menuMinimized, setMenuMinimized] = useState(false)
     return (
       <RootLayout>
-        <Sider {...args} collapsed={menuCollapsed} >
+        <Sider {...args} collapsed={menuMinimized} >
           <ServicesMenu>
-            <Hamburger className='item left' role='button' name='hamburger' onClick={ () => { setMenuCollapsed(!menuCollapsed) } } />
+            <Hamburger className='item left' role='button' name='hamburger' onClick={ () => { setMenuMinimized(!menuMinimized) } } />
+            {getNotificationsIcon(true)}
+            <Help className='item' role='button' onClick={ () => alert('open online help') } />
           </ServicesMenu>
           <AppLogo/>
-          <Menu menuItems={menuItems} collapsed={menuCollapsed} />
-          <UserMenu menuItems={menuUserItems} collapsed={menuCollapsed} />
+          <Menu menuItems={menuItems} minimized={menuMinimized} />
+          <UserMenu menuItems={menuUserItems} minimized={menuMinimized} />
         </Sider>
       </RootLayout>
     )

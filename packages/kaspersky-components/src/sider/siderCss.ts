@@ -21,7 +21,7 @@ export const siderServicesMenuCss = css`
   font-size: 14px;
   justify-content: flex-end;
     
-  .ant-layout-sider-collapsed & {
+  .ant-layout-sider-minimized & {
     flex-direction: column;
     margin: 0;
 
