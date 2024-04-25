@@ -5,7 +5,7 @@ import { MenuItem } from './SiderMenuItem'
 import { menuCss } from '@src/sider/menuCss'
 import { MenuItemProps, MenuProps, StateActions } from '@src/sider/types'
 
-const MenuComponent = ({ menuItems, className, minimized }: MenuProps) => {
+const MenuComponent = ({ menuItems, className, minimized, subsPop }: MenuProps) => {
   const [menuState, setMenuState] = useState(menuItems)
   const [active, setActive] = useState('')
 
@@ -20,20 +20,24 @@ const MenuComponent = ({ menuItems, className, minimized }: MenuProps) => {
   }: StateActions) => {
     const updateLevel = (menuItem: any) => {
       const { state: currentItem, expanded = false, items = undefined } = menuItem
+
       if (collapseAll) {
         menuItem.expanded = false
+        if (menuItem.items) menuItem.items.map(updateLevel)
         return menuItem
       }
-      if (currentItem === toggleExpandItem) {
+
+      if (toggleExpandItem && (currentItem === toggleExpandItem)) {
         menuItem.expanded = !expanded
         return menuItem
       }
 
-      if (currentItem === activateItem) {
-        menuItem.active = true
-        setActive(activateItem as string)
-      } else {
+      if (activateItem) {
         menuItem.active = false
+        if (currentItem === activateItem) {
+          menuItem.active = true
+          setActive(activateItem as string)
+        }
       }
 
       if (items) {
@@ -49,10 +53,10 @@ const MenuComponent = ({ menuItems, className, minimized }: MenuProps) => {
     collapseAll()
   }, [minimized])
 
-  return (<nav className={cn(className, 'uif-menu uif-menu-user', minimized && 'menu-minimized')}>
+  return (<nav className={cn(className, 'uif-menu uif-menu-user', minimized && 'menu-minimized', subsPop && 'menu-subs-pop')}>
     {
       menuItems.map((item: MenuItemProps) => {
-        return <MenuItem key={item.key} data={item} menuState={{ updateMenuState, setActive, active }} />
+        return <MenuItem key={item.key} data={item} menuState={{ updateMenuState, collapseAll, setActive, active, minimized }} />
       })
     }
   </nav>)

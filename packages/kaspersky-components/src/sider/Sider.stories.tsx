@@ -641,7 +641,20 @@ const menuUserItems: Record<string, unknown>[] = [
     weight: 100,
     key: 'Settings',
     klId: 'navigation.settings',
-    isRoot: true
+    isRoot: true,
+    items: [{
+      key: 'Help',
+      onClick: () => true
+    },
+    {
+      klId: 'about-window',
+      key: 'About',
+      onClick: () => true
+    },
+    {
+      key: 'Logout',
+      onClick: () => true
+    }]
   },
   {
     iconClass: 'user',
@@ -701,7 +714,7 @@ export const SiderWithMenu: StoryObj<SiderProps> = {
           </ServicesMenu>
           <AppLogo/>
           <Menu menuItems={menuItems} minimized={menuMinimized} />
-          <UserMenu menuItems={menuUserItems} minimized={menuMinimized} />
+          <UserMenu menuItems={menuUserItems} minimized={menuMinimized} subsPop={true} />
         </Sider>
       </RootLayout>
     )

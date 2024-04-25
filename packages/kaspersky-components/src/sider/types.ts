@@ -34,7 +34,8 @@ export type MenuItemProps = {
 export type MenuProps = {
   menuItems: any,
   className?: string,
-  minimized?: boolean
+  minimized?: boolean,
+  subsPop?: boolean
 }
 
 export type StateActions = {
