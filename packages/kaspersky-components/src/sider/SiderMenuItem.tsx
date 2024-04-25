@@ -14,6 +14,7 @@ const MenuItemComponent = ({
   const haveSubs = Boolean(data.items && data.items.length)
 
   const toggleItem = (item: string) => {
+    menuState.minimized && menuState.collapseAll()
     menuState.updateMenuState({ toggleExpandItem: item })
   }
 
@@ -22,6 +23,7 @@ const MenuItemComponent = ({
     menuState.setActive(data.state)
     alert('Active item: ' + data.state)
     data.onClick && data.onClick()
+    menuState.minimized && menuState.collapseAll()
   }
 
   const entryClick = () => {

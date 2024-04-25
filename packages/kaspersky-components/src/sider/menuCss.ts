@@ -62,6 +62,12 @@ export const menuItemCss = css`
   
   &.expanded,
   .expanded {
+  &:has(.active) {
+      > .uif-menu-item-entry {
+        color: ${colors.mainInteract.primary};
+      }
+    }
+    
     > .uif-menu-item-entry .uif-menu-item-entry-arrow {
       transform: rotate(90deg);
     }
@@ -86,14 +92,24 @@ export const menuItemCss = css`
     }
   }
 
-  .menu-collapsed & {
+  .menu-minimized &,
+  .menu-subs-pop & {
     .uif-menu-item-entry-arrow,
     .uif-menu-item-entry-title {
       display: none;
     }
+    
+    .uif-menu-item-subs {
+      display: none;
+    }
+
+    .uif-menu-item-subs-wrapper {
+      overflow: visible;
+    }
 
     &.expanded,
-    .expanded {
+    .expanded,
+    &:has(.expanded) {
       & > .uif-menu-item-subs {
         opacity: 1;
         display: block;
@@ -104,20 +120,42 @@ export const menuItemCss = css`
       }
     }
 
+    &:has(.active) {
+      > .uif-menu-item-entry {
+        color: ${colors.mainInteract.primary};
+      }
+    }
+
     .uif-menu-item-subs {
       position: absolute;
-      left: 45px;
+      left: 100%;
       margin-top: -32px;
       
       .uif-menu-item-subs-wrapper {
         background-color: ${colors.bg.base};
         border-radius: ${SPACES[4]}px;
-        translate: 20px 0;
+        translate: 1px 0;
       }
 
       .uif-menu-item-entry-title {
         margin: 0;
       }
+    }
+  }
+
+  .menu-subs-pop & {
+    .uif-menu-item-entry-title {
+      display: block;
+    }
+    
+    .uif-menu-item.expanded {
+      position: relative;
+    }
+    
+    .uif-menu-item-subs {
+      margin-top: 0;
+      bottom: 0;
+      translate: 16px 0;
     }
   }
 `
@@ -130,7 +168,8 @@ export const menuCss = css`
   flex-direction: column;
   gap: ${SPACES[2]}px;
 
-  &.menu-collapsed {
+  &.menu-minimized,
+  &.menu-subs-pop {
     overflow: visible;
   }
 `
