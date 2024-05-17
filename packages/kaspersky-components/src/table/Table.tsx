@@ -59,6 +59,7 @@ export const Table: FC<ITableProps> = props => {
     rowSelection: _rowSelection,
     klId,
     testId,
+    isValid,
     ...tableProps
   } = props
 
@@ -98,6 +99,7 @@ export const Table: FC<ITableProps> = props => {
         locale={{ emptyText }}
         showSorterTooltip={showSorterTooltip}
         size='small'
+        isValid={isValid}
       />
       {rowDraggingContainer}
     </>

@@ -28,7 +28,7 @@ export const paginationCss = css`
 
       a {
         padding: 0;
-        color: inherit;
+        color: ${fromProps('unselected.normal.color')};
       }
 
       &:hover {
@@ -48,16 +48,26 @@ export const paginationCss = css`
       }
       
       &.ant-pagination-item-active {
-        color: ${fromProps('selected.normal.color')};
         background: ${fromProps('selected.normal.background')};
+
+        &, a {
+          color: ${fromProps('selected.normal.color')};
+        }
         
         &:hover {
-          color: ${fromProps('selected.hover.color')};
           background: ${fromProps('selected.hover.background')};
+
+          &, a {
+            color: ${fromProps('selected.hover.color')};
+          }
         }
+        
         &:active {
-          color: ${fromProps('selected.active.color')};
           background: ${fromProps('selected.active.background')};
+
+          &, a {
+            color: ${fromProps('selected.active.color')};
+          }
         }
       }
     }

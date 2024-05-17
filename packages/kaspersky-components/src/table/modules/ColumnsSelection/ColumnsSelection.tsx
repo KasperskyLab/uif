@@ -13,9 +13,14 @@ import { ITableProps } from '@src/table/types'
 import { isColumnReadonly } from '../../helpers/common'
 import { useLocalization } from '@helpers/localization/useLocalization'
 import ColumnSelectionActions from '@src/table/modules/ColumnsSelection/ColumnSelectionActions'
+import { RadioOption } from '@src/radio/types'
 
 const TabsPanel = styled.div`
   margin: 0 24px;
+
+  .ant-tabs-nav {
+    margin-bottom: 0;
+  }
 `
 
 const prepareColumns = (
@@ -45,11 +50,12 @@ const prepareColumns = (
 
 const prepareGrouping = (columns: any[], groupBy: string, dataSource: any) => {
   let groupByValue = groupBy
-  const options: any = []
+  const options: RadioOption[] = []
 
   columns.forEach((column) => {
-    // eslint-disable-next-line no-prototype-builtins
-    const dataSourceHasColumn = dataSource && dataSource.every((item: any) => item.hasOwnProperty(column.dataIndex))
+    const dataSourceHasColumn =
+      dataSource &&
+      dataSource.every((item: any) => Object.prototype.hasOwnProperty.call(item, column.dataIndex))
     if (column.groupingAvailable && dataSourceHasColumn && column.show) {
       options.push({ label: column.title, value: column.dataIndex })
     }
@@ -96,7 +102,7 @@ export const ColumnsSelection: TableModule =
           groupBy,
           props.dataSource
         )
-        setGroupingOptions(options)
+        setGroupingOptions(options as { label: string, value: string }[])
         setGroupBy(groupByValue)
       }
     }, [activeTab])

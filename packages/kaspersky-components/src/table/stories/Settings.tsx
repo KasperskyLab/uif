@@ -1,44 +1,37 @@
 import React from 'react'
-import { basicDataSource, BasicTableStory, Story } from './_commonConstants'
+import { BasicTableStory, Story } from './_commonConstants'
 import { Text } from '@src/typography'
-import { Locale } from '@src/locale'
+import mockData from '../__mocks__/table-mock-data.json'
+
+const createColumn = (name: string, width?: number, show = true) => ({
+  key: name,
+  title: name,
+  dataIndex: name,
+  width: `${width}%`,
+  show,
+  hideColumnAvailable: true,
+  groupingAvailable: true
+})
 
 const columns = [
-  {
-    key: 'hidden',
-    title: 'Hidden',
-    dataIndex: 'hidden',
-    show: false,
-    hideColumnAvailable: true
-  },
-  {
-    key: 'name',
-    title: <Locale localizationKey="table.column.name" />,
-    dataIndex: 'name',
-    width: 300,
-    show: true,
-    hideColumnAvailable: true
-  },
-  {
-    key: 'description',
-    title: <Locale localizationKey="table.column2.name" />,
-    dataIndex: 'description',
-    width: 200,
-    show: true,
-    hideColumnAvailable: true
-  }
+  createColumn('name', 10),
+  createColumn('country', 8),
+  createColumn('numberrange', 8),
+  createColumn('currency', 8),
+  createColumn('city', 8),
+  createColumn('email', 16),
+  createColumn('company', 12, false),
+  createColumn('address', 12)
 ]
 
-const dataSource = basicDataSource.slice(0, 20).map((item, index) => ({
-  ...item,
-  hidden: `Hidden content ${index + 1}`
-}))
+const dataSource = mockData
 
 export const Settings: Story = {
   render: BasicTableStory.bind({}),
   args: {
     columns,
     dataSource,
+    groupBy: 'country',
     toolbar: {
       showColumns: true,
       showGrouping: true,

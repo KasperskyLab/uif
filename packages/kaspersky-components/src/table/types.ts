@@ -29,6 +29,7 @@ export type TableFiltersColorConfig = {
     backgroundColor: string
   },
   item: {
+    iconColor: string,
     backgroundColor: string,
     title: {
       color: string
@@ -54,7 +55,10 @@ export type TableColorConfig = {
   },
   checkbox: CheckboxColorConfig,
   radio: RadioColorConfig,
-  filters: TableFiltersColorConfig
+  filters: TableFiltersColorConfig,
+  validation: {
+    outline: string
+  }
 }
 
 export type TableCssConfig = TableColorConfig
@@ -129,7 +133,8 @@ export type ITableProps<T = Record<string, any>> = Omit<TableProps<T>, 'columns'
   emptyText?: ReactNode,
   columnVerticalAlign?: 'top' | 'middle' | 'bottom' | 'inherit',
   rowMode?: 'standard' | 'compact',
-  disabled?: boolean
+  disabled?: boolean,
+  isValid?: boolean
 } & TestingProps
 
 export type TableViewProps = ToViewProps<ITableProps, TableCssConfig, TableThemeProps> & Required<TableThemeProps>

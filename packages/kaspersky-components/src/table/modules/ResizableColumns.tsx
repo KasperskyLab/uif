@@ -8,6 +8,7 @@ import { isColumnReadonly } from '../helpers/common'
 import { ITableProps, TableCustomColumn } from '../types'
 
 const DEFAULT_COLUMN_WIDTH = 220
+const COLUMN_MIN_WIDTH = 100
 
 const cloneColumns = (columns: TableCustomColumn[]): Required<ITableProps>['columns'] =>
   cloneDeepWith(columns, column => isColumnReadonly(column) ? column : undefined)
@@ -28,6 +29,7 @@ const ResizableTitle = (props: any) => {
     // @ts-ignore
     <Resizable
       width={width}
+      minConstraints={[COLUMN_MIN_WIDTH, 0]}
       height={0}
       handle={
         <div
@@ -36,12 +38,11 @@ const ResizableTitle = (props: any) => {
             e.stopPropagation()
           }}
         >
-          <div className='resizing-handle'> </div>
+          <div className="resizing-handle"> </div>
         </div>
       }
       onResize={onResize}
       draggableOpts={{ enableUserSelectHack: true }}
-
     >
       <th {...tableHeaderCellProps} />
     </Resizable>

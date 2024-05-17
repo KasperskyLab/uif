@@ -1,5 +1,5 @@
 import React from 'react'
-import { fireEvent, render } from '@testing-library/react'
+import {fireEvent, render, screen} from '@testing-library/react'
 import { act } from 'react-test-renderer'
 import { ConfigProvider } from '@design-system/context'
 import { ThemeKey } from '@design-system/types'
@@ -25,25 +25,9 @@ const DefaultPagination = (props: PaginationProps) => (
   </ConfigProvider>
 )
 
+const getSummaryRegex = (total: number) => new RegExp(`total ${total} / selected 0`, 'i')
+
 describe('Pagination', () => {
-  /**
-   * Antd Pagination uses window.watchMedia, we need to mock it
-   */
-  beforeAll(() => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: jest.fn().mockImplementation(query => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: jest.fn(),
-        removeListener: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn()
-      }))
-    })
-  })
 
   test('should render', () => {
     const { container } = render(<DefaultPagination />)
@@ -150,5 +134,34 @@ describe('Pagination', () => {
     secondOption.click()
 
     expect(onShowSizeChange).toHaveBeenCalledTimes(1)
+  })
+
+  test('should render summary by default', () => {
+    const total = 10
+    render(<DefaultPagination total={total}/>)
+    expect(screen.getByText(getSummaryRegex(total))).toBeInTheDocument()
+  })
+
+  test('should not render summary if it is in simple mode', () => {
+    const total = 10
+    render(<DefaultPagination total={10} simple={true}/>)
+    expect(screen.queryByText(getSummaryRegex(total))).not.toBeInTheDocument()
+  })
+
+  describe('when rendered summary', () => {
+    const total = 100
+    const totalRegex = new RegExp(`total ${total}`, 'i')
+    const totalAndSelectedRegex = new RegExp(`total ${total} / selected 0`, 'i')
+
+    test('should show selected value by default', () => {
+      render(<DefaultPagination total={100}/>)
+      expect(screen.getByText(totalAndSelectedRegex)).toBeInTheDocument()
+    })
+
+    test('should not show selected value if selection is not possible', () => {
+      render(<DefaultPagination total={100} showSelected={false}/>)
+      expect(screen.getByText(totalRegex)).toBeInTheDocument()
+      expect(screen.queryByText(totalAndSelectedRegex)).not.toBeInTheDocument()
+    })
   })
 })

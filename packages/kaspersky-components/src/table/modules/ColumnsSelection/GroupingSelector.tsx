@@ -3,11 +3,12 @@ import { Locale } from '@src/locale'
 import { Radio } from '@src/radio'
 import { SelectorWrapper } from './SelectorWrapper'
 import { Text } from '@src/typography'
+import { RadioOption } from '@src/radio/types'
 
 export interface GroupingSelectorProps {
-  groupBy: any,
+  groupBy: string,
   setGroupBy: (value: string) => void,
-  options: any[]
+  options: RadioOption[]
 }
 
 export const GroupingSelector = ({ groupBy, setGroupBy, options }: GroupingSelectorProps) => {

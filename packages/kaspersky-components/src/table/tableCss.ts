@@ -2,7 +2,7 @@ import { css } from 'styled-components'
 import { SPACES } from '@design-system/theme'
 // ts issue https://github.com/microsoft/TypeScript/issues/5711
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { getFromProps, getFromInnerProps, GenericObject } from '@helpers/getFromProps'
+import { getFromProps, getFromInnerProps } from '@helpers/getFromProps'
 import { getCheckboxCss } from '../checkbox/checkboxCss'
 import { getRadioCss } from '../radio/radioCss'
 import { ITableProps, TableCssConfig, TableViewProps } from './types'
@@ -43,6 +43,11 @@ const getThCss = (props: ITableProps) => {
 
   const thCss = css`
     z-index: 3;
+
+    &.ant-table-cell-fix-left,
+    .ant-table-cell-fix-right {
+      z-index: 4;
+    }
   `
   return css`
     ${thCss}
@@ -73,13 +78,17 @@ const scrollableResizingCss = css`
   }
 `
 
+const tableValidationCss = css`
+  outline: 1px solid ${fromTableProps('validation.outline')}
+`
+
 export const tableCss = css<TableViewProps>`
   .ant-table {
     background-color: ${fromTableProps('root.backgroundColor')};
     color: ${fromTableProps('root.color')};
 
     .ant-table-thead > tr > th {
-        background-color: transparent;
+        background-color: ${fromTableProps('root.backgroundColor')};
         padding: ${SPACES[5]}px ${SPACES[4]}px;
         
         &:has(.kl6-table-dropdown) {
@@ -130,6 +139,12 @@ export const tableCss = css<TableViewProps>`
         position: static;
 
         border-bottom-color: ${fromTableProps('cell.normal.borderColor')};
+
+        &.ant-table-cell-ellipsis {
+          white-space: normal;
+          text-overflow: clip;
+          word-break: break-all;
+        }
 
         .drag-handle {
           position: absolute;
@@ -302,6 +317,8 @@ export const tableCss = css<TableViewProps>`
     }
 
     ${(props: ITableProps) => props.resizingMode === 'scroll' ? scrollableResizingCss : ''}
+    
+    ${({ isValid }: ITableProps) => isValid === false ? tableValidationCss : ''}
   }
 
   col.ant-table-selection-col, .ant-table-selection-column  {
@@ -312,6 +329,32 @@ export const tableCss = css<TableViewProps>`
   .ant-empty,
   .ant-empty-normal {
     color: var(--text-color);
+  }
+
+  .ant-table-cell-fix-left,
+  .ant-table-cell-fix-right {
+    background-color: ${fromTableProps('root.backgroundColor')};
+  }
+
+  .ant-table-cell-fix-left-last::after {
+    width: calc(100% - ${SPACES[4]}px);
+    transform: unset
+  }
+
+  ${({ scroll }) => scroll?.y
+    ? css`
+        .ant-table-body {
+          overflow-y: auto !important;
+        }
+
+        
+        .ant-table-header {
+          & .ant-table-cell-scrollbar::after {
+            display: none;
+          }
+        }
+      `
+    : ''
   }
 `
 

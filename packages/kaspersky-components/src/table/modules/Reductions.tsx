@@ -1,25 +1,22 @@
+import { Tooltip } from '@src/tooltip'
 import React, {
-  useMemo,
   useState,
   useEffect,
   useRef,
   RefObject,
   VFC,
-  PropsWithChildren
+  PropsWithChildren,
+  FC
 } from 'react'
-import { TableModule } from './index'
-import { Tooltip } from '@src/tooltip'
-import { TableCustomColumn } from '../types'
 import styled from 'styled-components'
+
+import { TableCustomColumn } from '../types'
+
+import { TableModule } from './index'
 
 export type Column = TableCustomColumn
 
-const hasEllipsis = (columns: Column[]) => {
-  return columns.reduce(
-    (acc, curr) => acc || curr.ellipsis === false,
-    true
-  )
-}
+const hasColumnsWithEllipsis = (columns: Column[]) => columns.some(({ ellipsis }) => ellipsis !== false)
 
 const TooltipWrapper = styled.div`
   overflow: hidden;
@@ -53,45 +50,48 @@ export const OverflowSpan: VFC<OverflowSpanProps> = ({ containerRef, children })
   )
 }
 
+const ReducedText: FC<{containerRef: RefObject<HTMLDivElement>}> = ({ containerRef, children }) =>
+  <div ref={containerRef} style={{ overflowX: 'hidden' }}>
+    <OverflowSpan containerRef={containerRef}>
+      {children}
+    </OverflowSpan>
+  </div>
+
 export const Reductions: TableModule = Component => ({
   columns,
   ...props
 }): React.ReactElement => {
-  if (!columns) {
-    return <Component {...props} />
-  }
+  const containerRef = useRef<HTMLDivElement>(null)
 
-  if (!hasEllipsis(columns)) {
+  if (!columns) {
     return <Component {...props} columns={columns} />
   }
 
-  const containerRef = useRef<HTMLDivElement>(null)
+  const hasEllipsis = hasColumnsWithEllipsis(columns)
+
+  if (!hasEllipsis) {
+    return <Component {...props} columns={columns} />
+  }
 
   const processColumn = (column: Column) : Column => {
-    if (!column.title) {
+    if (!column.title || column.ellipsis === false) {
       return column
     }
+
     return {
       ...column,
-      ellipsis: true,
-      title: (
-        <div ref={containerRef} style={{ overflowX: 'hidden' }}>
-          <OverflowSpan containerRef={containerRef}>
-            {column.title}
-          </OverflowSpan>
-        </div>
+      ellipsis: column.render ? column.ellipsis : true,
+      title: <ReducedText containerRef={containerRef}>{column.title}</ReducedText>,
+      render: (value, record, index) => (
+        column.render ? column.render(value, record, index) : <ReducedText containerRef={containerRef}>{value}</ReducedText>
       )
     }
   }
-  const processedColumns: Column[] = useMemo(
-    () => columns.map(processColumn),
-    [columns]
-  )
 
   return (
     <Component
       {...props}
-      columns={processedColumns}
+      columns={columns.map(processColumn)}
     />
   )
 }

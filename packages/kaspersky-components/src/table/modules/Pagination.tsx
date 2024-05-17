@@ -104,6 +104,8 @@ const PaginationModule: TableModule = Component => props => {
           <Pagination
             simple={simple}
             total={total}
+            selected={props.rowSelection?.selectedRowKeys?.length}
+            showSelected={Boolean(props.rowSelection)}
             pageSize={pageSize}
             current={current}
             onChange={current => {

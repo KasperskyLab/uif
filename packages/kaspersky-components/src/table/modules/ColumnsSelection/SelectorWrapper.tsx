@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 10px 24px 0 0;
+  padding: 0 24px 0 0;
 
   .select-all-item {
     align-items: center;

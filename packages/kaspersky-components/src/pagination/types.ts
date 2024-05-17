@@ -31,10 +31,14 @@ export type PaginationProps = {
   pageSizeOptions?: string[],
   /** Determine whether to show pageSize select, it will be true when total > 50 */
   showSizeChanger?: boolean,
+  /** Show less pagination items: 3 or 5 */
+  showLessItems?: boolean,
   /** Total number of data items */
   total?: number,
   /** Number of selected data items */
   selected?: number,
+  /** Show number of selected data items */
+  showSelected?: boolean,
   /** Called when the page number or pageSize is changed, and it takes the resulting page number and pageSize as its arguments */
   onChange?: (page: number, pageSize: number) => void,
   /** Called when pageSize is changed */
