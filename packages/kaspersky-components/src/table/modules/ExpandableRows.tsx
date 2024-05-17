@@ -62,7 +62,7 @@ function checkRows (rows: readonly object[]) {
 }
 
 export const ExpandableRows: TableModule = Component => props => {
-  const { dataSource: rows = [], rowSelection } = props
+  const { dataSource: rows = [], rowSelection, expandable = {} } = props
   const [hasChildren, setHasChildren] = useState(checkRows(rows))
   useEffect(() => {
     const { dataSource: rows = [] } = props
@@ -88,7 +88,8 @@ export const ExpandableRows: TableModule = Component => props => {
                   : null
               }
             </StyledIconContainer>
-          )
+          ),
+          ...expandable
         }}
         { ...props } />
     </StyledTableContainer>

@@ -1,10 +1,20 @@
+import React, { useState, useEffect } from 'react'
 import { badges } from '@sb/badges'
 import { Meta } from '@storybook/react'
 import { withKnobs } from '@storybook/addon-knobs'
 import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
 import MetaData from '@src/table/__meta__/meta.json'
 import { ITableProps, Table } from '../index'
-import { BasicTableStory, patchKeys, basicArgTypes, basicTwoColumns, basicTreeDataSource, genArgType, Story } from './_commonConstants'
+import {
+  BasicTableStory,
+  patchKeys,
+  basicArgTypes,
+  basicTwoColumns,
+  basicTreeDataSource,
+  genArgType,
+  Story,
+  Wrapper
+} from './_commonConstants'
 
 const columns = [
   {
@@ -70,4 +80,49 @@ export const TreeCustomColumn: Story = {
     ]
   },
   argTypes: { expandable: basicArgTypes.expandable }
+}
+
+type RowKeys = Readonly<React.Key[]>
+
+const getRowKeysFromStorage = (): RowKeys | null => {
+  const rowKeys = localStorage.getItem('expandedRowKeys')
+  return rowKeys && JSON.parse(rowKeys)
+}
+
+const setRowKeysInStorage = (rowKeys: RowKeys) => {
+  localStorage.setItem('expandedRowKeys', JSON.stringify(rowKeys))
+}
+
+export const ExpandedRowsMemorization: Story = {
+  render: (props: ITableProps) => {
+    const { expandable, ...rest } = props
+    const [expandedRowKeys, setExpandedRowKeys] = useState<RowKeys | undefined>(
+      expandable?.expandedRowKeys
+    )
+
+    useEffect(() => {
+      const preexpanded = getRowKeysFromStorage()
+      setExpandedRowKeys(preexpanded || [])
+    }, [])
+
+    const onExpandedRowsChange = (newExpandedRowKeys: RowKeys) => {
+      console.log(`expandedRowKeys changed: ${newExpandedRowKeys}`)
+
+      setExpandedRowKeys(newExpandedRowKeys)
+      setRowKeysInStorage(newExpandedRowKeys)
+    }
+
+    return (
+      <Wrapper>
+        <Table
+          {...rest}
+          expandable={{
+            ...expandable,
+            expandedRowKeys,
+            onExpandedRowsChange
+          }}
+        />
+      </Wrapper>
+    )
+  }
 }

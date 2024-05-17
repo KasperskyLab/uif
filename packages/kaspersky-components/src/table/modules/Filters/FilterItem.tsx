@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Delete } from '@kaspersky/icons/16'
-import { Button } from '@src/button'
+import { ActionButton } from '@src/action-button'
 import { TableContextProviderProps, useTableContext } from '@src/table/context/TableContext'
 
 const StyledFilterItem = styled.div<TableContextProviderProps>`
@@ -9,24 +9,13 @@ const StyledFilterItem = styled.div<TableContextProviderProps>`
   background: ${(props) => props.cssConfig?.filters.item.backgroundColor};
   border-radius: 8px;
   position: relative;
+  color: ${(props) => props.cssConfig?.filters.item.iconColor};
 `
 
-const CloseButton = styled(Button)`
-  &&& {
-    min-width: 0;
-    border-radius: 100%;
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    position: absolute;
-    top: 4px;
-    right: 4px;
-
-    .kl-components-button-text {
-      display: block;
-      line-height: 1;
-    }
-  }
+const DeleteButton = styled(ActionButton)`
+  position: absolute;
+  top: 8px;
+  right: 8px;
 `
 
 const Content = styled.div`
@@ -51,9 +40,7 @@ const FilterItem: React.FC<FilterItemProps> = ({
 
   return (
     <StyledFilterItem cssConfig={cssConfig}>
-      <CloseButton mode="tertiary" onClick={onRemove}>
-        <Delete />
-      </CloseButton>
+      <DeleteButton onClick={onRemove} icon={<Delete />} size="large" />
       <Content>{children}</Content>
     </StyledFilterItem>
   )

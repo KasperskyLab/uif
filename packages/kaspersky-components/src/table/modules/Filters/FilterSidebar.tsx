@@ -13,7 +13,10 @@ import { Button } from '@src/button'
 const FilterList = styled.div`
   display: grid;
   gap: 16px;
-  padding-top: 24px;
+
+  & + & {
+    padding-top: 16px;
+  }
 `
 
 const StyledFooter = styled.div`
@@ -34,13 +37,15 @@ export const FilterSidebar: TableModule =
           footer={
             <StyledFooter>
               <Button onClick={props.onCloseFilterSidebar}>Apply</Button>
-              <Button onClick={props.onCloseFilterSidebar} mode="secondary">Cancel</Button>
+              <Button onClick={props.onCloseFilterSidebar} mode="secondary">
+                Cancel
+              </Button>
             </StyledFooter>
           }
         >
-          {[0, 1].map((n) => (
-            <FilterList key={`filter-list-${n}`}>
-              <FilterItem>
+          <FilterList>
+            {[0, 1].map((n) => (
+              <FilterItem key={`filter-list-${n}`}>
                 <FilterRow title="Property">
                   <Select />
                 </FilterRow>
@@ -51,8 +56,8 @@ export const FilterSidebar: TableModule =
                   <Textbox />
                 </FilterRow>
               </FilterItem>
-            </FilterList>
-          ))}
+            ))}
+          </FilterList>
         </Sidebar>
         <Component {...props} />
       </>

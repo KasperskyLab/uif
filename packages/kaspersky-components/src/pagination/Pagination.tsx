@@ -42,6 +42,7 @@ export const PaginationView: FC<PaginationViewProps> = ({
   pageSizeOptions = ['10', '20', '50', '100'],
   total = 0,
   selected = 0,
+  showSelected = true,
   onChange,
   onShowSizeChange: customOnShowSizeChange,
   showSizeChanger = false,
@@ -57,12 +58,14 @@ export const PaginationView: FC<PaginationViewProps> = ({
   }
 
   const { t } = useTranslation()
-  const totalText = useMemo(() => (
-    `${t('pagination.total', { count: total })}`
-  ), [t, total])
-  const selectedText = useMemo(() => (
-    `${t('pagination.selected', { count: selected })}`
-  ), [t, selected])
+
+  const getSummaryText = () => {
+    const totalText = `${t('pagination.total', { count: total })}`
+    if (!showSelected) return totalText
+
+    const selectedText = `${t('pagination.selected', { count: selected })}`
+    return `${totalText} / ${selectedText}`
+  }
 
   const parsedPageSizeOptions = useMemo(() => (
     getPageSizeOptions(t, pageSizeOptions)
@@ -90,10 +93,10 @@ export const PaginationView: FC<PaginationViewProps> = ({
       aria-disabled={disabled}
       {...testAttributes}
     >
-      <StyledTotal testId='total'>
-        {`${totalText} / ${selectedText}`}
-      </StyledTotal>
-      {!simple && (
+      {!simple && <StyledTotal testId='total'>
+        {getSummaryText()}
+      </StyledTotal>}
+      {(
         <div className='kl6-pagination-right'>
           <StyledPagination
             showQuickJumper={false}
@@ -102,7 +105,8 @@ export const PaginationView: FC<PaginationViewProps> = ({
             current={current}
             pageSize={pageSize}
             total={total}
-            disabled={disabled}
+            showLessItems={true}
+            disabled={disabled || (pageSize >= total)}
             onChange={onChange}
             cssConfig={cssConfig}
             {...icons}

@@ -31,13 +31,18 @@ const ItemLabel = styled.div`
   flex-grow: 1;
 `
 
-const Item = styled.div`
+const Item = styled.label`
+  cursor: pointer;
   display: flex;
   z-index: 700;
   margin-top: 8px;
   align-items: center;
   line-height: 1;
   gap: 4px;
+
+  &.selector-item-dragging {
+    z-index: 1200;
+  }
 
   p {
     margin-top: ${SPACES[1]}px;
@@ -177,7 +182,7 @@ export const ColumnsSelector = ({
           </Text>
         </CheckboxRow>
       </Item>
-      <SortableContainer distance={2} onSortEnd={onSortEnd}>
+      <SortableContainer distance={2} onSortEnd={onSortEnd} helperClass="selector-item-dragging">
         {filteredColumns.map((value, index) => (
           <SortableItem
             key={`item-${value.dataIndex}-${index}`}

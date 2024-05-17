@@ -44,9 +44,13 @@ export const table = ({ colors }: ComponentThemeContext): TableColorConfig => ({
     },
     item: {
       backgroundColor: colors.bg.alternative2,
+      iconColor: colors.textIconsElements.primary,
       title: {
         color: colors.textIconsElements['secondary2-solid']
       }
     }
+  },
+  validation: {
+    outline: colors.criticalitystatuses.critical
   }
 })
