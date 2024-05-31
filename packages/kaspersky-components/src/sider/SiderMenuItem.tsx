@@ -21,7 +21,6 @@ const MenuItemComponent = ({
   const itemClick = () => {
     menuState.updateMenuState({ activateItem: data.state })
     menuState.setActive(data.state)
-    alert('Active item: ' + data.state)
     data.onClick && data.onClick()
     menuState.minimized && menuState.collapseAll()
   }
