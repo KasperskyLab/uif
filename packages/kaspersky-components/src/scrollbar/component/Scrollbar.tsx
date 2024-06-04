@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { forwardRef, useCallback } from 'react'
 import styled from 'styled-components'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useIsThumbIncreased } from './useIsThumbIncreased'
@@ -22,12 +22,14 @@ const ThumbHorizontal = styled.div`${thumbHorizontalCss}`
 
 const View = styled.div`${viewCss}`
 
-export const Scrollbar: React.FC<ScrollbarProps> = (rawProps) => {
+export const Scrollbar = forwardRef<Scrollbars, ScrollbarProps>((rawProps, ref) => {
   const props = useThemedScrollbar(rawProps)
-  return <ScrollbarView {...props} />
-}
+  return <ScrollbarView {...props} ref={ref}/>
+})
 
-export const ScrollbarView: React.FC<ScrollbarViewProps> = (props) => {
+Scrollbar.displayName = 'Scrollbar'
+
+export const ScrollbarView = forwardRef<Scrollbars, ScrollbarViewProps>((props, ref) => {
   const { cssConfig, ...forwardedProps } = props
   const [, setIsVerticalThumbIncreased] = useIsThumbIncreased()
   const [, setIsHorizontalThumbIncreased] = useIsThumbIncreased()
@@ -73,7 +75,10 @@ export const ScrollbarView: React.FC<ScrollbarViewProps> = (props) => {
       renderThumbVertical={renderThumbVertical}
       renderThumbHorizontal={renderThumbHorizontal}
       renderView={renderView}
+      ref={ref}
       {...forwardedProps}
     />
   )
-}
+})
+
+ScrollbarView.displayName = 'ScrollbarView'

@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
+import Scrollbars from 'react-custom-scrollbars-2'
 import { Meta, StoryObj } from '@storybook/react'
 import { badges } from '@sb/badges'
 import { useTheme } from '@design-system/theme'
 import { ThemeKey } from '@design-system/types'
 import { sbHideControls } from '@helpers/storybookHelpers'
 import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import { Button } from '@src/button'
 import MetaData from '../__meta__/meta.json'
 import { Scrollbar } from './Scrollbar'
 import { ScrollbarProps } from './types'
@@ -82,6 +84,31 @@ export const Both: StoryObj<ScrollbarProps> = {
           <p>{content}</p>
         </Scrollbar>
       </Wrapper>
+    )
+  }
+}
+
+export const WithRef: StoryObj<ScrollbarProps> = {
+  render: (args: ScrollbarProps) => {
+    const theme = useTheme()
+    const ref = useRef<Scrollbars | null>(null)
+
+    const scrollToBottom = () => {
+      ref.current?.scrollToBottom()
+    }
+
+    const scrollToTop = () => {
+      ref.current?.scrollToTop()
+    }
+
+    return (
+      <VerticalWrapper theme={theme.key}>
+        <Scrollbar {...args} theme={theme.key} ref={ref}>
+          <Button onClick={scrollToBottom}>Scroll to bottom</Button>
+          <p>{content}</p>
+          <Button onClick={scrollToTop}>Scroll to top</Button>
+        </Scrollbar>
+      </VerticalWrapper>
     )
   }
 }
