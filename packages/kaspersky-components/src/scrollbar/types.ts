@@ -18,7 +18,7 @@ export type ScrollbarThemeProps = {
   theme?: Theme
 }
 
-export type ScrollbarsClass = Scrollbars
+export type ScrollbarsType = Scrollbars
 
 export type ScrollbarCssConfig = ScrollbarColorConfig
 
