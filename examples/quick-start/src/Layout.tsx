@@ -23,6 +23,7 @@ const StyledSpace = styled(Space)<{ themeKey: ThemeKey }>`
   border-radius: 16px;
   padding: 16px;
   align-items: flex-start;
+  flex-direction: column;
   overflow: auto;
   position: relative;
   z-index: 1;
