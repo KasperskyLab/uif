@@ -1,7 +1,18 @@
 import { Dispatch, SetStateAction, useState } from 'react'
 import styled from 'styled-components'
-import { SegmentedButton, Button, Sidebar, Text, Table, Space } from '@kaspersky/components'
-import { Menu, Nav, UserNav, ServicesNav, Hamburger } from '@kaspersky/components/src/menu'
+import {
+  SegmentedButton,
+  Button,
+  Sidebar,
+  Text,
+  Table,
+  Space,
+  Menu,
+  Nav,
+  UserNav,
+  ServicesNav,
+  Hamburger
+} from '@kaspersky/components'
 import { SegmentedButtonOption } from '@kaspersky/components/src/segmented-button/types'
 import { ThemeKey, themeColors } from '@kaspersky/components/design-system'
 import { navItems, navUserItems, favItems } from '@kaspersky/components/src/menu/stories/menu-items'
