@@ -48,6 +48,7 @@ import { expandableText } from './expandableText'
 import { scrollbar } from './scrollbar'
 import { timeInput } from './timeInput'
 import { weeklySchedule } from './weeklySchedule'
+import { menu } from './menu'
 
 export const DARK_THEME: ThemeConfig = {
   ...COMMON_THEME,
@@ -179,6 +180,9 @@ export const DARK_THEME: ThemeConfig = {
     },
     weeklySchedule: {
       colors: weeklySchedule({ colors })
+    },
+    menu: {
+      colors: menu({ colors })
     }
   }
 }

@@ -3,122 +3,122 @@
     "primary": {
       "category": "color",
       "exportKey": "color",
-      "value": "#0d0d15",
+      "value": "#2f3033",
       "type": "color",
-      "description": ".StaticPalette/StaticBlack"
+      "description": "staticpalette/lightgray/lg50"
     },
     "secondary": {
       "category": "color",
       "exportKey": "color",
-      "value": "#2a3541d9",
+      "value": "#000000ad",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA100"
+      "description": "staticpalette/lightgrayalpha/lga100"
     },
     "secondary2": {
       "category": "color",
       "exportKey": "color",
-      "value": "#2a3541b3",
+      "value": "#0000008f",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA200"
+      "description": "staticpalette/lightgrayalpha/lga200"
     },
     "base-icon": {
-      "value": "#2735448c",
+      "value": "#0000006e",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA300"
+      "description": "staticpalette/lightgrayalpha/lga300"
     },
     "disabled": {
       "category": "color",
       "exportKey": "color",
-      "value": "#22344966",
+      "value": "#00000052",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA400"
+      "description": "staticpalette/lightgrayalpha/lga400"
     },
     "secondary-solid": {
-      "value": "#4a525c",
+      "value": "#515255",
       "type": "color",
       "description": "staticpalette/lightgray/lg100"
     },
     "secondary2-solid": {
-      "value": "#6a717b",
+      "value": "#707175",
       "type": "color",
       "description": "staticpalette/lightgray/lg200"
     },
     "base-icon-solid": {
-      "value": "#899099",
+      "value": "#8f9093",
       "type": "color",
       "description": "staticpalette/lightgray/lg300"
     },
     "disabled-solid": {
-      "value": "#a7aeb6",
+      "value": "#adaeb0",
       "type": "color",
       "description": "staticpalette/lightgray/lg400"
     },
     "primary-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#f5f8fb",
+      "value": "#f7f7f8",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG50"
+      "description": "staticpalette/darkgray/dg50"
     },
     "secondary-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#eff5fad1",
+      "value": "#ffffffc4",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA100"
+      "description": "staticpalette/darkgrayalpha/dga100"
     },
     "secondary2-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#e7eef7a8",
+      "value": "#ffffff96",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA200"
+      "description": "staticpalette/darkgrayalpha/dga200"
     },
     "base-icon-invert": {
-      "value": "#e7f1fd7d",
+      "value": "#ffffff6e",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA300"
+      "description": "staticpalette/darkgrayalpha/dga300"
     },
     "disabled-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#e5ecfb5c",
+      "value": "#ffffff4d",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA400"
+      "description": "staticpalette/darkgrayalpha/dga400"
     },
     "secondary-invert-solid": {
-      "value": "#c8cdd2",
+      "value": "#cacbce",
       "type": "color",
       "description": "staticpalette/darkgray/dg100"
     },
     "secondary2-invert-solid": {
-      "value": "#9fa4aa",
+      "value": "#a3a4a6",
       "type": "color",
       "description": "staticpalette/darkgray/dg200"
     },
     "base-icon-invert-solid": {
-      "value": "#7a8087",
+      "value": "#7e7f83",
       "type": "color",
       "description": "staticpalette/darkgray/dg300"
     },
     "disabled-invert-solid": {
-      "value": "#a7aeb6",
+      "value": "#606163",
       "type": "color",
       "description": "staticpalette/darkgray/dg400"
     },
     "baseicon": {
       "category": "color",
       "exportKey": "color",
-      "value": "#2735448c",
+      "value": "#0000006e",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA300"
+      "description": "staticpalette/lightgrayalpha/lga300"
     },
     "baseicon-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#e7f1fd7d",
+      "value": "#ffffff6e",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA300"
+      "description": "staticpalette/darkgrayalpha/dga300"
     }
   },
   "bg__light": {
@@ -127,42 +127,42 @@
       "exportKey": "color",
       "value": "#ffffff",
       "type": "color",
-      "description": ".StaticPalette/StaticWhite"
+      "description": "staticpalette/staticwhite"
     },
     "alternative": {
       "category": "color",
       "exportKey": "color",
-      "value": "#f8fafc",
+      "value": "#f7f7f8",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG900"
+      "description": "staticpalette/lightgray/lg900"
     },
     "alternative2": {
       "category": "color",
       "exportKey": "color",
-      "value": "#f4f7fa",
+      "value": "#eeeff1",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG800"
+      "description": "staticpalette/lightgray/lg800"
     },
     "base-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#0d0d15",
+      "value": "#1d1d1f",
       "type": "color",
-      "description": ".StaticPalette/StaticBlack"
+      "description": "staticpalette/staticblack"
     },
     "alternative-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#1a1925",
+      "value": "#252527",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG900"
+      "description": "staticpalette/darkgray/dg900"
     },
     "alternative2-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#1d1c28",
+      "value": "#2d2d2f",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG800"
+      "description": "staticpalette/darkgray/dg800"
     },
     "transparent": {
       "value": "#ffffff00",
@@ -173,73 +173,73 @@
     "line": {
       "category": "color",
       "exportKey": "color",
-      "value": "#1f324745",
+      "value": "#00000038",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA500"
+      "description": "staticpalette/lightgrayalpha/lga500"
     },
     "separator": {
-      "value": "#294d7517",
+      "value": "#00000017",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA700"
+      "description": "staticpalette/lightgrayalpha/lga700"
     },
     "separator-bold": {
-      "value": "#1d36532b",
+      "value": "#00000024",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA600"
+      "description": "staticpalette/lightgrayalpha/lga600"
     },
     "line-solid": {
-      "value": "#c2c8ce",
+      "value": "#c7c7c9",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG500"
+      "description": "staticpalette/lightgray/lg500"
     },
     "separator-solid": {
-      "value": "#eaeef2",
+      "value": "#e7e7e9",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG700"
+      "description": "staticpalette/lightgray/lg700"
     },
     "separator-bold-solid": {
-      "value": "#d8dde3",
+      "value": "#dbdbdc",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG600"
+      "description": "staticpalette/lightgray/lg600"
     },
     "line-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#e5ecfb5c",
+      "value": "#ffffff30",
       "type": "color",
-      "description": "StaticPalette/DarkGrayAlpha/DGA400"
+      "description": "staticpalette/darkgrayalpha/dga500"
     },
     "separator-invert": {
-      "value": "#d0d7fb2b",
+      "value": "#ffffff1c",
       "type": "color",
-      "description": "StaticPalette/DarkGrayAlpha/DGA600"
+      "description": "staticpalette/darkgrayalpha/dga700"
     },
     "separator-bold-invert": {
-      "value": "#0859a505",
+      "value": "#ffffff24",
       "type": "color",
-      "description": "StaticPalette/LightGrayAlpha/LGA900"
+      "description": "staticpalette/darkgrayalpha/dga600"
     },
     "line-invert-solid": {
-      "value": "#5b6068",
+      "value": "#464749",
       "type": "color",
-      "description": "StaticPalette/DarkGray/DG400"
+      "description": "staticpalette/darkgray/dg500"
     },
     "separator-invert-solid": {
-      "value": "#2e333d",
+      "value": "#343537",
       "type": "color",
-      "description": "StaticPalette/DarkGray/DG600"
+      "description": "staticpalette/darkgray/dg700"
     },
     "separator-bold-invert-solid": {
-      "value": "#1a1925",
+      "value": "#3c3d3e",
       "type": "color",
-      "description": "StaticPalette/LightGray/LG900"
+      "description": "staticpalette/darkgray/dg600"
     },
     "accent-link": {
       "category": "color",
       "exportKey": "color",
       "value": "#394dbf",
       "type": "color",
-      "description": ".StaticPalette/Marina/Marina600"
+      "description": "staticpalette/marina/marina600"
     },
     "accent-link-visited": {
       "value": "#89307e",
@@ -251,35 +251,35 @@
       "exportKey": "color",
       "value": "#fce3ae",
       "type": "color",
-      "description": ".StaticPalette/Yellow/Yellow200"
+      "description": "staticpalette/yellow/yellow200"
     },
     "seporator": {
       "category": "color",
       "exportKey": "color",
-      "value": "#294d7517",
+      "value": "#00000017",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA700"
+      "description": "staticpalette/lightgrayalpha/lga700"
     },
     "seporatorbold": {
       "category": "color",
       "exportKey": "color",
-      "value": "#1d36532b",
+      "value": "#00000024",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA600"
+      "description": "staticpalette/lightgrayalpha/lga600"
     },
     "seporator-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#d0d7fb2b",
+      "value": "#ffffff1c",
       "type": "color",
-      "description": "StaticPalette/DarkGrayAlpha/DGA600"
+      "description": "staticpalette/darkgrayalpha/dga700"
     },
     "seporatorbold-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#0859a505",
+      "value": "#ffffff24",
       "type": "color",
-      "description": "StaticPalette/LightGrayAlpha/LGA900"
+      "description": "staticpalette/darkgrayalpha/dga600"
     }
   },
   "statestatuses__light": {
@@ -288,50 +288,50 @@
       "exportKey": "color",
       "value": "#53ccf1",
       "type": "color",
-      "description": ".StaticPalette/Marengo/Marengo300"
+      "description": "staticpalette/marengo/marengo300"
     },
     "update": {
       "category": "color",
       "exportKey": "color",
       "value": "#89307e",
       "type": "color",
-      "description": ".StaticPalette/Violet/Violet700"
+      "description": "staticpalette/violet/violet700"
     },
     "in-progress": {
       "value": "#394dbf",
       "type": "color",
-      "description": ".StaticPalette/Marina/Marina600"
+      "description": "staticpalette/marina/marina600"
     },
     "resolved-solved": {
       "value": "#7f8994",
       "type": "color",
-      "description": ".StaticPalette/ColdGrey/CG500"
+      "description": "staticpalette/coldgrey/cg500"
     },
     "in-incident": {
       "value": "#ab94f1",
       "type": "color",
-      "description": ".StaticPalette/Purple/Purple400"
+      "description": "staticpalette/purple/purple400"
     },
     "inprogress": {
       "category": "color",
       "exportKey": "color",
       "value": "#394dbf",
       "type": "color",
-      "description": ".StaticPalette/Marina/Marina600"
+      "description": "staticpalette/marina/marina600"
     },
     "resolved_solved": {
       "category": "color",
       "exportKey": "color",
       "value": "#7f8994",
       "type": "color",
-      "description": ".StaticPalette/ColdGrey/CG500"
+      "description": "staticpalette/coldgrey/cg500"
     },
     "inincedent": {
       "category": "color",
       "exportKey": "color",
       "value": "#ab94f1",
       "type": "color",
-      "description": ".StaticPalette/Purple/Purple400"
+      "description": "staticpalette/purple/purple400"
     }
   },
   "criticalitystatuses__light": {
@@ -340,93 +340,93 @@
       "exportKey": "color",
       "value": "#b21a35",
       "type": "color",
-      "description": ".StaticPalette/Red/Red700"
+      "description": "staticpalette/red/red700"
     },
     "high": {
       "category": "color",
       "exportKey": "color",
       "value": "#fa625b",
       "type": "color",
-      "description": ".StaticPalette/Red/Red500"
+      "description": "staticpalette/red/red500"
     },
     "medium": {
       "category": "color",
       "exportKey": "color",
       "value": "#f9c559",
       "type": "color",
-      "description": ".StaticPalette/Yellow/Yellow400"
+      "description": "staticpalette/yellow/yellow400"
     },
     "low": {
       "category": "color",
       "exportKey": "color",
-      "value": "#b2b8bf",
+      "value": "#98a0aa",
       "type": "color",
-      "description": ".StaticPalette/ColdGrey/CG300"
+      "description": "staticpalette/coldgrey/cg400"
     },
     "info": {
       "category": "color",
       "exportKey": "color",
       "value": "#ab94f1",
       "type": "color",
-      "description": ".StaticPalette/Purple/Purple400"
+      "description": "staticpalette/purple/purple400"
     },
     "positive": {
       "category": "color",
       "exportKey": "color",
       "value": "#1da189",
       "type": "color",
-      "description": ".StaticPalette/Emerald/Emerald500"
+      "description": "staticpalette/emerald/emerald500"
     }
   },
   "tags__light": {
     "neutral": {
       "category": "color",
       "exportKey": "color",
-      "value": "#4a525c",
+      "value": "#515255",
       "type": "color",
-      "description": ".StaticPalette/lightgray/lg100",
+      "description": "staticpalette/lightgray/lg100",
       "name": "tags__light/neutral"
     },
     "neutral-bg-base": {
-      "value": "#294d7517",
+      "value": "#00000017",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA700",
+      "description": "staticpalette/lightgrayalpha/lga700",
       "name": "tags__light/neutral-bg-base"
     },
     "neutral-bg-hover": {
-      "value": "#1d36532b",
+      "value": "#00000024",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA600",
+      "description": "staticpalette/lightgrayalpha/lga600",
       "name": "tags__light/neutral-bg-hover"
     },
     "neutral-bg-active": {
-      "value": "#1f324745",
+      "value": "#00000038",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA500",
+      "description": "staticpalette/lightgrayalpha/lga500",
       "name": "tags__light/neutral-bg-active"
     },
     "grey": {
       "name": "tags__light/grey",
-      "description": ".StaticPalette/lightgrey/lg700",
-      "value": "#eaeef2",
+      "description": "staticpalette/lightgrey/lg700",
+      "value": "#e7e7e9",
       "type": "color"
     },
     "grey-bg-base": {
       "name": "tags__light/grey-bg-base",
-      "description": ".StaticPalette/lightgrey/lg200",
-      "value": "#6a717b",
+      "description": "staticpalette/lightgrey/lg200",
+      "value": "#707175",
       "type": "color"
     },
     "grey-bg-hover": {
       "name": "tags__light/grey-bg-hover",
-      "description": ".StaticPalette/lightgrey/lg100",
-      "value": "#4a525c",
+      "description": "staticpalette/lightgrey/lg100",
+      "value": "#515255",
       "type": "color"
     },
     "grey-bg-active": {
       "name": "tags__light/grey-bg-active",
-      "description": ".StaticPalette/lightgrey/lg50",
-      "value": "#2b333e",
+      "description": "staticpalette/lightgrey/lg50",
+      "value": "#2f3033",
       "type": "color"
     },
     "red": {
@@ -434,7 +434,7 @@
       "exportKey": "color",
       "value": "#ffe1df",
       "type": "color",
-      "description": ".StaticPalette/Red/Red100",
+      "description": "staticpalette/red/red100",
       "name": "tags__light/red"
     },
     "red-bg-base": {
@@ -450,7 +450,7 @@
       "name": "tags__light/red-bg-hover"
     },
     "red-bg-active": {
-      "value": "#84082a",
+      "value": "#6f2432",
       "type": "color",
       "description": "staticpalette/red/red800",
       "name": "tags__light/red-bg-active"
@@ -460,7 +460,7 @@
       "exportKey": "color",
       "value": "#ffe7d9",
       "type": "color",
-      "description": ".StaticPalette/Orange/Orange100",
+      "description": "staticpalette/orange/orange100",
       "name": "tags__light/orange"
     },
     "orange-bg-base": {
@@ -476,7 +476,7 @@
       "name": "tags__light/orange-bg-hover"
     },
     "orange-bg-active": {
-      "value": "#78281f",
+      "value": "#6d3127",
       "type": "color",
       "description": "staticpalette/orange/orange800",
       "name": "tags__light/orange-bg-active"
@@ -486,7 +486,7 @@
       "exportKey": "color",
       "value": "#fff1d5",
       "type": "color",
-      "description": ".StaticPalette/Yellow/Yellow100",
+      "description": "staticpalette/yellow/yellow100",
       "name": "tags__light/yellow"
     },
     "yellow-bg-base": {
@@ -502,7 +502,7 @@
       "name": "tags__light/yellow-bg-hover"
     },
     "yellow-bg-active": {
-      "value": "#71480a",
+      "value": "#554123",
       "type": "color",
       "description": "staticpalette/yellow/yellow800",
       "name": "tags__light/yellow-bg-active"
@@ -512,7 +512,7 @@
       "exportKey": "color",
       "value": "#e1f5d7",
       "type": "color",
-      "description": ".StaticPalette/Grass/Grass100",
+      "description": "staticpalette/grass/grass100",
       "name": "tags__light/grass"
     },
     "grass-bg-base": {
@@ -528,7 +528,7 @@
       "name": "tags__light/grass-bg-hover"
     },
     "grass-bg-active": {
-      "value": "#315633",
+      "value": "#2c472a",
       "type": "color",
       "description": "staticpalette/grass/grass800",
       "name": "tags__light/grass-bg-active"
@@ -538,7 +538,7 @@
       "exportKey": "color",
       "value": "#c0f0e7",
       "type": "color",
-      "description": ".StaticPalette/Emerald/Emerald100",
+      "description": "staticpalette/emerald/emerald100",
       "name": "tags__light/emerald"
     },
     "emerald-bg-base": {
@@ -554,7 +554,7 @@
       "name": "tags__light/emerald-bg-hover"
     },
     "emerald-bg-active": {
-      "value": "#014943",
+      "value": "#184640",
       "type": "color",
       "description": "staticpalette/emerald/emerald800",
       "name": "tags__light/emerald-bg-active"
@@ -564,7 +564,7 @@
       "exportKey": "color",
       "value": "#c3f0fd",
       "type": "color",
-      "description": ".StaticPalette/Marengo/Marengo100",
+      "description": "staticpalette/marengo/marengo100",
       "name": "tags__light/marengo"
     },
     "marengo-bg-base": {
@@ -580,7 +580,7 @@
       "name": "tags__light/marengo-bg-hover"
     },
     "marengo-bg-active": {
-      "value": "#084665",
+      "value": "#1a4458",
       "type": "color",
       "description": "staticpalette/marengo/marengo800",
       "name": "tags__light/marengo-bg-active"
@@ -590,7 +590,7 @@
       "exportKey": "color",
       "value": "#d3e2ff",
       "type": "color",
-      "description": ".StaticPalette/Marina/Marina100",
+      "description": "staticpalette/marina/marina100",
       "name": "tags__light/marina"
     },
     "marina-bg-base": {
@@ -606,7 +606,7 @@
       "name": "tags__light/marina-bg-hover"
     },
     "marina-bg-active": {
-      "value": "#182d74",
+      "value": "#2a376c",
       "type": "color",
       "description": "staticpalette/marina/marina800",
       "name": "tags__light/marina-bg-active"
@@ -616,7 +616,7 @@
       "exportKey": "color",
       "value": "#e9e3fb",
       "type": "color",
-      "description": ".StaticPalette/Purple/Purple100",
+      "description": "staticpalette/purple/purple100",
       "name": "tags__light/purple"
     },
     "purple-bg-base": {
@@ -632,7 +632,7 @@
       "name": "tags__light/purple-bg-hover"
     },
     "purple-bg-active": {
-      "value": "#3d316e",
+      "value": "#41366b",
       "type": "color",
       "description": "staticpalette/purple/purple800",
       "name": "tags__light/purple-bg-active"
@@ -642,7 +642,7 @@
       "exportKey": "color",
       "value": "#fbddf3",
       "type": "color",
-      "description": ".StaticPalette/Violet/Violet100",
+      "description": "staticpalette/violet/violet100",
       "name": "tags__light/violet"
     },
     "violet-bg-base": {
@@ -658,7 +658,7 @@
       "name": "tags__light/violet-bg-hover"
     },
     "violet-bg-active": {
-      "value": "#62235f",
+      "value": "#60315a",
       "type": "color",
       "description": "staticpalette/violet/violet800",
       "name": "tags__light/violet-bg-active"
@@ -738,65 +738,65 @@
     "neutral": {
       "category": "color",
       "exportKey": "color",
-      "value": "#f5f8fb",
+      "value": "#f7f7f8",
       "type": "color",
-      "description": ".StaticPalette/darkgrey/dg50",
+      "description": "staticpalette/darkgrey/dg50",
       "name": "tags__dark/neutral"
     },
     "neutral-bg-base": {
-      "value": "#bfc5ee1f",
+      "value": "#ffffff1c",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA700",
+      "description": "staticpalette/darkgrayalpha/dga700",
       "name": "tags__dark/neutral-bg-base"
     },
     "neutral-bg-hover": {
-      "value": "#d0d7fb2b",
+      "value": "#ffffff24",
       "type": "color",
       "name": "tags__dark/neutral-bg-hover",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA600"
+      "description": "staticpalette/darkgrayalpha/dga600"
     },
     "neutral-bg-active": {
-      "value": "#d4d9f242",
+      "value": "#ffffff30",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA500",
+      "description": "staticpalette/darkgrayalpha/dga500",
       "name": "tags__dark/neutral-bg-active"
     },
     "grey": {
       "name": "tags__dark/grey",
-      "description": ".StaticPalette/darkgrey/dg700",
-      "value": "#22232f",
+      "description": "staticpalette/darkgrey/dg700",
+      "value": "#343537",
       "type": "color"
     },
     "grey-bg-base": {
       "name": "tags__dark/grey-bg-base",
-      "description": ".StaticPalette/darkgrey/dg200",
-      "value": "#9fa4aa",
+      "description": "staticpalette/darkgrey/dg200",
+      "value": "#a3a4a6",
       "type": "color"
     },
     "grey-bg-hover": {
       "name": "tags__dark/grey-bg-hover",
-      "description": ".StaticPalette/darkgrey/dg100",
-      "value": "#c8cdd2",
+      "description": "staticpalette/darkgrey/dg100",
+      "value": "#cacbce",
       "type": "color"
     },
     "grey-bg-active": {
       "name": "tags__dark/grey-bg-active",
-      "description": ".StaticPalette/darkgrey/dg50",
-      "value": "#f5f8fb",
+      "description": "staticpalette/darkgrey/dg50",
+      "value": "#f7f7f8",
       "type": "color"
     },
     "red": {
       "category": "color",
       "exportKey": "color",
-      "value": "#84082a",
+      "value": "#6f2432",
       "type": "color",
-      "description": ".StaticPalette/Red/Red800",
+      "description": "staticpalette/red/red800",
       "name": "tags__dark/red"
     },
     "red-bg-base": {
       "value": "#ffa29d",
       "type": "color",
-      "description": ".StaticPalette/Red/Red300",
+      "description": "staticpalette/red/red300",
       "name": "tags__dark/red-bg-base"
     },
     "red-bg-hover": {
@@ -814,15 +814,15 @@
     "orange": {
       "category": "color",
       "exportKey": "color",
-      "value": "#78281f",
+      "value": "#6d3127",
       "type": "color",
-      "description": ".StaticPalette/Orange/Orange800",
+      "description": "staticpalette/orange/orange800",
       "name": "tags__dark/orange"
     },
     "orange-bg-base": {
       "value": "#ffb78e",
       "type": "color",
-      "description": ".StaticPalette/Orange/Orange300",
+      "description": "staticpalette/orange/orange300",
       "name": "tags__dark/orange-bg-base"
     },
     "orange-bg-hover": {
@@ -840,15 +840,15 @@
     "yellow": {
       "category": "color",
       "exportKey": "color",
-      "value": "#71480a",
+      "value": "#554123",
       "type": "color",
-      "description": ".StaticPalette/Yellow/Yellow800",
+      "description": "staticpalette/yellow/yellow800",
       "name": "tags__dark/yellow"
     },
     "yellow-bg-base": {
       "value": "#fbd385",
       "type": "color",
-      "description": ".StaticPalette/Yellow/Yellow300",
+      "description": "staticpalette/yellow/yellow300",
       "name": "tags__dark/yellow-bg-base"
     },
     "yellow-bg-hover": {
@@ -866,15 +866,15 @@
     "grass": {
       "category": "color",
       "exportKey": "color",
-      "value": "#315633",
+      "value": "#2c472a",
       "type": "color",
-      "description": ".StaticPalette/Grass/Grass800",
+      "description": "staticpalette/grass/grass800",
       "name": "tags__dark/grass"
     },
     "grass-bg-base": {
       "value": "#addd97",
       "type": "color",
-      "description": ".StaticPalette/Grass/Grass300",
+      "description": "staticpalette/grass/grass300",
       "name": "tags__dark/grass-bg-base"
     },
     "grass-bg-hover": {
@@ -892,15 +892,15 @@
     "emerald": {
       "category": "color",
       "exportKey": "color",
-      "value": "#014943",
+      "value": "#184640",
       "type": "color",
-      "description": ".StaticPalette/Emerald/Emerald800",
+      "description": "staticpalette/emerald/emerald800",
       "name": "tags__dark/emerald"
     },
     "emerald-bg-base": {
       "value": "#6bc9b8",
       "type": "color",
-      "description": ".StaticPalette/Emerald/Emerald300",
+      "description": "staticpalette/emerald/emerald300",
       "name": "tags__dark/emerald-bg-base"
     },
     "emerald-bg-hover": {
@@ -918,15 +918,15 @@
     "marengo": {
       "category": "color",
       "exportKey": "color",
-      "value": "#084665",
+      "value": "#1a4458",
       "type": "color",
-      "description": ".StaticPalette/Marengo/Marengo800",
+      "description": "staticpalette/marengo/marengo800",
       "name": "tags__dark/marengo"
     },
     "marengo-bg-base": {
       "value": "#53ccf1",
       "type": "color",
-      "description": ".StaticPalette/Marengo/Marengo300",
+      "description": "staticpalette/marengo/marengo300",
       "name": "tags__dark/marengo-bg-base"
     },
     "marengo-bg-hover": {
@@ -944,15 +944,15 @@
     "marina": {
       "category": "color",
       "exportKey": "color",
-      "value": "#182d74",
+      "value": "#2a376c",
       "type": "color",
-      "description": ".StaticPalette/Marina/Marina800",
+      "description": "staticpalette/marina/marina800",
       "name": "tags__dark/marina"
     },
     "marina-bg-base": {
       "value": "#7aa7ff",
       "type": "color",
-      "description": ".StaticPalette/Marina/Marina300",
+      "description": "staticpalette/marina/marina300",
       "name": "tags__dark/marina-bg-base"
     },
     "marina-bg-hover": {
@@ -970,15 +970,15 @@
     "purple": {
       "category": "color",
       "exportKey": "color",
-      "value": "#3d316e",
+      "value": "#41366b",
       "type": "color",
-      "description": ".StaticPalette/Purple/Purple800",
+      "description": "staticpalette/purple/purple800",
       "name": "tags__dark/purple"
     },
     "purple-bg-base": {
       "value": "#bdabf7",
       "type": "color",
-      "description": ".StaticPalette/Purple/Purple300",
+      "description": "staticpalette/purple/purple300",
       "name": "tags__dark/purple-bg-base"
     },
     "purple-bg-hover": {
@@ -996,15 +996,15 @@
     "violet": {
       "category": "color",
       "exportKey": "color",
-      "value": "#62235f",
+      "value": "#60315a",
       "type": "color",
-      "description": ".StaticPalette/Violet/Violet800",
+      "description": "staticpalette/violet/violet800",
       "name": "tags__dark/violet"
     },
     "violet-bg-base": {
       "value": "#ea98d8",
       "type": "color",
-      "description": ".StaticPalette/Violet/Violet300",
+      "description": "staticpalette/violet/violet300",
       "name": "tags__dark/violet-bg-base"
     },
     "violet-bg-hover": {
@@ -1096,244 +1096,244 @@
       "exportKey": "color",
       "value": "#ffecea",
       "type": "color",
-      "description": ".StaticPalette/Red/Red50"
+      "description": "staticpalette/red/red50"
     },
     "orange": {
       "category": "color",
       "exportKey": "color",
       "value": "#fff3ec",
       "type": "color",
-      "description": ".StaticPalette/Orange/Orange50"
+      "description": "staticpalette/orange/orange50"
     },
     "yellow": {
       "category": "color",
       "exportKey": "color",
       "value": "#fef8eb",
       "type": "color",
-      "description": ".StaticPalette/Yellow/Yellow50"
+      "description": "staticpalette/yellow/yellow50"
     },
     "grass": {
       "category": "color",
       "exportKey": "color",
       "value": "#f1faee",
       "type": "color",
-      "description": ".StaticPalette/Grass/Grass50"
+      "description": "staticpalette/grass/grass50"
     },
     "emerald": {
       "category": "color",
       "exportKey": "color",
       "value": "#dff8f3",
       "type": "color",
-      "description": ".StaticPalette/Emerald/Emerald50"
+      "description": "staticpalette/emerald/emerald50"
     },
     "marengo": {
       "category": "color",
       "exportKey": "color",
       "value": "#e4f6fd",
       "type": "color",
-      "description": ".StaticPalette/Marengo/Marengo50"
+      "description": "staticpalette/marengo/marengo50"
     },
     "marina": {
       "category": "color",
       "exportKey": "color",
       "value": "#e9f0ff",
       "type": "color",
-      "description": ".StaticPalette/Marina/Marina50"
+      "description": "staticpalette/marina/marina50"
     },
     "purple": {
       "category": "color",
       "exportKey": "color",
       "value": "#f3f2ff",
       "type": "color",
-      "description": ".StaticPalette/Purple/Purple50"
+      "description": "staticpalette/purple/purple50"
     },
     "violet": {
       "category": "color",
       "exportKey": "color",
       "value": "#feedfa",
       "type": "color",
-      "description": ".StaticPalette/Violet/Violet50"
+      "description": "staticpalette/violet/violet50"
     },
     "coldgrey": {
       "category": "color",
       "exportKey": "color",
       "value": "#f2f3f4",
       "type": "color",
-      "description": ".StaticPalette/ColdGrey/CG50"
+      "description": "staticpalette/coldgrey/cg50"
     },
     "neutral": {
       "value": "#ffffff",
       "type": "color",
-      "description": ".StaticPalette/StaticWhite"
+      "description": "staticpalette/staticwhite"
     }
   },
   "text-icons-elements__dark": {
     "primary": {
       "category": "color",
       "exportKey": "color",
-      "value": "#f5f8fb",
+      "value": "#f7f7f8",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG50"
+      "description": "staticpalette/darkgray/dg50"
     },
     "secondary": {
       "category": "color",
       "exportKey": "color",
-      "value": "#eff5fad1",
+      "value": "#ffffffc4",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA100"
+      "description": "staticpalette/darkgrayalpha/dga100"
     },
     "secondary2": {
       "category": "color",
       "exportKey": "color",
-      "value": "#e7eef7a8",
+      "value": "#ffffff96",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA200"
+      "description": "staticpalette/darkgrayalpha/dga200"
     },
     "base-icon": {
-      "value": "#e7f1fd7d",
+      "value": "#ffffff6e",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA300"
+      "description": "staticpalette/darkgrayalpha/dga300"
     },
     "disabled": {
       "category": "color",
       "exportKey": "color",
-      "value": "#e5ecfb5c",
+      "value": "#ffffff4d",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA400"
+      "description": "staticpalette/darkgrayalpha/dga400"
     },
     "secondary-solid": {
-      "value": "#c8cdd2",
+      "value": "#cacbce",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG100"
+      "description": "staticpalette/garkgray/dg100"
     },
     "secondary2-solid": {
-      "value": "#9fa4aa",
+      "value": "#a3a4a6",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG200"
+      "description": "staticpalette/garkgray/dg200"
     },
     "base-icon-solid": {
-      "value": "#7a8087",
+      "value": "#7e7f83",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG300"
+      "description": "staticpalette/garkgray/dg300"
     },
     "disabled-solid": {
-      "value": "#5b6068",
+      "value": "#606163",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG400"
+      "description": "staticpalette/garkgray/dg400"
     },
     "primary-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#0d0d15",
+      "value": "#2f3033",
       "type": "color",
-      "description": ".StaticPalette/StaticBlack"
+      "description": "staticpalette/lightgray/lg50"
     },
     "secondary-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#2a3541d9",
+      "value": "#000000ad",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA100"
+      "description": "staticpalette/lightgrayalpha/lga100"
     },
     "secondary2-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#2a3541b3",
+      "value": "#0000008f",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA200"
+      "description": "staticpalette/lightgrayalpha/lga200"
     },
     "base-icon-invert": {
-      "value": "#2735448c",
+      "value": "#0000006e",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA300"
+      "description": "staticpalette/lightgrayalpha/lga300"
     },
     "disabled-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#22344966",
+      "value": "#00000052",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA400"
+      "description": "staticpalette/lightgrayalpha/lga400"
     },
     "secondary-invert-solid": {
-      "value": "#4a525c",
+      "value": "#515255",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG100"
+      "description": "staticpalette/lightgray/lg100"
     },
     "secondary2-invert-solid": {
-      "value": "#6a717b",
+      "value": "#707175",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG200"
+      "description": "staticpalette/lightgray/lg200"
     },
     "base-icon-invert-solid": {
-      "value": "#899099",
+      "value": "#8f9093",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG300"
+      "description": "staticpalette/lightgray/lg300"
     },
     "disabled-invert-solid": {
-      "value": "#a7aeb6",
+      "value": "#adaeb0",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG400"
+      "description": "staticpalette/lightgray/lg400"
     },
     "baseicon-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#2735448c",
+      "value": "#0000006e",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA300"
+      "description": "staticpalette/lightgrayalpha/lga300"
     },
     "baseicon": {
       "category": "color",
       "exportKey": "color",
-      "value": "#e7f1fd7d",
+      "value": "#ffffff6e",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA300"
+      "description": "staticpalette/darkgrayalpha/dga300"
     }
   },
   "bg__dark": {
     "base": {
       "category": "color",
       "exportKey": "color",
-      "value": "#1d1c28",
+      "value": "#1d1d1f",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG800"
+      "description": "staticpalette/staticblack"
     },
     "alternative": {
       "category": "color",
       "exportKey": "color",
-      "value": "#1a1925",
+      "value": "#252527",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG900"
+      "description": "staticpalette/darkgray/dg900"
     },
     "alternative2": {
       "category": "color",
       "exportKey": "color",
-      "value": "#0d0d15",
+      "value": "#2d2d2f",
       "type": "color",
-      "description": ".StaticPalette/StaticBlack"
+      "description": "staticpalette/darkgray/dg800"
     },
     "base-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#f4f7fa",
+      "value": "#ffffff",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG800"
+      "description": "staticpalette/staticwhite"
     },
     "alternative-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#f8fafc",
+      "value": "#f7f7f8",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG900"
+      "description": "staticpalette/lightgray/lg900"
     },
     "alternative2-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#ffffff",
+      "value": "#eeeff1",
       "type": "color",
-      "description": ".StaticPalette/StaticWhite"
+      "description": "staticpalette/lightgray/lg800"
     },
     "transparent": {
-      "value": "#ffffff00",
+      "value": "#00000000",
       "type": "color"
     }
   },
@@ -1341,41 +1341,41 @@
     "line": {
       "category": "color",
       "exportKey": "color",
-      "value": "#d4d9f242",
+      "value": "#ffffff30",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA500"
+      "description": "staticpalette/darkgrayalpha/dga500"
     },
     "separator": {
-      "value": "#bfc5ee1f",
+      "value": "#ffffff1c",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA700"
+      "description": "staticpalette/darkgrayalpha/dga700"
     },
     "separator-bold": {
-      "value": "#d0d7fb2b",
+      "value": "#ffffff24",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA600"
+      "description": "staticpalette/darkgrayalpha/dga600"
     },
     "line-solid": {
-      "value": "#41464f",
+      "value": "#464749",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG500"
+      "description": "staticpalette/darkgray/dg500"
     },
     "separator-solid": {
-      "value": "#202631",
+      "value": "#343537",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG700"
+      "description": "staticpalette/darkgray/dg700"
     },
     "separator-bold-solid": {
-      "value": "#2e333d",
+      "value": "#3c3d3e",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG600"
+      "description": "staticpalette/darkgray/dg600"
     },
     "accent-link": {
       "category": "color",
       "exportKey": "color",
       "value": "#7aa7ff",
       "type": "color",
-      "description": ".StaticPalette/Marina/Marina300"
+      "description": "staticpalette/marina/marina300"
     },
     "accent-link-visited": {
       "value": "#ea98d8",
@@ -1385,69 +1385,69 @@
     "highlight": {
       "category": "color",
       "exportKey": "color",
-      "value": "#71480a",
+      "value": "#554123",
       "type": "color",
-      "description": ".StaticPalette/Yellow/Yellow800"
+      "description": "staticpalette/yellow/yellow800"
     },
     "line-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#1f324745",
+      "value": "#00000038",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA500"
+      "description": "staticpalette/lightgrayalpha/lga500"
     },
     "separator-invert": {
-      "value": "#294d7517",
+      "value": "#00000017",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA700"
+      "description": "staticpalette/lightgrayalpha/lga700"
     },
     "separator-bold-invert": {
-      "value": "#1d36532b",
+      "value": "#00000024",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA600"
+      "description": "staticpalette/lightgrayalpha/lga600"
     },
     "line-invert-solid": {
-      "value": "#c2c8ce",
+      "value": "#c7c7c9",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG500"
+      "description": "staticpalette/lightgray/lg500"
     },
     "separator-invert-solid": {
-      "value": "#eaeef2",
+      "value": "#e7e7e9",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG700"
+      "description": "staticpalette/lightgray/lg700"
     },
     "separator-bold-invert-solid": {
-      "value": "#d8dde3",
+      "value": "#dbdbdc",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG600"
+      "description": "staticpalette/lightgray/lg600"
     },
     "seporator": {
       "category": "color",
       "exportKey": "color",
-      "value": "#bfc5ee1f",
+      "value": "#ffffff1c",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA700"
+      "description": "staticpalette/darkgrayalpha/dga700"
     },
     "seporatorbold": {
       "category": "color",
       "exportKey": "color",
-      "value": "#d0d7fb2b",
+      "value": "#ffffff24",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA600"
+      "description": "staticpalette/darkgrayalpha/dga600"
     },
     "seporator-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#294d7517",
+      "value": "#00000017",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA700"
+      "description": "staticpalette/lightgrayalpha/lga700"
     },
     "seporatorbold-invert": {
       "category": "color",
       "exportKey": "color",
-      "value": "#1d36532b",
+      "value": "#00000024",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA600"
+      "description": "staticpalette/lightgrayalpha/lga600"
     }
   },
   "statestatuses__dark": {
@@ -1463,43 +1463,43 @@
       "exportKey": "color",
       "value": "#b03d9d",
       "type": "color",
-      "description": ".StaticPalette/Violet/Violet600"
+      "description": "staticpalette/violet/violet600"
     },
     "in-progress": {
       "value": "#394dbf",
       "type": "color",
-      "description": ".StaticPalette/Marina/Marina600"
+      "description": "staticpalette/marina/marina600"
     },
     "resolved-solved": {
       "value": "#7f8994",
       "type": "color",
-      "description": ".StaticPalette/ColdGrey/CG500"
+      "description": "staticpalette/coldgrey/cg500"
     },
     "in-incident": {
       "value": "#ab94f1",
       "type": "color",
-      "description": ".StaticPalette/Purple/Purple400"
+      "description": "staticpalette/purple/purple400"
     },
     "inprogress": {
       "category": "color",
       "exportKey": "color",
       "value": "#394dbf",
       "type": "color",
-      "description": ".StaticPalette/Marina/Marina600"
+      "description": "staticpalette/marina/marina600"
     },
     "resolved_solved": {
       "category": "color",
       "exportKey": "color",
       "value": "#7f8994",
       "type": "color",
-      "description": ".StaticPalette/ColdGrey/CG500"
+      "description": "staticpalette/coldgrey/cg500"
     },
     "inincedent": {
       "category": "color",
       "exportKey": "color",
       "value": "#ab94f1",
       "type": "color",
-      "description": ".StaticPalette/Purple/Purple400"
+      "description": "staticpalette/purple/purple400"
     }
   },
   "criticalitystatuses__dark": {
@@ -1508,352 +1508,361 @@
       "exportKey": "color",
       "value": "#db3545",
       "type": "color",
-      "description": ".StaticPalette/Red/Red600"
+      "description": "staticpalette/red/red600"
     },
     "high": {
       "category": "color",
       "exportKey": "color",
       "value": "#fe827c",
       "type": "color",
-      "description": ".StaticPalette/Red/Red400"
+      "description": "staticpalette/red/red400"
     },
     "medium": {
       "category": "color",
       "exportKey": "color",
       "value": "#f5c66b",
       "type": "color",
-      "description": ".StaticPalette/Yellow/Yellow400"
+      "description": "staticpalette/yellow/yellow400"
     },
     "low": {
       "category": "color",
       "exportKey": "color",
-      "value": "#b2b8bf",
+      "value": "#98a0aa",
       "type": "color",
-      "description": ".StaticPalette/ColdGrey/CG300"
+      "description": "staticpalette/coldgrey/cg400"
     },
     "info": {
       "category": "color",
       "exportKey": "color",
       "value": "#ab94f1",
       "type": "color",
-      "description": ".StaticPalette/Purple/Purple400"
+      "description": "staticpalette/purple/purple400"
     },
     "positive": {
       "category": "color",
       "exportKey": "color",
       "value": "#1da189",
       "type": "color",
-      "description": ".StaticPalette/Emerald/Emerald500"
+      "description": "staticpalette/emerald/emerald500"
     }
   },
   "surface__dark": {
     "red": {
       "category": "color",
       "exportKey": "color",
-      "value": "#530023",
+      "value": "#4d2129",
       "type": "color",
-      "description": ".StaticPalette/Red/Red900"
+      "description": "staticpalette/red/red900"
     },
     "orange": {
       "category": "color",
       "exportKey": "color",
-      "value": "#491618",
+      "value": "#48251f",
       "type": "color",
-      "description": ".StaticPalette/Orange/Orange900"
+      "description": "staticpalette/orange/orange900"
     },
     "yellow": {
       "category": "color",
       "exportKey": "color",
-      "value": "#432900",
+      "value": "#382e1b",
       "type": "color",
-      "description": ".StaticPalette/Yellow/Yellow900"
+      "description": "staticpalette/yellow/yellow900"
     },
     "grass": {
       "category": "color",
       "exportKey": "color",
-      "value": "#173422",
+      "value": "#1c351c",
       "type": "color",
-      "description": ".StaticPalette/Grass/Grass900"
+      "description": "staticpalette/grass/grass900"
     },
     "emerald": {
       "category": "color",
       "exportKey": "color",
-      "value": "#022c2e",
+      "value": "#193530",
       "type": "color",
-      "description": ".StaticPalette/Emerald/Emerald900"
+      "description": "staticpalette/emerald/emerald900"
     },
     "marengo": {
       "category": "color",
       "exportKey": "color",
-      "value": "#0b2a3d",
+      "value": "#1d323d",
       "type": "color",
-      "description": ".StaticPalette/Marengo/Marengo900"
+      "description": "staticpalette/marengo/marengo900"
     },
     "marina": {
       "category": "color",
       "exportKey": "color",
-      "value": "#051c51",
+      "value": "#252e50",
       "type": "color",
-      "description": ".StaticPalette/Marina/Marina900"
+      "description": "staticpalette/marina/marina900"
     },
     "purple": {
       "category": "color",
       "exportKey": "color",
-      "value": "#211e4b",
+      "value": "#322a4e",
       "type": "color",
-      "description": ".StaticPalette/Purple/Purple900"
+      "description": "staticpalette/purple/purple900"
     },
     "violet": {
       "category": "color",
       "exportKey": "color",
-      "value": "#3c1441",
+      "value": "#432540",
       "type": "color",
-      "description": ".StaticPalette/Violet/Violet900"
+      "description": "staticpalette/violet/violet900"
     },
     "coldgrey": {
       "category": "color",
       "exportKey": "color",
       "value": "#21272f",
       "type": "color",
-      "description": ".StaticPalette/ColdGrey/CG900"
+      "description": "staticpalette/coldgrey/cg900"
     },
     "neutral": {
-      "value": "#202631",
+      "value": "#252527",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG700"
+      "description": "staticpalette/darkgray/dg700"
     }
   },
   "fixedneutralcolor": {
     "primary": {
       "category": "color",
       "exportKey": "color",
-      "value": "#0d0d15",
+      "value": "#2f3033",
       "type": "color",
-      "description": ".StaticPalette/StaticBlack"
+      "description": "staticpalette/lightgrayalpha/lga50"
     },
     "secondary": {
       "category": "color",
       "exportKey": "color",
-      "value": "#2a3541d9",
+      "value": "#000000ad",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA100"
+      "description": "staticpalette/lightgrayalpha/lga100"
     },
     "secondary2": {
       "category": "color",
       "exportKey": "color",
-      "value": "#2a3541b3",
+      "value": "#0000008f",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA200"
+      "description": "staticpalette/lightgrayalpha/lga200"
     },
     "base-icon": {
-      "value": "#2735448c",
+      "value": "#0000006e",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA300"
+      "description": "staticpalette/lightgrayalpha/lga300"
     },
     "disabled": {
       "category": "color",
       "exportKey": "color",
-      "value": "#22344966",
+      "value": "#00000052",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA400"
+      "description": "staticpalette/lightgrayalpha/lga400"
     },
     "line": {
       "category": "color",
       "exportKey": "color",
-      "value": "#1f324745",
+      "value": "#00000038",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA500"
+      "description": "staticpalette/lightgrayalpha/lga500"
     },
     "separator-bold": {
-      "value": "#1d36532b",
+      "value": "#00000024",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA600"
+      "description": "staticpalette/lightgrayalpha/lga600"
     },
     "separator": {
-      "value": "#294d7517",
+      "value": "#00000017",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA700"
+      "description": "staticpalette/lightgrayalpha/lga700"
     },
     "alternative2": {
       "category": "color",
       "exportKey": "color",
-      "value": "#1d1c28",
+      "value": "#2d2d2f",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG800"
+      "description": "staticpalette/darkgray/dg800"
     },
     "alternative": {
       "category": "color",
       "exportKey": "color",
-      "value": "#1a1925",
+      "value": "#252527",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG900"
+      "description": "staticpalette/darkgray/dg900"
     },
     "base": {
       "category": "color",
       "exportKey": "color",
-      "value": "#0d0d15",
+      "value": "#1d1d1f",
       "type": "color",
-      "description": ".StaticPalette/StaticBlack"
+      "description": "staticpalette/staticblack"
+    },
+    "menu": {
+      "description": "staticpalette/staticmenu",
+      "value": "#131315",
+      "type": "color"
     },
     "primary-white": {
-      "value": "#f5f8fb",
+      "value": "#f7f7f8",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG50"
+      "description": "staticpalette/darkgray/dg50"
     },
     "secondary-white": {
-      "value": "#eff5fad1",
+      "value": "#ffffffc4",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA100"
+      "description": "staticpalette/darkgrayalpha/dga100"
     },
     "secondary2-white": {
-      "value": "#e7eef7a8",
+      "value": "#ffffff96",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA200"
-    },
-    "disabled-white": {
-      "value": "#e5ecfb5c",
-      "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA400"
-    },
-    "line-white": {
-      "value": "#d4d9f242",
-      "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA500"
+      "description": "staticpalette/darkgrayalpha/dga200"
     },
     "base-icon-white": {
-      "value": "#e7f1fd7d",
+      "value": "#ffffff6e",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA300"
+      "description": "staticpalette/darkgrayalpha/dga300"
     },
-    "separator-white": {
-      "value": "#bfc5ee1f",
+    "disabled-white": {
+      "value": "#ffffff4d",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA700"
+      "description": "staticpalette/darkgrayalpha/dga400"
+    },
+    "line-white": {
+      "value": "#ffffff30",
+      "type": "color",
+      "description": "staticpalette/darkgrayalpha/dga500"
     },
     "separator-bold-white": {
-      "value": "#d0d7fb2b",
+      "value": "#ffffff24",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA600"
+      "description": "staticpalette/darkgrayalpha/dga600"
+    },
+    "separator-white": {
+      "value": "#ffffff1c",
+      "type": "color",
+      "description": "staticpalette/darkgrayalpha/dga700"
     },
     "alternative2-white": {
-      "value": "#f4f7fa",
+      "value": "#eeeff1",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG800"
+      "description": "staticpalette/lightgray/lg800"
     },
     "alternative-white": {
-      "value": "#f8fafc",
+      "value": "#f7f7f8",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG900"
+      "description": "staticpalette/lightgray/lg900"
     },
     "base-white": {
       "value": "#ffffff",
       "type": "color",
-      "description": ".StaticPalette/StaticWhite"
+      "description": "staticpalette/staticwhite"
     },
     "baseicon": {
       "category": "color",
       "exportKey": "color",
-      "value": "#2735448c",
+      "value": "#0000006e",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA300"
+      "description": "staticpalette/lightgrayalpha/lga300"
     },
     "seporatorbold": {
       "category": "color",
       "exportKey": "color",
-      "value": "#1d36532b",
+      "value": "#00000024",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA600"
+      "description": "staticpalette/lightgrayalpha/lga600"
     },
     "seporator": {
       "category": "color",
       "exportKey": "color",
-      "value": "#294d7517",
+      "value": "#00000017",
       "type": "color",
-      "description": ".StaticPalette/LightGrayAlpha/LGA700"
+      "description": "staticpalette/lightgrayalpha/lga700"
     },
     "primarywhite": {
       "category": "color",
       "exportKey": "color",
-      "value": "#f5f8fb",
+      "value": "#f7f7f8",
       "type": "color",
-      "description": ".StaticPalette/DarkGray/DG50"
+      "description": "staticpalette/darkgray/dg50"
     },
     "secondarywhite": {
       "category": "color",
       "exportKey": "color",
-      "value": "#eff5fad1",
+      "value": "#ffffffc4",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA100"
+      "description": "staticpalette/darkgrayalpha/dga100"
     },
     "secondary2white": {
       "category": "color",
       "exportKey": "color",
-      "value": "#e7eef7a8",
+      "value": "#ffffff96",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA200"
+      "description": "staticpalette/darkgrayalpha/dga200"
     },
     "disabledwhite": {
       "category": "color",
       "exportKey": "color",
-      "value": "#e5ecfb5c",
+      "value": "#ffffff4d",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA400"
+      "description": "staticpalette/darkgrayalpha/dga400"
     },
     "linewhite": {
       "category": "color",
       "exportKey": "color",
-      "value": "#d4d9f242",
+      "value": "#ffffff30",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA500"
+      "description": "staticpalette/darkgrayalpha/dga500"
     },
     "baseiconwhite": {
       "category": "color",
       "exportKey": "color",
-      "value": "#e7f1fd7d",
+      "value": "#ffffff6e",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA300"
+      "description": "staticpalette/darkgrayalpha/dga300"
     },
     "seporatorwhite": {
       "category": "color",
       "exportKey": "color",
-      "value": "#bfc5ee1f",
+      "value": "#ffffff1c",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA700"
+      "description": "staticpalette/darkgrayalpha/dga700"
     },
     "seporatorboldwhite": {
       "category": "color",
       "exportKey": "color",
-      "value": "#d0d7fb2b",
+      "value": "#ffffff24",
       "type": "color",
-      "description": ".StaticPalette/DarkGrayAlpha/DGA600"
+      "description": "staticpalette/darkgrayalpha/dga600"
     },
     "alternative2white": {
       "category": "color",
       "exportKey": "color",
-      "value": "#f4f7fa",
+      "value": "#eeeff1",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG800"
+      "description": "staticpalette/lightgray/lg800"
     },
     "alternativewhite": {
       "category": "color",
       "exportKey": "color",
-      "value": "#f8fafc",
+      "value": "#f7f7f8",
       "type": "color",
-      "description": ".StaticPalette/LightGray/LG900"
+      "description": "staticpalette/lightgray/lg900"
     },
     "basewhite": {
       "category": "color",
       "exportKey": "color",
       "value": "#ffffff",
       "type": "color",
-      "description": ".StaticPalette/StaticWhite"
+      "description": "staticpalette/staticwhite"
     }
   },
   "staticpalette": {
+    "staticmenu": {
+      "value": "#131315",
+      "type": "color"
+    },
     "staticblack": {
       "category": "color",
       "exportKey": "color",
-      "value": "#0d0d15",
+      "value": "#1d1d1f",
       "type": "color"
     },
     "staticwhite": {
@@ -1866,61 +1875,61 @@
       "lga900": {
         "category": "color",
         "exportKey": "color",
-        "value": "#0859a505",
+        "value": "#00000008",
         "type": "color"
       },
       "lga800": {
         "category": "color",
         "exportKey": "color",
-        "value": "#0f519d0a",
+        "value": "#0000000f",
         "type": "color"
       },
       "lga700": {
         "category": "color",
         "exportKey": "color",
-        "value": "#294d7517",
+        "value": "#00000017",
         "type": "color"
       },
       "lga600": {
         "category": "color",
         "exportKey": "color",
-        "value": "#1d36532b",
+        "value": "#00000024",
         "type": "color"
       },
       "lga500": {
         "category": "color",
         "exportKey": "color",
-        "value": "#1f324745",
+        "value": "#00000038",
         "type": "color"
       },
       "lga400": {
         "category": "color",
         "exportKey": "color",
-        "value": "#22344966",
+        "value": "#00000052",
         "type": "color"
       },
       "lga300": {
         "category": "color",
         "exportKey": "color",
-        "value": "#2735448c",
+        "value": "#0000006e",
         "type": "color"
       },
       "lga200": {
         "category": "color",
         "exportKey": "color",
-        "value": "#2a3541b3",
+        "value": "#0000008f",
         "type": "color"
       },
       "lga100": {
         "category": "color",
         "exportKey": "color",
-        "value": "#2a3541d9",
+        "value": "#000000ad",
         "type": "color"
       },
       "lga50": {
         "category": "color",
         "exportKey": "color",
-        "value": "#2b323b",
+        "value": "#000000cf",
         "type": "color"
       }
     },
@@ -1928,61 +1937,61 @@
       "dga900": {
         "category": "color",
         "exportKey": "color",
-        "value": "#e1e2e30f",
+        "value": "#ffffff08",
         "type": "color"
       },
       "dga800": {
         "category": "color",
         "exportKey": "color",
-        "value": "#99a8bd1a",
+        "value": "#ffffff12",
         "type": "color"
       },
       "dga700": {
         "category": "color",
         "exportKey": "color",
-        "value": "#bfc5ee1f",
+        "value": "#ffffff1c",
         "type": "color"
       },
       "dga600": {
         "category": "color",
         "exportKey": "color",
-        "value": "#d0d7fb2b",
+        "value": "#ffffff24",
         "type": "color"
       },
       "dga500": {
         "category": "color",
         "exportKey": "color",
-        "value": "#d4d9f242",
+        "value": "#ffffff30",
         "type": "color"
       },
       "dga400": {
         "category": "color",
         "exportKey": "color",
-        "value": "#e5ecfb5c",
+        "value": "#ffffff4d",
         "type": "color"
       },
       "dga300": {
         "category": "color",
         "exportKey": "color",
-        "value": "#e7f1fd7d",
+        "value": "#ffffff6e",
         "type": "color"
       },
       "dga200": {
         "category": "color",
         "exportKey": "color",
-        "value": "#e7eef7a8",
+        "value": "#ffffff96",
         "type": "color"
       },
       "dga100": {
         "category": "color",
         "exportKey": "color",
-        "value": "#eff5fad1",
+        "value": "#ffffffc4",
         "type": "color"
       },
       "dga50": {
         "category": "color",
         "exportKey": "color",
-        "value": "#f8f7ff",
+        "value": "#fffffff5",
         "type": "color"
       }
     },
@@ -1990,61 +1999,61 @@
       "dg900": {
         "category": "color",
         "exportKey": "color",
-        "value": "#1a1925",
+        "value": "#252527",
         "type": "color"
       },
       "dg800": {
         "category": "color",
         "exportKey": "color",
-        "value": "#1d1c28",
+        "value": "#2d2d2f",
         "type": "color"
       },
       "dg700": {
         "category": "color",
         "exportKey": "color",
-        "value": "#202631",
+        "value": "#343537",
         "type": "color"
       },
       "dg600": {
         "category": "color",
         "exportKey": "color",
-        "value": "#2e333d",
+        "value": "#3c3d3e",
         "type": "color"
       },
       "dg500": {
         "category": "color",
         "exportKey": "color",
-        "value": "#41464f",
+        "value": "#464749",
         "type": "color"
       },
       "dg400": {
         "category": "color",
         "exportKey": "color",
-        "value": "#5b6068",
+        "value": "#606163",
         "type": "color"
       },
       "dg300": {
         "category": "color",
         "exportKey": "color",
-        "value": "#7a8087",
+        "value": "#7e7f83",
         "type": "color"
       },
       "dg200": {
         "category": "color",
         "exportKey": "color",
-        "value": "#9fa4aa",
+        "value": "#a3a4a6",
         "type": "color"
       },
       "dg100": {
         "category": "color",
         "exportKey": "color",
-        "value": "#c8cdd2",
+        "value": "#cacbce",
         "type": "color"
       },
       "dg50": {
         "category": "color",
         "exportKey": "color",
-        "value": "#f5f8fb",
+        "value": "#f7f7f8",
         "type": "color"
       }
     },
@@ -2052,61 +2061,61 @@
       "lg900": {
         "category": "color",
         "exportKey": "color",
-        "value": "#f8fafc",
+        "value": "#f7f7f8",
         "type": "color"
       },
       "lg800": {
         "category": "color",
         "exportKey": "color",
-        "value": "#f4f7fa",
+        "value": "#eeeff1",
         "type": "color"
       },
       "lg700": {
         "category": "color",
         "exportKey": "color",
-        "value": "#eaeef2",
+        "value": "#e7e7e9",
         "type": "color"
       },
       "lg600": {
         "category": "color",
         "exportKey": "color",
-        "value": "#d8dde3",
+        "value": "#dbdbdc",
         "type": "color"
       },
       "lg500": {
         "category": "color",
         "exportKey": "color",
-        "value": "#c2c8ce",
+        "value": "#c7c7c9",
         "type": "color"
       },
       "lg400": {
         "category": "color",
         "exportKey": "color",
-        "value": "#a7aeb6",
+        "value": "#adaeb0",
         "type": "color"
       },
       "lg300": {
         "category": "color",
         "exportKey": "color",
-        "value": "#899099",
+        "value": "#8f9093",
         "type": "color"
       },
       "lg200": {
         "category": "color",
         "exportKey": "color",
-        "value": "#6a717b",
+        "value": "#707175",
         "type": "color"
       },
       "lg100": {
         "category": "color",
         "exportKey": "color",
-        "value": "#4a525c",
+        "value": "#515255",
         "type": "color"
       },
       "lg50": {
         "category": "color",
         "exportKey": "color",
-        "value": "#2b333e",
+        "value": "#2f3033",
         "type": "color"
       }
     },
@@ -2182,19 +2191,19 @@
       "red950": {
         "category": "color",
         "exportKey": "color",
-        "value": "#23161d",
+        "value": "#342628",
         "type": "color"
       },
       "red900": {
         "category": "color",
         "exportKey": "color",
-        "value": "#530023",
+        "value": "#4d2129",
         "type": "color"
       },
       "red800": {
         "category": "color",
         "exportKey": "color",
-        "value": "#84082a",
+        "value": "#6f2432",
         "type": "color"
       },
       "red700": {
@@ -2250,19 +2259,19 @@
       "orange950": {
         "category": "color",
         "exportKey": "color",
-        "value": "#25161a",
+        "value": "#312826",
         "type": "color"
       },
       "orange900": {
         "category": "color",
         "exportKey": "color",
-        "value": "#491618",
+        "value": "#48251f",
         "type": "color"
       },
       "orange800": {
         "category": "color",
         "exportKey": "color",
-        "value": "#78281f",
+        "value": "#6d3127",
         "type": "color"
       },
       "orange700": {
@@ -2318,19 +2327,19 @@
       "yellow950": {
         "category": "color",
         "exportKey": "color",
-        "value": "#251c15",
+        "value": "#2c2a25",
         "type": "color"
       },
       "yellow900": {
         "category": "color",
         "exportKey": "color",
-        "value": "#432900",
+        "value": "#382e1b",
         "type": "color"
       },
       "yellow800": {
         "category": "color",
         "exportKey": "color",
-        "value": "#71480a",
+        "value": "#554123",
         "type": "color"
       },
       "yellow700": {
@@ -2386,19 +2395,19 @@
       "grass950": {
         "category": "color",
         "exportKey": "color",
-        "value": "#181f1e",
+        "value": "#272a27",
         "type": "color"
       },
       "grass900": {
         "category": "color",
         "exportKey": "color",
-        "value": "#173422",
+        "value": "#1c351c",
         "type": "color"
       },
       "grass800": {
         "category": "color",
         "exportKey": "color",
-        "value": "#315633",
+        "value": "#2c472a",
         "type": "color"
       },
       "grass700": {
@@ -2454,19 +2463,19 @@
       "emerlad950": {
         "category": "color",
         "exportKey": "color",
-        "value": "#0f1c21",
+        "value": "#252b2a",
         "type": "color"
       },
       "emerald900": {
         "category": "color",
         "exportKey": "color",
-        "value": "#022c2e",
+        "value": "#193530",
         "type": "color"
       },
       "emerald800": {
         "category": "color",
         "exportKey": "color",
-        "value": "#014943",
+        "value": "#184640",
         "type": "color"
       },
       "emerald700": {
@@ -2522,19 +2531,19 @@
       "marengo950": {
         "category": "color",
         "exportKey": "color",
-        "value": "#0c1b29",
+        "value": "#22292c",
         "type": "color"
       },
       "marengo900": {
         "category": "color",
         "exportKey": "color",
-        "value": "#0b2a3d",
+        "value": "#1d323d",
         "type": "color"
       },
       "marengo800": {
         "category": "color",
         "exportKey": "color",
-        "value": "#084665",
+        "value": "#1a4458",
         "type": "color"
       },
       "marengo700": {
@@ -2590,19 +2599,19 @@
       "marina950": {
         "category": "color",
         "exportKey": "color",
-        "value": "#12152a",
+        "value": "#252734",
         "type": "color"
       },
       "marina900": {
         "category": "color",
         "exportKey": "color",
-        "value": "#051c51",
+        "value": "#252e50",
         "type": "color"
       },
       "marina800": {
         "category": "color",
         "exportKey": "color",
-        "value": "#182d74",
+        "value": "#2a376c",
         "type": "color"
       },
       "marina700": {
@@ -2658,19 +2667,19 @@
       "purple950": {
         "category": "color",
         "exportKey": "color",
-        "value": "#191727",
+        "value": "#29282f",
         "type": "color"
       },
       "purple900": {
         "category": "color",
         "exportKey": "color",
-        "value": "#211e4b",
+        "value": "#322a4e",
         "type": "color"
       },
       "purple800": {
         "category": "color",
         "exportKey": "color",
-        "value": "#3d316e",
+        "value": "#41366b",
         "type": "color"
       },
       "purple700": {
@@ -2726,19 +2735,19 @@
       "violet950": {
         "category": "color",
         "exportKey": "color",
-        "value": "#1f1624",
+        "value": "#2c252b",
         "type": "color"
       },
       "violet900": {
         "category": "color",
         "exportKey": "color",
-        "value": "#3c1441",
+        "value": "#432540",
         "type": "color"
       },
       "violet800": {
         "category": "color",
         "exportKey": "color",
-        "value": "#62235f",
+        "value": "#60315a",
         "type": "color"
       },
       "violet700": {
@@ -2795,7 +2804,7 @@
     "neutral": {
       "name": "tagsoutlined__light/neutral",
       "description": "staticpalette/lightgrey/lg100",
-      "value": "#4a525c",
+      "value": "#515255",
       "type": "color"
     },
     "neutral-bg-base": {
@@ -2807,17 +2816,17 @@
     "neutral-bg-hover": {
       "name": "tagsoutlined__light/neutral-bg-hover",
       "description": "staticpalette/lightgrey/lg900",
-      "value": "#f8fafc",
+      "value": "#f7f7f8",
       "type": "color"
     },
     "neutral-bg-active": {
-      "value": "#f4f7fa",
+      "value": "#eeeff1",
       "type": "color",
       "description": "staticpalette/lightgrey/lg800",
       "name": "tagsoutlined__light/neutral-bg-active"
     },
     "neutral-border": {
-      "value": "#c2c8ce",
+      "value": "#c7c7c9",
       "type": "color",
       "description": "staticpalette/lightgrey/lg500",
       "name": "tagsoutlined__light/neutral-border"
@@ -2825,31 +2834,31 @@
     "grey": {
       "name": "tagsoutlined__light/grey",
       "description": "staticpalette/lightgrey/lg100",
-      "value": "#4a525c",
+      "value": "#515255",
       "type": "color"
     },
     "grey-bg-base": {
       "name": "tagsoutlined__light/grey-bg-base",
       "description": "staticpalette/lightgrey/lg800",
-      "value": "#f4f7fa",
+      "value": "#eeeff1",
       "type": "color"
     },
     "grey-bg-hover": {
       "name": "tagsoutlined__light/grey-bg-hover",
       "description": "staticpalette/lightgrey/lg700",
-      "value": "#eaeef2",
+      "value": "#e7e7e9",
       "type": "color"
     },
     "grey-bg-active": {
       "name": "tagsoutlined__light/grey-bg-active",
       "description": "staticpalette/lightgrey/lg600",
-      "value": "#d8dde3",
+      "value": "#dbdbdc",
       "type": "color"
     },
     "grey-border": {
       "name": "tagsoutlined__light/grey-border",
       "description": "staticpalette/lightgrey/lg400",
-      "value": "#a7aeb6",
+      "value": "#adaeb0",
       "type": "color"
     },
     "red": {
@@ -3127,11 +3136,11 @@
     "neutral": {
       "name": "tagsoutlined__dark/neutral",
       "description": "staticpalette/darkgrey/dg50",
-      "value": "#f5f8fb",
+      "value": "#f7f7f8",
       "type": "color"
     },
     "neutral-bg-base": {
-      "value": "#1d1c28",
+      "value": "#2d2d2f",
       "type": "color",
       "description": "staticpalette/darkgrey/dg800",
       "name": "tagsoutlined__dark/neutral-bg-base"
@@ -3139,17 +3148,17 @@
     "neutral-bg-hover": {
       "name": "tagsoutlined__dark/neutral-bg-hover",
       "description": "staticpalette/darkgrey/dg700",
-      "value": "#202631",
+      "value": "#343537",
       "type": "color"
     },
     "neutral-bg-active": {
-      "value": "#2e333d",
+      "value": "#3c3d3e",
       "type": "color",
       "description": "staticpalette/darkgrey/dg600",
       "name": "tagsoutlined__dark/neutral-bg-active"
     },
     "neutral-border": {
-      "value": "#7a8087",
+      "value": "#7e7f83",
       "type": "color",
       "description": "staticpalette/darkgrey/dg300",
       "name": "tagsoutlined__dark/neutral-border"
@@ -3157,31 +3166,31 @@
     "grey": {
       "name": "tagsoutlined__dark/grey",
       "description": "staticpalette/darkgrey/dg50",
-      "value": "#f5f8fb",
+      "value": "#f7f7f8",
       "type": "color"
     },
     "grey-bg-base": {
       "name": "tagsoutlined__dark/grey-bg-base",
       "description": "staticpalette/darkgrey/dg600",
-      "value": "#2e333d",
+      "value": "#3c3d3e",
       "type": "color"
     },
     "grey-bg-hover": {
       "name": "tagsoutlined__dark/grey-bg-hover",
       "description": "staticpalette/darkgrey/dg500",
-      "value": "#41464f",
+      "value": "#464749",
       "type": "color"
     },
     "grey-bg-active": {
       "name": "tagsoutlined__dark/grey-bg-active",
       "description": "staticpalette/darkgrey/dg400",
-      "value": "#5b6068",
+      "value": "#606163",
       "type": "color"
     },
     "grey-border": {
       "name": "tagsoutlined__dark/grey-border",
       "description": "staticpalette/darkgrey/dg200",
-      "value": "#9fa4aa",
+      "value": "#a3a4a6",
       "type": "color"
     },
     "red": {
@@ -3191,7 +3200,7 @@
       "type": "color"
     },
     "red-bg-base": {
-      "value": "#530023",
+      "value": "#4d2129",
       "type": "color",
       "description": "staticpalette/red/red900",
       "name": "tagsoutlined__dark/red-bg-base"
@@ -3199,7 +3208,7 @@
     "red-bg-hover": {
       "name": "tagsoutlined__dark/red-bg-hover",
       "description": "staticpalette/red/red800",
-      "value": "#84082a",
+      "value": "#6f2432",
       "type": "color"
     },
     "red-bg-active": {
@@ -3221,7 +3230,7 @@
       "type": "color"
     },
     "orange-bg-base": {
-      "value": "#491618",
+      "value": "#48251f",
       "type": "color",
       "description": "staticpalette/orange/orange900",
       "name": "tagsoutlined__dark/orange-bg-base"
@@ -3229,7 +3238,7 @@
     "orange-bg-hover": {
       "name": "tagsoutlined__dark/orange-bg-hover",
       "description": "staticpalette/orange/orange800",
-      "value": "#78281f",
+      "value": "#6d3127",
       "type": "color"
     },
     "orange-bg-active": {
@@ -3251,7 +3260,7 @@
       "type": "color"
     },
     "yellow-bg-base": {
-      "value": "#432900",
+      "value": "#382e1b",
       "type": "color",
       "description": "staticpalette/yellow/yellow900",
       "name": "tagsoutlined__dark/yellow-bg-base"
@@ -3259,7 +3268,7 @@
     "yellow-bg-hover": {
       "name": "tagsoutlined__dark/yellow-bg-hover",
       "description": "staticpalette/yellow/yellow800",
-      "value": "#71480a",
+      "value": "#554123",
       "type": "color"
     },
     "yellow-bg-active": {
@@ -3281,7 +3290,7 @@
       "type": "color"
     },
     "grass-bg-base": {
-      "value": "#173422",
+      "value": "#1c351c",
       "type": "color",
       "description": "staticpalette/grass/grass900",
       "name": "tagsoutlined__dark/grass-bg-base"
@@ -3289,7 +3298,7 @@
     "grass-bg-hover": {
       "name": "tagsoutlined__dark/grass-bg-hover",
       "description": "staticpalette/grass/grass800",
-      "value": "#315633",
+      "value": "#2c472a",
       "type": "color"
     },
     "grass-bg-active": {
@@ -3311,7 +3320,7 @@
       "type": "color"
     },
     "emerald-bg-base": {
-      "value": "#022c2e",
+      "value": "#193530",
       "type": "color",
       "description": "staticpalette/emerald/emerald900",
       "name": "tagsoutlined__dark/emerald-bg-base"
@@ -3319,7 +3328,7 @@
     "emerald-bg-hover": {
       "name": "tagsoutlined__dark/emerald-bg-hover",
       "description": "staticpalette/emerald/emerald800",
-      "value": "#014943",
+      "value": "#184640",
       "type": "color"
     },
     "emerald-bg-active": {
@@ -3341,7 +3350,7 @@
       "type": "color"
     },
     "marengo-bg-base": {
-      "value": "#0b2a3d",
+      "value": "#1d323d",
       "type": "color",
       "description": "staticpalette/marengo/marengo900",
       "name": "tagsoutlined__dark/marengo-bg-base"
@@ -3349,7 +3358,7 @@
     "marengo-bg-hover": {
       "name": "tagsoutlined__dark/marengo-bg-hover",
       "description": "staticpalette/marengo/marengo800",
-      "value": "#084665",
+      "value": "#1a4458",
       "type": "color"
     },
     "marengo-bg-active": {
@@ -3371,7 +3380,7 @@
       "type": "color"
     },
     "marina-bg-base": {
-      "value": "#051c51",
+      "value": "#252e50",
       "type": "color",
       "description": "staticpalette/marina/marina900",
       "name": "tagsoutlined__dark/marina-bg-base"
@@ -3379,7 +3388,7 @@
     "marina-bg-hover": {
       "name": "tagsoutlined__dark/marina-bg-hover",
       "description": "staticpalette/marina/marina800",
-      "value": "#182d74",
+      "value": "#2a376c",
       "type": "color"
     },
     "marina-bg-active": {
@@ -3401,7 +3410,7 @@
       "type": "color"
     },
     "purple-bg-base": {
-      "value": "#211e4b",
+      "value": "#322a4e",
       "type": "color",
       "description": "staticpalette/purple/purple900",
       "name": "tagsoutlined__dark/purple-bg-base"
@@ -3409,7 +3418,7 @@
     "purple-bg-hover": {
       "name": "tagsoutlined__dark/purple-bg-hover",
       "description": "staticpalette/purple/purple800",
-      "value": "#3d316e",
+      "value": "#41366b",
       "type": "color"
     },
     "purple-bg-active": {
@@ -3431,7 +3440,7 @@
       "type": "color"
     },
     "violet-bg-base": {
-      "value": "#3c1441",
+      "value": "#432540",
       "type": "color",
       "description": "staticpalette/violet/violet900",
       "name": "tagsoutlined__dark/violet-bg-base"
@@ -3439,7 +3448,7 @@
     "violet-bg-hover": {
       "name": "tagsoutlined__dark/violet-bg-hover",
       "description": "staticpalette/violet/violet800",
-      "value": "#62235f",
+      "value": "#60315a",
       "type": "color"
     },
     "violet-bg-active": {
@@ -3467,7 +3476,7 @@
       "description": "staticpalette/marina/marina700"
     },
     "tertiary": {
-      "value": "#182d74",
+      "value": "#2a376c",
       "type": "color",
       "description": "staticpalette/marina/marina800"
     },
@@ -3529,12 +3538,12 @@
       "description": "staticpalette/marina/marina200"
     },
     "primary-invert": {
-      "value": "#051c51",
+      "value": "#252e50",
       "type": "color",
       "description": "staticpalette/marina/marina900"
     },
     "secondary-invert": {
-      "value": "#182d74",
+      "value": "#2a376c",
       "type": "color",
       "description": "staticpalette/marina/marina800"
     },

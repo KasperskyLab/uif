@@ -77,6 +77,7 @@ import { ExpandableTextColorConfig } from '@src/expandable-text/types'
 import { ScrollbarColorConfig } from '@src/scrollbar/types'
 import { TimeInputColorConfig } from '@src/time-input'
 import { WeeklyScheduleCssConfig } from '@src/weekly-schedule/types'
+import { MenuColorConfig } from '@src/menu/types'
 
 export type Theme = 'light' | 'dark'
 
@@ -172,6 +173,7 @@ export type ThemeConfig = {
     >,
     readonly popover: { colors: PopoverCssConfig },
     readonly timeInput: { colors: TimeInputColorConfig },
-    readonly weeklySchedule: { colors: WeeklyScheduleCssConfig }
+    readonly weeklySchedule: { colors: WeeklyScheduleCssConfig },
+    readonly menu: { colors: MenuColorConfig }
   }
 }
