@@ -17,6 +17,8 @@ import { SegmentedButtonOption } from '@kaspersky/components/src/segmented-butto
 import { ThemeKey, themeColors } from '@kaspersky/components/design-system'
 import { navItems, navUserItems, favItems } from '@kaspersky/components/src/menu/stories/menu-items'
 
+import { AppLogo } from './AppLogo'
+
 const StyledSpace = styled(Space)<{ themeKey: ThemeKey }>`
   border-radius: 16px;
   padding: 16px;
@@ -26,7 +28,7 @@ const StyledSpace = styled(Space)<{ themeKey: ThemeKey }>`
   z-index: 1;
 `
 
-const StyledMenu = styled(Menu)<{ themeKey: ThemeKey }>`
+const StyledMenu = styled(Menu)`
   position: relative;
   z-index: 2;
 `
@@ -104,6 +106,7 @@ export const Layout = ({ themeKey, setThemeKey }: LayoutProps) => {
         <ServicesNav>
           <Hamburger className='item left' role='button' name='hamburger' onClick={ () => setMenuMinimized(!menuMinimized) } />
         </ServicesNav>
+        <AppLogo />
         <Nav navItems={navItems} favItems={favItems} minimized={menuMinimized} favsEnabled={true} />
         <UserNav navItems={navUserItems} minimized={menuMinimized} childPop={true} />
       </StyledMenu>
