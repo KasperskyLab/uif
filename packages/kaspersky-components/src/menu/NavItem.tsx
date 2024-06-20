@@ -34,7 +34,6 @@ const NavItemComponent = ({
     if (menuState.minimized || menuState.childPop) {
       menuState.collapseAll()
     }
-    alert('Active item: ' + state)
     onClick && onClick()
   }
 

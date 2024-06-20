@@ -22,7 +22,6 @@ const NavUserItemComponent = ({
   const itemClick = () => {
     menuState.updateNavState({ activateItem: state })
     menuState.setActive(state)
-    alert('Active item: ' + state)
     onClick && onClick()
     menuState.minimized && menuState.collapseAll()
   }
