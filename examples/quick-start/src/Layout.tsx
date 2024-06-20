@@ -24,6 +24,7 @@ const StyledSpace = styled(Space)<{ themeKey: ThemeKey }>`
   padding: 16px;
   align-items: flex-start;
   flex-direction: column;
+  flex-wrap: nowrap;
   overflow: auto;
   position: relative;
   z-index: 1;
