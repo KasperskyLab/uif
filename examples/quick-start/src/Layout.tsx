@@ -1,15 +1,28 @@
 import { Dispatch, SetStateAction, useState } from 'react'
 import styled from 'styled-components'
 import { SegmentedButton, Button, Sidebar, Text, Table, Space } from '@kaspersky/components'
+import { Menu, Nav, UserNav, ServicesNav, Hamburger } from '@kaspersky/components/src/menu'
 import { SegmentedButtonOption } from '@kaspersky/components/src/segmented-button/types'
 import { ThemeKey, themeColors } from '@kaspersky/components/design-system'
+import { navItems, navUserItems, favItems } from '@kaspersky/components/src/menu/stories/menu-items'
 
 const StyledSpace = styled(Space)<{ themeKey: ThemeKey }>`
   border-radius: 16px;
   padding: 16px;
-  margin: 16px;
   align-items: flex-start;
-  width: 910px;
+  overflow: auto;
+  position: relative;
+  z-index: 1;
+`
+
+const StyledMenu = styled(Menu)<{ themeKey: ThemeKey }>`
+  position: relative;
+  z-index: 2;
+`
+
+const StyledRootSpace = styled(Space)<{ themeKey: ThemeKey }>`
+  height: 100vh;
+  align-items: normal;
   background: ${props => themeColors.bg.base[props.themeKey]};
 `
 
@@ -25,6 +38,7 @@ export type LayoutProps = {
 }
 
 export const Layout = ({ themeKey, setThemeKey }: LayoutProps) => {
+  const [menuMinimized, setMenuMinimized] = useState(false)
   const segmentedButtonOptions: SegmentedButtonOption[] = [
     {
       value: ThemeKey.Light,
@@ -57,6 +71,13 @@ export const Layout = ({ themeKey, setThemeKey }: LayoutProps) => {
     }
   ]
 
+  const menuProps = {
+    width: 280,
+    trigger: null,
+    collapsedWidth: 64,
+    collapsible: true
+  }
+
   const tableData = Array.from({ length: 180 }).map((_, index): RowType => ({
     name: `Value ${index + 1}`,
     description: `Description ${index + 1}`,
@@ -64,19 +85,30 @@ export const Layout = ({ themeKey, setThemeKey }: LayoutProps) => {
     key: `${index + 1}`
   }))
 
+  console.log(navItems)
+
   return (
-    <StyledSpace themeKey={themeKey} direction='vertical' size={16}>
-      <SegmentedButton value={[themeKey]} items={segmentedButtonOptions} onChange={value => setThemeKey(value[0] as ThemeKey)}/>
-      <Button onClick={() => setIsOpen(true)} text={'Open modal'}/>
-      <Sidebar visible={isOpen} onClose={() => setIsOpen(false)} title="Sidebar">
-        <Text>Content</Text>
-      </Sidebar>
-      <TableWrapper>
-        <Table
-          columns={tableColumns}
-          dataSource={tableData}
-        />
-      </TableWrapper>
-    </StyledSpace>
+    <StyledRootSpace themeKey={themeKey} direction='horizontal' size={0} wrap='nowrap'>
+      <StyledMenu {...menuProps} collapsed={menuMinimized}>
+        <ServicesNav>
+          <Hamburger className='item left' role='button' name='hamburger' onClick={ () => setMenuMinimized(!menuMinimized) } />
+        </ServicesNav>
+        <Nav navItems={navItems} favItems={favItems} minimized={menuMinimized} favsEnabled={true} />
+        <UserNav navItems={navUserItems} minimized={menuMinimized} childPop={true} />
+      </StyledMenu>
+      <StyledSpace themeKey={themeKey} direction='vertical' size={16}>
+        <SegmentedButton value={[themeKey]} items={segmentedButtonOptions} onChange={value => setThemeKey(value[0] as ThemeKey)}/>
+        <Button onClick={() => setIsOpen(true)} text={'Open modal'}/>
+        <Sidebar visible={isOpen} onClose={() => setIsOpen(false)} title="Sidebar">
+          <Text>Content</Text>
+        </Sidebar>
+        <TableWrapper>
+          <Table
+              columns={tableColumns}
+              dataSource={tableData}
+          />
+        </TableWrapper>
+      </StyledSpace>
+    </StyledRootSpace>
   )
 }
