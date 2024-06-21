@@ -25,7 +25,6 @@ const meta: Meta<RangePickerProps> = {
 }
 export default meta
 
-
 const WrapperForRangeWithTime = styled.div`
   width: 500px;
 `

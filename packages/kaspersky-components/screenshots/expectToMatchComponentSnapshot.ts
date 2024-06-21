@@ -6,7 +6,7 @@ interface MatchParams {
   url: string,
   browser: Browser | undefined,
   story: string,
-  type: ComponentType,
+  type: ComponentType
 }
 
 const snapshotConfig = {

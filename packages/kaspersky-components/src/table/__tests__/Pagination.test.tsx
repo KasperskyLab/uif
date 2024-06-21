@@ -63,5 +63,4 @@ describe('Table pagination module', () => {
       expect(Pagination).toHaveBeenCalledWith(props, context)
     })
   })
-
 })

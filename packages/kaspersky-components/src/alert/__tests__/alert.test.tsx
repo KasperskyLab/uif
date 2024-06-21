@@ -77,6 +77,7 @@ describe('Alert', () => {
     )
     expect(alert).toBeInTheDocument()
   })
+
   test('should render the info alert component', () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
