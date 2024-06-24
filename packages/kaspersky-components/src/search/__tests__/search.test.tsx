@@ -84,7 +84,6 @@ describe('Search ', () => {
   })
 
   test('render without l18n', () => {
-    // @ts-ignore
     const enSearchText = localization['en-us'].translation.search.dotted
 
     render(
@@ -98,5 +97,94 @@ describe('Search ', () => {
     expect(enSearchText).toEqual(locText)
     const searchElem = screen.getByPlaceholderText(locText)
     expect(searchElem).toBeInTheDocument()
+  })
+
+  // Codium AI
+  test('should render suffix icon', () => {
+    const { container } = render(
+      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
+        <Search klId="test-search-id" />
+      </ConfigProvider>
+    )
+
+    expect(container.querySelector('[data-testid="search-icon"]')).toBeInTheDocument()
+  })
+
+  test('should render clear button when value is present', () => {
+    const { container } = render(
+      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
+        <Search klId="test-search-id" value="test" />
+      </ConfigProvider>
+    )
+
+    expect(container.querySelector('[data-testid="search-clear"]')).toBeInTheDocument()
+  })
+
+  test('should call onClearClick when clear button is clicked', async () => {
+    const onClearClick = jest.fn()
+    const { container } = render(
+      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
+        <Search klId="test-search-id" value="test" onClearClick={onClearClick} />
+      </ConfigProvider>
+    )
+    const clearButton = container.querySelector('[data-testid="search-clear"]')
+    if (clearButton) {
+      await userEvent.click(clearButton)
+      expect(onClearClick).toHaveBeenCalled()
+    }
+  })
+
+  test('should handle undefined onClearClick without errors', async () => {
+    const { container } = render(
+      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
+        <Search klId="test-search-id" value="test" />
+      </ConfigProvider>
+    )
+    const clearButton = container.querySelector('[data-testid="search-clear"]')
+    if (clearButton) {
+      await userEvent.click(clearButton)
+      expect(clearButton).toBeInTheDocument()
+    }
+  })
+
+  test('should handle empty value gracefully', () => {
+    render(
+      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
+        <Search klId="test-search-id" value="" />
+      </ConfigProvider>
+    )
+    const searchElem = screen.getByTestId('test-search-id')
+    expect(searchElem).toHaveValue('')
+  })
+
+  test('should render correctly with prefix', () => {
+    render(
+      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
+        <Search klId="test-search-id" prefix="prefix" />
+      </ConfigProvider>
+    )
+    const prefixElem = screen.getByText('prefix')
+    expect(prefixElem).toBeInTheDocument()
+  })
+
+  test('should render correctly with suffix', () => {
+    render(
+      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
+        <Search klId="test-search-id" suffix="suffix" />
+      </ConfigProvider>
+    )
+    const suffixElem = screen.getByText('suffix')
+    expect(suffixElem).toBeInTheDocument()
+  })
+
+  test('should handle rapid changes in value', async () => {
+    const { getByTestId } = render(
+      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
+        <Search klId="test-search-id" />
+      </ConfigProvider>
+    )
+    const searchElem = getByTestId('test-search-id')
+    await userEvent.type(searchElem, 'rapid change')
+    expect(searchElem).toHaveValue('rapid change')
   })
 })

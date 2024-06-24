@@ -101,4 +101,44 @@ describe('Tag ', () => {
     const closeIcon = container.querySelector('.kl-action-button')
     expect(closeIcon).toBeInTheDocument()
   })
+
+  // Codium AI
+  it('should truncate content when exceeding maxChars', () => {
+    const longText = 'This is a very long text'
+    const { getByText } = render(
+      <ThemeProvider theme={ThemeKey.Light}>
+        <Tag truncation={{ maxChars: 20 }}>{longText}</Tag>
+      </ThemeProvider>
+    )
+    expect(getByText('This is a very lo...')).toBeInTheDocument()
+  })
+
+  it('should handle non-string children content', () => {
+    const { getByText } = render(
+      <ThemeProvider theme={ThemeKey.Light}>
+        <Tag><span>Non-string Content</span></Tag>
+      </ThemeProvider>
+    )
+    expect(getByText('Non-string Content')).toBeInTheDocument()
+  })
+
+  it('should not truncate content when not exceeding maxChar', () => {
+    const longText = 'This is a very long text'
+    const { getByText } = render(
+      <ThemeProvider theme={ThemeKey.Light}>
+        <Tag truncation={{ maxChars: 50 }}>{longText}</Tag>
+      </ThemeProvider>
+    )
+    expect(getByText(longText)).toBeInTheDocument()
+  })
+
+  it('should not render close button when closable is false', () => {
+    const { container } = render(
+      <ThemeProvider theme={ThemeKey.Light}>
+        <Tag>Non-closable Tag</Tag>
+      </ThemeProvider>
+    )
+    const closeButton = container.querySelector('.kl-action-button')
+    expect(closeButton).not.toBeInTheDocument()
+  })
 })

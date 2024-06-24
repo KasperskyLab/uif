@@ -1,5 +1,5 @@
 import React from 'react'
-import {fireEvent, render, screen} from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { act } from 'react-test-renderer'
 import { ConfigProvider } from '@design-system/context'
 import { ThemeKey } from '@design-system/types'
@@ -28,7 +28,6 @@ const DefaultPagination = (props: PaginationProps) => (
 const getSummaryRegex = (total: number) => new RegExp(`total ${total} / selected 0`, 'i')
 
 describe('Pagination', () => {
-
   test('should render', () => {
     const { container } = render(<DefaultPagination />)
 
@@ -163,5 +162,27 @@ describe('Pagination', () => {
       expect(screen.getByText(totalRegex)).toBeInTheDocument()
       expect(screen.queryByText(totalAndSelectedRegex)).not.toBeInTheDocument()
     })
+  })
+
+  // Codium AI
+  it('should handle case when total is 0', () => {
+    const total = 0
+    const { container } = render(<DefaultPagination total={total} />)
+    const totalContainer = container.querySelector('[data-testid="total"]')
+
+    expect(totalContainer?.textContent).toContain(`Total ${total} / Selected ${total}`)
+  })
+
+  it('should handle case when pageSizeOptions is an empty array', () => {
+    const pageSizeOptions: any[] = []
+    const { container } = render(<DefaultPagination pageSizeOptions={pageSizeOptions} showSizeChanger />)
+    act(() => {
+      const select = container.querySelector('[data-testid="select"]')?.firstElementChild
+      if (select) {
+        fireEvent.mouseDown(select)
+      }
+    })
+    const options = container.querySelectorAll('.ant-select-item')
+    expect(options.length).toBe(0)
   })
 })

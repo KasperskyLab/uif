@@ -4,11 +4,19 @@ import { ThemeKey } from '@design-system/types'
 import { ThemeProvider } from '@design-system/theme'
 import { KeyValue } from '../KeyValue'
 import { Icon } from '@src/icon'
-import { KeyValuePair } from '../types'
+import { KeyValuePair, KeyValueProps } from '../types'
 import { Space } from '@src/space'
 import { Button } from '@src/button'
 import '@testing-library/jest-dom'
 import 'jest-styled-components'
+
+const DefaultKeyValue = (props: KeyValueProps) => (
+  <KeyValue
+    klId="kl-id"
+    testId="test-id"
+    {...props}
+  />
+)
 
 describe('KeyValue ', () => {
   const componentId = 'key-value-id'
@@ -44,13 +52,7 @@ describe('KeyValue ', () => {
   ]
 
   test('should render', () => {
-    const { container } = render(
-      <KeyValue
-        data={data}
-        klId="kl-id"
-        testId="test-id"
-      />
-    )
+    const { container } = render(<DefaultKeyValue data={data}/>)
 
     expect(container.querySelector('[kl-id="kl-id"]')).toBeInTheDocument()
     expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
@@ -80,5 +82,47 @@ describe('KeyValue ', () => {
     )
     expect(button).toBeInTheDocument()
     expect(url).toBeInTheDocument()
+  })
+
+  // Codium AI
+  it('should render correct number of KeyValueWrapper elements based on data length', () => {
+    const data = [
+      { pairKey: 'Key1', pairValue: 'Value1' },
+      { pairKey: 'Key2', pairValue: 'Value2' }
+    ]
+    const { container } = render(<DefaultKeyValue data={data}/>)
+
+    expect(container.querySelectorAll('div[data-testid="test-id"] > *').length).toBe(data.length)
+  })
+
+  it('should handle empty data array gracefully', () => {
+    const { container } = render(<DefaultKeyValue data={[]}/>)
+
+    expect(container.querySelectorAll('div[data-testid="test-id"] > *').length).toBe(0)
+  })
+
+  it('should handle undefined data prop', () => {
+    const { container } = render(<DefaultKeyValue />)
+
+    expect(container.querySelectorAll('div[data-testid="test-id"] > *').length).toBe(0)
+  })
+
+  it('should handle null pairKey or pairValue in data', () => {
+    const data = [
+      { pairKey: null, pairValue: 'Value1' },
+      { pairKey: 'Key2', pairValue: null }
+    ]
+    const { container } = render(<DefaultKeyValue data={data}/>)
+
+    expect(container.querySelectorAll('div[data-testid="test-id"] > *').length).toBe(data.length)
+  })
+
+  it('should handle non-string pairValue correctly', () => {
+    const data = [
+      { pairKey: 'Key1', pairValue: <Button>Click me</Button> }
+    ]
+    const { container } = render(<DefaultKeyValue data={data}/>)
+
+    expect(container.querySelector('button')).toBeInTheDocument()
   })
 })

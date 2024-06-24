@@ -44,4 +44,39 @@ describe('Field', () => {
 
     expect(screen.getByText(additionalComponentText)).toBeInTheDocument()
   })
+
+  // GPT 4.0
+  it('should render control element', () => {
+    render(<DefaultField />)
+
+    expect(screen.getByRole('textbox')).toBeInTheDocument()
+  })
+
+  // Codium AI
+  it('should render label when label prop is provided', () => {
+    const label = 'Test Label'
+    render(<DefaultField label={label} />)
+
+    expect(screen.getByText(label)).toBeInTheDocument()
+  })
+
+  it('should render without crashing when no props are provided', () => {
+    const { container } = render(<Field />)
+
+    expect(container).toBeInTheDocument()
+  })
+
+  it('should render correctly when gridLayout prop is provided', () => {
+    const gridLayout = { firstCol: '1fr', secondCol: '2fr' }
+    const { container } = render(<Field gridLayout={gridLayout} />)
+
+    expect(container.querySelector('.kl6-field-grid-layout')).toBeInTheDocument()
+  })
+
+  it('should display help icon when onHelpClick prop is provided', () => {
+    const onHelpClick = jest.fn()
+    const { container } = render(<Field onHelpClick={onHelpClick} />)
+
+    expect(container.querySelector('.kl6-field-control-additional')).toBeInTheDocument()
+  })
 })

@@ -109,4 +109,61 @@ describe('Radio', () => {
     render(<DefaultRadio {...defaultProps} optionType='button' />)
     expect(getRadio().querySelectorAll(BUTTON_SELECTOR).length).toBe(ELEMENTS_AMOUNT)
   })
+
+  // Codium AI
+  test('should apply vertical class when vertical prop is true', () => {
+    render(<Radio {...defaultProps} vertical />)
+    expect(screen.getByRole('radioList')).toHaveClass('ant-radio-vertical')
+  })
+
+  test('should apply invalid class when invalid prop is true', () => {
+    render(<Radio {...defaultProps} invalid />)
+    expect(screen.getByRole('radioList')).toHaveClass('kl-radio-invalid')
+  })
+
+  test('should disable radio buttons when disabled prop is true', () => {
+    render(<Radio {...defaultProps} disabled />)
+    screen.getAllByRole('radio').forEach(radio => {
+      expect(radio).toBeDisabled()
+    })
+  })
+
+  test('should render options with correct labels and values', () => {
+    render(<Radio {...defaultProps} />)
+    defaultProps.options.forEach(option => {
+      expect(screen.getByLabelText(option.label)).toBeInTheDocument()
+      expect(screen.getByLabelText(option.label)).toHaveAttribute('value', option.value)
+    })
+  })
+
+  test('should handle empty options array gracefully', () => {
+    render(<Radio {...defaultProps} options={[]}/>)
+    expect(screen.queryAllByRole('radio').length).toBe(0)
+  })
+
+  test('should handle options with missing label', () => {
+    render(
+      <Radio
+        {...defaultProps}
+        options={[
+          { label: null, value: '1' },
+          { label: 'Option 2', value: '2' }
+        ]}
+      />
+    )
+    expect(screen.queryAllByRole('radio').length).toBe(2)
+  })
+
+  test('should handle options with duplicate values', () => {
+    render(
+      <Radio
+        {...defaultProps}
+        options={[
+          { label: 'Option 1', value: '1' },
+          { label: 'Option Duplicate', value: '1' }
+        ]}
+      />
+    )
+    expect(screen.queryAllByRole('radio').length).toBe(2)
+  })
 })

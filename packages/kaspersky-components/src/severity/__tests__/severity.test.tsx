@@ -66,7 +66,6 @@ describe('Severity ', () => {
   })
 
   test('render without l18n', () => {
-    // @ts-ignore
     const enSeverityTextStatus = localization['en-us'].translation.severity.positive
     const mode = 'positive'
     const { getByTestId } = render(<DefaultSeverity mode={mode} klId={klId}/>)
@@ -75,5 +74,11 @@ describe('Severity ', () => {
     const locText = result.current.t(severityTextLocalization[mode])
     expect(enSeverityTextStatus).toEqual(locText)
     expect(getByTestId(klId)).toHaveTextContent(locText)
+  })
+
+  // Codium AI
+  test('should render correctly when children is an empty string', () => {
+    const { container } = render(<Severity mode="medium">{''}</Severity>)
+    expect(container).toBeInTheDocument()
   })
 })

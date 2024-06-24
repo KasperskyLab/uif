@@ -338,4 +338,24 @@ describe('Modal', () => {
       expect(baseElement.querySelector('[data-testid="first-action"]')).not.toHaveFocus()
     })
   })
+
+  // Codium AI
+  it('should display custom buttons when provided', () => {
+    const customButtons: any[] = [{ text: 'Custom1' }, { text: 'Custom2' }, { text: 'Custom3' }]
+    const { queryByText } = render(<Modal customButtons={customButtons} visible mode="default" />)
+
+    expect(queryByText('Custom1')).toBeInTheDocument()
+    expect(queryByText('Custom2')).toBeInTheDocument()
+    expect(queryByText('Custom3')).toBeInTheDocument()
+  })
+
+  it('should render without header, content, or footer', async () => {
+    const { baseElement } = render(<Modal visible mode="default" testId={testId} />)
+    await waitFor(() => expect(baseElement.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument())
+  })
+
+  it('should handle empty actions and customButtons arrays', async () => {
+    const { baseElement } = render(<Modal actions={{}} customButtons={[]} visible mode="default" testId={testId} />)
+    await waitFor(() => expect(baseElement.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument())
+  })
 })

@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, act, waitFor } from '@testing-library/react'
 import { Checkbox } from '../Checkbox'
 
 const defaultProps = {
@@ -91,6 +91,37 @@ describe('Checkbox', () => {
       name={defaultProps.name}
       disabled>{defaultProps.text}</Checkbox>)
     expect(getCheckbox()).toBeDisabled()
+  })
+
+  // Claude 3 Sonnet
+  test('should render with custom className', () => {
+    const { container } = render(<Checkbox {...defaultProps} className="custom-class" />)
+    expect(container.querySelector('.custom-class')).toBeInTheDocument()
+  })
+
+  test('should render as readonly when readonly prop is true', () => {
+    const { container } = render(<Checkbox {...defaultProps} readonly />)
+    expect(container.querySelector('.kl6-checkbox-readonly')).toBeInTheDocument()
+  })
+
+  test('should render as invalid when invalid prop is true', () => {
+    const { container } = render(<Checkbox {...defaultProps} invalid />)
+    expect(container.querySelector('.kl6-checkbox-invalid')).toBeInTheDocument()
+  })
+
+  test('should render with tooltip when tooltip prop is provided', async () => {
+    const tooltip = 'This is a tooltip'
+    const { container } = render(<Checkbox {...defaultProps} tooltip={tooltip} />)
+    const infoIcon = container.querySelector('.form-label-info-icon')
+
+    expect(infoIcon).toBeInTheDocument()
+
+    if (infoIcon) {
+      act(() => {
+        fireEvent.click(infoIcon)
+      })
+      await waitFor(() => expect(screen.getByText(tooltip)).toBeInTheDocument())
+    }
   })
 })
 

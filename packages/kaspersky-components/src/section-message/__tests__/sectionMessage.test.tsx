@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { SectionMessage } from '../SectionMessage'
 import { ConfigProvider } from '../../../design-system/context'
@@ -18,8 +18,8 @@ const ActionsButtons: SectionMessageProps['actions'] = {
 }
 
 describe('SectionMessage', () => {
-  const klId = 'sectio-message-kl-id'
-  const testId = 'sectio-message-test-id'
+  const klId = 'section-message-kl-id'
+  const testId = 'section-message-test-id'
 
   test('should render', () => {
     const { container } = render(
@@ -40,44 +40,39 @@ describe('SectionMessage', () => {
   test('should render the success SectionMessage component', () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
-        <SectionMessage testId={testId} title={'Check!'} mode="success" >
+        <SectionMessage testId={testId} title={'Check!'} mode="success">
           Success section message
         </SectionMessage>
       </ConfigProvider>
     )
-    const sectionMessage = container.querySelector(
-      `[data-testid="${testId}"]`
-    )
-    expect(sectionMessage).toBeInTheDocument()
+    expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
+    expect(container.querySelector('[data-component-id="icon-success"]')).toBeInTheDocument()
   })
 
   test('should render the warning SectionMessage component', () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
-        <SectionMessage testId={testId} title={'Check!'} mode="warning" >
+        <SectionMessage testId={testId} title={'Check!'} mode="warning">
           Warning section message
         </SectionMessage>
       </ConfigProvider>
     )
-    const sectionMessage = container.querySelector(
-      `[data-testid="${testId}"]`
-    )
-    expect(sectionMessage).toBeInTheDocument()
+    expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
+    expect(container.querySelector('[data-component-id="icon-warning"]')).toBeInTheDocument()
   })
 
   test('should render the error SectionMessage component', () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
-        <SectionMessage testId={testId} title={'Check!'} mode="error" >
+        <SectionMessage testId={testId} title={'Check!'} mode="error">
           Error section message
         </SectionMessage>
       </ConfigProvider>
     )
-    const sectionMessage = container.querySelector(
-      `[data-testid="${testId}"]`
-    )
-    expect(sectionMessage).toBeInTheDocument()
+    expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
+    expect(container.querySelector('[data-component-id="icon-error"]')).toBeInTheDocument()
   })
+
   test('should render the info SectionMessage component', () => {
     const { container } = render(
       <ConfigProvider theme={ThemeKey.Light} >
@@ -86,10 +81,8 @@ describe('SectionMessage', () => {
         </SectionMessage>
       </ConfigProvider>
     )
-    const alert = container.querySelector(
-      `[data-testid="${testId}"]`
-    )
-    expect(alert).toBeInTheDocument()
+    expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
+    expect(container.querySelector('[data-component-id="icon-info"]')).toBeInTheDocument()
   })
 
   test('should render the content', () => {
@@ -147,5 +140,32 @@ describe('SectionMessage', () => {
 
     const button = screen.queryByText('Action1')
     expect(button).toBeInTheDocument()
+  })
+
+  // Codium AI
+  test('should execute onClose callback when close button is clicked', () => {
+    const onCloseMock = jest.fn()
+    render(<SectionMessage closable onClose={onCloseMock} mode="success" />)
+    fireEvent.click(screen.getByRole('button'))
+    expect(onCloseMock).toHaveBeenCalled()
+  })
+
+  test('should handle missing children gracefully', () => {
+    const { container } = render(<SectionMessage mode="success" />)
+    expect(container).toBeInTheDocument()
+  })
+
+  test('should handle expandable prop set to true', () => {
+    const { container } = render(<SectionMessage expandable mode="success" testId={testId} />)
+    expect(container
+      .querySelector(`[data-testid="${testId}-section-message-expansion-icon"]`))
+      .toBeInTheDocument()
+  })
+
+  test('should handle closable prop set to true by default', () => {
+    const { container } = render(<SectionMessage mode="success" testId={testId} />)
+    expect(container
+      .querySelector(`[data-testid="${testId}-section-message-close-icon"]`))
+      .toBeInTheDocument()
   })
 })

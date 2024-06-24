@@ -132,4 +132,50 @@ describe('Dropdown', () => {
     await getDropdownAfterAction('click')
     expect(document.body.childElementCount).toEqual(bodyChildrenCount)
   })
+
+  // Codium AI
+  it('should trigger onVisibleChange callback when visibility changes', async () => {
+    const onVisibleChange = jest.fn()
+    render(<DefaultDropdown onVisibleChange={onVisibleChange} />)
+    await getDropdownAfterAction('click')
+    expect(onVisibleChange).toHaveBeenCalledTimes(1)
+  })
+
+  it('should handle missing onVisibleChange callback', async () => {
+    render(<DefaultDropdown />)
+    await getDropdownAfterAction('click')
+    expect(getDropdown()).toBeInTheDocument()
+  })
+
+  it('should display overlay content correctly', async () => {
+    render(<DefaultDropdown />)
+    await getDropdownAfterAction('click')
+    overlay.forEach(item => {
+      expect(screen.getByText(item.children.props.children)).toBeInTheDocument()
+    })
+  })
+
+  it('should handle empty overlay array gracefully', async () => {
+    render(<DefaultDropdown overlay={[]} />)
+    await getDropdownAfterAction('click')
+    expect(screen.queryByText('1st menu item')).not.toBeInTheDocument()
+  })
+
+  it('should handle rapid open/close actions', async () => {
+    render(<DefaultDropdown />)
+    await act(async () => {
+      userEvent.click(getDropdownButton())
+      userEvent.click(getDropdownButton())
+      userEvent.click(getDropdownButton())
+    })
+    expect(getDropdown()).toBeInTheDocument()
+  })
+
+  it('should handle missing focusable items in overlay', async () => {
+    const nonFocusableOverlay = [{ children: <div>Non-focusable item</div> }]
+    render(<DefaultDropdown overlay={nonFocusableOverlay} />)
+    await getDropdownAfterAction('click')
+    const firstItem = document.querySelector('.ant-dropdown:not(.ant-dropdown-hidden) li')?.firstChild as HTMLElement
+    expect(document.activeElement).not.toBe(firstItem)
+  })
 })

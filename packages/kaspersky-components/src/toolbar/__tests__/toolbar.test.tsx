@@ -165,4 +165,45 @@ describe('Toolbar ', () => {
     expect(btnSettings).toBeInTheDocument()
     expect(btnScale).toBeInTheDocument()
   })
+
+  // Codium AI
+  test('should render toolbar with left and right items correctly', () => {
+    const itemsLeft: ToolbarItems[] = [
+      { type: 'button', key: '1', label: 'Tool 1' },
+      { type: 'button', key: '2', label: 'Tool 2' }
+    ]
+    const itemsRight: ToolbarItems[] = [
+      { type: 'button', key: '3', label: 'Tool 3' }
+    ]
+    render(<Toolbar left={itemsLeft} right={itemsRight} />)
+    expect(screen.getByText('Tool 1')).toBeInTheDocument()
+    expect(screen.getByText('Tool 2')).toBeInTheDocument()
+    expect(screen.getByText('Tool 3')).toBeInTheDocument()
+  })
+
+  test('should handle visibility of toolbar items correctly', () => {
+    const itemsLeft: ToolbarItems[] = [
+      { type: 'button', key: '1', label: 'Visible Tool', visible: true },
+      { type: 'button', key: '2', label: 'Hidden Tool', visible: false }
+    ]
+    render(<Toolbar left={itemsLeft} />)
+    expect(screen.getByText('Visible Tool')).toBeInTheDocument()
+    expect(screen.queryByText('Hidden Tool')).not.toBeInTheDocument()
+  })
+
+  test('should render correctly when no left or right items provided', () => {
+    const { container } = render(<Toolbar />)
+    expect(container.firstChild).toBeInTheDocument()
+  })
+
+  test('should render toolbar items when all have visible set to false', () => {
+    const itemsLeft: ToolbarItems[] = [
+      { type: 'button', key: '1', label: 'Tool 1', visible: false },
+      { type: 'button', key: '2', label: 'Tool 2', visible: false }
+    ]
+    const { container } = render(<Toolbar left={itemsLeft} testId={testId} />)
+    expect(screen.queryByText('Tool 1')).not.toBeInTheDocument()
+    expect(screen.queryByText('Tool 2')).not.toBeInTheDocument()
+    expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
+  })
 })
