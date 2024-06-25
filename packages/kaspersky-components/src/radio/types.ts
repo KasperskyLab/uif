@@ -6,7 +6,7 @@ import { Focus } from '@design-system/tokens/focus'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 
 export type RadioOption = {
-  label: ReactNode,
+  label: Exclude<ReactNode, null | undefined>,
   value: string,
   disabled?: boolean,
   readonly?: boolean,

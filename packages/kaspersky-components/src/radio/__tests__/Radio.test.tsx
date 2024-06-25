@@ -141,20 +141,8 @@ describe('Radio', () => {
     expect(screen.queryAllByRole('radio').length).toBe(0)
   })
 
-  test('should handle options with missing label', () => {
-    render(
-      <Radio
-        {...defaultProps}
-        options={[
-          { label: null, value: '1' },
-          { label: 'Option 2', value: '2' }
-        ]}
-      />
-    )
-    expect(screen.queryAllByRole('radio').length).toBe(2)
-  })
-
   test('should handle options with duplicate values', () => {
+    console.error = jest.fn()
     render(
       <Radio
         {...defaultProps}
@@ -165,5 +153,6 @@ describe('Radio', () => {
       />
     )
     expect(screen.queryAllByRole('radio').length).toBe(2)
+    expect(console.error).toBeCalled()
   })
 })

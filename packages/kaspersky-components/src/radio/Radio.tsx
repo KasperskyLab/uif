@@ -14,6 +14,11 @@ const StyledRadioGroup = styled(RadioAntd.Group).withConfig({
 })`${radioCss}`
 
 export const Radio: FC<RadioProps> = (rawProps: RadioProps) => {
+  try {
+    checkDuplicateOptionValues(rawProps.options)
+  } catch (error) {
+    console.error(error)
+  }
   const props: RadioViewProps = useThemedRadio(rawProps)
   const { testAttributes } = useTestAttribute(props)
   return <RadioView role='radioList' testAttributes={testAttributes} {...props}/>
@@ -93,4 +98,13 @@ export const RadioView: FC<RadioViewProps> = ({
           {...rest}
         />
   )
+}
+
+const checkDuplicateOptionValues = (options: RadioOption[]) => {
+  const values = options.map(option => option.value)
+  const uniqueValues = new Set(values)
+
+  if (values.length !== uniqueValues.size) {
+    throw new Error('Radio options must have unique values')
+  }
 }
