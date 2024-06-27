@@ -37,10 +37,6 @@ export const selectCss = css`
     }
   }
 
-  &.ant-select-show-search:not(.ant-select-multiple) .ant-select-clear {
-    display: none;
-  }
-
   &.ant-select-single {
     .ant-select-selector {
       padding: 6px 36px 6px 12px;
