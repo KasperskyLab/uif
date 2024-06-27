@@ -2,11 +2,9 @@ import React, { useState } from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Search } from '../Search'
-import { ThemeKey } from '@design-system/types'
 import { useTranslation } from 'react-i18next'
 import { renderHook } from '@testing-library/react-hooks'
 import { localization } from '../../../helpers/localization'
-import { ConfigProvider } from '@design-system/context'
 import '@testing-library/jest-dom'
 import 'jest-styled-components'
 import { SearchProps } from '../types'
@@ -34,22 +32,14 @@ describe('Search ', () => {
   }
 
   test('should render', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-        <Search klId={klId} testId="test-id" value={'search'} />
-      </ConfigProvider>
-    )
+    const { container } = render(<Search klId={klId} testId="test-id" value={'search'} />)
 
     expect(container.querySelector(`[kl-id="${klId}"]`)).toBeInTheDocument()
     expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
 
   test('should set correctly value', async () => {
-    const { getByTestId } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-        <Search klId={klId} />
-      </ConfigProvider>
-    )
+    const { getByTestId } = render(<Search klId={klId} />)
 
     const search = getByTestId(klId)
     await userEvent.clear(search)
@@ -58,11 +48,7 @@ describe('Search ', () => {
   })
 
   test('search result is show when input has focus and value', async () => {
-    const { getByTestId } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-        <SearchTestComponent klId={klId} />
-      </ConfigProvider>
-    )
+    const { getByTestId } = render(<SearchTestComponent klId={klId} />)
 
     const search = getByTestId(klId)
     await userEvent.clear(search)
@@ -72,11 +58,7 @@ describe('Search ', () => {
   })
 
   test('search result is hide when input has not value', async () => {
-    const { getByTestId } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-        <SearchTestComponent klId={klId} />
-      </ConfigProvider>
-    )
+    const { getByTestId } = render(<SearchTestComponent klId={klId} />)
 
     const search = getByTestId(klId)
     await userEvent.clear(search)
@@ -86,11 +68,7 @@ describe('Search ', () => {
   test('render without l18n', () => {
     const enSearchText = localization['en-us'].translation.search.dotted
 
-    render(
-      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-        <Search klId={klId} placeholder="search.dotted" />
-      </ConfigProvider>
-    )
+    render(<Search klId={klId} placeholder="search.dotted" />)
 
     const { result } = renderHook(() => useTranslation())
     const locText = result.current.t(enSearchText)
@@ -101,32 +79,21 @@ describe('Search ', () => {
 
   // Codium AI
   test('should render suffix icon', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-        <Search klId="test-search-id" />
-      </ConfigProvider>
-    )
+    const { container } = render(<Search klId="test-search-id" />)
 
     expect(container.querySelector('[data-testid="search-icon"]')).toBeInTheDocument()
   })
 
   test('should render clear button when value is present', () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-        <Search klId="test-search-id" value="test" />
-      </ConfigProvider>
-    )
+    const { container } = render(<Search klId="test-search-id" value="test" />)
 
     expect(container.querySelector('[data-testid="search-clear"]')).toBeInTheDocument()
   })
 
   test('should call onClearClick when clear button is clicked', async () => {
     const onClearClick = jest.fn()
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-        <Search klId="test-search-id" value="test" onClearClick={onClearClick} />
-      </ConfigProvider>
-    )
+    const { container } = render(<Search klId="test-search-id" value="test" onClearClick={onClearClick} />)
+
     const clearButton = container.querySelector('[data-testid="search-clear"]')
     if (clearButton) {
       await userEvent.click(clearButton)
@@ -135,11 +102,8 @@ describe('Search ', () => {
   })
 
   test('should handle undefined onClearClick without errors', async () => {
-    const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-        <Search klId="test-search-id" value="test" />
-      </ConfigProvider>
-    )
+    const { container } = render(<Search klId="test-search-id" value="test" />)
+
     const clearButton = container.querySelector('[data-testid="search-clear"]')
     if (clearButton) {
       await userEvent.click(clearButton)
@@ -148,41 +112,29 @@ describe('Search ', () => {
   })
 
   test('should handle empty value gracefully', () => {
-    render(
-      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-        <Search klId="test-search-id" value="" />
-      </ConfigProvider>
-    )
+    render(<Search klId="test-search-id" value="" />)
+
     const searchElem = screen.getByTestId('test-search-id')
     expect(searchElem).toHaveValue('')
   })
 
   test('should render correctly with prefix', () => {
-    render(
-      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-        <Search klId="test-search-id" prefix="prefix" />
-      </ConfigProvider>
-    )
+    render(<Search klId="test-search-id" prefix="prefix" />)
+
     const prefixElem = screen.getByText('prefix')
     expect(prefixElem).toBeInTheDocument()
   })
 
   test('should render correctly with suffix', () => {
-    render(
-      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-        <Search klId="test-search-id" suffix="suffix" />
-      </ConfigProvider>
-    )
+    render(<Search klId="test-search-id" suffix="suffix" />)
+
     const suffixElem = screen.getByText('suffix')
     expect(suffixElem).toBeInTheDocument()
   })
 
   test('should handle rapid changes in value', async () => {
-    const { getByTestId } = render(
-      <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-        <Search klId="test-search-id" />
-      </ConfigProvider>
-    )
+    const { getByTestId } = render(<Search klId="test-search-id" />)
+
     const searchElem = getByTestId('test-search-id')
     await userEvent.type(searchElem, 'rapid change')
     expect(searchElem).toHaveValue('rapid change')

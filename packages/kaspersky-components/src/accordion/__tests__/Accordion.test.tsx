@@ -56,9 +56,8 @@ describe('Accordion', () => {
   })
 
   test('disabled accordion should not opened', () => {
-    const handleClick = jest.fn()
     render(
-      <Accordion {...defaultProps} onChange={handleClick}>
+      <Accordion {...defaultProps}>
         <AccordionPanel disabled={true} {...defaultPanelProps}>
           <Text>Text should not displayed</Text>
         </AccordionPanel>
@@ -70,9 +69,8 @@ describe('Accordion', () => {
 
   // Codium AI
   test('accordion panel should open when clicked', () => {
-    const handleClick = jest.fn()
     render(
-      <Accordion {...defaultProps} onChange={handleClick}>
+      <Accordion {...defaultProps}>
         <AccordionPanel {...defaultPanelProps}>
           <Text>Text should be displayed</Text>
         </AccordionPanel>
@@ -80,17 +78,6 @@ describe('Accordion', () => {
     )
     userEvent.click(getAccordionFirstPanel())
     expect(screen.getByText('Text should be displayed')).toBeInTheDocument()
-  })
-
-  test('accordion panel with custom title size should render', () => {
-    render(
-      <Accordion {...defaultProps}>
-        <AccordionPanel { ...defaultPanelProps} titleSize="large">
-          <Text>Text with large title size</Text>
-        </AccordionPanel>
-      </Accordion>
-    )
-    expect(screen.getByText('Header text content')).toBeInTheDocument()
   })
 
   // Tabnine

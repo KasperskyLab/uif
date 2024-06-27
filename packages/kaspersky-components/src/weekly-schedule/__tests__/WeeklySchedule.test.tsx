@@ -1,6 +1,4 @@
 import { render } from '@testing-library/react'
-import { ThemeProvider } from '@design-system/theme'
-import { ThemeKey } from '@design-system/types'
 import React from 'react'
 import { WeeklySchedule } from '@src/weekly-schedule/WeeklySchedule'
 import { checkCellInSelectedArea, parseInitialSchedule, toInitialFormat } from '@src/weekly-schedule/helpers'
@@ -36,15 +34,13 @@ describe('Weekly schedule', () => {
   describe('Weekly schedule component', () => {
     test('Component rendered', () => {
       const { container } = render(
-        <ThemeProvider theme={ThemeKey.Light}>
-          <WeeklySchedule
-            initialState={weekSchedule}
-            onChange={jest.fn()}
-            daysOfWeek={week}
-            legend={legend}
-            testId={testId}
-          />
-        </ThemeProvider>
+        <WeeklySchedule
+          initialState={weekSchedule}
+          onChange={jest.fn()}
+          daysOfWeek={week}
+          legend={legend}
+          testId={testId}
+        />
       )
       expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
     })
@@ -61,15 +57,13 @@ describe('Weekly schedule', () => {
         sunday: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       }
       const { container } = render(
-        <ThemeProvider theme={ThemeKey.Light}>
-          <WeeklySchedule
-            initialState={weekSchedule}
-            onChange={onChangeHandler}
-            daysOfWeek={week}
-            legend={legend}
-            testId={testId}
-          />
-        </ThemeProvider>
+        <WeeklySchedule
+          initialState={weekSchedule}
+          onChange={onChangeHandler}
+          daysOfWeek={week}
+          legend={legend}
+          testId={testId}
+        />
       )
 
       const firstCell = container.querySelector('[data-testid="cell-id-0"]')
@@ -91,15 +85,13 @@ describe('Weekly schedule', () => {
         sunday: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       }
       const { container } = render(
-        <ThemeProvider theme={ThemeKey.Light}>
-          <WeeklySchedule
-            initialState={weekSchedule}
-            onChange={onChangeHandler}
-            daysOfWeek={week}
-            legend={legend}
-            testId={testId}
-          />
-        </ThemeProvider>
+        <WeeklySchedule
+          initialState={weekSchedule}
+          onChange={onChangeHandler}
+          daysOfWeek={week}
+          legend={legend}
+          testId={testId}
+        />
       )
 
       const firstCell = container.querySelector('[data-testid="cell-id-68"]')

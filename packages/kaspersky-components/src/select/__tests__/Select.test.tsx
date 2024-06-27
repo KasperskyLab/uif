@@ -1,7 +1,6 @@
 import React from 'react'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { ConfigProvider } from '@design-system/context'
 import { Button } from '../../button'
 import { Tag } from '../../tag'
 import { Text } from '../../typography'
@@ -35,9 +34,7 @@ const getSelect = async (klId = defaultProps.klId) => {
 }
 
 const DefaultSelect = (props: SelectProps) => (
-  <ConfigProvider>
-    <Select {...defaultProps} {...props} />
-  </ConfigProvider>
+  <Select {...defaultProps} {...props} />
 )
 
 describe('Select', () => {

@@ -1,14 +1,11 @@
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react'
-import { ConfigProvider } from '@design-system/context'
 import { RangePicker } from '../RangePicker'
 import { RangePickerProps } from '../types'
 
 describe('RangePicker', () => {
   const DefaultRangePicker = (props: RangePickerProps) => (
-    <ConfigProvider>
-      <RangePicker {...props} />
-    </ConfigProvider>
+    <RangePicker {...props} />
   )
 
   it('should receive qa props', () => {

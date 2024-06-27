@@ -7,25 +7,22 @@ import { AnchorProps } from '../Anchor/types'
 
 const defaultProps: AnchorProps = {
   items: [
-    {
-      href: '#test',
-      title: 'test-title'
-    }
+    { href: '#link1', title: 'Link 1' },
+    { href: '#link2', title: 'Link 2' }
   ],
   klId: 'kl-id',
   testId: 'test-id'
 }
 
-const DefaultAnchor = (props: AnchorProps) => <Anchor {...props} />
-
 describe('Anchor', () => {
   test('should render', () => {
-    render(<DefaultAnchor {...defaultProps}/>)
-    screen.getByText('test-title')
+    render(<Anchor {...defaultProps}/>)
+    expect(screen.getByText('Link 1')).toBeInTheDocument()
+    expect(screen.getByText('Link 2')).toBeInTheDocument()
   })
 
   test('should receive qa props', () => {
-    const { container } = render(<DefaultAnchor {...defaultProps} />)
+    const { container } = render(<Anchor {...defaultProps} />)
 
     expect(container.querySelector('[kl-id="kl-id"]')).toBeInTheDocument()
     expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
@@ -36,7 +33,7 @@ describe('Anchor', () => {
     render(
       <Anchor {...defaultProps} onChange={handleClick} />
     )
-    userEvent.click(screen.getByText('test-title'))
+    userEvent.click(screen.getByText('Link 1'))
     expect(handleClick).toHaveBeenCalled()
   })
 
@@ -81,35 +78,16 @@ describe('Anchor', () => {
   })
 
   // Codium AI
-  it('should render all anchor links correctly when there is no intersection', () => {
-    const items = [
-      { href: '#link1', title: 'Link 1' },
-      { href: '#link2', title: 'Link 2' }
-    ]
-    render(<Anchor {...defaultProps} items={items} />)
-
-    expect(screen.getByText('Link 1')).toBeInTheDocument()
-    expect(screen.getByText('Link 2')).toBeInTheDocument()
-  })
-
   it('should handle click events on anchor links and update active link state', () => {
-    const items = [
-      { href: '#link1', title: 'Link 1' },
-      { href: '#link2', title: 'Link 2' }
-    ]
     const handleChange = jest.fn()
-    render(<Anchor {...defaultProps} items={items} onChange={handleChange} />)
+    render(<Anchor {...defaultProps} onChange={handleChange} />)
     userEvent.click(screen.getByText('Link 1'))
 
     expect(handleChange).toHaveBeenCalledWith('#link1')
   })
 
   it('should smoothly scroll to the clicked anchor link', () => {
-    const items = [
-      { href: '#link1', title: 'Link 1' },
-      { href: '#link2', title: 'Link 2' }
-    ]
-    render(<Anchor {...defaultProps} items={items} />)
+    render(<Anchor {...defaultProps} />)
 
     const scrollIntoViewMock = jest.fn()
     document.querySelector = jest.fn().mockReturnValue({ scrollIntoView: scrollIntoViewMock })

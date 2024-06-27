@@ -1,14 +1,11 @@
 import React from 'react'
 import { fireEvent, render, waitFor } from '@testing-library/react'
-import { ConfigProvider } from '@design-system/context'
 import { Calendar } from '../Calendar'
 import { CalendarProps } from '../types'
 
 describe('Calendar', () => {
   const DefaultCalender = (props: CalendarProps) => (
-    <ConfigProvider>
-      <Calendar {...props} />
-    </ConfigProvider>
+    <Calendar {...props} />
   )
 
   it('should receive qa props', () => {

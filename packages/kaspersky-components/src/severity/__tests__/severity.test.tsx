@@ -4,7 +4,6 @@ import { Severity } from '../Severity'
 import { SeverityProps } from '../types'
 import { useTranslation } from 'react-i18next'
 import { renderHook } from '@testing-library/react-hooks'
-import { ConfigProvider } from '@design-system/context'
 import { severityTextLocalization } from '../localization'
 import { localization } from '../../../helpers/localization'
 import '@testing-library/jest-dom'
@@ -14,9 +13,7 @@ describe('Severity ', () => {
   const klId = 'test-severity-id'
 
   const DefaultSeverity = (props: SeverityProps) => (
-    <ConfigProvider locale="en-us">
-      <Severity {...props} />
-    </ConfigProvider>
+    <Severity {...props} />
   )
 
   test('should render', () => {

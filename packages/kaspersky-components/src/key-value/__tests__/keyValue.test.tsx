@@ -1,7 +1,5 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import { ThemeKey } from '@design-system/types'
-import { ThemeProvider } from '@design-system/theme'
 import { KeyValue } from '../KeyValue'
 import { Icon } from '@src/icon'
 import { KeyValuePair, KeyValueProps } from '../types'
@@ -60,9 +58,7 @@ describe('KeyValue ', () => {
 
   test('should recieve data prop', () => {
     render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <KeyValue componentId={componentId} data={data} />
-      </ThemeProvider>
+      <KeyValue componentId={componentId} data={data} />
     )
     const keyItem = screen.getByText('Copy')
     const valueItem = screen.getByText('SideCopy')
@@ -72,9 +68,7 @@ describe('KeyValue ', () => {
 
   test('should handle custom components in key and value', () => {
     render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <KeyValue componentId={componentId} data={data} />
-      </ThemeProvider>
+      <KeyValue componentId={componentId} data={data} />
     )
     const button = screen.getByRole('button', { name: 'Button' })
     const url = screen.getByText(

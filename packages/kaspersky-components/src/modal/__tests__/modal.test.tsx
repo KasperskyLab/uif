@@ -351,11 +351,11 @@ describe('Modal', () => {
 
   it('should render without header, content, or footer', async () => {
     const { baseElement } = render(<Modal visible mode="default" testId={testId} />)
-    await waitFor(() => expect(baseElement.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument())
+    expect(baseElement.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
   })
 
   it('should handle empty actions and customButtons arrays', async () => {
     const { baseElement } = render(<Modal actions={{}} customButtons={[]} visible mode="default" testId={testId} />)
-    await waitFor(() => expect(baseElement.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument())
+    expect(baseElement.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
   })
 })

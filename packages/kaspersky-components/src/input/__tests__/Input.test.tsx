@@ -1,7 +1,5 @@
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react'
-import { ThemeKey } from '@design-system/types'
-import { ThemeProvider } from '@design-system/theme'
 import '@testing-library/jest-dom'
 import 'jest-styled-components'
 import { Textbox } from '../Textbox'
@@ -19,17 +17,15 @@ describe('Input - Textbox - Basic ', () => {
 
   test('should render with mask Date', async () => {
     const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox
-          klId={klId}
-          maskOptions={ {
-            mask: Date,
-            lazy: false,
-            overwrite: true,
-            autofix: true
-          }}
-        />
-      </ThemeProvider>
+      <Textbox
+        klId={klId}
+        maskOptions={ {
+          mask: Date,
+          lazy: false,
+          overwrite: true,
+          autofix: true
+        }}
+      />
     )
     const inputDate = getByTestId(klId)
     await userEvent.clear(inputDate)
@@ -39,17 +35,15 @@ describe('Input - Textbox - Basic ', () => {
 
   test('should not render any text when input mask is Number', async () => {
     const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox
-          klId={klId}
-          maskOptions={ {
-            mask: Number,
-            lazy: false,
-            overwrite: true,
-            autofix: true
-          }}
-        />
-      </ThemeProvider>
+      <Textbox
+        klId={klId}
+        maskOptions={ {
+          mask: Number,
+          lazy: false,
+          overwrite: true,
+          autofix: true
+        }}
+      />
     )
     const inputNumber = getByTestId(klId)
     await userEvent.clear(inputNumber)
@@ -59,12 +53,10 @@ describe('Input - Textbox - Basic ', () => {
 
   test('should render any text when input mask is None', async () => {
     const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox
-          klId={klId}
-          maskOptions={ undefined }
-        />
-      </ThemeProvider>
+      <Textbox
+        klId={klId}
+        maskOptions={ undefined }
+      />
     )
     const inputNone = getByTestId(klId)
     await userEvent.clear(inputNone)
@@ -76,17 +68,15 @@ describe('Input - Textbox - Basic ', () => {
 
   test('should render with mask Phone', async () => {
     const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox
-          klId={klId}
-          maskOptions={ {
-            mask: '+7 (000) 000-00-00',
-            lazy: false,
-            overwrite: true,
-            autofix: true
-          }}
-        />
-      </ThemeProvider>
+      <Textbox
+        klId={klId}
+        maskOptions={ {
+          mask: '+7 (000) 000-00-00',
+          lazy: false,
+          overwrite: true,
+          autofix: true
+        }}
+      />
     )
     const inputPhone = getByTestId(klId)
     await userEvent.clear(inputPhone)
@@ -96,17 +86,15 @@ describe('Input - Textbox - Basic ', () => {
 
   test('should render with mask Pattern', async () => {
     const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox
-          klId={klId}
-          maskOptions={ {
-            mask: '{#}000[aaa]/NIC-`*[**]',
-            lazy: false,
-            overwrite: true,
-            autofix: true
-          }}
-        />
-      </ThemeProvider>
+      <Textbox
+        klId={klId}
+        maskOptions={ {
+          mask: '{#}000[aaa]/NIC-`*[**]',
+          lazy: false,
+          overwrite: true,
+          autofix: true
+        }}
+      />
     )
     const inputPattern = getByTestId(klId)
     await userEvent.clear(inputPattern)
@@ -116,19 +104,17 @@ describe('Input - Textbox - Basic ', () => {
 
   test('should render with mask IP', async () => {
     const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox
-          klId={klId}
-          maskOptions={ {
-            mask: 'NUM.NUM.NUM.NUM',
-            blocks: {
-              NUM: {
-                mask: /^[0-9]{1,3}$/
-              }
+      <Textbox
+        klId={klId}
+        maskOptions={ {
+          mask: 'NUM.NUM.NUM.NUM',
+          blocks: {
+            NUM: {
+              mask: /^[0-9]{1,3}$/
             }
-          }}
-        />
-      </ThemeProvider>
+          }
+        }}
+      />
     )
     const inputIP = getByTestId(klId)
     await userEvent.clear(inputIP)
@@ -138,20 +124,18 @@ describe('Input - Textbox - Basic ', () => {
 
   test('should render with mask MAC', async () => {
     const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox
-          klId={klId}
-          maskOptions={ {
-            mask: 'MACAD:MACAD:MACAD:MACAD',
-            blocks: {
-              MACAD: { mask: /^[0-9a-f]{1,2}$/ }
-            },
-            lazy: true,
-            overwrite: true,
-            autofix: true
-          }}
-        />
-      </ThemeProvider>
+      <Textbox
+        klId={klId}
+        maskOptions={ {
+          mask: 'MACAD:MACAD:MACAD:MACAD',
+          blocks: {
+            MACAD: { mask: /^[0-9a-f]{1,2}$/ }
+          },
+          lazy: true,
+          overwrite: true,
+          autofix: true
+        }}
+      />
     )
     const inputMAC = getByTestId(klId)
     await userEvent.type(inputMAC, '11111111')
@@ -162,24 +146,12 @@ describe('Input - Textbox - Basic ', () => {
 describe('Input - Textbox - Number ', () => {
   const klId = 'input-id'
   test('should recieve kl-id prop', () => {
-    const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox.Number
-          klId={klId}
-        />
-      </ThemeProvider>
-    )
+    const { getByTestId } = render(<Textbox.Number klId={klId} />)
     expect(getByTestId(klId)).toBeInTheDocument()
   })
 
   test('should not render text value', async () => {
-    const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox.Number
-          klId={klId}
-        />
-      </ThemeProvider>
-    )
+    const { getByTestId } = render(<Textbox.Number klId={klId} />)
     const textboxNumber = getByTestId(klId)
     await userEvent.clear(textboxNumber)
     await userEvent.type(textboxNumber, 'aaa')
@@ -188,13 +160,7 @@ describe('Input - Textbox - Number ', () => {
   })
 
   test('should render only numeric value', async () => {
-    const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox.Number
-          klId={klId}
-        />
-      </ThemeProvider>
-    )
+    const { getByTestId } = render(<Textbox.Number klId={klId} />)
     const textboxNumber = getByTestId(klId)
     await userEvent.clear(textboxNumber)
     await userEvent.type(textboxNumber, '444')
@@ -206,13 +172,7 @@ describe('Input - Textbox - Number ', () => {
 describe('Input - Textbox - Textarea ', () => {
   const klId = 'input-id'
   test('should recieve kl-id prop', () => {
-    const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox.Textarea
-          klId={klId}
-        />
-      </ThemeProvider>
-    )
+    const { getByTestId } = render(<Textbox.Textarea klId={klId} />)
     expect(getByTestId(klId)).toBeInTheDocument()
   })
 })
@@ -220,13 +180,7 @@ describe('Input - Textbox - Textarea ', () => {
 describe('Input - Textbox - Password ', () => {
   const klId = 'input-id'
   test('should recieve kl-id prop', () => {
-    const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox.Password
-          klId={klId}
-        />
-      </ThemeProvider>
-    )
+    const { getByTestId } = render(<Textbox.Password klId={klId} />)
     expect(getByTestId(klId)).toBeInTheDocument()
   })
 })
@@ -234,13 +188,7 @@ describe('Input - Textbox - Password ', () => {
 describe('Input - Textbox - Url ', () => {
   const klId = 'url-input-id'
   test('should recieve kl-id prop', () => {
-    const { getByTestId } = render(
-      <ThemeProvider theme={ThemeKey.Light}>
-        <Textbox.Url
-          klId={klId}
-        />
-      </ThemeProvider>
-    )
+    const { getByTestId } = render(<Textbox.Url klId={klId} />)
     expect(getByTestId(klId)).toBeInTheDocument()
   })
 

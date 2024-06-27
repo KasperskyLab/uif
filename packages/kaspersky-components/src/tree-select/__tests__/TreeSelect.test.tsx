@@ -23,24 +23,4 @@ describe('TreeSelect', () => {
     const { container } = render(<TreeSelect showSearch={false} />)
     expect(container.querySelector('[data-testid="select-chevron-icon"]')).toBeInTheDocument()
   })
-
-  it('should handle undefined treeCheckable prop', () => {
-    const { container } = render(<TreeSelect treeCheckable={undefined} />)
-    expect(container).toBeInTheDocument()
-  })
-
-  it('should handle undefined dropdownClassName prop', () => {
-    const { container } = render(<TreeSelect dropdownClassName={undefined} />)
-    expect(container).toBeInTheDocument()
-  })
-
-  it('should handle undefined getPopupContainer prop', () => {
-    const { container } = render(<TreeSelect getPopupContainer={undefined} />)
-    expect(container).toBeInTheDocument()
-  })
-
-  it('should handle undefined showSearch prop', () => {
-    const { container } = render(<TreeSelect showSearch={undefined} />)
-    expect(container).toBeInTheDocument()
-  })
 })

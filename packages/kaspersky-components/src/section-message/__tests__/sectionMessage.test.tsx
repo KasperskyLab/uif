@@ -2,8 +2,6 @@ import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { SectionMessage } from '../SectionMessage'
-import { ConfigProvider } from '../../../design-system/context'
-import { ThemeKey } from '../../../design-system/types'
 import { SectionMessageProps } from '../types'
 
 const ActionsButtons: SectionMessageProps['actions'] = {
@@ -39,11 +37,9 @@ describe('SectionMessage', () => {
 
   test('should render the success SectionMessage component', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <SectionMessage testId={testId} title={'Check!'} mode="success">
-          Success section message
-        </SectionMessage>
-      </ConfigProvider>
+      <SectionMessage testId={testId} title={'Check!'} mode="success">
+        Success section message
+      </SectionMessage>
     )
     expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
     expect(container.querySelector('[data-component-id="icon-success"]')).toBeInTheDocument()
@@ -51,11 +47,9 @@ describe('SectionMessage', () => {
 
   test('should render the warning SectionMessage component', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <SectionMessage testId={testId} title={'Check!'} mode="warning">
-          Warning section message
-        </SectionMessage>
-      </ConfigProvider>
+      <SectionMessage testId={testId} title={'Check!'} mode="warning">
+        Warning section message
+      </SectionMessage>
     )
     expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
     expect(container.querySelector('[data-component-id="icon-warning"]')).toBeInTheDocument()
@@ -63,11 +57,9 @@ describe('SectionMessage', () => {
 
   test('should render the error SectionMessage component', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <SectionMessage testId={testId} title={'Check!'} mode="error">
-          Error section message
-        </SectionMessage>
-      </ConfigProvider>
+      <SectionMessage testId={testId} title={'Check!'} mode="error">
+        Error section message
+      </SectionMessage>
     )
     expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
     expect(container.querySelector('[data-component-id="icon-error"]')).toBeInTheDocument()
@@ -75,11 +67,9 @@ describe('SectionMessage', () => {
 
   test('should render the info SectionMessage component', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <SectionMessage testId={testId} title={'Check!'} mode="info" type="alert">
-          Info Alert
-        </SectionMessage>
-      </ConfigProvider>
+      <SectionMessage testId={testId} title={'Check!'} mode="info" type="alert">
+        Info Alert
+      </SectionMessage>
     )
     expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
     expect(container.querySelector('[data-component-id="icon-info"]')).toBeInTheDocument()
@@ -87,15 +77,13 @@ describe('SectionMessage', () => {
 
   test('should render the content', () => {
     render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <SectionMessage
-          testId={testId}
-          title={'Check!'}
-          mode="info"
-        >
-          info SectionMessage
-        </SectionMessage>
-      </ConfigProvider>
+      <SectionMessage
+        testId={testId}
+        title={'Check!'}
+        mode="info"
+      >
+        info SectionMessage
+      </SectionMessage>
     )
     expect(screen.getByText('info SectionMessage')).toBeInTheDocument()
   })
@@ -103,26 +91,22 @@ describe('SectionMessage', () => {
   test('should render with title', async () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <SectionMessage
-          testId={testId}
-          title={'Check!'}
-          mode="info"
-        >
-          info SectionMessage
-        </SectionMessage>
-      </ConfigProvider>
+      <SectionMessage
+        testId={testId}
+        title={'Check!'}
+        mode="info"
+      >
+        info SectionMessage
+      </SectionMessage>
     )
 
     expect(screen.getByText('Check!')).toBeInTheDocument()
   })
   test('should render without title', async () => {
     render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <SectionMessage testId={testId} mode="info" >
-          info section message
-        </SectionMessage>
-      </ConfigProvider>
+      <SectionMessage testId={testId} mode="info" >
+        info section message
+      </SectionMessage>
     )
 
     const title = screen.queryByTestId('alert-title')
@@ -131,11 +115,9 @@ describe('SectionMessage', () => {
 
   test('should render with actions', () => {
     render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <SectionMessage testId={testId} mode="success" type="alert" actions={ActionsButtons} >
-          section message text
-        </SectionMessage>
-      </ConfigProvider>
+      <SectionMessage testId={testId} mode="success" type="alert" actions={ActionsButtons} >
+        section message text
+      </SectionMessage>
     )
 
     const button = screen.queryByText('Action1')

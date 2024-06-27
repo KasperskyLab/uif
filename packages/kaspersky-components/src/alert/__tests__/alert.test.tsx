@@ -2,8 +2,6 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { Alert } from '../Alert'
-import { ConfigProvider } from '../../../design-system/context'
-import { ThemeKey } from '../../../design-system/types'
 import { AlertProps } from '../types'
 
 const ActionsButtons: AlertProps['actions'] = {
@@ -38,11 +36,9 @@ describe('Alert', () => {
 
   test('should render the success alert component', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert testId={testId} title={'Check!'} mode="success" type="alert">
-          Success Alert
-        </Alert>
-      </ConfigProvider>
+      <Alert testId={testId} title={'Check!'} mode="success" type="alert">
+        Success Alert
+      </Alert>
     )
     const alert = container.querySelector(
       `[data-testid="${testId}"]`
@@ -52,11 +48,9 @@ describe('Alert', () => {
 
   test('should render the warning alert component', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert testId={testId} title={'Check!'} mode="warning" type="alert">
-          Warning Alert
-        </Alert>
-      </ConfigProvider>
+      <Alert testId={testId} title={'Check!'} mode="warning" type="alert">
+        Warning Alert
+      </Alert>
     )
     const alert = container.querySelector(
       `[data-testid="${testId}"]`
@@ -66,11 +60,9 @@ describe('Alert', () => {
 
   test('should render the error alert component', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert testId={testId} title={'Check!'} mode="error" type="alert">
-          Error Alert
-        </Alert>
-      </ConfigProvider>
+      <Alert testId={testId} title={'Check!'} mode="error" type="alert">
+        Error Alert
+      </Alert>
     )
     const alert = container.querySelector(
       `[data-testid="${testId}"]`
@@ -80,11 +72,9 @@ describe('Alert', () => {
 
   test('should render the info alert component', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert testId={testId} title={'Check!'} mode="info" type="alert">
-          Info Alert
-        </Alert>
-      </ConfigProvider>
+      <Alert testId={testId} title={'Check!'} mode="info" type="alert">
+        Info Alert
+      </Alert>
     )
     const alert = container.querySelector(
       `[data-testid="${testId}"]`
@@ -94,32 +84,28 @@ describe('Alert', () => {
 
   test('should render the content', () => {
     render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert
-          testId="alert"
-          title={'Check!'}
-          mode="info"
-          type="alert"
-        >
-          Info Alert
-        </Alert>
-      </ConfigProvider>
+      <Alert
+        testId="alert"
+        title={'Check!'}
+        mode="info"
+        type="alert"
+      >
+        Info Alert
+      </Alert>
     )
     expect(screen.getByText('Info Alert')).toBeInTheDocument()
   })
 
   test('should render with title', async () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert
-          testId="alert"
-          title={'Check!'}
-          mode="info"
-          type='sectionMessage'
-        >
-          Info Alert
-        </Alert>
-      </ConfigProvider>
+      <Alert
+        testId="alert"
+        title={'Check!'}
+        mode="info"
+        type='sectionMessage'
+      >
+        Info Alert
+      </Alert>
     )
     const title = container.querySelector(
       '[data-testid="alert-title"]'
@@ -129,11 +115,9 @@ describe('Alert', () => {
 
   test('should render without title', async () => {
     render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert testId={testId} mode="info" type="alert">
-          Info Alert
-        </Alert>
-      </ConfigProvider>
+      <Alert testId={testId} mode="info" type="alert">
+        Info Alert
+      </Alert>
     )
 
     const title = screen.queryByTestId('alert-title')
@@ -142,11 +126,9 @@ describe('Alert', () => {
 
   test('should render with icon / info', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert testId={testId} mode="info" type="alert">
-          Info Alert
-        </Alert>
-      </ConfigProvider>
+      <Alert testId={testId} mode="info" type="alert">
+        Info Alert
+      </Alert>
     )
     const icon = container.querySelector(
       '[data-component-id="icon-info"]'
@@ -156,11 +138,9 @@ describe('Alert', () => {
 
   test('should render with icon / success', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert testId={testId} mode="success" type="alert">
-          Success Alert
-        </Alert>
-      </ConfigProvider>
+      <Alert testId={testId} mode="success" type="alert">
+        Success Alert
+      </Alert>
     )
     const icon = container.querySelector(
       '[data-component-id="icon-success"]'
@@ -170,11 +150,9 @@ describe('Alert', () => {
 
   test('should render with icon / error', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert testId={testId} mode="error" type="alert">
-          Error Alert
-        </Alert>
-      </ConfigProvider>
+      <Alert testId={testId} mode="error" type="alert">
+        Error Alert
+      </Alert>
     )
     const icon = container.querySelector(
       '[data-component-id="icon-error"]'
@@ -184,11 +162,9 @@ describe('Alert', () => {
 
   test('should render with icon / warning', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert testId={testId} mode="warning" type="alert">
-          Warning Alert
-        </Alert>
-      </ConfigProvider>
+      <Alert testId={testId} mode="warning" type="alert">
+        Warning Alert
+      </Alert>
     )
     const icon = container.querySelector(
       '[data-component-id="icon-warning"]'
@@ -198,11 +174,9 @@ describe('Alert', () => {
 
   test('should render with actions', () => {
     render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Alert testId={testId} mode="success" type="alert" actions={ActionsButtons} >
-          alert text
-        </Alert>
-      </ConfigProvider>
+      <Alert testId={testId} mode="success" type="alert" actions={ActionsButtons} >
+        alert text
+      </Alert>
     )
 
     const button = screen.queryByText('Action1')

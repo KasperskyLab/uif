@@ -48,5 +48,6 @@ describe('Popover', () => {
         container.parentElement?.querySelector(`.${contentClassName}`)
       ).toBeInTheDocument()
     })
+    expect(screen.getByText('Test')).toBeInTheDocument()
   })
 })
