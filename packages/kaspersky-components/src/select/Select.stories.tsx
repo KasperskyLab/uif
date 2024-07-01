@@ -9,7 +9,7 @@ import { sbHideControls } from '@helpers/storybookHelpers'
 import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
 import Docs from './SelectDocs'
 import { Toggle } from '@src/toggle'
-import { Label } from '@src/label'
+import { Field } from '@src/field'
 import { Link } from '@src/link'
 import { P, Text } from '@src/typography'
 import { Tag } from '@src/tag'
@@ -201,6 +201,25 @@ export const WithHeader: Story = {
   }
 }
 
+export const WithShowSearchAndAllowClear: Story = {
+  render: (args: SelectProps) => {
+    return (
+      <div style={{ width: '550px' }}>
+        <P>No mode</P>
+        <Field control={<Select {...args} />} />
+        <P>Tags mode</P>
+        <Field control={<Select {...args} mode="tags" />} />
+        <P>Multiple mode</P>
+        <Field control={<Select {...args} mode="multiple" />} />
+      </div>
+    )
+  },
+  args: {
+    allowClear: true,
+    showSearch: true
+  }
+}
+
 export const CustomDropdown: Story = {
   render: (args: SelectProps) => {
     const [checked, setChecked] = React.useState(false)
@@ -231,20 +250,16 @@ export const Tags: Story = {
     return (
       <div style={{ width: '550px' }}>
         <P>Tags mode</P>
-        <Label htmlFor={args.id}>
-          <Select
-            {...args}
-          />
-        </Label>
+        <Field control={<Select {...args} />} />
         <P>Tags mode with allowNonUniqueValues</P>
-        <Label htmlFor={args.id + '1'}>
+        <Field control={
           <Select
             id={args.id + '1'}
             {...args}
             allowNonUniqueValues={true}
             defaultValue={['MyTag', 'MyTag']}
           />
-        </Label>
+        } />
       </div>
     )
   },
