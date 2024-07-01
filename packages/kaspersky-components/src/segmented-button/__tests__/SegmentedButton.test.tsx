@@ -89,6 +89,7 @@ describe('SegmentedButton', () => {
     expect(getByTestId('test-icon-before')).toBeInTheDocument()
     expect(getByTestId('test-icon-after')).toBeInTheDocument()
   })
+
   test('should pass className prop', () => {
     const className = 'segmented-button-test-class'
     const { getByTestId } = render(
@@ -105,5 +106,28 @@ describe('SegmentedButton', () => {
     userEvent.click(btn)
 
     expect(handleOnChange).toHaveBeenCalledWith(['default'])
+  })
+
+  // Codium AI
+  test('should handle empty items array gracefully', () => {
+    const handleOnChange = jest.fn()
+    const { container } = render(<SegmentedButton items={[]} value={[]} onChange={handleOnChange} />)
+    expect(container.querySelectorAll('.kl6-segmented-button-item')).toHaveLength(0)
+  })
+
+  test('should handle rapid sequential clicks on items', async () => {
+    const handleOnChange = jest.fn()
+    const items = [{ text: 'Item 1', value: 'item1' }, { text: 'Item 2', value: 'item2' }]
+    const { getByText } = render(<SegmentedButton items={items} value={[]} onChange={handleOnChange} />)
+
+    const item1 = getByText('Item 1')
+    const item2 = getByText('Item 2')
+
+    await userEvent.click(item1)
+    await userEvent.click(item2)
+
+    expect(handleOnChange).toHaveBeenCalledTimes(2)
+    expect(handleOnChange).toHaveBeenCalledWith(['item1'])
+    expect(handleOnChange).toHaveBeenCalledWith(['item2'])
   })
 })

@@ -1,7 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { ConfigProvider } from '@design-system/context'
 import { TenantFilter } from '../TenantFilter'
 import { Tenant, TenantFilterProps, TenantFilterTreeDataItem } from '../types'
 
@@ -88,9 +87,7 @@ describe('TenantFilter', () => {
   }
 
   const DefaultTenantFilter = (props: Partial<TenantFilterProps>) => (
-    <ConfigProvider>
-      <TenantFilter {...defaultProps} {...props} />
-    </ConfigProvider>
+    <TenantFilter {...defaultProps} {...props} />
   )
 
   const clickOnNodeCheckbox = async (container: HTMLElement, id: string) => {

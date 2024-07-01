@@ -42,4 +42,31 @@ describe('Link', () => {
     render(<DefaultLink disabled />)
     expect(getLink()).toHaveAttribute('tabIndex', '-1')
   })
+
+  // Codium AI
+  it('should render a link with children elements', () => {
+    const { getByText } = render(<Link href="#"><span>Child Element</span></Link>)
+    expect(getByText('Child Element')).toBeInTheDocument()
+  })
+
+  it('should display an icon when decoration is "icon"', () => {
+    const { container } = render(<DefaultLink decoration="icon" />)
+    expect(container.querySelector('svg')).toBeInTheDocument()
+  })
+
+  it('should position the icon before the text when iconPosition is "before"', () => {
+    const { container } = render(<DefaultLink decoration="icon" iconPosition="before" />)
+    const iconWrapper = container.querySelector('span')
+    expect(iconWrapper?.nextSibling?.textContent).toBe(defaultProps.text)
+  })
+
+  it('should handle missing href gracefully', () => {
+    const { getByText } = render(<Link text="No Href" />)
+    expect(getByText('No Href')).toBeInTheDocument()
+  })
+
+  it('should handle missing text and children gracefully', () => {
+    const { container } = render(<Link href="#" />)
+    expect(container.querySelector('a')).toBeInTheDocument()
+  })
 })

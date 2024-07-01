@@ -114,3 +114,20 @@ export const WithAsyncSetValue: Story = {
     value: null
   }
 }
+
+export const InlineOptions: Story = {
+  render: (args: RadioProps) => {
+    const [radioState, setRadioState] = useState<string>()
+    return (
+      <Radio
+        {...args}
+        onChange={(e) => setRadioState(e.target.value)}
+        value={radioState}
+      />
+    )
+  },
+  args: {
+    options: radioOptions,
+    vertical: false
+  }
+}

@@ -1,14 +1,11 @@
 import React from 'react'
-import { render, waitFor } from '@testing-library/react'
-import { ConfigProvider } from '@design-system/context'
+import { fireEvent, render, waitFor } from '@testing-library/react'
 import { Calendar } from '../Calendar'
 import { CalendarProps } from '../types'
 
 describe('Calendar', () => {
   const DefaultCalender = (props: CalendarProps) => (
-    <ConfigProvider>
-      <Calendar {...props} />
-    </ConfigProvider>
+    <Calendar {...props} />
   )
 
   it('should receive qa props', () => {
@@ -47,5 +44,56 @@ describe('Calendar', () => {
     })
 
     expect(console.warn).not.toBeCalled()
+  })
+
+  // Codium AI
+  it('should close calendar when date is selected', () => {
+    const { getByPlaceholderText, container } = render(<DefaultCalender />)
+    const input = getByPlaceholderText('____-__-__')
+    fireEvent.focus(input)
+    fireEvent.change(input, { target: { value: '2022-12-12' } })
+    fireEvent.blur(input)
+
+    expect(container.querySelector('.ant-picker-open')).not.toBeInTheDocument()
+  })
+
+  it('should handle empty presets array without errors', () => {
+    const { container } = render(<DefaultCalender presets={[]} />)
+
+    expect(container).toBeInTheDocument()
+  })
+
+  it('should handle disabled state correctly', () => {
+    const { getByPlaceholderText } = render(<Calendar disabled />)
+    const input = getByPlaceholderText('____-__-__')
+
+    expect(input).toBeDisabled()
+  })
+
+  it('should handle readonly state correctly', () => {
+    const { getByPlaceholderText } = render(<DefaultCalender readonly />)
+    const input = getByPlaceholderText('____-__-__')
+
+    expect(input).toHaveAttribute('readonly')
+  })
+
+  it('should close when clicking outside', () => {
+    const { getByPlaceholderText, container } = render(<Calendar />)
+    const input = getByPlaceholderText('____-__-__')
+    fireEvent.click(input)
+    fireEvent.mouseDown(document)
+
+    expect(container.querySelector('.ant-picker-open')).not.toBeInTheDocument()
+  })
+
+  it('should handle rapid open/close actions', () => {
+    const { getByPlaceholderText, container } = render(<Calendar />)
+    const input = getByPlaceholderText('____-__-__')
+    fireEvent.click(input)
+    fireEvent.mouseDown(document)
+    fireEvent.click(input)
+    fireEvent.mouseDown(document)
+
+    expect(container.querySelector('.ant-picker-open')).not.toBeInTheDocument()
   })
 })

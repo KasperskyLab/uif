@@ -59,4 +59,35 @@ describe('Badge', () => {
       expect(result.current).toEqual(`+${overflowCount}`)
     })
   })
+
+  // Codium AI
+  it('should render text when text is provided', () => {
+    const { container } = render(<Badge text="New" />)
+    expect(matchBadgeContent(container, 'New')).toBeTruthy()
+  })
+
+  it('should render text when both count and text are provided', () => {
+    const { container } = render(<DefaultBadge text="New" />)
+    expect(matchBadgeContent(container, 'New')).toBeTruthy()
+  })
+
+  it('should render dot mode correctly when mode is "dot"', () => {
+    const { container } = render(<Badge mode="dot" />)
+    expect(container.querySelector('.ant-badge-dot')).toBeInTheDocument()
+  })
+
+  it('should render correctly when count is undefined', () => {
+    const { container } = render(<Badge />)
+    expect(getBadge(container)?.textContent).toEqual('')
+  })
+
+  it('should handle negative count values appropriately', () => {
+    const { container } = render(<Badge count={-5} />)
+    expect(matchBadgeContent(container, '-5')).toBeTruthy()
+  })
+
+  it('should render correctly when both count and text are undefined', () => {
+    const { container } = render(<Badge />)
+    expect(getBadge(container)?.textContent).toEqual('')
+  })
 })

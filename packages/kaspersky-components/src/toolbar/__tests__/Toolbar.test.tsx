@@ -1,14 +1,11 @@
 import { render, screen, act, waitFor } from '@testing-library/react'
 import { Toolbar } from '../Toolbar'
-import { ThemeKey } from '@design-system/types'
-import { ThemeProvider } from '@design-system/theme'
 import '@testing-library/jest-dom'
 import 'jest-styled-components'
 import React from 'react'
 import { ToolbarItems } from '../types'
 import userEvent from '@testing-library/user-event'
 import { Search } from '@src/search'
-import { ConfigProvider } from '@design-system/context'
 
 describe('Toolbar ', () => {
   const itemsLeft: ToolbarItems[] = [
@@ -90,9 +87,7 @@ describe('Toolbar ', () => {
 
   test('should render toolbar items in left part', () => {
     render(
-      <ThemeProvider theme={ThemeKey.Light} >
-        <Toolbar testId={testId} left={itemsLeft}/>
-      </ThemeProvider>
+      <Toolbar testId={testId} left={itemsLeft}/>
     )
 
     const buttonTool = screen.getByText('Tool 1')
@@ -100,9 +95,7 @@ describe('Toolbar ', () => {
   })
   test('should correctly render toolbar items with maxLeftItemsCount', () => {
     render(
-      <ThemeProvider theme={ThemeKey.Light} >
-        <Toolbar testId={testId} left={itemsLeft} leftLimit={2}/>
-      </ThemeProvider>
+      <Toolbar testId={testId} left={itemsLeft} leftLimit={2}/>
     )
 
     const buttonTool2 = screen.queryByText('Tool 2')
@@ -113,9 +106,7 @@ describe('Toolbar ', () => {
   })
   test('should correctly render items in dropdown with maxLeftItemsCount', async () => {
     const { container } = render(
-      <ThemeProvider theme={ThemeKey.Light} >
-        <Toolbar testId={testId} left={itemsLeft} leftLimit={2}/>
-      </ThemeProvider>
+      <Toolbar testId={testId} left={itemsLeft} leftLimit={2}/>
     )
 
     const dropdown = container.querySelector('[kl-id="toolbar-dropdown-button"]')!
@@ -135,9 +126,7 @@ describe('Toolbar ', () => {
   })
   test('should correctly render items without dropdown', async () => {
     const { container } = render(
-      <ThemeProvider theme={ThemeKey.Light} >
-        <Toolbar testId={testId} left={itemsLeft}/>
-      </ThemeProvider>
+      <Toolbar testId={testId} left={itemsLeft}/>
     )
     const dropdown = container.querySelector('[kl-id="toolbar-dropdown-button"]')!
     expect(dropdown).not.toBeInTheDocument()
@@ -148,9 +137,7 @@ describe('Toolbar ', () => {
   })
   test('should render toolbar items in right part', () => {
     const { container } = render(
-      <ConfigProvider theme={ThemeKey.Light} >
-        <Toolbar testId={testId} left={itemsLeft} right={itemsRight}/>
-      </ConfigProvider>
+      <Toolbar testId={testId} left={itemsLeft} right={itemsRight}/>
     )
 
     const collapsibleSearch = container.querySelector('[kl-id="kl-collapsible-search-item"]')
@@ -164,5 +151,46 @@ describe('Toolbar ', () => {
     expect(btnFilter).toBeInTheDocument()
     expect(btnSettings).toBeInTheDocument()
     expect(btnScale).toBeInTheDocument()
+  })
+
+  // Codium AI
+  test('should render toolbar with left and right items correctly', () => {
+    const itemsLeft: ToolbarItems[] = [
+      { type: 'button', key: '1', label: 'Tool 1' },
+      { type: 'button', key: '2', label: 'Tool 2' }
+    ]
+    const itemsRight: ToolbarItems[] = [
+      { type: 'button', key: '3', label: 'Tool 3' }
+    ]
+    render(<Toolbar left={itemsLeft} right={itemsRight} />)
+    expect(screen.getByText('Tool 1')).toBeInTheDocument()
+    expect(screen.getByText('Tool 2')).toBeInTheDocument()
+    expect(screen.getByText('Tool 3')).toBeInTheDocument()
+  })
+
+  test('should handle visibility of toolbar items correctly', () => {
+    const itemsLeft: ToolbarItems[] = [
+      { type: 'button', key: '1', label: 'Visible Tool', visible: true },
+      { type: 'button', key: '2', label: 'Hidden Tool', visible: false }
+    ]
+    render(<Toolbar left={itemsLeft} />)
+    expect(screen.getByText('Visible Tool')).toBeInTheDocument()
+    expect(screen.queryByText('Hidden Tool')).not.toBeInTheDocument()
+  })
+
+  test('should render correctly when no left or right items provided', () => {
+    const { container } = render(<Toolbar />)
+    expect(container.firstChild).toBeInTheDocument()
+  })
+
+  test('should render toolbar items when all have visible set to false', () => {
+    const itemsLeft: ToolbarItems[] = [
+      { type: 'button', key: '1', label: 'Tool 1', visible: false },
+      { type: 'button', key: '2', label: 'Tool 2', visible: false }
+    ]
+    const { container } = render(<Toolbar left={itemsLeft} testId={testId} />)
+    expect(screen.queryByText('Tool 1')).not.toBeInTheDocument()
+    expect(screen.queryByText('Tool 2')).not.toBeInTheDocument()
+    expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
   })
 })

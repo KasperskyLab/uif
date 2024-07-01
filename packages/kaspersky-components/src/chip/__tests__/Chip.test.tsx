@@ -3,6 +3,7 @@ import { act } from 'react-dom/test-utils'
 import { render, screen } from '@testing-library/react'
 import { Chip } from '../Chip'
 import { ChipProps } from '../types'
+import { Placeholder } from '@kaspersky/icons/16'
 
 const defaultProps = {
   label: 'Test Chip',
@@ -62,5 +63,16 @@ describe('Chip', () => {
   test('should be disabled with disabled prop', () => {
     render(<DefaultChip disabled />)
     expect(getChip()).toHaveAttribute('disabled')
+  })
+
+  // Codium AI
+  test('should display icon when provided', () => {
+    const { container } = render(<DefaultChip icon={<Placeholder testId='test-icon-id' />} />)
+    expect(container.querySelector('[data-testid="test-icon-id"]')).toBeInTheDocument()
+  })
+
+  test('should render chip with counter overflow', () => {
+    const { container } = render(<DefaultChip counter={9999} />)
+    expect(getBadge(container)?.textContent).toEqual('+99')
   })
 })

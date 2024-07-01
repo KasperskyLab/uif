@@ -84,7 +84,6 @@ const CalendarViewComponent: React.VFC<CalendarViewProps> = ({
   const closeOnLastTime = (e: any) => {
     const wrapper = calendarRef.current?.querySelector('.ant-picker-time-panel-column:last-child')
     if (wrapper === e.target?.parentElement || wrapper === e.target?.parentElement?.parentElement) {
-
       setOpenState(false)
     }
   }

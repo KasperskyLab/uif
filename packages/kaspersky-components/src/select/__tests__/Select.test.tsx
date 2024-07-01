@@ -1,7 +1,6 @@
 import React from 'react'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { ConfigProvider } from '@design-system/context'
 import { Button } from '../../button'
 import { Tag } from '../../tag'
 import { Text } from '../../typography'
@@ -35,9 +34,7 @@ const getSelect = async (klId = defaultProps.klId) => {
 }
 
 const DefaultSelect = (props: SelectProps) => (
-  <ConfigProvider>
-    <Select {...defaultProps} {...props} />
-  </ConfigProvider>
+  <Select {...defaultProps} {...props} />
 )
 
 describe('Select', () => {
@@ -406,5 +403,45 @@ describe('Select', () => {
     expect(select).toBeInTheDocument()
     expect(dropdown).toBeInTheDocument()
     expect(firstItem).toBeInTheDocument()
+  })
+
+  // Codium AI
+  it('should handle selection of multiple options', async () => {
+    const onChange = jest.fn()
+    const { container } = render(<DefaultSelect onChange={onChange} />)
+    await waitForDropdown()
+
+    const selectItems = container.querySelectorAll('.ant-select-item')
+    expect(selectItems.length).toBeGreaterThan(1)
+
+    selectItems.forEach(item => {
+      (item as HTMLDivElement).click()
+    })
+
+    expect(onChange).toHaveBeenCalledTimes(selectItems.length)
+  })
+
+  it('should handle empty options array gracefully', async () => {
+    const { container } = render(<DefaultSelect options={[]} />)
+    const dropdown = await waitForDropdown()
+
+    expect(dropdown).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="select-no-data"]')).toBeInTheDocument()
+  })
+
+  it('should handle non-unique values when allowNonUniqueValues is true', async () => {
+    const onChange = jest.fn()
+    const { container } = render(<DefaultSelect mode="tags" allowNonUniqueValues onChange={onChange} />)
+    await waitForDropdown()
+
+    const selectItem = getFirstOption(container)
+    expect(selectItem).toBeDefined()
+
+    if (selectItem) {
+      (selectItem as HTMLDivElement).click();
+      (selectItem as HTMLDivElement).click()
+    }
+
+    expect(onChange).toHaveBeenCalledTimes(2)
   })
 })

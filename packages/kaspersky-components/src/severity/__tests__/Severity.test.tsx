@@ -4,7 +4,6 @@ import { Severity } from '../Severity'
 import { SeverityProps } from '../types'
 import { useTranslation } from 'react-i18next'
 import { renderHook } from '@testing-library/react-hooks'
-import { ConfigProvider } from '@design-system/context'
 import { severityTextLocalization } from '../localization'
 import { localization } from '../../../helpers/localization'
 import '@testing-library/jest-dom'
@@ -14,9 +13,7 @@ describe('Severity ', () => {
   const klId = 'test-severity-id'
 
   const DefaultSeverity = (props: SeverityProps) => (
-    <ConfigProvider locale="en-us">
-      <Severity {...props} />
-    </ConfigProvider>
+    <Severity {...props} />
   )
 
   test('should render', () => {
@@ -66,7 +63,6 @@ describe('Severity ', () => {
   })
 
   test('render without l18n', () => {
-    // @ts-ignore
     const enSeverityTextStatus = localization['en-us'].translation.severity.positive
     const mode = 'positive'
     const { getByTestId } = render(<DefaultSeverity mode={mode} klId={klId}/>)
@@ -75,5 +71,11 @@ describe('Severity ', () => {
     const locText = result.current.t(severityTextLocalization[mode])
     expect(enSeverityTextStatus).toEqual(locText)
     expect(getByTestId(klId)).toHaveTextContent(locText)
+  })
+
+  // Codium AI
+  test('should render correctly when children is an empty string', () => {
+    const { container } = render(<Severity mode="medium">{''}</Severity>)
+    expect(container).toBeInTheDocument()
   })
 })

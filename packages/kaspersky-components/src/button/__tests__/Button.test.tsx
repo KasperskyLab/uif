@@ -96,4 +96,27 @@ describe('Button', () => {
     expect(screen.getByTestId(buttonKlIds[0])).toBeInTheDocument()
     expect(screen.getByTestId(buttonKlIds[1])).toBeInTheDocument()
   })
+
+  // Claude 3 Sonnet
+  it('should render correctly with children', () => {
+    const { container } = render(<Button>Child Content</Button>)
+    expect(container.querySelector('.kl-components-button-text')).toHaveTextContent('Child Content')
+  })
+
+  it('should render correctly with both children and text', () => {
+    const { container } = render(<DefaultButton>Child Content</DefaultButton>)
+    expect(container.querySelector('.kl-components-button-text')).toHaveTextContent(defaultProps.text)
+    expect(getButton()).toBeInTheDocument()
+  })
+
+  // Codium AI
+  it('should render correctly when no props are provided', () => {
+    render(<Button />)
+    expect(screen.getByRole('button')).toBeInTheDocument()
+  })
+
+  it('should combine className with icon-only when no text or children are provided', () => {
+    const { container } = render(<Button />)
+    expect(container.querySelector('.icon-only')).toBeInTheDocument()
+  })
 })

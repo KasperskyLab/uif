@@ -21,4 +21,25 @@ describe('Grid', () => {
       expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
     })
   })
+
+  // Codium AI
+  it('should use default gap when layoutProperty.gap is not provided', () => {
+    const { container } = render(<Grid />)
+    const gridElement = container.firstChild
+
+    expect(gridElement).toHaveStyle('gap: 16px')
+  })
+
+  it('should apply custom gap when layoutProperty.gap is provided', () => {
+    const { container } = render(<Grid layoutProperty={{ gap: 24 }} />)
+    const gridElement = container.firstChild
+
+    expect(gridElement).toHaveStyle('gap: 24px')
+  })
+
+  it('should render with default grid layout when layout prop is not provided', () => {
+    const { container } = render(<Grid />)
+    const gridElement = container.firstChild
+    expect(gridElement).toBeInTheDocument()
+  })
 })

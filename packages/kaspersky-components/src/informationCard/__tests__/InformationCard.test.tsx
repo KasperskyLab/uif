@@ -24,4 +24,35 @@ describe('Information card', () => {
     render(<DefaultInformationCard disabled />)
     expect(getInformationCard()).toHaveAttribute('disabled')
   })
+
+  // Codium AI
+  it('should render title', () => {
+    const title = 'Title'
+    render(<DefaultInformationCard title={title} />)
+
+    expect(screen.getByText(title)).toBeInTheDocument()
+  })
+
+  it('should render leftSide content', () => {
+    const leftSideContent = 'Left Side'
+    render(<DefaultInformationCard leftSide={leftSideContent} />)
+
+    expect(screen.getByText(leftSideContent)).toBeInTheDocument()
+  })
+
+  it('should render rightCorner content when both title and rightCorner are provided', () => {
+    const rightCornerContent = 'Right Corner'
+    const title = 'Title'
+    render(<DefaultInformationCard title={title} rightCorner={rightCornerContent} />)
+
+    expect(screen.getByText(rightCornerContent)).toBeInTheDocument()
+    expect(screen.getByText(title)).toBeInTheDocument()
+  })
+
+  it('should not render rightCorner content when title is not provided', () => {
+    const rightCornerContent = 'Right Corner'
+    render(<DefaultInformationCard rightCorner={rightCornerContent} />)
+
+    expect(screen.queryByText(rightCornerContent)).not.toBeInTheDocument()
+  })
 })

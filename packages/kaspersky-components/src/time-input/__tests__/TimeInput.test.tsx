@@ -70,4 +70,31 @@ describe('TimeInput', () => {
 
     expect(inputPhone).toHaveValue('10:20')
   })
+
+  // Codium AI
+  it('should update mask options when format changes', () => {
+    const { rerender, getByPlaceholderText } = render(<TimeInput format="HH:mm" placeholder="Time" />)
+    let inputElement = getByPlaceholderText('Time')
+    userEvent.type(inputElement, '1020')
+    expect(inputElement).toHaveValue('10:20')
+
+    rerender(<TimeInput format="HH:mm:ss" placeholder="Time" />)
+    inputElement = getByPlaceholderText('Time')
+    userEvent.clear(inputElement)
+    userEvent.type(inputElement, '102030')
+    expect(inputElement).toHaveValue('10:20:30')
+  })
+
+  it('should work with empty value prop', () => {
+    render(<TimeInput value="" />)
+    const inputElement = screen.getByDisplayValue('')
+    expect(inputElement).toBeInTheDocument()
+  })
+
+  it('should handle undefined onChange prop without errors', () => {
+    render(<TimeInput onChange={undefined} />)
+    const inputElement = screen.getByRole('textbox')
+    userEvent.type(inputElement, '1234')
+    expect(inputElement).toHaveValue('12:34')
+  })
 })

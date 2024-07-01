@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unknown-property */
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
@@ -215,5 +214,39 @@ describe('Tabs', () => {
     expect(screen.getByText('Заголовок группы 1')).toBeInTheDocument()
     expect(screen.getByText('Заголовок группы 2')).toBeInTheDocument()
     expect(screen.getByText('Заголовок группы 3')).toBeInTheDocument()
+  })
+
+  // Codium AI
+  test('should change active tab on tab click', () => {
+    const onChange = jest.fn()
+    const { container } = render(
+      <Tabs defaultActiveKey="1" onChange={onChange}>
+        <Tabs.TabPane tab="Tab 1" key="1">Content 1</Tabs.TabPane>
+        <Tabs.TabPane tab="Tab 2" key="2">Content 2</Tabs.TabPane>
+      </Tabs>
+    )
+    const secondTab = container.querySelectorAll('.ant-tabs-tab')[1]
+    fireEvent.click(secondTab)
+    expect(onChange).toHaveBeenCalledWith('2')
+  })
+
+  test('should handle Tabs component with only one tab', () => {
+    const { container } = render(
+      <Tabs>
+        <Tabs.TabPane tab="Tab 1" key="1">Content 1</Tabs.TabPane>
+      </Tabs>
+    )
+    expect(container.querySelectorAll('.ant-tabs-tab').length).toBe(1)
+  })
+
+  test('should handle Tabs component with all tabs disabled', () => {
+    const { container } = render(
+      <Tabs>
+        <Tabs.TabPane tab="Tab 1" key="1" disabled>Content 1</Tabs.TabPane>
+        <Tabs.TabPane tab="Tab 2" key="2" disabled>Content 2</Tabs.TabPane>
+      </Tabs>
+    )
+    const tabs = container.querySelectorAll('.ant-tabs-tab')
+    tabs.forEach(tab => expect(tab).toHaveClass('ant-tabs-tab-disabled'))
   })
 })

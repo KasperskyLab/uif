@@ -7,7 +7,7 @@ import { Sidebar } from '../Sidebar'
 import { SidebarProps } from '../types'
 
 const defaultProps = {
-  klId: 'test-slider'
+  klId: 'test-sidebar'
 }
 
 const getSidebar = (klId: string = defaultProps.klId) => screen.getByTestId(klId)
@@ -98,5 +98,28 @@ describe('Sidebar', () => {
     const zIndex = 2000
     render(<DefaultSidebar zIndex={zIndex} />)
     expect(getSidebar()).toHaveStyle({ 'z-index': zIndex })
+  })
+
+  // Codium AI
+  it('should display both title and subtitle when provided', () => {
+    const title = 'Test Title'
+    const subtitle = 'Test Subtitle'
+    render(<Sidebar visible title={title} subtitle={subtitle} />)
+    expect(screen.getByText(title)).toBeInTheDocument()
+    expect(screen.getByText(subtitle)).toBeInTheDocument()
+  })
+
+  it('should render children content correctly', () => {
+    const childContent = <div>Child Content</div>
+    render(<DefaultSidebar visible>{childContent}</DefaultSidebar>)
+    expect(screen.getByText('Child Content')).toBeInTheDocument()
+  })
+
+  it('should handle rapid visibility toggling without errors', () => {
+    const { rerender } = render(<DefaultSidebar visible={false} testId="test-id" />)
+    rerender(<DefaultSidebar visible={true} />)
+    rerender(<DefaultSidebar visible={false} />)
+    rerender(<DefaultSidebar visible={true} />)
+    expect(getSidebar()).toBeInTheDocument()
   })
 })

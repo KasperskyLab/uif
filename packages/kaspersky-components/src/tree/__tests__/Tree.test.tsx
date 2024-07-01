@@ -1,7 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { ConfigProvider } from '@design-system/context'
 import { TreeList, TreeNav } from '@src/tree'
 import { DataNode, Key, TreeListProps } from '../types'
 import { getNodes, hasUncheckedChildren, sortCheckedKeys } from '../utils'
@@ -78,9 +77,7 @@ function queryCheckbox (container: HTMLElement, key: string) {
 }
 
 const DefaultTree = (props: Partial<TreeListProps>) => (
-  <ConfigProvider>
-    <TreeList {...defaultProps} {...props} />
-  </ConfigProvider>
+  <TreeList {...defaultProps} {...props} />
 )
 
 describe('Tree', () => {
