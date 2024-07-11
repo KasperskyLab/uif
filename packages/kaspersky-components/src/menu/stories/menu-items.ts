@@ -1,7 +1,7 @@
 import { AppUpdate, Desktop, Grid, Search, Server, StorageServer, Settings2, Store, UserAccount, UserGroup } from '@kaspersky/icons/16'
-import { ItemDivider } from '@src/menu/types'
+import { ItemDivider, NavItemData } from '@src/menu/types'
 
-export const beforeItems: Record<string, unknown>[] = [
+export const beforeItems: NavItemData[] = [
   {
     key: 'Administration server',
     state: 'monitoring',
@@ -9,15 +9,24 @@ export const beforeItems: Record<string, unknown>[] = [
     icon: StorageServer,
     klId: 'navigation.main.server',
     isRoot: true,
-    itemDivider: 'after'
+    itemDivider: ItemDivider.After
   }
 ]
 
-export const navItems: Record<string, unknown>[] = [
+export const navItems: NavItemData[] = [
+  {
+    state: 'new',
+    weight: 100,
+    key: 'New item',
+    icon: AppUpdate,
+    klId: 'navigation.main.newItem',
+    items: [],
+    isRoot: true
+  },
   {
     state: 'monitoring',
     weight: 100,
-    key: 'Monitoring & reporting',
+    key: 'cMonitoring & reporting',
     iconClass: 'monitoring',
     icon: Grid,
     klId: 'navigation.main.monitoring',
@@ -454,7 +463,7 @@ export const navItems: Record<string, unknown>[] = [
   }
 ]
 
-export const navUserItems: Record<string, unknown>[] = [
+export const navUserItems: NavItemData[] = [
   {
     iconClass: 'settings',
     icon: Settings2,

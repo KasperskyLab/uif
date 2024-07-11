@@ -15,6 +15,7 @@ import {
 } from '@kaspersky/components'
 import { SegmentedButtonOption } from '@kaspersky/components/src/segmented-button/types'
 import { ThemeKey, themeColors } from '@kaspersky/components/design-system'
+import { AppUpdate } from '@kaspersky/icons/16'
 import { navItems, navUserItems, favItems } from '@kaspersky/components/src/menu/stories/menu-items'
 
 import { AppLogo } from './AppLogo'
@@ -52,8 +53,14 @@ export type LayoutProps = {
   setThemeKey: Dispatch<SetStateAction<ThemeKey>>
 }
 
+
+
 export const Layout = ({ themeKey, setThemeKey }: LayoutProps) => {
   const [menuMinimized, setMenuMinimized] = useState(false)
+  const [menuNavState, setMenuNavState] = useState(navItems)
+  const [userMenuState, setUserMenuState] = useState(navUserItems)
+  const [isAdded, setIsAdded] = useState(false)
+
   const segmentedButtonOptions: SegmentedButtonOption[] = [
     {
       value: ThemeKey.Light,
@@ -100,7 +107,44 @@ export const Layout = ({ themeKey, setThemeKey }: LayoutProps) => {
     key: `${index + 1}`
   }))
 
-  console.log(navItems)
+  const addMenuItem = () => {
+    setMenuNavState([{
+      state: 'new',
+      weight: 100,
+      key: 'New item',
+      icon: AppUpdate,
+      klId: 'navigation.main.newItem',
+      items: [],
+      isRoot: true
+    }, ...menuNavState.filter(item => item.state !== 'new')])
+    console.log(menuNavState)
+    setIsAdded(true)
+  }
+
+  const removeMenuItem = () => {
+    setMenuNavState([...menuNavState.filter(item => item.state !== 'new')])
+    setIsAdded(false)
+  }
+
+  const toggleUser = () => {
+    setUserMenuState([...userMenuState.map((item) => {
+      if (item.state === 'user') {
+        if (item.userProps?.role !== 'Administrator') {
+          item.userProps = {
+            role: 'Administrator',
+            name: 'Leonardo'
+          }
+        } else {
+          item.userProps = {
+            role: 'Operator',
+            name: 'Raphael'
+          }
+        }
+      }
+      return item
+    })])
+    setIsAdded(false)
+  }
 
   return (
     <StyledRootSpace themeKey={themeKey} direction='horizontal' size={0} wrap='nowrap'>
@@ -109,12 +153,23 @@ export const Layout = ({ themeKey, setThemeKey }: LayoutProps) => {
           <Hamburger className='item left' role='button' name='hamburger' onClick={ () => setMenuMinimized(!menuMinimized) } />
         </ServicesNav>
         <AppLogo />
-        <Nav navItems={navItems} favItems={favItems} minimized={menuMinimized} favsEnabled={true} />
-        <UserNav navItems={navUserItems} minimized={menuMinimized} childPop={true} />
+        <Nav navItems={menuNavState} favItems={favItems} minimized={menuMinimized} favsEnabled={true} />
+        <UserNav navItems={userMenuState} minimized={menuMinimized} childPop={true} />
       </StyledMenu>
       <StyledSpace themeKey={themeKey} direction='vertical' size={16}>
         <SegmentedButton value={[themeKey]} items={segmentedButtonOptions} onChange={value => setThemeKey(value[0] as ThemeKey)}/>
         <Button onClick={() => setIsOpen(true)} text={'Open modal'}/>
+
+        <Space size='10' align='auto' direction='vertical'>
+          <Space size='10' justify='space-between'>
+            <Button onClick={addMenuItem} disabled={isAdded}>Add new menu item</Button>
+            <Button onClick={removeMenuItem} disabled={!isAdded}>Remove new menu item</Button>
+          </Space>
+          <Space size='10' justify='space-between'>
+            <Button onClick={toggleUser}>Toggle user</Button>
+          </Space>
+        </Space>
+
         <Sidebar visible={isOpen} onClose={() => setIsOpen(false)} title="Sidebar">
           <Text>Content</Text>
         </Sidebar>
