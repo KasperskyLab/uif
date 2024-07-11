@@ -1,15 +1,14 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'
+import { navCss, navSeparator } from '@src/menu/navCss'
+import { NavItemData, NavItemProps, NavProps, StateActions } from '@src/menu/types'
 import cn from 'classnames'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import styled from 'styled-components'
 
 import { Pin } from '@kaspersky/icons/16'
 
-import { navCss, navSeparator } from '@src/menu/navCss'
-import { NavItemData, NavItemProps, NavProps, StateActions } from '@src/menu/types'
-
+import { NavCaptionItem } from './NavCaptionItem'
 import { NavItem } from './NavItem'
 import { NavUserItem } from './NavUserItem'
-import { NavCaptionItem } from './NavCaptionItem'
 
 const NavComponent = ({ beforeItems = [], navItems = [], favItems = [], favsEnabled, className, minimized, childPop, inert }: NavProps) => {
   const [active, setActive] = useState('')
@@ -25,21 +24,15 @@ const NavComponent = ({ beforeItems = [], navItems = [], favItems = [], favsEnab
     isRoot: true,
     items: navFavItems
   }
-  const [navState, setNavState] = useState([Boolean(favItems.length) && favSection, ...navItems].filter(Boolean))
+  const resolveNavStateArr = () => {
+    return [
+      Boolean(navFavItems.length) && favSection,
+      ...navItems
+        .filter((el:NavItemData) => el.state !== 'favorites')
+    ].filter(Boolean)
+  }
 
-  const documentRef = useRef(document)
-
-  const handleClickOutside = useCallback((event) => {
-    if ((minimized || !!childPop) && !document.querySelectorAll('.ant-layout-sider')[0].contains(event.target)) collapseAll()
-  }, [minimized])
-
-  useEffect(() => {
-    documentRef.current.addEventListener('click', handleClickOutside)
-    return () => {
-      documentRef.current.removeEventListener('click', handleClickOutside)
-    }
-  }, [minimized])
-
+  const [navState, setNavState] = useState(resolveNavStateArr())
   const collapseAll = () => {
     updateNavState({ collapseAll: true })
   }
@@ -71,9 +64,8 @@ const NavComponent = ({ beforeItems = [], navItems = [], favItems = [], favsEnab
         }
       }
 
-      if (items) {
-        navItem.items?.map(updateLevel)
-      }
+      items && navItem.items?.map(updateLevel)
+
       return navItem
     }
     const updatedNavState = navState.map(updateLevel)
@@ -81,12 +73,25 @@ const NavComponent = ({ beforeItems = [], navItems = [], favItems = [], favsEnab
   }
   const updateFavState = () => {
     favSection.items = navFavItems
-    setNavState([Boolean(navFavItems.length) && favSection, ...navState.filter((el:NavItemData) => el.state !== 'favorites')].filter(Boolean))
+    setNavState(resolveNavStateArr())
   }
+
+  const documentRef = useRef(document)
+
+  const handleClickOutside = useCallback((event) => {
+    if ((minimized || !!childPop) && !document.querySelectorAll('.ant-layout-sider')[0].contains(event.target)) collapseAll()
+  }, [minimized])
+
+  useEffect(() => {
+    documentRef.current.addEventListener('click', handleClickOutside)
+    return () => {
+      documentRef.current.removeEventListener('click', handleClickOutside)
+    }
+  }, [minimized])
 
   useEffect(() => {
     updateFavState()
-  }, [navFavItems])
+  }, [navFavItems, navItems])
 
   useEffect(() => {
     minimized && collapseAll()

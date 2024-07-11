@@ -91,7 +91,8 @@ export const StyledNavItem = styled(NavItemComponent).withConfig({
 const AddToFavs = ({
   data,
   navFavItems,
-  setNavFavItems
+  setNavFavItems,
+  updateFavState
 }: {
   data: NavItemData,
   navFavItems: NavItemData[],

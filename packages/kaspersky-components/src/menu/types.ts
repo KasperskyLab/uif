@@ -26,8 +26,9 @@ export type NavItemData = {
   isCaption?: boolean,
   expanded?: boolean,
   active?: boolean,
+  mode?: 'user' | undefined,
   userProps?: UserProps,
-  itemDivider?: ItemDivider.Before | ItemDivider.After
+  itemDivider?: ItemDivider.Before | ItemDivider.After | undefined
 }
 
 type UserProps = {
