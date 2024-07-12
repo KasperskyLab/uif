@@ -26,9 +26,6 @@ const meta: Meta<MenuProps> = {
     docs: {
       page: withMeta(MetaData)
     }
-  },
-  args: {
-    testId: 'menu-test-id'
   }
 }
 export default meta
@@ -119,6 +116,7 @@ export const Base: StoryObj<MenuProps> = {
     width: 280,
     trigger: null,
     collapsedWidth: 64,
-    collapsible: true
+    collapsible: true,
+    testId: 'menu-test-id'
   }
 }
