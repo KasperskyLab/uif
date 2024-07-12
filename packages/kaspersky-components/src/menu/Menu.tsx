@@ -19,6 +19,6 @@ const StyledAntSider = styled(Layout.Sider).withConfig({
 
 export const Menu = (rawProps: AntSiderProps): JSX.Element => {
   const themedProps: MenuViewProps = useThemedMenu(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <StyledAntSider {...props}/>
+  const { testAttributes, ...rest } = useTestAttribute(themedProps)
+  return <StyledAntSider {...testAttributes} {...rest}/>
 }

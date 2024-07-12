@@ -4,6 +4,7 @@ import { NavDivider } from '@src/menu/NavItem'
 import styled from 'styled-components'
 import { navItemCss } from '@src/menu/navCss'
 import cn from 'classnames'
+import { openNotification } from '@src/notification'
 const CustomComponent = ({ className }: any) => {
   return (
     <>
@@ -27,3 +28,7 @@ const CustomComponent = ({ className }: any) => {
 export const CustomItem = styled(CustomComponent)`
   ${navItemCss}
 `
+
+export const clickHandler = (text: string) => {
+  openNotification.success({ description: text, duration: 1 })
+}

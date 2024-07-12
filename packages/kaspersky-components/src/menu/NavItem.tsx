@@ -11,8 +11,8 @@ import { NavCaptionItem } from '@src/menu/NavCaptionItem'
 
 export const NavItem = (rawProps: NavItemProps): JSX.Element => {
   const themedProps: MenuViewProps = useThemedMenu(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <StyledNavItem {...props} {...rawProps}/>
+  const { testAttributes, ...rest } = useTestAttribute(themedProps)
+  return <StyledNavItem {...testAttributes} {...rest} {...rawProps}/>
 }
 const NavItemComponent = ({
   data,
@@ -53,7 +53,12 @@ const NavItemComponent = ({
     <>
       { itemDivider === ItemDivider.Before && <NavDivider/> }
       <div className={cn(className, 'uif-nav-item', isCaption && 'uif-nav-caption', expanded && 'expanded')}>
-        <div className={cn(className, 'uif-nav-item-entry', active && 'active')} onClick={entryClick}>
+        <div
+          className={cn(className, 'uif-nav-item-entry', active && 'active')}
+          kl-id={data.klId}
+          data-testId={data.klId}
+          onClick={entryClick}
+        >
           { icon && <div className='uif-nav-item-entry-icon'>
             <NavItemIcon/>
           </div> }

@@ -7,6 +7,7 @@ import { Menu, Hamburger } from '../Menu'
 import { MenuProps } from '../types'
 import { Nav, UserNav } from '../Nav'
 import { ServicesNav } from '@src/menu'
+import { Notification } from '@src/notification'
 import { badges } from '@sb/badges'
 import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
 import { AppUpdate, Help } from '@kaspersky/icons/16'
@@ -15,6 +16,7 @@ import { beforeItems, navItems, navUserItems, favItems } from '../stories/menu-i
 import { getNotificationsIcon } from '../stories/Notifications'
 import { Space } from '@src/space'
 import { Button } from '@src/button'
+import { clickHandler } from '../stories/CustomItem'
 
 const meta: Meta<MenuProps> = {
   title: 'Organisms/Menu',
@@ -24,6 +26,9 @@ const meta: Meta<MenuProps> = {
     docs: {
       page: withMeta(MetaData)
     }
+  },
+  args: {
+    testId: 'menu-test-id'
   }
 }
 export default meta
@@ -54,7 +59,8 @@ export const Base: StoryObj<MenuProps> = {
         icon: AppUpdate,
         klId: 'navigation.main.newItem',
         items: [],
-        isRoot: true
+        isRoot: true,
+        onClick: () => clickHandler('New item')
       }, ...menuNavState.filter(item => item.state !== 'new')])
       setIsAdded(true)
     }
@@ -90,13 +96,14 @@ export const Base: StoryObj<MenuProps> = {
           <ServicesNav>
             <Hamburger className='item left' role='button' name='hamburger' onClick={ () => setMenuMinimized(!menuMinimized) } />
             {getNotificationsIcon(true)}
-            <Help className='item' role='button' onClick={ () => alert('open online help') } />
+            <Help className='item' role='button' onClick={ () => clickHandler('open online help') } />
           </ServicesNav>
           <AppLogo/>
           <Nav beforeItems={beforeItems} navItems={menuNavState} favItems={favItems} minimized={menuMinimized} favsEnabled={true} />
           <UserNav navItems={userMenuState} minimized={menuMinimized} childPop={true} />
         </Menu>
         <Section size='10' align='auto' direction='vertical'>
+          <Notification mode={'info'} duration={1} />
           <Space size='10' justify='space-between'>
             <Button onClick={addMenuItem} disabled={isAdded}>Add new menu item</Button>
             <Button onClick={removeMenuItem} disabled={!isAdded}>Remove new menu item</Button>
