@@ -68,6 +68,11 @@
       },
       "groupingEmpty": "Other"
     },
+    "tabs": {
+      "dropdown": {
+        "more": "More"
+      }
+    },
     "timeInput": {
       "placeholder": "Select time"
     },

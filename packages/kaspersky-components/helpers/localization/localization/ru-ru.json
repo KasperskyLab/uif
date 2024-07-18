@@ -68,6 +68,11 @@
       },
       "groupingEmpty": "Другое"
     },
+    "tabs": {
+      "dropdown": {
+        "more": "Еще"
+      }
+    },
     "timeInput": {
       "placeholder": "Выбор времени"
     },
