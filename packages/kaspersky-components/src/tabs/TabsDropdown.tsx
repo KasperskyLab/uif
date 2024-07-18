@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react'
 import { Dropdown } from '@src/dropdown'
+import { Locale } from '@src/locale'
 import { ArrowDown1 } from '@kaspersky/icons/16'
 import { StyledMoreButton } from './tabsCss'
 
@@ -29,7 +30,7 @@ export const TabsDropdown = ({
       })}
     >
       <StyledMoreButton mode='tertiary' iconAfter={<ArrowDown1 />}>
-        More
+        <Locale localizationKey={'tabs.dropdown.more'} />
       </StyledMoreButton>
     </Dropdown>
   )
