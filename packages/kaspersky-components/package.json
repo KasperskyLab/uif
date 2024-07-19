@@ -84,6 +84,7 @@
     "uuid": "9.0.0"
   },
   "devDependencies": {
+    "@kaspersky/icons": "2.3.0",
     "@babel/core": "7.23.2",
     "@babel/plugin-transform-runtime": "7.17.0",
     "@babel/preset-react": "7.16.7",
