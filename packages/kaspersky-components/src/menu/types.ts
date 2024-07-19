@@ -45,7 +45,7 @@ export type NavItemProps = {
   favsEnabled?: boolean,
   component?: any,
   isCaption?: boolean
-}
+} & TestingProps
 
 export type NavProps = {
   beforeItems?: any,

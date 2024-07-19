@@ -117,7 +117,7 @@ const NavComponent = ({ beforeItems = [], navItems = [], favItems = [], favsEnab
         if (ItemCustomComponent) return <ItemCustomComponent key={item.key} />
         if (item.userProps) return <NavUserItem key={item.key} data={item} menuState={menuState} />
         if (item.isCaption) return <NavCaptionItem key={item.key} data={item} />
-        return <NavItem key={item.key} data={item} menuState={menuState} />
+        return <NavItem key={item.key} data={item} testId={item.klId} menuState={menuState} />
       })
     }
   </nav>)
