@@ -1,11 +1,14 @@
-import React, { ReactElement } from 'react'
-import { Dropdown } from '@src/dropdown'
+import { Dropdown, DropdownProps } from '@src/dropdown'
 import { Locale } from '@src/locale'
-import { ArrowDown1 } from '@kaspersky/icons/16'
+import React, { ReactElement, Key } from 'react'
+
+import { ArrowDown1 } from '@kl/icons/16'
+
 import { StyledMoreButton } from './tabsCss'
 
 type TabsDropdownProps = {
   tabs: ReactElement[],
+  activeKey: Key,
   onChange: ((activeKey: string) => void) | undefined,
   className?: string
 }
@@ -13,6 +16,7 @@ type TabsDropdownProps = {
 export const TabsDropdown = ({
   tabs,
   onChange,
+  activeKey,
   className
 }: TabsDropdownProps): JSX.Element => {
   return (
@@ -25,11 +29,16 @@ export const TabsDropdown = ({
           children: tab.props.tab,
           onClick: () => onChange?.(String(tab.key) || ''),
           key: tab.key,
-          disabled: tab.props.disabled
+          disabled: tab.props.disabled,
+          className: tab.key === activeKey ? 'kl6-dropdown-active-tab' : ''
         }
       })}
     >
-      <StyledMoreButton mode='tertiary' iconAfter={<ArrowDown1 />}>
+      <StyledMoreButton
+        className="kl6-tabs-more-button"
+        mode='tertiary'
+        iconAfter={<ArrowDown1 />}
+      >
         <Locale localizationKey={'tabs.dropdown.more'} />
       </StyledMoreButton>
     </Dropdown>

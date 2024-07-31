@@ -6,6 +6,7 @@ import {
   CSSProperties,
   FC
 } from 'react'
+import { IndicatorMode } from '@src/indicator'
 import { SpaceProps } from '@src/space'
 import { Theme } from '@design-system/types/Theme'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
@@ -72,9 +73,15 @@ export type TabsViewProps = TabsToViewProps<TabsProps> & { rootHashClass?: strin
 
 export type TabPaneHeadProps = {
   text: string,
+  /** Icon before text */
+  iconBefore?: ReactNode,
+  /** Icon after text */
+  iconAfter?: ReactNode,
+  /** @deprecated Use 'iconBefore' prop instead */
   icon?: ReactNode,
   number?: number,
   indicator?: boolean,
+  indicatorMode?: IndicatorMode,
   cssConfig?: TabsCssConfig,
   /** @deprecated Disabled state - use TabPane disabled prop instead */
   disabled?: boolean

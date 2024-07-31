@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 import { Button } from '@src/button'
 import { Divider } from '@src/divider'
-import { Text } from '@src/typography/text'
+import { Text } from '@src/typography'
 import { TabsCssConfig } from './types'
 import { getFromProps } from '@helpers/getFromProps'
 import { SPACES } from '@design-system/theme'
@@ -19,7 +19,8 @@ const fromProps = getFromProps<TabsCssConfig>()
 const tabsSizes = {
   tabList: {
     gap: `${SPACES[2]}px`,
-    padding: `${SPACES[12]}px ${SPACES[6]}px`
+    padding: `${SPACES[12]}px ${SPACES[6]}px`,
+    margin: `0 0 ${SPACES[12]}px 0`
   },
   topTab: {
     padding: `${SPACES[1]}px ${SPACES[4]}px`,
@@ -113,7 +114,6 @@ const cardTabsCss = css`
 
 const leftTabsCss = css`
   && > .ant-tabs-nav {
-    min-height: 100vh;
     width: 280px;
     padding: ${tabsSizes.tabList.padding};
     border-right: 1px solid ${fromProps('divider.color')};
@@ -141,6 +141,10 @@ const leftTabsCss = css`
 
       ${StyledDivider} {
         margin: 0 0 8px 0;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
 
       .ant-tabs-tab-btn {
@@ -186,6 +190,10 @@ export const tabsCss = css<{
 
   &&.group-tabs .ant-tabs-tab-disabled {
     cursor: inherit;
+  }
+
+  &.ant-tabs-top > .ant-tabs-nav {
+    margin: ${tabsSizes.tabList.margin};
   }
 
   && .ant-tabs-nav-wrap {
@@ -242,10 +250,12 @@ export const tabsCss = css<{
     margin-left: ${tabsSizes.tabList.gap};
   }
 
-  ${props => props.hiddenTabsLength && `
-  .ant-tabs-tab:nth-last-child(-n + ${props.hiddenTabsLength}) {
-    display: none;
-  }`}
+  ${props => props.hiddenTabsLength
+    ? `.ant-tabs-tab:nth-last-child(-n + ${props.hiddenTabsLength}) {
+        visibility: hidden;
+      }`
+    : ''
+  }
 
   .ant-tabs-tab {
     padding: 0;
@@ -348,17 +358,35 @@ export const tabPaneHeadCss = css<{ cssConfig: TabsCssConfig }>`
 
 export const tabsWrapperCss = css<{
   cssConfig: TabsCssConfig,
-  selectedMoreButton: boolean
+  selectedMoreButton: boolean,
+  shouldShowMoreButton: boolean
 }>`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  overflow: hidden;
+
+  .ant-tabs-ink-bar {
+    ${props => props.selectedMoreButton && `
+      display: none;
+    `}
+  }
+
+  .kl6-tabs-more-button{
+
+  }
 
   && ${StyledMoreButton} {
+    position: absolute;
+    right: 24px;
     color: ${fromProps('unSelected.enabled.color')};
     ${props => props.selectedMoreButton && `
       color: ${fromProps('selected.enabled.color')(props)};
     `}
+    ${props => props.shouldShowMoreButton
+      ? ''
+      : 'visibility: hidden;'
+    }
     ${textSizesCss}; 
 
     padding: ${tabsSizes.topTab.padding};
@@ -367,7 +395,7 @@ export const tabsWrapperCss = css<{
     height: 24px;
     border-radius: 4px;
     min-width: fit-content;
-    
+
     &::before {
       display: none;
       position: absolute;
