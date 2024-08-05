@@ -267,7 +267,7 @@ const LeftButton = <Button mode='secondary' text='Left extra button'/>
 export const WithExtraContent: Story = {
   render: (args: TabsProps) => (
     <Space size={16}>
-      <H3>ÐžÑ‚Ñ�Ñ‚ÑƒÐ¿Ñ‹ Ð¸ Ð´Ñ€ÑƒÐ³Ð¸Ðµ Ñ�Ñ‚Ð¸Ð»Ð¸ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð½Ð¾ Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ð¾ Ð·Ð°Ð´Ð°Ð²Ð°Ñ‚ÑŒ Ð²Ñ€ÑƒÑ‡Ð½ÑƒÑŽ, Ð² Ð±ÑƒÐ´ÑƒÑ‰ÐµÐ¼ Ð±ÑƒÐ´ÐµÑ‚ Ð¿Ñ€Ð¾Ñ€Ð°Ð±Ð¾Ñ‚Ð°Ð½Ð¾ Ñ�Ð¾ Ñ�Ñ‚Ð¾Ñ€Ð¾Ð½Ñ‹ Ð´Ð¸Ð·Ð°Ð¹Ð½Ð°</H3>
+      <H3>Отѝтупы и другие ѝтили временно необходимо задавать вручную, в будущем будет проработано ѝо ѝтороны дизайна</H3>
       <Tabs {...args} tabBarExtraContent={RightButton} />
       <Tabs {...args} tabBarExtraContent={{ right: RightButton, left: LeftButton }} />
     </Space>
@@ -277,7 +277,7 @@ export const WithExtraContent: Story = {
 export const WithGroupedTabs: Story = {
   render: (args: TabsProps) => (
     <GroupTabs {...args}>
-      {/* Ð“Ñ€ÑƒÐ¿Ð¿Ð° 1 */}
+      {/* Group 1 */}
       <GroupTabs.TabPaneHeader
         title={'Group 1 heading'}
         key="tab-group-header-1"
@@ -302,7 +302,7 @@ export const WithGroupedTabs: Story = {
         Content of Tab Pane 3
       </Tabs.TabPane>
 
-      {/* Ð“Ñ€ÑƒÐ¿Ð¿Ð° 2 */}
+      {/* Group 2 */}
       <GroupTabs.TabPaneHeader
         divider
         title={'Group 2 heading'}
@@ -315,7 +315,7 @@ export const WithGroupedTabs: Story = {
         Content of Tab Pane 5
       </Tabs.TabPane>
 
-      {/* Ð“Ñ€ÑƒÐ¿Ð¿Ð° 3 */}
+      {/* Group 3 */}
       <GroupTabs.TabPaneHeader
         divider
         title={'Group 3 heading'}
