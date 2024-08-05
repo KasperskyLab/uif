@@ -73,14 +73,14 @@ const StyledTabsWrapper = styled.div.withConfig<{ cssConfig: TabsCssConfig }>({ 
 `
 
 export const TabPaneHead: FC<TabPaneHeadProps> = ({
-                                                    text,
-                                                    icon,
-                                                    iconBefore,
-                                                    iconAfter,
-                                                    number,
-                                                    indicator,
-                                                    indicatorMode
-                                                  }: TabPaneHeadProps) => {
+  text,
+  icon,
+  iconBefore,
+  iconAfter,
+  number,
+  indicator,
+  indicatorMode
+}: TabPaneHeadProps) => {
   const { cssConfig, testAttributes } = useContext(TabsContext)
 
   return (
@@ -139,7 +139,7 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
   const activeTab = activeKey ?? defaultActiveKey ?? (children as ReactElement[])[0]?.key ?? ''
   const [activeTabKey, setActiveTabKey] = useState(activeTab)
   const [buttonMoreSize, setButtonMoreSize] = useState(0)
-  const [shouldRecalculateIntersection, setShouldRecalculateIntersection] = useState(0)
+  const [recalculateIntersectionCounter, setRecalculateIntersectionCounter] = useState(0)
   const [containerWidth, setContainerWidth] = useState(0)
 
   const existingTabs: ReactElement[] = useMemo(
@@ -159,7 +159,7 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
     tabsRef,
     buttonMoreSize,
     '.ant-tabs-nav-list',
-    shouldRecalculateIntersection
+    recalculateIntersectionCounter
   ) ?? existingTabs.length
 
   if (tabsRef.current) {
@@ -185,7 +185,7 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
   }, [activeTab])
 
   useEffect(() => {
-    setShouldRecalculateIntersection(shouldRecalculateIntersection + 1)
+    setRecalculateIntersectionCounter(recalculateIntersectionCounter + 1)
   }, [existingTabs])
 
   const onTabChange = (value: string) => {
@@ -198,7 +198,7 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
       if (tabsRef.current) {
         const buttonWidth = tabsRef.current.querySelector('.kl6-tabs-more-button')?.getBoundingClientRect().width || 0
         setButtonMoreSize(buttonWidth)
-        setShouldRecalculateIntersection(shouldRecalculateIntersection + 1)
+        setRecalculateIntersectionCounter(recalculateIntersectionCounter + 1)
       }
     }, 0)
   }

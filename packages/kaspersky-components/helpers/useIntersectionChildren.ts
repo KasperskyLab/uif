@@ -1,11 +1,12 @@
 import { RefObject, useMemo } from 'react'
 import { useResizeObserver } from './useResizeObserver'
 
-/** Find position last inside element
- * @param ref Ref element inside witch will be calculations
- * @param padding left paading from end of container for Intersection detect
- * @param wrapperQuerySelector querySelector of parent for Intersection elements
- * @param renderCounter If you need recalculate useMemo
+/** The hook calculates the intersection of the container and its children, returns the index of last fitting child
+
+ @param ref External container ref
+ @param padding Padding to consider when intersecting
+ @param wrapperQuerySelector selector of internal container
+ @param renderCounter flag to trigger the recalculation
  */
 export const useIntersectionChildren = (ref: RefObject<Element>, padding = 0, wrapperQuerySelector?: string, renderCounter?: number): number | undefined => {
   const { right: containerRight } = useResizeObserver(ref) ?? { right: 0 }
