@@ -6,21 +6,20 @@ import { Button } from '@src/button'
 import { IndicatorMode } from '@src/indicator'
 import { IndicatorModes } from '@src/indicator/types'
 import { Textbox } from '@src/input'
-import { Locale } from '@src/locale'
 import { Space } from '@src/space'
 import { H3 } from '@src/typography'
 import { Meta, StoryObj } from '@storybook/react'
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { Placeholder } from '@kl/icons/16'
 
-import MetaData from '../__meta__/meta.json'
-import { Tabs, GroupTabs } from '../Tabs'
-import { TabsProps } from '../types'
+import MetaData from './__meta__/meta.json'
+import { Tabs, GroupTabs } from './Tabs'
+import { TabsProps } from './types'
 
 const meta: Meta<TabsProps> = {
-  title: 'Atoms/Tabs',
+  title: 'Hexa UI Components/Tabs',
   component: Tabs,
   argTypes: {
     ...sbHideControls(['onChange', 'onTabClick', 'style', 'destroyInactiveTabPane', 'theme', 'className', 'type'])
@@ -237,45 +236,28 @@ export const WithDisabled: Story = {
   )
 }
 
-const generateTabs = (length = 15, tabText = 'Tab', contentText = 'Content of tab') => [
-  ...Array.from({ length: length }, (_, i) => i)
-].map((i) => (
-  <Tabs.TabPane
-    tab={
-      <Tabs.TabPaneHead text={`${tabText} ${i + 1}`} icon={<Placeholder/>}/>
-    }
-    key={i + 1}
-    disabled={i === 8}
-  >
-    {contentText} {i + 1}
-  </Tabs.TabPane>
+const generateTabs = (length = 15, tabText = 'Tab', contentText = 'Content of tab') => Array.from({ length: length }, (_, i) => i).map((i) => ({
+    text: tabText,
+    disabled: i === 8,
+    content: contentText + ' ' + (i + 1)
+  }
 ))
 
 export const CollapsedHorizontalGroup: Story = {
   render: (props: TabsProps) => {
-    const [dynamicChange, setDynamicChange] = useState<boolean>(true)
-    const tabsForMoreButton = generateTabs()
-    const tabsForMoreButton2 = generateTabs(15, 'Text', 'Different Content of tab')
-
-    const localizedTab = <Tabs.TabPane
-      tab={
-        <Tabs.TabPaneHead text={useLocalization('tabs.dropdown.more')} icon={<Placeholder/>}/>
-      }
-      key={'myKey'}
-    >
-      <Locale localizationKey={'tabs.dropdown.more'}/>
-    </Tabs.TabPane>
-
-    tabsForMoreButton.push(localizedTab)
-    tabsForMoreButton2.push(localizedTab)
-
-    return (<>
-      <Button onClick={() => { setDynamicChange(!dynamicChange) }}>
-        <Locale localizationKey={'tabs.dropdown.more'}/>
-      </Button>
+    return (
       <Tabs {...props}>
-        { dynamicChange ? tabsForMoreButton : tabsForMoreButton2 }
-      </Tabs></>)
+        {generateTabs(20, 'tabs.dropdown.more').map((el, i) => <Tabs.TabPane
+            tab={
+              <Tabs.TabPaneHead text={useLocalization(el.text) + ' ' + (i + 2)} icon={<Placeholder/>}/>
+            }
+            key={i + 1}
+            disabled={el.disabled}
+          >
+            {el.content}
+          </Tabs.TabPane>
+        )}
+      </Tabs>)
   }
 }
 
@@ -285,7 +267,7 @@ const LeftButton = <Button mode='secondary' text='Left extra button'/>
 export const WithExtraContent: Story = {
   render: (args: TabsProps) => (
     <Space size={16}>
-      <H3>Отступы и другие стили пока задавать надо вручную, в будущем будет проработано со стороны дизайна</H3>
+      <H3>ÐžÑ‚Ñ�Ñ‚ÑƒÐ¿Ñ‹ Ð¸ Ð´Ñ€ÑƒÐ³Ð¸Ðµ Ñ�Ñ‚Ð¸Ð»Ð¸ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð½Ð¾ Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ð¾ Ð·Ð°Ð´Ð°Ð²Ð°Ñ‚ÑŒ Ð²Ñ€ÑƒÑ‡Ð½ÑƒÑŽ, Ð² Ð±ÑƒÐ´ÑƒÑ‰ÐµÐ¼ Ð±ÑƒÐ´ÐµÑ‚ Ð¿Ñ€Ð¾Ñ€Ð°Ð±Ð¾Ñ‚Ð°Ð½Ð¾ Ñ�Ð¾ Ñ�Ñ‚Ð¾Ñ€Ð¾Ð½Ñ‹ Ð´Ð¸Ð·Ð°Ð¹Ð½Ð°</H3>
       <Tabs {...args} tabBarExtraContent={RightButton} />
       <Tabs {...args} tabBarExtraContent={{ right: RightButton, left: LeftButton }} />
     </Space>
@@ -295,7 +277,7 @@ export const WithExtraContent: Story = {
 export const WithGroupedTabs: Story = {
   render: (args: TabsProps) => (
     <GroupTabs {...args}>
-      {/* Группа 1 */}
+      {/* Ð“Ñ€ÑƒÐ¿Ð¿Ð° 1 */}
       <GroupTabs.TabPaneHeader
         title={'Group 1 heading'}
         key="tab-group-header-1"
@@ -320,7 +302,7 @@ export const WithGroupedTabs: Story = {
         Content of Tab Pane 3
       </Tabs.TabPane>
 
-      {/* Группа 2 */}
+      {/* Ð“Ñ€ÑƒÐ¿Ð¿Ð° 2 */}
       <GroupTabs.TabPaneHeader
         divider
         title={'Group 2 heading'}
@@ -333,7 +315,7 @@ export const WithGroupedTabs: Story = {
         Content of Tab Pane 5
       </Tabs.TabPane>
 
-      {/* Группа 3 */}
+      {/* Ð“Ñ€ÑƒÐ¿Ð¿Ð° 3 */}
       <GroupTabs.TabPaneHeader
         divider
         title={'Group 3 heading'}

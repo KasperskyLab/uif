@@ -12,6 +12,7 @@ import cn from 'classnames'
 import React, {
   ReactElement,
   FC,
+  Children,
   isValidElement,
   useContext,
   useEffect,
@@ -72,14 +73,14 @@ const StyledTabsWrapper = styled.div.withConfig<{ cssConfig: TabsCssConfig }>({ 
 `
 
 export const TabPaneHead: FC<TabPaneHeadProps> = ({
-  text,
-  icon,
-  iconBefore,
-  iconAfter,
-  number,
-  indicator,
-  indicatorMode
-}: TabPaneHeadProps) => {
+                                                    text,
+                                                    icon,
+                                                    iconBefore,
+                                                    iconAfter,
+                                                    number,
+                                                    indicator,
+                                                    indicatorMode
+                                                  }: TabPaneHeadProps) => {
   const { cssConfig, testAttributes } = useContext(TabsContext)
 
   return (
@@ -108,49 +109,64 @@ export const GroupTabs: FC<GroupTabsProps> & GroupTabsVariants = ({ className, .
   />
 )
 
+function extractChildrenFromFragment (variableToInspect: any): ReactElement[] {
+  if (variableToInspect?.type && variableToInspect.type === React.Fragment) {
+    return extractChildrenFromFragment(variableToInspect.props.children)
+  }
+  return variableToInspect
+}
+
 export const GroupTabHeader: FC<TabPaneHeaderProps> = (props: TabPaneHeaderProps) => createGroupTabPane(props)
 
 GroupTabs.TabPaneHeader = GroupTabHeader
 
 const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = ({
-  cssConfig,
-  tabPosition = 'top',
-  type = 'line',
-  destroyInactiveTabPane = false,
-  children,
-  activeKey,
-  defaultActiveKey,
-  onChange,
-  testId,
-  testAttributes,
-  className,
-  rootHashClass,
-  ...props
-}: TabsViewProps) => {
+                                                                                   cssConfig,
+                                                                                   tabPosition = 'top',
+                                                                                   type = 'line',
+                                                                                   destroyInactiveTabPane = false,
+                                                                                   children,
+                                                                                   activeKey,
+                                                                                   defaultActiveKey,
+                                                                                   onChange,
+                                                                                   testId,
+                                                                                   testAttributes,
+                                                                                   className,
+                                                                                   rootHashClass,
+                                                                                   ...props
+                                                                                 }: TabsViewProps) => {
   const tabsRef = useRef<HTMLDivElement>(null)
   const activeTab = activeKey ?? defaultActiveKey ?? (children as ReactElement[])[0]?.key ?? ''
   const [activeTabKey, setActiveTabKey] = useState(activeTab)
   const [buttonMoreSize, setButtonMoreSize] = useState(0)
-  const [antiCache, setAntiCache] = useState(0)
+  const [shouldRecalculateIntersection, setShouldRecalculateIntersection] = useState(0)
   const [containerWidth, setContainerWidth] = useState(0)
 
   const existingTabs: ReactElement[] = useMemo(
     () => {
-      if (children) {
-        return (children as [])?.filter((tab: any) => isValidElement(tab))
-      }
-      return []
-    },
-    [children]
+      const result: ReactElement[] = []
+      const noWrapper = extractChildrenFromFragment(children)
+      Children.forEach(noWrapper, (child) => {
+        if (isValidElement(child)) {
+          result.push(child as ReactElement)
+        }
+      })
+      return result
+    }, [children]
   )
 
-  let lastFittingItemIndex = useIntersectionChildren(tabsRef, buttonMoreSize, '.ant-tabs-nav-list', antiCache) || 100
+  let lastFittingItemIndex = useIntersectionChildren(
+    tabsRef,
+    buttonMoreSize,
+    '.ant-tabs-nav-list',
+    shouldRecalculateIntersection
+  ) ?? existingTabs.length
 
   if (tabsRef.current) {
     const tabs = tabsRef.current.querySelectorAll('.ant-tabs-tab')
     const lastTab = tabs[tabs.length - 1]
-    if ((lastTab as HTMLElement).offsetLeft + lastTab.clientWidth < containerWidth) {
-      lastFittingItemIndex = 100
+    if (lastTab && ((lastTab as HTMLElement).offsetLeft + lastTab.clientWidth < containerWidth)) {
+      lastFittingItemIndex = existingTabs.length
     }
   }
 
@@ -158,7 +174,7 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
   const shouldShowMoreButton =
     hasIntersection && (lastFittingItemIndex + 1 < existingTabs.length)
 
-  const isMoreButtonActive = existingTabs.findIndex(el => activeTabKey === el.key) > (lastFittingItemIndex || Infinity)
+  const isMoreButtonActive = existingTabs.findIndex(el => activeTabKey === el.key) > lastFittingItemIndex
 
   const dropdownItems = hasIntersection
     ? existingTabs.slice(lastFittingItemIndex + 1, existingTabs.length)
@@ -169,7 +185,7 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
   }, [activeTab])
 
   useEffect(() => {
-    setAntiCache(antiCache + 1)
+    setShouldRecalculateIntersection(shouldRecalculateIntersection + 1)
   }, [existingTabs])
 
   const onTabChange = (value: string) => {
@@ -182,7 +198,7 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
       if (tabsRef.current) {
         const buttonWidth = tabsRef.current.querySelector('.kl6-tabs-more-button')?.getBoundingClientRect().width || 0
         setButtonMoreSize(buttonWidth)
-        setAntiCache(antiCache + 1)
+        setShouldRecalculateIntersection(shouldRecalculateIntersection + 1)
       }
     }, 0)
   }

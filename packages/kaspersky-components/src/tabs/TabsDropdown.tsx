@@ -14,11 +14,11 @@ type TabsDropdownProps = {
 }
 
 export const TabsDropdown = ({
-  tabs,
-  onChange,
-  activeKey,
-  className
-}: TabsDropdownProps): JSX.Element => {
+                               tabs,
+                               onChange,
+                               activeKey,
+                               className
+                             }: TabsDropdownProps): JSX.Element => {
   return (
     <Dropdown
       trigger={['click']}
