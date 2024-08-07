@@ -1,18 +1,30 @@
+import { WithGlobalComponentStyles } from '@helpers/hocs/WithGlobalComponentStyles'
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import i18n from '@helpers/localization/i18n'
+import { shouldForwardProp } from '@helpers/shouldForwardProp'
+import { useIntersectionChildren } from '@helpers/useIntersectionChildren'
+import { isNumber } from '@src/anchor-links/helpers'
+import { Badge } from '@src/badge'
+import { Indicator } from '@src/indicator'
+import { Space } from '@src/space'
+import { Tabs as AntdTabs } from 'antd'
+import cn from 'classnames'
 import React, {
   ReactElement,
-  ReactPortal,
+  FC,
+  Children,
+  isValidElement,
   useContext,
   useEffect,
-  useRef,
   useState,
-  FC
+  useMemo,
+  useRef
 } from 'react'
-import styled from 'styled-components'
-import { throttle } from 'lodash'
-import { Tabs as AntdTabs } from 'antd'
 import ResizeObserver from 'resize-observer-polyfill'
-import cn from 'classnames'
+import styled from 'styled-components'
 
+import { TabsContext } from './context'
+import { getDropdownStyles } from './dropdownGlobalStyles'
 import {
   tabsCss,
   tabsWrapperCss,
@@ -21,7 +33,7 @@ import {
   StyledTabPaneText,
   StyledTabPaneIndicator
 } from './tabsCss'
-import { useThemedTabs } from './useThemedTabs'
+import { TabsDropdown } from './TabsDropdown'
 import {
   TabPaneHeadProps,
   TabsProps,
@@ -33,19 +45,8 @@ import {
   TabsVariants,
   StyledTabPanedHeadProps
 } from './types'
-import { TabsContext } from './context'
-import { TabsDropdown } from './TabsDropdown'
-import { Badge } from '@src/badge'
-import { Indicator } from '@src/indicator'
-import { Space } from '@src/space'
+import { useThemedTabs } from './useThemedTabs'
 import { createGroupTabPane, extractTabPanes } from './utils'
-import { WithGlobalComponentStyles } from '@helpers/hocs/WithGlobalComponentStyles'
-import { getDropdownStyles } from './dropdownGlobalStyles'
-import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { shouldForwardProp } from '@helpers/shouldForwardProp'
-
-const TAB_MORE_BUTTON_WIDTH = 70
-const TAB_MARGIN = 4
 
 const StyledTabs = styled(AntdTabs).withConfig<TabsViewProps & { hiddenTabsLength: number }>({
   shouldForwardProp: (prop) => !['cssConfig', 'hiddenTabsLength', 'containerWidth'].includes(prop as string)
@@ -74,19 +75,24 @@ const StyledTabsWrapper = styled.div.withConfig<{ cssConfig: TabsCssConfig }>({ 
 export const TabPaneHead: FC<TabPaneHeadProps> = ({
   text,
   icon,
+  iconBefore,
+  iconAfter,
   number,
-  indicator
+  indicator,
+  indicatorMode
 }: TabPaneHeadProps) => {
-  const { cssConfig } = useContext(TabsContext)
+  const { cssConfig, testAttributes } = useContext(TabsContext)
 
   return (
     <StyledTabPaneHead size={8} wrap="nowrap" cssConfig={cssConfig}>
-      {icon && <StyledTabPaneIcon>{icon}</StyledTabPaneIcon>}
+      {!iconBefore && icon && <StyledTabPaneIcon>{icon}</StyledTabPaneIcon>}
+      {iconBefore && <StyledTabPaneIcon>{iconBefore}</StyledTabPaneIcon>}
       <StyledTabPaneText>{text}</StyledTabPaneText>
+      {iconAfter && <StyledTabPaneIcon>{iconAfter}</StyledTabPaneIcon>}
       {number && <Badge count={number} mode="neutral" />}
       {indicator && (
         <StyledTabPaneIndicator>
-          <Indicator mode="high" />
+          <Indicator mode={indicatorMode ?? 'high'} testId={`${testAttributes?.['data-testid'] ?? 'tabs'}-tab-indicator`} />
         </StyledTabPaneIndicator>
       )}
     </StyledTabPaneHead>
@@ -95,96 +101,131 @@ export const TabPaneHead: FC<TabPaneHeadProps> = ({
 
 Tabs.TabPaneHead = TabPaneHead
 
-export const GroupTabs: FC<GroupTabsProps> & GroupTabsVariants = ({ children }) => (
-  <Tabs className="group-tabs" tabPosition="left">
-    {children}
-  </Tabs>
+export const GroupTabs: FC<GroupTabsProps> & GroupTabsVariants = ({ className, ...props }) => (
+  <Tabs
+    {...props}
+    className={cn('group-tabs', className)}
+    tabPosition="left"
+  />
 )
+
+function extractChildrenFromFragment (variableToInspect: any): ReactElement[] {
+  if (variableToInspect?.type && variableToInspect.type === React.Fragment) {
+    return extractChildrenFromFragment(variableToInspect.props.children)
+  }
+  return variableToInspect
+}
 
 export const GroupTabHeader: FC<TabPaneHeaderProps> = (props: TabPaneHeaderProps) => createGroupTabPane(props)
 
 GroupTabs.TabPaneHeader = GroupTabHeader
 
 const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = ({
-  cssConfig,
-  tabPosition = 'top',
-  type = 'line',
-  destroyInactiveTabPane = false,
-  children,
-  activeKey,
-  defaultActiveKey,
-  onChange,
-  testAttributes,
-  className,
-  rootHashClass,
-  ...props
-}: TabsViewProps) => {
+                                                                                   cssConfig,
+                                                                                   tabPosition = 'top',
+                                                                                   type = 'line',
+                                                                                   destroyInactiveTabPane = false,
+                                                                                   children,
+                                                                                   activeKey,
+                                                                                   defaultActiveKey,
+                                                                                   onChange,
+                                                                                   testId,
+                                                                                   testAttributes,
+                                                                                   className,
+                                                                                   rootHashClass,
+                                                                                   ...props
+                                                                                 }: TabsViewProps) => {
   const tabsRef = useRef<HTMLDivElement>(null)
-  const [visibleTabs, setVisibleTabs] = useState<ReactElement[]>(
-    children as ReactElement[]
-  )
-  const [hiddenTabs, setHiddenTabs] = useState<(ReactElement | ReactPortal)[]>(
-    []
-  )
-  const [containerWidth, setContainerWidth] = useState(0)
-  const activeTab =
-    activeKey ?? defaultActiveKey ?? (children as ReactElement[])[0]?.key ?? ''
+  const activeTab = activeKey ?? defaultActiveKey ?? (children as ReactElement[])[0]?.key ?? ''
   const [activeTabKey, setActiveTabKey] = useState(activeTab)
+  const [buttonMoreSize, setButtonMoreSize] = useState(0)
+  const [recalculateIntersectionCounter, setRecalculateIntersectionCounter] = useState(0)
+  const [containerWidth, setContainerWidth] = useState(0)
+
+  const existingTabs: ReactElement[] = useMemo(
+    () => {
+      const result: ReactElement[] = []
+      const noWrapper = extractChildrenFromFragment(children)
+      Children.forEach(noWrapper, (child) => {
+        if (isValidElement(child)) {
+          result.push(child as ReactElement)
+        }
+      })
+      return result
+    }, [children]
+  )
+
+  let lastFittingItemIndex = useIntersectionChildren(
+    tabsRef,
+    buttonMoreSize,
+    '.ant-tabs-nav-list',
+    recalculateIntersectionCounter
+  ) ?? existingTabs.length
+
+  if (tabsRef.current) {
+    const tabs = tabsRef.current.querySelectorAll('.ant-tabs-tab')
+    const lastTab = tabs[tabs.length - 1]
+    if (lastTab && ((lastTab as HTMLElement).offsetLeft + lastTab.clientWidth < containerWidth)) {
+      lastFittingItemIndex = existingTabs.length
+    }
+  }
+
+  const hasIntersection = isNumber(lastFittingItemIndex)
+  const shouldShowMoreButton =
+    hasIntersection && (lastFittingItemIndex + 1 < existingTabs.length)
+
+  const isMoreButtonActive = existingTabs.findIndex(el => activeTabKey === el.key) > lastFittingItemIndex
+
+  const dropdownItems = hasIntersection
+    ? existingTabs.slice(lastFittingItemIndex + 1, existingTabs.length)
+    : []
 
   useEffect(() => {
     setActiveTabKey(activeTab)
   }, [activeTab])
+
+  useEffect(() => {
+    setRecalculateIntersectionCounter(recalculateIntersectionCounter + 1)
+  }, [existingTabs])
 
   const onTabChange = (value: string) => {
     setActiveTabKey(value)
     onChange?.(value)
   }
 
-  useEffect(() => {
-    if (!tabsRef.current || tabPosition === 'left') {
-      return
-    }
-
-    const domTabs = tabsRef.current.querySelectorAll('.ant-tabs-tab')
-    const tabsWidth = Array.from(domTabs).map((tab) => tab.clientWidth)
-    const tabsCalculation = throttle(() => {
+  const handler = () => {
+    setTimeout(() => {
       if (tabsRef.current) {
-        let currentWidth = TAB_MORE_BUTTON_WIDTH
-        const visibleTabs: ReactElement[] = []
-        const hiddenTabs: ReactElement[] = []
-        if (Array.isArray(children)) {
-          const filteredChildren = children.filter((tab) => tab != null)
-          for (let i = 0; i < filteredChildren.length; i++) {
-            if (currentWidth + tabsWidth[i] < tabsRef.current.clientWidth) {
-              visibleTabs.push(filteredChildren[i])
-              currentWidth += tabsWidth[i] + TAB_MARGIN
-            } else {
-              hiddenTabs.push(filteredChildren[i])
-            }
-          }
-        }
-
-        setVisibleTabs(visibleTabs)
-        setHiddenTabs(hiddenTabs)
-        setContainerWidth(tabsRef.current.clientWidth)
+        const buttonWidth = tabsRef.current.querySelector('.kl6-tabs-more-button')?.getBoundingClientRect().width || 0
+        setButtonMoreSize(buttonWidth)
+        setRecalculateIntersectionCounter(recalculateIntersectionCounter + 1)
       }
-    }, 1000)
+    }, 0)
+  }
 
-    const resizeObserver = new ResizeObserver(tabsCalculation)
-    resizeObserver.observe(tabsRef.current)
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(() => {
+      if (tabsRef.current) setContainerWidth(tabsRef.current.clientWidth)
+    })
+
+    if (tabsRef.current) resizeObserver.observe(tabsRef.current)
+
+    i18n.on('languageChanged', handler)
 
     return () => {
       resizeObserver.disconnect()
+      i18n.off('languageChanged', handler)
     }
   }, [])
 
   return (
-    <TabsContext.Provider value={{ cssConfig }}>
+    <TabsContext.Provider value={{ cssConfig, testAttributes }}>
       <StyledTabsWrapper
         ref={tabsRef}
         className={cn(className, rootHashClass)}
         cssConfig={cssConfig}
-        selectedMoreButton={Number(activeTabKey) > visibleTabs.length}
+        selectedMoreButton={isMoreButtonActive}
+        shouldShowMoreButton={shouldShowMoreButton}
       >
         <StyledTabs
           cssConfig={cssConfig}
@@ -194,19 +235,18 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
           {...props}
           activeKey={activeTabKey as string}
           onChange={onTabChange}
-          hiddenTabsLength={hiddenTabs.length + 1}
+          hiddenTabsLength={existingTabs.length - (lastFittingItemIndex || existingTabs.length)}
           containerWidth={containerWidth}
           {...testAttributes}
         >
-          {extractTabPanes(children)}
+          {extractTabPanes(existingTabs)}
         </StyledTabs>
-        {hiddenTabs.length > 0 && (
-          <TabsDropdown
-            className={rootHashClass}
-            tabs={hiddenTabs}
-            onChange={onTabChange}
-          />
-        )}
+        <TabsDropdown
+          activeKey={activeTabKey}
+          className={rootHashClass}
+          tabs={dropdownItems}
+          onChange={onTabChange}
+        />
       </StyledTabsWrapper>
     </TabsContext.Provider>
   )
