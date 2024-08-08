@@ -1,7 +1,8 @@
-import { css } from 'styled-components'
-import { InputCssConfig, TextboxViewProps } from './types'
-import { getFromProps } from '@helpers/getFromProps'
 import { getTextSizes, MonoTextTypes, TextSizes } from '@design-system/tokens'
+import { getFromProps } from '@helpers/getFromProps'
+import { css } from 'styled-components'
+
+import { InputCssConfig, TextboxViewProps } from './types'
 
 const fromProps = getFromProps<InputCssConfig>()
 
@@ -120,6 +121,7 @@ export const inputStyles = css`
       }
 
       &, & input {
+        background-color: ${fromProps('disabled.background')};
         color: ${fromProps('disabled.color')};
 
         ::placeholder {
