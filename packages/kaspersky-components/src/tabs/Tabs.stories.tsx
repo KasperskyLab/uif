@@ -12,7 +12,7 @@ import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
 
-import { Placeholder } from '@kl/icons/16'
+import { Placeholder } from '@kaspersky/icons/16'
 
 import MetaData from './__meta__/meta.json'
 import { Tabs, GroupTabs } from './Tabs'
