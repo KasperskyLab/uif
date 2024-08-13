@@ -302,6 +302,7 @@ export const DropdownColumnTitle: React.FC<IDropdownColumnTitleProps> = (
           }
         </StyledDropdown>
       }
+      dropdownMaxHeight={370}
     >
       <StyledColumn className={cn(classNames)} cssConfig={cssConfig} isPressed={dropdownOpened}>
         <TitleLine>

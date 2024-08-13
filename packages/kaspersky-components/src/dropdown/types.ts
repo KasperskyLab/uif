@@ -27,7 +27,8 @@ export type DropdownColorConfig = {
   disabled: StateProps,
   group: StateProps,
   boxShadow: string,
-  boxShadowLine: string
+  boxShadowLine: string,
+  maxHeight?: number
 }
 
 // Helpers
@@ -64,6 +65,8 @@ export type DropdownProps = PropsWithChildren<{
   overlayClassName?: string,
   /** Css class */
   className?: string,
+  /** Set max height for dropdownMenu in pixels */
+  dropdownMaxHeight?: number,
   /** To set the container of the dropdown menu */
   getPopupContainer?: AntdDropdownProps['getPopupContainer']
 } & DropdownThemeProps & TestingProps>

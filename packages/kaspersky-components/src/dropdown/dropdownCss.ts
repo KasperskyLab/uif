@@ -120,10 +120,16 @@ const getDropdownItemCss = (cssConfig: DropdownColorConfig) => css`
   }
 `
 
-export const getDropdownCss = (cssConfig: DropdownColorConfig, rootHashClass: string) => css`
+export const getDropdownCss = (cssConfig: DropdownColorConfig, rootHashClass: string, maxHeight?: number) => css`
   .${rootHashClass} {
     padding: 0;
+
     .ant-dropdown-menu {
+      ${cssConfig.maxHeight
+        ? `max-height: ${cssConfig.maxHeight < 100 ? 100 : cssConfig.maxHeight}px;
+          overflow: auto;`
+        : ''
+      }
       border-radius: ${BORDER_RADIUS[4]}px;
       padding: ${SPACES[2]}px 0px;
       margin: 0;
