@@ -12,6 +12,7 @@ import { DividerProps } from '@src/divider/types'
 
 export const Dropdown: FC<DropdownProps> & DropdownVariants = (rawProps: DropdownProps) => {
   const props = useThemedDropdown(rawProps)
+  props.cssConfig.maxHeight = props.dropdownMaxHeight
   return <DropdownView {...props} />
 }
 
