@@ -1,11 +1,12 @@
-import styled, { css } from 'styled-components'
+import { SPACES } from '@design-system/theme'
+import { getTextSizes, textLevels } from '@design-system/tokens'
+import { getFromProps } from '@helpers/getFromProps'
 import { Button } from '@src/button'
 import { Divider } from '@src/divider'
 import { Text } from '@src/typography'
+import styled, { css } from 'styled-components'
+
 import { TabsCssConfig } from './types'
-import { getFromProps } from '@helpers/getFromProps'
-import { SPACES } from '@design-system/theme'
-import { getTextSizes, textLevels } from '@design-system/tokens'
 
 export const StyledTabPaneIcon = styled.div``
 export const StyledTabPaneText = styled.div``
@@ -13,6 +14,7 @@ export const StyledTabPaneIndicator = styled.div``
 export const StyledDivider = styled(Divider)``
 export const StyledText = styled(Text)``
 export const StyledMoreButton = styled(Button)``
+export const StyledExtraContent = styled.div``
 
 const fromProps = getFromProps<TabsCssConfig>()
 
@@ -358,10 +360,12 @@ export const tabPaneHeadCss = css<{ cssConfig: TabsCssConfig }>`
 
 export const tabsWrapperCss = css<{
   cssConfig: TabsCssConfig,
+  extraContentWidth: number,
   selectedMoreButton: boolean,
   shouldShowMoreButton: boolean
 }>`
   width: 100%;
+  position: relative;
   display: flex;
   justify-content: space-between;
   overflow: hidden;
@@ -372,13 +376,18 @@ export const tabsWrapperCss = css<{
     `}
   }
 
-  .kl6-tabs-more-button{
-
+  .ant-tabs-extra-content {
+    padding-right: 4px;
   }
 
-  && ${StyledMoreButton} {
+  & ${StyledExtraContent} {
     position: absolute;
-    right: 24px;
+    right: 0px;
+  }
+
+  & ${StyledMoreButton} {
+    position: absolute;
+    right: ${props => (props.extraContentWidth) + 'px'};
     color: ${fromProps('unSelected.enabled.color')};
     ${props => props.selectedMoreButton && `
       color: ${fromProps('selected.enabled.color')(props)};
@@ -395,6 +404,7 @@ export const tabsWrapperCss = css<{
     height: 24px;
     border-radius: 4px;
     min-width: fit-content;
+
 
     &::before {
       display: none;
