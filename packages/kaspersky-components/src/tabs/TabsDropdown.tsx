@@ -1,8 +1,8 @@
-import { Dropdown, DropdownProps } from '@src/dropdown'
+import { Dropdown } from '@src/dropdown'
 import { Locale } from '@src/locale'
 import React, { ReactElement, Key } from 'react'
 
-import { ArrowDown1 } from '@kl/icons/16'
+import { ArrowDown1 } from '@kaspersky/icons/16'
 
 import { StyledMoreButton } from './tabsCss'
 
@@ -14,11 +14,11 @@ type TabsDropdownProps = {
 }
 
 export const TabsDropdown = ({
-                               tabs,
-                               onChange,
-                               activeKey,
-                               className
-                             }: TabsDropdownProps): JSX.Element => {
+  tabs,
+  onChange,
+  activeKey,
+  className
+}: TabsDropdownProps): JSX.Element => {
   return (
     <Dropdown
       trigger={['click']}
