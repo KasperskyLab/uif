@@ -11,6 +11,7 @@ import { Tabs as AntdTabs } from 'antd'
 import cn from 'classnames'
 import React, {
   ReactElement,
+  ReactNode,
   FC,
   Children,
   isValidElement,
@@ -31,6 +32,7 @@ import {
   tabPaneHeadCss,
   StyledTabPaneIcon,
   StyledTabPaneText,
+  StyledExtraContent,
   StyledTabPaneIndicator
 } from './tabsCss'
 import { TabsDropdown } from './TabsDropdown'
@@ -43,10 +45,13 @@ import {
   TabPaneHeaderProps,
   GroupTabsProps,
   TabsVariants,
+  ComplexTabBarExtraContent,
   StyledTabPanedHeadProps
 } from './types'
 import { useThemedTabs } from './useThemedTabs'
 import { createGroupTabPane, extractTabPanes } from './utils'
+
+export const TABS_GAP = 4
 
 const StyledTabs = styled(AntdTabs).withConfig<TabsViewProps & { hiddenTabsLength: number }>({
   shouldForwardProp: (prop) => !['cssConfig', 'hiddenTabsLength', 'containerWidth'].includes(prop as string)
@@ -121,21 +126,23 @@ export const GroupTabHeader: FC<TabPaneHeaderProps> = (props: TabPaneHeaderProps
 GroupTabs.TabPaneHeader = GroupTabHeader
 
 const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = ({
-                                                                                   cssConfig,
-                                                                                   tabPosition = 'top',
-                                                                                   type = 'line',
-                                                                                   destroyInactiveTabPane = false,
-                                                                                   children,
-                                                                                   activeKey,
-                                                                                   defaultActiveKey,
-                                                                                   onChange,
-                                                                                   testId,
-                                                                                   testAttributes,
-                                                                                   className,
-                                                                                   rootHashClass,
-                                                                                   ...props
-                                                                                 }: TabsViewProps) => {
+  cssConfig,
+  tabPosition = 'top',
+  type = 'line',
+  destroyInactiveTabPane = false,
+  children,
+  activeKey,
+  defaultActiveKey,
+  onChange,
+  testId,
+  testAttributes,
+  className,
+  tabBarExtraContent,
+  rootHashClass,
+  ...props
+}: TabsViewProps) => {
   const tabsRef = useRef<HTMLDivElement>(null)
+  const extraContentRef = useRef<HTMLDivElement>(null)
   const activeTab = activeKey ?? defaultActiveKey ?? (children as ReactElement[])[0]?.key ?? ''
   const [activeTabKey, setActiveTabKey] = useState(activeTab)
   const [buttonMoreSize, setButtonMoreSize] = useState(0)
@@ -155,17 +162,24 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
     }, [children]
   )
 
+  let extraContentWidthWithGap = 0
+  if (extraContentRef.current) {
+    extraContentWidthWithGap = extraContentRef.current.clientWidth + TABS_GAP
+  }
+
   let lastFittingItemIndex = useIntersectionChildren(
     tabsRef,
-    buttonMoreSize,
+    buttonMoreSize + extraContentWidthWithGap,
     '.ant-tabs-nav-list',
     recalculateIntersectionCounter
   ) ?? existingTabs.length
 
   if (tabsRef.current) {
     const tabs = tabsRef.current.querySelectorAll('.ant-tabs-tab')
+    const extraContentLeft = tabsRef.current.querySelector('.ant-tabs-extra-content')
+    const extraContentLeftWidth = extraContentLeft ? (extraContentLeft.clientWidth + TABS_GAP) : 0
     const lastTab = tabs[tabs.length - 1]
-    if (lastTab && ((lastTab as HTMLElement).offsetLeft + lastTab.clientWidth < containerWidth)) {
+    if (lastTab && ((lastTab as HTMLElement).offsetLeft + lastTab.clientWidth + extraContentWidthWithGap + extraContentLeftWidth < containerWidth)) {
       lastFittingItemIndex = existingTabs.length
     }
   }
@@ -218,6 +232,25 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
     }
   }, [])
 
+  const tabBarExtraContentLeft: ComplexTabBarExtraContent = { left: undefined }
+  let tabBarExtraContentRight: ReactNode
+  if (tabBarExtraContent) {
+    if (typeof tabBarExtraContent === 'object') {
+      if ('left' in tabBarExtraContent || 'right' in tabBarExtraContent) {
+        if ('left' in tabBarExtraContent) {
+          tabBarExtraContentLeft.left = tabBarExtraContent.left
+        }
+        if ('right' in tabBarExtraContent) {
+          tabBarExtraContentRight = tabBarExtraContent.right
+        }
+      } else {
+        tabBarExtraContentRight = tabBarExtraContent
+      }
+    } else {
+      tabBarExtraContentRight = tabBarExtraContent
+    }
+  }
+
   return (
     <TabsContext.Provider value={{ cssConfig, testAttributes }}>
       <StyledTabsWrapper
@@ -225,6 +258,7 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
         className={cn(className, rootHashClass)}
         cssConfig={cssConfig}
         selectedMoreButton={isMoreButtonActive}
+        extraContentWidth={extraContentWidthWithGap}
         shouldShowMoreButton={shouldShowMoreButton}
       >
         <StyledTabs
@@ -233,14 +267,18 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
           tabPosition={tabPosition}
           destroyInactiveTabPane={destroyInactiveTabPane}
           {...props}
+          tabBarExtraContent={tabBarExtraContentLeft}
           activeKey={activeTabKey as string}
           onChange={onTabChange}
-          hiddenTabsLength={existingTabs.length - (lastFittingItemIndex || existingTabs.length)}
+          hiddenTabsLength={existingTabs.length - (lastFittingItemIndex)}
           containerWidth={containerWidth}
           {...testAttributes}
         >
           {extractTabPanes(existingTabs)}
         </StyledTabs>
+        <StyledExtraContent ref={extraContentRef} className={'extraContent'}>
+          {tabBarExtraContentRight}
+        </StyledExtraContent>
         <TabsDropdown
           activeKey={activeTabKey}
           className={rootHashClass}

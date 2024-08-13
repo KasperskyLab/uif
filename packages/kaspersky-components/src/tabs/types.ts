@@ -1,3 +1,9 @@
+import { Focus } from '@design-system/tokens/focus'
+import { Theme } from '@design-system/types/Theme'
+import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { IndicatorMode } from '@src/indicator'
+import { SpaceProps } from '@src/space'
+import { TabPaneProps } from 'antd'
 import {
   PropsWithChildren,
   ReactNode,
@@ -6,12 +12,6 @@ import {
   CSSProperties,
   FC
 } from 'react'
-import { IndicatorMode } from '@src/indicator'
-import { SpaceProps } from '@src/space'
-import { Theme } from '@design-system/types/Theme'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
-import { TabPaneProps } from 'antd'
-import { Focus } from '@design-system/tokens/focus'
 
 type StateProps = {
   color?: string,
@@ -44,11 +44,13 @@ export type TabsVariants = {
   TabPaneHead: FC<TabPaneHeadProps>
 }
 
+export type ComplexTabBarExtraContent = { right?: ReactNode, left?: ReactNode }
+
 export type TabsProps = TabsThemeProps & PropsWithChildren<{
   /** @deprecated Tabs type - card tabs are not supported */
   type?: 'line' | 'card',
   /** Extra content at left and right side of tabs. Intends should be set manually (until design review) */
-  tabBarExtraContent?: ReactNode | { right?: ReactNode, left?: ReactNode },
+  tabBarExtraContent?: ReactNode | ComplexTabBarExtraContent,
   /** TabPane's className */
   className?: string,
   /** Tabs position */
