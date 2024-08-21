@@ -188,7 +188,7 @@ export const DropdownColumnTitle: React.FC<IDropdownColumnTitleProps> = (
           >
             <StyledFilterRow>
               <Checkbox checked={isChecked} />
-              <span>{filter.localisationName ? <Locale localizationKey={filter.localisationName}/> : filter.name}</span>
+              <span>{filter.localizationName ? <Locale localizationKey={filter.localizationName}/> : filter.name}</span>
             </StyledFilterRow>
           </Dropdown.MenuItem>
         )
