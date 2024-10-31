@@ -1,52 +1,52 @@
 import { PickerColorConfig } from '@src/datepicker/types'
+
 import { ComponentThemeContext } from '../config'
 
 export const picker = ({ colors }: ComponentThemeContext): PickerColorConfig => {
   return {
-    separatorColor: colors.elements['separator-solid'],
-    iconColor: colors.textIconsElements.primary,
+    separator: colors.calendar_dropdown.border,
     boxShadow: '0px 0px 1px 0px rgba(9, 30, 66, 0.64), 0px 3px 5px 0px rgba(9, 30, 66, 0.20)',
-    unSelected: {
-      normal: {
-        background: colors.bg.base,
-        color: colors.textIconsElements.primary,
-        borderColor: colors.mainInteractPrimary
+    unselected: {
+      enabled: {
+        background: colors.calendar_dropdown_button.bg.base.enabled,
+        color: colors.calendar_dropdown_button.text.base.enabled,
+        border: colors.calendar_dropdown_button.border.base.enabled
       },
       hover: {
-        background: colors.elements['separator-solid']
+        background: colors.calendar_dropdown_button.bg.base.hover
       },
       active: {
-        background: colors.elements['separator-bold-solid']
+        background: colors.calendar_dropdown_button.bg.base.active
       },
       disabled: {
-        background: colors.elements['separator-solid'],
-        color: colors.textIconsElements['disabled-solid'],
-        borderColor: colors.textIconsElements['disabled-solid']
+        background: colors.calendar_dropdown_button.bg.inactive.enabled,
+        color: colors.calendar_dropdown_button.text.inactive.enabled,
+        border: colors.calendar_dropdown_button.border.inactive.enabled
       }
     },
     selected: {
-      normal: {
-        background: colors.mainInteractPrimary,
-        color: colors.textIconsElements['primary-invert']
+      enabled: {
+        background: colors.calendar_dropdown_button.bg.selected.enabled,
+        color: colors.calendar_dropdown_button.text.selected.enabled
       },
       hover: {
-        background: colors.mainInteractSecondary
+        background: colors.calendar_dropdown_button.bg.selected.hover
       },
       active: {
-        background: colors.mainInteractTertiary
+        background: colors.calendar_dropdown_button.bg.selected.active
       }
     },
-    inRange: {
-      normal: {
-        background: colors.mainInteractPrimaryInverted,
-        color: colors.textIconsElements.primary,
-        borderColor: colors.mainInteractPrimary
+    between: {
+      enabled: {
+        background: colors.calendar_dropdown_button.bg.between.enabled,
+        color: colors.calendar_dropdown_button.text.between.enabled,
+        border: colors.calendar_dropdown_button.border.between.enabled
       },
       hover: {
-        background: colors.mainInteractSecondaryInverted
+        background: colors.calendar_dropdown_button.bg.between.hover
       },
       active: {
-        background: colors.mainInteractTertiaryInverted
+        background: colors.calendar_dropdown_button.bg.between.active
       }
     }
   }

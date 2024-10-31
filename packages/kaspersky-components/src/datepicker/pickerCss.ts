@@ -1,8 +1,9 @@
-import { css, createGlobalStyle } from 'styled-components'
-import { PickerCssConfig, PickerInputCssConfig } from './types'
+import { BORDER_RADIUS, SPACES } from '@design-system/theme/themes/variables'
 import { getTextSizes, textLevels } from '@design-system/tokens'
 import { getFromProps } from '@helpers/getFromProps'
-import { BORDER_RADIUS, SPACES } from '@design-system/theme/themes/variables'
+import { css, createGlobalStyle } from 'styled-components'
+
+import { PickerCssConfig, PickerInputCssConfig } from './types'
 
 const fromProps = getFromProps<PickerCssConfig>()
 
@@ -10,6 +11,7 @@ const fromInputProps = getFromProps<PickerInputCssConfig>()
 
 const DATE_PICKER_PANEL_BODY_PADDING = `${SPACES[8]}px`
 const DATE_PICKER_PANEL_WIDTH = '260px'
+const DATE_PICKER_PANEL_HEIGHT = '288px'
 const DATE_PICKER_PANEL_CONTENT_HEIGHT = '248px'
 const DATE_PICKER_PANEL_HEADER_HEIGHT = '40px'
 const DATE_PICKER_PANEL_FOOTER_WIDTH = '140px'
@@ -42,7 +44,7 @@ export const listCss = css`
 export const pickerCss = css`
   .ant-picker-suffix {
     pointer-events: auto;
-    color: ${fromInputProps('normal.color')};
+    color: ${fromInputProps('enabled.color')};
     border-radius: 3px;
   }
 
@@ -64,12 +66,23 @@ export const pickerCss = css`
 `
 
 export const pickerContainerCss = css`
-  background: ${fromProps('unSelected.normal.background')};
+  background: ${fromProps('unselected.enabled.background')};
+  
+  &:not(.kl6-datepicker-range-time-calendar) {
+    height: ${DATE_PICKER_PANEL_HEIGHT}; 
+  }
+
+  &.kl6-datepicker-range-time-calendar {
+    .ant-picker-footer {
+      width: 100%;
+      border-right: 0;
+    }
+  }
 
   .ant-picker-panel {
     display: flex;
     flex-direction: row-reverse;
-    background: ${fromProps('unSelected.normal.background')};
+    background: ${fromProps('unselected.enabled.background')};
     border: none;
 
     .ant-picker-decade-panel,
@@ -82,7 +95,7 @@ export const pickerContainerCss = css`
 
   .ant-picker-body {
     padding: ${DATE_PICKER_PANEL_BODY_PADDING};
-    border-color: ${fromProps('separatorColor')};
+    border-color: ${fromProps('separator')};
     width: ${DATE_PICKER_PANEL_WIDTH};
     height: ${DATE_PICKER_PANEL_CONTENT_HEIGHT};
 
@@ -91,7 +104,6 @@ export const pickerContainerCss = css`
       height: calc(${DATE_PICKER_PANEL_CONTENT_HEIGHT} - 2 * ${DATE_PICKER_PANEL_BODY_PADDING});
       table-layout: unset;
       border-collapse: separate;
-      // border-spacing: 0 ${SPACES[4]}px;
     }
   }
 
@@ -99,26 +111,31 @@ export const pickerContainerCss = css`
     padding: ${SPACES[4]}px;
     height: ${DATE_PICKER_PANEL_HEADER_HEIGHT};
     width: ${DATE_PICKER_PANEL_WIDTH};
-
+    button {
+      color: ${fromProps('selected.enabled.background')};
+    }
     .ant-picker-header-view {
       line-height: ${SPACES[12]}px;
+
 
       .ant-picker-month-btn,
       .ant-picker-year-btn,
       .ant-picker-decade-btn {
         ${getTextSizes(textLevels.BTM3)}
-        color: ${fromProps('selected.normal.background')};
+        color: ${fromProps('selected.enabled.background')};
     
-        &:hover {
-          color: ${fromProps('selected.hover.background')};
+        :hover {
+          &,
+          & + button {
+            color: ${fromProps('selected.hover.background')};
+          }
         }
-        
-        &:hover + button {
-          color: ${fromProps('selected.hover.background')};
-        }
-      
-        &:active {
-          color: ${fromProps('selected.active.background')};
+
+        :active {
+          &,
+          & + button {
+            color: ${fromProps('selected.active.background')};
+          }
         }
       }
       .ant-picker-month-btn:after {
@@ -138,7 +155,6 @@ export const pickerContainerCss = css`
     .ant-picker-header-prev-btn,
     .ant-picker-header-next-btn {
       visibility: visible !important;
-      color: ${fromProps('iconColor')};
       height: ${SPACES[12]}px;
       width: ${SPACES[12]}px;
       display: flex;
@@ -162,35 +178,38 @@ export const pickerContainerCss = css`
     height: ${SPACES[12]}px;
     width: ${SPACES[12]}px;
     padding: 0;
-    color: ${fromProps('unSelected.normal.color')};
+    color: ${fromProps('unselected.enabled.color')};
   }
 
   .ant-picker-cell-today {
     .ant-picker-cell-inner::before {
       border-radius: ${BORDER_RADIUS[2]}px;
-      border-color: ${fromProps('unSelected.normal.borderColor')};
+      border-color: ${fromProps('unselected.enabled.border')};
     }
+
     &.ant-picker-cell-disabled .ant-picker-cell-inner::before {
-      border-color: ${fromProps('unSelected.disabled.borderColor')};
+      border-color: ${fromProps('unselected.disabled.border')};
     }
   }
 
   .ant-picker-cell-disabled {
     .ant-picker-cell-inner {
-      background: ${fromProps('unSelected.disabled.background')};
-      color: ${fromProps('unSelected.disabled.color')};
+      background: ${fromProps('unselected.disabled.background')};
+      color: ${fromProps('unselected.disabled.color')};
     }
     &::before {
       background: unset;
     }
   }
 
+  .ant-picker-time-panel-column > .ant-picker-time-panel-cell.ant-picker-time-panel-cell-selected,
   .ant-picker-cell-selected,
   .ant-picker-cell-range-start,
   .ant-picker-cell-range-end {
-    .ant-picker-cell-inner {
-      background: ${fromProps('selected.normal.background')};
-      color: ${fromProps('selected.normal.color')};
+    .ant-picker-cell-inner,
+    .ant-picker-time-panel-cell-inner {
+      background: ${fromProps('selected.enabled.background')};
+      color: ${fromProps('selected.enabled.color')};
 
       &:hover {
         background: ${fromProps('selected.hover.background')};
@@ -200,61 +219,133 @@ export const pickerContainerCss = css`
       }
     }
   }
-
-  .ant-picker-cell {
-    color: ${fromProps('unSelected.disabled.color')};
-    padding: 0;
-    line-height: unset;
-
-    &.ant-picker-cell-in-view {
-      color: ${fromProps('unSelected.normal.color')};
-    }
-
-    > .ant-picker-cell-inner {
-      ${getTextSizes(textLevels.BTR4)}
-      line-height: ${SPACES[12]}px;
-      border-radius: ${BORDER_RADIUS[2]}px;
+  .ant-picker-cell ant-picker-cell-in-view { 
+    .ant-picker-cell-range-start ant-picker-cell-selected
+    .ant-picker-cell-in-range .ant-picker-cell-range-hover-start
+    .ant-picker-cell-range-start .ant-picker-cell-range-hover-start .ant-picker-cell-selected {
+      background:  ${fromProps('selected.hover.background')};
     }
   }
-  
-  &&&& .ant-picker-cell:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(.ant-picker-cell-range-hover-end):not(.ant-picker-cell-range-hover-start) {
-    &:hover .ant-picker-cell-inner {
-      background: ${fromProps('unSelected.hover.background')};
+
+  .ant-picker-cell:hover:not(.ant-picker-cell-in-view) .ant-picker-cell-inner {
+    background:  ${fromProps('selected.hover.background')};
+  }
+  .ant-picker-date-panel .ant-picker-cell-in-view.ant-picker-cell-in-range.ant-picker-cell-range-hover-end .ant-picker-cell-inner::after,
+ .ant-picker-date-panel .ant-picker-cell-in-view.ant-picker-cell-in-range.ant-picker-cell-range-hover-start .ant-picker-cell-inner::after {
+    background:  ${fromProps('selected.enabled.background')};
+  }
+
+  .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(.ant-picker-cell-range-hover-start):not(.ant-picker-cell-range-hover-end) .ant-picker-cell-inner {
+    background:  ${fromProps('unselected.hover.background')};
+  }
+  .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single)::before,
+  .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-range-end-single)::before,
+  .ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner,
+  .ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner {
+    background:  ${fromProps('selected.enabled.background')};
+  }
+
+  .ant-picker-cell {
+    color: ${fromProps('unselected.disabled.color')};
+    padding: 0;
+    line-height: unset;
+    
+    &::before {
+      left: -1px;
+      right: -1px;
     }
-    &:active .ant-picker-cell-inner {
-      background: ${fromProps('unSelected.active.background')};
-      color: ${fromProps('unSelected.normal.color')};
+  }
+
+  .ant-picker-cell.ant-picker-cell-in-view,
+  .ant-picker-time-panel-column > .ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner {
+    color: ${fromProps('unselected.enabled.color')};
+  }
+  
+  .ant-picker-time-panel-column > li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner:hover,
+  .ant-picker-time-panel-column > li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner {
+    background: ${fromProps('selected.enabled.background')};
+    color: ${fromProps('selected.enabled.color')};
+  }
+
+  .ant-picker-cell > .ant-picker-cell-inner,
+  .ant-picker-time-panel-cell-inner {
+    ${getTextSizes(textLevels.BTR4)}
+    line-height: ${SPACES[12]}px;
+    border-radius: ${BORDER_RADIUS[2]}px;
+  }
+  
+  & .ant-picker-cell,
+  & .ant-picker-time-panel-cell {
+    :not(.ant-picker-cell-selected)
+    :not(.ant-picker-time-panel-cell-selected)
+    :not(.ant-picker-cell-range-start)
+    :not(.ant-picker-cell-range-end)
+    :not(.ant-picker-cell-range-hover-end)
+    :not(.ant-picker-cell-range-hover-start) {
+      :hover {
+        .ant-picker-cell-inner,
+        .ant-picker-time-panel-cell-inner {
+          background: ${fromProps('unselected.hover.background')};
+        }
+      }
+
+      :active {
+        .ant-picker-cell-inner,
+        .ant-picker-time-panel-cell-inner {
+          background: ${fromProps('unselected.active.background')};
+          color: ${fromProps('unselected.enabled.color')};
+        }
+      }
     }
   }
 
   .ant-picker-footer {
     min-width: ${DATE_PICKER_PANEL_FOOTER_WIDTH};
-    width: 140px;
     border-width: 0 1px 0 0;
     border-style: solid;
-    border-color: ${fromProps('separatorColor')};
+    border-color: ${fromProps('separator')};
     
     .ant-picker-footer-extra {
       line-height: 1;
       padding: ${SPACES[8]}px ${SPACES[2]}px;
     }
   }
+
   .ant-picker-datetime-panel, .ant-picker-panels {
     & + .ant-picker-footer {
       display: none;
     }
-    
-    .ant-picker-time-panel-column::after {
-      height: 0;
-    }
   }
-  &.kl-v6-datepicker-calendar .ant-picker-footer {
-    display: block;
-    width: 100%;
+
+  &.kl6-datepicker-range-time-calendar .ant-picker-time-panel-column::after {
+    height: 0;
   }
 
   .ant-picker-time-panel .ant-picker-header {
     display: none;
+  }
+  
+  .ant-picker-time-panel-column {
+    width: 48px;
+    scrollbar-width: none;
+    padding: 16px 12px;
+    
+    
+    & > li {
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+      
+      &.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        padding: 0;
+        text-align: center;
+        border-radius: ${BORDER_RADIUS[2]}px;
+      }
+    }
   }
 
   // range picker
@@ -263,7 +354,7 @@ export const pickerContainerCss = css`
     display: none;
   }
 
-  && .ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single):not(.ant-picker-cell-range-end) {
+  .ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single):not(.ant-picker-cell-range-end) {
     .ant-picker-cell-inner {
       border-radius: ${BORDER_RADIUS[2]}px 0 0 ${BORDER_RADIUS[2]}px;
     }
@@ -272,12 +363,12 @@ export const pickerContainerCss = css`
       border-radius: 0;
     }
     &::after {
-      left: 0;
+      left: -1px;
       border-radius: 0;
     }
   }
 
-  && .ant-picker-cell-range-end:not(.ant-picker-cell-range-end-single):not(.ant-picker-cell-range-start) {
+  .ant-picker-cell-range-end:not(.ant-picker-cell-range-end-single):not(.ant-picker-cell-range-start) {
     .ant-picker-cell-inner {
       border-radius: 0 ${BORDER_RADIUS[2]}px ${BORDER_RADIUS[2]}px 0;
     }
@@ -286,70 +377,80 @@ export const pickerContainerCss = css`
       border-radius: 0;
     }
     &::after {
-      right: 0;
+      right: -1px;
       border-radius: 0;
     }
   }
 
-  && .ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single),
-  && .ant-picker-cell-range-end:not(.ant-picker-cell-range-end-single) {
-    &:hover {
-      &::before, .ant-picker-cell-inner {
+  .ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single) {
+    :hover {
+      ::before,
+      .ant-picker-cell-inner {
         background: ${fromProps('selected.hover.background')};
       }
     }
-    &:active {
-      &::before, .ant-picker-cell-inner {
+
+    :active {
+      ::before,
+      .ant-picker-cell-inner {
         background: ${fromProps('selected.active.background')};
       }
     }
-    &::before, .ant-picker-cell-inner {
-      background: ${fromProps('selected.normal.background')};
-      color: ${fromProps('selected.normal.color')};
+
+    ::before,
+    .ant-picker-cell-inner {
+      background: ${fromProps('selected.enabled.background')};
+      color: ${fromProps('selected.enabled.color')};
     }
   }
 
-  .ant-picker-cell-range-hover,
-  .ant-picker-cell-range-hover-start,
-  .ant-picker-cell-range-hover-end {
-    &::before, &::after {
-      background: ${fromProps('inRange.hover.background')};
-      border: none !important;
-      transition: none !important;
+  &&&& {
+    .ant-picker-cell-range-hover,
+    .ant-picker-cell-range-hover-start,
+    .ant-picker-cell-range-hover-end {
+      ::before,
+      ::after {
+        background: ${fromProps('between.hover.background')};
+        border: none;
+        transition: none;
+      }
     }
-  }
-
-  &&&& .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(.ant-picker-cell-in-view) .ant-picker-cell-inner {
-    background: transparent;
+    .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(.ant-picker-cell-in-view) .ant-picker-cell-inner {
+      background: transparent;
+    }
   }
 
   .ant-picker-cell-range-hover-start, .ant-picker-cell-range-hover-end {
     &.ant-picker-cell-range-start, &.ant-picker-cell-range-end {
       background: transparent;
-      &::before {
-        background: ${fromProps('inRange.hover.background')};
+      
+      ::before {
+        background: ${fromProps('between.hover.background')};
       }
     }
   }
 
-  &&& .ant-picker-cell-in-range {
-    &.ant-picker-cell-range-hover-end, &.ant-picker-cell-range-hover-start {
+  .ant-picker-cell-in-range {
+    &.ant-picker-cell-range-hover-end,
+    &.ant-picker-cell-range-hover-start {
       .ant-picker-cell-inner::after {
-        background: ${fromProps('inRange.hover.background')};
+        background: ${fromProps('between.hover.background')};
         right: -4px;
         left: -4px;
       }
     }
 
     &:not(.ant-picker-cell-in-view) {
-      &.ant-picker-cell-range-hover-start::before,
-      &.ant-picker-cell-range-hover-end::before {
-        background: ${fromProps('inRange.hover.background')};
+      &.ant-picker-cell-range-hover-start,
+      &.ant-picker-cell-range-hover-end {
+        ::before {
+          background: ${fromProps('between.hover.background')};
+        }
       }
     }
     
-    &::before {
-      background: ${fromProps('inRange.normal.background')};
+    ::before {
+      background: ${fromProps('between.enabled.background')};
     }
   }
 `

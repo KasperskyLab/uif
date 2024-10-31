@@ -1,11 +1,16 @@
-import React from 'react'
+import { ConfigProvider } from '@design-system/context'
+import { locales } from '@design-system/tokens'
 import { fireEvent, render, waitFor } from '@testing-library/react'
+import React from 'react'
+
 import { Calendar } from '../Calendar'
 import { CalendarProps } from '../types'
 
 describe('Calendar', () => {
   const DefaultCalender = (props: CalendarProps) => (
-    <Calendar {...props} />
+    <ConfigProvider>
+      <Calendar {...props} />
+    </ConfigProvider>
   )
 
   it('should receive qa props', () => {
@@ -49,9 +54,9 @@ describe('Calendar', () => {
   // Codium AI
   it('should close calendar when date is selected', () => {
     const { getByPlaceholderText, container } = render(<DefaultCalender />)
-    const input = getByPlaceholderText('____-__-__')
+    const input = getByPlaceholderText(locales.en.placeholder)
     fireEvent.focus(input)
-    fireEvent.change(input, { target: { value: '2022-12-12' } })
+    fireEvent.change(input, { target: { value: '08.30.2024' } })
     fireEvent.blur(input)
 
     expect(container.querySelector('.ant-picker-open')).not.toBeInTheDocument()
@@ -65,21 +70,21 @@ describe('Calendar', () => {
 
   it('should handle disabled state correctly', () => {
     const { getByPlaceholderText } = render(<Calendar disabled />)
-    const input = getByPlaceholderText('____-__-__')
+    const input = getByPlaceholderText(locales.en.placeholder)
 
     expect(input).toBeDisabled()
   })
 
   it('should handle readonly state correctly', () => {
     const { getByPlaceholderText } = render(<DefaultCalender readonly />)
-    const input = getByPlaceholderText('____-__-__')
+    const input = getByPlaceholderText(locales.en.placeholder)
 
     expect(input).toHaveAttribute('readonly')
   })
 
   it('should close when clicking outside', () => {
     const { getByPlaceholderText, container } = render(<Calendar />)
-    const input = getByPlaceholderText('____-__-__')
+    const input = getByPlaceholderText(locales.en.placeholder)
     fireEvent.click(input)
     fireEvent.mouseDown(document)
 
@@ -88,7 +93,7 @@ describe('Calendar', () => {
 
   it('should handle rapid open/close actions', () => {
     const { getByPlaceholderText, container } = render(<Calendar />)
-    const input = getByPlaceholderText('____-__-__')
+    const input = getByPlaceholderText(locales.en.placeholder)
     fireEvent.click(input)
     fireEvent.mouseDown(document)
     fireEvent.click(input)

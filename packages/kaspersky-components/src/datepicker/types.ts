@@ -1,17 +1,18 @@
-import { ComponentProps, ReactNode, KeyboardEvent } from 'react'
 import { ThemeKey } from '@design-system/types'
+import { TestingProps, ToViewProps, ValidationStatus } from '@helpers/typesHelpers'
 import { InputCssConfig } from '@src/input/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { ComponentProps, ReactNode, KeyboardEvent } from 'react'
+
 import { DatePicker } from './DatePicker'
 
 type StateProps = {
   background?: string,
   color?: string,
-  borderColor?: string
+  border?: string
 }
 
 export type PickerStateConfig = {
-  normal?: StateProps,
+  enabled?: StateProps,
   hover?: StateProps,
   active?: StateProps,
   disabled?: StateProps
@@ -19,10 +20,9 @@ export type PickerStateConfig = {
 
 export type PickerColorConfig = {
   selected: PickerStateConfig,
-  unSelected: PickerStateConfig,
-  inRange?: PickerStateConfig,
-  iconColor?: string,
-  separatorColor?: string,
+  unselected: PickerStateConfig,
+  between?: PickerStateConfig,
+  separator?: string,
   boxShadow?: string
 }
 
@@ -54,9 +54,11 @@ export type CalendarProps = Omit<ComponentProps<typeof DatePicker>, PropsToOmitF
   disabled?: boolean,
   /** Is readonly */
   readonly?: boolean,
-  /** Is invalid */
+  /** Validation status */
+  validationStatus?: ValidationStatus,
+  /** @deprecated Use 'validationStatus' prop instead */
   invalid?: boolean,
-  /** Is valid */
+  /** @deprecated Use 'validationStatus' prop instead */
   valid?: boolean,
   /** Show today button */
   showToday?: boolean,
@@ -72,7 +74,7 @@ export type RangePickerProps = Omit<ComponentProps<typeof DatePicker['RangePicke
   /** Date value */
   value?: RangeDateInputValue,
   /** Handler for date range changes */
-  onChange?: (dates: [Date | null, Date | null] | null) => void,
+  onChange?: (dates: RangeDateInputValue) => void,
   /** Function to determine if a date is disabled */
   disabledDate?: (currentDate: Date) => boolean,
   /** Custom key down handler for input */
@@ -87,9 +89,11 @@ export type RangePickerProps = Omit<ComponentProps<typeof DatePicker['RangePicke
   disabled?: boolean,
   /** Is readonly */
   readonly?: boolean,
-  /** Is invalid */
+  /** Validation status */
+  validationStatus?: ValidationStatus,
+  /** @deprecated Use 'validationStatus' prop instead */
   invalid?: boolean,
-  /** Is valid */
+  /** @deprecated Use 'validationStatus' prop instead */
   valid?: boolean,
   /** Preset date range options */
   presets?: Array<{ title: ReactNode, value: NonNullable<RangePickerProps['value']> }>,

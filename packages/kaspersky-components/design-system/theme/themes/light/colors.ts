@@ -15,7 +15,10 @@ const {
     tagsoutlined,
     surface,
     'main-interact': mainInteract,
-    'danger-interact': dangerInteract
+    'danger-interact': dangerInteract,
+    calendar_dropdown_button,
+    calendar_preset_button,
+    calendar_dropdown
   }
 } = shortcuts
 
@@ -75,5 +78,8 @@ export const colors = {
   surface,
   mainInteract,
   dangerInteract,
-  defaultPalette
+  defaultPalette,
+  calendar_dropdown_button,
+  calendar_preset_button,
+  calendar_dropdown
 }

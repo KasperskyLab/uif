@@ -1,19 +1,15 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import styled from 'styled-components'
-import { IMask } from 'react-imask'
-import { Calendar as CalendarIcon } from '@kaspersky/icons/16'
 import { DIGITAL_SYMBOL_IN_PLACEHOLDERS } from '@design-system/tokens'
 import { generateDateIMaskOptions } from '@helpers//imaskDateOptionsGenerator'
 import { WithGlobalStyles } from '@helpers/hocs/WithGlobalStyles'
-import { inputStyles } from '@src/input/inputCss'
-import { ActionButton } from '@src/action-button'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { DatePicker } from './DatePicker'
-import { useThemedPicker } from './useThemedPicker'
-import { PresetsRangePicker as Presets } from './Presets'
-import { pickerCss, pickerContainerCss, PickerGlobalCss } from './pickerCss'
-import { isDigital, isValidDate, useClassNamedDatepicker, useLocaleOptions } from './helpers'
-import { RangePickerProps, RangePickerViewProps, PickerInputCssConfig, RangeDateInputValue } from './types'
+import { ActionButton } from '@src/action-button'
+import { inputStyles } from '@src/input/inputCss'
+import cn from 'classnames'
+import React, { useEffect, useState, useMemo, useRef } from 'react'
+import { IMask } from 'react-imask'
+import styled from 'styled-components'
+
+import { Calendar as CalendarIcon } from '@kaspersky/icons/16'
 
 import {
   ArrowDoubleLeftIcon,
@@ -21,14 +17,33 @@ import {
   ArrowLeftMiniIcon,
   ArrowRightMiniIcon
 } from './ActionIcons'
+import { DatePicker } from './DatePicker'
+import {
+  isDigital,
+  isValidDate,
+  useClassNamedDatepicker,
+  useLocaleOptions,
+  prepareRangeDateValue,
+  isNestedInDOM,
+  checkIsUserTimeSelect
+} from './helpers'
+import { pickerCss, pickerContainerCss, PickerGlobalCss } from './pickerCss'
+import { PresetsRangePicker as Presets } from './Presets'
+import {
+  RangePickerProps,
+  RangePickerViewProps,
+  PickerInputCssConfig,
+  RangeDateInputValue
+} from './types'
+import { useThemedPicker } from './useThemedPicker'
 
 const maskObject: any[] = []
 
 const { RangePicker: AntdRangePicker } = DatePicker
 
-const StyledRangePicker = styled(AntdRangePicker).withConfig<
+const StyledRangePicker = styled(AntdRangePicker as any).withConfig<
   RangePickerProps & { cssConfig: PickerInputCssConfig }
->({ shouldForwardProp: (prop) => !['cssConfig'].includes(prop) })`
+>({ shouldForwardProp: (prop) => !['cssConfig'].includes(prop.toString()) })`
   ${inputStyles}
   ${pickerCss}
 `
@@ -50,8 +65,6 @@ const defaultValue: RangePickerProps['value'] = [null, null]
 const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
   disabled,
   readonly,
-  invalid,
-  valid,
   value = defaultValue,
   onChange,
   customKeyDown,
@@ -64,6 +77,7 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
   testId,
   testAttributes,
   showTime = false,
+  panelRender,
   ...rest
 }) => {
   const [isOpen, setOpenState] = useState(false)
@@ -71,7 +85,9 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
   const [isDateValid, setIsDateValid] = useState(isValidDate(value))
   const [isMaskApply, setIsMaskApply] = useState(false)
   const [localLocale, setLocaleLocale] = useState(useLocaleOptions(showTime))
-  const pickerRef = React.useRef(null)
+  const pickerRef = useRef(null)
+  const calendarRef = useRef<HTMLDivElement>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
 
   const localeOptions = useLocaleOptions(showTime)
 
@@ -91,9 +107,59 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
     setIsMaskApply(false)
   }
 
+  const prepareDateValueByIMask = (date: string): Date | string => maskOptions?.parse?.(date) || ''
+
   const maskOptions: IMask.MaskedDateOptions = useMemo(() => {
     return generateDateIMaskOptions(localLocale.format)
   }, [localLocale])
+
+  const onClickHandler = (e: any) => {
+    const calendarElement = calendarRef.current
+    const timeSecondsWrapper = calendarElement?.querySelector('.ant-picker-time-panel-column:last-child')
+
+    if (!calendarElement || !timeSecondsWrapper) {
+      return undefined
+    }
+
+    const pickerElement = wrapperRef.current
+    // isUserTimeSelect should be outside debounce function.
+    const isUserTimeSelect = checkIsUserTimeSelect(calendarElement, e.target)
+    let newDates: RangeDateInputValue = [null, null]
+    const inputs = pickerElement?.querySelectorAll('input') || []
+
+    const getValueDebounce = async () => {
+      await new Promise(resolve => setTimeout(() => {
+        let startDateInputValue = inputs[0]?.value || ''
+        let endDateInputValue = inputs[1]?.value || ''
+        if (!isUserTimeSelect) {
+          const activeInput = pickerElement?.querySelector('.ant-picker-input-active input')
+          // If time was not selected by the user, it should be set to midnight.
+          if (activeInput === inputs[0]) {
+            startDateInputValue = inputs[0]?.value.split(' ')[0] + ' 00:00:00'
+          }
+          endDateInputValue = inputs[1]?.value.split(' ')[0] + ' 00:00:00'
+        }
+        newDates = prepareRangeDateValue([prepareDateValueByIMask(startDateInputValue), prepareDateValueByIMask(endDateInputValue)])
+        resolve(newDates)
+      }))
+    }
+    getValueDebounce().then(() => {
+      destroyMask()
+      setDate(newDates)
+      onChange?.(newDates)
+
+      // Action when click on seconds in range with time
+      if (isNestedInDOM(timeSecondsWrapper, e.target, 5)) {
+        if (inputs[0] === pickerElement?.querySelector('.ant-picker-input-active input')) {
+          // On first date in range changed focus to second date
+          inputs[1].focus()
+        } else {
+          // On second date in range close calendar
+          setOpenState(false)
+        }
+      }
+    })
+  }
 
   useEffect(() => {
     setDate(value)
@@ -147,7 +213,7 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
   }
 
   return (
-    <>
+    <div ref={wrapperRef}>
       <StyledRangePicker
         ref={pickerRef}
         {...testAttributes}
@@ -157,7 +223,7 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
         onKeyDown={handleKeyDown}
         open={open ?? isOpen}
         value={date}
-        onOpenChange={(value) => {
+        onOpenChange={(value: boolean) => {
           onOpenChange?.(value)
           setOpenState(value)
         }}
@@ -167,7 +233,7 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
           handleOnChange(dates)
           setIsDateValid(isValidDate(dates))
         }}
-        onCalendarChange={(value) => {
+        onCalendarChange={(value: RangeDateInputValue) => {
           if (value === null) {
             destroyMask()
             setDate([null, null])
@@ -191,16 +257,18 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
             />
             : undefined
         }
-        panelRender={(container) => (
+        panelRender={(container: HTMLElement) => (
           <CalendarContainer
-            className="kl6-datepicker-calendar"
+            ref={calendarRef}
+            className={cn('kl6-datepicker-calendar', { 'kl6-datepicker-range-time-calendar': showTime })}
             data-testid={`${testId}-range-calendar`}
             cssConfig={cssConfig.pickerCssConfig}
+            onClick={onClickHandler}
           >
-            {container}
+            {panelRender ? panelRender(container) : container}
           </CalendarContainer>
         )}
-        suffixIcon={date && !disabled && !readonly
+        suffixIcon={date?.some(date => date !== null) && !disabled && !readonly
           ? (<ActionButton
               testId={`${testId}-calendar-clear-icon`}
               mode="filled"
@@ -208,6 +276,7 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
                 destroyMask()
                 setDate([null, null])
                 handleOnChange(null)
+                wrapperRef.current?.querySelector('input')?.focus()
                 event.stopPropagation()
               }}
             />)
@@ -222,7 +291,7 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
         showTime={showTime}
       />
       <PickerGlobalCss cssConfig={cssConfig.pickerCssConfig} />
-    </>
+    </div>
   )
 }
 

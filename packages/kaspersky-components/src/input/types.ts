@@ -23,6 +23,7 @@ export type StateProps = {
 }
 
 export type InputColorConfig = Focus & {
+  enabled?: StateProps,
   normal?: StateProps,
   hover?: StateProps,
   active?: StateProps,

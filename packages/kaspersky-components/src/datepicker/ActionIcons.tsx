@@ -1,16 +1,17 @@
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import { shouldForwardProp } from '@helpers/shouldForwardProp'
+import { ActionButtonCustomProps, ActionButtonProps, useThemedActionButton } from '@src/action-button'
+import ActionButtonCSS from '@src/action-button/ActionButtonCSS'
+import { ActionButtonSize, ActionButtonMode } from '@src/action-button/types'
 import React from 'react'
 import styled from 'styled-components'
+
 import {
   ArrowDoubleLeft,
   ArrowDoubleRight,
   ArrowLeftMini,
   ArrowRightMini
 } from '@kaspersky/icons/16'
-import { shouldForwardProp } from '@helpers/shouldForwardProp'
-import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import ActionButtonCSS from '@src/action-button/ActionButtonCSS'
-import { ActionButtonSize, ActionButtonMode } from '@src/action-button/types'
-import { ActionButtonCustomProps, ActionButtonProps, useThemedActionButton } from '@src/action-button'
 
 const StyledArrowDoubleRightIcon = styled(ArrowDoubleRight).withConfig({ shouldForwardProp })`
   ${ActionButtonCSS}

@@ -1,26 +1,31 @@
+import { validationStatuses } from '@helpers/typesHelpers'
+import { badges } from '@sb/badges'
+import { withMeta } from '@sb/components/Meta'
+import { sbHideControls } from '@sb/helpers'
+import { P } from '@src/typography'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
-import { Meta, StoryObj } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
-import { badges } from '@sb/badges'
-import { sbHideControls } from '@helpers/storybookHelpers'
-import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
-import { P } from '@src/typography'
+
 import MetaData from '../__meta__/meta.json'
 import { Calendar } from '../Calendar'
 import { RangePicker } from '../RangePicker'
 import { CalendarProps, RangePickerProps } from '../types'
 
 const meta: Meta<CalendarProps> = {
-  title: 'Atoms/DatePicker',
+  title: 'Hexa UI Components/Inputs/DatePicker',
   component: Calendar,
   argTypes: {
-    ...sbHideControls(['theme'])
+    validationStatus: {
+      control: { type: 'radio' },
+      options: validationStatuses
+    },
+    ...sbHideControls(['theme', 'valid', 'invalid'])
   },
   args: {
-    onChange: action('Change'),
     testId: 'calendar-test-id',
-    klId: 'calendar-kl-id'
+    klId: 'calendar-kl-id',
+    validationStatus: 'default'
   },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
@@ -61,7 +66,7 @@ const RangePickerExample: React.FC<RangePickerProps> = ({ onChange, value, ...pr
   return (
     <RangePicker
       value={dates}
-      onChange={(value) => setDates(value)}
+      onChange={(value: any) => setDates(value)}
       {...props}
     />
   )
@@ -88,6 +93,17 @@ export const WithTime: StoryCalendar = {
 
 export const WithPreset: StoryCalendar = {
   args: {
+    presets: [
+      { title: 'Today', value: new Date() },
+      { title: 'Yesterday ', value: new Date(new Date().setDate(new Date().getDate() - 1)) },
+      { title: 'Tomorrow', value: new Date(new Date().setDate(new Date().getDate() + 1)) }
+    ]
+  }
+}
+
+export const WithPresetAndTime: StoryCalendar = {
+  args: {
+    showTime: true,
     presets: [
       { title: 'Today', value: new Date() },
       { title: 'Yesterday ', value: new Date(new Date().setDate(new Date().getDate() - 1)) },
@@ -131,7 +147,7 @@ export const WithValidation = {
           />
           {!isValidDate && (
             <div style={{ marginTop: 10 }}>
-              <P themedColor='high'>Введена недопустимая дата!</P>
+              <P themedColor="high">Введена недопустимая дата!</P>
             </div>
           )}
         </div>

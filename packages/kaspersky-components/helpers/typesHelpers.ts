@@ -15,3 +15,6 @@ export type TestingAttributes = {
   'data-testid'?: string,
   'kl-id'?: string
 }
+
+export const validationStatuses = ['default', 'error', 'success'] as const
+export type ValidationStatus = typeof validationStatuses[number]
