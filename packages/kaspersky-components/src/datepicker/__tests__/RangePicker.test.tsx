@@ -1,11 +1,16 @@
-import React from 'react'
+import { ConfigProvider } from '@design-system/context'
+import { locales } from '@design-system/tokens'
 import { fireEvent, render } from '@testing-library/react'
+import React from 'react'
+
 import { RangePicker } from '../RangePicker'
 import { RangePickerProps } from '../types'
 
 describe('RangePicker', () => {
   const DefaultRangePicker = (props: RangePickerProps) => (
-    <RangePicker {...props} />
+    <ConfigProvider>
+      <RangePicker {...props} />
+    </ConfigProvider>
   )
 
   it('should receive qa props', () => {
@@ -23,9 +28,9 @@ describe('RangePicker', () => {
   // Codium AI
   it('should close calendar when date is selected', () => {
     const { queryAllByPlaceholderText, container } = render(<DefaultRangePicker />)
-    const input = queryAllByPlaceholderText('____-__-__')[0]
+    const input = queryAllByPlaceholderText(locales.en.placeholder)[0]
     fireEvent.focus(input)
-    fireEvent.change(input, { target: { value: '2022-12-12' } })
+    fireEvent.change(input, { target: { value: '08.30.2024' } })
     fireEvent.blur(input)
 
     expect(container.querySelector('.ant-picker-open')).not.toBeInTheDocument()
@@ -39,7 +44,7 @@ describe('RangePicker', () => {
 
   it('should handle readonly states correctly', () => {
     const { queryAllByPlaceholderText } = render(<DefaultRangePicker readonly />)
-    const input = queryAllByPlaceholderText('____-__-__')[0]
+    const input = queryAllByPlaceholderText(locales.en.placeholder)[0]
 
     expect(input).toHaveAttribute('readonly')
   })
@@ -48,7 +53,7 @@ describe('RangePicker', () => {
     const customKeyDown = jest.fn()
     const { queryAllByPlaceholderText } = render(<DefaultRangePicker customKeyDown={customKeyDown} />)
 
-    const input = queryAllByPlaceholderText('____-__-__')[0]
+    const input = queryAllByPlaceholderText(locales.en.placeholder)[0]
 
     fireEvent.keyDown(input, { key: 'Enter' })
 

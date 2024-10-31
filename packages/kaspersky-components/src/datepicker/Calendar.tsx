@@ -1,25 +1,34 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import styled from 'styled-components'
-import { IMask } from 'react-imask'
-import { Calendar as CalendarIcon } from '@kaspersky/icons/16'
 import { DIGITAL_SYMBOL_IN_PLACEHOLDERS } from '@design-system/tokens'
-import { generateDateIMaskOptions } from '@helpers/imaskDateOptionsGenerator'
-import { inputStyles } from '@src/input/inputCss'
-import { ActionButton } from '@src/action-button'
 import { WithGlobalStyles } from '@helpers/hocs/WithGlobalStyles'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { DatePicker } from './DatePicker'
-import { useThemedPicker } from './useThemedPicker'
-import { PresetsCalendar as Presets } from './Presets'
-import { useClassNamedDatepicker, isDigital, useLocaleOptions } from './helpers'
-import { pickerCss, pickerContainerCss, PickerGlobalCss } from './pickerCss'
-import { CalendarProps, CalendarViewProps, PickerInputCssConfig, DateInputValue } from './types'
+import { generateDateIMaskOptions } from '@helpers/imaskDateOptionsGenerator'
+import { ActionButton } from '@src/action-button'
+import { inputStyles } from '@src/input/inputCss'
+import React, { useEffect, useState, useMemo, useRef, VFC } from 'react'
+import { IMask } from 'react-imask'
+import styled from 'styled-components'
+
+import { Calendar as CalendarIcon } from '@kaspersky/icons/16'
+
 import {
   ArrowDoubleLeftIcon,
   ArrowDoubleRightIcon,
   ArrowRightMiniIcon,
   ArrowLeftMiniIcon
 } from './ActionIcons'
+import { DatePicker } from './DatePicker'
+import {
+  useClassNamedDatepicker,
+  isDigital,
+  useLocaleOptions,
+  prepareDateValue,
+  isNestedInDOM,
+  checkIsUserTimeSelect
+} from './helpers'
+import { pickerCss, pickerContainerCss, PickerGlobalCss } from './pickerCss'
+import { PresetsCalendar as Presets } from './Presets'
+import { CalendarProps, CalendarViewProps, PickerInputCssConfig, DateInputValue } from './types'
+import { useThemedPicker } from './useThemedPicker'
 
 const StyledPicker = styled(DatePicker).withConfig<
   CalendarProps & { cssConfig: PickerInputCssConfig }
@@ -28,11 +37,15 @@ const StyledPicker = styled(DatePicker).withConfig<
   ${pickerCss}
 `
 
+const WrapperDiv = styled.div`
+  flex-grow: 1;
+`
+
 const CalendarContainer = styled.div.withConfig({
   shouldForwardProp: prop => !['cssConfig'].includes(prop)
 })`${pickerContainerCss}`
 
-export const Calendar: React.VFC<CalendarProps> = (rawProps) => {
+export const Calendar: VFC<CalendarProps> = (rawProps) => {
   const mappedProps = useClassNamedDatepicker(rawProps)
   const themedProps = useThemedPicker(mappedProps)
   const { testAttributes } = useTestAttribute(themedProps)
@@ -42,12 +55,10 @@ export const Calendar: React.VFC<CalendarProps> = (rawProps) => {
 
 let maskObject: any
 
-const CalendarViewComponent: React.VFC<CalendarViewProps> = ({
+const CalendarViewComponent: VFC<CalendarViewProps> = ({
   presets,
   disabled,
   readonly,
-  invalid,
-  valid,
   value = null,
   onChange,
   cssConfig,
@@ -62,7 +73,8 @@ const CalendarViewComponent: React.VFC<CalendarViewProps> = ({
   const [isMaskApply, setIsMaskApply] = useState(false)
   const [localLocale, setLocaleLocale] = useState(useLocaleOptions(showTime))
   const [dynamicKey, setDynamicKey] = useState<boolean>(false)
-  const calendarRef = React.useRef<HTMLDivElement>(null)
+  const calendarRef = useRef<HTMLDivElement>(null)
+  const pickerRef = useRef<HTMLDivElement>(null)
 
   const localeOptions = useLocaleOptions(showTime)
 
@@ -81,11 +93,39 @@ const CalendarViewComponent: React.VFC<CalendarViewProps> = ({
     }, 500)
   }
 
-  const closeOnLastTime = (e: any) => {
-    const wrapper = calendarRef.current?.querySelector('.ant-picker-time-panel-column:last-child')
-    if (wrapper === e.target?.parentElement || wrapper === e.target?.parentElement?.parentElement) {
-      setOpenState(false)
+  const onClickHandler = (e: any) => {
+    let newDate: DateInputValue = null
+    const calendarElement = calendarRef.current
+    const timeSecondsWrapper = calendarElement?.querySelector('.ant-picker-time-panel-column:last-child')
+    const input = pickerRef.current?.querySelector('input')
+
+    if (!calendarElement || !timeSecondsWrapper || !input) {
+      return undefined
     }
+
+    const prepareDateValueByIMask = (date: string): Date | string => maskOptions?.parse?.(date) || ''
+    // Variable should be outside debounce function.
+    const isUserTimeSelect = checkIsUserTimeSelect(calendarElement, e.target)
+
+    const getValueDebounce = async () => {
+      await new Promise(resolve => setTimeout(() => {
+        let dateInputValue = input?.value || ''
+        if (!isUserTimeSelect) {
+          // If time was not selected by the user, it should be set to midnight.
+          dateInputValue = dateInputValue.split(' ')[0] + ' 00:00:00'
+        }
+        newDate = prepareDateValue(prepareDateValueByIMask(dateInputValue))
+        resolve(newDate)
+      }))
+    }
+    getValueDebounce().then(() => {
+      destroyMask()
+      setDate(newDate)
+      // Close calendar when click on seconds in range with time
+      if (isNestedInDOM(timeSecondsWrapper, e.target, 5)) {
+        setOpenState(false)
+      }
+    })
   }
 
   useEffect(() => {
@@ -128,10 +168,11 @@ const CalendarViewComponent: React.VFC<CalendarViewProps> = ({
     if (isDigital(e.key) && inputWhenLastSymbolStand) {
       setTimeout(() => {
         const result = maskOptions?.parse?.(currentTarget.value)
-        if (!isNaN(Number(result?.getTime()))) {
+        if (result) {
+          const newResult = prepareDateValue(result)
           destroyMask()
-          setDate(result || null)
-          handleOnChange(result || null)
+          setDate(newResult)
+          handleOnChange(newResult)
         }
       }, 0)
     }
@@ -139,7 +180,7 @@ const CalendarViewComponent: React.VFC<CalendarViewProps> = ({
   }
 
   return (
-    <>
+    <WrapperDiv ref={pickerRef}>
       <StyledPicker
         {...testAttributes}
         {...rest}
@@ -151,7 +192,7 @@ const CalendarViewComponent: React.VFC<CalendarViewProps> = ({
             cssConfig={cssConfig.pickerCssConfig}
             data-testid={`${testId}-calendar`}
             key={dynamicKey.toString()}
-            onClick={closeOnLastTime}
+            onClick={onClickHandler}
           >
             {container}
           </CalendarContainer>
@@ -215,7 +256,7 @@ const CalendarViewComponent: React.VFC<CalendarViewProps> = ({
         showTime={showTime}
       />
       <PickerGlobalCss cssConfig={cssConfig.pickerCssConfig} />
-    </>
+    </WrapperDiv>
   )
 }
 

@@ -1,7 +1,12 @@
+import { validationStatuses } from '@helpers/typesHelpers'
+import { badges } from '@sb/badges'
+import { withMeta } from '@sb/components/Meta'
+import { sbHideControls } from '@sb/helpers'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
-import { Meta, StoryObj } from '@storybook/react'
-import { badges } from '@sb/badges'
+
+import MetaData from '../__meta__/metaRange.json'
 import { RangePicker } from '../RangePicker'
 import { RangePickerProps } from '../types'
 
@@ -10,10 +15,26 @@ const Wrapper = styled.div`
 `
 
 const meta: Meta<RangePickerProps> = {
-  title: 'Organisms/DateRanges',
+  title: 'Hexa UI Components/Inputs/DateRanges',
   component: RangePicker,
+  argTypes: {
+    validationStatus: {
+      control: { type: 'radio' },
+      options: validationStatuses
+    },
+    ...sbHideControls(['theme', 'valid', 'invalid'])
+  },
+  args: {
+    testId: 'range-picker-test-id',
+    klId: 'range-picker-kl-id',
+    validationStatus: 'default'
+  },
   parameters: {
-    badges: [badges.stable, badges.needsDesignReview]
+    badges: [badges.stable],
+    docs: {
+      page: withMeta(MetaData)
+    },
+    design: MetaData.figmaView
   },
   decorators: [
     (Story, context) => (

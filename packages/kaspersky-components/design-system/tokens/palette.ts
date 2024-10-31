@@ -162,6 +162,242 @@ export const colors = palette
 export type colorType = keyof typeof colors;
 
 export const themeColors = {
+  "calendar_dropdown": {
+    "bg": {
+      "light": "#FFFFFF",
+      "dark": "#1B1C22"
+    },
+    "border": {
+      "light": "#070D4526",
+      "dark": "#CECEF53D"
+    },
+    "text": {
+      "enabled": {
+        "light": "#1B1C22",
+        "dark": "#FFFFFF"
+      },
+      "disabled": {
+        "light": "#1B1C22",
+        "dark": "#FFFFFF"
+      }
+    }
+  },
+  "calendar_dropdown_button": {
+    "bg": {
+      "base": {
+        "enabled": {
+          "light": "#FFFFFF",
+          "dark": "#1B1C22"
+        },
+        "hover": {
+          "light": "#EDEEF3",
+          "dark": "#2E3038"
+        },
+        "active": {
+          "light": "#E4E6ED",
+          "dark": "#363740"
+        },
+        "disabled": {
+          "light": "#F2F3F7",
+          "dark": "#292A2F"
+        }
+      },
+      "selected": {
+        "enabled": {
+          "light": "#3964BE",
+          "dark": "#6695F4"
+        },
+        "hover": {
+          "light": "#2F4F91",
+          "dark": "#81AAFA"
+        },
+        "active": {
+          "light": "#182E5B",
+          "dark": "#9EBEFC"
+        }
+      },
+      "between": {
+        "enabled": {
+          "light": "#D8E5FD",
+          "dark": "#182E5B"
+        },
+        "hover": {
+          "light": "#9EBEFC",
+          "dark": "#2F4F91"
+        },
+        "active": {
+          "light": "#81AAFA",
+          "dark": "#3964BE"
+        }
+      },
+      "inactive": {
+        "enabled": {
+          "light": "#FFFFFF",
+          "dark": "#1B1C22"
+        },
+        "hover": {
+          "light": "#EDEEF3",
+          "dark": "#2E3038"
+        },
+        "active": {
+          "light": "#E4E6ED",
+          "dark": "#363740"
+        },
+        "disabled": {
+          "light": "#F2F3F7",
+          "dark": "#292A2F"
+        }
+      }
+    },
+    "border": {
+      "base": {
+        "enabled": {
+          "light": "#3964BE",
+          "dark": "#6695F4"
+        },
+        "hover": {
+          "light": "#2F4F91",
+          "dark": "#81AAFA"
+        },
+        "active": {
+          "light": "#182E5B",
+          "dark": "#9EBEFC"
+        },
+        "disabled": {
+          "light": "#E4E6ED",
+          "dark": "#363740"
+        }
+      },
+      "between": {
+        "enabled": {
+          "light": "#3964BE",
+          "dark": "#6695F4"
+        },
+        "hover": {
+          "light": "#2F4F91",
+          "dark": "#81AAFA"
+        },
+        "active": {
+          "light": "#182E5B",
+          "dark": "#9EBEFC"
+        }
+      },
+      "inactive": {
+        "enabled": {
+          "light": "#3964BE",
+          "dark": "#6695F4"
+        },
+        "hover": {
+          "light": "#2F4F91",
+          "dark": "#81AAFA"
+        },
+        "active": {
+          "light": "#182E5B",
+          "dark": "#9EBEFC"
+        },
+        "disabled": {
+          "light": "#E4E6ED",
+          "dark": "#363740"
+        }
+      }
+    },
+    "text": {
+      "base": {
+        "enabled": {
+          "light": "#1B1C22",
+          "dark": "#FFFFFF"
+        },
+        "hover": {
+          "light": "#1B1C22",
+          "dark": "#FFFFFF"
+        },
+        "active": {
+          "light": "#1B1C22",
+          "dark": "#FFFFFF"
+        },
+        "disabled": {
+          "light": "#070C335C",
+          "dark": "#CECEED80"
+        }
+      },
+      "selected": {
+        "enabled": {
+          "light": "#FFFFFF",
+          "dark": "#1B1C22"
+        },
+        "hover": {
+          "light": "#FFFFFF",
+          "dark": "#1B1C22"
+        },
+        "active": {
+          "light": "#FFFFFF",
+          "dark": "#1B1C22"
+        }
+      },
+      "between": {
+        "enabled": {
+          "light": "#1B1C22",
+          "dark": "#FFFFFF"
+        },
+        "hover": {
+          "light": "#1B1C22",
+          "dark": "#FFFFFF"
+        },
+        "active": {
+          "light": "#1B1C22",
+          "dark": "#FFFFFF"
+        }
+      },
+      "inactive": {
+        "enabled": {
+          "light": "#070C335C",
+          "dark": "#CECEED80"
+        },
+        "hover": {
+          "light": "#070C335C",
+          "dark": "#CECEED80"
+        },
+        "active": {
+          "light": "#070C335C",
+          "dark": "#CECEED80"
+        },
+        "disabled": {
+          "light": "#070C335C",
+          "dark": "#CECEED80"
+        }
+      }
+    }
+  },
+  "calendar_preset_button": {
+    "bg": {
+      "enabled": {
+        "light": "#FFFFFF",
+        "dark": "#1B1C22"
+      },
+      "hover": {
+        "light": "#EAEBEF",
+        "dark": "#2E3038"
+      },
+      "active": {
+        "light": "#D9DAE3",
+        "dark": "#454753"
+      }
+    },
+    "text": {
+      "enabled": {
+        "light": "#1B1C22",
+        "dark": "#FFFFFF"
+      },
+      "hover": {
+        "light": "#1B1C22",
+        "dark": "#FFFFFF"
+      },
+      "active": {
+        "light": "#1B1C22",
+        "dark": "#FFFFFF"
+      }
+    }
+  },
   "text-icons-elements": {
     "primary": {
       "light": "#2f3033",
@@ -1007,6 +1243,95 @@ export const themeColors = {
 export type themeColorsType = keyof typeof themeColors;
 export const shortcuts = {
   "light": {
+    "calendar_dropdown": {
+      "bg": "#FFFFFF",
+      "border": "#070D4526",
+      "text": {
+        "enabled": "#1B1C22",
+        "disabled": "#1B1C22"
+      }
+    },
+    "calendar_dropdown_button": {
+      "bg": {
+        "base": {
+          "enabled": "#FFFFFF",
+          "hover": "#EDEEF3",
+          "active": "#E4E6ED",
+          "disabled": "#F2F3F7"
+        },
+        "selected": {
+          "enabled": "#3964BE",
+          "hover": "#2F4F91",
+          "active": "#182E5B"
+        },
+        "between": {
+          "enabled": "#D8E5FD",
+          "hover": "#9EBEFC",
+          "active": "#81AAFA"
+        },
+        "inactive": {
+          "enabled": "#FFFFFF",
+          "hover": "#EDEEF3",
+          "active": "#E4E6ED",
+          "disabled": "#F2F3F7"
+        }
+      },
+      "border": {
+        "base": {
+          "enabled": "#3964BE",
+          "hover": "#2F4F91",
+          "active": "#182E5B",
+          "disabled": "#E4E6ED"
+        },
+        "between": {
+          "enabled": "#3964BE",
+          "hover": "#2F4F91",
+          "active": "#182E5B"
+        },
+        "inactive": {
+          "enabled": "#3964BE",
+          "hover": "#2F4F91",
+          "active": "#182E5B",
+          "disabled": "#E4E6ED"
+        }
+      },
+      "text": {
+        "base": {
+          "enabled": "#1B1C22",
+          "hover": "#1B1C22",
+          "active": "#1B1C22",
+          "disabled": "#070C335C"
+        },
+        "selected": {
+          "enabled": "#FFFFFF",
+          "hover": "#FFFFFF",
+          "active": "#FFFFFF"
+        },
+        "between": {
+          "enabled": "#1B1C22",
+          "hover": "#1B1C22",
+          "active": "#1B1C22"
+        },
+        "inactive": {
+          "enabled": "#070C335C",
+          "hover": "#070C335C",
+          "active": "#070C335C",
+          "disabled": "#070C335C"
+        }
+      }
+    },
+    "calendar_preset_button": {
+      "bg": {
+        "enabled": "#FFFFFF",
+        "hover": "#EAEBEF",
+        "active": "#D9DAE3"
+      },
+      "text": {
+        "enabled": "#1B1C22",
+        "hover": "#1B1C22",
+        "active": "#1B1C22"
+      }
+    },
     "text-icons-elements": {
       "primary": "#2f3033",
       "secondary": "#000000ad",
@@ -1225,6 +1550,95 @@ export const shortcuts = {
     }
   },
   "dark": {
+    "calendar_dropdown": {
+      "bg": "#1B1C22",
+      "border": "#CECEF53D",
+      "text": {
+        "enabled": "#FFFFFF",
+        "disabled": "#FFFFFF"
+      }
+    },
+    "calendar_dropdown_button": {
+      "bg": {
+        "base": {
+          "enabled": "#FFFFFF",
+          "hover": "#EDEEF3",
+          "active": "#E4E6ED",
+          "disabled": "#F2F3F7"
+        },
+        "selected": {
+          "enabled": "#3964BE",
+          "hover": "#2F4F91",
+          "active": "#182E5B"
+        },
+        "between": {
+          "enabled": "#D8E5FD",
+          "hover": "#9EBEFC",
+          "active": "#81AAFA"
+        },
+        "inactive": {
+          "enabled": "#FFFFFF",
+          "hover": "#EDEEF3",
+          "active": "#E4E6ED",
+          "disabled": "#F2F3F7"
+        }
+      },
+      "border": {
+        "base": {
+          "enabled": "#3964BE",
+          "hover": "#2F4F91",
+          "active": "#182E5B",
+          "disabled": "#E4E6ED"
+        },
+        "between": {
+          "enabled": "#3964BE",
+          "hover": "#2F4F91",
+          "active": "#182E5B"
+        },
+        "inactive": {
+          "enabled": "#3964BE",
+          "hover": "#2F4F91",
+          "active": "#182E5B",
+          "disabled": "#E4E6ED"
+        }
+      },
+      "text": {
+        "base": {
+          "enabled": "#1B1C22",
+          "hover": "#1B1C22",
+          "active": "#1B1C22",
+          "disabled": "#070C335C"
+        },
+        "selected": {
+          "enabled": "#FFFFFF",
+          "hover": "#FFFFFF",
+          "active": "#FFFFFF"
+        },
+        "between": {
+          "enabled": "#1B1C22",
+          "hover": "#1B1C22",
+          "active": "#1B1C22"
+        },
+        "inactive": {
+          "enabled": "#070C335C",
+          "hover": "#070C335C",
+          "active": "#070C335C",
+          "disabled": "#070C335C"
+        }
+      }
+    },
+    "calendar_preset_button": {
+      "bg": {
+        "enabled": "#1B1C22",
+        "hover": "#2E3038",
+        "active": "#454753"
+      },
+      "text": {
+        "enabled": "#FFFFFF",
+        "hover": "#FFFFFF",
+        "active": "#FFFFFF"
+      }
+    },
     "tags": {
       "neutral": "#f7f7f8",
       "neutral-bg-base": "#ffffff1c",
