@@ -1,22 +1,18 @@
+import React from 'react'
 import { useLocalization } from '@helpers/localization/useLocalization'
-import { badges } from '@sb/badges'
-import { withMeta } from '@sb/components/Meta'
-import { sbHideControls } from '@sb/helpers'
-import { Button } from '@src/button'
+import { Meta, StoryObj } from '@storybook/react'
+import MetaData from './__meta__/meta.json'
+import { TabsProps } from './types'
+import { Tabs } from './Tabs'
 import { IndicatorMode } from '@src/indicator'
 import { IndicatorModes } from '@src/indicator/types'
 import { Textbox } from '@src/input'
-import { Space } from '@src/space'
-import { H3 } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
-import React from 'react'
-import styled from 'styled-components'
-
+import { badges } from '@sb/badges'
+import { withMeta } from '@helpers/hocs/MetaComponent/withMeta'
+import { sbHideControls } from '@helpers/storybookHelpers'
 import { Placeholder } from '@kaspersky/icons/16'
-
-import MetaData from './__meta__/meta.json'
-import { Tabs, GroupTabs } from './Tabs'
-import { TabsProps } from './types'
+import { Button, GroupTabs, H3, Space } from '..'
+import styled from 'styled-components'
 
 const meta: Meta<TabsProps> = {
   title: 'Hexa UI Components/Tabs',
