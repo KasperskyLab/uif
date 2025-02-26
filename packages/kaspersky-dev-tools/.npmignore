@@ -3,7 +3,6 @@ node_modules/
 .gitignore
 gulpfile.js
 CHANGELOG.md
-todo.txt
 jest.config.js
 yarn-error.log
 __tests__/
