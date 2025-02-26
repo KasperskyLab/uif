@@ -1,0 +1,135 @@
+{
+  "translation": {
+    "common": {
+      "empty": "無資料",
+      "import": "匯入",
+      "export": "匯出"
+    },
+    "upload": {
+      "dropFileTitle": "將檔案拖放在此",
+      "pasteLinkTitle": "在此將連接粘貼到檔案",
+      "helpText": "您可以新增最多 6 個 ZIP 和 RAR 檔案，大小不超過 200 MB",
+      "placeholder": "預留位置",
+      "addFiles": "新增檔案",
+      "cancel": "取消",
+      "selectAnotherFile": "選擇另一個檔案",
+      "enterNewURL": "輸入新 URL",
+      "repeat": "重複",
+      "loadingTitle": "上傳 {{value, number}}%",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "上傳成功",
+      "successDescription": "{{file, fileName}} 被成功上傳到伺服器",
+      "errorTitle": "上傳錯誤",
+      "errorDescription": "由於連線失敗，{{file, fileName}} 無法上傳"
+    },
+    "uploader": {
+      "actions": {
+        "deleteAll": "刪除所有檔案",
+        "deleteErrors": "刪除所有包含錯誤的檔案 ({{count}})",
+        "downloadAll": "下載所有檔案",
+        "reloadErrors": "重新載入所有包含錯誤的檔案 ({{count}})",
+        "upload": "上傳"
+      },
+      "dropText": {
+        "beginningMultiple": "上傳檔案",
+        "beginningSingle": "上傳檔案",
+        "endingMultiple": "或將他們拖放於此",
+        "endingSingle": "或將其拖放於此"
+      },
+      "maxCountUploaded": "上傳檔案的最大數量",
+      "progress": "{{progress}}，共 {{size}}",
+      "showFiles": "顯示檔案",
+      "total": {
+        "files": "{{filesCount}} 個檔案，共 {{total}} 個檔案",
+        "simple": "{{filesCount}} 個檔案",
+        "size": "{{size}}，共 {{total}}"
+      },
+      "validation": {
+        "maxCount": "由於超過最多檔案限制，{{count}} 個檔案無法上傳。",
+        "maxFileSize": "由於超過允許大小，{{count}} 個檔案無法上傳。",
+        "maxTotalSize": "由於超過允許總大小，{{count}} 個檔案無法上傳。",
+        "format": "由於格式要求，{{count}} 個檔案無法上傳。"
+      }
+    },
+    "severity": {
+      "critical": "緊急",
+      "low": "低度",
+      "medium": "中度",
+      "high": "高度",
+      "info": "資訊",
+      "positive": "陽性"
+    },
+    "select": {
+      "empty": "無資料",
+      "tags": {
+        "addPrefix": "新增: ‟",
+        "removePrefix": "移除: ‟",
+        "addRemovePostfix": "”"
+      }
+    },
+    "pagination": {
+      "total": "總計 {{count}}",
+      "selected": "已選 {{count}}",
+      "page": "頁面",
+      "goto": "轉到"
+    },
+    "search": {
+      "raw": "搜尋",
+      "dotted": "搜尋..."
+    },
+    "table": {
+      "column": {
+        "name": "第一欄"
+      },
+      "column2": {
+        "name": "第二欄"
+      },
+      "column3": {
+        "name": "第三欄"
+      },
+      "columnDropdown": {
+        "ascending": "遞增",
+        "descending": "遞減",
+        "sorting": "排序",
+        "filters": "篩選器",
+        "resetFilters": "重設篩選器"
+      },
+      "columnsSettings": {
+        "header": "欄設定",
+        "selectAll": "全選",
+        "columns": "列",
+        "grouping": "分組",
+        "clear": "清除",
+        "noGrouping": "不分組",
+        "apply": "套用",
+        "cancel": "取消",
+        "filtering": {
+          "add": "新增",
+          "clearAll": "全部清除",
+          "property": "內容",
+          "condition": "條件",
+          "from": "從",
+          "to": "到",
+          "value": "值"
+        }
+      },
+      "groupingEmpty": "其他"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "更多"
+      }
+    },
+    "timeInput": {
+      "placeholder": "選擇時間"
+    },
+    "actionBar": {
+      "unsavedChanges": "等待變更",
+      "save": "儲存",
+      "cancel": "取消"
+    },
+    "textarea": {
+      "wordsCount": "{{count}}，共 {{total}}"
+    }
+  }
+}

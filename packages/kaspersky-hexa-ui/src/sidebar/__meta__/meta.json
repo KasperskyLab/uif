@@ -1,0 +1,18 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "designLink": true,
+    "figmaView": true
+  },
+  "component": "Sidebar",
+  "description": "В качестве основы используется AntdDrawer из библиотеки Antd.",
+  "usage": "Боковая панель, область навигации. Появлется при нажатии на элемент с действием.",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1250%3A84457",
+  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F01-%255BB2B%255D-Hexa-UI-Components%3Ftype%3Ddesign%26node-id%3D1250%253A8445%26mode%3Ddev"
+}

@@ -1,0 +1,16 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": false,
+    "storybook": true,
+    "figmaView": false
+  },
+  "component": "Menu",
+  "description": "В качестве основы используется Layout.Sider из библиотеки Antd.",
+  "usage": "Боковая панель, область навигации приложения.",
+  "designLink": "https://www.figma.com/design/9hiN2DbkqbxbhR9EWRI1VK/[B2B]-Hexa-UI-Components-v6.126.7?node-id=29963-103939&t=65dpe5bv8IMBEeN6-0"
+}

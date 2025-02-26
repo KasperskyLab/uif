@@ -1,0 +1,37 @@
+{
+  "component": "Dropdown",
+  "hexa-ui": "/docs/hexa-ui-components-dropdown--basic",
+  "v3": [
+    {
+      "prop": "onVisibleChange",
+      "changes": "Добавлен"
+    },
+    {
+      "prop": "overlayClassName",
+      "changes": "Добавлен"
+    },
+    {
+      "prop": "trigger",
+      "changes": "Добавлен триггер contextMenu, по нажатию на правую кнопку мыши"
+    }
+  ],
+  "v5": [
+    {
+      "prop": "autoFocus",
+      "changes": "Убран"
+    },
+    {
+      "prop": "destroyPopupOnHide",
+      "changes": "Убран"
+    },
+    {
+      "prop": "getPopupContainer",
+      "changes": "Убран"
+    },
+    {
+      "prop": "overlayStyle",
+      "changes": "Убран"
+    }
+  ],
+  "common": []
+}

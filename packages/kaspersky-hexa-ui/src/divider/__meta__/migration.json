@@ -1,0 +1,16 @@
+{
+  "component": "Divider",
+  "hexa-ui": "/docs/hexa-ui-components-divider--basic",
+  "v3": "Компонента не было",
+  "v5": [
+    {
+      "prop": "color",
+      "changes": "Убран"
+    },
+    {
+      "prop": "thickness",
+      "changes": "Убран"
+    }
+  ],
+  "common": []
+}

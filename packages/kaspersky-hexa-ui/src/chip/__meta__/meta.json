@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true,
+    "figmaView": true
+  },
+  "component": "Chip",
+  "description": "В качестве основы используется AntdTag из библиотеки Antd.",
+  "usage": "",
+  "designLink": "https://www.figma.com/file/7TGvGlgGfTltMG1OBgLq8p/%F0%9F%93%96-%5BB2B%5D-Hexa-UI-Kit?type=design&node-id=29925-97367&mode=design&t=O9pDV5sa9pqBg5hq-0",
+  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F01-%255BB2B%255D-Hexa-UI-Components%3Ftype%3Ddesign%26node-id%3D29925%253A97367%26mode%3Ddev"
+}

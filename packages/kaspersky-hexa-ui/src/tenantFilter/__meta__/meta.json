@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": false,
+    "useThemedHook": false,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true
+  },
+  "component": "TenantFilter",
+  "description": "Составной компонент. Включает в себя Label, Search, Tree, Button",
+  "usage": "Компонент TenantFilter предназначен для фильтрации данных по тенантам. `runtime.trigger('interface.tenant-filter.toggle', params)` - вызов из кодов NWC. `runtime.app.features.tenantFilter.openTenantFilter(params)` - вызов из плагинов. `params: {treeData, defaultCheckedKeys, handler}`",
+  "designLink": "https://www.figma.com/file/o7vdftt3lbgQBw5gPB6ufz/IRP-On-prem-(xDR)?node-id=18211-307102&t=Lr8TrsREnLuSETHG-0"
+}

@@ -1,0 +1,15 @@
+{
+    "dod": {
+      "designTokens": true,
+      "useThemedHook": false,
+      "unitTests": false,
+      "screenshotTests": false,
+      "migration": true,
+      "apiTable": true,
+      "storybook": true
+    },
+    "component": "Field",
+    "description": "",
+    "usage": "",
+    "designLink": ""
+  }

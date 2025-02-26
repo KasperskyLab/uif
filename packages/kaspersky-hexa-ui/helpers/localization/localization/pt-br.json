@@ -1,0 +1,101 @@
+{
+  "translation": {
+    "common": {
+      "empty": "Sem dados"
+    },
+    "upload": {
+      "dropFileTitle": "Solte o arquivo aqui",
+      "pasteLinkTitle": "Cole o link do arquivo aqui",
+      "helpText": "Você pode adicionar até 6 arquivos ZIP e RAR de até 200 MB",
+      "placeholder": "espaço reservado",
+      "addFiles": "Adicionar arquivos",
+      "cancel": "Cancelar",
+      "selectAnotherFile": "Selecionar outro arquivo",
+      "enterNewURL": "Insira o novo URL",
+      "repeat": "Repetir",
+      "loadingTitle": "Fazendo upload {{value, number}}%",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "Upload bem-sucedido",
+      "successDescription": "Upload de {{file, fileName}} bem-sucedido no servidor",
+      "errorTitle": "Erro no upload",
+      "errorDescription": "{{file, fileName}} não pôde ser carregado devido a uma falha de conexão"
+    },
+    "severity": {
+      "critical": "Crítico",
+      "low": "Baixo",
+      "medium": "Médio",
+      "high": "Alto",
+      "info": "Informações",
+      "positive": "Positivo"
+    },
+    "select": {
+      "empty": "Sem dados",
+      "tags": {
+        "addPrefix": "Adicionar: ‟",
+        "removePrefix": "Remover: ‟",
+        "addRemovePostfix": "”"
+      }
+    },
+    "pagination": {
+      "total": "Total de {{count}}",
+      "selected": "{{count}} selecionado(s)",
+      "page": "página",
+      "goto": "Ir para"
+    },
+    "search": {
+      "raw": "Pesquisar",
+      "dotted": "Pesquisar..."
+    },
+    "table": {
+      "column": {
+        "name": "Primeira coluna"
+      },
+      "column2": {
+        "name": "Segunda coluna"
+      },
+      "column3": {
+        "name": "Terceira coluna"
+      },
+      "columnDropdown": {
+        "ascending": "Ascendente",
+        "descending": "Descendente",
+        "sorting": "Ordenar",
+        "filters": "Filtro",
+        "resetFilters": "Redefinir filtros"
+      },
+      "columnsSettings": {
+        "header": "Configurações de colunas",
+        "selectAll": "Selecionar tudo",
+        "columns": "Colunas",
+        "grouping": "Agrupamento",
+        "clear": "Limpar",
+        "noGrouping": "Nenhum agrupamento",
+        "apply": "Aplicar",
+        "cancel": "Cancelar",
+        "filtering": {
+          "add": "Adicionar",
+          "clearAll": "Limpar tudo",
+          "property": "Propriedade",
+          "condition": "Condição",
+          "from": "de",
+          "to": "até",
+          "value": "Valor"
+        }
+      },
+      "groupingEmpty": "Outro"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "Mais"
+      }
+    },
+    "timeInput": {
+      "placeholder": "Selecionar hora"
+    },
+    "actionBar": {
+      "unsavedChanges": "Alterações pendentes",
+      "save": "Salvar",
+      "cancel": "Cancelar"
+    }
+  }
+}

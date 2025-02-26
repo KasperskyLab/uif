@@ -1,0 +1,135 @@
+{
+  "translation": {
+    "common": {
+      "empty": "Nessun dato",
+      "import": "Importa",
+      "export": "Esporta"
+    },
+    "upload": {
+      "dropFileTitle": "Trascinare il file qui",
+      "pasteLinkTitle": "Incollare il link al file qui",
+      "helpText": "È possibile aggiungere fino a 6 file ZIP e RAR con una dimensione massima di 200 MB",
+      "placeholder": "segnaposto",
+      "addFiles": "Aggiungi file",
+      "cancel": "Annulla",
+      "selectAnotherFile": "Selezionare un altro file",
+      "enterNewURL": "Immettere il nuovo URL",
+      "repeat": "Ripeti",
+      "loadingTitle": "Caricamento di {{value, number}}%",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "Caricamento riuscito",
+      "successDescription": "{{file, fileName}} caricato correttamente nel server",
+      "errorTitle": "Errore di caricamento",
+      "errorDescription": "Impossibile caricare {{file, fileName}} a causa di un errore di connessione"
+    },
+    "uploader": {
+      "actions": {
+        "deleteAll": "Elimina tutti i file",
+        "deleteErrors": "Elimina tutti i file con un errore ({{count}})",
+        "downloadAll": "Scarica tutti i file",
+        "reloadErrors": "Ricarica tutti i file con un errore ({{count}})",
+        "upload": "Carica"
+      },
+      "dropText": {
+        "beginningMultiple": "Carica file",
+        "beginningSingle": "Caricare un file",
+        "endingMultiple": "oppure trascinarli e rilasciarli qui",
+        "endingSingle": "oppure trascinarlo e rilasciarlo qui"
+      },
+      "maxCountUploaded": "Numero massimo di file caricati",
+      "progress": "{{progress}} di {{size}}",
+      "showFiles": "Mostra file",
+      "total": {
+        "files": "{{filesCount}} di {{total}} file",
+        "simple": "{{filesCount}} file",
+        "size": "{{count}} di {{total}}"
+      },
+      "validation": {
+        "maxCount": "{{count}} file non possono essere caricati perché è stato superato il limite massimo di file.",
+        "maxFileSize": "{{count}} file non possono essere caricati a causa del superamento delle dimensioni consentite.",
+        "maxTotalSize": "{{count}} file non possono essere caricati a causa del superamento della dimensione totale consentita.",
+        "format": "{{count}} file non possono essere caricati a causa di requisiti di formato."
+      }
+    },
+    "severity": {
+      "critical": "Critico",
+      "low": "Basso",
+      "medium": "Medio",
+      "high": "Alto",
+      "info": "Informazioni",
+      "positive": "Positivo"
+    },
+    "select": {
+      "empty": "Nessun dato",
+      "tags": {
+        "addPrefix": "Aggiungi: ‟",
+        "removePrefix": "Rimuovi: ‟",
+        "addRemovePostfix": "”"
+      }
+    },
+    "pagination": {
+      "total": "Totale/i: {{count}}",
+      "selected": "Selezionato/i: {{count}}",
+      "page": "pagina",
+      "goto": "Vai a"
+    },
+    "search": {
+      "raw": "Ricerca",
+      "dotted": "Ricerca..."
+    },
+    "table": {
+      "column": {
+        "name": "Prima colonna"
+      },
+      "column2": {
+        "name": "Seconda colonna"
+      },
+      "column3": {
+        "name": "Terza colonna"
+      },
+      "columnDropdown": {
+        "ascending": "Crescente",
+        "descending": "Decrescente",
+        "sorting": "Ordina",
+        "filters": "Filtro",
+        "resetFilters": "Reimposta filtro"
+      },
+      "columnsSettings": {
+        "header": "Impostazioni colonne",
+        "selectAll": "Seleziona tutto",
+        "columns": "Colonne",
+        "grouping": "Raggruppamento",
+        "clear": "Cancella",
+        "noGrouping": "Nessun raggruppamento",
+        "apply": "Applica",
+        "cancel": "Annulla",
+        "filtering": {
+          "add": "Aggiungi",
+          "clearAll": "Cancella tutto",
+          "property": "Proprietà",
+          "condition": "Condizione",
+          "from": "da",
+          "to": "a",
+          "value": "Valore"
+        }
+      },
+      "groupingEmpty": "Altro"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "Altro"
+      }
+    },
+    "timeInput": {
+      "placeholder": "Seleziona ora"
+    },
+    "actionBar": {
+      "unsavedChanges": "Modifiche in sospeso",
+      "save": "Salva",
+      "cancel": "Annulla"
+    },
+    "textarea": {
+      "wordsCount": "{{count}} di {{total}}"
+    }
+  }
+}

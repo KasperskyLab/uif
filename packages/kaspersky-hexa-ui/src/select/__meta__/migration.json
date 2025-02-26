@@ -1,0 +1,24 @@
+{
+  "component": "Select",
+  "hexa-ui": "/docs/hexa-ui-components-select--basic",
+  "v3": [
+    {
+      "prop": "error",
+      "changes": "Убран"
+    },
+    {
+      "prop": "prefixIcon",
+      "changes": "Убран"
+    },
+    {
+      "prop": "className",
+      "changes": "Теперь - dropdownClassName"
+    },
+    {
+      "prop": "fluid",
+      "changes": "Убран"
+    }
+  ],
+  "v5": "Больше не расширсет интерфейс Antd - SelectProps<SelectValue>",
+  "common": "-"
+}

@@ -1,0 +1,135 @@
+{
+  "translation": {
+    "common": {
+      "empty": "データなし",
+      "import": "インポート",
+      "export": "エクスポート"
+    },
+    "upload": {
+      "dropFileTitle": "ここにファイルをドロップしてください",
+      "pasteLinkTitle": "ファイルへのリンクを貼り付けてください",
+      "helpText": "200 MB までの ZIP ファイルと RAR ファイルを 6 つまで追加できます。",
+      "placeholder": "プレースホルダー",
+      "addFiles": "ファイルを追加",
+      "cancel": "キャンセル",
+      "selectAnotherFile": "他のファイルを選択",
+      "enterNewURL": "新しい URL を入力",
+      "repeat": "繰り返す",
+      "loadingTitle": "アップロード中 - {{value, number}}%",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "アップロード成功",
+      "successDescription": "{{file, fileName}} が正常にサーバーにアップロードされました",
+      "errorTitle": "アップロードエラー",
+      "errorDescription": "接続の問題により、{{file, fileName}} はアップロードできませんでした"
+    },
+    "uploader": {
+      "actions": {
+        "deleteAll": "すべてのファイルを削除",
+        "deleteErrors": "エラーのあるすべてのファイルを削除（{{count}}）",
+        "downloadAll": "すべてのファイルをダウンロード",
+        "reloadErrors": "エラーのあるすべてのファイルをリロード（{{count}}）",
+        "upload": "アップロード"
+      },
+      "dropText": {
+        "beginningMultiple": "ファイルをアップロード",
+        "beginningSingle": "ファイルをアップロード",
+        "endingMultiple": "またはここにファイルをドラッグアンドドロップ",
+        "endingSingle": "またはここにファイルをドラッグアンドドロップ"
+      },
+      "maxCountUploaded": "アップロードされるファイルの最大数",
+      "progress": "{{progress}} / {{size}}",
+      "showFiles": "ファイルを表示",
+      "total": {
+        "files": "{{filesCount}} ファイル / 合計 {{total}} ファイル",
+        "simple": "{{filesCount}} ファイル",
+        "size": "{{size}} / {{total}}"
+      },
+      "validation": {
+        "maxCount": "ファイル最大数の上限を超えるため、{{count}} ファイルがアップロードできません。",
+        "maxFileSize": "許可される最大サイズの上限を超えるため、{{count}} ファイルがアップロードできません。",
+        "maxTotalSize": "許可される合計サイズの上限を超えるため、{{count}} ファイルがアップロードできません。",
+        "format": "ファイル形式の要件を満たしていないため、{{count}} ファイルがアップロードできません。"
+      }
+    },
+    "severity": {
+      "critical": "緊急",
+      "low": "低",
+      "medium": "中",
+      "high": "高",
+      "info": "情報",
+      "positive": "正"
+    },
+    "select": {
+      "empty": "データなし",
+      "tags": {
+        "addPrefix": "追加：「",
+        "removePrefix": "削除：「",
+        "addRemovePostfix": "」"
+      }
+    },
+    "pagination": {
+      "total": "合計 {{count}}",
+      "selected": "選択済み {{count}}",
+      "page": "ページ",
+      "goto": "移動"
+    },
+    "search": {
+      "raw": "検索",
+      "dotted": "検索..."
+    },
+    "table": {
+      "column": {
+        "name": "1 列目"
+      },
+      "column2": {
+        "name": "2 列目"
+      },
+      "column3": {
+        "name": "3 列目"
+      },
+      "columnDropdown": {
+        "ascending": "昇順",
+        "descending": "降順",
+        "sorting": "並べ替え",
+        "filters": "フィルター",
+        "resetFilters": "フィルターのリセット"
+      },
+      "columnsSettings": {
+        "header": "列の設定",
+        "selectAll": "すべて選択",
+        "columns": "列",
+        "grouping": "グループ化",
+        "clear": "クリア",
+        "noGrouping": "グループ化なし",
+        "apply": "適用",
+        "cancel": "キャンセル",
+        "filtering": {
+          "add": "追加",
+          "clearAll": "すべてクリア",
+          "property": "プロパティ",
+          "condition": "条件",
+          "from": "開始",
+          "to": "終了",
+          "value": "値"
+        }
+      },
+      "groupingEmpty": "その他"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "詳細"
+      }
+    },
+    "timeInput": {
+      "placeholder": "時間を選択"
+    },
+    "actionBar": {
+      "unsavedChanges": "保留中の変更",
+      "save": "保存",
+      "cancel": "キャンセル"
+    },
+    "textarea": {
+      "wordsCount": "{{count}} / {{total}}"
+    }
+  }
+}

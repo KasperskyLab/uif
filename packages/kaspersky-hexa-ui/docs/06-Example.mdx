@@ -1,0 +1,90 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta title="Docs/Шаблон документации компонентов" />
+
+# Шаблон документации компонентов
+
+### Документация компонента должна состоять из следующих пунктов:
+
+1. Список `Defenition of Done`, добавленный с помощью hoс `WithMeta`:
+
+- `designTokens` - использованы ли дизайн-токены,
+
+- `useThemedHook` - использован ли хук для темизации,
+
+- `unitTests` - написаны ли юнит-тесты,
+
+- `screenshotTests` - написаны ли скриншот-тесты,
+
+- `migration` - описана ли миграция с другой библиотеки компонентов,
+
+- `apiTable` - добавлена ли таблица с описанием интерфейса компонента,
+
+- `storybook` - есть ли `stories` с основными видами использования компонента,
+
+- `figmaView` - добавлена ли документация из фигмы
+
+2. Название компонента, назначение с техническими особенностями, ссылка на дизайн и ссылка на `Figma View` (получается через экспорт ссылки через `Get embed code в Figma`).
+В описание следует указать, был ли взят за основу компонент из **antd** или был использован нативный элемент.
+
+#### Пример
+
+```
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "figmaView": true
+  },
+  "component": "Button",
+  "description": "Компонент для отрисовки кнопок. В качестве основы используется AntdButton из библиотеки Antd.",
+  "usage": "Элемент, при нажатии на который происходит какое-то действие",
+  "designLink": "https://example-link",
+  "figmaView": "https://example-link"
+}
+```
+
+Также необходимо добавить `badge`-ы:
+
+1. `stable`: The component is used in real projects, no major known issues
+
+2. `deprecated`: The component is no longer supported
+
+3. `missingDesign`: The component doesn\'t have layout page in figma
+  
+4. `reviewedByDesign`: The component is reviewed by design team and no further actions are required
+
+5. `needsDesignReview`: The component is implemented, but needs to be reviewed by design team
+
+6. `dev`: It is neseccary to demonstrate some dev features, no need in design sync
+
+7. `notProdReady`: This is experimental feature, not ready to use in production
+
+#### Пример
+
+```
+...
+import { withMeta } from '@helpers/hooks/MetaComponent/withMeta'
+import { Alert } from './Alert'
+import { AlertProps } from './types'
+import { AlertDocs } from './docs'
+import Meta from './meta.json'
+
+export default {
+  title: 'Hexa UI Components/Alert',
+  component: Alert,
+  parameters: {
+    badges: [badges.stable, badges.needsDesignReview],
+    docs: {
+      page: withMeta(Meta)
+    }
+  }
+}
+...
+```
+

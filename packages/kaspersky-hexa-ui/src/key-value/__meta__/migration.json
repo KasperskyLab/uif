@@ -1,0 +1,24 @@
+{
+  "component": "KeyValue",
+  "hexa-ui": "/docs/hexa-ui-components-keyvalue",
+  "v3": [
+    {
+      "prop": "componentId",
+      "changes": {
+        "before": "-",
+        "after": "string",
+        "description": "Уникальный id компонента"
+      }
+    },
+    {
+      "prop": "labelPosition",
+      "changes": {
+        "before": "none | top | aside | right",
+        "after": "-",
+        "description": "deprecated"
+      }
+    }
+  ],
+  "v5": [],
+  "common": []
+}

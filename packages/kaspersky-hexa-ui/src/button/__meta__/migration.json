@@ -1,0 +1,58 @@
+{
+  "component": "Button",
+  "hexa-ui": "/docs/hexa-ui-components-button--basic",
+  "v3": [
+    {
+      "prop": "size",
+      "changes": {
+        "before": "small | middle | large",
+        "after": "small | medium | large | extraLarge",
+        "description": "Изменение размерной сетки c шагом в 2 units"
+      }
+    },
+    {
+      "prop": "mode",
+      "changes": {
+        "before": "primary | secondary | danger | tertiary",
+        "after": "primary | secondary | tertiary | dangerOutlined | dangerFilled",
+        "description":"Изменение названий, добавлены два новых вида mode"
+      }
+    }
+  ],
+  "v5": [
+    {
+      "prop": "mode",
+      "changes": {
+        "before": "primaryBlue | primaryBlack | secondary | tertiary",
+        "after": "primary | secondary | tertiary | dangerOutlined | dangerFilled",
+        "description": "Изменение названий, добавлены два новых вида mode"
+      }
+    }
+  ],
+  "common": [
+    {
+      "prop": "block",
+      "changes": "Убран"
+    },
+    {
+      "prop": "danger",
+      "changes": "Убран"
+    },
+    {
+      "prop": "ghost",
+      "changes": "Убран"
+    },
+    {
+      "prop": "shape",
+      "changes": "Убран"
+    },
+    {
+      "prop": "href",
+      "changes": "Убран"
+    },
+    {
+      "prop": "target",
+      "changes": "Убран"
+    }
+  ]
+}

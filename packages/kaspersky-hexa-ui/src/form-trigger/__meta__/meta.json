@@ -1,0 +1,15 @@
+{
+    "dod": {
+      "designTokens": true,
+      "useThemedHook": false,
+      "unitTests": true,
+      "screenshotTests": false,
+      "migration": false,
+      "apiTable": true,
+      "storybook": true
+    },
+    "component": "FormTrigger",
+    "description": "",
+    "usage": "",
+    "designLink": ""
+  }

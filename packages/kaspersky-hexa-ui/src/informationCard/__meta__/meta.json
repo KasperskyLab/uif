@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true,
+    "figmaView": true
+  },
+  "component": "InformationCard",
+  "description": "Компонент InformationCard. Карточка может содержать заголовок, описание, иконку, любой контент и элементы управления.",
+  "usage": "Компонент InformationCard используется для группировки информации и опций для одной сущности.",
+  "designLink": "https://www.figma.com/file/7TGvGlgGfTltMG1OBgLq8p/%F0%9F%93%96-00-%5BB2B%5D-Hexa-UI-Kit?node-id=7765%3A32808",
+  "figmaView": "https://embed.figma.com/design/7TGvGlgGfTltMG1OBgLq8p/%5BB2B%5D-Hexa-UI-Doc-(A%E2%80%93I)?m=auto&node-id=61321-726542&embed-host=share"
+}

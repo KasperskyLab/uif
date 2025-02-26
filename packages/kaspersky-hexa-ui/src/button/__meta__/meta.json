@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "figmaView": true
+  },
+  "component": "Button",
+  "description": "В качестве основы используется AntdButton из библиотеки Antd.",
+  "usage": "Button — это интерактивный компонент, который используется для инициирования действий или выполнения команд в пользовательском интерфейсе, такие как отправка форм, запуск процессов или навигация по страницам.",
+  "designLink": "https://www.figma.com/design/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-Hexa-UI-Components-v6.165.5?node-id=36803-133405&t=98ThNtVSvMryaRvy-4",
+  "figmaView": "https://embed.figma.com/design/5Fw9D3WK4arGhQglc5vNmk/Button?node-id=0-1&embed-host=share"
+}

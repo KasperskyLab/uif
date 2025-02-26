@@ -1,0 +1,121 @@
+{
+  "component": "Toolbar",
+  "hexa-ui": "/docs/hexa-ui-components-toolbar",
+  "v3": [
+    {
+      "prop": "grey",
+      "changes": {
+        "before": "boolean",
+        "after": "-",
+        "description": "prop отсутствует в новом дизайне"
+      }
+    },
+    {
+      "prop": "componentId",
+      "changes": {
+        "before": "-",
+        "after": "string",
+        "description":"Уникальный id компонента"
+      }
+    },
+    {
+      "prop": "left",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "ToolbarItems<ToolbarItemKey>[]",
+        "description":"Уникальный id компонента"
+      }
+    },
+    {
+      "prop": "right",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "ToolbarItems<ToolbarItemKey>[]",
+        "description":"Уникальный id компонента"
+      }
+    }
+  ],
+  "v5": [],
+  "common": [
+    {
+      "prop": "Toolbar.FilterItem",
+      "changes": {
+        "before": "-",
+        "after": "React.FC<IButtonProps>",
+        "description":"Кнопка с фильтром зачастую длс использованис в контексте с таблицей"
+      }
+    },
+    {
+      "prop": "Toolbar.FilterActiveItem",
+      "changes": {
+        "before": "-",
+        "after": "React.FC<IButtonProps>",
+        "description":"Кнопка с активным состонием фильтра зачастую длс использованис в контексте с таблицей"
+      }
+    },
+    {
+      "prop": "Toolbar.SettingsItem",
+      "changes": {
+        "before": "-",
+        "after": "React.FC<IButtonProps>",
+        "description":"Кнопка с настройками зачастую длс использованис в контексте с таблицей"
+      }
+    },
+    {
+      "prop": "Toolbar.ScaleItem",
+      "changes": {
+        "before": "-",
+        "after": "React.FC<IButtonProps>",
+        "description":"Scale кнопка зачастую длс использованис в контексте с таблицей"
+      }
+    },
+    {
+      "prop": "Toolbar.Header",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "-",
+        "description":"deprecated"
+      }
+    },
+    {
+      "prop": "Toolbar.Button",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "-",
+        "description":"deprecated"
+      }
+    },
+    {
+      "prop": "Toolbar.IconButton",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "-",
+        "description":"deprecated"
+      }
+    },
+    {
+      "prop": "Toolbar.ButtonGroup",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "-",
+        "description":"deprecated"
+      }
+    },
+    {
+      "prop": "Toolbar.Search",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "-",
+        "description":"deprecated"
+      }
+    },
+    {
+      "prop": "Toolbar.Divider",
+      "changes": {
+        "before": "React.ReactNode",
+        "after": "-",
+        "description":"deprecated"
+      }
+    }
+  ]
+}

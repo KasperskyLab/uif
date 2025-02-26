@@ -1,0 +1,101 @@
+{
+  "translation": {
+    "common": {
+      "empty": "Деректер жоқ"
+    },
+    "upload": {
+      "dropFileTitle": "Файлды осы жерге қойыңыз",
+      "pasteLinkTitle": "Файл сілтемесін осы жерге қойыңыз",
+      "helpText": "Өлшемі 200 Мб-қа дейінгі 6 ZIP пен RAR файлын қосуға болады",
+      "placeholder": "плейсхолдер",
+      "addFiles": "Файлдар қосу",
+      "cancel": "Бас тарту",
+      "selectAnotherFile": "Басқа файл таңдау",
+      "enterNewURL": "Жаңа URL мекенжайын енгізіңіз",
+      "repeat": "Қайталау",
+      "loadingTitle": "Жүктеп салынуда {{value, number}}%",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "Жүктеп салу сәтті аяқталды",
+      "successDescription": "{{file, fileName}} серверге сәтті жүктеп салынды",
+      "errorTitle": "Жүктеп салу қатесі",
+      "errorDescription": "{{file, fileName}} байланыс ақауына байланысты жүктеп салынбады"
+    },
+    "severity": {
+      "critical": "Критикалық",
+      "low": "Төмен",
+      "medium": "Орташа",
+      "high": "Жоғары",
+      "info": "Ақпараттық",
+      "positive": "Оң"
+    },
+    "select": {
+      "empty": "Деректер жоқ",
+      "tags": {
+        "addPrefix": "Қосу: ‟",
+        "removePrefix": "Жою: ‟",
+        "addRemovePostfix": "”"
+      }
+    },
+    "pagination": {
+      "total": "Жалпы {{count}}",
+      "selected": "Таңдалған {{count}}",
+      "page": "бет",
+      "goto": "Келесіге өту"
+    },
+    "search": {
+      "raw": "Іздеу",
+      "dotted": "Іздеу..."
+    },
+    "table": {
+      "column": {
+        "name": "Бірінші баған"
+      },
+      "column2": {
+        "name": "Екінші баған"
+      },
+      "column3": {
+        "name": "Үшінші баған"
+      },
+      "columnDropdown": {
+        "ascending": "Артуы бойынша",
+        "descending": "Кемуі бойынша",
+        "sorting": "Сұрыптау",
+        "filters": "Сүзгі",
+        "resetFilters": "Сүзгіні қалпына келтіру"
+      },
+      "columnsSettings": {
+        "header": "Бағандар параметрлері",
+        "selectAll": "Барлығын таңдау",
+        "columns": "Бағандар",
+        "grouping": "Топтау",
+        "clear": "Тазалау",
+        "noGrouping": "Топтаусыз",
+        "apply": "Қолдану",
+        "cancel": "Бас тарту",
+        "filtering": {
+          "add": "Қосу",
+          "clearAll": "Барлығын тазалау",
+          "property": "Сипат",
+          "condition": "Шарт",
+          "from": "бастап",
+          "to": "дейін",
+          "value": "Мән"
+        }
+      },
+      "groupingEmpty": "Басқа"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "Көбірек"
+      }
+    },
+    "timeInput": {
+      "placeholder": "Уақыт таңдау"
+    },
+    "actionBar": {
+      "unsavedChanges": "Күтудегі өзгерістер",
+      "save": "Сақтау",
+      "cancel": "Бас тарту"
+    }
+  }
+}

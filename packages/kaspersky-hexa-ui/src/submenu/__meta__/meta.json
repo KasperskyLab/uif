@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": true,
+    "storybook": true,
+    "figmaView": false
+  },
+  "component": "Submenu",
+  "description": "Submenu — технический компонент, который используется для отображения блока вертикальной навигации в сайдбаре. Самостоятельно не используется.",
+  "usage": "",
+  "designLink": "https://www.figma.com/design/OFK4aQyw7ozxy78sRFDQRH/Submenu?node-id=0-1&node-type=canvas&t=TLvubEF1MdXjstl5-0",
+  "figmaView": "https://embed.figma.com/design/OFK4aQyw7ozxy78sRFDQRH/Submenu?node-id=0-1&embed-host=share"
+}
