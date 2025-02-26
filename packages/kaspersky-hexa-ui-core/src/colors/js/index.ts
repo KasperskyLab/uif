@@ -268,6 +268,7 @@ const palette = {
   "neutral_aw_600": "#DDE9FE38",
   "neutral_aw_550": "#D7E2F94D",
   "neutral_aw_500": "#D3DFF363",
+  "neutral_aw_450": "#D2DFF378",
   "neutral_aw_0": "#FFFFFF00",
   "neutral_a_800": "#0C0E13D9",
   "neutral_a_700": "#0A0E14C9",
@@ -2836,6 +2837,7 @@ export const componentColors = {
         "dark": "#474B51"
       },
       "inverted": {
+        "light": "#D2DFF378",
         "dark": "#17284533"
       },
       "on_light": {
@@ -2997,7 +2999,8 @@ export const componentColors = {
     },
     "medium": {
       "1": {
-        "light": "#474B51"
+        "light": "#474B51",
+        "dark": "#D2DFF378"
       },
       "2": {
         "light": "#17284533",
@@ -3006,7 +3009,8 @@ export const componentColors = {
     },
     "large": {
       "1": {
-        "light": "#1822359C"
+        "light": "#1822359C",
+        "dark": "#D2DFF378"
       },
       "2": {
         "light": "#17284533",
@@ -4178,7 +4182,7 @@ export const componentColors = {
       "dark": "#727883"
     }
   },
-  "menu": {
+  "menu_v1": {
     "logo_brand": {
       "light": "#1DA189",
       "dark": "#3DB5A1"
@@ -4206,7 +4210,7 @@ export const componentColors = {
       }
     }
   },
-  "menu_item": {
+  "menu_v1_item": {
     "bg": {
       "unselected": {
         "enabled": {
@@ -5660,6 +5664,24 @@ export const componentColors = {
       "dark": "#474B51"
     }
   },
+  "submenu": {
+    "bg_subtle": {
+      "light": "#FFFFFF",
+      "dark": "#1D1E20"
+    },
+    "bg_bold": {
+      "light": "#F3F4F6",
+      "dark": "#131416"
+    },
+    "border": {
+      "light": "#D1D5DB",
+      "dark": "#474B51"
+    },
+    "text": {
+      "light": "#727883",
+      "dark": "#727883"
+    }
+  },
   "status": {
     "icon": {
       "default": {
@@ -5834,20 +5856,6 @@ export const componentColors = {
       }
     }
   },
-  "submenu": {
-    "bg": {
-      "light": "#FFFFFF",
-      "dark": "#1D1E20"
-    },
-    "border": {
-      "light": "#D1D5DB",
-      "dark": "#474B51"
-    },
-    "text": {
-      "light": "#727883",
-      "dark": "#727883"
-    }
-  },
   "toggle": {
     "bg": {
       "track": {
@@ -5953,27 +5961,27 @@ export const componentColors = {
         "dark": "#1D1E20"
       },
       "hover": {
-        "light": "#F3F4F6",
-        "dark": "#2B2D31"
-      },
-      "active": {
         "light": "#EDEFF2",
         "dark": "#303236"
+      },
+      "active": {
+        "light": "#E5E7EB",
+        "dark": "#35373B"
       },
       "disabled": {
         "light": "#FFFFFF",
         "dark": "#1D1E20"
       },
       "enabled_selected": {
-        "light": "#EEF2FC",
+        "light": "#DBE6FE",
         "dark": "#102046"
       },
       "hover_selected": {
-        "light": "#DBE6FE",
+        "light": "#B8CEFD",
         "dark": "#152E7F"
       },
       "active_selected": {
-        "light": "#B8CEFD",
+        "light": "#94B4FD",
         "dark": "#2241B0"
       },
       "disabled_selected": {
@@ -6800,7 +6808,7 @@ export const componentColors = {
   },
   "text": {
     "light": "#1D1E20",
-    "dark": "#FFFFFF"
+    "dark": "#DCDFE4"
   },
   "toast": {
     "bg": {
@@ -7043,8 +7051,8 @@ export const componentColors = {
     },
     "text": {
       "requirements_enabled": {
-        "light": "#1D1E20",
-        "dark": "#DCDFE4"
+        "light": "#727883",
+        "dark": "#727883"
       },
       "requirements_disabled": {
         "light": "#959CA7",
@@ -7338,26 +7346,58 @@ export const componentColors = {
       "dark": "#2B2D31"
     }
   },
-  "menu_item_2": {
+  "menu": {
+    "text": {
+      "heading": {
+        "light": "#727883",
+        "dark": "#727883"
+      },
+      "logo": {
+        "light": "#1D1E20",
+        "dark": "#DCDFE4"
+      }
+    },
+    "bg": {
+      "logo_icon": {
+        "enabled": {
+          "light": "#1D1E20",
+          "dark": "#DCDFE4"
+        }
+      },
+      "surface": {
+        "enabled": {
+          "light": "#F3F4F6",
+          "dark": "#131416"
+        }
+      }
+    },
+    "border": {
+      "enabled": {
+        "light": "#D1D5DB",
+        "dark": "#131416"
+      }
+    }
+  },
+  "menu_item": {
     "bg": {
       "hover": {
         "light": "#EDEFF2",
-        "dark": "#1D1E20"
+        "dark": "#303236"
       },
       "active": {
         "light": "#E5E7EB",
-        "dark": "#2B2D31"
+        "dark": "#35373B"
       },
       "enabled_selected": {
-        "light": "#EEF2FC",
+        "light": "#DBE6FE",
         "dark": "#102046"
       },
       "hover_selected": {
-        "light": "#DBE6FE",
+        "light": "#B8CEFD",
         "dark": "#152E7F"
       },
       "active_selected": {
-        "light": "#B8CEFD",
+        "light": "#94B4FD",
         "dark": "#2241B0"
       }
     },
@@ -7403,38 +7443,6 @@ export const componentColors = {
       "ebabled_selected": {
         "light": "#335EDD",
         "dark": "#94B4FD"
-      }
-    }
-  },
-  "menu_2": {
-    "bg": {
-      "logo_hexagon": {
-        "light": "#1DA189",
-        "dark": "#3DB5A1"
-      },
-      "logo_icon": {
-        "light": "#1D1E20",
-        "dark": "#DCDFE4"
-      },
-      "enabled": {
-        "light": "#F3F4F6",
-        "dark": "#131416"
-      }
-    },
-    "text": {
-      "heading": {
-        "light": "#727883",
-        "dark": "#727883"
-      },
-      "logo": {
-        "light": "#1D1E20",
-        "dark": "#DCDFE4"
-      }
-    },
-    "border": {
-      "enabled": {
-        "light": "#D1D5DB",
-        "dark": "#131416"
       }
     }
   }
@@ -8140,9 +8148,11 @@ export const componentColorsShortcuts = {
         "2": "#D3DFF363"
       },
       "medium": {
+        "1": "#D2DFF378",
         "2": "#0C0E13D9"
       },
       "large": {
+        "1": "#D2DFF378",
         "2": "#0C0E13D9"
       }
     },
@@ -8575,7 +8585,7 @@ export const componentColorsShortcuts = {
       "text": "#727883",
       "text_inverted": "#727883"
     },
-    "menu": {
+    "menu_v1": {
       "logo_brand": "#3DB5A1",
       "logo_icon": "#DCDFE4",
       "bg": "#131416",
@@ -8585,7 +8595,7 @@ export const componentColorsShortcuts = {
         "logo": "#DCDFE4"
       }
     },
-    "menu_item": {
+    "menu_v1_item": {
       "bg": {
         "unselected": {
           "enabled": "#131416",
@@ -9073,6 +9083,12 @@ export const componentColorsShortcuts = {
       "icon": "#DCDFE4",
       "border": "#474B51"
     },
+    "submenu": {
+      "bg_subtle": "#1D1E20",
+      "bg_bold": "#131416",
+      "border": "#474B51",
+      "text": "#727883"
+    },
     "status": {
       "icon": {
         "default": "#DCDFE4",
@@ -9127,11 +9143,6 @@ export const componentColorsShortcuts = {
         "success": "#06675B"
       }
     },
-    "submenu": {
-      "bg": "#1D1E20",
-      "border": "#474B51",
-      "text": "#727883"
-    },
     "toggle": {
       "bg": {
         "track": {
@@ -9167,8 +9178,8 @@ export const componentColorsShortcuts = {
     "submenu_item": {
       "bg": {
         "enabled": "#1D1E20",
-        "hover": "#2B2D31",
-        "active": "#303236",
+        "hover": "#303236",
+        "active": "#35373B",
         "disabled": "#1D1E20",
         "enabled_selected": "#102046",
         "hover_selected": "#152E7F",
@@ -9449,7 +9460,7 @@ export const componentColorsShortcuts = {
         }
       }
     },
-    "text": "#FFFFFF",
+    "text": "#DCDFE4",
     "toast": {
       "bg": {
         "critical": "#FC6D6C",
@@ -9540,7 +9551,7 @@ export const componentColorsShortcuts = {
         "disabled": "#35373B"
       },
       "text": {
-        "requirements_enabled": "#DCDFE4",
+        "requirements_enabled": "#727883",
         "requirements_disabled": "#646973",
         "total_disabled": "#646973",
         "total_enabled": "#727883",
@@ -9647,10 +9658,27 @@ export const componentColorsShortcuts = {
       "description": "#727883",
       "bg": "#2B2D31"
     },
-    "menu_item_2": {
+    "menu": {
+      "text": {
+        "heading": "#727883",
+        "logo": "#DCDFE4"
+      },
       "bg": {
-        "hover": "#1D1E20",
-        "active": "#2B2D31",
+        "logo_icon": {
+          "enabled": "#DCDFE4"
+        },
+        "surface": {
+          "enabled": "#131416"
+        }
+      },
+      "border": {
+        "enabled": "#131416"
+      }
+    },
+    "menu_item": {
+      "bg": {
+        "hover": "#303236",
+        "active": "#35373B",
         "enabled_selected": "#102046",
         "hover_selected": "#152E7F",
         "active_selected": "#2241B0"
@@ -9671,20 +9699,6 @@ export const componentColorsShortcuts = {
         "enabled": "#DCDFE4",
         "disabled": "#646973",
         "ebabled_selected": "#94B4FD"
-      }
-    },
-    "menu_2": {
-      "bg": {
-        "logo_hexagon": "#3DB5A1",
-        "logo_icon": "#DCDFE4",
-        "enabled": "#131416"
-      },
-      "text": {
-        "heading": "#727883",
-        "logo": "#DCDFE4"
-      },
-      "border": {
-        "enabled": "#131416"
       }
     }
   },
@@ -10240,6 +10254,7 @@ export const componentColorsShortcuts = {
         "light": "#E5E7EB",
         "bold": "#DCDFE4",
         "minimal": "#D1D5DB",
+        "inverted": "#D2DFF378",
         "on_light": "#17284533"
       }
     },
@@ -10730,7 +10745,7 @@ export const componentColorsShortcuts = {
       "text": "#727883",
       "text_inverted": "#727883"
     },
-    "menu": {
+    "menu_v1": {
       "logo_brand": "#1DA189",
       "logo_icon": "#1D1E20",
       "bg": "#FFFFFF",
@@ -10740,7 +10755,7 @@ export const componentColorsShortcuts = {
         "logo": "#1D1E20"
       }
     },
-    "menu_item": {
+    "menu_v1_item": {
       "bg": {
         "unselected": {
           "enabled": "#FFFFFF",
@@ -11228,6 +11243,12 @@ export const componentColorsShortcuts = {
       "icon": "#1D1E20",
       "border": "#D1D5DB"
     },
+    "submenu": {
+      "bg_subtle": "#FFFFFF",
+      "bg_bold": "#F3F4F6",
+      "border": "#D1D5DB",
+      "text": "#727883"
+    },
     "status": {
       "icon": {
         "default": "#1D1E20",
@@ -11282,11 +11303,6 @@ export const componentColorsShortcuts = {
         "success": "#94DCD0"
       }
     },
-    "submenu": {
-      "bg": "#FFFFFF",
-      "border": "#D1D5DB",
-      "text": "#727883"
-    },
     "toggle": {
       "bg": {
         "track": {
@@ -11322,12 +11338,12 @@ export const componentColorsShortcuts = {
     "submenu_item": {
       "bg": {
         "enabled": "#FFFFFF",
-        "hover": "#F3F4F6",
-        "active": "#EDEFF2",
+        "hover": "#EDEFF2",
+        "active": "#E5E7EB",
         "disabled": "#FFFFFF",
-        "enabled_selected": "#EEF2FC",
-        "hover_selected": "#DBE6FE",
-        "active_selected": "#B8CEFD",
+        "enabled_selected": "#DBE6FE",
+        "hover_selected": "#B8CEFD",
+        "active_selected": "#94B4FD",
         "disabled_selected": "#E5E7EB"
       },
       "text": {
@@ -11695,7 +11711,7 @@ export const componentColorsShortcuts = {
         "disabled": "#E5E7EB"
       },
       "text": {
-        "requirements_enabled": "#1D1E20",
+        "requirements_enabled": "#727883",
         "requirements_disabled": "#959CA7",
         "total_disabled": "#959CA7",
         "total_enabled": "#727883",
@@ -11802,13 +11818,30 @@ export const componentColorsShortcuts = {
       "description": "#727883",
       "bg": "#F3F4F6"
     },
-    "menu_item_2": {
+    "menu": {
+      "text": {
+        "heading": "#727883",
+        "logo": "#1D1E20"
+      },
+      "bg": {
+        "logo_icon": {
+          "enabled": "#1D1E20"
+        },
+        "surface": {
+          "enabled": "#F3F4F6"
+        }
+      },
+      "border": {
+        "enabled": "#D1D5DB"
+      }
+    },
+    "menu_item": {
       "bg": {
         "hover": "#EDEFF2",
         "active": "#E5E7EB",
-        "enabled_selected": "#EEF2FC",
-        "hover_selected": "#DBE6FE",
-        "active_selected": "#B8CEFD"
+        "enabled_selected": "#DBE6FE",
+        "hover_selected": "#B8CEFD",
+        "active_selected": "#94B4FD"
       },
       "text": {
         "label": {
@@ -11826,20 +11859,6 @@ export const componentColorsShortcuts = {
         "enabled": "#1D1E20",
         "disabled": "#959CA7",
         "ebabled_selected": "#335EDD"
-      }
-    },
-    "menu_2": {
-      "bg": {
-        "logo_hexagon": "#1DA189",
-        "logo_icon": "#1D1E20",
-        "enabled": "#F3F4F6"
-      },
-      "text": {
-        "heading": "#727883",
-        "logo": "#1D1E20"
-      },
-      "border": {
-        "enabled": "#D1D5DB"
       }
     }
   }

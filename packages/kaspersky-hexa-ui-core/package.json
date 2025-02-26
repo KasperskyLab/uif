@@ -1,6 +1,6 @@
 {
   "name": "@kaspersky/hexa-ui-core",
-  "version": "0.9.10",
+  "version": "0.9.11",
   "description": "Tokens for Kaspersky Hexa UI Design system: colors, fonts and typography",
   "author": "AO Kaspersky Lab",
   "license": "Apache-2.0",
@@ -37,7 +37,7 @@
     "update-typography": "npx ts-node ./src/typography/write-tokens-to-json.ts && gulp updateTypography"
   },
   "devDependencies": {
-    "@kaspersky/dev-tools": "2.32.0",
+    "@kaspersky/dev-tools": "2.32.1",
     "@rollup/plugin-commonjs": "26.0.1",
     "@rollup/plugin-node-resolve": "15.2.3",
     "@typescript-eslint/parser": "5.12.1",

@@ -8,7 +8,7 @@ export const cssVarString = `
   --upload--bg--enabled: var(--color--neutral_0);
   --upload--bg--active: var(--color--marina_50);
   --upload--bg--disabled: var(--color--neutral_200);
-  --upload--text--requirements_enabled: var(--color--neutral_850);
+  --upload--text--requirements_enabled: var(--color--neutral_450);
   --upload--text--requirements_disabled: var(--color--neutral_400);
   --upload--text--total_disabled: var(--color--neutral_400);
   --upload--text--total_enabled: var(--color--neutral_450);
@@ -65,7 +65,7 @@ export const cssVarString = `
   --upload--bg--enabled: var(--color--neutral_850);
   --upload--bg--active: var(--color--marina_900);
   --upload--bg--disabled: var(--color--neutral_700);
-  --upload--text--requirements_enabled: var(--color--neutral_250);
+  --upload--text--requirements_enabled: var(--color--neutral_450);
   --upload--text--requirements_disabled: var(--color--neutral_500);
   --upload--text--total_disabled: var(--color--neutral_500);
   --upload--text--total_enabled: var(--color--neutral_450);

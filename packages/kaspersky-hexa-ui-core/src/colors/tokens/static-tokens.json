@@ -189,6 +189,12 @@
               "value": "#FFFFFF00"
             },
             {
+              "name": "neutral/aw/neutral_aw_450",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D2DFF378"
+            },
+            {
               "name": "neutral/aw/neutral_aw_500",
               "type": "color",
               "isAlias": false,

@@ -109,6 +109,7 @@ export const cssVarString = `:root {
   --color--neutral_aw_600: #DDE9FE38;
   --color--neutral_aw_550: #D7E2F94D;
   --color--neutral_aw_500: #D3DFF363;
+  --color--neutral_aw_450: #D2DFF378;
   --color--neutral_aw_0: #FFFFFF00;
   --color--neutral_a_800: #0C0E13D9;
   --color--neutral_a_700: #0A0E14C9;
