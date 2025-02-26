@@ -1,4 +1,4 @@
-const { extractArgValue, isFormExcludet, message } = require('./helpers')
+const { extractArgValue, isFormExcludet, isFromAlreadyMigrated, migrationList, message } = require('./helpers')
 const COMPONENT_LIBRARY = 'v6'
 const typesWithSubElements = [
   ...['control-group', 20],
@@ -8,32 +8,50 @@ const typesWithSubElements = [
 const updateProductSectionElement = el => {
   return {
     ...el,
-    componentLibrary: COMPONENT_LIBRARY,
-    componentLibraryPrevious: el.componentLibrary || 'riot',
+    componentLibraryNext: COMPONENT_LIBRARY,
     elements: Array.isArray(el.elements) && typesWithSubElements.includes(el.type)
       ? el.elements.map(updateProductSectionElement)
-      : el.elements
+      : el.elements,
+    gridItems: el.gridItems && Array.isArray(el.gridItems)
+      ? el.gridItems.map(gridItem => ({
+          ...gridItem,
+          innerComponents: Array.isArray(gridItem.innerComponents)
+            ? gridItem.innerComponents.map(updateProductSectionElement)
+            : gridItem.innerComponents
+        }))
+      : el.gridItems
   }
 }
 
 const updateBuilderSectionElement = el => {
-  const prevSlct = el.state.componentLibraryPrevious && el.state.componentLibraryPrevious.slct
-  const slct = el.state.componentLibrary && el.state.componentLibrary.slct
-  const elements = el.state && el.state.elements
+  if (!el || !el.state) {
+    return el
+  }
+
+  const elements = el.state.elements
+  const gridItems = el.state.gridItems
+
   return {
     ...el,
     state: {
       ...el.state,
-      componentLibrary: {
-        ...el.state.componentLibrary,
+      componentLibraryNext: {
         slct: COMPONENT_LIBRARY
-      },
-      componentLibraryPrevious: {
-        slct: prevSlct || slct || 'riot'
       },
       elements: Array.isArray(elements) && typesWithSubElements.includes(el.type)
         ? elements.map(updateBuilderSectionElement)
-        : elements
+        : elements,
+      gridItems: gridItems && gridItems.items && Array.isArray(gridItems.items)
+        ? {
+            ...gridItems,
+            items: gridItems.items.map(gridItem => ({
+              ...gridItem,
+              innerComponents: Array.isArray(gridItem.innerComponents)
+                ? gridItem.innerComponents.map(updateBuilderSectionElement)
+                : gridItem.innerComponents
+            }))
+          }
+        : gridItems
     }
   }
 }
@@ -66,8 +84,20 @@ const setUiComponentV6lib = ({ fs, path }) => {
       // eslint-disable-next-line no-console
       console.log(`${message.reading} ${file}`)
       const json = JSON.parse(fs.readFileSync(`${UI_FORMS_PATH}${file}`))
+
+      if (isFromAlreadyMigrated(json, migrationList.offsets)) {
+        // eslint-disable-next-line no-console
+        console.log(`${message.alreadyMigrated} ${file}`)
+        return
+      }
+      const currentMigrationInfo = json.state.migrationInfo || []
+      const migrationSet = new Set([...currentMigrationInfo, migrationList.v6])
       const updatedJSON = {
         ...json,
+        state: {
+          ...json.state,
+          migrationInfo: [...migrationSet]
+        },
         elements: json.elements.map(updateBuilderSectionElement),
         json: {
           ...json.json,

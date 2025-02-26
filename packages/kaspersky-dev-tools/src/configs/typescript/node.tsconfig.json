@@ -7,7 +7,6 @@
       "es2020.bigint",
       "es2020.string"
     ],
-    "skipLibCheck": true,
-    "target": "ES2019"
+    "skipLibCheck": true
   }
 }

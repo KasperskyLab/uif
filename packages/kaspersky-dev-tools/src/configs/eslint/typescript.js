@@ -16,6 +16,7 @@ const typescript = {
       plugins: ['deprecation'],
       rules: {
         camelcase: 'warn',
+        '@typescript-eslint/no-var-requires': 'warn',
         'no-use-before-define': 'off',
         '@typescript-eslint/no-use-before-define': ['error', { functions: false, classes: false, variables: false }],
         '@typescript-eslint/member-delimiter-style': ['error', {
@@ -31,8 +32,11 @@ const typescript = {
         '@typescript-eslint/ban-ts-comment': 'off',
         'no-unused-vars': 'off',
         'no-undef': 'off',
-        '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
-        'deprecation/deprecation': 'warn'
+        '@typescript-eslint/no-unused-vars': ['warn', { ignoreRestSiblings: true }],
+        'deprecation/deprecation': 'warn',
+        'no-irregular-whitespace': 'warn',
+        'no-dupe-class-members': 'warn',
+        '@typescript-eslint/no-empty-function': 'warn'
       }
     }]
 }

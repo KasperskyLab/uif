@@ -5,34 +5,27 @@
  * @returns { Object } babel config. Every key can be accessed using babel documentation.
  */
 function babel (...args) {
+  const envOptions = {
+    useBuiltIns: 'usage',
+    corejs: '3.2',
+    modules: 'cjs',
+    targets: {
+      browsers: [
+        'Safari >= 15',
+        'chrome >= 100',
+        'edge >= 100',
+        'Firefox ESR'
+      ]
+    }
+  }
+
   return {
     presets: [
-      [
-        '@babel/preset-env',
-        {
-          loose: false,
-          useBuiltIns: 'usage',
-          corejs: 3,
-          modules: 'cjs',
-          targets: {
-            browsers: [
-              'chrome >= 49',
-              'ie >= 11',
-              'firefox >= 52',
-              'safari >= 10'
-            ]
-          }
-        }
-      ]
+      ['@babel/preset-env', envOptions]
     ],
     plugins: [
       ['@babel/plugin-transform-runtime', { regenerator: true }],
-      ['@babel/plugin-proposal-decorators', { legacy: true }],
-      ['@babel/plugin-transform-flow-strip-types'],
-      ['@babel/plugin-transform-modules-commonjs'],
-      ['@babel/plugin-proposal-class-properties', { loose: true }],
-      ['@babel/plugin-proposal-optional-chaining'],
-      ['@babel/plugin-proposal-nullish-coalescing-operator']
+      ['@babel/plugin-proposal-decorators', { legacy: true }]
     ]
   }
 }

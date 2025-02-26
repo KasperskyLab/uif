@@ -2,7 +2,6 @@
   "extends": "./common.tsconfig.json",
   "compilerOptions": {
     "jsx": "react",
-    "module": "es6",
-    "target": "ES2019"
+    "module": "es6"
   }
 }

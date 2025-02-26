@@ -22,7 +22,67 @@ const base = {
     'operator-linebreak': ['error', 'after', { overrides: { '?': 'before', ':': 'before', '|>': 'before' } }],
     'no-irregular-whitespace': 'warn',
     'no-console': 'warn',
-    '@typescript-eslint/no-var-requires': 'off'
+    'no-empty-function': 'warn',
+    'no-unreachable': 'warn',
+    'no-unused-vars': 'warn',
+    'no-dupe-class-members': 'warn',
+    'import/order': [
+      'warn',
+      {
+        pathGroups: [
+          {
+            pattern: '{../../**,..,@kaspersky/**,Client/**,.}/*.{less,css}',
+            group: 'unknown',
+            patternOptions: { matchBase: true },
+            position: 'after'
+          },
+          {
+            pattern: '{@css,@certificates}/**',
+            group: 'unknown',
+            patternOptions: { matchBase: true },
+            position: 'after'
+          },
+          {
+            pattern: '@kaspersky/**',
+            group: 'external',
+            position: 'after'
+          },
+          {
+            pattern: '{Enterprise,Client,Shared,@services,@client,@server,@common,environment,domains,app,components}/**',
+            group: 'internal',
+            position: 'before'
+          },
+          {
+            pattern: '{Types,types}/**',
+            group: 'object',
+            position: 'before'
+          }
+        ],
+        pathGroupsExcludedImportTypes: [
+          '@kl',
+          'Enterprise',
+          'Client',
+          'Types',
+          'Shared'
+        ],
+        groups: [
+          'external',
+          'builtin',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+          'object',
+          'unknown'
+        ],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true
+        },
+        'newlines-between': 'always',
+        named: true
+      }
+    ]
   },
   extends: [
     'standard', // Basic set of standardjs

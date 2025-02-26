@@ -41,7 +41,11 @@ function buildUi ({ forms, helpTopics = null, buildTypes = [], devMode = false }
       domain: parsedJson.json.domain,
       useCache: parsedJson.useCache,
       mode: parsedJson.mode,
+      size: parsedJson.size,
       title: parsedJson.title,
+      addTitle: parsedJson.addTitle,
+      editTitle: parsedJson.editTitle,
+      showFlyoutHeader: parsedJson.showFlyoutHeader,
       navigationTitle: parsedJson.navigationTitle,
       navigationGroup: parsedJson.navigationGroup,
       customButtonsGetter: parsedJson.customButtonsGetter,
@@ -50,12 +54,18 @@ function buildUi ({ forms, helpTopics = null, buildTypes = [], devMode = false }
       isParentEntity: parsedJson.isParentEntity,
       actionBarAssistantBootstrapper: parsedJson.actionBarAssistantBootstrapper,
       ignoreFormCloseOnDomainSave: parsedJson.ignoreFormCloseOnDomainSave,
+      addSaveCloseButton: parsedJson.addSaveCloseButton,
       topicId: parsedJson.topicId,
       customFields: parsedJson.customFields,
       parentElementId: parsedJson.parentElementId,
       parentFormId: parsedJson.parentFormId,
       version: parsedJson.version,
-      dataModelName: parsedJson.dataModelName
+      dataModelName: parsedJson.dataModelName,
+      actionBarEnableOverride: parsedJson.actionBarEnableOverride,
+      actionBarButtonOkName: parsedJson.actionBarButtonOkName,
+      actionBarButtonSaveName: parsedJson.actionBarButtonSaveName,
+      actionBarButtonCancelName: parsedJson.actionBarButtonCancelName,
+      actionBarGetButtonsHandler: parsedJson.actionBarGetButtonsHandler
     }
 
     if (helpTopics && helpTopics[id]) {
