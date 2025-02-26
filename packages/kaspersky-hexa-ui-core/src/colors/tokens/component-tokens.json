@@ -3993,7 +3993,7 @@
               }
             },
             {
-              "name": "menu/logo_brand",
+              "name": "menu_v1/logo_brand",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4001,7 +4001,7 @@
               }
             },
             {
-              "name": "menu/logo_icon",
+              "name": "menu_v1/logo_icon",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4009,7 +4009,7 @@
               }
             },
             {
-              "name": "menu/bg",
+              "name": "menu_v1/bg",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4017,7 +4017,7 @@
               }
             },
             {
-              "name": "menu/border",
+              "name": "menu_v1/border",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4025,7 +4025,7 @@
               }
             },
             {
-              "name": "menu/text/heading",
+              "name": "menu_v1/text/heading",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4033,7 +4033,7 @@
               }
             },
             {
-              "name": "menu/text/logo",
+              "name": "menu_v1/text/logo",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4041,7 +4041,7 @@
               }
             },
             {
-              "name": "menu_item/bg/unselected/enabled",
+              "name": "menu_v1_item/bg/unselected/enabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4049,7 +4049,7 @@
               }
             },
             {
-              "name": "menu_item/bg/unselected/hover",
+              "name": "menu_v1_item/bg/unselected/hover",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4057,7 +4057,7 @@
               }
             },
             {
-              "name": "menu_item/bg/unselected/active",
+              "name": "menu_v1_item/bg/unselected/active",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4065,7 +4065,7 @@
               }
             },
             {
-              "name": "menu_item/bg/selected/enabled",
+              "name": "menu_v1_item/bg/selected/enabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4073,7 +4073,7 @@
               }
             },
             {
-              "name": "menu_item/bg/selected/hover",
+              "name": "menu_v1_item/bg/selected/hover",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4081,7 +4081,7 @@
               }
             },
             {
-              "name": "menu_item/bg/selected/active",
+              "name": "menu_v1_item/bg/selected/active",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4089,7 +4089,7 @@
               }
             },
             {
-              "name": "menu_item/text/unselected/base",
+              "name": "menu_v1_item/text/unselected/base",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4097,7 +4097,7 @@
               }
             },
             {
-              "name": "menu_item/text/unselected/description",
+              "name": "menu_v1_item/text/unselected/description",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4105,7 +4105,7 @@
               }
             },
             {
-              "name": "menu_item/text/unselected/base_disabled",
+              "name": "menu_v1_item/text/unselected/base_disabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4113,7 +4113,7 @@
               }
             },
             {
-              "name": "menu_item/text/unselected/description_disabled",
+              "name": "menu_v1_item/text/unselected/description_disabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4121,7 +4121,7 @@
               }
             },
             {
-              "name": "menu_item/text/selected/base",
+              "name": "menu_v1_item/text/selected/base",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4129,7 +4129,7 @@
               }
             },
             {
-              "name": "menu_item/text/selected/description",
+              "name": "menu_v1_item/text/selected/description",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4137,7 +4137,7 @@
               }
             },
             {
-              "name": "menu_item/icon/unselected/base",
+              "name": "menu_v1_item/icon/unselected/base",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4145,7 +4145,7 @@
               }
             },
             {
-              "name": "menu_item/icon/unselected/base_disabled",
+              "name": "menu_v1_item/icon/unselected/base_disabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -4153,7 +4153,7 @@
               }
             },
             {
-              "name": "menu_item/icon/selected/base",
+              "name": "menu_v1_item/icon/selected/base",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -7457,6 +7457,22 @@
               }
             },
             {
+              "name": "submenu/bg_subtle",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_0"
+              }
+            },
+            {
+              "name": "submenu/bg_bold",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_100"
+              }
+            },
+            {
               "name": "sidebar/text",
               "type": "color",
               "isAlias": true,
@@ -7798,14 +7814,6 @@
               "isAlias": true,
               "value": {
                 "name": "emerald/emerald_200"
-              }
-            },
-            {
-              "name": "submenu/bg",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_0"
               }
             },
             {
@@ -9445,7 +9453,7 @@
               "type": "color",
               "isAlias": true,
               "value": {
-                "name": "neutral/neutral_100"
+                "name": "neutral/neutral_150"
               }
             },
             {
@@ -9453,7 +9461,7 @@
               "type": "color",
               "isAlias": true,
               "value": {
-                "name": "neutral/neutral_150"
+                "name": "neutral/neutral_200"
               }
             },
             {
@@ -9469,7 +9477,7 @@
               "type": "color",
               "isAlias": true,
               "value": {
-                "name": "marina/marina_50"
+                "name": "marina/marina_100"
               }
             },
             {
@@ -9477,7 +9485,7 @@
               "type": "color",
               "isAlias": true,
               "value": {
-                "name": "marina/marina_100"
+                "name": "marina/marina_200"
               }
             },
             {
@@ -9485,7 +9493,7 @@
               "type": "color",
               "isAlias": true,
               "value": {
-                "name": "marina/marina_200"
+                "name": "marina/marina_300"
               }
             },
             {
@@ -9997,7 +10005,7 @@
               "type": "color",
               "isAlias": true,
               "value": {
-                "name": "neutral/neutral_850"
+                "name": "neutral/neutral_450"
               }
             },
             {
@@ -10561,127 +10569,7 @@
               }
             },
             {
-              "name": "menu_item 2/bg/hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_150"
-              }
-            },
-            {
-              "name": "menu_item 2/bg/active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_200"
-              }
-            },
-            {
-              "name": "menu_item 2/bg/enabled_selected",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "marina/marina_50"
-              }
-            },
-            {
-              "name": "menu_item 2/bg/hover_selected",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "marina/marina_100"
-              }
-            },
-            {
-              "name": "menu_item 2/bg/active_selected",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "marina/marina_200"
-              }
-            },
-            {
-              "name": "menu_item 2/text/label/enabled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_850"
-              }
-            },
-            {
-              "name": "menu_item 2/text/description/enabled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_400"
-              }
-            },
-            {
-              "name": "menu_item 2/text/description/disabled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_400"
-              }
-            },
-            {
-              "name": "menu_item 2/text/description/enabled_selected",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "marina/marina_400"
-              }
-            },
-            {
-              "name": "menu_item 2/text/label/disabled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_400"
-              }
-            },
-            {
-              "name": "menu_item 2/text/label/enabled_selected",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "marina/marina_600"
-              }
-            },
-            {
-              "name": "menu_item 2/icon/enabled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_850"
-              }
-            },
-            {
-              "name": "menu_item 2/icon/disabled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_400"
-              }
-            },
-            {
-              "name": "menu_item 2/icon/ebabled_selected",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "marina/marina_600"
-              }
-            },
-            {
-              "name": "menu 2/bg/logo_hexagon",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "emerald/emerald_500"
-              }
-            },
-            {
-              "name": "menu 2/text/heading",
+              "name": "menu/text/heading",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -10689,7 +10577,7 @@
               }
             },
             {
-              "name": "menu 2/text/logo",
+              "name": "menu/text/logo",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -10697,7 +10585,7 @@
               }
             },
             {
-              "name": "menu 2/bg/logo_icon",
+              "name": "menu/bg/logo_icon/enabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -10705,7 +10593,7 @@
               }
             },
             {
-              "name": "menu 2/bg/enabled",
+              "name": "menu/bg/surface/enabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -10713,11 +10601,123 @@
               }
             },
             {
-              "name": "menu 2/border/enabled",
+              "name": "menu/border/enabled",
               "type": "color",
               "isAlias": true,
               "value": {
                 "name": "neutral/neutral_300"
+              }
+            },
+            {
+              "name": "menu_item/bg/hover",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_150"
+              }
+            },
+            {
+              "name": "menu_item/bg/active",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_200"
+              }
+            },
+            {
+              "name": "menu_item/bg/enabled_selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_100"
+              }
+            },
+            {
+              "name": "menu_item/bg/hover_selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_200"
+              }
+            },
+            {
+              "name": "menu_item/bg/active_selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_300"
+              }
+            },
+            {
+              "name": "menu_item/text/label/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "menu_item/text/description/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_400"
+              }
+            },
+            {
+              "name": "menu_item/text/description/disabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_400"
+              }
+            },
+            {
+              "name": "menu_item/text/description/enabled_selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_400"
+              }
+            },
+            {
+              "name": "menu_item/text/label/disabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_400"
+              }
+            },
+            {
+              "name": "menu_item/text/label/enabled_selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_600"
+              }
+            },
+            {
+              "name": "menu_item/icon/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "menu_item/icon/disabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_400"
+              }
+            },
+            {
+              "name": "menu_item/icon/ebabled_selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_600"
               }
             }
           ]
@@ -14710,7 +14710,7 @@
               }
             },
             {
-              "name": "menu/logo_brand",
+              "name": "menu_v1/logo_brand",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14718,7 +14718,7 @@
               }
             },
             {
-              "name": "menu/logo_icon",
+              "name": "menu_v1/logo_icon",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14726,7 +14726,7 @@
               }
             },
             {
-              "name": "menu/bg",
+              "name": "menu_v1/bg",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14734,7 +14734,7 @@
               }
             },
             {
-              "name": "menu/border",
+              "name": "menu_v1/border",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14742,7 +14742,7 @@
               }
             },
             {
-              "name": "menu/text/heading",
+              "name": "menu_v1/text/heading",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14750,7 +14750,7 @@
               }
             },
             {
-              "name": "menu/text/logo",
+              "name": "menu_v1/text/logo",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14758,7 +14758,7 @@
               }
             },
             {
-              "name": "menu_item/bg/unselected/enabled",
+              "name": "menu_v1_item/bg/unselected/enabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14766,7 +14766,7 @@
               }
             },
             {
-              "name": "menu_item/bg/unselected/hover",
+              "name": "menu_v1_item/bg/unselected/hover",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14774,7 +14774,7 @@
               }
             },
             {
-              "name": "menu_item/bg/unselected/active",
+              "name": "menu_v1_item/bg/unselected/active",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14782,7 +14782,7 @@
               }
             },
             {
-              "name": "menu_item/bg/selected/enabled",
+              "name": "menu_v1_item/bg/selected/enabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14790,7 +14790,7 @@
               }
             },
             {
-              "name": "menu_item/bg/selected/hover",
+              "name": "menu_v1_item/bg/selected/hover",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14798,7 +14798,7 @@
               }
             },
             {
-              "name": "menu_item/bg/selected/active",
+              "name": "menu_v1_item/bg/selected/active",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14806,7 +14806,7 @@
               }
             },
             {
-              "name": "menu_item/text/unselected/base",
+              "name": "menu_v1_item/text/unselected/base",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14814,7 +14814,7 @@
               }
             },
             {
-              "name": "menu_item/text/unselected/description",
+              "name": "menu_v1_item/text/unselected/description",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14822,7 +14822,7 @@
               }
             },
             {
-              "name": "menu_item/text/unselected/base_disabled",
+              "name": "menu_v1_item/text/unselected/base_disabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14830,7 +14830,7 @@
               }
             },
             {
-              "name": "menu_item/text/unselected/description_disabled",
+              "name": "menu_v1_item/text/unselected/description_disabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14838,7 +14838,7 @@
               }
             },
             {
-              "name": "menu_item/text/selected/base",
+              "name": "menu_v1_item/text/selected/base",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14846,7 +14846,7 @@
               }
             },
             {
-              "name": "menu_item/text/selected/description",
+              "name": "menu_v1_item/text/selected/description",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14854,7 +14854,7 @@
               }
             },
             {
-              "name": "menu_item/icon/unselected/base",
+              "name": "menu_v1_item/icon/unselected/base",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14862,7 +14862,7 @@
               }
             },
             {
-              "name": "menu_item/icon/unselected/base_disabled",
+              "name": "menu_v1_item/icon/unselected/base_disabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -14870,7 +14870,7 @@
               }
             },
             {
-              "name": "menu_item/icon/selected/base",
+              "name": "menu_v1_item/icon/selected/base",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -18174,6 +18174,22 @@
               }
             },
             {
+              "name": "submenu/bg_subtle",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "submenu/bg_bold",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_900"
+              }
+            },
+            {
               "name": "sidebar/text",
               "type": "color",
               "isAlias": true,
@@ -18515,14 +18531,6 @@
               "isAlias": true,
               "value": {
                 "name": "emerald/emerald_700"
-              }
-            },
-            {
-              "name": "submenu/bg",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_850"
               }
             },
             {
@@ -20162,7 +20170,7 @@
               "type": "color",
               "isAlias": true,
               "value": {
-                "name": "neutral/neutral_800"
+                "name": "neutral/neutral_750"
               }
             },
             {
@@ -20170,7 +20178,7 @@
               "type": "color",
               "isAlias": true,
               "value": {
-                "name": "neutral/neutral_750"
+                "name": "neutral/neutral_700"
               }
             },
             {
@@ -20562,7 +20570,7 @@
               "type": "color",
               "isAlias": true,
               "value": {
-                "name": "neutral/neutral_0"
+                "name": "neutral/neutral_250"
               }
             },
             {
@@ -20714,7 +20722,7 @@
               "type": "color",
               "isAlias": true,
               "value": {
-                "name": "neutral/neutral_250"
+                "name": "neutral/neutral_450"
               }
             },
             {
@@ -21278,127 +21286,7 @@
               }
             },
             {
-              "name": "menu_item 2/bg/hover",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_850"
-              }
-            },
-            {
-              "name": "menu_item 2/bg/active",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_800"
-              }
-            },
-            {
-              "name": "menu_item 2/bg/enabled_selected",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "marina/marina_900"
-              }
-            },
-            {
-              "name": "menu_item 2/bg/hover_selected",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "marina/marina_800"
-              }
-            },
-            {
-              "name": "menu_item 2/bg/active_selected",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "marina/marina_700"
-              }
-            },
-            {
-              "name": "menu_item 2/text/label/enabled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_250"
-              }
-            },
-            {
-              "name": "menu_item 2/text/description/enabled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_500"
-              }
-            },
-            {
-              "name": "menu_item 2/text/description/disabled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_500"
-              }
-            },
-            {
-              "name": "menu_item 2/text/description/enabled_selected",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "marina/marina_500"
-              }
-            },
-            {
-              "name": "menu_item 2/text/label/disabled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_500"
-              }
-            },
-            {
-              "name": "menu_item 2/text/label/enabled_selected",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "marina/marina_300"
-              }
-            },
-            {
-              "name": "menu_item 2/icon/enabled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_250"
-              }
-            },
-            {
-              "name": "menu_item 2/icon/disabled",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "neutral/neutral_500"
-              }
-            },
-            {
-              "name": "menu_item 2/icon/ebabled_selected",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "marina/marina_300"
-              }
-            },
-            {
-              "name": "menu 2/bg/logo_hexagon",
-              "type": "color",
-              "isAlias": true,
-              "value": {
-                "name": "emerald/emerald_400"
-              }
-            },
-            {
-              "name": "menu 2/text/heading",
+              "name": "menu/text/heading",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -21406,7 +21294,7 @@
               }
             },
             {
-              "name": "menu 2/text/logo",
+              "name": "menu/text/logo",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -21414,7 +21302,7 @@
               }
             },
             {
-              "name": "menu 2/bg/logo_icon",
+              "name": "menu/bg/logo_icon/enabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -21422,7 +21310,7 @@
               }
             },
             {
-              "name": "menu 2/bg/enabled",
+              "name": "menu/bg/surface/enabled",
               "type": "color",
               "isAlias": true,
               "value": {
@@ -21430,11 +21318,123 @@
               }
             },
             {
-              "name": "menu 2/border/enabled",
+              "name": "menu/border/enabled",
               "type": "color",
               "isAlias": true,
               "value": {
                 "name": "neutral/neutral_900"
+              }
+            },
+            {
+              "name": "menu_item/bg/hover",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_750"
+              }
+            },
+            {
+              "name": "menu_item/bg/active",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_700"
+              }
+            },
+            {
+              "name": "menu_item/bg/enabled_selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_900"
+              }
+            },
+            {
+              "name": "menu_item/bg/hover_selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_800"
+              }
+            },
+            {
+              "name": "menu_item/bg/active_selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_700"
+              }
+            },
+            {
+              "name": "menu_item/text/label/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "menu_item/text/description/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_500"
+              }
+            },
+            {
+              "name": "menu_item/text/description/disabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_500"
+              }
+            },
+            {
+              "name": "menu_item/text/description/enabled_selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_500"
+              }
+            },
+            {
+              "name": "menu_item/text/label/disabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_500"
+              }
+            },
+            {
+              "name": "menu_item/text/label/enabled_selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_300"
+              }
+            },
+            {
+              "name": "menu_item/icon/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "menu_item/icon/disabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_500"
+              }
+            },
+            {
+              "name": "menu_item/icon/ebabled_selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_300"
               }
             }
           ]

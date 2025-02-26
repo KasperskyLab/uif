@@ -76,7 +76,7 @@ const getCollectionByName = (fileName, collectionName) => {
     .filter(({ name }) => name === collectionName).pop()
 }
 
-function deepReduce (obj, themeName) {
+const deepReduce = (obj, themeName) => {
   return Object.entries(obj).reduce((acc, [key, value]) => {
     if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
       return {
@@ -163,31 +163,32 @@ const getGroupedThemes = ({ fileName, collectionName, resolveToCSSVar = false })
 }
 
 const getCSSVarsString = ({ groupedThemes, shouldReturnObject }) => {
-  const generateCSSVariables = (section, path = '') => {
-    return Object.entries(section).reduce((acc, [key, value]) => {
-      if (typeof value === 'object' && value !== null) {
-        return acc + generateCSSVariables(value, `${path}--${key.toLowerCase()}`)
-      } else {
-        return acc + `  ${path}--${key.toLowerCase()}: ${value};\n`
-      }
-    }, '')
-  }
+  const generateCSSVariables = (section, path = '') =>
+    typeof section === 'object'
+      ? Object.entries(section).reduce((acc, [key, value]) => {
+        if (typeof value === 'object' && value !== null) {
+          return acc + generateCSSVariables(value, `${path}--${key.toLowerCase()}`)
+        } else {
+          return acc + `  ${path}--${key.toLowerCase()}: ${value};\n`
+        }
+      }, '')
+      : `  ${path}: ${section};\n`
 
   return shouldReturnObject
     ? Object.entries(groupedThemes).sort(sortThemes).reduce((cssStringObject, [themeName, section]) => {
-        const cssThemedStringObject = Object.entries(section).reduce((acc, [key, value]) => {
-          const cssVariablesString = generateCSSVariables(value, `--${key}`)
-          const prefix = themeName === 'dark' ? '\n.theme-dark,\n.hexa-ui-dark-theme {\n' : '\n:root,\n.theme-light,\n.hexa-ui-light-theme {\n'
-          const suffix = '}\n'
-          deepMerge(acc, { [key]: { [themeName]: `${prefix}${cssVariablesString}${suffix}` } })
+      const cssThemedStringObject = Object.entries(section).reduce((acc, [key, value]) => {
+        const cssVariablesString = generateCSSVariables(value, `--${key}`)
+        const prefix = themeName === 'dark' ? '\n.theme-dark,\n.hexa-ui-dark-theme {\n' : '\n:root,\n.theme-light,\n.hexa-ui-light-theme {\n'
+        const suffix = '}\n'
+        deepMerge(acc, { [key]: { [themeName]: `${prefix}${cssVariablesString}${suffix}` } })
 
-          return { ...acc }
-        }, {})
-
-        deepMerge(cssStringObject, cssThemedStringObject)
-
-        return cssStringObject
+        return { ...acc }
       }, {})
+
+      deepMerge(cssStringObject, cssThemedStringObject)
+
+      return cssStringObject
+    }, {})
     : Object.entries(groupedThemes).sort(sortThemes).reduce((cssString, [themeName, section]) => {
       const cssVariablesString = generateCSSVariables(section)
       const prefix = themeName === 'dark' ? '\n.theme-dark,\n.hexa-ui-dark-theme {\n' : '\n:root,\n.theme-light,\n.hexa-ui-light-theme {\n'

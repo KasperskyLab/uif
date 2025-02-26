@@ -18,7 +18,7 @@
 ## Установка
 
 ```shell
-npm install @kaspersky/hexa-ui-core
+npm install @kl/hexa-ui-core
 ```
 
 ## Использование в проекте
@@ -26,7 +26,7 @@ npm install @kaspersky/hexa-ui-core
 ### Шрифты
 
 ```tsx
-import '@kaspersky/hexa-ui-core/fonts'
+import '@kl/hexa-ui-core/fonts'
 ```
 
 На странице создается элемент `<style class="hexa-ui-fonts"></style>`, в котором определены источники шрифтов.
@@ -34,19 +34,19 @@ import '@kaspersky/hexa-ui-core/fonts'
 При SSR подключение шрифтов происходит следующим образом:
 
 ```tsx
-import '@kaspersky/hexa-ui-core/fonts/tokens.css'
+import '@kl/hexa-ui-core/fonts/tokens.css'
 ```
 
 ### Токены типографии
 
 ```tsx
-import '@kaspersky/hexa-ui-core/typography/css'
+import '@kl/hexa-ui-core/typography/css'
 ```
 
 На странице создается элемент `<style class="hexa-ui-typography"></style>`, в котором определены css-variables для токенов типографии.
 
 ```tsx
-import { typography }  from '@kaspersky/hexa-ui-core/typography/js'
+import { typography }  from '@kl/hexa-ui-core/typography/js'
 ```
 
 _Экспортируемые объекты и типы:_
@@ -56,20 +56,20 @@ _Экспортируемые объекты и типы:_
 При SSR подключение токенов типографии происходит следующим образом:
 
 ```tsx
-import '@kaspersky/hexa-ui-core/typography/tokens.css'
+import '@kl/hexa-ui-core/typography/tokens.css'
 ```
 
 ### Токены цветов
 
 ```tsx
-import '@kaspersky/hexa-ui-core/colors/css'
+import '@kl/hexa-ui-core/colors/css'
 ```
 
 На странице создается элемент `<style class="hexa-ui-colors"></style>`, в котором определены css-variables для токенов цветов.
 
 ```tsx
-import '@kaspersky/hexa-ui-core/colors/css/components/static'
-import '@kaspersky/hexa-ui-core/colors/css/components/button'
+import '@kl/hexa-ui-core/colors/css/components/static'
+import '@kl/hexa-ui-core/colors/css/components/button'
 ```
 
 На странице создается элемент `<style class="hexa-ui-colors-static"></style>`, в котором определены css-variables для токенов цветов из статической палитры, а также элемент `<style class="hexa-ui-colors-button"></style>`, в котором определены css-variables для токенов цветов конкретного компонента (в примере - `button`).
@@ -79,7 +79,7 @@ import '@kaspersky/hexa-ui-core/colors/css/components/button'
 > Возможность подключать токены цветов конкретного компонента уменьшает итоговый размер бандла, но при таком подходе важно всегда импортировать статические цвета, так как переменные для компонентов на них ссылаются.
 
 ```tsx
-import { colors }  from '@kaspersky/hexa-ui-core/colors/js'
+import { colors }  from '@kl/hexa-ui-core/colors/js'
 ```
 
 _Экспортируемые объекты:_
@@ -94,7 +94,7 @@ _Экспортируемые объекты:_
 При SSR подключение токенов цветов происходит следующим образом:
 
 ```tsx
-import '@kaspersky/hexa-ui-core/colors/tokens.css'
+import '@kl/hexa-ui-core/colors/tokens.css'
 ```
 
 ### Сборка пакета
