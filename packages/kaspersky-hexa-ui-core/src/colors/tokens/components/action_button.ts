@@ -1,0 +1,134 @@
+/*! This file was created automatically. */
+/*! Use updateColors gulp task if you need to update colors. */
+
+export const cssVarString = `
+:root,
+.theme-light,
+.hexa-ui-light-theme {
+  --action_button--bg--ghost--enabled: var(--color--neutral_a_0);
+  --action_button--bg--ghost--hover: var(--color--neutral_a_0);
+  --action_button--bg--ghost--active: var(--color--neutral_a_0);
+  --action_button--bg--ghost--disabled: var(--color--neutral_a_0);
+  --action_button--bg--filled--enabled: var(--color--neutral_150);
+  --action_button--bg--filled--hover: var(--color--neutral_200);
+  --action_button--bg--filled--active: var(--color--neutral_250);
+  --action_button--bg--filled--disabled: var(--color--neutral_100);
+  --action_button--bg--ghost_inverted--enabled: var(--color--neutral_aw_0);
+  --action_button--bg--ghost_inverted--hover: var(--color--neutral_aw_0);
+  --action_button--bg--ghost_inverted--active: var(--color--neutral_aw_0);
+  --action_button--bg--ghost_inverted--disabled: var(--color--neutral_aw_0);
+  --action_button--bg--filled_inverted--enabled: var(--color--neutral_aw_700);
+  --action_button--bg--filled_inverted--hover: var(--color--neutral_aw_600);
+  --action_button--bg--filled_inverted--active: var(--color--neutral_aw_550);
+  --action_button--bg--filled_inverted--disabled: var(--color--neutral_aw_750);
+  --action_button--bg--on_light--enabled: var(--color--neutral_a_0);
+  --action_button--bg--on_light--hover: var(--color--neutral_a_0);
+  --action_button--bg--on_light--active: var(--color--neutral_a_0);
+  --action_button--bg--on_light--disabled: var(--color--neutral_a_0);
+  --action_button--text--ghost--enabled: var(--color--neutral_450);
+  --action_button--text--ghost--hover: var(--color--neutral_500);
+  --action_button--text--ghost--active: var(--color--neutral_550);
+  --action_button--text--ghost--disabled: var(--color--neutral_400);
+  --action_button--text--filled--enabled: var(--color--neutral_450);
+  --action_button--text--filled--hover: var(--color--neutral_500);
+  --action_button--text--filled--active: var(--color--neutral_550);
+  --action_button--text--filled--disabled: var(--color--neutral_400);
+  --action_button--text--ghost_inverted--enabled: var(--color--neutral_250);
+  --action_button--text--ghost_inverted--hover: var(--color--neutral_300);
+  --action_button--text--ghost_inverted--active: var(--color--neutral_350);
+  --action_button--text--ghost_inverted--disabled: var(--color--neutral_400);
+  --action_button--text--on_light--enabled: var(--color--neutral_450);
+  --action_button--text--on_light--hover: var(--color--neutral_500);
+  --action_button--text--on_light--active: var(--color--neutral_550);
+  --action_button--text--on_light--disabled: var(--color--neutral_400);
+  --action_button--text--filled_inverted--enabled: var(--color--neutral_250);
+  --action_button--text--filled_inverted--hover: var(--color--neutral_300);
+  --action_button--text--filled_inverted--active: var(--color--neutral_350);
+  --action_button--text--filled_inverted--disabled: var(--color--neutral_400);
+  --action_button--icon--ghost--enabled: var(--color--neutral_450);
+  --action_button--icon--ghost--hover: var(--color--neutral_500);
+  --action_button--icon--ghost--active: var(--color--neutral_550);
+  --action_button--icon--ghost--disabled: var(--color--neutral_400);
+  --action_button--icon--filled--enabled: var(--color--neutral_450);
+  --action_button--icon--filled--hover: var(--color--neutral_500);
+  --action_button--icon--filled--active: var(--color--neutral_550);
+  --action_button--icon--filled--disabled: var(--color--neutral_400);
+  --action_button--icon--ghost_inverted--enabled: var(--color--neutral_250);
+  --action_button--icon--ghost_inverted--hover: var(--color--neutral_300);
+  --action_button--icon--ghost_inverted--active: var(--color--neutral_350);
+  --action_button--icon--ghost_inverted--disabled: var(--color--neutral_400);
+  --action_button--icon--on_light--enabled: var(--color--neutral_450);
+  --action_button--icon--on_light--hover: var(--color--neutral_500);
+  --action_button--icon--on_light--active: var(--color--neutral_550);
+  --action_button--icon--on_light--disabled: var(--color--neutral_400);
+  --action_button--icon--filled_inverted--enabled: var(--color--neutral_250);
+  --action_button--icon--filled_inverted--hover: var(--color--neutral_300);
+  --action_button--icon--filled_inverted--active: var(--color--neutral_350);
+  --action_button--icon--filled_inverted--disabled: var(--color--neutral_400);
+}
+
+
+.theme-dark,
+.hexa-ui-dark-theme {
+  --action_button--bg--ghost--enabled: var(--color--neutral_aw_0);
+  --action_button--bg--ghost--hover: var(--color--neutral_aw_0);
+  --action_button--bg--ghost--active: var(--color--neutral_aw_0);
+  --action_button--bg--ghost--disabled: var(--color--neutral_aw_0);
+  --action_button--bg--filled--enabled: var(--color--neutral_750);
+  --action_button--bg--filled--hover: var(--color--neutral_700);
+  --action_button--bg--filled--active: var(--color--neutral_650);
+  --action_button--bg--filled--disabled: var(--color--neutral_800);
+  --action_button--bg--ghost_inverted--enabled: var(--color--neutral_a_0);
+  --action_button--bg--ghost_inverted--hover: var(--color--neutral_a_0);
+  --action_button--bg--ghost_inverted--active: var(--color--neutral_a_0);
+  --action_button--bg--ghost_inverted--disabled: var(--color--neutral_a_0);
+  --action_button--bg--filled_inverted--enabled: var(--color--neutral_a_250);
+  --action_button--bg--filled_inverted--hover: var(--color--neutral_a_300);
+  --action_button--bg--filled_inverted--active: var(--color--neutral_a_350);
+  --action_button--bg--filled_inverted--disabled: var(--color--neutral_a_200);
+  --action_button--bg--on_light--enabled: var(--color--neutral_aw_0);
+  --action_button--bg--on_light--hover: var(--color--neutral_aw_0);
+  --action_button--bg--on_light--active: var(--color--neutral_aw_0);
+  --action_button--bg--on_light--disabled: var(--color--neutral_aw_0);
+  --action_button--text--ghost--enabled: var(--color--neutral_450);
+  --action_button--text--ghost--hover: var(--color--neutral_400);
+  --action_button--text--ghost--active: var(--color--neutral_350);
+  --action_button--text--ghost--disabled: var(--color--neutral_500);
+  --action_button--text--filled--enabled: var(--color--neutral_450);
+  --action_button--text--filled--hover: var(--color--neutral_400);
+  --action_button--text--filled--active: var(--color--neutral_350);
+  --action_button--text--filled--disabled: var(--color--neutral_500);
+  --action_button--text--ghost_inverted--enabled: var(--color--neutral_650);
+  --action_button--text--ghost_inverted--hover: var(--color--neutral_600);
+  --action_button--text--ghost_inverted--active: var(--color--neutral_550);
+  --action_button--text--ghost_inverted--disabled: var(--color--neutral_500);
+  --action_button--text--on_light--enabled: var(--color--neutral_500);
+  --action_button--text--on_light--hover: var(--color--neutral_550);
+  --action_button--text--on_light--active: var(--color--neutral_600);
+  --action_button--text--on_light--disabled: var(--color--neutral_450);
+  --action_button--text--filled_inverted--enabled: var(--color--neutral_650);
+  --action_button--text--filled_inverted--hover: var(--color--neutral_600);
+  --action_button--text--filled_inverted--active: var(--color--neutral_550);
+  --action_button--text--filled_inverted--disabled: var(--color--neutral_500);
+  --action_button--icon--ghost--enabled: var(--color--neutral_450);
+  --action_button--icon--ghost--hover: var(--color--neutral_400);
+  --action_button--icon--ghost--active: var(--color--neutral_350);
+  --action_button--icon--ghost--disabled: var(--color--neutral_500);
+  --action_button--icon--filled--enabled: var(--color--neutral_450);
+  --action_button--icon--filled--hover: var(--color--neutral_400);
+  --action_button--icon--filled--active: var(--color--neutral_350);
+  --action_button--icon--filled--disabled: var(--color--neutral_500);
+  --action_button--icon--ghost_inverted--enabled: var(--color--neutral_650);
+  --action_button--icon--ghost_inverted--hover: var(--color--neutral_600);
+  --action_button--icon--ghost_inverted--active: var(--color--neutral_550);
+  --action_button--icon--ghost_inverted--disabled: var(--color--neutral_500);
+  --action_button--icon--on_light--enabled: var(--color--neutral_500);
+  --action_button--icon--on_light--hover: var(--color--neutral_550);
+  --action_button--icon--on_light--active: var(--color--neutral_600);
+  --action_button--icon--on_light--disabled: var(--color--neutral_450);
+  --action_button--icon--filled_inverted--enabled: var(--color--neutral_650);
+  --action_button--icon--filled_inverted--hover: var(--color--neutral_600);
+  --action_button--icon--filled_inverted--active: var(--color--neutral_550);
+  --action_button--icon--filled_inverted--disabled: var(--color--neutral_450);
+}
+`

@@ -1,0 +1,146 @@
+{
+  "Header/H1": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 600,
+    "fontStyle": "normal",
+    "htmlTag": "h1",
+    "fontSize": "48px",
+    "lineHeight": "56px",
+    "letterSpacing": "-0.5px"
+  },
+  "Header/H2": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 600,
+    "fontStyle": "normal",
+    "htmlTag": "h2",
+    "fontSize": "32px",
+    "lineHeight": "40px",
+    "letterSpacing": "-0.5px"
+  },
+  "Header/H3": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 600,
+    "fontStyle": "normal",
+    "htmlTag": "h3",
+    "fontSize": "28px",
+    "lineHeight": "32px",
+    "letterSpacing": "0"
+  },
+  "Header/H4": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 600,
+    "fontStyle": "normal",
+    "htmlTag": "h4",
+    "fontSize": "24px",
+    "lineHeight": "32px",
+    "letterSpacing": "0"
+  },
+  "Header/H5": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 600,
+    "fontStyle": "normal",
+    "htmlTag": "h5",
+    "fontSize": "20px",
+    "lineHeight": "24px",
+    "letterSpacing": "0"
+  },
+  "Header/H6": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 600,
+    "fontStyle": "normal",
+    "htmlTag": "h6",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "letterSpacing": "0"
+  },
+  "BodyTextRegular/BTR2": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 400,
+    "fontStyle": "normal",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "letterSpacing": "0px",
+    "htmlTag": "span"
+  },
+  "BodyTextRegular/BTR3": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 400,
+    "fontStyle": "normal",
+    "fontSize": "14px",
+    "lineHeight": "20px",
+    "letterSpacing": "0px",
+    "htmlTag": "span"
+  },
+  "BodyTextRegular/BTR4": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 400,
+    "fontStyle": "normal",
+    "fontSize": "12px",
+    "lineHeight": "16px",
+    "letterSpacing": "0px",
+    "htmlTag": "span"
+  },
+  "BodyTextRegular/BTR5": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 400,
+    "fontStyle": "normal",
+    "fontSize": "10px",
+    "lineHeight": "12px",
+    "letterSpacing": "0px",
+    "htmlTag": "span"
+  },
+  "BodyTextMedium/BTM2": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 500,
+    "fontStyle": "normal",
+    "fontSize": "16px",
+    "lineHeight": "24px",
+    "letterSpacing": "0px",
+    "htmlTag": "span"
+  },
+  "BodyTextMedium/BTM3": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 500,
+    "fontStyle": "normal",
+    "fontSize": "14px",
+    "lineHeight": "20px",
+    "letterSpacing": "0px",
+    "htmlTag": "span"
+  },
+  "BodyTextMedium/BTM4": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 500,
+    "fontStyle": "normal",
+    "fontSize": "12px",
+    "lineHeight": "16px",
+    "letterSpacing": "0px",
+    "htmlTag": "span"
+  },
+  "BodyTextMedium/BTM5": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 500,
+    "fontStyle": "normal",
+    "fontSize": "10px",
+    "lineHeight": "12px",
+    "letterSpacing": "0px",
+    "htmlTag": "span"
+  },
+  "MonoTextRegular/MTR3": {
+    "fontFamily": "\"Kaspersky Sans Mono\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 400,
+    "fontStyle": "normal",
+    "fontSize": "14px",
+    "lineHeight": "20px",
+    "letterSpacing": "0px",
+    "htmlTag": "span"
+  },
+  "MonoTextRegular/MTR4": {
+    "fontFamily": "\"Kaspersky Sans Mono\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 400,
+    "fontStyle": "normal",
+    "fontSize": "12px",
+    "lineHeight": "16px",
+    "letterSpacing": "0px",
+    "htmlTag": "span"
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "version": "1.0.4",
+  "metadata": {},
+  "collections": [
+    {
+      "name": "base colors 1.6",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "fixedneutralcolor/primary",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#2f3033",
+              "type": "color",
+              "description": "staticpalette/lightgrayalpha/lga50"
+            },
+            {
+              "name": "fixedneutralcolor/secondary",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#000000ad",
+              "type": "color",
+              "description": "staticpalette/lightgrayalpha/lga100"
+            },
+            {
+              "name": "fixedneutralcolor/secondary2",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#0000008f",
+              "type": "color",
+              "description": "staticpalette/lightgrayalpha/lga200"
+            },
+            {
+              "name": "fixedneutralcolor/base-icon",
+              "value": "#0000006e",
+              "type": "color",
+              "description": "staticpalette/lightgrayalpha/lga300"
+            },
+            {
+              "name": "fixedneutralcolor/disabled",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#00000052",
+              "type": "color",
+              "description": "staticpalette/lightgrayalpha/lga400"
+            },
+            {
+              "name": "fixedneutralcolor/line",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#00000038",
+              "type": "color",
+              "description": "staticpalette/lightgrayalpha/lga500"
+            },
+            {
+              "name": "fixedneutralcolor/separator-bold",
+              "value": "#00000024",
+              "type": "color",
+              "description": "staticpalette/lightgrayalpha/lga600"
+            },
+            {
+              "name": "fixedneutralcolor/separator",
+              "value": "#00000017",
+              "type": "color",
+              "description": "staticpalette/lightgrayalpha/lga700"
+            },
+            {
+              "name": "fixedneutralcolor/alternative2",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#2d2d2f",
+              "type": "color",
+              "description": "staticpalette/darkgray/dg800"
+            },
+            {
+              "name": "fixedneutralcolor/alternative",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#252527",
+              "type": "color",
+              "description": "staticpalette/darkgray/dg900"
+            },
+            {
+              "name": "fixedneutralcolor/base",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#1d1d1f",
+              "type": "color",
+              "description": "staticpalette/staticblack"
+            },
+            {
+              "name": "fixedneutralcolor/menu",
+              "description": "staticpalette/staticmenu",
+              "value": "#131315",
+              "type": "color"
+            },
+            {
+              "name": "fixedneutralcolor/primary-white",
+              "value": "#f7f7f8",
+              "type": "color",
+              "description": "staticpalette/darkgray/dg50"
+            },
+            {
+              "name": "fixedneutralcolor/secondary-white",
+              "value": "#ffffffc4",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga100"
+            },
+            {
+              "name": "fixedneutralcolor/secondary2-white",
+              "value": "#ffffff96",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga200"
+            },
+            {
+              "name": "fixedneutralcolor/base-icon-white",
+              "value": "#ffffff6e",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga300"
+            },
+            {
+              "name": "fixedneutralcolor/disabled-white",
+              "value": "#ffffff4d",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga400"
+            },
+            {
+              "name": "fixedneutralcolor/line-white",
+              "value": "#ffffff30",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga500"
+            },
+            {
+              "name": "fixedneutralcolor/separator-bold-white",
+              "value": "#ffffff24",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga600"
+            },
+            {
+              "name": "fixedneutralcolor/separator-white",
+              "value": "#ffffff1c",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga700"
+            },
+            {
+              "name": "fixedneutralcolor/alternative2-white",
+              "value": "#eeeff1",
+              "type": "color",
+              "description": "staticpalette/lightgray/lg800"
+            },
+            {
+              "name": "fixedneutralcolor/alternative-white",
+              "value": "#f7f7f8",
+              "type": "color",
+              "description": "staticpalette/lightgray/lg900"
+            },
+            {
+              "name": "fixedneutralcolor/base-white",
+              "value": "#ffffff",
+              "type": "color",
+              "description": "staticpalette/staticwhite"
+            },
+            {
+              "name": "fixedneutralcolor/baseicon",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#0000006e",
+              "type": "color",
+              "description": "staticpalette/lightgrayalpha/lga300"
+            },
+            {
+              "name": "fixedneutralcolor/seporatorbold",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#00000024",
+              "type": "color",
+              "description": "staticpalette/lightgrayalpha/lga600"
+            },
+            {
+              "name": "fixedneutralcolor/seporator",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#00000017",
+              "type": "color",
+              "description": "staticpalette/lightgrayalpha/lga700"
+            },
+            {
+              "name": "fixedneutralcolor/primarywhite",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#f7f7f8",
+              "type": "color",
+              "description": "staticpalette/darkgray/dg50"
+            },
+            {
+              "name": "fixedneutralcolor/secondarywhite",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#ffffffc4",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga100"
+            },
+            {
+              "name": "fixedneutralcolor/secondary2white",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#ffffff96",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga200"
+            },
+            {
+              "name": "fixedneutralcolor/disabledwhite",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#ffffff4d",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga400"
+            },
+            {
+              "name": "fixedneutralcolor/linewhite",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#ffffff30",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga500"
+            },
+            {
+              "name": "fixedneutralcolor/baseiconwhite",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#ffffff6e",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga300"
+            },
+            {
+              "name": "fixedneutralcolor/seporatorwhite",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#ffffff1c",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga700"
+            },
+            {
+              "name": "fixedneutralcolor/seporatorboldwhite",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#ffffff24",
+              "type": "color",
+              "description": "staticpalette/darkgrayalpha/dga600"
+            },
+            {
+              "name": "fixedneutralcolor/alternative2white",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#eeeff1",
+              "type": "color",
+              "description": "staticpalette/lightgray/lg800"
+            }, {
+              "name": "fixedneutralcolor/alternativewhite",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#f7f7f8",
+              "type": "color",
+              "description": "staticpalette/lightgray/lg900"
+            },
+            {
+              "name": "fixedneutralcolor/basewhite",
+              "category": "color",
+              "exportKey": "color",
+              "value": "#ffffff",
+              "type": "color",
+              "description": "staticpalette/staticwhite"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+node_modules/
+.env
+.gitignore
+gulpfile.js
+CHANGELOG.md
+todo.txt
+jest.config.js
+yarn-error.log
+__tests__/
+coverage/
+jest.config.json
+*.md

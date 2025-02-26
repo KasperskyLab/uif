@@ -1,0 +1,332 @@
+/*! This file was created automatically. */
+/*! Use updateColors gulp task if you need to update colors. */
+
+export const cssVarString = `
+:root,
+.theme-light,
+.hexa-ui-light-theme {
+  --segmented_button--bg--enabled: var(--color--neutral_350);
+  --segmented_button--bg--disabled: var(--color--neutral_250);
+}
+
+:root,
+.theme-light,
+.hexa-ui-light-theme {
+  --segmented_button_radio_item--bg--enabled: var(--color--neutral_0);
+  --segmented_button_radio_item--bg--hover: var(--color--neutral_100);
+  --segmented_button_radio_item--bg--active: var(--color--neutral_150);
+  --segmented_button_radio_item--bg--disabled: var(--color--neutral_0);
+  --segmented_button_radio_item--bg--enabled_selected: var(--color--marina_50);
+  --segmented_button_radio_item--bg--hover_selected: var(--color--marina_100);
+  --segmented_button_radio_item--bg--active_selected: var(--color--marina_200);
+  --segmented_button_radio_item--bg--disabled_selected: var(--color--neutral_200);
+  --segmented_button_radio_item--text--enabled: var(--color--neutral_650);
+  --segmented_button_radio_item--text--hover: var(--color--neutral_650);
+  --segmented_button_radio_item--text--active: var(--color--neutral_650);
+  --segmented_button_radio_item--text--disabled: var(--color--neutral_400);
+  --segmented_button_radio_item--text--enabled_selected: var(--color--marina_600);
+  --segmented_button_radio_item--text--hover_selected: var(--color--marina_600);
+  --segmented_button_radio_item--text--active_selected: var(--color--marina_600);
+  --segmented_button_radio_item--text--disabled_selected: var(--color--neutral_400);
+  --segmented_button_radio_item--icon--enabled: var(--color--neutral_650);
+  --segmented_button_radio_item--icon--hover: var(--color--neutral_650);
+  --segmented_button_radio_item--icon--active: var(--color--neutral_650);
+  --segmented_button_radio_item--icon--disabled: var(--color--neutral_400);
+  --segmented_button_radio_item--icon--enabled_selected: var(--color--marina_600);
+  --segmented_button_radio_item--icon--hover_selected: var(--color--marina_600);
+  --segmented_button_radio_item--icon--active_selected: var(--color--marina_600);
+  --segmented_button_radio_item--icon--disabled_selected: var(--color--neutral_400);
+  --segmented_button_radio_item--border--enabled_selected: var(--color--marina_200);
+  --segmented_button_radio_item--border--hover_selected: var(--color--marina_300);
+  --segmented_button_radio_item--border--active_selected: var(--color--marina_400);
+  --segmented_button_radio_item--border--disabled_selected: var(--color--neutral_350);
+}
+
+:root,
+.theme-light,
+.hexa-ui-light-theme {
+  --segmented_button_checkbox_item--unselected--text: var(--color--neutral_650);
+  --segmented_button_checkbox_item--unselected--text_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--unselected--icon: var(--color--neutral_650);
+  --segmented_button_checkbox_item--unselected--icon_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--unselected--border: var(--color--neutral_350);
+  --segmented_button_checkbox_item--unselected--bg--enabled: var(--color--neutral_0);
+  --segmented_button_checkbox_item--unselected--bg--hover: var(--color--neutral_100);
+  --segmented_button_checkbox_item--unselected--bg--active: var(--color--neutral_150);
+  --segmented_button_checkbox_item--unselected--bg--disabled: var(--color--neutral_0);
+  --segmented_button_checkbox_item--red--text: var(--color--red_600);
+  --segmented_button_checkbox_item--red--text_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--red--icon: var(--color--red_600);
+  --segmented_button_checkbox_item--red--icon_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--red--border: var(--color--red_200);
+  --segmented_button_checkbox_item--red--bg--enabled: var(--color--red_50);
+  --segmented_button_checkbox_item--red--bg--hover: var(--color--red_100);
+  --segmented_button_checkbox_item--red--bg--active: var(--color--red_200);
+  --segmented_button_checkbox_item--red--bg--disabled: var(--color--neutral_200);
+  --segmented_button_checkbox_item--orange--text: var(--color--orange_600);
+  --segmented_button_checkbox_item--orange--text_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--orange--icon: var(--color--orange_600);
+  --segmented_button_checkbox_item--orange--icon_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--orange--border: var(--color--orange_200);
+  --segmented_button_checkbox_item--orange--bg--enabled: var(--color--orange_50);
+  --segmented_button_checkbox_item--orange--bg--hover: var(--color--orange_100);
+  --segmented_button_checkbox_item--orange--bg--active: var(--color--orange_200);
+  --segmented_button_checkbox_item--orange--bg--disabled: var(--color--neutral_200);
+  --segmented_button_checkbox_item--yellow--text: var(--color--yellow_600);
+  --segmented_button_checkbox_item--yellow--text_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--yellow--icon: var(--color--yellow_600);
+  --segmented_button_checkbox_item--yellow--icon_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--yellow--border: var(--color--yellow_200);
+  --segmented_button_checkbox_item--yellow--bg--enabled: var(--color--yellow_50);
+  --segmented_button_checkbox_item--yellow--bg--hover: var(--color--yellow_100);
+  --segmented_button_checkbox_item--yellow--bg--active: var(--color--yellow_200);
+  --segmented_button_checkbox_item--yellow--bg--disabled: var(--color--neutral_200);
+  --segmented_button_checkbox_item--grass--text: var(--color--grass_600);
+  --segmented_button_checkbox_item--grass--text_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--grass--icon: var(--color--grass_600);
+  --segmented_button_checkbox_item--grass--icon_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--grass--border: var(--color--grass_200);
+  --segmented_button_checkbox_item--grass--bg--enabled: var(--color--grass_50);
+  --segmented_button_checkbox_item--grass--bg--hover: var(--color--grass_100);
+  --segmented_button_checkbox_item--grass--bg--active: var(--color--grass_200);
+  --segmented_button_checkbox_item--grass--bg--disabled: var(--color--neutral_200);
+  --segmented_button_checkbox_item--emerald--text: var(--color--emerald_600);
+  --segmented_button_checkbox_item--emerald--text_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--emerald--icon: var(--color--emerald_600);
+  --segmented_button_checkbox_item--emerald--icon_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--emerald--border: var(--color--emerald_200);
+  --segmented_button_checkbox_item--emerald--bg--enabled: var(--color--emerald_50);
+  --segmented_button_checkbox_item--emerald--bg--hover: var(--color--emerald_100);
+  --segmented_button_checkbox_item--emerald--bg--active: var(--color--emerald_200);
+  --segmented_button_checkbox_item--emerald--bg--disabled: var(--color--neutral_200);
+  --segmented_button_checkbox_item--marengo--text: var(--color--marengo_600);
+  --segmented_button_checkbox_item--marengo--text_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--marengo--icon: var(--color--marengo_600);
+  --segmented_button_checkbox_item--marengo--icon_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--marengo--border: var(--color--marengo_200);
+  --segmented_button_checkbox_item--marengo--bg--enabled: var(--color--marengo_50);
+  --segmented_button_checkbox_item--marengo--bg--hover: var(--color--marengo_100);
+  --segmented_button_checkbox_item--marengo--bg--active: var(--color--marengo_200);
+  --segmented_button_checkbox_item--marengo--bg--disabled: var(--color--neutral_200);
+  --segmented_button_checkbox_item--marina--text: var(--color--marina_600);
+  --segmented_button_checkbox_item--marina--text_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--marina--icon: var(--color--marina_600);
+  --segmented_button_checkbox_item--marina--icon_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--marina--border: var(--color--marina_200);
+  --segmented_button_checkbox_item--marina--bg--enabled: var(--color--marina_50);
+  --segmented_button_checkbox_item--marina--bg--hover: var(--color--marina_100);
+  --segmented_button_checkbox_item--marina--bg--active: var(--color--marina_200);
+  --segmented_button_checkbox_item--marina--bg--disabled: var(--color--neutral_200);
+  --segmented_button_checkbox_item--purple--text: var(--color--purple_600);
+  --segmented_button_checkbox_item--purple--text_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--purple--icon: var(--color--purple_600);
+  --segmented_button_checkbox_item--purple--icon_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--purple--border: var(--color--purple_200);
+  --segmented_button_checkbox_item--purple--bg--enabled: var(--color--purple_50);
+  --segmented_button_checkbox_item--purple--bg--hover: var(--color--purple_100);
+  --segmented_button_checkbox_item--purple--bg--active: var(--color--purple_200);
+  --segmented_button_checkbox_item--purple--bg--disabled: var(--color--neutral_200);
+  --segmented_button_checkbox_item--violet--text: var(--color--violet_600);
+  --segmented_button_checkbox_item--violet--text_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--violet--icon: var(--color--violet_600);
+  --segmented_button_checkbox_item--violet--icon_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--violet--border: var(--color--violet_200);
+  --segmented_button_checkbox_item--violet--bg--enabled: var(--color--violet_50);
+  --segmented_button_checkbox_item--violet--bg--hover: var(--color--violet_100);
+  --segmented_button_checkbox_item--violet--bg--active: var(--color--violet_200);
+  --segmented_button_checkbox_item--violet--bg--disabled: var(--color--neutral_200);
+  --segmented_button_checkbox_item--grey--text: var(--color--neutral_550);
+  --segmented_button_checkbox_item--grey--text_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--grey--icon: var(--color--neutral_550);
+  --segmented_button_checkbox_item--grey--icon_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--grey--border: var(--color--neutral_400);
+  --segmented_button_checkbox_item--grey--bg--enabled: var(--color--neutral_100);
+  --segmented_button_checkbox_item--grey--bg--hover: var(--color--neutral_150);
+  --segmented_button_checkbox_item--grey--bg--active: var(--color--neutral_200);
+  --segmented_button_checkbox_item--grey--bg--disabled: var(--color--neutral_200);
+  --segmented_button_checkbox_item--neutral--text: var(--color--neutral_550);
+  --segmented_button_checkbox_item--neutral--text_outlined: var(--color--neutral_550);
+  --segmented_button_checkbox_item--neutral--text_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--neutral--text_readonly: var(--color--neutral_450);
+  --segmented_button_checkbox_item--neutral--text_invalid: var(--color--neutral_550);
+  --segmented_button_checkbox_item--neutral--icon: var(--color--neutral_550);
+  --segmented_button_checkbox_item--neutral--icon_invalid: var(--color--neutral_550);
+  --segmented_button_checkbox_item--neutral--icon_invalid_status: var(--color--red_500);
+  --segmented_button_checkbox_item--neutral--icon_disabled: var(--color--neutral_400);
+  --segmented_button_checkbox_item--neutral--icon_readonly: var(--color--neutral_450);
+  --segmented_button_checkbox_item--neutral--icon_outlined: var(--color--neutral_550);
+  --segmented_button_checkbox_item--neutral--border_outlined: var(--color--neutral_400);
+  --segmented_button_checkbox_item--neutral--bg--enabled: var(--color--neutral_250);
+  --segmented_button_checkbox_item--neutral--bg--disabled: var(--color--neutral_200);
+  --segmented_button_checkbox_item--neutral--bg--readonly: var(--color--neutral_200);
+  --segmented_button_checkbox_item--neutral--bg--hover: var(--color--neutral_350);
+  --segmented_button_checkbox_item--neutral--bg--active: var(--color--neutral_400);
+  --segmented_button_checkbox_item--neutral--bg--invalid: var(--color--red_100);
+  --segmented_button_checkbox_item--neutral--bg--enabled_outlined: var(--color--neutral_0);
+  --segmented_button_checkbox_item--neutral--bg--hover_outlined: var(--color--neutral_100);
+  --segmented_button_checkbox_item--neutral--bg--active_outlined: var(--color--neutral_150);
+}
+
+
+.theme-dark,
+.hexa-ui-dark-theme {
+  --segmented_button--bg--enabled: var(--color--neutral_550);
+  --segmented_button--bg--disabled: var(--color--neutral_650);
+}
+
+.theme-dark,
+.hexa-ui-dark-theme {
+  --segmented_button_radio_item--bg--enabled: var(--color--neutral_850);
+  --segmented_button_radio_item--bg--hover: var(--color--neutral_800);
+  --segmented_button_radio_item--bg--active: var(--color--neutral_750);
+  --segmented_button_radio_item--bg--disabled: var(--color--neutral_850);
+  --segmented_button_radio_item--bg--enabled_selected: var(--color--marina_900);
+  --segmented_button_radio_item--bg--hover_selected: var(--color--marina_800);
+  --segmented_button_radio_item--bg--active_selected: var(--color--marina_700);
+  --segmented_button_radio_item--bg--disabled_selected: var(--color--neutral_700);
+  --segmented_button_radio_item--text--enabled: var(--color--neutral_250);
+  --segmented_button_radio_item--text--hover: var(--color--neutral_250);
+  --segmented_button_radio_item--text--active: var(--color--neutral_250);
+  --segmented_button_radio_item--text--disabled: var(--color--neutral_500);
+  --segmented_button_radio_item--text--enabled_selected: var(--color--marina_300);
+  --segmented_button_radio_item--text--hover_selected: var(--color--marina_300);
+  --segmented_button_radio_item--text--active_selected: var(--color--marina_300);
+  --segmented_button_radio_item--text--disabled_selected: var(--color--neutral_500);
+  --segmented_button_radio_item--icon--enabled: var(--color--neutral_250);
+  --segmented_button_radio_item--icon--hover: var(--color--neutral_250);
+  --segmented_button_radio_item--icon--active: var(--color--neutral_250);
+  --segmented_button_radio_item--icon--disabled: var(--color--neutral_500);
+  --segmented_button_radio_item--icon--enabled_selected: var(--color--marina_300);
+  --segmented_button_radio_item--icon--hover_selected: var(--color--marina_300);
+  --segmented_button_radio_item--icon--active_selected: var(--color--marina_300);
+  --segmented_button_radio_item--icon--disabled_selected: var(--color--neutral_500);
+  --segmented_button_radio_item--border--enabled_selected: var(--color--marina_700);
+  --segmented_button_radio_item--border--hover_selected: var(--color--marina_600);
+  --segmented_button_radio_item--border--active_selected: var(--color--marina_500);
+  --segmented_button_radio_item--border--disabled_selected: var(--color--neutral_550);
+}
+
+.theme-dark,
+.hexa-ui-dark-theme {
+  --segmented_button_checkbox_item--unselected--text: var(--color--neutral_250);
+  --segmented_button_checkbox_item--unselected--text_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--unselected--icon: var(--color--neutral_250);
+  --segmented_button_checkbox_item--unselected--icon_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--unselected--border: var(--color--neutral_550);
+  --segmented_button_checkbox_item--unselected--bg--enabled: var(--color--neutral_850);
+  --segmented_button_checkbox_item--unselected--bg--hover: var(--color--neutral_800);
+  --segmented_button_checkbox_item--unselected--bg--active: var(--color--neutral_750);
+  --segmented_button_checkbox_item--unselected--bg--disabled: var(--color--neutral_850);
+  --segmented_button_checkbox_item--red--text: var(--color--red_300);
+  --segmented_button_checkbox_item--red--text_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--red--icon: var(--color--red_300);
+  --segmented_button_checkbox_item--red--icon_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--red--border: var(--color--red_700);
+  --segmented_button_checkbox_item--red--bg--enabled: var(--color--red_900);
+  --segmented_button_checkbox_item--red--bg--hover: var(--color--red_800);
+  --segmented_button_checkbox_item--red--bg--active: var(--color--red_700);
+  --segmented_button_checkbox_item--red--bg--disabled: var(--color--neutral_700);
+  --segmented_button_checkbox_item--orange--text: var(--color--orange_300);
+  --segmented_button_checkbox_item--orange--text_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--orange--icon: var(--color--orange_300);
+  --segmented_button_checkbox_item--orange--icon_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--orange--border: var(--color--orange_700);
+  --segmented_button_checkbox_item--orange--bg--enabled: var(--color--orange_900);
+  --segmented_button_checkbox_item--orange--bg--hover: var(--color--orange_800);
+  --segmented_button_checkbox_item--orange--bg--active: var(--color--orange_700);
+  --segmented_button_checkbox_item--orange--bg--disabled: var(--color--neutral_700);
+  --segmented_button_checkbox_item--yellow--text: var(--color--yellow_300);
+  --segmented_button_checkbox_item--yellow--text_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--yellow--icon: var(--color--yellow_300);
+  --segmented_button_checkbox_item--yellow--icon_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--yellow--border: var(--color--yellow_700);
+  --segmented_button_checkbox_item--yellow--bg--enabled: var(--color--yellow_900);
+  --segmented_button_checkbox_item--yellow--bg--hover: var(--color--yellow_800);
+  --segmented_button_checkbox_item--yellow--bg--active: var(--color--yellow_700);
+  --segmented_button_checkbox_item--yellow--bg--disabled: var(--color--neutral_700);
+  --segmented_button_checkbox_item--grass--text: var(--color--grass_300);
+  --segmented_button_checkbox_item--grass--text_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--grass--icon: var(--color--grass_300);
+  --segmented_button_checkbox_item--grass--icon_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--grass--border: var(--color--grass_700);
+  --segmented_button_checkbox_item--grass--bg--enabled: var(--color--grass_900);
+  --segmented_button_checkbox_item--grass--bg--hover: var(--color--grass_800);
+  --segmented_button_checkbox_item--grass--bg--active: var(--color--grass_700);
+  --segmented_button_checkbox_item--grass--bg--disabled: var(--color--neutral_700);
+  --segmented_button_checkbox_item--emerald--text: var(--color--emerald_300);
+  --segmented_button_checkbox_item--emerald--text_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--emerald--icon: var(--color--emerald_300);
+  --segmented_button_checkbox_item--emerald--icon_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--emerald--border: var(--color--emerald_700);
+  --segmented_button_checkbox_item--emerald--bg--enabled: var(--color--emerald_900);
+  --segmented_button_checkbox_item--emerald--bg--hover: var(--color--emerald_800);
+  --segmented_button_checkbox_item--emerald--bg--active: var(--color--emerald_700);
+  --segmented_button_checkbox_item--emerald--bg--disabled: var(--color--neutral_700);
+  --segmented_button_checkbox_item--marengo--text: var(--color--marengo_300);
+  --segmented_button_checkbox_item--marengo--text_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--marengo--icon: var(--color--marengo_300);
+  --segmented_button_checkbox_item--marengo--icon_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--marengo--border: var(--color--marengo_700);
+  --segmented_button_checkbox_item--marengo--bg--enabled: var(--color--marengo_900);
+  --segmented_button_checkbox_item--marengo--bg--hover: var(--color--marengo_800);
+  --segmented_button_checkbox_item--marengo--bg--active: var(--color--marengo_700);
+  --segmented_button_checkbox_item--marengo--bg--disabled: var(--color--neutral_700);
+  --segmented_button_checkbox_item--marina--text: var(--color--marina_300);
+  --segmented_button_checkbox_item--marina--text_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--marina--icon: var(--color--marina_300);
+  --segmented_button_checkbox_item--marina--icon_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--marina--border: var(--color--marina_700);
+  --segmented_button_checkbox_item--marina--bg--enabled: var(--color--marina_900);
+  --segmented_button_checkbox_item--marina--bg--hover: var(--color--marina_800);
+  --segmented_button_checkbox_item--marina--bg--active: var(--color--marina_700);
+  --segmented_button_checkbox_item--marina--bg--disabled: var(--color--neutral_700);
+  --segmented_button_checkbox_item--purple--text: var(--color--purple_300);
+  --segmented_button_checkbox_item--purple--text_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--purple--icon: var(--color--purple_300);
+  --segmented_button_checkbox_item--purple--icon_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--purple--border: var(--color--purple_700);
+  --segmented_button_checkbox_item--purple--bg--enabled: var(--color--purple_900);
+  --segmented_button_checkbox_item--purple--bg--hover: var(--color--purple_800);
+  --segmented_button_checkbox_item--purple--bg--active: var(--color--purple_700);
+  --segmented_button_checkbox_item--purple--bg--disabled: var(--color--neutral_700);
+  --segmented_button_checkbox_item--violet--text: var(--color--violet_300);
+  --segmented_button_checkbox_item--violet--text_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--violet--icon: var(--color--violet_300);
+  --segmented_button_checkbox_item--violet--icon_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--violet--border: var(--color--violet_700);
+  --segmented_button_checkbox_item--violet--bg--enabled: var(--color--violet_900);
+  --segmented_button_checkbox_item--violet--bg--hover: var(--color--violet_800);
+  --segmented_button_checkbox_item--violet--bg--active: var(--color--violet_700);
+  --segmented_button_checkbox_item--violet--bg--disabled: var(--color--neutral_700);
+  --segmented_button_checkbox_item--grey--text: var(--color--neutral_250);
+  --segmented_button_checkbox_item--grey--text_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--grey--icon: var(--color--neutral_250);
+  --segmented_button_checkbox_item--grey--icon_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--grey--border: var(--color--neutral_400);
+  --segmented_button_checkbox_item--grey--bg--enabled: var(--color--neutral_800);
+  --segmented_button_checkbox_item--grey--bg--hover: var(--color--neutral_750);
+  --segmented_button_checkbox_item--grey--bg--active: var(--color--neutral_700);
+  --segmented_button_checkbox_item--grey--bg--disabled: var(--color--neutral_700);
+  --segmented_button_checkbox_item--neutral--text: var(--color--neutral_350);
+  --segmented_button_checkbox_item--neutral--text_outlined: var(--color--neutral_350);
+  --segmented_button_checkbox_item--neutral--text_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--neutral--text_readonly: var(--color--neutral_450);
+  --segmented_button_checkbox_item--neutral--text_invalid: var(--color--neutral_350);
+  --segmented_button_checkbox_item--neutral--icon: var(--color--neutral_350);
+  --segmented_button_checkbox_item--neutral--icon_invalid: var(--color--neutral_350);
+  --segmented_button_checkbox_item--neutral--icon_invalid_status: var(--color--red_400);
+  --segmented_button_checkbox_item--neutral--icon_disabled: var(--color--neutral_500);
+  --segmented_button_checkbox_item--neutral--icon_readonly: var(--color--neutral_450);
+  --segmented_button_checkbox_item--neutral--icon_outlined: var(--color--neutral_350);
+  --segmented_button_checkbox_item--neutral--border_outlined: var(--color--neutral_500);
+  --segmented_button_checkbox_item--neutral--bg--enabled: var(--color--neutral_650);
+  --segmented_button_checkbox_item--neutral--bg--disabled: var(--color--neutral_700);
+  --segmented_button_checkbox_item--neutral--bg--readonly: var(--color--neutral_700);
+  --segmented_button_checkbox_item--neutral--bg--hover: var(--color--neutral_550);
+  --segmented_button_checkbox_item--neutral--bg--active: var(--color--neutral_500);
+  --segmented_button_checkbox_item--neutral--bg--invalid: var(--color--red_900);
+  --segmented_button_checkbox_item--neutral--bg--enabled_outlined: var(--color--neutral_850);
+  --segmented_button_checkbox_item--neutral--bg--hover_outlined: var(--color--neutral_800);
+  --segmented_button_checkbox_item--neutral--bg--active_outlined: var(--color--neutral_750);
+}
+`

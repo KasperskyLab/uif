@@ -1,0 +1,501 @@
+{
+  "version": "1.0.4",
+  "metadata": {},
+  "collections": [
+    {
+      "name": "Product colors",
+      "modes": [
+        {
+          "name": "Light",
+          "variables": [
+            {
+              "name": "text/primary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "text/secondary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "text/disabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_400"
+              }
+            },
+            {
+              "name": "text/link",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_500"
+              }
+            },
+            {
+              "name": "text/critical",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_500"
+              }
+            },
+            {
+              "name": "text/positive",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_500"
+              }
+            },
+            {
+              "name": "bg/global",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_0"
+              }
+            },
+            {
+              "name": "bg/section",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_150"
+              }
+            },
+            {
+              "name": "icon/neutral/neutralPrimary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "icon/neutral/neutralSecondary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "icon/status/statusAccent",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_500"
+              }
+            },
+            {
+              "name": "icon/status/statusCritical",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_500"
+              }
+            },
+            {
+              "name": "icon/status/statusWarning",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_500"
+              }
+            },
+            {
+              "name": "icon/status/statusPositive",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_500"
+              }
+            },
+            {
+              "name": "icon/status/statusInfo",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_500"
+              }
+            },
+            {
+              "name": "icon/status/statusOrange",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_400"
+              }
+            },
+            {
+              "name": "icon/status/statusMarengo",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_400"
+              }
+            },
+            {
+              "name": "icon/status/statusGrass",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_500"
+              }
+            },
+            {
+              "name": "icon/status/statusPurple",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_500"
+              }
+            },
+            {
+              "name": "icon/status/statusViolet",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_500"
+              }
+            },
+            {
+              "name": "icon/status/statusNeutral",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_400"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel0",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_400"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel1",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_500"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel2",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_300"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel3",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_500"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel4",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_400"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel5",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_400"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel6",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_500"
+              }
+            },
+            {
+              "name": "bg/hover",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_150"
+              }
+            },
+            {
+              "name": "bg/selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_50"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Dark",
+          "variables": [
+            {
+              "name": "text/primary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_0"
+              }
+            },
+            {
+              "name": "text/secondary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "text/disabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_500"
+              }
+            },
+            {
+              "name": "text/link",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_400"
+              }
+            },
+            {
+              "name": "text/critical",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_400"
+              }
+            },
+            {
+              "name": "text/positive",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_400"
+              }
+            },
+            {
+              "name": "bg/global",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "bg/section",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_750"
+              }
+            },
+            {
+              "name": "icon/neutral/neutralPrimary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_0"
+              }
+            },
+            {
+              "name": "icon/neutral/neutralSecondary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "icon/status/statusAccent",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_400"
+              }
+            },
+            {
+              "name": "icon/status/statusCritical",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_400"
+              }
+            },
+            {
+              "name": "icon/status/statusWarning",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_400"
+              }
+            },
+            {
+              "name": "icon/status/statusPositive",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_400"
+              }
+            },
+            {
+              "name": "icon/status/statusInfo",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_400"
+              }
+            },
+            {
+              "name": "icon/status/statusOrange",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_300"
+              }
+            },
+            {
+              "name": "icon/status/statusMarengo",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_300"
+              }
+            },
+            {
+              "name": "icon/status/statusGrass",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_400"
+              }
+            },
+            {
+              "name": "icon/status/statusPurple",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_400"
+              }
+            },
+            {
+              "name": "icon/status/statusViolet",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_400"
+              }
+            },
+            {
+              "name": "icon/status/statusNeutral",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_350"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel0",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_350"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel1",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_400"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel2",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_200"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel3",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_400"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel4",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_300"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel5",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_300"
+              }
+            },
+            {
+              "name": "icon/severity/severityLevel6",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_400"
+              }
+            },
+            {
+              "name": "bg/hover",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_750"
+              }
+            },
+            {
+              "name": "bg/selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_900"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,934 @@
+{
+  "version": "1.0.4",
+  "metadata": {},
+  "collections": [
+    {
+      "name": "base colors 1.6",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "variables": [
+            {
+              "name": "staticpalette/staticmenu",
+              "type": "color",
+              "isAlias": false,
+              "value": "#131315"
+            },
+            {
+              "name": "staticpalette/staticblack",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1D1D1F"
+            },
+            {
+              "name": "staticpalette/staticwhite",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF"
+            },
+            {
+              "name": "staticpalette/lightgrayalpha/lga900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#00000008"
+            },
+            {
+              "name": "staticpalette/lightgrayalpha/lga800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0000000F"
+            },
+            {
+              "name": "staticpalette/lightgrayalpha/lga700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#00000017"
+            },
+            {
+              "name": "staticpalette/lightgrayalpha/lga600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#00000024"
+            },
+            {
+              "name": "staticpalette/lightgrayalpha/lga500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#00000038"
+            },
+            {
+              "name": "staticpalette/lightgrayalpha/lga400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#00000052"
+            },
+            {
+              "name": "staticpalette/lightgrayalpha/lga300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0000006E"
+            },
+            {
+              "name": "staticpalette/lightgrayalpha/lga200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#0000008F"
+            },
+            {
+              "name": "staticpalette/lightgrayalpha/lga100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#000000AD"
+            },
+            {
+              "name": "staticpalette/lightgrayalpha/lga50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#000000CF"
+            },
+            {
+              "name": "staticpalette/darkgrayalpha/dga900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF08"
+            },
+            {
+              "name": "staticpalette/darkgrayalpha/dga800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF12"
+            },
+            {
+              "name": "staticpalette/darkgrayalpha/dga700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF1C"
+            },
+            {
+              "name": "staticpalette/darkgrayalpha/dga600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF24"
+            },
+            {
+              "name": "staticpalette/darkgrayalpha/dga500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF30"
+            },
+            {
+              "name": "staticpalette/darkgrayalpha/dga400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF4D"
+            },
+            {
+              "name": "staticpalette/darkgrayalpha/dga300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF6E"
+            },
+            {
+              "name": "staticpalette/darkgrayalpha/dga200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFF96"
+            },
+            {
+              "name": "staticpalette/darkgrayalpha/dga100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFFC4"
+            },
+            {
+              "name": "staticpalette/darkgrayalpha/dga50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFFFFFF5"
+            },
+            {
+              "name": "staticpalette/darkgray/dg900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#252527"
+            },
+            {
+              "name": "staticpalette/darkgray/dg800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2D2D2F"
+            },
+            {
+              "name": "staticpalette/darkgray/dg700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#343537"
+            },
+            {
+              "name": "staticpalette/darkgray/dg600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#3C3D3E"
+            },
+            {
+              "name": "staticpalette/darkgray/dg500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#464749"
+            },
+            {
+              "name": "staticpalette/darkgray/dg400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#606163"
+            },
+            {
+              "name": "staticpalette/darkgray/dg300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#7E7F83"
+            },
+            {
+              "name": "staticpalette/darkgray/dg200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#A3A4A6"
+            },
+            {
+              "name": "staticpalette/darkgray/dg100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#CACBCE"
+            },
+            {
+              "name": "staticpalette/darkgray/dg50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F7F7F8"
+            },
+            {
+              "name": "staticpalette/lightgray/lg900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F7F7F8"
+            },
+            {
+              "name": "staticpalette/lightgray/lg800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#EEEFF1"
+            },
+            {
+              "name": "staticpalette/lightgray/lg700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E7E7E9"
+            },
+            {
+              "name": "staticpalette/lightgray/lg600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#DBDBDC"
+            },
+            {
+              "name": "staticpalette/lightgray/lg500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#C7C7C9"
+            },
+            {
+              "name": "staticpalette/lightgray/lg400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#ADAEB0"
+            },
+            {
+              "name": "staticpalette/lightgray/lg300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#8F9093"
+            },
+            {
+              "name": "staticpalette/lightgray/lg200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#707175"
+            },
+            {
+              "name": "staticpalette/lightgray/lg100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#515255"
+            },
+            {
+              "name": "staticpalette/lightgray/lg50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2F3033"
+            },
+            {
+              "name": "staticpalette/coldgrey/cg950",
+              "type": "color",
+              "isAlias": false,
+              "value": "#131A23"
+            },
+            {
+              "name": "staticpalette/coldgrey/cg900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#21272F"
+            },
+            {
+              "name": "staticpalette/coldgrey/cg800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#383F48"
+            },
+            {
+              "name": "staticpalette/coldgrey/cg700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#505862"
+            },
+            {
+              "name": "staticpalette/coldgrey/cg600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#68707B"
+            },
+            {
+              "name": "staticpalette/coldgrey/cg500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#7F8994"
+            },
+            {
+              "name": "staticpalette/coldgrey/cg400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#98A0AA"
+            },
+            {
+              "name": "staticpalette/coldgrey/cg300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#B2B8BF"
+            },
+            {
+              "name": "staticpalette/coldgrey/cg200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#CCD0D4"
+            },
+            {
+              "name": "staticpalette/coldgrey/cg100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E6E7E9"
+            },
+            {
+              "name": "staticpalette/coldgrey/cg50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F2F3F4"
+            },
+            {
+              "name": "staticpalette/red/red950",
+              "type": "color",
+              "isAlias": false,
+              "value": "#342628"
+            },
+            {
+              "name": "staticpalette/red/red900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#4D2129"
+            },
+            {
+              "name": "staticpalette/red/red800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#6F2432"
+            },
+            {
+              "name": "staticpalette/red/red700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#B21A35"
+            },
+            {
+              "name": "staticpalette/red/red600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#DB3545"
+            },
+            {
+              "name": "staticpalette/red/red500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FA625B"
+            },
+            {
+              "name": "staticpalette/red/red400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FE827C"
+            },
+            {
+              "name": "staticpalette/red/red300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFA29D"
+            },
+            {
+              "name": "staticpalette/red/red200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFC1BE"
+            },
+            {
+              "name": "staticpalette/red/red100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFE1DF"
+            },
+            {
+              "name": "staticpalette/red/red50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFECEA"
+            },
+            {
+              "name": "staticpalette/orange/orange950",
+              "type": "color",
+              "isAlias": false,
+              "value": "#312826"
+            },
+            {
+              "name": "staticpalette/orange/orange900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#48251F"
+            },
+            {
+              "name": "staticpalette/orange/orange800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#6D3127"
+            },
+            {
+              "name": "staticpalette/orange/orange700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#A63B29"
+            },
+            {
+              "name": "staticpalette/orange/orange600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D15138"
+            },
+            {
+              "name": "staticpalette/orange/orange500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FF7B43"
+            },
+            {
+              "name": "staticpalette/orange/orange400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FF9F69"
+            },
+            {
+              "name": "staticpalette/orange/orange300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFB78E"
+            },
+            {
+              "name": "staticpalette/orange/orange200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFCFB4"
+            },
+            {
+              "name": "staticpalette/orange/orange100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFE7D9"
+            },
+            {
+              "name": "staticpalette/orange/orange50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFF3EC"
+            },
+            {
+              "name": "staticpalette/yellow/yellow950",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2C2A25"
+            },
+            {
+              "name": "staticpalette/yellow/yellow900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#382E1B"
+            },
+            {
+              "name": "staticpalette/yellow/yellow800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#554123"
+            },
+            {
+              "name": "staticpalette/yellow/yellow700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#9F6712"
+            },
+            {
+              "name": "staticpalette/yellow/yellow600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D0900E"
+            },
+            {
+              "name": "staticpalette/yellow/yellow500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F3B846"
+            },
+            {
+              "name": "staticpalette/yellow/yellow400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F9C559"
+            },
+            {
+              "name": "staticpalette/yellow/yellow300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FBD385"
+            },
+            {
+              "name": "staticpalette/yellow/yellow200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FCE3AE"
+            },
+            {
+              "name": "staticpalette/yellow/yellow100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FFF1D5"
+            },
+            {
+              "name": "staticpalette/yellow/yellow50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FEF8EB"
+            },
+            {
+              "name": "staticpalette/grass/grass950",
+              "type": "color",
+              "isAlias": false,
+              "value": "#272A27"
+            },
+            {
+              "name": "staticpalette/grass/grass900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1C351C"
+            },
+            {
+              "name": "staticpalette/grass/grass800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2C472A"
+            },
+            {
+              "name": "staticpalette/grass/grass700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#467A42"
+            },
+            {
+              "name": "staticpalette/grass/grass600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#5B9E55"
+            },
+            {
+              "name": "staticpalette/grass/grass500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#86C16A"
+            },
+            {
+              "name": "staticpalette/grass/grass400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#98CF7F"
+            },
+            {
+              "name": "staticpalette/grass/grass300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#ADDD97"
+            },
+            {
+              "name": "staticpalette/grass/grass200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#C7E9B7"
+            },
+            {
+              "name": "staticpalette/grass/grass100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E1F5D7"
+            },
+            {
+              "name": "staticpalette/grass/grass50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F1FAEE"
+            },
+            {
+              "name": "staticpalette/emerald/emerlad950",
+              "type": "color",
+              "isAlias": false,
+              "value": "#252B2A"
+            },
+            {
+              "name": "staticpalette/emerald/emerald900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#193530"
+            },
+            {
+              "name": "staticpalette/emerald/emerald800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#184640"
+            },
+            {
+              "name": "staticpalette/emerald/emerald700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#06675B"
+            },
+            {
+              "name": "staticpalette/emerald/emerald600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#088572"
+            },
+            {
+              "name": "staticpalette/emerald/emerald500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1DA189"
+            },
+            {
+              "name": "staticpalette/emerald/emerald400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#3DB5A1"
+            },
+            {
+              "name": "staticpalette/emerald/emerald300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#6BC9B8"
+            },
+            {
+              "name": "staticpalette/emerald/emerald200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#94DCD0"
+            },
+            {
+              "name": "staticpalette/emerald/emerald100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#C0F0E7"
+            },
+            {
+              "name": "staticpalette/emerald/emerald50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#DFF8F3"
+            },
+            {
+              "name": "staticpalette/marengo/marengo950",
+              "type": "color",
+              "isAlias": false,
+              "value": "#22292C"
+            },
+            {
+              "name": "staticpalette/marengo/marengo900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1D323D"
+            },
+            {
+              "name": "staticpalette/marengo/marengo800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1A4458"
+            },
+            {
+              "name": "staticpalette/marengo/marengo700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#06638D"
+            },
+            {
+              "name": "staticpalette/marengo/marengo600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#037FB5"
+            },
+            {
+              "name": "staticpalette/marengo/marengo500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#019CDD"
+            },
+            {
+              "name": "staticpalette/marengo/marengo400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#1CBAE7"
+            },
+            {
+              "name": "staticpalette/marengo/marengo300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#53CCF1"
+            },
+            {
+              "name": "staticpalette/marengo/marengo200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#86DEF9"
+            },
+            {
+              "name": "staticpalette/marengo/marengo100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#C3F0FD"
+            },
+            {
+              "name": "staticpalette/marengo/marengo50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E4F6FD"
+            },
+            {
+              "name": "staticpalette/marina/marina950",
+              "type": "color",
+              "isAlias": false,
+              "value": "#252734"
+            },
+            {
+              "name": "staticpalette/marina/marina900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#252E50"
+            },
+            {
+              "name": "staticpalette/marina/marina800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2A376C"
+            },
+            {
+              "name": "staticpalette/marina/marina700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#293D9A"
+            },
+            {
+              "name": "staticpalette/marina/marina600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#394DBF"
+            },
+            {
+              "name": "staticpalette/marina/marina500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#426FEC"
+            },
+            {
+              "name": "staticpalette/marina/marina400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#558AF9"
+            },
+            {
+              "name": "staticpalette/marina/marina300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#7AA7FF"
+            },
+            {
+              "name": "staticpalette/marina/marina200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#A6C5FF"
+            },
+            {
+              "name": "staticpalette/marina/marina100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D3E2FF"
+            },
+            {
+              "name": "staticpalette/marina/marina50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E9F0FF"
+            },
+            {
+              "name": "staticpalette/purple/purple950",
+              "type": "color",
+              "isAlias": false,
+              "value": "#29282F"
+            },
+            {
+              "name": "staticpalette/purple/purple900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#322A4E"
+            },
+            {
+              "name": "staticpalette/purple/purple800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#41366B"
+            },
+            {
+              "name": "staticpalette/purple/purple700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#554590"
+            },
+            {
+              "name": "staticpalette/purple/purple600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#725CB6"
+            },
+            {
+              "name": "staticpalette/purple/purple500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#8E76DD"
+            },
+            {
+              "name": "staticpalette/purple/purple400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#AB94F1"
+            },
+            {
+              "name": "staticpalette/purple/purple300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#BDABF7"
+            },
+            {
+              "name": "staticpalette/purple/purple200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D4C8F9"
+            },
+            {
+              "name": "staticpalette/purple/purple100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E9E3FB"
+            },
+            {
+              "name": "staticpalette/purple/purple50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F3F2FF"
+            },
+            {
+              "name": "staticpalette/violet/violet950",
+              "type": "color",
+              "isAlias": false,
+              "value": "#2C252B"
+            },
+            {
+              "name": "staticpalette/violet/violet900",
+              "type": "color",
+              "isAlias": false,
+              "value": "#432540"
+            },
+            {
+              "name": "staticpalette/violet/violet800",
+              "type": "color",
+              "isAlias": false,
+              "value": "#60315A"
+            },
+            {
+              "name": "staticpalette/violet/violet700",
+              "type": "color",
+              "isAlias": false,
+              "value": "#89307E"
+            },
+            {
+              "name": "staticpalette/violet/violet600",
+              "type": "color",
+              "isAlias": false,
+              "value": "#B03D9D"
+            },
+            {
+              "name": "staticpalette/violet/violet500",
+              "type": "color",
+              "isAlias": false,
+              "value": "#D350B9"
+            },
+            {
+              "name": "staticpalette/violet/violet400",
+              "type": "color",
+              "isAlias": false,
+              "value": "#E073CB"
+            },
+            {
+              "name": "staticpalette/violet/violet300",
+              "type": "color",
+              "isAlias": false,
+              "value": "#EA98D8"
+            },
+            {
+              "name": "staticpalette/violet/violet200",
+              "type": "color",
+              "isAlias": false,
+              "value": "#F0BBE5"
+            },
+            {
+              "name": "staticpalette/violet/violet100",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FBDDF3"
+            },
+            {
+              "name": "staticpalette/violet/violet50",
+              "type": "color",
+              "isAlias": false,
+              "value": "#FEEDFA"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
