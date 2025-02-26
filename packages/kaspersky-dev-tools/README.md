@@ -2,15 +2,15 @@
 
 ## ESLint
 
-`@kaspersky/dev-tools` contains a set of common configuration files, plugins and extensions for ESLint.
+`@kaspersky/dev-tools`  содержит в себе набор общих конфигурационных файлов, плагинов и расширений для ESLint.
 
-Additional installation of eslint plugins/configs is not required in your project.
+Дополнительная установка плагинов/конфигов eslint-а в ваш проект не требуется.
 
-### ESLint configuration
+### Настройка ESLint
 
-**1. Add `.eslintrc.js`**
+**1. Добавить  `.eslintrc.js`**
 
-To configure ESLint, you need to create a file `.eslintrc.js ` in the root of the project and connect the necessary set of configs:
+Для настройки ESLint необходимо создать файл `.eslintrc.js` в корне проекта и подключить нужный набор конфигов:
 
 ```js
 const { getConfigPath } = require('@kaspersky/dev-tools/src/configs/eslint/patch')
@@ -27,13 +27,13 @@ module.exports = {
 }
 ```
 
-* Option `parserOptions: { tsconfigRootDir: __dirname }` it is only needed for projects where Typescript is used and there is `tsconfig.json`.
+* Опция `parserOptions: { tsconfigRootDir: __dirname }` нужна только для проектов, где используется Typescript и есть `tsconfig.json`.
 
-* Patch `require('@kaspersky/dev-tools/src/configs/eslint/patch')`  is required for plugins and configs to resolve within this package (eslint by default searches for plugins relative to `.eslintrc.js` in project).
+* Подключение патча `require('@kaspersky/dev-tools/src/configs/eslint/patch')`  необходимо для того, что бы, плагины и конфиги резолвились в рамках данного пакета (eslint по умолчанию ищет плагины относительно `.eslintrc.js` в проекте).
 
-**2. Install dependencies **
+**2. Установить зависимости**
 
-For ESLint you need to add only 2 dependencies - `@kaspersky/dev-tools` greater than 2.4.0 and `eslint` (6-8 ver), for example:
+Для работы ESlint нужно добавить только 2 зависимости - `@kaspersky/dev-tools` версии выше 2.4.0 и `eslint` (6-8 версии), например:
 
 ```json
 {
@@ -45,42 +45,42 @@ For ESLint you need to add only 2 dependencies - `@kaspersky/dev-tools` greater 
 }
 ```
 
-### Adding new shared configs ESLint
+### Добавление новых общих конфигов ESLint
 
-New configs can be added to the folder `/src/configs/eslint`, for example, these can be configs for the framework (angular, vue, etc.).
+Новые конфиги можно добавлять в папку `/src/configs/eslint`, например, это могут быть конфиги для фреймворка (angular, vue и др.).
 
-At the same time, the necessary packages with eslint plugins and configs need to be added to `dependencies` in package.json, so that when installing the package `@kaspersky/dev-tools` consists in `node_modules`.
+При этом, необходимые пакеты с плагинами и конфигами eslint-а нужно добавлять в `dependencies` в package.json, что бы при установке пакета `@kaspersky/dev-tools` он содержал их в себе `node_modules`.
 
-### Config extension
+### Расширение конфига
 
-If you need to add new rules or expand the current config, it is better to do it through this package `@kaspersky/dev-tools`, by extending the current configuration or adding a new one, as described in the paragraph above. Exceptions may be rules that apply only to your project, but do not change the rules of general configs (rules), for ex:s `env`, `globals`, `ignorePatterns`
+Если вам необходимо добавить новые правила или расширить текущий конфиг, то это лучше делать через данный пакет `@kaspersky/dev-tools`, путём расширения текущей конфигурации или добавления новой, как описано в пункте выше. Исключениями могут быть правила, относящиеся только к вашему проекту, но не меняющие правила общих конфигов (rules), например свойства `env`, `globals`, `ignorePatterns`
 
 ### FAQ
 
-* *After installing the package Eslint does not work in IDE*
+* *После установки пакета не работает Eslint в IDE*
   
-Restart the IDE after updating the package @kaspersky/dev-tools. If in the console ESlint writes that he does not find any modules, then try to delete node_modules and do the installation of dependencies again. Check that there are no syntax errors in `.eslintrc.js` file, there is `parserOptions: { tsconfigRootDir: __dirname }` for TS project. It is mandatory to have a patch import `eslint/patch` and usage `getConfigPath` to specify the config name.
+Перезапустите IDE после обновления пакета @kaspersky/dev-tools. Если в консоли ESlint пишет, что не находит каких-то модулей, то попробуйте удалить node_modules и сделать установку зависимостей заново. Проверьте, что нет синтаксических ошибок в `.eslintrc.js` файле, присутствует `parserOptions: { tsconfigRootDir: __dirname }` для TS проекта. Обязательно наличие импорта патча `eslint/patch` и использование `getConfigPath` для указания имени конфига.
 
-### Support for different Node.js versions
+### Поддержка разных версий Node.js
 
-To support different versions of Node.js sometimes needs to be installed `NODE_OPTIONS`, for example, to run certain versions TS and Webpack > 17 version you may need to install options `NODE_OPTIONS=\"--openssl-legacy-provider --no-experimental-fetch\"`.
+Для поддержки различных версий Node.js иногда необходимо устанавливать `NODE_OPTIONS`, например, для запуска определённых версий TS и Webpack через ноду начиная с 17 версии могут потребоваться установки опций `NODE_OPTIONS=\"--openssl-legacy-provider --no-experimental-fetch\"`.
 
-To make backward compatible with Node.js 16 (which does not support these options) you can use the script `utils/get-node-options.js`, which returns the desired `NODE_OPTIONS` depending on the installed version.
+Что-бы сделать обратную совместимость с 16 нодой (которая не поддерживает эти опции) можно использовать скрипт `utils/get-node-options.js`, который возвращает нужный `NODE_OPTIONS` в зависимости от установленной версии.
 
-To set the env variable `NODE_OPTIONS` is used `env-cmd`.
+Для установки env переменной `NODE_OPTIONS` используется библиотека `env-cmd`.
 
-#### Adding a script to a project
+#### Добавление скрипта в проект
 
-In your project, you will need to add to `package.json` next script:
+В вашем проекте необходимо будет добавить в `package.json` следующий скрипт:
 
 ```json
 "set-env": "./node_modules/@kaspersky/dev-tools/node_modules/.bin/env-cmd -f ./node_modules/@kaspersky/dev-tools/src/utils/get-node-options.js"
 ```
 
-and then into the scripts `build`, `release` and other add `yarn set-env` before the command, for ex.:
+и далее в скрипты `build`, `release` и другие, добавить `yarn set-env` перед нужной командой, например:
 
 ```json
 "release": "yarn set-env gulp release",
 ```
 
-This script will add to `gulp release` installation of the necessary `NODE_OPTIONS` depending on the Node version.js before launching it.
+Данный скрипт добавит к `gulp release` установку нужных `NODE_OPTIONS` в зависимости от версии Node.js перед его запуском.
