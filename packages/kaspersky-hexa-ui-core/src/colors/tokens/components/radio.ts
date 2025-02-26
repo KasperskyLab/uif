@@ -1,0 +1,154 @@
+/*! This file was created automatically. */
+/*! Use updateColors gulp task if you need to update colors. */
+
+export const cssVarString = `
+:root,
+.theme-light,
+.hexa-ui-light-theme {
+  --radio--bg--base--enabled: var(--color--neutral_0);
+  --radio--bg--base--hover: var(--color--neutral_0);
+  --radio--bg--base--active: var(--color--neutral_0);
+  --radio--bg--base--disabled: var(--color--neutral_200);
+  --radio--bg--base--readonly: var(--color--neutral_200);
+  --radio--bg--base--enabled_selected: var(--color--neutral_0);
+  --radio--bg--base--hover_selected: var(--color--neutral_0);
+  --radio--bg--base--active_selected: var(--color--neutral_0);
+  --radio--bg--base--disabled_selected: var(--color--neutral_200);
+  --radio--bg--base--readonly_selected: var(--color--neutral_200);
+  --radio--bg--danger--enabled: var(--color--neutral_0);
+  --radio--bg--danger--hover: var(--color--neutral_0);
+  --radio--bg--danger--active: var(--color--neutral_0);
+  --radio--bg--danger--disabled: var(--color--neutral_200);
+  --radio--bg--danger--readonly: var(--color--neutral_200);
+  --radio--bg--danger--enabled_selected: var(--color--neutral_0);
+  --radio--bg--danger--hover_selected: var(--color--neutral_0);
+  --radio--bg--danger--active_selected: var(--color--neutral_0);
+  --radio--bg--danger--disabled_selected: var(--color--neutral_200);
+  --radio--bg--danger--readonly_selected: var(--color--neutral_200);
+  --radio--text--base--enabled: var(--color--neutral_850);
+  --radio--text--base--hover: var(--color--neutral_850);
+  --radio--text--base--active: var(--color--neutral_850);
+  --radio--text--base--disabled: var(--color--neutral_400);
+  --radio--text--base--readonly: var(--color--neutral_400);
+  --radio--text--danger--enabled: var(--color--neutral_850);
+  --radio--text--danger--hover: var(--color--neutral_850);
+  --radio--text--danger--active: var(--color--neutral_850);
+  --radio--text--danger--disabled: var(--color--neutral_400);
+  --radio--text--danger--readonly: var(--color--neutral_450);
+  --radio--border--base--enabled: var(--color--neutral_350);
+  --radio--border--base--hover: var(--color--marina_600);
+  --radio--border--base--active: var(--color--marina_700);
+  --radio--border--base--disabled: var(--color--neutral_250);
+  --radio--border--base--readonly: var(--color--neutral_250);
+  --radio--border--base--enabled_selected: var(--color--neutral_350);
+  --radio--border--base--hover_selected: var(--color--marina_600);
+  --radio--border--base--active_selected: var(--color--marina_700);
+  --radio--border--base--disabled_selected: var(--color--neutral_250);
+  --radio--border--base--readonly_selected: var(--color--neutral_250);
+  --radio--border--danger--enabled: var(--color--red_500);
+  --radio--border--danger--hover: var(--color--red_600);
+  --radio--border--danger--active: var(--color--red_700);
+  --radio--border--danger--disabled: var(--color--neutral_250);
+  --radio--border--danger--readonly: var(--color--neutral_250);
+  --radio--border--danger--enabled_selected: var(--color--red_500);
+  --radio--border--danger--hover_selected: var(--color--red_600);
+  --radio--border--danger--active_selected: var(--color--red_700);
+  --radio--border--danger--disabled_selected: var(--color--neutral_250);
+  --radio--border--danger--readonly_selected: var(--color--neutral_250);
+  --radio--icon--base--enabled: var(--color--neutral_0);
+  --radio--icon--base--hover: var(--color--neutral_0);
+  --radio--icon--base--active: var(--color--neutral_0);
+  --radio--icon--base--disabled: var(--color--neutral_400);
+  --radio--icon--base--readonly: var(--color--neutral_450);
+  --radio--icon--base--enabled_selected: var(--color--marina_500);
+  --radio--icon--base--hover_selected: var(--color--marina_600);
+  --radio--icon--base--active_selected: var(--color--marina_700);
+  --radio--icon--base--disabled_selected: var(--color--neutral_400);
+  --radio--icon--base--readonly_selected: var(--color--neutral_450);
+  --radio--icon--danger--enabled: var(--color--neutral_0);
+  --radio--icon--danger--hover: var(--color--neutral_0);
+  --radio--icon--danger--active: var(--color--neutral_0);
+  --radio--icon--danger--disabled: var(--color--neutral_400);
+  --radio--icon--danger--readonly: var(--color--neutral_400);
+  --radio--icon--danger--enabled_selected: var(--color--red_500);
+  --radio--icon--danger--hover_selected: var(--color--red_600);
+  --radio--icon--danger--active_selected: var(--color--red_700);
+  --radio--icon--danger--disabled_selected: var(--color--neutral_400);
+  --radio--icon--danger--readonly_selected: var(--color--neutral_400);
+}
+
+
+.theme-dark,
+.hexa-ui-dark-theme {
+  --radio--bg--base--enabled: var(--color--neutral_850);
+  --radio--bg--base--hover: var(--color--neutral_850);
+  --radio--bg--base--active: var(--color--neutral_850);
+  --radio--bg--base--disabled: var(--color--neutral_700);
+  --radio--bg--base--readonly: var(--color--neutral_700);
+  --radio--bg--base--enabled_selected: var(--color--neutral_850);
+  --radio--bg--base--hover_selected: var(--color--neutral_850);
+  --radio--bg--base--active_selected: var(--color--neutral_850);
+  --radio--bg--base--disabled_selected: var(--color--neutral_700);
+  --radio--bg--base--readonly_selected: var(--color--neutral_700);
+  --radio--bg--danger--enabled: var(--color--neutral_850);
+  --radio--bg--danger--hover: var(--color--neutral_850);
+  --radio--bg--danger--active: var(--color--neutral_850);
+  --radio--bg--danger--disabled: var(--color--neutral_700);
+  --radio--bg--danger--readonly: var(--color--neutral_700);
+  --radio--bg--danger--enabled_selected: var(--color--neutral_850);
+  --radio--bg--danger--hover_selected: var(--color--neutral_850);
+  --radio--bg--danger--active_selected: var(--color--neutral_850);
+  --radio--bg--danger--disabled_selected: var(--color--neutral_700);
+  --radio--bg--danger--readonly_selected: var(--color--neutral_700);
+  --radio--text--base--enabled: var(--color--neutral_250);
+  --radio--text--base--hover: var(--color--neutral_250);
+  --radio--text--base--active: var(--color--neutral_250);
+  --radio--text--base--disabled: var(--color--neutral_500);
+  --radio--text--base--readonly: var(--color--neutral_500);
+  --radio--text--danger--enabled: var(--color--neutral_250);
+  --radio--text--danger--hover: var(--color--neutral_250);
+  --radio--text--danger--active: var(--color--neutral_250);
+  --radio--text--danger--disabled: var(--color--neutral_500);
+  --radio--text--danger--readonly: var(--color--neutral_450);
+  --radio--border--base--enabled: var(--color--neutral_550);
+  --radio--border--base--hover: var(--color--marina_300);
+  --radio--border--base--active: var(--color--marina_200);
+  --radio--border--base--disabled: var(--color--neutral_650);
+  --radio--border--base--readonly: var(--color--neutral_650);
+  --radio--border--base--enabled_selected: var(--color--neutral_550);
+  --radio--border--base--hover_selected: var(--color--marina_300);
+  --radio--border--base--active_selected: var(--color--marina_200);
+  --radio--border--base--disabled_selected: var(--color--neutral_650);
+  --radio--border--base--readonly_selected: var(--color--neutral_650);
+  --radio--border--danger--enabled: var(--color--red_400);
+  --radio--border--danger--hover: var(--color--red_300);
+  --radio--border--danger--active: var(--color--red_200);
+  --radio--border--danger--disabled: var(--color--neutral_650);
+  --radio--border--danger--readonly: var(--color--neutral_650);
+  --radio--border--danger--enabled_selected: var(--color--red_400);
+  --radio--border--danger--hover_selected: var(--color--red_300);
+  --radio--border--danger--active_selected: var(--color--red_200);
+  --radio--border--danger--disabled_selected: var(--color--neutral_650);
+  --radio--border--danger--readonly_selected: var(--color--neutral_650);
+  --radio--icon--base--enabled: var(--color--neutral_250);
+  --radio--icon--base--hover: var(--color--neutral_250);
+  --radio--icon--base--active: var(--color--neutral_250);
+  --radio--icon--base--disabled: var(--color--neutral_500);
+  --radio--icon--base--readonly: var(--color--neutral_450);
+  --radio--icon--base--enabled_selected: var(--color--marina_400);
+  --radio--icon--base--hover_selected: var(--color--marina_300);
+  --radio--icon--base--active_selected: var(--color--marina_200);
+  --radio--icon--base--disabled_selected: var(--color--neutral_500);
+  --radio--icon--base--readonly_selected: var(--color--neutral_450);
+  --radio--icon--danger--enabled: var(--color--neutral_250);
+  --radio--icon--danger--hover: var(--color--neutral_250);
+  --radio--icon--danger--active: var(--color--neutral_250);
+  --radio--icon--danger--disabled: var(--color--neutral_500);
+  --radio--icon--danger--readonly: var(--color--neutral_500);
+  --radio--icon--danger--enabled_selected: var(--color--red_400);
+  --radio--icon--danger--hover_selected: var(--color--red_300);
+  --radio--icon--danger--active_selected: var(--color--red_200);
+  --radio--icon--danger--disabled_selected: var(--color--neutral_500);
+  --radio--icon--danger--readonly_selected: var(--color--neutral_500);
+}
+`

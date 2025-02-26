@@ -1,0 +1,31 @@
+{
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    },
+  },
+  "compilerOptions": {
+    "declaration": true,
+    "sourceMap": true,
+    "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "noImplicitAny": true,
+    "strict": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "outDir": "lib",
+    "allowJs": true
+  },
+  "include": [
+    "./src/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
+  "files": ["declarations.d.ts"]
+}

@@ -1,0 +1,22 @@
+{
+  "seporator": "separator",
+  "seporatorbold": "separator-bold",
+  "seporator-invert": "separator-invert",
+  "seporatorbold-invert": "separator-bold-invert",
+  "baseicon": "base-icon",
+  "inprogress": "in-progress",
+  "resolved_solved": "resolved-solved",
+  "inincedent": "in-incident",
+  "primarywhite": "primary-white",
+  "secondarywhite": "secondary-white",
+  "secondary2white": "secondary2-white",
+  "disabledwhite": "disabled-white",
+  "linewhite": "line-white",
+  "baseiconwhite": "base-icon-white",
+  "baseicon-invert": "base-icon-invert",
+  "seporatorwhite": "separator-white",
+  "seporatorboldwhite": "separator-bold-white",
+  "alternative2white": "alternative2-white",
+  "alternativewhite": "alternative-white",
+  "basewhite": "base-white"
+}
