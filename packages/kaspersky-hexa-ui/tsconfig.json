@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "jsx": "react",
+    "noImplicitAny": true,
+    "strict": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "outDir": "lib",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@design-system/*": ["design-system/*"],
+      "@icons/*": ["icons/*"],
+      "@helpers/*": ["helpers/*"],
+      "@style/*": ["style/*"],
+      "@sb/*": [".storybook/*"]
+    }
+  },
+  "tsc-alias": {
+    "verbose": false,
+    "resolveFullPaths": true
+  },
+  "include": [
+    "./src/**/*",
+    "./tests/**/*",
+    "./design-system/**/*",
+    "./helpers/**/*",
+    "./assets/**/*",
+    "./icons/**/*",
+    "./illustrations/**/*",
+    "./.storybook/**/*",
+    "./screenshots/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib",
+    "./icons/*.d.ts"
+  ],
+  "files": ["fonts.d.ts"]
+}

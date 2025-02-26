@@ -1,0 +1,62 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta title="Design/Design System" />
+
+# Дизайн Система
+
+Описание подходов в использовании дизайн системы. Ресурсы находятся по пути `design-system/`
+
+[Ссылка на дизайн систему в Figma](https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit)
+
+## Ссылки
+
+- [Colors](/docs/design-colors--docs)
+- [Sizing & Spaces](/docs/design-sizing-spacing--docs)
+
+## Токены
+
+1. Цветовая палитра импортируется из пакета `@kaspersky/hexa-ui-core`.
+2. Для каждой темы, на основании токенов, необходимо создать файл c псевдонимами (aliases). Например, `themes/light/colors.ts`.
+3. Если компонент изпользует цветовую палитру для него необходимо создать отдельный файл в папке `themes/` для каждой темы. Например, `themes/light/button.ts`
+4. Для стилизации компонента создаются объекты с цветами и размерами (если необходимо). Если у компонента несколько состояний (например, enabled, active, hover), то объект имеет вид:
+
+```
+const component = {
+  enabled: {
+    ...
+  },
+  active: {
+    ...
+  },
+  hover: {
+    ...
+  }
+}
+```
+
+### Структура
+
+- `themes/*theme*/colors.ts` - aliases
+- `themes/*theme*/*component*` - токены компонентов
+- `themes/light` - базовая тема, остальные расширяют базовую
+
+### Использование
+
+Для стилизации компонента используются **только токены компонента**.
+
+1. Необходимо создать файл токенов компонента для каждой темы.
+2. Использовать токены компонента в `Themed Hook` для построения `CSS config`.
+3. `Component View` прокидывает `CSS config` в стилизованные `styled-components` компоненты.
+4. Использовать `CSS config` для построения `componentCss`.
+
+### Использование цветов в продукте
+
+Для раскрашивания элементов в продукте есть 2 способа:
+
+1. **Предпочтительный** - использование css-переменных. Например, если на макете используется цвет **status/icon/critical**, то в коде его можно вытащить через переменную **var(--status--icon--critical)**.
+2. Использование нужного токена цвета через прямой импорт из библиотеки `@kaspersky/hexa-ui-core`:
+```typescript
+import { componentColors } from '@kaspersky/hexa-ui-core'
+
+const statusColor = componentColors.status.icon.critical
+```

@@ -1,0 +1,48 @@
+{
+  "labels": "New",
+  "component": "Tag",
+  "hexa-ui": "/docs/hexa-ui-components-tag",
+  "v3": [],
+  "v5": [
+    {
+      "prop": "color",
+      "changes": {
+        "before": "color",
+        "after": "the same",
+        "description": "-"
+      }
+    },
+    {
+      "prop": "size",
+      "changes": {
+        "before": "tagSize - устаревшас размернас сетка",
+        "after": "size по размерной сетке",
+        "description": "Используетсс в соответствии с дефолтной размерной сеткой"
+      }
+    },
+    {
+      "prop": "textColor",
+      "changes": {
+        "before": "Выбор цвета текста в соответствии с primary палитрой",
+        "after": "Цвет текста можно менсть через свойство override",
+        "description": "Цвет текста теперь зафиксирован в primary. Чтобы кастомизировать свойство необходимо восппользоватьсс props overrides"
+      }
+    },
+    {
+      "prop": "theme",
+      "changes": {
+        "before": "themedColor",
+        "after": "theme",
+        "description": "Возможность прокидывать тему в props"
+      }
+    },    {
+      "prop": "children",
+      "changes": {
+        "before": "text",
+        "after": "children",
+        "description": ""
+      }
+    }
+  ],
+  "common": []
+}

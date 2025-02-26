@@ -1,0 +1,18 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "designLink": true,
+    "figmaView": true
+  },
+  "component": "Typography",
+  "description": "Компонент для отображения стилизованного текста.",
+  "usage": "Компонент для отображения стилизованного текста.",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=14560%3A87552",
+  "figmaView": "https://www.figma.com/design/qy3m7VFgmNYhxeJxDptLoK/_Foundation?m=auto&node-id=0-1&t=inZSiyjXUzwtH3pc-1"
+}

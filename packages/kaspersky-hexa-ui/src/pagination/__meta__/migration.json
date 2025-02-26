@@ -1,0 +1,36 @@
+{
+  "component": "Pagination",
+  "hexa-ui": "/docs/hexa-ui-components-pagination--basic",
+  "v3": [],
+  "v5": [],
+  "common": [
+    {
+      "prop": "defaultCurrent",
+      "changes": "Убран"
+    },
+    {
+      "prop": "itemRender",
+      "changes": "Убран"
+    },
+    {
+      "prop": "responsive",
+      "changes": "Убран"
+    },
+    {
+      "prop": "showLessItems",
+      "changes": "Убран"
+    },
+    {
+      "prop": "showTitle",
+      "changes": "Убран"
+    },
+    {
+      "prop": "size",
+      "changes": {
+        "before": "default | small",
+        "after": "small | medium",
+        "description": "Изменение размерной сетки"
+      }
+    }
+  ]
+}

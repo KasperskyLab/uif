@@ -1,0 +1,135 @@
+{
+  "translation": {
+    "common": {
+      "empty": "Veri yok",
+      "import": "İçe aktar",
+      "export": "Dışa aktar"
+    },
+    "upload": {
+      "dropFileTitle": "Dosyayı buraya bırakın",
+      "pasteLinkTitle": "Dosyanın bağlantısını buraya yapıştırın",
+      "helpText": "Boyutu 200 MB'a kadar olan 6 adede kadar ZIP ve RAR dosyası ekleyebilirsiniz",
+      "placeholder": "yer tutucu",
+      "addFiles": "Dosyalar ekleyin",
+      "cancel": "İptal",
+      "selectAnotherFile": "Başka bir dosya seçin",
+      "enterNewURL": "Yeni URL girin",
+      "repeat": "Tekrarla",
+      "loadingTitle": "Yükleniyor %{{value, number}}",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "Yükleme başarılı",
+      "successDescription": "{{file, fileName}} sunucuya başarıyla yüklendi",
+      "errorTitle": "Yükleme hatası",
+      "errorDescription": "{{file, fileName}} bağlantı hatası nedeniyle yüklenemedi"
+    },
+    "uploader": {
+      "actions": {
+        "deleteAll": "Tüm dosyaları sil",
+        "deleteErrors": "Hatalı tüm dosyaları ({{count}}) sil",
+        "downloadAll": "Tüm dosyaları indir",
+        "reloadErrors": "Hatalı tüm dosyaları ({{count}}) yeniden yükle",
+        "upload": "Yükle"
+      },
+      "dropText": {
+        "beginningMultiple": "Dosyaları yükleyin",
+        "beginningSingle": "Dosya yükleyin",
+        "endingMultiple": "veya buraya sürükleyip bırakın",
+        "endingSingle": "veya buraya sürükleyip bırakın"
+      },
+      "maxCountUploaded": "Yüklenen dosyaların maksimum sayısı",
+      "progress": "{{progress}}/{{size}}",
+      "showFiles": "Dosyaları göster",
+      "total": {
+        "files": "{{filesCount}}/{{total}} dosya",
+        "simple": "{{filesCount}} dosya",
+        "size": "{{size}}/{{total}}"
+      },
+      "validation": {
+        "maxCount": "Maksimum dosya sınırını aştığından {{count}} dosya yüklenemiyor.",
+        "maxFileSize": "İzin verilen boyutu aştığından {{count}} dosya yüklenemiyor.",
+        "maxTotalSize": "İzin verilen toplam boyutu aştığından {{count}} dosya yüklenemiyor.",
+        "format": "Biçim gereksinimleri nedeniyle {{count}} dosya yüklenemiyor."
+      }
+    },
+    "severity": {
+      "critical": "Kritik",
+      "low": "Düşük",
+      "medium": "Orta",
+      "high": "Yüksek",
+      "info": "Bilgi",
+      "positive": "Pozitif"
+    },
+    "select": {
+      "empty": "Veri yok",
+      "tags": {
+        "addPrefix": "Ekle: \"",
+        "removePrefix": "Kaldır: \"",
+        "addRemovePostfix": "\""
+      }
+    },
+    "pagination": {
+      "total": "Toplam {{count}}",
+      "selected": "Seçilen {{count}}",
+      "page": "sayfa",
+      "goto": "Şuraya git:"
+    },
+    "search": {
+      "raw": "Ara",
+      "dotted": "Ara..."
+    },
+    "table": {
+      "column": {
+        "name": "İlk sütun"
+      },
+      "column2": {
+        "name": "İkinci sütun"
+      },
+      "column3": {
+        "name": "Üçüncü sütun"
+      },
+      "columnDropdown": {
+        "ascending": "Artan",
+        "descending": "Azalan",
+        "sorting": "Sırala",
+        "filters": "Filtrele",
+        "resetFilters": "Filtreyi sıfırla"
+      },
+      "columnsSettings": {
+        "header": "Sütun ayarları",
+        "selectAll": "Tümünü seç",
+        "columns": "Sütunlar",
+        "grouping": "Gruplama",
+        "clear": "Temizle",
+        "noGrouping": "Gruplama yok",
+        "apply": "Uygula",
+        "cancel": "İptal",
+        "filtering": {
+          "add": "Ekle",
+          "clearAll": "Tümünü temizle",
+          "property": "Özellik",
+          "condition": "Koşul",
+          "from": "başlangıç",
+          "to": "-",
+          "value": "Değer"
+        }
+      },
+      "groupingEmpty": "Diğer"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "Daha Fazla"
+      }
+    },
+    "timeInput": {
+      "placeholder": "Zaman seç"
+    },
+    "actionBar": {
+      "unsavedChanges": "Bekleyen değişiklikler",
+      "save": "Kaydet",
+      "cancel": "İptal"
+    },
+    "textarea": {
+      "wordsCount": "{{count}}/{{total}}"
+    }
+  }
+}

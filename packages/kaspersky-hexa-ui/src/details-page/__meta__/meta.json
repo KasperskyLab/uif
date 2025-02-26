@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": true,
+    "storybook": true,
+    "figmaView": false
+  },
+  "component": "DetailsPage",
+  "description": "",
+  "usage": "",
+  "designLink": "",
+  "figmaView": ""
+}

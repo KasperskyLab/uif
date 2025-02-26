@@ -1,0 +1,21 @@
+import { Meta } from '@storybook/blocks'
+import { DataItemsTable, KeyValueMigrationTable } from './KeyValueMigrationTable'
+
+<Meta title="Hexa UI Components/KeyValue/MigrationToFieldSet" />
+
+# Миграция с KeyValue на FieldSet
+
+Ниже представлен список соответствия пропов `KeyValue` и `FieldSet`. Схожие по смыслу находятся в одной строке.
+
+<KeyValueMigrationTable />
+
+Это таблица соответствия полей `data` из `KeyValue` с `items` из `FieldSet`
+
+<DataItemsTable />
+
+## KeyValueMapper
+
+В FieldSet в качестве субкомпонента есть FieldSet.KeyValueMapper. Он принимает в себя KeyValueProps, а внутри себя он
+размапливает пропы KeyValue и кладет их в нужные места с нужным именем в FieldSet. Так что для миграции
+с KeyValue на FieldSet достаточно ctrl/cmd + r. Но еще лучше заменить все KeyValue на FieldSet ручками, т.к. KeyValue -
+deprecated компонент, и он не поддерживается дизайн-системой, рано или поздно все равно нужно будет заменить.

@@ -1,0 +1,56 @@
+{
+  "component": "Tabs",
+  "hexa-ui": "/docs/hexa-ui-components-tabs--basic",
+  "v3": [],
+  "v5": [],
+  "common": [
+    {
+      "prop": "addIcon",
+      "changes": "Убран"
+    },
+    {
+      "prop": "animated",
+      "changes": "Убран"
+    },
+    {
+      "prop": "centered",
+      "changes": "Убран"
+    },
+    {
+      "prop": "hideAdd",
+      "changes": "Убран"
+    },
+    {
+      "prop": "popupClassName",
+      "changes": "Убран"
+    },
+    {
+      "prop": "renderTabBar",
+      "changes": "Убран"
+    },
+    {
+      "prop": "size",
+      "changes": "Убран"
+    },
+    {
+      "prop": "tabBarExtraContent",
+      "changes": "Убран"
+    },
+    {
+      "prop": "tabBarGutter",
+      "changes": "Убран"
+    },
+    {
+      "prop": "tabBarStyle",
+      "changes": "Убран"
+    },
+    {
+      "prop": "onEdit",
+      "changes": "Убран"
+    },
+    {
+      "prop": "onTabScroll",
+      "changes": "Убран"
+    }
+  ]
+}

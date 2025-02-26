@@ -1,0 +1,135 @@
+{
+  "translation": {
+    "common": {
+      "empty": "데이터 없음",
+      "import": "가져오기",
+      "export": "내보내기"
+    },
+    "upload": {
+      "dropFileTitle": "여기에 드롭",
+      "pasteLinkTitle": "여기에 파일 링크 붙여넣기",
+      "helpText": "최대 200MB의 ZIP 및 RAR 파일을 최대 6개까지 추가할 수 있습니다",
+      "placeholder": "플레이스홀더",
+      "addFiles": "파일 추가",
+      "cancel": "취소",
+      "selectAnotherFile": "다른 파일 선택",
+      "enterNewURL": "새 URL 입력",
+      "repeat": "반복",
+      "loadingTitle": "업로드 {{value, number}}%",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "업로드 성공",
+      "successDescription": "서버에 {{file, fileName}} 업로드 완료",
+      "errorTitle": "업로드 오류",
+      "errorDescription": "연결 오류로 {{file, fileName}} 업로드 불가"
+    },
+    "uploader": {
+      "actions": {
+        "deleteAll": "모든 파일 삭제",
+        "deleteErrors": "오류가 있는 파일 모두 삭제({{count}})",
+        "downloadAll": "모든 파일 다운로드",
+        "reloadErrors": "오류가 있는 파일 모두 다시 불러오기({{count}})",
+        "upload": "업로드"
+      },
+      "dropText": {
+        "beginningMultiple": "파일 업로드",
+        "beginningSingle": "파일 업로드",
+        "endingMultiple": "또는 여기에 드래그 앤 드롭",
+        "endingSingle": "또는 여기에 드래그 앤 드롭"
+      },
+      "maxCountUploaded": "업로드한 파일 최대 수",
+      "progress": "{{progress}}/{{size}}",
+      "showFiles": "파일 보기",
+      "total": {
+        "files": "{{filesCount}}개/개{{total}} 파일",
+        "simple": "{{filesCount}}개 파일",
+        "size": "{{size}}/{{total}}"
+      },
+      "validation": {
+        "maxCount": "최대 파일 한도를 초과하여 {{count}}개 파일을 업로드하지 못했습니다.",
+        "maxFileSize": "허용 크기를 초과하여 {{count}}개 파일을 업로드하지 못했습니다.",
+        "maxTotalSize": "총 허용 크기를 초과하여 {{count}}개 파일을 업로드하지 못했습니다.",
+        "format": "형식 요건에 따라 {{count}}개 파일을 업로드하지 못했습니다."
+      }
+    },
+    "severity": {
+      "critical": "심각",
+      "low": "낮음",
+      "medium": "중간",
+      "high": "높음",
+      "info": "정보",
+      "positive": "양호"
+    },
+    "select": {
+      "empty": "데이터 없음",
+      "tags": {
+        "addPrefix": "추가: \"",
+        "removePrefix": "제거: \"",
+        "addRemovePostfix": "\""
+      }
+    },
+    "pagination": {
+      "total": "총 {{count}}개",
+      "selected": "{{count}}개 선택",
+      "page": "페이지",
+      "goto": "다음으로 가기"
+    },
+    "search": {
+      "raw": "검색",
+      "dotted": "검색..."
+    },
+    "table": {
+      "column": {
+        "name": "첫 번째 열"
+      },
+      "column2": {
+        "name": "두 번째 열"
+      },
+      "column3": {
+        "name": "세 번째 열"
+      },
+      "columnDropdown": {
+        "ascending": "오름차순",
+        "descending": "내림차순",
+        "sorting": "정렬",
+        "filters": "필터",
+        "resetFilters": "필터 초기화"
+      },
+      "columnsSettings": {
+        "header": "열 설정",
+        "selectAll": "모두 선택",
+        "columns": "열",
+        "grouping": "그룹화",
+        "clear": "지우기",
+        "noGrouping": "그룹화 안 됨",
+        "apply": "적용",
+        "cancel": "취소",
+        "filtering": {
+          "add": "추가",
+          "clearAll": "모두 지우기",
+          "property": "속성",
+          "condition": "조건",
+          "from": "시작",
+          "to": "종료",
+          "value": "값"
+        }
+      },
+      "groupingEmpty": "기타"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "더 보기"
+      }
+    },
+    "timeInput": {
+      "placeholder": "시간 선택"
+    },
+    "actionBar": {
+      "unsavedChanges": "대기 중인 변경 사항",
+      "save": "저장",
+      "cancel": "취소"
+    },
+    "textarea": {
+      "wordsCount": "{{total}} 중 {{count}}"
+    }
+  }
+}

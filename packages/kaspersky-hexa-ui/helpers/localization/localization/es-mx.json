@@ -1,0 +1,145 @@
+{
+  "translation": {
+    "common": {
+      "empty": "No hay datos",
+      "import": "Importar",
+      "export": "Exportar"
+    },
+    "upload": {
+      "dropFileTitle": "Soltar el archivo aquí",
+      "pasteLinkTitle": "Pegar el vínculo al archivo aquí",
+      "helpText": "Puede agregar hasta 6 archivos ZIP y RAR de hasta 200 MB",
+      "placeholder": "marcador de posición",
+      "addFiles": "Agregar archivos",
+      "cancel": "Cancelar",
+      "selectAnotherFile": "Seleccionar otro archivo",
+      "enterNewURL": "Ingresar nueva URL",
+      "repeat": "Repetir",
+      "loadingTitle": "Cargando {{value, number}} %",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "Carga finalizada correctamente",
+      "successDescription": "Se cargó {{file, fileName}} correctamente al servidor",
+      "errorTitle": "Error de carga",
+      "errorDescription": "No se pudo cargar {{file, fileName}} debido a un error de conexión"
+    },
+    "uploader": {
+      "actions": {
+        "deleteAll": "Eliminar todos los archivos",
+        "deleteErrors": "Eliminar todos los archivos con error ({{count}})",
+        "downloadAll": "Descargar todos los archivos",
+        "reloadErrors": "Recargar todos los archivos con error ({{count}} )",
+        "upload": "Cargar"
+      },
+      "dropText": {
+        "beginningMultiple": "Cargar archivos",
+        "beginningSingle": "Cargar un archivo",
+        "endingMultiple": "o arrástrelos y suéltelos aquí",
+        "endingSingle": "o arrástrelo y suéltelo aquí"
+      },
+      "maxCountUploaded": "Número máximo de archivos cargados",
+      "progress": "{{progress}} de {{size}}",
+      "showFiles": "Mostrar archivos",
+      "total": {
+        "files": "{{filesCount}} de {{total}} archivos",
+        "simple": "{{filesCount}} archivo(s)",
+        "size": "{{size}} de {{total}}"
+      },
+      "validation": {
+        "maxCount": "No se puede(n) cargar {{count}} archivo(s) porque supera(n) el límite máximo de archivos.",
+        "maxFileSize": "No se puede(n) cargar {{count}} archivo(s) porque supera(n) el tamaño permitido.",
+        "maxTotalSize": "No se puede(n) cargar {{count}} archivo(s) porque supera(n) el tamaño máximo permitido.",
+        "format": "No se puede(n) cargar {{count}} archivo(s) debido a requisitos de formato."
+      }
+    },
+    "severity": {
+      "critical": "Crítico",
+      "low": "Bajo",
+      "medium": "Medio",
+      "high": "Alto",
+      "info": "Información",
+      "positive": "Positivo"
+    },
+    "select": {
+      "empty": "No hay datos",
+      "tags": {
+        "addPrefix": "Agregar: \"",
+        "removePrefix": "Eliminar: \"",
+        "addRemovePostfix": "\""
+      }
+    },
+    "pagination": {
+      "total": "Total: {{count}}",
+      "selected": "Seleccionados: {{count}}",
+      "page": "página",
+      "goto": "Ir a"
+    },
+    "search": {
+      "raw": "Buscar",
+      "dotted": "Buscar..."
+    },
+    "table": {
+      "column": {
+        "name": "Primera columna"
+      },
+      "column2": {
+        "name": "Segunda columna"
+      },
+      "column3": {
+        "name": "Tercera columna"
+      },
+      "columnDropdown": {
+        "ascending": "Ascendente",
+        "descending": "Descendente",
+        "sorting": "Ordenar",
+        "filters": "Filtro",
+        "resetFilters": "Restablecer filtro"
+      },
+      "columnsSettings": {
+        "header": "Configuración de las columnas",
+        "selectAll": "Seleccionar todo",
+        "columns": "Columnas",
+        "grouping": "Agrupación",
+        "clear": "Borrar",
+        "noGrouping": "No agrupar",
+        "apply": "Aplicar",
+        "cancel": "Cancelar",
+        "filtering": {
+          "add": "Agregar",
+          "clearAll": "Quitar selección a todo",
+          "property": "Propiedad",
+          "condition": "Condición",
+          "from": "desde",
+          "to": "hasta",
+          "value": "Valor"
+        }
+      },
+      "groupingEmpty": "Otro"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "Más"
+      }
+    },
+    "timeInput": {
+      "placeholder": "Seleccionar hora"
+    },
+    "actionBar": {
+      "unsavedChanges": "Cambios pendientes",
+      "save": "Guardar",
+      "cancel": "Cancelar"
+    },
+    "textarea": {
+      "wordsCount": "{{count}} de {{total}}"
+    },
+    "menu": {
+      "navUserItem": {
+        "userProps": {
+          "status": {
+            "available": "Disponible",
+            "unavailable": "Unavailable"
+          }
+        }
+      }
+    }
+  }
+}

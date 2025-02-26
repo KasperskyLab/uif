@@ -1,0 +1,164 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta title="Docs/Типизация компонентов" />
+
+# Типизация компонентов
+Представим себе абстрактный несуществующий компонент `Flower`. Скорее всего он будет иметь такую структуру:
+```
+/src/flower/Flower.tsx
+
+const StyledFlower = styled(AntdFlower).withConfig({
+  shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
+})`
+  ${flowerCss}
+`
+
+export const Flower: FC<FlowerProps> = (rawProps: FlowerProps) => {
+  const props = useThemedFlower(rawProps)
+  return <FlowerView {...props} />
+}
+
+const FlowerView: FC<FlowerViewProps> = ({
+  prop1,
+  ...
+  propN,
+  ...rest
+}: FlowerViewProps) => {
+  /* some logic */
+  return <FlowerComponent {...propsWithLogic} />
+}
+```
+Рассмотрим стандартно используемые типы в компоненте.
+## ComponentProps
+Единственный тип, которым должен пользоваться разработчик извне. Тут прописываются все необходимые компоненту пропы.
+```
+/src/flower/types.ts
+
+export type FlowerProps = {
+  prop1?: type1,
+  ...
+  propN?: typeN
+} & FlowerThemeProps
+```
+## ComponentThemeProps
+С `FlowerProps` соединяются пропы `FlowerThemeProps`, которые должны быть темезированы в хуке `useThemedFlower`
+([подробнее](?path=/docs/docs-использование-usethemedcomponent--docs)).
+```
+/src/flower/types.ts
+
+import { Theme } from '@design-system/types'
+
+export type FlowerThemeProps = {
+  theme?: Theme,
+  mode?: FlowerMode,
+  size?: FlowerSize
+}
+```
+Проп `theme` должен быть всегда, если внутри `componentCss.ts` используются какие-либо цвета из дизайн-системы.
+`mode` и `size` опциональны.
+> __NB!__ Стоит задавать компоненту пропы `mode` или `size` только в том случае, если они относятся именно к нему.
+Если проп относится к внутрилежащему компоненту, то лучше назвать его по другому. Пример: у `Checkbox` есть
+проп `mode`, однако он не используется при темезации чекбокса, а прокидывается в лежащий внутри компонент `FormLabel`.
+Лучше было бы назвать такой проп `formLabelMode` или сделать для `Checkbox` проп `formLabel`, внутри которого можно было бы положить
+относящийся к нему `mode`.
+
+## ComponentViewProps
+Пропы, которые попадают в `FlowerView`. В них, чаще всего, нет пропов из `FlowerThemeProps` и есть `cssConfig`,
+который в дальнейшем попадает в `StyledFlower`.
+```
+/src/flower/types.ts
+
+import { ToViewProps } from '@helpers/typeHelpers'
+
+...
+
+export type FlowertViewProps = ToViewProps<ComponentProps, ComponentCssConfig, ComponentThemeProps>
+```
+`ToViewProps` работает по следующему принципу: к `ComponentProps` добавляется `cssConfig` и убираются
+`ComponentThemeProps`. Формирование `ComponentCssConfig` будет рассмотрено ниже. Реализация `ToViewProps`:
+```
+/helpers/typesHelpers.ts
+
+export type ToViewProps<BaseType, CssConfig, ToExclude = ''> = Omit<BaseType, keyof ToExclude> & { cssConfig: CssConfig }
+```
+### Субкомпонент
+Если же у компонента есть субкомпоненты, каждому из которых требуется свой отдельный тип `SubComponentViewProps`,
+но `ComponentThemeProps` и `cssConfig` одинаковые, то можно создать `ComponentToViewProps`. Рассмотрим в качестве примера `input`:
+```
+/src/input/types.ts
+
+import { ToViewProps } from '@helpers/typesHelpers'
+
+export type TextboxToViewProps<T> = ToViewProps<T, InputCssConfig, TextboxThemeProps>
+
+export type TextboxProps = {
+ ...
+} & TextboxThemeProps
+export type TextboxViewProps = TextboxToViewProps<TextboxProps>
+
+export type TextboxNumberProps = {
+ ...
+} & TextboxThemeProps
+export type TextboxNumberViewProps = TextboxToViewProps<TextboxNumberProps>
+
+export type TextboxPasswordProps = {
+ ...
+} & TextboxThemeProps
+export type TextboxPasswordViewProps = TextboxToViewProps<TextboxPasswordProps>
+
+...
+```
+## ComponentCssConfig
+```
+/src/flower/types.ts
+
+export type FlowerCssConfig = FlowerColorConfig & FlowerSizeConfig
+```
+Если же `FlowerSizeConfig` конфиг отсутствует, то лучше все равно оставлять запись
+`export type FlowerCssConfig = FlowerColorConfig`, так как в будущем размеры могут быть добавлены, и придется
+выполнять лишние действия по замене типов, да и код не будет унифицированным.
+### ComponentColorConfig
+Внутри него может лежать что угодно, но если компонент подразумевает разные состояния (hover, active, focus etc), то
+есть устоявшаяся структура:
+```
+/src/flower/types.ts
+
+type StateProps = {
+  background?: string,
+  color?: string,
+  ...whatever you need...
+}
+
+export type FlowerColorConfig = {
+  enabled?: StateProps,
+  hover?: StateProps,
+  ...whatever you need...
+}
+```
+Если у компонента подразумевается цветовой мод, то `export type FlowerMode = 'mode1' | 'mode2' | ... | 'modeN'`.
+При этом не нужно включать `FlowerMode` в `FlowerColorConfig`, так как в `cssConfig`, полученный в `useThemedFlower`,
+будут включены только значения, относящиеся к выбранному разработчиком извне `mode`. `FlowerMode` будет использован
+в [конфигурировании THEME_CONFIG](?path=/docs/docs-конфигурирование-theme-config--docs).
+### ComponentSizeConfig
+Без наличия разных размеров у компонента, `FlowerSizeConfig` бессмысленен. В таком случае все размеры должны быть проставлены
+непосредственно в `flowerCss.ts`. Задать `FlowerSize` можно двумя способами:
+1. `${Extract<Size, 'small' | 'medium' | etc}`
+2. `${Exclude<Size, 'small' | 'medium' | etc}`
+
+Первый способ "вытаскивает" только указанные размеры, а второй "вытаскивает" все, кроме указанных. Используйте тот, который
+требует ввода меньшего количества размеров.
+```
+/src/flower/types.ts
+
+import { SizingType } from '@design-system/types'
+import { TextSizes } from '@kaspersky/hexa-ui-core/typography/js'
+
+export FlowerSize = `${Extract<SizingType, 'small' | 'medium'}`
+
+export FlowerSizeConfig = {
+  height?: string,
+  borderRadius: string,
+  ...whatever you need...
+} & TextSizes
+```
+Используйте тип `TextSizes`, если в `FlowerSizeConfig` будут размеры шрифта.

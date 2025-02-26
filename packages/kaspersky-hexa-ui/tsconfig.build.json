@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true
+  },
+  "exclude": [
+    "**/stories",
+    "**/*.stories.tsx",
+    "**/__tests__",
+    "**/*.test.ts*",
+    ".storybook",
+    "docs",
+    "screenshots"
+  ]
+}

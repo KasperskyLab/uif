@@ -1,0 +1,34 @@
+{
+  "component": "Anchor",
+  "hexa-ui": "/docs/hexa-ui-components-anchor--default",
+  "v5": [
+    {
+      "prop": "isFullFillMode",
+      "changes": "Убрано"
+    },
+    {
+      "prop": "value",
+      "changes": "Убрано"
+    },
+    {
+      "prop": "onSelect",
+      "changes": "Переименовано в onChange"
+    },
+    {
+      "prop": "items",
+      "changes": {
+        "before": "[{key: string, title: string}]",
+        "after": "[{href: string, title: string}]",
+        "description": "Ключ key изменен на href"
+      }
+    }
+  ],
+  "common": [{
+    "prop": "displayName",
+    "changes": {
+      "before": "SegmentControl",
+      "after": "Anchor",
+      "description": "Изменено название компонента"
+    }
+  }]
+}

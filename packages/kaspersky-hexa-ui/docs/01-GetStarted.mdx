@@ -1,0 +1,176 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta title="Docs/Установка и инициализация" />
+
+# Установка и инициализация
+
+## Установка пакета
+```
+npm i @kaspersky/hexa-ui
+```
+Или если вы используете yarn:
+```
+yarn add @kaspersky/hexa-ui
+```
+Не забудьте также про настройку registry (если еще не делали):
+```
+npm config set registry https://registry.npmjs.org/
+```
+
+## Добавление глобальных стилей
+
+```
+// provide theme color to css vars
+import { GlobalStyle } from '@kaspersky/hexa-ui/design-system/global-style'
+
+// provide base css
+import '@kaspersky/hexa-ui/design-system/global-style/styles.css'
+
+// App Root
+const AppRoot = () => (
+  <>
+    <GlobalStyle />
+    <Layout />
+  </>
+)
+
+ReactDOM.render(<AppRoot />, document.getElementById('app'))
+```
+
+## Импорт компонента
+```
+import React from 'react'
+
+import { Button } from '@kaspersky/hexa-ui'
+
+const Layout = () => {
+  return (
+    <Button
+      text='Click me!'
+      mode='secondary'
+      size='large'
+    />
+  )
+}
+```
+
+## Providers
+
+### ThemeProvider
+ThemeProvider принимает проп `theme` и позволяет в дальнейшем взаимодействовать с темами приложения.
+```
+import React, { useState } from 'react'
+
+import { Button } from '@kaspersky/hexa-ui'
+
+import { ThemeProvider } from '@kaspersky/hexa-ui/design-system/theme'
+import { ThemeKey } from '@kaspersky/hexa-ui/design-system/types'
+
+const Layout = () => {
+  const [theme, setTheme] = useState<ThemeKey>(ThemeKey.light)
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Button
+        text='Click me!'
+        mode='secondary'
+        size='large'
+      />
+    </ThemeProvider>
+  )
+}
+```
+
+### LocalizationProvider
+LocalizationProvider принимает проп `locale` (язык) и `i18n` (объект i18n). Позволяет в дальнейшем взаимодействовать с
+системой локализационных ключей.
+```
+import React, { useState } from 'react'
+
+import { Button } from '@kaspersky/hexa-ui'
+
+import { ThemeProvider } from '@kaspersky/hexa-ui/design-system/theme'
+import { LocalizationProvider } from '@kaspersky/hexa-ui/design-system/context'
+import i18n from '@kaspersky/hexa-ui/helpers/localization/i18n'
+
+import { ThemeKey } from '@kaspersky/hexa-ui/design-system/types'
+import { LangType } from '@kaspersky/hexa-ui/helpers/localization/types'
+
+const Layout = () => {
+  const [theme, setTheme] = useState<ThemeKey>(ThemeKey.light)
+  const [locale, setLocale] = useState<LangType>('en-us')
+
+  return (
+    <LocalizationProvider locale={locale} i18n={i18n}>
+      <ThemeProvider theme={theme}>
+        <Button
+          text='Click me!'
+          mode='secondary'
+          size='large'
+        />
+      </ThemeProvider>
+    </LocalizationProvider>
+  )
+}
+```
+
+### ConfigProvider
+ConfigProvider является интеграцией ThemeProvider и LocalizationProvider.
+В качестве пропов принимает `theme` и `locale`.
+
+```
+import React, { useState, useCallback, useEffect } from 'react'
+
+import { Button } from '@kaspersky/hexa-ui'
+
+import { ConfigProvider } from '@kaspersky/hexa-ui/design-system/context'
+
+import { ThemeKey } from '@kaspersky/hexa-ui/design-system/types'
+import { LangType } from '@kaspersky/hexa-ui/helpers/localization/types'
+
+const Layout = () => {
+  const [theme, setTheme] = useState<ThemeKey>(ThemeKey.Light)
+  const [locale, setLocale] = useState<LangType>('en-us')
+
+  return (
+    <ConfigProvider theme={theme} locale={locale}>
+      <Button
+        text='Click me!'
+        mode='secondary'
+        size='large'
+      />
+    </ConfigProvider>
+  )
+}
+```
+
+## Переключение темы и локализации
+```
+import React, { useState, useCallback, useEffect } from 'react'
+
+import { Button } from '@kaspersky/hexa-ui'
+
+import { ConfigProvider } from '@kaspersky/hexa-ui/design-system/context'
+
+import { ThemeKey } from '@kaspersky/hexa-ui/design-system/types'
+import { LangType } from '@kaspersky/hexa-ui/helpers/localization/types'
+
+const Layout = () => {
+  const [theme, setTheme] = useState<ThemeKey>(ThemeKey.Light)
+  const [locale, setLocale] = useState<LangType>('en-us')
+
+  const setLight = useCallback(() => setTheme('light'), [])
+  const setDark = useCallback(() => setTheme('dark'), [])
+  const setEn = useCallback(() => setLocale('en-us'), [])
+  const setRu = useCallback(() => setLocale('ru-ru'), [])
+
+  return (
+    <ConfigProvider theme={theme} locale={locale}>
+      <Button text='Set light' onClick={setLight} />
+      <Button text='Set dark' onClick={setDark} />
+      <Button text='Set en' onClick={setEn} />
+      <Button text='Set ru' onClick={setRu} />
+    </ConfigProvider>
+  )
+}
+```

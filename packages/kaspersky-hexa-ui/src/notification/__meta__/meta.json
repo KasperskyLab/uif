@@ -1,0 +1,18 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "designLink": true,
+    "figmaView": true
+  },
+  "component": "Notification",
+  "description": "Компонент Notification используетсс длс отображенис временных глобальных уведомлений. Накладываетсс поверх всей страницы.",
+  "usage": "Чтобы показать уведомление необходимо вызвать функцию `openNotification`. Так же необходимо отрендерить компонент `Notification`. В dom ноду стого компонента будут складыватьсс все уведомленис.",
+  "designLink": "https://www.figma.com/design/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-Hexa-UI-Components-v6.148.0?m=auto&node-id=69315-242254&t=pkT4USurK2McO1PM-1",
+  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F01-%255BB2B%255D-Hexa-UI-Components%3Ftype%3Ddesign%26node-id%3D43876%253A184415%26mode%3Ddev"
+}

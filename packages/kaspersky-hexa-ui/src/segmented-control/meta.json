@@ -1,0 +1,18 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": true,
+    "storybook": true,
+    "designLink": true,
+    "figmaView": true
+  },
+  "component": "SegmentedControl",
+  "description": "Табы с возможностью прокидывать дополнительные проперти-модификаторы в контент",
+  "usage": "Префильтры, модифицированное представление одной формы несколькими табами",
+  "designLink": "https://www.figma.com/design/o46ZL4IBxvDFNc73cZrQYf/Segmented-control?node-id=8008-9363&node-type=frame&t=kkuF4ccDTty1fEOE-0",
+  "figmaView": "https://embed.figma.com/design/o46ZL4IBxvDFNc73cZrQYf/Segmented-control?node-id=0-1&embed-host=share"
+}

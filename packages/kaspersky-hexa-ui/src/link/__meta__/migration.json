@@ -1,0 +1,45 @@
+{
+  "component": "Link",
+  "hexa-ui": "/docs/hexa-ui-components-link--basic",
+  "v3": [
+    {
+      "prop": "decoration",
+      "changes": {
+        "before": "underline | dashed | none",
+        "after": "underline | icon | none"
+      }
+    },
+    {
+      "prop": "secondaryColors",
+      "changes": "Убран"
+    },
+    {
+      "prop": "disabled",
+      "changes":"Добавлен - boolean"
+    }
+  ],
+  "v5": [
+    {
+      "prop": "mode",
+      "changes": "Убран"
+    }
+  ],
+  "common": [
+    {
+      "prop": "typography",
+      "changes": "Убран - использовать пропс 'type'"
+    },
+    {
+      "prop": "type",
+      "changes": "Добавлен - вместо typography"
+    },
+    {
+      "prop": "text",
+      "changes": "Добавлен - передача текста как children"
+    },
+    {
+      "prop": "iconPosition",
+      "changes": "Добавлен - before | after"
+    }
+  ]
+}

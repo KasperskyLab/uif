@@ -1,0 +1,135 @@
+{
+  "translation": {
+    "common": {
+      "empty": "Brak danych",
+      "import": "Importuj",
+      "export": "Eksportuj"
+    },
+    "upload": {
+      "dropFileTitle": "Upuść pliki tutaj",
+      "pasteLinkTitle": "Wklej link do pliku tutaj",
+      "helpText": "Możesz dodać do 6 plików ZIP i RAR o rozmiarze do 200 MB",
+      "placeholder": "placeholder",
+      "addFiles": "Dodaj pliki",
+      "cancel": "Anuluj",
+      "selectAnotherFile": "Wybierz inny plik",
+      "enterNewURL": "Wprowadź nowy adres URL",
+      "repeat": "Powtórz",
+      "loadingTitle": "Przesyłanie {{value, number}}%",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "Przesyłanie powiodło się",
+      "successDescription": "Plik {{file, fileName}} został pomyślnie przesłany na serwer",
+      "errorTitle": "Błąd przesyłania",
+      "errorDescription": "{{file, fileName}} nie mógł zostać przesłany z powodu błędu połączenia"
+    },
+    "uploader": {
+      "actions": {
+        "deleteAll": "Usuń wszystkie pliki",
+        "deleteErrors": "Usuń wszystkie pliki z błędem ({{count}})",
+        "downloadAll": "Pobierz wszystkie pliki",
+        "reloadErrors": "Ponownie załaduj wszystkie pliki z błędem ({{count}})",
+        "upload": "Prześlij"
+      },
+      "dropText": {
+        "beginningMultiple": "Prześlij pliki",
+        "beginningSingle": "Prześlij plik",
+        "endingMultiple": "lub przeciągnij i upuść je tutaj",
+        "endingSingle": "lub przeciągnij i upuść go tutaj"
+      },
+      "maxCountUploaded": "Maksymalna liczba przesłanych plików",
+      "progress": "{{progress}} z {{size}}",
+      "showFiles": "Pokaż pliki",
+      "total": {
+        "files": "{{filesCount}} z {{total}} plików",
+        "simple": "{{filesCount}} plik(i)",
+        "size": "{{size}} z {{total}}"
+      },
+      "validation": {
+        "maxCount": "{{count}} plik(i) nie może/-gą być przesłany/-e z powodu przekroczenia maksymalnego limitu plików.",
+        "maxFileSize": "{{count}} plik(i) nie może/-gą być przesłany/-e z powodu przekroczenia dopuszczalnego rozmiaru.",
+        "maxTotalSize": "{{count}} plik(i) nie może/-gą być przesłany/-e z powodu przekroczenia dopuszczalnego rozmiaru całkowitego.",
+        "format": "{{count}} plik(i) nie może/-gą być przesłany/-e z powodu wymagań związanych z formatem."
+      }
+    },
+    "severity": {
+      "critical": "Krytyczny",
+      "low": "Niski",
+      "medium": "Średni",
+      "high": "Wysoki",
+      "info": "Informacja",
+      "positive": "Pozytywny"
+    },
+    "select": {
+      "empty": "Brak danych",
+      "tags": {
+        "addPrefix": "Dodaj: „",
+        "removePrefix": "Usuń: „",
+        "addRemovePostfix": "”"
+      }
+    },
+    "pagination": {
+      "total": "Łącznie {{count}}",
+      "selected": "Wybrano {{count}}",
+      "page": "strona",
+      "goto": "Przejdź do"
+    },
+    "search": {
+      "raw": "Szukaj",
+      "dotted": "Szukaj..."
+    },
+    "table": {
+      "column": {
+        "name": "Pierwsza kolumna"
+      },
+      "column2": {
+        "name": "Druga kolumna"
+      },
+      "column3": {
+        "name": "Trzecia kolumna"
+      },
+      "columnDropdown": {
+        "ascending": "Rosnąco",
+        "descending": "Malejąco",
+        "sorting": "Sortowanie",
+        "filters": "Filtr",
+        "resetFilters": "Resetuj filtr"
+      },
+      "columnsSettings": {
+        "header": "Ustawienia kolumn",
+        "selectAll": "Wybierz wszystkie",
+        "columns": "Kolumny",
+        "grouping": "Grupowanie",
+        "clear": "Wyczyść",
+        "noGrouping": "Brak grupowania",
+        "apply": "Zastosuj",
+        "cancel": "Anuluj",
+        "filtering": {
+          "add": "Dodaj",
+          "clearAll": "Wyczyść wszystkie",
+          "property": "Własność",
+          "condition": "Warunek",
+          "from": "od",
+          "to": "do",
+          "value": "Wartość"
+        }
+      },
+      "groupingEmpty": "Inne"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "Więcej"
+      }
+    },
+    "timeInput": {
+      "placeholder": "Wybierz godzinę"
+    },
+    "actionBar": {
+      "unsavedChanges": "Oczekujące zmiany",
+      "save": "Zapisz",
+      "cancel": "Anuluj"
+    },
+    "textarea": {
+      "wordsCount": "{{count}} z {{total}}"
+    }
+  }
+}

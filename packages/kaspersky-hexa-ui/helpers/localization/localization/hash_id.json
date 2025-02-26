@@ -1,0 +1,96 @@
+{
+  "translation": {
+    "common": {
+      "empty": "8R544MF4^No data"
+    },
+    "upload": {
+      "dropFileTitle": "PnzdmSR7^Drop file here",
+      "pasteLinkTitle": "AKiCr6yP^Paste the link to the file here",
+      "helpText": "Gx689Vfu^You can add up to 6 ZIP and RAR files up to 200 MB in size",
+      "placeholder": "8h2EgvjB^placeholder",
+      "addFiles": "Usq6ts9u^Add files",
+      "cancel": "GamxEkxm^Cancel",
+      "selectAnotherFile": "Kd8rR8gx^Select another file",
+      "enterNewURL": "PTYSvUvE^Enter new URL",
+      "repeat": "S2TdMSCy^Repeat",
+      "loadingTitle": "6uaHubed^Uploading {{value, number}}%",
+      "loadingDescription": "5wn4xjUE^{{file, fileName}}",
+      "successTitle": "5mUxcJUQ^Uploading success",
+      "successDescription": "2ssSqRVs^{{file, fileName}} successfully uploaded to the server",
+      "errorTitle": "QyUDsamN^Upload error",
+      "errorDescription": "AHE4AU7K^{{file, fileName}} could not be uploaded due to a connection failure"
+    },
+    "severity": {
+      "critical": "T5mWyxu7^Critical",
+      "low": "3vNYiFAZ^Low",
+      "medium": "Xx9gMhfb^Medium",
+      "high": "EaBrWBYq^High",
+      "info": "JLL8JDbF^Info",
+      "positive": "67dTJxFe^Positive"
+    },
+    "select": {
+      "empty": "8R544MF4^No data"
+    },
+    "pagination": {
+      "total": "WckAaiCY^Total {{count}}",
+      "selected": "ZeiHgMmj^Selected {{count}}",
+      "page": "DzeyUmA1^page",
+      "goto": "P7n5Ak1M^Go to"
+    },
+    "search": {
+      "raw": "C3fWMKGP^Search",
+      "dotted": "9wgFr5FZ^Search..."
+    },
+    "table": {
+      "column": {
+        "name": "H9LmcW9J^First column"
+      },
+      "column2": {
+        "name": "BvUhQ6UZ^Second column"
+      },
+      "column3": {
+        "name": "71h2KWMQ^Third column"
+      },
+      "columnDropdown": {
+        "ascending": "BjqU8yoH^Ascending",
+        "descending": "MaJdcmtM^Descending",
+        "sorting": "Y6bL4nNn^Sort",
+        "filters": "A27pWxeF^Filter",
+        "resetFilters": "FibzC73G^Reset filter"
+      },
+      "columnsSettings": {
+        "header": "TPSBszGe^Columns settings",
+        "selectAll": "TkhzZCKk^Select all",
+        "columns": "BUvDfe7w^Columns",
+        "grouping": "XtWxxjS2^Grouping",
+        "clear": "NKUkxV8V^Clear",
+        "noGrouping": "3SrXr2Mg^No grouping",
+        "apply": "4Tmy6JxU^Apply",
+        "cancel": "GamxEkxm^Cancel",
+        "filtering": {
+          "add": "C8eWFfPf^Add",
+          "clearAll": "7qXfKv64^Clear all",
+          "property": "6iNxWj3X^Property",
+          "condition": "Wm4eFsY4^Condition",
+          "from": "Us4Kx7Tp^from",
+          "to": "2HixrcUk^to",
+          "value": "6vPtKGJT^Value"
+        }
+      },
+      "groupingEmpty": "PsPaW6Te^Other"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "Tmmzuprp^More"
+      }
+    },
+    "timeInput": {
+      "placeholder": "WdvtZWpm^Select time"
+    },
+    "actionBar": {
+      "unsavedChanges": "TywcMdWw^Pending changes",
+      "save": "TFJqMhsm^Save",
+      "cancel": "GamxEkxm^Cancel"
+    }
+  }
+}

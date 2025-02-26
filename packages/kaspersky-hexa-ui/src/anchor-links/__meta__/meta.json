@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true,
+    "figmaView": true
+  },
+  "component": "AnchorLinks",
+  "description": "В качестве основы используется AnchorLink из библиотеки Antd.",
+  "usage": "Переключения в одном окне, между несколькими табами",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-UI-KIT?type=design&node-id=29963-101579&t=xCBL6uxVQ0IAMGIj-0",
+  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7TGvGlgGfTltMG1OBgLq8p%2F00-%255BB2B%255D-Hexa-UI-Kit%3Ftype%3Ddesign%26node-id%3D29963%253A101579%26mode%3Ddev"
+}

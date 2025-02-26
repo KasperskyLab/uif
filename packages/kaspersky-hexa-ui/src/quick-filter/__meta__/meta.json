@@ -1,0 +1,16 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": false,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true,
+    "figmaView": true
+  },
+  "component": "QuickFilter",
+  "description": "В качестве основы используется компонент Field.",
+  "usage": "Quick filter — это набор предопределенных фильтров, адаптированных под наиболее частые сценарии использования. Quick filter позволяет быстро выбирать и применять фильтры с минимальными усилиями, предоставляя мгновенную обратную связь.",
+  "figmaView": "https://embed.figma.com/design/qLqY99hC40oEBwLRUgYNWi/Table?node-id=6001-1979&embed-host=share"
+}

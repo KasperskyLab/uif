@@ -1,0 +1,145 @@
+{
+  "translation": {
+    "common": {
+      "empty": "Нет информации",
+      "import": "Импортировать",
+      "export": "Экспортировать"
+    },
+    "upload": {
+      "dropFileTitle": "Перетащить файл сюда",
+      "pasteLinkTitle": "Вставьте ссылку на файл сюда",
+      "helpText": "Вы можете добавить до 6 файлов ZIP и RAR размером до 200 МБ",
+      "placeholder": "плейсхолдер",
+      "addFiles": "Добавить файлы",
+      "cancel": "Отмена",
+      "selectAnotherFile": "Выберите другой файл",
+      "enterNewURL": "Введите новый веб-адрес",
+      "repeat": "Повторить",
+      "loadingTitle": "Загрузка {{value, number}}%",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "Загрузка завершена успешно",
+      "successDescription": "{{file, fileName}} успешно загружен на сервер",
+      "errorTitle": "Ошибка загрузки",
+      "errorDescription": "Не удалось загрузить {{file, fileName}} из-за сбоя соединения"
+    },
+    "uploader": {
+      "actions": {
+        "deleteAll": "Удалить все файлы",
+        "deleteErrors": "Удалить все файлы с ошибкой ({{count}})",
+        "downloadAll": "Скачать все файлы",
+        "reloadErrors": "Перезагрузить все файлы с ошибкой ({{count}})",
+        "upload": "Загрузить"
+      },
+      "dropText": {
+        "beginningMultiple": "Загрузить файлы",
+        "beginningSingle": "Загрузить файл",
+        "endingMultiple": "или перетащить их сюда",
+        "endingSingle": "или перетащить его сюда"
+      },
+      "maxCountUploaded": "Максимальное количество загружаемых файлов",
+      "progress": "{{progress}} из {{size}}",
+      "showFiles": "Показать файлы",
+      "total": {
+        "files": "{{filesCount}} из {{total}}",
+        "simple": "Файлов: {{filesCount}}",
+        "size": "{{size}} из {{total}}"
+      },
+      "validation": {
+        "maxCount": "Количество файлов, которые не могут быть загружены из-за превышения максимального количества файлов: {{count}}.",
+        "maxFileSize": "Количество файлов, которые не могут быть загружены из-за превышения допустимого размера: {{count}}.",
+        "maxTotalSize": "Количество файлов, которые не могут быть загружены из-за превышения допустимого общего размера: {{count}}.",
+        "format": "Количество файлов, которые не могут быть загружены из-за недопустимого формата: {{count}}."
+      }
+    },
+    "severity": {
+      "critical": "Критический",
+      "low": "Низкий",
+      "medium": "Средний",
+      "high": "Высокий",
+      "info": "Информационное сообщение",
+      "positive": "Положительный"
+    },
+    "select": {
+      "empty": "Нет информации",
+      "tags": {
+        "addPrefix": "Добавить: \"",
+        "removePrefix": "Удалить: \"",
+        "addRemovePostfix": "\""
+      }
+    },
+    "pagination": {
+      "total": "Всего {{count}}",
+      "selected": "Выбрано {{count}}",
+      "page": "страница",
+      "goto": "Перейти к"
+    },
+    "search": {
+      "raw": "Поиск",
+      "dotted": "Поиск..."
+    },
+    "table": {
+      "column": {
+        "name": "Первый столбец"
+      },
+      "column2": {
+        "name": "Второй столбец"
+      },
+      "column3": {
+        "name": "Третий столбец"
+      },
+      "columnDropdown": {
+        "ascending": "По возрастанию",
+        "descending": "По убыванию",
+        "sorting": "Сортировать",
+        "filters": "Фильтр",
+        "resetFilters": "Сбросить фильтр"
+      },
+      "columnsSettings": {
+        "header": "Параметры столбцов",
+        "selectAll": "Выделить все",
+        "columns": "Столбцы",
+        "grouping": "Группировка",
+        "clear": "Очистить",
+        "noGrouping": "Без группировки",
+        "apply": "Применить",
+        "cancel": "Отмена",
+        "filtering": {
+          "add": "Добавить",
+          "clearAll": "Очистить все",
+          "property": "Свойство",
+          "condition": "Условие",
+          "from": "с",
+          "to": "по",
+          "value": "Значение"
+        }
+      },
+      "groupingEmpty": "Другое"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "Еще"
+      }
+    },
+    "timeInput": {
+      "placeholder": "Выбор времени"
+    },
+    "actionBar": {
+      "unsavedChanges": "Изменения, ожидающие подтверждения",
+      "save": "Сохранить",
+      "cancel": "Отмена"
+    },
+    "textarea": {
+      "wordsCount": "{{count}} из {{total}}"
+    },
+    "menu": {
+      "navUserItem": {
+        "userProps": {
+          "status": {
+            "available": "Доступно",
+            "unavailable": "Недоступно"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": true,
+    "storybook": true
+  },
+  "component": "Section Message",
+  "description": "Section Message используется как статичное уведомление для акцента на информации вутри контента, требующего внимания или действий.",
+  "usage": "Используется для инлайн уведомлений. Размещается в теле страницы, Section Message не пропадает с течением времени.",
+  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/%E2%9A%99%EF%B8%8F-Hexa-UI-Components?type=design&node-id=43881-240386&mode=design&t=wOvhS9CYVLfKjuss-0"
+}

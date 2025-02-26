@@ -1,0 +1,56 @@
+{
+  "component": "Upload",
+  "hexa-ui": "/docs/hexa-ui-components-upload",
+  "v3": [
+    {
+      "prop": "titleText",
+      "changes": {
+        "before": "titleText - string",
+        "after": "title - string",
+        "description": "Изменилось наименование prop"
+      }
+    },
+    {
+      "prop": "buttonText",
+      "changes": {
+        "before": "buttonText - string",
+        "after": "IButtonProps[]",
+        "description": "Изменилась бизнес логика рендера кнопок"
+      }
+    },
+    {
+      "prop": "bottomText",
+      "changes": {
+        "before": "bottomText",
+        "after": "-",
+        "description": "deprecated"
+      }
+    },
+    {
+      "prop": "disabled",
+      "changes": {
+        "before": "disabled",
+        "after": "disabled",
+        "description": "-"
+      }
+    },
+    {
+      "prop": "buttonSize",
+      "changes": {
+        "before": "-",
+        "after": "-",
+        "description": "deprecated"
+      }
+    },
+    {
+      "prop": "buttonMode",
+      "changes": {
+        "before": "-",
+        "after": "-",
+        "description": "deprecated"
+      }
+    }
+  ],
+  "v5": [],
+  "common": []
+}

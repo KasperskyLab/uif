@@ -1,0 +1,135 @@
+{
+  "translation": {
+    "common": {
+      "empty": "无数据",
+      "import": "导入",
+      "export": "导出"
+    },
+    "upload": {
+      "dropFileTitle": "将文件放到此处",
+      "pasteLinkTitle": "将链接粘贴到此处的文件",
+      "helpText": "您最多可以添加 6 个大小不超过 200 MB 的 ZIP 和 RAR 文件",
+      "placeholder": "占位符",
+      "addFiles": "添加文件",
+      "cancel": "取消",
+      "selectAnotherFile": "选择另一个文件",
+      "enterNewURL": "输入新 URL",
+      "repeat": "重复",
+      "loadingTitle": "正在上传 {{value, number}}%",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "上传成功",
+      "successDescription": "{{file, fileName}} 已成功上传到服务器",
+      "errorTitle": "上传错误",
+      "errorDescription": "由于连接失败，无法上传 {{file, fileName}}"
+    },
+    "uploader": {
+      "actions": {
+        "deleteAll": "删除所有文件",
+        "deleteErrors": "删除所有有错误的文件 ({{count}})",
+        "downloadAll": "下载所有文件",
+        "reloadErrors": "重新加载所有有错误的文件 ({{count}})",
+        "upload": "上传"
+      },
+      "dropText": {
+        "beginningMultiple": "上传文件",
+        "beginningSingle": "上传文件",
+        "endingMultiple": "或者将它们拖放到此处",
+        "endingSingle": "或者将其拖放到此处"
+      },
+      "maxCountUploaded": "上传文件的最大数量",
+      "progress": "{{progress}} / {{size}}",
+      "showFiles": "显示文件",
+      "total": {
+        "files": "{{filesCount}} / {{total}} 个文件",
+        "simple": "{{filesCount}} 个文件",
+        "size": "{{size}} / {{total}}"
+      },
+      "validation": {
+        "maxCount": "由于超过最大文件限制，无法上传 {{count}} 个文件。",
+        "maxFileSize": "由于超过允许的大小，无法上传 {{count}} 个文件。",
+        "maxTotalSize": "由于超过允许的总大小，无法上传 {{count}} 个文件。",
+        "format": "由于格式要求，无法上传 {{count}} 个文件。"
+      }
+    },
+    "severity": {
+      "critical": "严重",
+      "low": "低",
+      "medium": "中",
+      "high": "高",
+      "info": "信息",
+      "positive": "正面"
+    },
+    "select": {
+      "empty": "无数据",
+      "tags": {
+        "addPrefix": "添加: ‟",
+        "removePrefix": "删除: ‟",
+        "addRemovePostfix": "”"
+      }
+    },
+    "pagination": {
+      "total": "总共 {{count}}",
+      "selected": "已选择 {{count}}",
+      "page": "页面",
+      "goto": "转到"
+    },
+    "search": {
+      "raw": "搜索",
+      "dotted": "搜索..."
+    },
+    "table": {
+      "column": {
+        "name": "第一列"
+      },
+      "column2": {
+        "name": "第二列"
+      },
+      "column3": {
+        "name": "第三列"
+      },
+      "columnDropdown": {
+        "ascending": "递增",
+        "descending": "递减",
+        "sorting": "排序",
+        "filters": "过滤器",
+        "resetFilters": "重置过滤器"
+      },
+      "columnsSettings": {
+        "header": "列设置",
+        "selectAll": "全部选择",
+        "columns": "列",
+        "grouping": "分组",
+        "clear": "清除",
+        "noGrouping": "不分组",
+        "apply": "应用",
+        "cancel": "取消",
+        "filtering": {
+          "add": "添加",
+          "clearAll": "全部清空",
+          "property": "属性",
+          "condition": "条件",
+          "from": "从",
+          "to": "到",
+          "value": "值"
+        }
+      },
+      "groupingEmpty": "其他"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "更多"
+      }
+    },
+    "timeInput": {
+      "placeholder": "选择时间"
+    },
+    "actionBar": {
+      "unsavedChanges": "等待更改",
+      "save": "保存",
+      "cancel": "取消"
+    },
+    "textarea": {
+      "wordsCount": "{{count}} / {{total}}"
+    }
+  }
+}

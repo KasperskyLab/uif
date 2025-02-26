@@ -1,0 +1,145 @@
+{
+  "translation": {
+    "common": {
+      "empty": "No data",
+      "import": "Import",
+      "export": "Export"
+    },
+    "upload": {
+      "dropFileTitle": "Drop file here",
+      "pasteLinkTitle": "Paste the link to the file here",
+      "helpText": "You can add up to 6 ZIP and RAR files up to 200 MB in size",
+      "placeholder": "placeholder",
+      "addFiles": "Add files",
+      "cancel": "Cancel",
+      "selectAnotherFile": "Select another file",
+      "enterNewURL": "Enter new URL",
+      "repeat": "Repeat",
+      "loadingTitle": "Uploading {{value, number}}%",
+      "loadingDescription": "{{file, fileName}}",
+      "successTitle": "Uploading success",
+      "successDescription": "{{file, fileName}} successfully uploaded to the server",
+      "errorTitle": "Upload error",
+      "errorDescription": "{{file, fileName}} cannot be uploaded due to a connection failure"
+    },
+    "uploader": {
+      "actions": {
+        "deleteAll": "Delete all files",
+        "deleteErrors": "Delete all files with an error ({{count}})",
+        "downloadAll": "Download all files",
+        "reloadErrors": "Reload all files with an error ({{count}})",
+        "upload": "Upload"
+      },
+      "dropText": {
+        "beginningMultiple": "Upload files",
+        "beginningSingle": "Upload a file",
+        "endingMultiple": "or drag and drop them here",
+        "endingSingle": "or drag and drop it here"
+      },
+      "maxCountUploaded": "Maximum number of uploaded files",
+      "progress": "{{progress}} out of {{size}}",
+      "showFiles": "Show files",
+      "total": {
+        "files": "{{filesCount}} out of {{total}} files",
+        "simple": "{{filesCount}} file(s)",
+        "size": "{{size}} out of {{total}}"
+      },
+      "validation": {
+        "maxCount": "{{count}} file(s) cannot be uploaded due to exceeding the maximum file limit.",
+        "maxFileSize": "{{count}} file(s) cannot be uploaded due to exceeding the allowed size.",
+        "maxTotalSize": "{{count}} file(s) cannot be uploaded due to exceeding the allowed total size.",
+        "format": "{{count}} file(s) cannot be uploaded due to format requirements."
+      }
+    },
+    "severity": {
+      "critical": "Critical",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "info": "Info",
+      "positive": "Positive"
+    },
+    "select": {
+      "empty": "No data",
+      "tags": {
+        "addPrefix": "Add: ‟",
+        "removePrefix": "Remove: ‟",
+        "addRemovePostfix": "”"
+      }
+    },
+    "pagination": {
+      "total": "Total {{count}}",
+      "selected": "Selected {{count}}",
+      "page": "page",
+      "goto": "Go to"
+    },
+    "search": {
+      "raw": "Search",
+      "dotted": "Search..."
+    },
+    "table": {
+      "column": {
+        "name": "First column"
+      },
+      "column2": {
+        "name": "Second column"
+      },
+      "column3": {
+        "name": "Third column"
+      },
+      "columnDropdown": {
+        "ascending": "Ascending",
+        "descending": "Descending",
+        "sorting": "Sort",
+        "filters": "Filter",
+        "resetFilters": "Reset filter"
+      },
+      "columnsSettings": {
+        "header": "Columns settings",
+        "selectAll": "Select all",
+        "columns": "Columns",
+        "grouping": "Grouping",
+        "clear": "Clear",
+        "noGrouping": "No grouping",
+        "apply": "Apply",
+        "cancel": "Cancel",
+        "filtering": {
+          "add": "Add",
+          "clearAll": "Clear all",
+          "property": "Property",
+          "condition": "Condition",
+          "from": "from",
+          "to": "to",
+          "value": "Value"
+        }
+      },
+      "groupingEmpty": "Other"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "More"
+      }
+    },
+    "timeInput": {
+      "placeholder": "Select time"
+    },
+    "actionBar": {
+      "unsavedChanges": "Pending changes",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "textarea": {
+      "wordsCount": "{{count}} out of {{total}}"
+    },
+    "menu": {
+      "navUserItem": {
+        "userProps": {
+          "status": {
+            "available": "Available",
+            "unavailable": "Unavailable"
+          }
+        }
+      }
+    }
+  }
+}

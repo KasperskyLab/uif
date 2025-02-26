@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true,
+    "figmaView": true
+  },
+  "component": "ProgressBar",
+  "description": "",
+  "usage": "Progress bar — компонент, предназначенный для отображения прогресса выполнения какого-либо процесса или для графического отображения количественного показателя.",
+  "designLink": "",
+  "figmaView": "https://embed.figma.com/design/EFHVYGpVSHNixYKULnjWdu/Progress-bar?node-id=8001-6922&embed-host=share"
+}

@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "figmaView": true
+  },
+  "component": "Badge",
+  "description": "В качестве основы используется AntdBadge из библиотеки Antd.",
+  "usage": "Компонент Badge предназначен для компактного отображения дополнительной информации, выступая либо в роли счетчика (показывает количество элементов, например, уведомлений), либо текстовой метки.",
+  "designLink": "https://www.figma.com/design/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-Hexa-UI-Components-v-6.173.1?node-id=1133-10682&p=f&t=sldPytbIojQzU6ZV-0",
+  "figmaView": "https://embed.figma.com/design/lteprDZtaDMT9QrVWoGa4y/Badge?node-id=0-1&embed-host=share"
+}
