@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/index.ts",
+    "src/8/*",
+    "src/12/*",
+    "src/16/*",
+    "src/24/*",
+    "src/32/*",
+    "src/40/*",
+    "src/48/*",
+    "src/stories/**/*",
+    "src/tests/**/*",
+    "src/types/**/*"
+  ]
+}

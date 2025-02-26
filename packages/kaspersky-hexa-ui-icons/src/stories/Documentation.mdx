@@ -1,0 +1,36 @@
+# @kaspersky/hexa-ui-icons
+
+**Библиотека иконок имеет две основные реализации:**
+- *со стороны Design System:* svg пак иконок в [Figma](https://www.figma.com/file/sFYnrrW2tEOurX8rL2OCki/Icons?type=design&mode=design&t=SLAwY6QlYlkBdfPc-0). Обновлением иконок в Figma и поддержкой пака иконок в актуальном состоянии занимается команда дизайнеров DRO.
+- *со стороны UI Kit:* npm пакет, содержащий все иконки из дизайн системы. Поддержкой npm пакета иконок @kaspersky/hexa-ui-icons занимается команда разработки UIF.
+- [StoryBook](https://kasperskylab.github.io/uif/icons/)
+
+## Установка
+``` js
+npm install @kaspersky/hexa-ui-icons
+yarn add @kaspersky/hexa-ui-icons
+
+```## Важно
+**Не используйте** версии пакета **1.5.3** и **1.5.7**
+
+## Использование в проекте
+**Импорт из размера:**
+``` js
+import { AccountIdentity } from '@kaspersky/hexa-ui-icons/24'
+import { AccountIdentity, Like } from '@kaspersky/hexa-ui-icons/24'
+```
+**Импорт объекта иконок одного размера для обращения к иконке по key крайне нежелателен:**
+Впоследствии эта функция будет отключена, не используйте её, она делает невозможным treeShaking.
+Вместо передачи ключа иконки через цепочку пропов, передавайте React компонент и используете его в конечной точке.
+``` js
+import Icons24 from '@kaspersky/hexa-ui-icons/24'
+```
+
+
+**Пример использования всех вышепредставленных импортов:**
+``` js
+`<AccountIdentity />`
+`<AccountIdentity color="red" />`
+`<AccountIdentity data-testid="test-icon" />`
+`<Icons24.AccountIdentity" />`
+```

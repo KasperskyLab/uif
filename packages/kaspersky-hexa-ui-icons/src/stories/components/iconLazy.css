@@ -1,0 +1,19 @@
+.item {
+    height: 100px;
+    text-align: center;
+    background: transparent;
+    cursor: pointer;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+
+.item:hover {
+    box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2);
+}
+
+.title {
+    display: block;
+    margin: 5px 0 0 0 !important;
+    word-break: break-all;
+    line-height: 1;
+}

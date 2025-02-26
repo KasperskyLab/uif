@@ -1,0 +1,16 @@
+.vscode/
+.idea/
+node_modules/
+src/
+yarn-error.log
+.lintstagedrc
+.eslintignore
+.eslintrc.js
+.gitignore
+.npmignore
+package-lock.json
+README.md
+rollup.config.js
+svgr.config.js
+templateIcons.js
+tsconfig.json
