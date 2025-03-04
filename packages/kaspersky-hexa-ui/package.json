@@ -1,6 +1,7 @@
 {
   "name": "@kaspersky/hexa-ui",
   "version": "6.198.0",
+  "author": "AO Kaspersky Lab",
   "description": "Kaspersky Hexa UI Design System UI Kit",
   "license": "Apache-2.0",
   "homepage": "https://github.com/KasperskyLab/uif#readme",
