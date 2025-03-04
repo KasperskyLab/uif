@@ -4,9 +4,16 @@ An opinionated toolset to build UI and Web Services like so:
 
 ![Demo App base on UIF](./docs/uif-app-demo.png)
 
+## Quick Links
+
+1. Storybook: https://kasperskylab.github.io/uif/hexa-ui/
+2. Examples / Quick Start: [code](./examples/quick-start/), [demo](https://kasperskylab.github.io/uif/examples/quick-start/)
+
 Currently available:
 
-* [@kaspersky/components](./packages/kaspersky-components/) — Hexa UI, Kaspersky Design System
+* [@kaspersky/hexa-ui](./packages/kaspersky-hexa-ui/) — Hexa UI, Kaspersky Design System
+* [@kaspersky/hexa-ui-icons](./packages/kaspersky-hexa-ui-icons/) — Hexa UI icon pack
+* [@kaspersky/hexa-ui-icons](./packages/kaspersky-hexa-ui-core/) — Hexa UI design tokens
 * [@kaspersky/ui-builder](./packages/kaspersky-ui-builder/) — WYSIWYG editor to create HTML forms
 * [@kaspersky/runtime](./packages/kaspersky-runtime/) — Application Bus
 * [@kaspersky/dev-tools](./packages/kaspersky-dev-tools/) — Set of configs for ESLint, Babel, TypeScript
