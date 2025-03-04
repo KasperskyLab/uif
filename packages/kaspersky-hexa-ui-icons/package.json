@@ -54,7 +54,7 @@
     "lint:fix": "eslint ./src --fix",
     "test": "npm run lint && npm run icons:tsx-create && jest",
     "storybook": "npm run icons:tsx-create && storybook dev -p 6006",
-    "build-storybook": "npm run icons:tsx-create && storybook build -o public"
+    "build-storybook": "npm run icons:tsx-create && storybook build -o storybook/hexa-ui-icons"
   },
   "keywords": [],
   "devDependencies": {
