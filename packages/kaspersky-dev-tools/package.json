@@ -4,10 +4,10 @@
   "description": "Development tools and configs for Babel, ESLint and TypeScript",
   "author": "AO Kaspersky Lab",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/kasperskylab/uif#readme",
-  "repository": "kasperskylab/uif",
+  "homepage": "https://github.com/KasperskyLab/uif#readme",
+  "repository": "KasperskyLab/uif",
   "bugs": {
-    "url": "https://github.com/kasperskylab/uif/issues"
+    "url": "https://github.com/KasperskyLab/uif/issues"
   },
   "main": "src/index.js",
   "scripts": {
