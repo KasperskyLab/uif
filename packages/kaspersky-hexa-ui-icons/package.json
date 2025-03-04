@@ -50,7 +50,6 @@
     "icons:rollup": "rollup -c --bundleConfigAsCjs",
     "prepublishOnly": "npm run icons:tsx-create && npm run icons:rollup",
     "build": "npm run icons:create && npm run prepublishOnly",
-    "postpublish": "gulp renamePackage && npm publish",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "test": "npm run lint && npm run icons:tsx-create && jest",
