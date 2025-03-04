@@ -1,7 +1,5 @@
 name: "@kaspersky/hexa-ui-core publish"
 on:
-  release:
-    types: [published]
   workflow_dispatch:
 jobs:
   build:
@@ -9,9 +7,11 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    defaults:
+      run:
+        working-directory: ./packages/kaspersky-hexa-ui-core
     steps:
       - uses: actions/checkout@v4
-      # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v4
         with:
           node-version: '22.x'
