@@ -1,9 +1,21 @@
 {
   "name": "@kaspersky/hexa-ui",
-  "author": "AO Kaspersky Lab",
-  "license": "ISC",
   "version": "6.198.0",
-  "description": "Components for building UI's",
+  "description": "Kaspersky Hexa UI Design System UI Kit",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/KasperskyLab/uif#readme",
+  "repository": "KasperskyLab/uif",
+  "bugs": {
+    "url": "https://github.com/KasperskyLab/uif/issues"
+  },
+  "keywords": [
+    "kaspersky",
+    "open single management platform",
+    "design system",
+    "ui kit",
+    "storybook",
+    "hexa ui"
+  ],
   "main": "src/index.js",
   "module": "src/index.js",
   "typings": "src/index.d.ts",
