@@ -6,33 +6,33 @@ import { ComponentThemeContext } from '../config'
 export const tabs = ({ colors, effects }: ComponentThemeContext): TabsColorConfig => ({
   selected: {
     enabled: {
-      color: colors.tab_item.text.selected.base,
-      border: colors.tab_item.border.selected.base,
-      background: colors.tab_item.bg.selected.enabled
+      color: colors.tabs_item.text.selected.base,
+      border: colors.tabs_item.border.selected.base,
+      background: colors.tabs_item.bg.selected.enabled
     },
     hover: {
-      background: colors.tab_item.bg.selected.hover
+      background: colors.tabs_item.bg.selected.hover
     },
     pressed: {
-      background: colors.tab_item.bg.selected.active
+      background: colors.tabs_item.bg.selected.active
     },
     disabled: {
-      color: colors.tab_item.text.selected.disabled
+      color: colors.tabs_item.text.selected.disabled
     }
   },
   unselected: {
     enabled: {
-      color: colors.tab_item.text.unselected.base,
-      background: colors.tab_item.bg.unselected.enabled
+      color: colors.tabs_item.text.unselected.base,
+      background: colors.tabs_item.bg.unselected.enabled
     },
     hover: {
-      background: colors.tab_item.bg.unselected.hover
+      background: colors.tabs_item.bg.unselected.hover
     },
     pressed: {
-      background: colors.tab_item.bg.unselected.active
+      background: colors.tabs_item.bg.unselected.active
     },
     disabled: {
-      color: colors.tab_item.text.unselected.disabled
+      color: colors.tabs_item.text.unselected.disabled
     }
   },
   divider: {

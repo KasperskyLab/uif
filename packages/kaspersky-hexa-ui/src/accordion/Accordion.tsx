@@ -8,8 +8,8 @@ import cn from 'classnames'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { Menu2 } from '@kaspersky/icons/16'
-import { ArrowRight } from '@kaspersky/icons/24'
+import { Menu2 } from '@kaspersky/hexa-ui-icons/16'
+import { ArrowRight } from '@kaspersky/hexa-ui-icons/24'
 
 import { accordionCss, accordionPanelCss } from './AccordionCss'
 import {

@@ -7,7 +7,7 @@ import cn from 'classnames'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { StatusInfoOutline } from '@kaspersky/icons/16'
+import { StatusInfoOutline } from '@kaspersky/hexa-ui-icons/16'
 
 import FormLabelCSS from './FormLabelCSS'
 import { FormLabelProps, FormLabelViewProps } from './types'

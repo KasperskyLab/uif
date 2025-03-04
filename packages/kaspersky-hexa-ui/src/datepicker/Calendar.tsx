@@ -8,7 +8,7 @@ import React, { useEffect, useMemo, useRef, useState, VFC } from 'react'
 import { IMask } from 'react-imask'
 import styled from 'styled-components'
 
-import { Calendar as CalendarIcon } from '@kaspersky/icons/16'
+import { Calendar as CalendarIcon } from '@kaspersky/hexa-ui-icons/16'
 
 import {
   ArrowDoubleLeftIcon,

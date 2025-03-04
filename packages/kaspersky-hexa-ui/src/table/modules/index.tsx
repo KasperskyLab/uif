@@ -4,6 +4,7 @@ import { Table } from '../Table'
 import { TableAccordion } from './Accordion'
 import { ColumnsSelection } from './ColumnsSelection'
 import { DraggableTable } from './Draggable'
+import { EmptyCellDash } from './EmptyCellDash'
 import { FilterSidebar } from './Filters'
 import { Groups } from './Groups'
 import { InfiniteScroll } from './InfiniteScroll'
@@ -36,6 +37,7 @@ export const tableModules: TableModule[] = [
   LocalizeColumnTitles,
   ResizableColumns,
   TableAccordion,
+  EmptyCellDash,
   DraggableTable,
   ColumnsSelection,
   FilterSidebar, // in developing, not ready for use

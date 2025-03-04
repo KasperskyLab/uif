@@ -4,7 +4,7 @@ import { TagReductionGroup } from '@src/tag/TagReductionGroup'
 import { Toggle } from '@src/toggle'
 import React from 'react'
 
-import { StatusOkOutline, StatusWarningOutline } from '@kaspersky/icons/16'
+import { StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
 
 export const mockedFilters: QuickFilterProps['filters'] = [
   {

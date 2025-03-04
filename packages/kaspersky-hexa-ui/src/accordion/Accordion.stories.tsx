@@ -12,7 +12,7 @@ import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { UserAccount } from '@kaspersky/icons/16'
+import { UserAccount } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from './__meta__/meta.json'
 import { Accordion, AccordionPanel } from './Accordion'

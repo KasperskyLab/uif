@@ -8,7 +8,7 @@ import cn from 'classnames'
 import React, { FC, useState } from 'react'
 import styled from 'styled-components'
 
-import { ArrowDown1, StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/icons/16'
+import { ArrowDown1, StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
 
 import { IconStyled, sectionMessageCss, SpaceBox } from './sectionMessageCss'
 import { SectionMessageMode, sectionMessageModes, SectionMessageProps, SectionMessageViewProps } from './types'

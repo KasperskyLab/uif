@@ -4,7 +4,7 @@ import { InputNumber as AntdInputNumber } from 'antd'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { ArrowDownMicro, ArrowUpMicro } from '@kaspersky/icons/16'
+import { ArrowDownMicro, ArrowUpMicro } from '@kaspersky/hexa-ui-icons/16'
 
 import { inputNumberStyles, inputStyles } from './inputCss'
 import { TextboxNumberMappedProps, TextboxNumberProps, TextboxNumberViewProps } from './types'

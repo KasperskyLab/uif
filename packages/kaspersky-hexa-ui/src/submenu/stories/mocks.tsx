@@ -1,7 +1,7 @@
 import { Toggle } from '@src/toggle'
 import React from 'react'
 
-import { Placeholder } from '@kaspersky/icons/16'
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import { SubmenuItemProps } from '../types'
 

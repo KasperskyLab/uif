@@ -1,7 +1,7 @@
 import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
 
-import { ArrowDown } from '@kaspersky/icons/8'
+import { ArrowDown } from '@kaspersky/hexa-ui-icons/8'
 
 import { ActionButton } from '../ActionButton'
 

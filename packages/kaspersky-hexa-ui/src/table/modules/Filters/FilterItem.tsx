@@ -3,7 +3,7 @@ import { TableContextProviderProps, useTableContext } from '@src/table/context/T
 import React from 'react'
 import styled from 'styled-components'
 
-import { Delete } from '@kaspersky/icons/16'
+import { Delete } from '@kaspersky/hexa-ui-icons/16'
 
 const StyledFilterItem = styled.div<TableContextProviderProps>`
   padding: 16px;

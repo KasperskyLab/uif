@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { act } from 'react-dom/test-utils'
 
-import { Placeholder } from '@kaspersky/icons/16'
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import { Chip } from '../Chip'
 import { ChipProps } from '../types'

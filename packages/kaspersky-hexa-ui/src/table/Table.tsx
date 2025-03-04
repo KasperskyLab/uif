@@ -75,6 +75,7 @@ export const Table: FC<ITableProps> = props => {
     if (props.columns) {
       return safeColumns(props.columns, tableWidth)
     }
+    return []
   }, [props.columns, tableWidth])
 
   const rowSelection = useMemo(() => {

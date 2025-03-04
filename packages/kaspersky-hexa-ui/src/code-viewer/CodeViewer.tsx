@@ -5,7 +5,7 @@ import React, { ForwardedRef, forwardRef, memo } from 'react'
 import { ResizableBox } from 'react-resizable'
 import styled from 'styled-components'
 
-import { ResizeInput } from '@kaspersky/icons/12'
+import { ResizeInput } from '@kaspersky/hexa-ui-icons/12'
 
 import {
   codeViewerCss,

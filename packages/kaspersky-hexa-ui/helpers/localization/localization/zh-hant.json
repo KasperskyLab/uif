@@ -130,6 +130,16 @@
     },
     "textarea": {
       "wordsCount": "{{count}}，共 {{total}}"
+    },
+    "menu": {
+      "navUserItem": {
+        "userProps": {
+          "status": {
+            "available": "可用",
+            "unavailable": "不可用"
+          }
+        }
+      }
     }
   }
 }

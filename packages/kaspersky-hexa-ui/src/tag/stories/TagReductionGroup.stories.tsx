@@ -3,7 +3,7 @@ import { StoryColumn } from '@sb/StoryComponents'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
-import { Placeholder } from '@kaspersky/icons/16'
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
 import { TagReductionGroup } from '../TagReductionGroup'

@@ -5,7 +5,7 @@ import { Tree as TreeAntd, TreeNodeProps, TreeProps } from 'antd'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { ArrowDownSolid } from '@kaspersky/icons/8'
+import { ArrowDownSolid } from '@kaspersky/hexa-ui-icons/8'
 
 import { Loader } from '../loader'
 

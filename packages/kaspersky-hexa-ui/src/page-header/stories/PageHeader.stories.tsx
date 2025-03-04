@@ -8,7 +8,7 @@ import { Tag } from '@src/tag'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
-import { Placeholder, Settings } from '@kaspersky/icons/24'
+import { Placeholder, Settings } from '@kaspersky/hexa-ui-icons/24'
 
 import MetaData from '../__meta__/meta.json'
 import { PageHeader as PageHeaderComponent } from '../PageHeader'

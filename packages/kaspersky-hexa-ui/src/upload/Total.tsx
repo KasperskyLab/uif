@@ -6,7 +6,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { Delete, Download2, Menu2, Reload } from '@kaspersky/icons/16'
+import { Delete, Download2, Menu2, Reload } from '@kaspersky/hexa-ui-icons/16'
 
 import { UploadFile } from './types'
 import { convertFileSize } from './utils/convertFileSize'

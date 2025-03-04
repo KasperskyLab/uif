@@ -2,7 +2,7 @@ import { generateRoutes } from '@src/breadcrumbs/helpers'
 import { render } from '@testing-library/react'
 import React from 'react'
 
-import { Placeholder } from '@kaspersky/icons/24'
+import { Placeholder } from '@kaspersky/hexa-ui-icons/24'
 
 import { PageHeader } from '../PageHeader'
 import { PageHeaderProps } from '../types'

@@ -50,6 +50,7 @@ export const ColorTokens: PaletteStory = {
 }
 
 export { EmptyText } from './stories/Empty'
+export { EmptyCellDash } from './stories/EmptyCellDash'
 export { Disabled } from './stories/Disabled'
 export { Draggable } from './stories/Draggable'
 export { Groupping } from './stories/Groupping'

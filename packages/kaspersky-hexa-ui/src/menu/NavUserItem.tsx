@@ -7,7 +7,7 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 
 import { productColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { StatusNoThreatSolid, StatusOkSolid, ITestIds } from '@kaspersky/icons/16'
+import { StatusNoThreatSolid, StatusOkSolid, ITestIds } from '@kaspersky/hexa-ui-icons/16'
 
 import { AppThemeContext } from './Menu'
 import { navItemCss } from './navCss'

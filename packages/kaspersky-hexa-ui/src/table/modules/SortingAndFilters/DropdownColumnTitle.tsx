@@ -7,7 +7,7 @@ import cn from 'classnames'
 import React, { ReactElement, useState } from 'react'
 import styled, { css } from 'styled-components'
 
-import { ArrowDownMini, Filter, Sort2, Sort3 } from '@kaspersky/icons/16'
+import { ArrowDownMini, Filter, Sort2, Sort3 } from '@kaspersky/hexa-ui-icons/16'
 
 import { useTableContext } from '../../context/TableContext'
 import { fromTableProps } from '../../tableCss'

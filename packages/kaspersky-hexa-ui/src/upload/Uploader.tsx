@@ -6,7 +6,7 @@ import RcUpload, { UploadProps as RcUploadProps } from 'rc-upload'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Upload } from '@kaspersky/icons/16'
+import { Upload } from '@kaspersky/hexa-ui-icons/16'
 
 import { Total } from './Total'
 import { RcFile, UploadChangeParam, UploaderProps, UploadFile } from './types'

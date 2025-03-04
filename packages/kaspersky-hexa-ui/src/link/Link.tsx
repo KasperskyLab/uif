@@ -3,7 +3,7 @@ import { Tooltip } from '@src/tooltip'
 import cn from 'classnames'
 import React, { forwardRef, MouseEventHandler, PropsWithChildren, ReactElement } from 'react'
 
-import { LinkExternal } from '@kaspersky/icons/16'
+import { LinkExternal } from '@kaspersky/hexa-ui-icons/16'
 
 import { IconWrapper, StyledLink, TextWrapper } from './linkCss'
 import { LinkProps, LinkViewProps } from './types'

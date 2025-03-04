@@ -151,6 +151,10 @@ export const tableCss = css<TableViewProps>`
         word-break: break-all;
       }
 
+      .hexa-ui-empty-dash-cell {
+        color: var(--table_cell--text--disabled);
+      }
+
       .drag-handle {
         position: absolute;
         left: -${tableSizes.dragHandler.size}px;

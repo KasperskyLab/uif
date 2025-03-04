@@ -2,7 +2,7 @@ import { Dropdown } from '@src/dropdown'
 import { Locale } from '@src/locale'
 import React, { Key, ReactElement } from 'react'
 
-import { ArrowDown1 } from '@kaspersky/icons/16'
+import { ArrowDown1 } from '@kaspersky/hexa-ui-icons/16'
 
 import { StyledMoreButton } from './tabsCss'
 

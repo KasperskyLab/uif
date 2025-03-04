@@ -93,6 +93,8 @@ export type ColumnFilter = {
 export type TableColumn = Omit<ColumnType<TableRecord>, 'key' | 'sorter' | 'filters'> & {
   key: React.Key,
   title?: string | ReactElement,
+  /* Show Dash in empty cell for column */
+  hasEmptyCellDash?: boolean,
   dataIndex?: string,
   columnId?: string,
   isSortable?: boolean,

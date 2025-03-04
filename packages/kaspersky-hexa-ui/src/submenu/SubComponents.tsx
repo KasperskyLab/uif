@@ -4,7 +4,7 @@ import { Badge } from '@src/badge'
 import { Indicator } from '@src/indicator'
 import React, { FC } from 'react'
 
-import { ArrowDownSolid, ArrowRightSolid } from '@kaspersky/icons/8'
+import { ArrowDownSolid, ArrowRightSolid } from '@kaspersky/hexa-ui-icons/8'
 
 import {
   StyledActionButton,

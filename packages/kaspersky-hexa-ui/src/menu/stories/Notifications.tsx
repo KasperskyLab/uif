@@ -2,7 +2,7 @@ import { clickHandler } from '@src/menu/stories/CustomItem'
 import React from 'react'
 import styled from 'styled-components'
 
-import { Alarm as AlarmIcon } from '@kaspersky/icons/16'
+import { Alarm as AlarmIcon } from '@kaspersky/hexa-ui-icons/16'
 
 export function getNotificationsIcon (hasNotifications: boolean): React.ReactNode {
   return (

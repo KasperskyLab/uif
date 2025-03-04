@@ -10,7 +10,7 @@ import {
 } from 'react-sortable-hoc'
 import styled from 'styled-components'
 
-import { DragDrop } from '@kaspersky/icons/16'
+import { DragDrop } from '@kaspersky/hexa-ui-icons/16'
 
 import { isColumnReadonly } from '../../helpers/common'
 

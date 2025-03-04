@@ -15,7 +15,7 @@ import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { Placeholder } from '@kaspersky/icons/16'
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from './meta.json'
 import { SegmentedControl } from './SegmentedControl'

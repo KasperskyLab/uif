@@ -7,7 +7,7 @@ import cn from 'classnames'
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 
-import { ArrowRightMini, Pin, Unpin } from '@kaspersky/icons/16'
+import { ArrowRightMini, Pin, Unpin } from '@kaspersky/hexa-ui-icons/16'
 
 import { AppThemeContext } from './Menu'
 import { navDividerCss, navItemCss, newIndicatorCss } from './navCss'

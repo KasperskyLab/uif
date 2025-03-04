@@ -2,7 +2,7 @@ import { ActionButton } from '@src/action-button'
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
-import { ArrowDownSolid, ArrowRightSolid } from '@kaspersky/icons/8'
+import { ArrowDownSolid, ArrowRightSolid } from '@kaspersky/hexa-ui-icons/8'
 
 import { ITableProps, TableRecord } from '../../table'
 

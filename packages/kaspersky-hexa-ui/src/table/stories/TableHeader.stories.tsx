@@ -6,7 +6,7 @@ import { Meta } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
 
-import { NotificationBell } from '@kaspersky/icons/32'
+import { NotificationBell } from '@kaspersky/hexa-ui-icons/32'
 
 import { ITableProps, Table } from '..'
 

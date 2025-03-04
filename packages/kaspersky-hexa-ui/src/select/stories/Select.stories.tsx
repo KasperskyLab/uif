@@ -14,7 +14,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { Add, Cancel1, Placeholder } from '@kaspersky/icons/16'
+import { Add, Cancel1, Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
 import { Select } from '../Select'

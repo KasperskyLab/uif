@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import React, { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { Lock2, StatusInfoOutline, StatusWarningOutline, Unlock2 } from '@kaspersky/icons/16'
+import { Lock2, StatusInfoOutline, StatusWarningOutline, Unlock2 } from '@kaspersky/hexa-ui-icons/16'
 
 import { ActionButton } from '../action-button'
 import { Popover } from '../popover'

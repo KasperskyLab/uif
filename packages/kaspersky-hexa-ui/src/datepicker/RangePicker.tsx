@@ -9,7 +9,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { IMask } from 'react-imask'
 import styled from 'styled-components'
 
-import { Calendar as CalendarIcon } from '@kaspersky/icons/16'
+import { Calendar as CalendarIcon } from '@kaspersky/hexa-ui-icons/16'
 
 import {
   ArrowDoubleLeftIcon,
@@ -148,8 +148,6 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
     getValueDebounce().then(() => {
       destroyMask()
       setDate(newDates)
-      onChange?.(newDates)
-
       // Action when click on seconds in range with time
       if (isNestedInDOM(timeSecondsWrapper, e.target, 5)) {
         if (inputs[0] === pickerElement?.querySelector('.ant-picker-input-active input')) {
@@ -160,6 +158,7 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
           setOpenState(false)
         }
       }
+      handleOnChange(newDates)
     })
   }
 

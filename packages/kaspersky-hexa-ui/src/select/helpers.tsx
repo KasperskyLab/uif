@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { v1 as uuidV1 } from 'uuid'
 
-import { ArrowDown1, Search, StatusDangerOutline1 } from '@kaspersky/icons/16'
+import { ArrowDown1, Search, StatusDangerOutline1 } from '@kaspersky/hexa-ui-icons/16'
 
 import { StyledErrorWrapper } from './selectCss'
 import { LabelValue, SelectCssConfig, SelectProps } from './types'
