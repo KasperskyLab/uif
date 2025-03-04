@@ -1,6 +1,6 @@
 {
   "name": "@kaspersky/hexa-ui-core",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "description": "Tokens for Kaspersky Hexa UI Design system: colors, fonts and typography",
   "author": "AO Kaspersky Lab",
   "license": "Apache-2.0",
@@ -25,6 +25,10 @@
     "./*": {
       "import": "./esm/*/index.js",
       "require": "./*/index.js"
+    },
+    "./colors/css/*": {
+      "import": "./esm/colors/css/*.js",
+      "require": "./colors/css/*.js"
     }
   },
   "scripts": {
