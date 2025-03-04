@@ -1,0 +1,5 @@
+Bundled license information:
+
+@kaspersky/hexa-ui-core/esm/typography/tokens/tokens.js:
+  /*! This file was created automatically. */
+  /*! Use updateTypography gulp task if you need to update typography. */
