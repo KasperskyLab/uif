@@ -11,7 +11,7 @@ import {
   ArrowDoubleRight,
   ArrowLeftMini,
   ArrowRightMini
-} from '@kaspersky/icons/16'
+} from '@kaspersky/hexa-ui-icons/16'
 
 const StyledArrowDoubleRightIcon = styled(ArrowDoubleRight).withConfig({ shouldForwardProp })`
   ${ActionButtonCSS}

@@ -6,7 +6,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 
-import { Help, UserGroup } from '@kaspersky/icons/16'
+import { Help, UserGroup } from '@kaspersky/hexa-ui-icons/16'
 
 import { Menu } from '../Menu'
 import { MenuProps } from '../types'

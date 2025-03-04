@@ -3,7 +3,7 @@ import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React, { FC, useState } from 'react'
 
-import { Placeholder } from '@kaspersky/icons/16'
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import { SegmentedButton } from '../SegmentedButton'
 import { SegmentedButtonOption, SegmentedButtonProps } from '../types'

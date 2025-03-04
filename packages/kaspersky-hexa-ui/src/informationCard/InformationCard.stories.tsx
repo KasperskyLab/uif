@@ -15,7 +15,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { Connection } from '@kaspersky/icons/32'
+import { Connection } from '@kaspersky/hexa-ui-icons/32'
 
 import MetaData from './__meta__/meta.json'
 import { InformationCard } from './InformationCard'

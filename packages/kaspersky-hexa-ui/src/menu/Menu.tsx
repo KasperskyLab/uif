@@ -4,7 +4,7 @@ import cn from 'classnames'
 import React, { createContext } from 'react'
 import styled from 'styled-components'
 
-import { Menu as HamburgerIcon } from '@kaspersky/icons/16'
+import { Menu as HamburgerIcon } from '@kaspersky/hexa-ui-icons/16'
 
 import { menuCss } from './menuCss'
 import { HamburgerProps, MenuProps, MenuViewProps } from './types'

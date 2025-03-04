@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { AppUpdate, Help } from '@kaspersky/icons/16'
+import { AppUpdate, Help } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
 import { Hamburger, Menu } from '../Menu'

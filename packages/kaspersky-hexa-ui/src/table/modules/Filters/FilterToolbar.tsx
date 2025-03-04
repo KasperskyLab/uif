@@ -3,7 +3,7 @@ import { Locale } from '@src/locale'
 import React from 'react'
 import styled from 'styled-components'
 
-import { Cross, Plus } from '@kaspersky/icons/16'
+import { Cross, Plus } from '@kaspersky/hexa-ui-icons/16'
 
 import { useTableContext } from '../../context/TableContext'
 import { TableColumn } from '../../types'

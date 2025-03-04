@@ -2,7 +2,7 @@ import { Tooltip } from '@src/tooltip'
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { ArrowRight } from '@kaspersky/icons/16'
+import { ArrowRight } from '@kaspersky/hexa-ui-icons/16'
 
 import { dropdownItemInnerCss } from './dropdownCss'
 import { DropdownItemInnerProps } from './types'

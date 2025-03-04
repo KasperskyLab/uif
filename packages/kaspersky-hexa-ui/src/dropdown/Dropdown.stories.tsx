@@ -12,7 +12,7 @@ import React, { CSSProperties, useRef } from 'react'
 import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { Menu3, Placeholder } from '@kaspersky/icons/16'
+import { Menu3, Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from './__meta__/meta.json'
 import { Dropdown } from './Dropdown'

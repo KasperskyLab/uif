@@ -2,7 +2,7 @@ import { Table as AntTable } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
 
-import { ArrowDown } from '@kaspersky/icons/16'
+import { ArrowDown } from '@kaspersky/hexa-ui-icons/16'
 
 import { Text } from '../../src/typography'
 

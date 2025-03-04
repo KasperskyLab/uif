@@ -9,7 +9,7 @@ import { TooltipCompositionWarning } from '@sb/components/Warnings'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
-import { Placeholder, Plus, Settings } from '@kaspersky/icons/16'
+import { Placeholder, Plus, Settings } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from './__meta__/meta.json'
 import { Button as ButtonComponent } from './Button'

@@ -1,7 +1,7 @@
 import React from 'react'
 import { v4 as uiidv4 } from 'uuid'
 
-import { ArrowDoubleRight } from '@kaspersky/icons/16'
+import { ArrowDoubleRight } from '@kaspersky/hexa-ui-icons/16'
 
 import { StyledTextExpander } from './expandableTextCss'
 

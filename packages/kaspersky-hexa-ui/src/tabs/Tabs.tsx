@@ -24,7 +24,7 @@ import React, {
 import ResizeObserver from 'resize-observer-polyfill'
 import styled from 'styled-components'
 
-import { StatusInfoOutline } from '@kaspersky/icons/16'
+import { StatusInfoOutline } from '@kaspersky/hexa-ui-icons/16'
 
 import { TabsContext } from './context'
 import { getDropdownStyles } from './dropdownGlobalStyles'

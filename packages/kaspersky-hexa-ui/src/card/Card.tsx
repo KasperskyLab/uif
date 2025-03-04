@@ -5,7 +5,7 @@ import { H6 } from '@src/typography'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { Delete, DragDrop, Menu2 } from '@kaspersky/icons/16'
+import { Delete, DragDrop, Menu2 } from '@kaspersky/hexa-ui-icons/16'
 
 import {
   CardActions,

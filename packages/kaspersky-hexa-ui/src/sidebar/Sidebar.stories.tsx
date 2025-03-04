@@ -18,8 +18,8 @@ import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { Help, Youtube } from '@kaspersky/icons/16'
-import { Star } from '@kaspersky/icons/24'
+import { Help, Youtube } from '@kaspersky/hexa-ui-icons/16'
+import { Star } from '@kaspersky/hexa-ui-icons/24'
 
 import { Button } from '../button'
 import { Text } from '../typography'

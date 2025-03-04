@@ -5,7 +5,7 @@ import { ValidationStatus } from '@helpers/typesHelpers'
 import styled, { css } from 'styled-components'
 
 import { MonoTextTypes } from '@kaspersky/hexa-ui-core/typography/js'
-import { StatusDangerSolid1, StatusWarningSolid } from '@kaspersky/icons/24'
+import { StatusDangerSolid1, StatusWarningSolid } from '@kaspersky/hexa-ui-icons/24'
 
 import { reactSvgComponentToMarkupString } from './helpers'
 import { CodeViewerCssConfig } from './types'

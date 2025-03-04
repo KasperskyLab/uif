@@ -13,7 +13,7 @@ import React, { CSSProperties } from 'react'
 import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { StatusInfoOutline } from '@kaspersky/icons/16'
+import { StatusInfoOutline } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from './__meta__/meta.json'
 import { Popover } from './Popover'

@@ -4,7 +4,7 @@ import { notification } from 'antd'
 import React from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-import { StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/icons/16'
+import { StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
 
 import { Description } from './notificationCss'
 import { NotificationApiParams, NotificationMode, NotificationModeArray, NotificationProps } from './types'

@@ -7,7 +7,7 @@ import cn from 'classnames'
 import React, { FC, useState } from 'react'
 import styled from 'styled-components'
 
-import { StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/icons/16'
+import { StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
 
 import { alertCss, IconStyled, SpaceBox } from './alertCss'
 import { AlertMode, alertModes, AlertProps, AlertViewProps } from './types'

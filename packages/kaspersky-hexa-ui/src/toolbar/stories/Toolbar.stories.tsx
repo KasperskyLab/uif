@@ -10,7 +10,7 @@ import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { FilterWithIndicator as FilterWithIndicatorIcon, Placeholder } from '@kaspersky/icons/16'
+import { FilterWithIndicator as FilterWithIndicatorIcon, Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
 import { Toolbar } from '../Toolbar'

@@ -5,7 +5,7 @@ import { Input } from 'antd'
 import React, { FC, useState } from 'react'
 import styled from 'styled-components'
 
-import { PasswordHide, PasswordShow } from '@kaspersky/icons/16'
+import { PasswordHide, PasswordShow } from '@kaspersky/hexa-ui-icons/16'
 
 import { inputPasswordStyles, inputStyles } from './inputCss'
 import { TextboxPasswordMappedProps, TextboxPasswordProps, TextboxPasswordViewProps } from './types'

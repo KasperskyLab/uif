@@ -8,7 +8,7 @@ import cn from 'classnames'
 import React, { FC, useState } from 'react'
 import styled from 'styled-components'
 
-import { Menu3, StatusInfoOutline } from '@kaspersky/icons/16'
+import { Menu3, StatusInfoOutline } from '@kaspersky/hexa-ui-icons/16'
 
 import { segmentedControlCss } from './segmentedControlCss'
 import {

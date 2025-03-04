@@ -8,7 +8,7 @@ import { Indicator } from '@src/indicator'
 import classnames from 'classnames'
 import React, { FC, KeyboardEvent, MouseEvent, useRef, useState } from 'react'
 
-import { Menu2 } from '@kaspersky/icons/16'
+import { Menu2 } from '@kaspersky/hexa-ui-icons/16'
 
 import { isNumber } from '../helpers'
 import { StyledMoreButton } from '../MoreButton/StyledMoreButton'

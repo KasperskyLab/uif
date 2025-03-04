@@ -7,33 +7,33 @@ export const toggle = ({ colors, effects }: ComponentThemeContext): ToggleColorC
   return {
     enabled: {
       color: colors.toggle.text.enabled,
-      knob: colors.toggle.knob.enabled,
-      bgOn: colors.toggle.bg.enabled_selected,
-      bgOff: colors.toggle.bg.enabled
+      knob: colors.toggle.bg.handle.enabled,
+      bgOn: colors.toggle.bg.track.enabled_selected,
+      bgOff: colors.toggle.bg.track.enabled
     },
     hover: {
       color: colors.toggle.text.hover,
-      knob: colors.toggle.knob.hover,
-      bgOn: colors.toggle.bg.hover_selected,
-      bgOff: colors.toggle.bg.hover
+      knob: colors.toggle.bg.handle.hover,
+      bgOn: colors.toggle.bg.track.hover_selected,
+      bgOff: colors.toggle.bg.track.hover
     },
     active: {
       color: colors.toggle.text.active,
-      knob: colors.toggle.knob.active,
-      bgOn: colors.toggle.bg.active_selected,
-      bgOff: colors.toggle.bg.active
+      knob: colors.toggle.bg.handle.active,
+      bgOn: colors.toggle.bg.track.active_selected,
+      bgOff: colors.toggle.bg.track.active
     },
     disabled: {
       color: colors.toggle.text.disabled,
-      knob: colors.toggle.knob.disabled,
-      bgOn: colors.toggle.bg.disabled_selected,
-      bgOff: colors.toggle.bg.disabled
+      knob: colors.toggle.bg.handle.disabled,
+      bgOn: colors.toggle.bg.track.disabled_selected,
+      bgOff: colors.toggle.bg.track.disabled
     },
     readonly: {
       color: colors.toggle.text.readonly,
-      knob: colors.toggle.knob.readonly,
-      bgOn: colors.toggle.bg.readonly_selected,
-      bgOff: colors.toggle.bg.readonly
+      knob: colors.toggle.bg.handle.readonly,
+      bgOn: colors.toggle.bg.track.readonly_selected,
+      bgOff: colors.toggle.bg.track.readonly
     },
     ...focus({ colors, effects })
   }

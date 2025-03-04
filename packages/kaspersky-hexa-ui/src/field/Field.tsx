@@ -7,7 +7,7 @@ import cn from 'classnames'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { Help, StatusInfoOutline } from '@kaspersky/icons/16'
+import { Help, StatusInfoOutline } from '@kaspersky/hexa-ui-icons/16'
 
 import { fieldCss } from './fieldCss'
 import { FieldProps, FieldViewProps } from './types'

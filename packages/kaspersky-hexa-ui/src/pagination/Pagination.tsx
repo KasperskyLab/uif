@@ -7,7 +7,7 @@ import React, { FC, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { ArrowLeft, ArrowRight } from '@kaspersky/icons/16'
+import { ArrowLeft, ArrowRight } from '@kaspersky/hexa-ui-icons/16'
 
 import { Text } from '../typography'
 

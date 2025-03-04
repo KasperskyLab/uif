@@ -24,7 +24,7 @@ import {
   Menu2,
   Settings21,
   SizeMaximize
-} from '@kaspersky/icons/16'
+} from '@kaspersky/hexa-ui-icons/16'
 
 import {
   AutoDropdownPart,

@@ -9,7 +9,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { Advertisement } from '@kaspersky/icons/16'
+import { Advertisement } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
 import Tag from '../Tag'

@@ -5,11 +5,11 @@ import { wrapperSpanCss } from '@src/icon/IconCss'
 import React, { ForwardedRef, forwardRef, useContext } from 'react'
 import styled from 'styled-components'
 
-import Icons12Pack from '@kaspersky/icons/12'
-import Icons16Pack, { StatusQuestionOutline } from '@kaspersky/icons/16'
-import Icons24Pack from '@kaspersky/icons/24'
-import Icons48Pack from '@kaspersky/icons/48'
-import Icons8Pack from '@kaspersky/icons/8'
+import Icons12Pack from '@kaspersky/hexa-ui-icons/12'
+import Icons16Pack, { StatusQuestionOutline } from '@kaspersky/hexa-ui-icons/16'
+import Icons24Pack from '@kaspersky/hexa-ui-icons/24'
+import Icons48Pack from '@kaspersky/hexa-ui-icons/48'
+import Icons8Pack from '@kaspersky/hexa-ui-icons/8'
 
 import { iconsMapper, MappedObjectInterface } from './iconsMapper'
 import { IconPackSizes, IconProps, IconSizes } from './types'
@@ -94,7 +94,7 @@ const IconView = forwardRef<HTMLSpanElement, IconProps>((props: IconProps, ref: 
       IconToDisplay = PackageIcon
       colorFromMapper = mappedIcon?.color
     } else {
-      console.warn(`@kaspersky/icons: did not found ${props.name} in size ${props.size}`)
+      console.warn(`@kaspersky/hexa-ui-icons: did not found ${props.name} in size ${props.size}`)
       IconToDisplay = StatusQuestionOutline
       colorFromMapper = 'pink'
     }

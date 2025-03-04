@@ -1,6 +1,6 @@
 import { ItemDivider, NavItemData } from '@src/menu/types'
 
-import { AppUpdate, Desktop, Grid, Search, Server, Settings2, StorageServer, Store, UserAccount, UserGroup } from '@kaspersky/icons/16'
+import { AppUpdate, Desktop, Grid, Search, Server, Settings2, StorageServer, Store, UserAccount, UserGroup } from '@kaspersky/hexa-ui-icons/16'
 
 import { clickHandler } from '../stories/CustomItem'
 

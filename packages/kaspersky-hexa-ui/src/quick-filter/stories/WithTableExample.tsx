@@ -3,7 +3,7 @@ import { Space } from '@src/space'
 import { Table } from '@src/table'
 import React, { useEffect, useState } from 'react'
 
-import { StatusOkOutline, StatusWarningOutline } from '@kaspersky/icons/16'
+import { StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
 
 import { tableColumns, tableDataSource } from './mocks'
 

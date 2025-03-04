@@ -6,7 +6,7 @@ import { Text } from '@src/typography'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { Menu3 } from '@kaspersky/icons/16'
+import { Menu3 } from '@kaspersky/hexa-ui-icons/16'
 
 import { breadcrumbsCss, StyledBreadcrumbsSeparator, StyledDropdownMenuItem } from './breadcrumbsCss'
 import { BreadcrumbsCssConfig, BreadcrumbsItemProps, BreadcrumbsProps, BreadcrumbsViewProps, Route } from './types'

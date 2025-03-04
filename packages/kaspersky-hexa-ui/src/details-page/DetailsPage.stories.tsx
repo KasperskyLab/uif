@@ -6,7 +6,7 @@ import { Toggle } from '@src/toggle'
 import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 
-import { Placeholder } from '@kaspersky/icons/16'
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from './__meta__/meta.json'
 import { DetailsPage } from './DetailsPage'

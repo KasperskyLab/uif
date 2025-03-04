@@ -3,12 +3,12 @@ import { Tooltip } from '@src/tooltip'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import icons16 from '@kaspersky/icons/16'
-import icons24 from '@kaspersky/icons/24'
-import icons32 from '@kaspersky/icons/32'
-import icons40 from '@kaspersky/icons/40'
-import icons48 from '@kaspersky/icons/48'
-import icons8 from '@kaspersky/icons/8'
+import icons16 from '@kaspersky/hexa-ui-icons/16'
+import icons24 from '@kaspersky/hexa-ui-icons/24'
+import icons32 from '@kaspersky/hexa-ui-icons/32'
+import icons40 from '@kaspersky/hexa-ui-icons/40'
+import icons48 from '@kaspersky/hexa-ui-icons/48'
+import icons8 from '@kaspersky/hexa-ui-icons/8'
 
 const SizeWrapper = styled.div`
   margin: 40px 0;

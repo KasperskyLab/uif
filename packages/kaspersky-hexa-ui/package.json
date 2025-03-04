@@ -1,28 +1,16 @@
 {
   "name": "@kaspersky/hexa-ui",
-  "version": "6.197.0",
-  "description": "Kaspersky Hexa UI Design System UI Kit",
   "author": "AO Kaspersky Lab",
-  "license": "Apache-2.0",
-  "homepage": "https://github.com/kasperskylab/uif#readme",
-  "repository": "kasperskylab/uif",
-  "bugs": {
-    "url": "https://github.com/kasperskylab/uif/issues"
-  },
-  "keywords": [
-    "kaspersky",
-    "open single management platform",
-    "design system",
-    "ui kit",
-    "storybook"
-  ],
+  "license": "ISC",
+  "version": "6.198.0",
+  "description": "Components for building UI's",
   "main": "src/index.js",
   "module": "src/index.js",
   "typings": "src/index.d.ts",
   "scripts": {
     "build": "npm i && gulp clear && gulp build && tsc --project tsconfig.build.json --outDir ./esm && tsc-alias -v --dir ./esm --project tsconfig.build.json",
     "release": "npm run build && gulp deploy",
-    "build-publish": "npm run build && cd ./esm && npm publish && gulp renamePackage && npm publish --access public",
+    "build-publish": "npm run build && cd ./esm && npm publish && gulp renamePackage && npm publish",
     "lint": "npm run lint-es && npm run lint-ts",
     "lint-es": "eslint ./src",
     "lint-es:fix": "eslint --fix ./src",
@@ -64,7 +52,7 @@
     "@codemirror/language": "6.10.8",
     "@codemirror/state": "6.5.0",
     "@codemirror/view": "6.36.1",
-    "@kaspersky/hexa-ui-core": "^0.9.10",
+    "@kaspersky/hexa-ui-core": "0.9.12",
     "@lezer/highlight": "1.2.1",
     "@popperjs/core": "2.11.2",
     "@tanstack/react-virtual": "3.10.1",
@@ -93,7 +81,7 @@
   "devDependencies": {
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
-    "@kaspersky/dev-tools": "^2.32.1",
+    "@kaspersky/dev-tools": "2.32.2",
     "@mihkeleidast/storybook-addon-source": "1.0.1",
     "@storybook/addon-docs": "8.1.10",
     "@storybook/addon-essentials": "8.1.10",
@@ -152,7 +140,7 @@
     "webpack": "5.94.0"
   },
   "peerDependencies": {
-    "@kaspersky/hexa-ui-icons": "2.6.10",
+    "@kaspersky/hexa-ui-icons": "2.6.11",
     "eslint": "^6.0.0 || ^7.0.0 || ^8.0.0",
     "react": "16.x || 17.x",
     "react-dom": "16.x || 17.x",

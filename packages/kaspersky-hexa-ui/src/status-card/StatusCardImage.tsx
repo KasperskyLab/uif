@@ -3,8 +3,8 @@ import { getChildTestProps } from '@helpers/hooks/useTestAttribute'
 import { TestingAttributes } from '@helpers/typesHelpers'
 import React, { FC } from 'react'
 
-import { StatusDangerSquareSolid, StatusErrorSolid, StatusOkSolid, StatusWarningSolid } from '@kaspersky/icons/24'
-import { ShieldDangerSolid, ShieldOkSolid } from '@kaspersky/icons/32'
+import { StatusDangerSquareSolid, StatusErrorSolid, StatusOkSolid, StatusWarningSolid } from '@kaspersky/hexa-ui-icons/24'
+import { ShieldDangerSolid, ShieldOkSolid } from '@kaspersky/hexa-ui-icons/32'
 
 import { StyledIcon, StyledImage } from './statusCardCss'
 import { IconVariant, StatusCardImageProps, StatusCardMode } from './types'

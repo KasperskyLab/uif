@@ -18,7 +18,7 @@ import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { Placeholder } from '@kaspersky/icons/16'
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from './meta.json'
 import { FieldSetItem, FieldSetProps } from './types'

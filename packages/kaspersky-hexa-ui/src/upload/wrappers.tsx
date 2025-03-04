@@ -6,7 +6,7 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { StatusDangerSquareOutline, UploadFull } from '@kaspersky/icons/40'
+import { StatusDangerSquareOutline, UploadFull } from '@kaspersky/hexa-ui-icons/40'
 
 import { UploadFile } from './types'
 import { UploadListWrapper } from './UploadList/wrappers'

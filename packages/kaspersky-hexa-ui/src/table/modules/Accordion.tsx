@@ -2,7 +2,7 @@ import classnames from 'classnames'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { ArrowDown1, ArrowRight } from '@kaspersky/icons/16'
+import { ArrowDown1, ArrowRight } from '@kaspersky/hexa-ui-icons/16'
 
 import { useTableContext } from '../context/TableContext'
 import { isColumnReadonly } from '../helpers/common'

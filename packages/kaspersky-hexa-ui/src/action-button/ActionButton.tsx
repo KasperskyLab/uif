@@ -5,8 +5,8 @@ import cn from 'classnames'
 import React from 'react'
 import styled from 'styled-components'
 
-import { CrossS, CrossXs } from '@kaspersky/icons/16'
-import { Close } from '@kaspersky/icons/8'
+import { CrossS, CrossXs } from '@kaspersky/hexa-ui-icons/16'
+import { Close } from '@kaspersky/hexa-ui-icons/8'
 
 import ActionButtonCSS from './ActionButtonCSS'
 import {

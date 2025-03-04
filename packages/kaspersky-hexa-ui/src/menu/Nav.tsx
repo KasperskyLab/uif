@@ -4,7 +4,7 @@ import cn from 'classnames'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { Pin } from '@kaspersky/icons/16'
+import { Pin } from '@kaspersky/hexa-ui-icons/16'
 
 import { NavCaptionItem } from './NavCaptionItem'
 import { NavItem } from './NavItem'

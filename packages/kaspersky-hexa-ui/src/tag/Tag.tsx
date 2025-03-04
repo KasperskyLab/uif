@@ -9,8 +9,8 @@ import cn from 'classnames'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { StatusDangerSolid1 } from '@kaspersky/icons/16'
-import { Close } from '@kaspersky/icons/8'
+import { StatusDangerSolid1 } from '@kaspersky/hexa-ui-icons/16'
+import { Close } from '@kaspersky/hexa-ui-icons/8'
 
 import { Group } from '../helpers/Group'
 

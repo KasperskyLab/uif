@@ -5,7 +5,7 @@ import { Space } from '@src/space'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { Search } from '@kaspersky/icons/16'
+import { Search } from '@kaspersky/hexa-ui-icons/16'
 
 const StyledIndicator = styled(Indicator)<{ cursor?: string }>`
   position: absolute;

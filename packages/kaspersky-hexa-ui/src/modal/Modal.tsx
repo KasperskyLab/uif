@@ -9,12 +9,12 @@ import { Modal as AntdModal } from 'antd'
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { Cross } from '@kaspersky/icons/16'
+import { Cross } from '@kaspersky/hexa-ui-icons/16'
 import {
   StatusDangerOutline1,
   StatusOkOutline,
   StatusWarningOutline
-} from '@kaspersky/icons/24'
+} from '@kaspersky/hexa-ui-icons/24'
 
 import {
   getMaskStyle,
