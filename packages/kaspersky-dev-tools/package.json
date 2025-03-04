@@ -1,6 +1,6 @@
 {
   "name": "@kaspersky/dev-tools",
-  "version": "2.32.1",
+  "version": "2.32.2",
   "description": "Development tools and configs for Babel, ESLint and TypeScript",
   "author": "AO Kaspersky Lab",
   "license": "Apache-2.0",
