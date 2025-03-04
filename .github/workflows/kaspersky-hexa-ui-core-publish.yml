@@ -1,4 +1,4 @@
-name: "@kaspersky/hexa-ui-core publish"
+name: "[publish] @kaspersky/hexa-ui-core"
 on:
   workflow_dispatch:
 jobs:
