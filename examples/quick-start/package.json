@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@kaspersky/components": "^6.42.3",
-    "@kaspersky/icons": "^2.3.0",
+    "@kaspersky/hexa-ui": "6.198.0",
+    "@kaspersky/hexa-ui-icons": "2.6.11",
     "antd": "4.18",
     "react": "^17",
     "react-dom": "^17"

@@ -5,8 +5,8 @@
     ```bash
     npm create vite my-project-name -- --template react-ts
     cd my-project-name
-    npm install react@17 react-dom@17 @kaspersky/icons @kaspersky/components
-    npm install -D @types/react@17 @types/react-dom@17 less antd@4.18
+    npm install react@17 react-dom@17 @kaspersky/hexa-ui-icons @kaspersky/hexa-ui --legacy-peer-deps
+    npm install -D @types/react@17 @types/react-dom@17 less antd@4.18 --legacy-peer-deps
     ```
 
 2. Add this to `vite.config.ts` for correct `less` work:
@@ -53,12 +53,12 @@
     ```typescript
     import { useState } from 'react'
 
-    import { ConfigProvider } from '@kaspersky/components/design-system/context/provider'
-    import { GlobalStyle } from '@kaspersky/components/design-system/global-style'
-    import { ThemeKey } from '@kaspersky/components/design-system'
-    import { LangVariants } from '@kaspersky/components/helpers/localization/types'
+    import { ConfigProvider } from '@kaspersky/hexa-ui/design-system/context/provider'
+    import { GlobalStyle } from '@kaspersky/hexa-ui/design-system/global-style'
+    import { ThemeKey } from '@kaspersky/hexa-ui/design-system'
+    import { LangVariants } from '@kaspersky/hexa-ui/helpers/localization/types'
 
-    import { Notification, H1 } from '@kaspersky/components'
+    import { Notification, H1 } from '@kaspersky/hexa-ui'
 
     function App() {
       const [themeKey] = useState<ThemeKey>(ThemeKey.Light)
@@ -67,7 +67,7 @@
         <ConfigProvider theme={themeKey} locale={LangVariants.EnUs}>
           <GlobalStyle />
           <Notification/>
-          <H1>Hi there! I am using @kaspersky/components!</H1>
+          <H1>Hi there! I am using @kaspersky/hexa-ui!</H1>
         </ConfigProvider>
       )
     }
