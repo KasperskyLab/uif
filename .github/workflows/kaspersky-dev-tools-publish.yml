@@ -1,4 +1,4 @@
-name: "@kaspersky/dev-tools publish"
+name: "[publish] @kaspersky/dev-tools"
 on:
   workflow_dispatch:
 jobs:
