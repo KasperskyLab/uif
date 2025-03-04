@@ -153,7 +153,7 @@ export const Layout = ({ themeKey, setThemeKey }: LayoutProps) => {
           <Hamburger className='item left' role='button' name='hamburger' onClick={ () => setMenuMinimized(!menuMinimized) } />
         </ServicesNav>
         <AppLogo />
-        <Nav navItems={menuNavState} favItems={favItems} minimized={menuMinimized} favsEnabled={true} />
+        <Nav beforeItems={beforeItems} navItems={menuNavState} favItems={favItems} minimized={menuMinimized} favsEnabled={true} />
         <UserNav navItems={userMenuState} minimized={menuMinimized} childPop={true} />
       </StyledMenu>
       <StyledSpace themeKey={themeKey} direction='vertical' size={16}>
