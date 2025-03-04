@@ -16,9 +16,9 @@ import {
 import { SegmentedButtonOption } from '@kaspersky/hexa-ui/src/segmented-button/types'
 import { ThemeKey, themeColors } from '@kaspersky/hexa-ui/design-system'
 import { AppUpdate } from '@kaspersky/hexa-ui-icons/16'
-import { beforeItems, navItems, navUserItems, favItems } from '../../../packages/kaspersky-hexa-ui/src/menu/stories/menu-items'
 
 import { AppLogo } from './AppLogo'
+import { beforeItems, favItems, navUserItems, navItems } from './menu/menu-items'
 
 const StyledSpace = styled(Space)<{ themeKey: ThemeKey }>`
   border-radius: 16px;
