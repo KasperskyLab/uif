@@ -1,4 +1,4 @@
-name: "@kl/hexa-ui-core publish"
+name: "@kaspersky/hexa-ui-core publish"
 on:
   release:
     types: [published]
