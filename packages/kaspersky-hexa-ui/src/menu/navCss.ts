@@ -14,7 +14,7 @@ export const navItemCss = css`
     height: 32px;
     border-radius: 8px;
     padding: 0 8px;
-    gap: 4px;
+    gap: 8px;
     user-select: none;
     cursor: pointer;
     
@@ -86,8 +86,8 @@ export const navItemCss = css`
   .uif-nav-item-child-wrapper {
     overflow: hidden;
     flex-direction: column;
-    gap: 4px;
-    margin-top: 4px;
+    gap: 2px;
+    margin-top: 2px;
     display: none;
   }
 
@@ -223,6 +223,7 @@ export const navItemCss = css`
     
     &.uif-nav-item.expanded {
       position: relative;
+      z-index: 1;
     }
     
     .uif-nav-item-child {
@@ -241,11 +242,9 @@ export const navCss = css`
   padding: 0 16px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   scrollbar-width: none;
   
-  --scrollbar-track-color: var(--elements--separator-solid);
-  --scrollbar-thumb-color: var(--text-icons-elements--secondary2-solid);
   --scrollbar-radius: 4px;
   --scrollbar-size: 6px;
 
@@ -260,20 +259,20 @@ export const navCss = css`
     height: var(--scrollbar-size);
   }
   &::-webkit-scrollbar-track {
-    background: var(--scrollbar-track-color);
+    background: var(--scrollbar--bg--enabled);
     border-radius: var(--scrollbar-radius);
   }
   &::-webkit-scrollbar-thumb {
     cursor: pointer;
-    background: var(--scrollbar-thumb-color);
+    background: var(--scrollbar--bar--enabled);
     border-radius: var(--scrollbar-radius);
     transition: color 0.2s ease;
   }
   &::-webkit-scrollbar-thumb:window-inactive {
-    background: var(--scrollbar-thumb-color);
+    background: var(--scrollbar--bar--disabled);
   }
   &::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-thumb-color);
+    background: var(--scrollbar--bar--hover);
   }
 `
 
