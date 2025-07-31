@@ -32,7 +32,6 @@ const DropdownViewComponent: FC<DropdownViewProps> = ({
     }, 0)
   }, [])
   const newOnVisibleChange = useCallback((opened: boolean) => {
-    focusOnFirstItem()
     onVisibleChange?.(opened)
   }, [onVisibleChange, focusOnFirstItem])
   return <AntDropdown {...props} onVisibleChange={newOnVisibleChange} />
