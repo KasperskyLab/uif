@@ -1,0 +1,41 @@
+name: "Examples: Form Show Case"
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - 'examples/form-showcase/**'
+      - '.github/workflows/examples-form-showcase.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    defaults:
+      run:
+        working-directory: ./examples/form-showcase
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        shell: bash
+        run: |
+          npm install
+      - name: Build
+        shell: bash
+        run: |
+          npm run build
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./examples/form-showcase/dist
+          destination_dir: examples/form-showcase
