@@ -133,6 +133,6 @@ See `.github/copilot-instructions.md` if present.
 
 - **Storybook (UI Kit):** https://kasperskylab.github.io/uif/hexa-ui/
 - **Quick Start example:** `examples/quick-start/`, demo linked from main README
-- **Form Show Case:** `examples/form-showcase/` — form patterns with React Hook Form and Zod. Forms use a 3-layer architecture (View, Form Schema, DTO); see `examples/form-showcase/README.md` for the app layout and `examples/form-showcase/src/shared/Forma/README.md` for the Forma layer.
+- **Form Showcase:** integrated in `examples/quick-start/` (menu item “Form Showcase”). Form patterns use a 3-layer architecture (View, Form Schema, DTO); see `examples/quick-start/src/shared/Forma/README.md` for the Forma layer.
 - **Design System packages** are the main surface for tokens, icons, and components; keep changes scoped to the correct package (core / icons / hexa-ui) to avoid circular or unnecessary dependencies.
 - Update this file when adding new packages or changing standard commands.
