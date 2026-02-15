@@ -90,6 +90,16 @@ export const navUserItems: NavItemData[] = [
 
 export const navItems: Record<string, unknown>[] = [
   {
+    state: 'form-showcase',
+    weight: 50,
+    key: 'Form Showcase',
+    iconClass: 'applicationsAndServices',
+    icon: AppUpdate,
+    klId: 'navigation.formShowcase',
+    isRoot: true,
+    onClick: () => {}
+  },
+  {
     state: 'monitoring',
     weight: 100,
     key: 'Monitoring & reporting',
