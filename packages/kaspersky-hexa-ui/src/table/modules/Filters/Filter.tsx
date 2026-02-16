@@ -62,7 +62,7 @@ export const FilterSidebar: TableModule = (Component) =>
       let preparedData = props.dataSource || []
       preparedData = preparedData.filter((row) => (
         Object.values(activeFilters).every((filters) => (
-          Object.values(filters).every((predicate) => predicate(row))
+          Object.values(filters).some((predicate) => predicate(row))
         ))
       ))
 
