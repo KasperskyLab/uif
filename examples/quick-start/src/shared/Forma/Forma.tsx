@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
   useForm,
   type FieldValues,
@@ -23,7 +24,8 @@ export function Forma<T extends FieldValues>({
   isLoading = false,
   title,
   description,
-  renderActions
+  renderActions,
+  onReady
 }: FormaProps<T>) {
   const {
     control,
@@ -45,6 +47,11 @@ export function Forma<T extends FieldValues>({
     getValues: getValues as FormaFormContext<T>['getValues'],
     handleSubmit: handleSubmitWrap
   }
+
+  useEffect(() => {
+    onReady?.(ctx)
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- onReady: notify once on mount
+  }, [])
 
   return (
     <>

@@ -100,6 +100,16 @@ export const navItems: Record<string, unknown>[] = [
     onClick: () => {}
   },
   {
+    state: 'b2b-typical-scenario',
+    weight: 55,
+    key: 'B2B Typical Scenario',
+    iconClass: 'applicationsAndServices',
+    icon: Grid,
+    klId: 'navigation.b2bTypicalScenario',
+    isRoot: true,
+    onClick: () => {}
+  },
+  {
     state: 'monitoring',
     weight: 100,
     key: 'Monitoring & reporting',

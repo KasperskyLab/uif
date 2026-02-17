@@ -59,6 +59,9 @@ export const Layout = ({ themeKey, setThemeKey }: LayoutProps) => {
         if (item.state === 'form-showcase') {
           return { ...item, onClick: () => navigate('/form-showcase') }
         }
+        if (item.state === 'b2b-typical-scenario') {
+          return { ...item, onClick: () => navigate('/b2b-typical-scenario') }
+        }
         if (item.state === 'monitoring') {
           return { ...item, onClick: () => navigate('/') }
         }

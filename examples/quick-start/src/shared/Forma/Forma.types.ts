@@ -37,6 +37,8 @@ export type FormaProps<T extends FieldValues> = {
   renderActions?: (
     ctx: FormaFormContext<T> & { handleSubmit: () => void }
   ) => React.ReactNode
+  /** Called when form is ready; use to get handleSubmit for external trigger (e.g. card footer Save). */
+  onReady?: (ctx: FormaFormContext<T> & { handleSubmit: () => void }) => void
 }
 
 export type {

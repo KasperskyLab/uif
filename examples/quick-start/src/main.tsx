@@ -17,7 +17,8 @@ async function prepare() {
   if (useMsw) {
     const { initFormaMocks } = await import('./shared/Forma')
     const { handlers } = await import('./app/form-showcase/mocks/handlers')
-    return initFormaMocks(handlers)
+    const { b2bHandlers } = await import('./app/b2b-typical-scenario/mocks/handlers')
+    return initFormaMocks([...handlers, ...b2bHandlers])
   }
   return Promise.resolve()
 }
