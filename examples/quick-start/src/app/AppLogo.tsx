@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const AppLogo = () => {
   return (
-    <StyledAppLogo href={'#'} className='logo-ksc'>
+    <StyledAppLogo href={'/'} className='logo-ksc'>
       <svg className="logo-svg" width="128" height="128" viewBox="0 0 128 128" fill="none"
            xmlns="http://www.w3.org/2000/svg">
         <g clipPath="url(#clip0_0_4722)">

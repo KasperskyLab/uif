@@ -6,6 +6,7 @@ An opinionated toolset to build UI and Web Services like so:
 
 1. Storybook: https://kasperskylab.github.io/uif/hexa-ui/
 2. Examples -> Quick Start: [code](./examples/quick-start/), [demo](https://kasperskylab.github.io/uif/examples/quick-start/)
+3. Examples -> Form Showcase: part of [Quick Start](./examples/quick-start/) (menu item “Form Showcase”)
 
 ![Demo App base on UIF](./docs/uif-app-demo.png)
 
