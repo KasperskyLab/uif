@@ -1,4 +1,4 @@
-name: "[storybook] @kaspersky/hexa-ui"
+name: "[storybook] @kaspersky/hexa-ui-icons"
 
 on:
   push:
