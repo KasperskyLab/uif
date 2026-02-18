@@ -3,7 +3,10 @@
     "common": {
       "empty": "Nessun dato",
       "import": "Importa",
-      "export": "Esporta"
+      "export": "Esporta",
+      "filters": "Filtri",
+      "no": "No",
+      "yes": "Sì"
     },
     "upload": {
       "dropFileTitle": "Trascinare il file qui",
@@ -38,18 +41,31 @@
       },
       "maxCountUploaded": "Numero massimo di file caricati",
       "progress": "{{progress}} di {{size}}",
-      "showFiles": "Mostra file",
+      "showFiles": "Visualizza file",
       "total": {
         "files": "{{filesCount}} di {{total}} file",
         "simple": "{{filesCount}} file",
-        "size": "{{count}} di {{total}}"
+        "size": "{{size}} di {{total}}"
       },
       "validation": {
         "maxCount": "{{count}} file non possono essere caricati perché è stato superato il limite massimo di file.",
+        "maxCount2": "Il numero totale di file caricati supera il limite consentito",
         "maxFileSize": "{{count}} file non possono essere caricati a causa del superamento delle dimensioni consentite.",
+        "maxFileSize2": "Alcuni dei file caricati in precedenza superano il limite di dimensione attualmente consentito",
         "maxTotalSize": "{{count}} file non possono essere caricati a causa del superamento della dimensione totale consentita.",
+        "maxTotalSize2": "La dimensione totale di tutti i file caricati supera il limite di dimensione attualmente consentito",
+        "filesDoNotMeetRequirements": "Il file non soddisfano i requisiti",
         "format": "{{count}} file non possono essere caricati a causa di requisiti di formato."
       }
+    },
+    "wizard": {
+      "actions": {
+        "cancel": "Annulla",
+        "back": "Indietro",
+        "next": "Avanti",
+        "finish": "Fine"
+      },
+      "stepStack": "Passaggio {{currentStep}} di {{totalSteps}}"
     },
     "severity": {
       "critical": "Critico",
@@ -71,22 +87,13 @@
       "total": "Totale/i: {{count}}",
       "selected": "Selezionato/i: {{count}}",
       "page": "pagina",
-      "goto": "Vai a"
+      "goto": "Vai alla pagina"
     },
     "search": {
       "raw": "Ricerca",
       "dotted": "Ricerca..."
     },
     "table": {
-      "column": {
-        "name": "Prima colonna"
-      },
-      "column2": {
-        "name": "Seconda colonna"
-      },
-      "column3": {
-        "name": "Terza colonna"
-      },
       "columnDropdown": {
         "ascending": "Crescente",
         "descending": "Decrescente",
@@ -94,8 +101,13 @@
         "filters": "Filtro",
         "resetFilters": "Reimposta filtro"
       },
+      "selectAll": {
+        "selectAll": "Seleziona tutto",
+        "selectCurrentPage": "Selezionare tutto nella pagina corrente",
+        "deselectAll": "Reimposta tutto"
+      },
       "columnsSettings": {
-        "header": "Impostazioni colonne",
+        "header": "Impostazioni tabella",
         "selectAll": "Seleziona tutto",
         "columns": "Colonne",
         "grouping": "Raggruppamento",
@@ -103,6 +115,16 @@
         "noGrouping": "Nessun raggruppamento",
         "apply": "Applica",
         "cancel": "Annulla",
+        "columnTitles": {
+        "name": "Nome",
+        "country": "Paese",
+        "age": "Età",
+        "city": "Città",
+        "date": "Data",
+        "isSortable": "È ordinabile",
+        "sorter": "Ordinatore",
+        "sorterIsSortable": "L'ordinamento è disponibile"
+        },
         "filtering": {
           "add": "Aggiungi",
           "clearAll": "Cancella tutto",
@@ -110,8 +132,33 @@
           "condition": "Condizione",
           "from": "da",
           "to": "a",
-          "value": "Valore"
-        }
+          "value": "Valore",
+          "validation": {
+            "emptyValue": "Specificare il valore di filtraggio",
+            "duplicateFilters": "Filtri duplicati. Verificare che ogni filtro sia univoco"
+          }
+        },
+        "columnHideIsUnavailable": "Non è possibile nascondere le colonne"
+      },
+      "filterOperation": {
+        "⊆": "Contiene",
+        "⊄": "Non contiene",
+        "cont_and": "Contiene (AND)",
+        "cont_or": "Contiene (OR)",
+        "ncont_or": "Non contiene",
+        "*=": "Regexp",
+        "empty": "Vuoto",
+        "nempty": "Non vuoto",
+        "range": "Compreso in",
+        "nrange": "Non è compreso in"
+      },
+      "filterTag": {
+        "⊆": "contiene {{value}}",
+        "⊄": "non contiene {{value}}",
+        "empty": "è vuoto",
+        "nempty": "non è vuoto",
+        "range": "Compreso in {{from}}-{{to}}",
+        "nrange": "Non compreso in {{from}}–{{to}}"
       },
       "groupingEmpty": "Altro"
     },
@@ -125,13 +172,14 @@
     },
     "actionBar": {
       "unsavedChanges": "Modifiche in sospeso",
-      "save": "Salva",
+      "save": "Applica",
       "cancel": "Annulla"
     },
     "textarea": {
       "wordsCount": "{{count}} di {{total}}"
     },
     "menu": {
+      "favoritesNavItem": "Segnalibri",
       "navUserItem": {
         "userProps": {
           "status": {
@@ -139,6 +187,41 @@
             "unavailable": "Non disponibile"
           }
         }
+      }
+    },
+    "expand": {
+      "toExpand": "Espandi",
+      "toCollapse": "Riduci a icona"
+    },
+    "codeCompare": {
+      "compareMode": "Modo di confronto",
+      "unified": "Unificato",
+      "split": "Dividi",
+      "loader": "Download delle versioni per il confronto...",
+      "totalChanges": "Modifiche totali:",
+      "collapseAll": "Comprimi tutto",
+      "expandAll": "Espandi tutto",
+      "expandLines": "Espandi {{count}} righe",
+      "empty": "Entrambi i file sono vuoti. Il confronto non è possibile.",
+      "noChanges": "Nessuna modifica trovata tra le versioni",
+      "basicVersion": "Versione di base",
+      "comparableVersion": "Versione confrontabile"
+    },
+    "licenseCard": {
+      "status": "Stato della chiave di licenza",
+      "number": "Numero chiave di licenza",
+      "remaining": "Rimanente",
+      "activationDate": "Data di attivazione",
+      "expirationDate": "Data di scadenza",
+      "term": "Termine",
+      "dayLeft": "{{count}} giorno rimasto",
+      "daysLeft": "{{count}} giorni rimasti",
+      "termDays": "{{count}} giorni"
+    },
+    "input": {
+      "password": {
+        "hide": "Nascondi",
+        "show": "Mostra"
       }
     }
   }

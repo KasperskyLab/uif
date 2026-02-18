@@ -3,26 +3,25 @@ import { Size } from '@design-system/types'
 import {
   TagColorConfig,
   TagMode,
+  tagModes,
   TagSize,
-  TagSizeConfig,
-  tagModes
+  TagSizeConfig
 } from '@src/tag/types'
 
 import { ComponentThemeContext } from '../config'
-import { SPACES } from '../variables'
 
 export const tagSize: Record<TagSize, TagSizeConfig> = {
   [Size.Small]: {
-    padding: `${SPACES[1]}px ${SPACES[2]}px`,
-    gap: `${SPACES[2]}px`,
-    borderRadius: `${SPACES[2]}px`,
-    height: `${SPACES[10]}px`
+    padding: '1px 4px',
+    gap: '4px',
+    borderRadius: '4px',
+    height: '20px'
   },
   [Size.Medium]: {
-    padding: `${SPACES[2]}px ${SPACES[3]}px`,
-    gap: `${SPACES[2]}px`,
-    borderRadius: `${SPACES[2]}px`,
-    height: `${SPACES[12]}px`
+    padding: '4px 6px',
+    gap: '4px',
+    borderRadius: '4px',
+    height: '24px'
   }
 }
 

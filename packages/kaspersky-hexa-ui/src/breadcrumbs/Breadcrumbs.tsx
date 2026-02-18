@@ -55,8 +55,8 @@ const BreadcrumbsView = ({
   <StyledBreadcrumbs cssConfig={cssConfig} {...testAttributes} {...rest}>
     {routes.length <= MAX_ITEMS
       ? routes.map((route, index, { length }) =>
-          <BreadcrumbsItem route={route} key={route.url} isLastItem={length - 1 === index} cssConfig={cssConfig} size={size} />
-        )
+        <BreadcrumbsItem route={route} key={route.url} isLastItem={length - 1 === index} cssConfig={cssConfig} size={size} />
+      )
       : <>
           {routes.slice(0, ITEMS_BEFORE_COLLAPSE).map((route) =>
             <BreadcrumbsItem key={route.url} route={route} cssConfig={cssConfig} size={size} />

@@ -1,10 +1,16 @@
-import { colors, productColors, componentColors } from '@kaspersky/hexa-ui-core/colors/js'
+import {
+  StaticPalette,
+  StaticPaletteProps,
+  ThemedPalette,
+  ThemedPaletteProps
+} from '@design-system/palette'
 import { withMeta } from '@sb/components/Meta'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
+import { colors, componentColors, productColors } from '@kaspersky/hexa-ui-core/colors/js'
+
 import MetaData from '../__meta__/meta.json'
-import { StaticPalette, ThemedPalette, StaticPaletteProps, ThemedPaletteProps } from '@design-system/palette'
 
 const meta: Meta = {
   title: 'Design/Colors',

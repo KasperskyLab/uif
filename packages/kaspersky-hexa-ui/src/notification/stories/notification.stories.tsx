@@ -4,7 +4,7 @@ import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Button } from '@src/button'
 import { notificationDestroy, openNotification } from '@src/notification'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
@@ -29,9 +29,6 @@ const meta: Meta<NotificationContainerProps & NotificationApiParams> = {
   },
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
-    controls: {
-      sort: 'alpha'
-    },
     docs: {
       page: withMeta(MetaData)
     }
@@ -63,6 +60,9 @@ export const Basic: Story = {
         </Button>
         <Button onClick={() => openNotification.info(args)}>
           Info
+        </Button>
+        <Button onClick={() => openNotification.ai(args)}>
+          AI
         </Button>
       </>
     )

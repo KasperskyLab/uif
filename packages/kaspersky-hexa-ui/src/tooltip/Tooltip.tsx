@@ -1,11 +1,12 @@
-import { WithGlobalComponentStyles } from '@helpers/hocs/WithGlobalComponentStyles'
+import { usePopupConfig } from '@helpers/components/PopupConfigProvider'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import { useGlobalComponentStyles } from '@helpers/useGlobalComponentStyles'
 import { getTooltipGlobalStyles } from '@src/tooltip/tooltipGlobalStyles'
-import { Tooltip as AntdTooltip } from 'antd'
 import React, { FC } from 'react'
 
+import { Tooltip as AntdTooltip } from './AntdTooltip'
 import { ALIGNS } from './tooltipCss'
-import { TooltipProps, TooltipViewProps } from './types'
+import { TooltipProps } from './types'
 import { useThemedTooltip } from './useThemedTooltip'
 
 export const Tooltip: FC<TooltipProps> = ({
@@ -13,39 +14,32 @@ export const Tooltip: FC<TooltipProps> = ({
   defaultAlign = false,
   ...rawProps
 }: TooltipProps) => {
-  const themedProps = useThemedTooltip(rawProps)
-  const props = useTestAttribute(themedProps)
+  const {
+    cssConfig,
+    getPopupContainer,
+    testAttributes,
+    text,
+    ...rest
+  } = useTestAttribute(useThemedTooltip(rawProps))
+  const config = usePopupConfig()
+
+  const globalClassName = useGlobalComponentStyles(
+    cssConfig,
+    getTooltipGlobalStyles,
+    Tooltip
+  )
+
   return (
-    <TooltipView
+    <AntdTooltip
       align={defaultAlign ? undefined : ALIGNS[placement]}
+      getPopupContainer={getPopupContainer ?? config.getPopupContainer}
+      mouseEnterDelay={0.2}
+      mouseLeaveDelay={0}
+      overlayClassName={globalClassName}
       placement={placement}
-      {...props}
+      title={text}
+      {...testAttributes}
+      {...rest}
     />
   )
 }
-
-const TooltipViewComponent: FC<TooltipViewProps> = ({
-  cssConfig,
-  rootHashClass,
-  text,
-  testAttributes,
-  ...rest
-}: TooltipViewProps) => {
-  return (
-    <>
-      <AntdTooltip
-        mouseEnterDelay={0.2}
-        mouseLeaveDelay={0}
-        overlayClassName={rootHashClass}
-        title={text}
-        {...testAttributes}
-        {...rest}
-      />
-    </>
-  )
-}
-
-const TooltipView = WithGlobalComponentStyles(
-  TooltipViewComponent,
-  getTooltipGlobalStyles
-)

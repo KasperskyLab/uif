@@ -2,7 +2,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Textbox } from '@src/input'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import MetaData from '../__meta__/meta.json'
@@ -31,6 +31,7 @@ const meta: Meta<LabelProps> = {
     }
   }
 }
+
 export default meta
 
 type Story = StoryObj<LabelProps>

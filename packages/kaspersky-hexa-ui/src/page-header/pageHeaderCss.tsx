@@ -7,6 +7,7 @@ export const pageHeaderCss = css`
   flex-direction: column;
   gap: 8px;
   width: 100%;
+  padding: 24px;
 
   .${prefixClass}-content {
     display: flex;

@@ -1,8 +1,7 @@
 import { SPACES } from '@design-system/theme'
 import { css } from 'styled-components'
 
-import { GridItemProps } from './GridItem'
-import { GridCssProps } from './types'
+import { GridCssProps, GridItemProps } from './types'
 
 const GRID_WIDTH_FIX = '872px'
 const GRID_WIDTH_STRETCH_MAX = '1592px'
@@ -19,7 +18,7 @@ export const gridCss = css<GridCssProps>`
     ? `padding: ${GRID_PADDING};
       box-sizing: content-box;`
     : ''
-  }
+}
   ${({ gridType }) => {
     switch (gridType) {
       case 'fix':

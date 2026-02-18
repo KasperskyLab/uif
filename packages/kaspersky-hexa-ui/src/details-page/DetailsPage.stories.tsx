@@ -3,7 +3,7 @@ import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Button } from '@src/button'
 import { Toggle } from '@src/toggle'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 
 import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
@@ -16,6 +16,7 @@ const meta: Meta<DetailsPageProps> = {
   title: 'Hexa UI Components/DetailsPage',
   component: DetailsPage,
   argTypes: {
+    onChange: {},
     ...sbHideControls(['theme', 'navigation', 'customButtons'])
   },
   args: {
@@ -23,6 +24,7 @@ const meta: Meta<DetailsPageProps> = {
     klId: 'details-page-kl-id'
   },
   parameters: {
+    actions: { argTypesRegex: '^(on.*)' },
     badges: [badges.stable, badges.missingDesign],
     docs: {
       page: withMeta(MetaData)
@@ -161,5 +163,13 @@ export const WithoutNavigation: Story = {
   args: {
     navigation: undefined,
     children: 'Content'
+  }
+}
+
+export const WithDefaultActiveKey: Story = {
+  render: (args: DetailsPageProps) => <DetailsPageWithButton {...args} />,
+  args: {
+    defaultActiveKey: 'tab-1',
+    actions: undefined
   }
 }

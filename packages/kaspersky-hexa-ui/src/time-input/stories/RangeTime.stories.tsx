@@ -1,12 +1,13 @@
 import { badges } from '@sb/badges'
 import { Space } from '@src/space'
 import { H6 } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import { RangeTimeInput } from '../RangeTimeInput'
 import { TimeInput } from '../TimeInput'
-import { TimeInputProps } from '../types'
+import { timeFormat, TimeInputProps } from '../types'
 
 const disableArg = {
   table: {
@@ -18,8 +19,10 @@ const meta: Meta<TimeInputProps> = {
   title: 'Hexa UI Components/Inputs/DateRanges',
   component: TimeInput,
   argTypes: {
-    format: disableArg,
-    placeholder: disableArg,
+    format: {
+      control: { type: 'radio' },
+      options: timeFormat
+    },
     theme: disableArg,
     value: disableArg,
     onChange: disableArg,
@@ -49,16 +52,28 @@ const Wrapper = styled.div`
   width: 300px;
 `
 
-export const RangeTime: StoryObj<TimeInputProps> = {
+export const RangeTimeComposition: StoryObj<TimeInputProps> = {
   render: (args) => {
     const [firstTime, setFirstTime] = useState<string>()
     const [secondTime, setSecondTime] = useState<string>()
     return <>
       <H6>Range time picker is composition of 2 TimeInputs</H6>
       <Space gap={4} direction="horizontal" wrap="nowrap">
-        <TimeInput {...args} value={firstTime} onChange={setFirstTime} format="HH:mm:ss" placeholder="00:00:00" />
-        – <TimeInput {...args} value={secondTime} onChange={setSecondTime} format="HH:mm:ss" placeholder="00:00:00" />
+        <TimeInput {...args} value={firstTime} onChange={setFirstTime} format="HH:mm:ss" placeholder="__:__:__" />
+        – <TimeInput {...args} value={secondTime} onChange={setSecondTime} format="HH:mm:ss" placeholder="__:__:__" />
       </Space>
     </>
+  }
+}
+
+export const RangeTime: StoryObj<TimeInputProps> = {
+  args: {
+    testId: 'time-input',
+    format: 'HH:mm:ss'
+  },
+  render: (args) => {
+    const [firstTime, setFirstTime] = useState<string>()
+    const [secondTime, setSecondTime] = useState<string>()
+    return <RangeTimeInput {...args} valueStart={firstTime} valueEnd={secondTime} onChangeStart={setFirstTime} onChangeEnd={setSecondTime} />
   }
 }

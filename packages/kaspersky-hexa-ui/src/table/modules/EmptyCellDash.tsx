@@ -1,12 +1,12 @@
+import { Text } from '@src/typography'
 import React, { useMemo } from 'react'
 
-import { Text } from '@src/typography'
-
-import { TableModule } from './index'
 import { TableRecord } from '../types'
 
+import { TableModule } from './index'
+
 /* Default view of empty cells when hasEmptyCellDash true */
-const EmptyDashComponent = () => <Text className="hexa-ui-empty-dash-cell" >&#x2014;</Text>
+const EmptyDashComponent = () => <Text className="hexa-ui-empty-dash-cell" data-hexa-empty-dash>&#x2014;</Text>
 
 export const EmptyCellDash: TableModule = Component => ({ columns = [], ...props }) => {
   const processedColumns = useMemo(() => columns.map((col) => {

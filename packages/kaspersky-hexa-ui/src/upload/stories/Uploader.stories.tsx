@@ -2,12 +2,12 @@ import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { badges } from '@sb/badges'
 import { withDesignControls } from '@sb/components/designControls'
 import { withMeta } from '@sb/components/Meta'
-import { renderVariants } from '@sb/StoryComponents'
 import { StyledTag } from '@sb/components/Warnings'
+import { renderVariants } from '@sb/StoryComponents'
 import { Button } from '@src/button'
 import { SectionMessage } from '@src/section-message'
 import { P, Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
@@ -88,17 +88,14 @@ const meta: Meta<UploaderProps> = {
         description: 'Maximum 8 files, total size up to 320MB',
         customRequest,
         maxCount: 8,
-        maxTotalSize: 320 * 1000,
+        maxTotalSize: 320 * 1024,
         testId: 'upload-test-id',
         klId: 'upload-kl-id'
       },
       parameters: {
         actions: { argTypesRegex: '^(on.*|action)' },
         badges: [badges.stable, badges.reviewedByDesign],
-        controls: {
-          exclude: /(componentId|componentType|dataTestId|theme)/
-        },
-        design: MetaData.figmaView,
+        design: MetaData.pixsoView,
         docs: {
           page: withMeta(MetaData)
         }
@@ -243,6 +240,65 @@ function Container ({ children, style, ...props }: any) {
       {children}
     </div>
   )
+}
+
+export const ControlOverFileList: StoryObj<UploaderProps> = {
+  render: ({ fileList, ...args }) => {
+    const [files, setFiles] = React.useState<UploadFile[] | undefined>(fileList)
+
+    return (
+      <div style={{ width: '100%' }}>
+        <SectionMessage closable={false} mode="info">
+          <P>
+            You can gain full control over the file list if needed. Enable <StyledTag>manual</StyledTag>
+            and pass the necessary data to <StyledTag>fileList</StyledTag> prop. You may want it if you need
+            <ul style={{ marginBottom: 0 }}>
+              <li>to display data previously got from backend;</li>
+              <li>a custom handler to upload the selected files.</li>
+            </ul>
+          </P>
+          <P>
+            Вы можете самостоятельно управлять списком файлов, если необходимо. Включите <StyledTag>manual</StyledTag>
+            и передайте необходимые данные в проп <StyledTag>fileList</StyledTag>. Это может понадобится,
+            если вам
+            <ul style={{ marginBottom: 0 }}>
+              <li>нужно отобразить данные ранее полученные от бэкенда;</li>
+              <li>нужен кастомный обработчик для загрузки файлов.</li>
+            </ul>
+          </P>
+        </SectionMessage>
+
+        <Uploader
+          {...args}
+          fileList={files}
+          onChange={info => {
+            setFiles(info.fileList)
+            args.onChange?.(info)
+          }}
+          style={{ marginTop: 16 }}
+        />
+      </div>
+    )
+  },
+  args: {
+    fileList: [
+      {
+        uid: 'xxx_1',
+        name: 'file_name_1.png',
+        size: 500 * 1024 * 1024,
+        status: 'success'
+      },
+      {
+        uid: 'xxx_2',
+        name: 'file_name_2.png',
+        percent: 45,
+        size: 150 * 1024,
+        status: 'uploading'
+      }
+    ],
+    manual: true,
+    maxFileSize: 320 * 1024
+  }
 }
 
 export const FullHeight: StoryObj<UploaderProps> = {

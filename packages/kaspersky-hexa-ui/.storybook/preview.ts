@@ -1,36 +1,21 @@
-import { withJsx } from '@mihkeleidast/storybook-addon-source'
-import { Preview } from '@storybook/react'
-// TODO: когда плагин начнет поддерживать восьмой сторибук, тогда и завезем обратно
+import { ThemeKey } from '@design-system/types'
+import { withBadges } from '@sb/decorators/withBadges'
+import { Preview } from '@storybook/react-webpack5'
+
 import { badgesConfig } from './badges'
 import { withI18n } from './decorators/withI18n'
-import { themes } from '@storybook/theming'
 import { withThemeProvider } from './decorators/withThemeProvider'
-import { ThemeKey } from '@design-system/types'
-import '../style/styles.less'
-import { themeColors } from '@design-system/tokens'
-import { withBadges } from '@sb/decorators/withBadges'
 
-import lightThemeLogo from './assets/Hexa_UI_Light.svg'
-import darkThemeLogo from './assets/Hexa_UI_Dark.svg'
+import '../style/styles.less'
 
 export const globalTypes = {
-  theme: {
-    name: 'Theme',
-    descriptions: 'Global theme for components',
-    defaultValue: ThemeKey.Light
-  },
-  version: {
-    name: 'Version',
-    descriptions: 'UI Kit Versions',
-    defaultValue: 'hexa-ui'
-  },
   locale: {
     name: 'Locale',
-    descriptions: 'Localization language',
+    description: 'Localization language',
     toolbar: {
       icon: 'globe',
       items: [
-        { value: 'en-us', title: 'English' },
+        { value: 'en-us', title: 'English', type: 'reset' },
         { value: 'ru-ru', title: 'Русский' },
         { value: 'de-de', title: 'Deutsch' },
         { value: 'ja-jp', title: '日本語' },
@@ -46,35 +31,66 @@ export const globalTypes = {
         { value: 'kk-kz', title: 'Қазақша' },
         { value: 'zh-hans', title: '中文(简体)' },
         { value: 'zh-hant', title: '中文(台灣)' },
-        { value: 'hash-id', title: 'Hash ID' },
-      ],
-      showName: true,
-    },
+        { value: 'hash-id', title: 'Hash ID' }
+      ]
+    }
   },
+  theme: {
+    name: 'Theme',
+    description: 'Global theme for components',
+    toolbar: {
+      title: 'Theme',
+      items: [
+        { value: ThemeKey.Light, title: '𖤓 light', type: 'reset' },
+        { value: ThemeKey.Dark, title: '⏾ dark' }
+      ],
+      dynamicTitle: true
+    }
+  },
+  direction: {
+    name: 'Direction',
+    description: 'Text direction (RTL/LTR)',
+    toolbar: {
+      icon: 'transfer',
+      items: [
+        { value: 'ltr', title: 'LTR', type: 'reset' },
+        { value: 'rtl', title: 'RTL' }
+      ]
+    }
+  }
 }
 
 const preview: Preview = {
   decorators: [
-    withJsx,
     withI18n,
     withThemeProvider,
     withBadges
   ],
   parameters: {
-    darkMode: {
-      light: { ...themes.light, appBg: themeColors.bg.base.light, brandImage: lightThemeLogo.toString() },
-      dark: { ...themes.dark, appBg: themeColors.bg.base.dark, brandImage: darkThemeLogo.toString() },
+    docs: {
+      codePanel: true,
+      source: { language: 'tsx' }
     },
     controls: {
-      exclude: /(componentType|componentId|dataTestId|theme)/,
+      exclude: /(componentType|componentId|dataTestId|klId|theme)/,
       expanded: true,
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/
-      }
+      },
+      sort: 'alpha'
     },
-    // TODO: когда плагин начнет поддерживать восьмой сторибук, тогда и завезем обратно
-    badgesConfig
+    badgesConfig,
+    options: {
+      storySort: {
+        method: 'alphabetical',
+        order: ['Intro', 'Changelog']
+      }
+    }
+  },
+  initialGlobals: {
+    theme: ThemeKey.Light,
+    direction: 'ltr'
   },
   tags: ['autodocs']
 }

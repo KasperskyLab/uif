@@ -2,7 +2,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { SBArgType, sbHideControls } from '@sb/helpers'
 import { Space } from '@src/space'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import { productColors } from '@kaspersky/hexa-ui-core/colors/js'
@@ -50,7 +50,7 @@ const meta: Meta<TextProps> = {
     docs: {
       page: withMeta(MetaData, TextDocs)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   },
   decorators: [
     (Story, context) => (
@@ -88,7 +88,7 @@ export const Basic: Story = {
 
 export const AllTypes: Story = {
   render: (args: TextProps) => (
-    <Space gap="20" direction="vertical" align="start">
+    <Space gap={20} direction="vertical" align="start">
       {defaultTypes.map(type => (
         <Text key={type} color={args.color} type={type} {...args}>
           {args.storyText},

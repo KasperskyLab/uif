@@ -1,2 +1,8 @@
 export * from './Button'
-export type { ButtonMode, ButtonProps, ButtonSize } from './types'
+export type {
+  ButtonGroupProps,
+  ButtonMode,
+  ButtonProps,
+  ButtonSize,
+  SplitButtonProps
+} from './types'

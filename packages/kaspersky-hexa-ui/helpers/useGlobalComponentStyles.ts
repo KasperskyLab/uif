@@ -9,7 +9,7 @@ export function getDisplayName (Component: React.ComponentType): string {
 export function useGlobalComponentStyles<T extends Record<string, any>> (
   cssConfig: T,
   getComponentStyles: (cssConfig: T, rootHashClass: string, extraProps?: any) => string,
-  Component: React.ComponentType,
+  Component: React.ComponentType<any>,
   extraProps?: any
 ): string {
   const displayName = getDisplayName(Component)

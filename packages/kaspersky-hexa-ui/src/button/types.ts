@@ -1,47 +1,26 @@
-import { Focus } from '@design-system/tokens/focus'
 import { Size, Theme } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingProps } from '@helpers/typesHelpers'
+import { DropdownProps } from '@src/dropdown'
 import { ButtonGroupProps as AntdButtonGroupProps } from 'antd/es/button'
 import { ButtonHTMLType } from 'antd/es/button/button'
 import { MouseEventHandler, ReactNode } from 'react'
-
-import { TextSizes } from '@kaspersky/hexa-ui-core/typography/js'
-
-export type ButtonToViewProps<T> = ToViewProps<T, ButtonCssConfig, BaseThemedButtonProps>
 
 export const buttonModes = [
   'primary',
   'secondary',
   'tertiary',
   'dangerFilled',
-  'dangerOutlined'
+  'dangerOutlined',
+  'ai'
 ] as const
 
 export type ButtonMode = typeof buttonModes[number]
 
+export const splitButtonModes = ['primary', 'secondary', 'dangerFilled'] as const
+
+export type SplitButtonMode = typeof splitButtonModes[number]
+
 export type ButtonSize = `${Exclude<Size, Size.ExtraSmall>}`
-
-export type ButtonSizeConfig = TextSizes & {
-  padding: string,
-  height: string,
-  borderRadius: string,
-  minWidth: string
-}
-
-type StateProps = {
-  background?: string,
-  color?: string,
-  border?: string
-}
-
-export type ButtonColorConfig = Focus & {
-  enabled?: StateProps,
-  hover?: StateProps,
-  active?: StateProps,
-  disabled?: StateProps
-}
-
-export type ButtonCssConfig = ButtonColorConfig & ButtonSizeConfig
 
 export type BaseThemedButtonProps = {
   /** Size */
@@ -53,6 +32,8 @@ export type BaseThemedButtonProps = {
 }
 
 export type ButtonProps = BaseThemedButtonProps & {
+  /** Element id */
+  id?: string;
   /** Disabled state */
   disabled?: boolean,
   /** Loading state */
@@ -76,9 +57,16 @@ export type ButtonProps = BaseThemedButtonProps & {
   style?: React.CSSProperties
 } & TestingProps
 
-export type ButtonViewProps = ButtonToViewProps<ButtonProps>
-
 export type ButtonGroupProps = AntdButtonGroupProps & {
   /** React children */
   children?: ReactNode
 } & TestingProps
+
+export type SplitButtonProps = Omit<ButtonProps, 'size' | 'mode' | 'iconAfter' | 'isPressed'> & {
+  /** Color mode */
+  mode?: SplitButtonMode,
+  /** Dropdown overlay */
+  items: DropdownProps['overlay'],
+  /** Dropdown items */
+  dropdownPlacement?: DropdownProps['placement']
+}

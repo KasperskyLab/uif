@@ -1,4 +1,4 @@
-import { CardColorConfig, CardSize, CardMode, CardSizeConfig } from '@src/card/types'
+import { CardColorConfig, CardMode, CardSize, CardSizeConfig } from '@src/card/types'
 
 export const card = (): Record<CardMode, CardColorConfig> => ({
   base: {

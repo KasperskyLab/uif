@@ -6,7 +6,7 @@ import { QuickFilterProps } from '@src/quick-filter'
 import { SectionMessage } from '@src/section-message'
 import { Space } from '@src/space'
 import { P } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import MetaData from '../__meta__/meta.json'
@@ -42,8 +42,8 @@ export const QuickFilter: Story = {
   render: (args) => (
     <Space gap={16} direction="vertical" align="start">
       <SectionMessage closable={false} mode="info">
-        <P>If labelPosition equals to &apos;top&apos;, it is recommended to replace Toggle with Segmented button.</P>
-        <P>Если лейблы расположены сверху, рекомендуется заменить Toggle на Segmented Button.</P>
+        <P>If labelPosition equals to &apos;top&apos;, it is recommended to replace Toggle with Toggle Button Group.</P>
+        <P>Если лейблы расположены сверху, рекомендуется заменить Toggle на Toggle Button Group.</P>
       </SectionMessage>
       <QuickFilterComponent {...args} />
     </Space>

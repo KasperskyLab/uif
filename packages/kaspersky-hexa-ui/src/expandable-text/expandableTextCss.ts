@@ -25,7 +25,7 @@ export const expandableTextCss = css<StyledTextProps>`
     transform: ${props => props.expanded ? 'rotate(180deg)' : ''};
     visibility: ${props => props.clipped ? '' : 'hidden'};
     position: absolute;
-    top: 2px;
+    top: 4px;
     right: 0;
   }
 

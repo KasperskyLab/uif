@@ -16,7 +16,7 @@ export const ScheduleLegend: FC<ScheduleLegendProps> = ({ cssConfig, legend }: S
         <Dot cssConfig={cssConfig} selected={true} />
         <Text type="BTR4" themedColor="primary">
         - {legend.selected}
-      </Text>
+        </Text>
       </LegendItem>
       <LegendItem>
         <Dot cssConfig={cssConfig} />

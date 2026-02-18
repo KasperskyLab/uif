@@ -10,14 +10,36 @@ import { TableModule } from './index'
 
 const StyledIconContainer = styled.span`
   display: inline-block;
-  margin-left: 6px;
+  margin-right: 2px;
   cursor: pointer;
   text-align: center;
 `
 
-export const StyledTableContainer = styled.div<{ hasSelectionColumn: boolean }>`
+export const StyledTableContainer = styled.div<{ hasSelectionColumn: boolean, $previewTableWidth?: number }>`
+  .table-height-full & {
+    display: flex;
+    flex: 1;
+  }
   .ant-table .ant-table-tbody > tr > td:first-child {
     padding-left: 12px;
+  }
+
+  &:has(.row-dragging-container:not(:empty)) .table-draggable {
+    user-select: none;
+
+    .drag-handle {
+      visibility: hidden;
+    }
+  }
+
+  .ant-table-placeholder > .ant-table-cell > .hexa-ui-placeholder {
+    ${({ $previewTableWidth }) => $previewTableWidth && $previewTableWidth > 0 && `width: ${$previewTableWidth}px;`}
+    position: sticky;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-height: 200px;
   }
 
   ${({ hasSelectionColumn }) => {
@@ -31,24 +53,22 @@ export const StyledTableContainer = styled.div<{ hasSelectionColumn: boolean }>`
         position: relative;
 
         &.ant-table-cell-with-append:has(.table-row-has-expandable) {
-          display: flex;
+          direction: rtl;
           
           .ant-checkbox-wrapper, .ant-radio-wrapper {
-            order: 0;
-            margin-left: 4px;
-          }
-          .ant-table-row-indent {
-            order: 1;
+            direction: ltr;
           }
           .kl-components-expandable-icon {
-            order: 2;
+            direction: ltr;
+            margin-right: -14px;
+            margin-left: 6px;
           }
         }
       }
 
       ${Array
-        .from({ length: 100 })
-        .map((_, index) => `
+    .from({ length: 100 })
+    .map((_, index) => `
           .ant-table-row-level-${index} td:nth-child(1) > .kl-components-expandable-icon {
             position: relative;
             transform: translateX(${index * 16}px);
@@ -59,7 +79,7 @@ export const StyledTableContainer = styled.div<{ hasSelectionColumn: boolean }>`
             padding-left: ${8 + index * 16}px !important;
           }
         `)
-      }
+}
       `
     }
   }}
@@ -83,16 +103,16 @@ export const defaultExpandConfig: ITableProps['expandable'] = {
   )
 }
 
-export function checkRows (rows: TableRecord) {
-  return rows.some(({ children }: { children?: TableRecord }) => Array.isArray(children))
+export function checkExpandableRows (rows: TableRecord[]) {
+  return rows.some(({ children }) => Array.isArray(children))
 }
 
-export const ExpandableRows: TableModule = Component => props => {
+export const ExpandableRows: TableModule = Component => function ExpandableRowsModule (props) {
   const { dataSource: rows = [], rowSelection, expandable = {} } = props
-  const [hasChildren, setHasChildren] = useState(checkRows(rows))
+  const [hasChildren, setHasChildren] = useState(checkExpandableRows(rows))
   useEffect(() => {
     const { dataSource: rows = [] } = props
-    setHasChildren(checkRows(rows))
+    setHasChildren(checkExpandableRows(rows))
   }, [props.dataSource])
 
   if (hasChildren) {

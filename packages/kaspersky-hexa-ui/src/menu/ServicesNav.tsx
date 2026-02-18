@@ -2,8 +2,9 @@ import styled from 'styled-components'
 
 export const ServicesNav = styled.div`
   display: flex;
+  gap: var(--inner--dependent, 4px);
   margin: 0 16px;
-  color: var(--menu_v1_item--text--unselected--base);
+  color: var(--menu_item--icon--enabled);
   font-size: 14px;
 
   .ant-layout-sider-collapsed & {

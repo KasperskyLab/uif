@@ -1,10 +1,10 @@
+import { generateId } from '@helpers/generateId'
 import { showDeprecationWarn } from '@helpers/showDeprecationWarn'
 import { ActionButton, ActionButtonMode } from '@src/action-button'
 import { notification } from 'antd'
 import React from 'react'
-import { v4 as uuidv4 } from 'uuid'
 
-import { StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
+import { Kira, StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
 
 import { Description } from './notificationCss'
 import { NotificationApiParams, NotificationMode, NotificationModeArray, NotificationProps } from './types'
@@ -12,24 +12,26 @@ import { NotificationApiParams, NotificationMode, NotificationModeArray, Notific
 const DEFAULT_DURATION = 5
 
 export type NotificationApiFullParams = string | NotificationApiParams
-export const defaultContainerId = uuidv4()
+export const defaultContainerId = generateId()
 
 const IconInfoMap: { [key in NotificationMode]: React.FC } = {
   error: () => <StatusDangerOutline1 data-component-id="icon-error" />,
   warning: () => <StatusWarningOutline data-component-id="icon-warning" />,
   success: () => <StatusOkOutline data-component-id="icon-success" />,
-  info: () => <StatusInfoOutline data-component-id="icon-info" />
+  info: () => <StatusInfoOutline data-component-id="icon-info" />,
+  ai: () => <Kira data-component-id="icon-ai" />
 }
 
 const IconCloseMap: { [key in NotificationMode]: React.FC } = {
   error: () => <ActionButton size="large" mode="ghostInverted" />,
   warning: () => <ActionButton size="large" mode="onLight" />,
   success: () => <ActionButton size="large" mode="ghostInverted" />,
-  info: () => <ActionButton size="large" mode="ghostInverted" />
+  info: () => <ActionButton size="large" mode="ghostInverted" />,
+  ai: () => <ActionButton size="large" mode="ghostInverted" />
 }
 
 const openNotificationInstance: any = (config: NotificationProps) => {
-  const key = config.key || uuidv4()
+  const key = config.key || generateId()
 
   let notDeprecatedMode = config.mode
   if (!NotificationModeArray.includes(config.mode)) {
@@ -42,13 +44,16 @@ const openNotificationInstance: any = (config: NotificationProps) => {
   const IconInfoComponent = IconInfoMap[notDeprecatedMode as NotificationMode]
   const IconCloseComponent = IconCloseMap[notDeprecatedMode as NotificationMode]
   const DescriptionComponent = <Description data-toasttype={notDeprecatedMode}>
-    {config.description}
+    <span className="toast-text">
+      {config.description}
+    </span>
     {config.actionButton &&
       <ActionButton
         onClick={config.actionButton?.onClick}
         mode={actionButtonMode}
         size="large"
         className="toast-action-button"
+        noIcon
       >
         {config.actionButton.title}
       </ActionButton>
@@ -57,7 +62,7 @@ const openNotificationInstance: any = (config: NotificationProps) => {
 
   notification.open({
     message: '',
-    duration: config.duration || DEFAULT_DURATION,
+    duration: config.duration ?? DEFAULT_DURATION,
     description: DescriptionComponent,
     getContainer: () => document.getElementById(config.id ? config.id : defaultContainerId)!,
     closeIcon: <IconCloseComponent />,

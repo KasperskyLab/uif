@@ -1,9 +1,9 @@
-import { useThemedComponent } from '@helpers/useThemedComponent'
+import { useComponentCssConfig } from '@design-system/css-configs/helpers/useComponentCssConfig'
 
 import { CheckboxCssConfig, CheckboxProps, CheckboxThemeProps, CheckboxViewProps } from './types'
 
 export const useThemedCheckbox = (props: CheckboxProps): CheckboxViewProps => (
-  useThemedComponent<CheckboxProps, CheckboxCssConfig, CheckboxThemeProps>({ ...props, mode: undefined }, {
+  useComponentCssConfig<CheckboxProps, CheckboxCssConfig, CheckboxThemeProps>({ ...props, mode: undefined }, {
     componentName: 'checkbox',
     defaultValues: {}
   })

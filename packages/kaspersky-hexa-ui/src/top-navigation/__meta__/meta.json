@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "TopNavigation",
+  "description": "Компонент отображает верхнюю панель с дополнительными элементами навигации и управления.",
+  "usage": "Верхняя панель, область навигации приложения.",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=150290%3A242302",
+  "pixsoView": "https://pixso.net/app/design/2bWwHdeKsp8ReARjo09IHw"
+}

@@ -1,9 +1,12 @@
 import { Theme } from '@design-system/types'
 import { ToViewProps } from '@helpers/typesHelpers'
-import { TooltipPropsWithTitle } from 'antd/es/tooltip'
+
+import { TooltipPropsWithTitle } from './AntdTooltip'
 
 export type TooltipCssConfig = {
   background: string,
+  boxShadow: string,
+  boxShadowLine: string,
   color: string
 }
 
@@ -21,4 +24,4 @@ export type TooltipProps = Omit<TooltipPropsWithTitle, 'placement' | 'title'> & 
   text: TooltipPropsWithTitle['title']
 }
 
-export type TooltipViewProps = ToViewProps<TooltipProps, TooltipCssConfig, TooltipThemeProps> & { rootHashClass?: string }
+export type TooltipViewProps = ToViewProps<TooltipProps, TooltipCssConfig, TooltipThemeProps>

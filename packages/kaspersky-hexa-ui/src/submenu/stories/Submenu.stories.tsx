@@ -1,12 +1,17 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
+import { ControllableActiveKeyInfo } from '@sb/components/Warnings'
 import { sbHideControls } from '@sb/helpers'
 import { Button } from '@src/button'
+import { Notification } from '@src/notification'
+import { SectionMessage } from '@src/section-message'
 import { Sidebar } from '@src/sidebar'
+import { Space } from '@src/space'
 import { Tag } from '@src/tag'
 import { Toggle } from '@src/toggle'
-import { Meta, StoryObj } from '@storybook/react'
+import { P } from '@src/typography'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
@@ -17,7 +22,7 @@ import MetaData from '../__meta__/meta.json'
 import { Submenu as SubmenuComponent } from '../Submenu'
 import { BadgeNotificationMode, IndicatorNotificationMode, RowProps, SubmenuItemProps, SubmenuProps } from '../types'
 
-import { mockedItems } from './mocks'
+import { mockedItems, mockedItemsWithoutContent } from './mocks'
 
 const meta: Meta<SubmenuProps> = {
   title: 'Hexa UI Components/Submenu',
@@ -30,7 +35,7 @@ const meta: Meta<SubmenuProps> = {
     collapseOnTextClick: true,
     elementBefore: 'Element before',
     elementAfter: 'Element after',
-    activeKey: 'row-1-2',
+    defaultActiveKey: 'row-1-2',
     testId: 'submenu-test-id',
     klId: 'submenu-kl-id',
     items: mockedItems
@@ -40,7 +45,7 @@ const meta: Meta<SubmenuProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta
@@ -57,21 +62,49 @@ const StyledSidebarWithSubmenu = styled(Sidebar)`
   }
 `
 
-export const Submenu: Story = {
+const SubmenuDefaultStory = (args: SubmenuProps) => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <>
+      <Button onClick={() => setIsOpen(true)}>Open</Button>
+      <StyledSidebarWithSubmenu
+        title="Sidebar"
+        visible={isOpen}
+        onClose={() => setIsOpen(!isOpen)}
+      >
+        <SubmenuComponent {...args} />
+      </StyledSidebarWithSubmenu>
+    </>
+  )
+}
+
+export const Submenu = {
+  render: SubmenuDefaultStory.bind({})
+}
+
+export const SubmenuControllableActiveKey: Story = {
   render: (args) => {
     const [isOpen, setIsOpen] = useState(false)
+    const [activeKey, setActiveKey] = useState('row-4-1')
+
+    const handleActiveKeyChange = (key: string) => {
+      console.log('new active key is', key)
+      setActiveKey(key)
+    }
 
     return (
-      <>
+      <Space gap="separated" direction="vertical" align="start">
+        <ControllableActiveKeyInfo />
         <Button onClick={() => setIsOpen(true)}>Open</Button>
         <StyledSidebarWithSubmenu
           title="Sidebar"
           visible={isOpen}
           onClose={() => setIsOpen(!isOpen)}
         >
-          <SubmenuComponent {...args} />
+          <SubmenuComponent {...args} activeKey={activeKey} onChange={handleActiveKeyChange} />
         </StyledSidebarWithSubmenu>
-      </>
+      </Space>
     )
   }
 }
@@ -288,6 +321,33 @@ export const SubmenuTitle: TitleStory = {
       exclude: /(items|activeKey|defaultActiveKey|onChange|collapseOnTextClick|truncateText|theme|componentType|dataTestId|componentId|elementBefore|elementAfter|testId|klId)/
     }
   }
+}
+
+const submenuInfoWithoutContentEn=`This story demonstrates the use of Submenu without embedded content.
+
+The product can fully control the rendering of tab contents:
+- If the SubmenuRow element does not have the content property, the component renders only the menu item.
+- Inside the onClick prop, the product can render its own content or perform another action (for example, show a modal window, etc.).
+`
+
+const submenuInfoWithoutContentRu=`Данный пример стори демонстрирует использование Submenu без встроенного контента.
+
+Продукт может полностью управлять отрисовкой содержимого вкладок:
+- Если у элемента SubmenuRow отсутствует свойство content, компонент рендерит только пункт меню.
+- Внутри пропа onClick продукт может отрисовать собственный контент или выполнить другое действие (например, показать модальное окно и т.д.).
+`
+
+export const SubmenuWithoutContent: Story = {
+  render: () => (
+    <Space gap="separated" direction="vertical" align="start">
+      <SectionMessage closable={false} mode="info">
+        <P>{submenuInfoWithoutContentEn}</P>
+        <P>{submenuInfoWithoutContentRu}</P>
+      </SectionMessage>
+      <Notification />
+      <SubmenuComponent items={mockedItemsWithoutContent} />
+    </Space>
+  )
 }
 
 type PaletteStory = StoryObj<ThemedPaletteProps>

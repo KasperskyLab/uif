@@ -1,7 +1,14 @@
 import { Search } from '@src/search'
-import { SearchProps } from '@src/search/types'
+import { useTableContext } from '@src/table'
+import { Toolbar } from '@src/toolbar'
 import Mark from 'mark.js'
-import React, { Key, ReactElement, SetStateAction, useState } from 'react'
+import React, {
+  Key,
+  ReactElement,
+  SetStateAction,
+  useEffect,
+  useState
+} from 'react'
 
 import { extractText } from '../../helpers/common'
 import { TableRecord } from '../../types'
@@ -36,8 +43,10 @@ interface ISearchModuleProps {
   setExpandedRowKeys: (val: SetStateAction<Key[]>) => void,
   dataSource?: readonly TableRecord[],
   onSearch?: (searchString: string) => void,
+  onClientSearch?: (searchString: string, row: TableRecord, index: number) => boolean,
   columns?: any[],
   tableContainer?: HTMLDivElement | null,
+  collapsibleSearch?: boolean,
   enableSearchHighlighting?: boolean
 }
 
@@ -46,8 +55,10 @@ const SearchModule = ({
   setExpandedRowKeys,
   dataSource = [],
   onSearch,
+  onClientSearch,
   columns,
   tableContainer,
+  collapsibleSearch = false,
   enableSearchHighlighting
 }: ISearchModuleProps): ReactElement => {
   const [searchValue, setSearchValue] = useState('')
@@ -86,6 +97,11 @@ const SearchModule = ({
     const valueToSearch = value ?? searchValue
     if (onSearch) {
       onSearch(valueToSearch)
+      return
+    }
+
+    if (onClientSearch) {
+      setFilteredRows(dataSource.filter((row, index) => onClientSearch(valueToSearch, row, index)))
       return
     }
 
@@ -137,19 +153,30 @@ const SearchModule = ({
     setFilteredRows(filteredRows)
   }
 
+  const { updateContext, pagination, useV3TestId } = useTableContext()
+
+  useEffect(() => {
+    updateContext({ searchValue })
+  }, [searchValue])
+
   const onClearClick = () => {
     setSearchValue('')
     filterValues('')
   }
 
-  return <Search
-    testId="table-search"
-    klId="table-search"
-    value={searchValue}
-    onChange={setSearchValue as SearchProps['onChange']}
-    onPressEnter={() => filterValues()}
-    onClearClick={onClearClick}
-  />
+  const SearchToRender = collapsibleSearch ? Toolbar.CollapsibleSearch : Search
+
+  return (
+    <SearchToRender
+      testId="table-search"
+      klId="table-search"
+      value={searchValue}
+      onChange={setSearchValue}
+      onPressEnter={!pagination.useDataSourceFunction ? () => filterValues() : undefined}
+      onClearClick={onClearClick}
+      searchIconTestId={useV3TestId ? 'toggle-table-search' : undefined}
+    />
+  )
 }
 
 export {

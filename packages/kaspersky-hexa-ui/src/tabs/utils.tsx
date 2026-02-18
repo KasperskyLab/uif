@@ -1,21 +1,22 @@
+import { generateId } from '@helpers/generateId'
+import { Tabs as AntdTabs } from 'antd'
 import React, {
   Children,
+  FC,
   isValidElement,
   ReactElement,
   ReactNode
 } from 'react'
-import { v4 as uuidv4 } from 'uuid'
 
-import { GroupTabHeader, Tabs } from './Tabs'
 import { StyledDivider, StyledText } from './tabsCss'
 import { TabPaneHeaderProps } from './types'
 
-export const createGroupTabPane = (props: TabPaneHeaderProps): JSX.Element => {
+const createGroupTabPane = (props: TabPaneHeaderProps): JSX.Element => {
   const { divider, dividerClassName, title, children, ...restProps } = props
-  const uniqueKey = uuidv4()
-  const tabKey = props.tabKey || uniqueKey
+  const tabKey = props.tabKey || generateId()
+
   return (
-    <Tabs.TabPane
+    <AntdTabs.TabPane
       key={tabKey}
       {...restProps}
       tab={
@@ -36,6 +37,8 @@ export const createGroupTabPane = (props: TabPaneHeaderProps): JSX.Element => {
   )
 }
 
+export const GroupTabHeader: FC<TabPaneHeaderProps> = (props: TabPaneHeaderProps) => createGroupTabPane(props)
+
 export const extractTabPanes = (children: ReactNode): ReactElement[] => {
   const result: ReactElement[] = []
   Children.forEach(children, (child) => {
@@ -48,4 +51,11 @@ export const extractTabPanes = (children: ReactNode): ReactElement[] => {
     }
   })
   return result
+}
+
+export function extractChildrenFromFragment (variableToInspect: any): ReactElement[] {
+  if (variableToInspect?.type && variableToInspect.type === React.Fragment) {
+    return extractChildrenFromFragment(variableToInspect.props.children)
+  }
+  return variableToInspect
 }

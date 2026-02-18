@@ -1,8 +1,9 @@
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
+import { TableTreeInfo } from '@sb/components/Warnings'
 import { Link } from '@src/link'
 import MetaData from '@src/table/__meta__/meta.json'
-import { Meta } from '@storybook/react'
+import { Meta } from '@storybook/react-webpack5'
 import React, { useEffect, useState } from 'react'
 
 import { ITableProps, Table } from '../index'
@@ -63,12 +64,30 @@ const meta: Meta<ITableProps> = {
     controls: {
       exclude: ['columns']
     }
-  }
+  },
+  tags: ['!autodocs']
 }
 export default meta
 
 export const Tree: Story = {
-  render: BasicTableStory.bind({})
+  render: (args) => {
+    return <>
+      <TableTreeInfo />
+      <BasicTableStory {...args} />
+    </>
+  }
+}
+
+export const TreeWithoutRowSelectionColumn: Story = {
+  render: (args) => (
+    <>
+      <TableTreeInfo />
+      <BasicTableStory {...args} />
+    </>
+  ),
+  args: {
+    rowSelection: undefined
+  }
 }
 
 const treeWithLinks = {

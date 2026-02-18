@@ -7,11 +7,11 @@
     "migration": false,
     "apiTable": false,
     "storybook": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Card",
   "description": "Компонент Card — это компонент, предназначенный для группировки связанного контента или действий.",
   "usage": "Карточка помогает организовать информацию, выделить её на фоне остального контента, и показать на какие элементы интерфейса распространяются возможности настройки или редактирования.",
-  "designLink": "https://www.figma.com/design/AoJnoMzhmX4M2V7CGaoVsw/Card?node-id=6001-2700&t=p7J2flMnfdQIejTv-4",
-  "figmaView": "https://embed.figma.com/design/AoJnoMzhmX4M2V7CGaoVsw/Card?node-id=0-1&embed-host=share"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=98007%3A285970",
+  "pixsoView": "https://pixso.net/app/design/Nh-gabA5flR-UqNiiMDMgw"
 }

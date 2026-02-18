@@ -1,5 +1,6 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { ActionButton } from '@src/action-button'
+import { Markdown } from '@src/markdown'
 import { Popover } from '@src/popover'
 import { Tag } from '@src/tag'
 import { Text } from '@src/typography'
@@ -33,9 +34,12 @@ const FormLabelView: FC<FormLabelViewProps> = ({
   tooltip,
   tagsAfter = [],
   testAttributes,
+  getPopupContainer,
+  popoverPlacement,
   popoverWidth,
   ...props
 }: FormLabelViewProps) => {
+  const getParentNode = (trigger: HTMLElement) => trigger.parentElement as HTMLElement
   return (
     <StyledFormLabel
       {...props}
@@ -51,7 +55,12 @@ const FormLabelView: FC<FormLabelViewProps> = ({
         </Text>
       )}
       {tooltip && (
-        <Popover content={tooltip} width={popoverWidth}>
+        <Popover
+          content={typeof tooltip === 'string' ? <Markdown withoutTextStyle={true} value={tooltip} /> : tooltip}
+          getPopupContainer={getPopupContainer || getParentNode}
+          placement={popoverPlacement}
+          width={popoverWidth}
+        >
           <ActionButton
             mode="ghost"
             size="large"

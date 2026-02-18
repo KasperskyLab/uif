@@ -12,6 +12,7 @@ import { Menu3, StatusInfoOutline } from '@kaspersky/hexa-ui-icons/16'
 
 import { segmentedControlCss } from './segmentedControlCss'
 import {
+  SegmentedContentProperties,
   SegmentedControlItemClickProps,
   SegmentedControlItemProps,
   SegmentedControlProps,
@@ -80,13 +81,15 @@ export const SegmentedControlView = ({
   className,
   cssConfig,
   badgeSize,
+  defaultActiveTab,
   ...props
 }: SegmentedControlViewProps) => {
+  const initialActiveTab = defaultActiveTab ? tabsData.find(tab => tab.name === defaultActiveTab) : tabsData[0]
+
   const { testAttributes } = useTestAttribute(props)
-  const [{ name: defaultTab, content: defaultContent }] = tabsData
-  const [activeTab, setActiveTab] = useState<string | undefined>(defaultTab)
-  const [activeContent, setActiveContent] = useState<string | undefined>(defaultContent)
-  const [properties, setProperties] = useState<Record<string, unknown>>()
+  const [activeTab, setActiveTab] = useState<string | undefined>(initialActiveTab?.name)
+  const [activeContent, setActiveContent] = useState<string | undefined>(initialActiveTab?.content)
+  const [properties, setProperties] = useState<SegmentedContentProperties | undefined>(initialActiveTab?.properties)
   const [expanderItems, setExpanderItems] = useState<SegmentedControlItemProps[]>([])
 
   const tabClickHandler = ({ name, content, properties }: SegmentedControlItemClickProps) => {
@@ -113,19 +116,28 @@ export const SegmentedControlView = ({
             name,
             content,
             properties,
+            onClick,
             ...rest
-          }: SegmentedControlItemProps) => (
-            <SegmentedControlItem
-              key={`tab_key_${name}`}
-              badgeSize={badgeSize}
-              role="tab"
-              className={cn({ active: activeTab === name })}
-              onClick={() => tabClickHandler({ name, content, properties })}
-              name={name}
-              content={content}
-              {...rest}
-            />
-          ))
+          }: SegmentedControlItemProps) => {
+
+            const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+              tabClickHandler({ name, content, properties })
+              onClick?.(event)
+            }
+
+            return (
+              <SegmentedControlItem
+                key={`tab_key_${name}`}
+                badgeSize={badgeSize}
+                role="tab"
+                className={cn({ active: activeTab === name })}
+                onClick={handleClick}
+                name={name}
+                content={content}
+                {...rest}
+              />
+            )
+          })
         }
         {
           Boolean(dropdownItems?.length) && <div className="kl6-segmented-control-expander">

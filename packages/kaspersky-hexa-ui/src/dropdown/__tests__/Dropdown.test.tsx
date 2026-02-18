@@ -22,9 +22,11 @@ const overlay = [
     )
   },
   {
+    testId: 'second-item',
     children: <Button>2nd menu item</Button>
   },
   {
+    testId: 'third-item',
     children: <Text type="BTR3">3rd menu item</Text>,
     disabled: true
   }
@@ -128,6 +130,16 @@ describe('Dropdown', () => {
     render(<DefaultDropdown />)
     await getDropdownAfterAction('click')
     expect(document.body.childElementCount).toEqual(bodyChildrenCount)
+  })
+
+  test('should receive qa props for menu items', async () => {
+    render(<DefaultDropdown visible />)
+    await getDropdownAfterAction('click')
+    overlay.forEach(item => {
+      if (item.testId) {
+        expect(document.querySelector(`[data-testid="${item.testId}"]`)).toBeInTheDocument()
+      }
+    })
   })
 
   // Codium AI

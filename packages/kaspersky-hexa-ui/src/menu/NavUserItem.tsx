@@ -7,15 +7,15 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 
 import { productColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { StatusNoThreatSolid, StatusOkSolid, ITestIds } from '@kaspersky/hexa-ui-icons/16'
+import { ITestIds, StatusNoThreatSolid, StatusOkSolid } from '@kaspersky/hexa-ui-icons/16'
 
-import { AppThemeContext } from './Menu'
+import { MenuContext } from './Menu'
 import { navItemCss } from './navCss'
 import { MenuViewProps, NavItemProps, UserStatus } from './types'
 import { useThemedMenu } from './useThemedMenu'
 
 export const NavUserItem = (rawProps: NavItemProps): JSX.Element => {
-  const applyAppTheme = useContext(AppThemeContext)
+  const { applyAppTheme } = useContext(MenuContext)
   const themedProps: MenuViewProps = useThemedMenu({ ...rawProps, applyAppTheme })
   const props = useTestAttribute(themedProps)
   return <StyledNavUserItem {...props} {...rawProps}/>
@@ -44,22 +44,32 @@ const NavUserItemComponent = ({
   className,
   menuState
 }: NavItemProps) => {
+  const { setMenuActiveItem } = useContext(MenuContext)
   const localizedUserStatus = userStatus && useLocalization(`menu.navUserItem.userProps.status.${userStatus}`)
   const StatusIcon = getStatusIcon(userStatus, theme)
-
   const NavItemIcon = StatusIcon || icon
+  const {
+    updateNavState,
+    minimized,
+    collapseAll
+  } = menuState
 
   const itemClick = () => {
-    menuState.updateNavState({ activateItem: state })
-    menuState.setActive(state)
+    updateNavState({ activateItem: state })
+    setMenuActiveItem && setMenuActiveItem(state as string)
     onClick && onClick()
-    menuState.minimized && menuState.collapseAll()
+    minimized && collapseAll()
   }
 
   return (
     <div className={cn(className, 'uif-nav-item')}>
-      <div className={cn(className, 'uif-nav-item-entry', 'uif-nav-item-user', active && 'active')} onClick={itemClick}>
-        <Tooltip text={!menuState.minimized && localizedUserStatus} theme={theme}>
+      <div className={cn(
+        className,
+        'uif-nav-item-entry',
+        'uif-nav-item-user',
+        { active }
+      )} onClick={itemClick}>
+        <Tooltip text={minimized && localizedUserStatus} theme={theme} placement="right">
           { icon && <div className="uif-nav-item-entry-icon">
             <NavItemIcon testId="userIconStatus" klId="userIconStatus" />
           </div> }

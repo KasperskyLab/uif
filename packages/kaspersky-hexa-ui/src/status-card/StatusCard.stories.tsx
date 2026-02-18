@@ -4,7 +4,7 @@ import { withMeta } from '@sb/components/Meta'
 import { renderVariants } from '@sb/StoryComponents'
 import { Link } from '@src/link'
 import { Tag } from '@src/tag'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import MetaData from './__meta__/meta.json'
@@ -82,7 +82,7 @@ const meta: Meta<StatusCardProps> = {
         docs: {
           page: withMeta(MetaData)
         },
-        design: MetaData.figmaView
+        design: MetaData.pixsoView
       }
     }
   })
@@ -120,7 +120,6 @@ export const Mode: Story = {
             mode={mode}
             actions={actions ? defaultActions : undefined}
             description={description ? <DefaultDescription /> : undefined}
-            key={mode}
           >
             {children ? <DefaultChildren /> : null}
           </StatusCardComponent>
@@ -147,7 +146,6 @@ export const Size: Story = {
             size={size}
             actions={actions ? defaultActions : undefined}
             description={description ? <DefaultDescription /> : undefined}
-            key={size}
           >
             {children ? <DefaultChildren /> : null}
           </StatusCardComponent>

@@ -1,10 +1,9 @@
+import { Button } from '@src/button'
 import { Dropdown } from '@src/dropdown'
 import { Locale } from '@src/locale'
 import React, { Key, ReactElement } from 'react'
 
 import { ArrowDown1 } from '@kaspersky/hexa-ui-icons/16'
-
-import { StyledMoreButton } from './tabsCss'
 
 type TabsDropdownProps = {
   tabs: ReactElement[],
@@ -34,13 +33,13 @@ export const TabsDropdown = ({
         }
       })}
     >
-      <StyledMoreButton
+      <Button
         className="kl6-tabs-more-button"
         mode="tertiary"
         iconAfter={<ArrowDown1 />}
       >
         <Locale localizationKey="tabs.dropdown.more" />
-      </StyledMoreButton>
+      </Button>
     </Dropdown>
   )
 }

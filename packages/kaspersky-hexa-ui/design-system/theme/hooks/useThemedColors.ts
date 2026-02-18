@@ -1,6 +1,7 @@
-import { useTheme } from './useTheme'
 import { themeColors } from '../../tokens/palette'
 import { Theme } from '../../types'
+
+import { useTheme } from './useTheme'
 
 export type ThemedColors = {
   [ElementOrFixedColor in keyof typeof themeColors]: typeof themeColors[ElementOrFixedColor] extends string

@@ -1,10 +1,10 @@
-import { ThemeKey } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { Theme } from '@design-system/types'
+import { TestingProps } from '@helpers/typesHelpers'
 import React from 'react'
 
 export type TenantFilterThemeProps = {
   /** Custom theme */
-  theme?: ThemeKey
+  theme?: Theme
 }
 
 export type ProcessedTreeDataItem = Omit<TenantFilterTreeDataItem, 'title' | 'key' | 'children'> & {
@@ -53,12 +53,6 @@ export type TenantFilterProps = TenantFilterThemeProps & TenantFilterData & {
   /** Whether to show icon */
   withIcon?: boolean
 } & TestingProps
-
-export type TenantFilterViewProps = ToViewProps<TenantFilterProps, TenantFilterCssConfig>
-
-export type TenantFilterCssConfig = {
-  highlight: string
-}
 
 export type TenantFilterTreeDataMap = Map<TenantFilterTreeDataItem['key'], TenantFilterTreeDataMapItem>
 

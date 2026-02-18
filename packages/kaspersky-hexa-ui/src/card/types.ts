@@ -1,7 +1,7 @@
 import { Theme } from '@design-system/types'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 import { CheckboxProps } from '@src/checkbox'
-import { IconProps } from '@src/icon'
+import { IconResolverProps } from '@src/icon'
 import { RadioProps } from '@src/radio'
 import { ToggleProps } from '@src/toggle'
 import { TextProps } from '@src/typography'
@@ -30,6 +30,8 @@ export type CardSize = 'small' | 'medium' | 'large'
 
 export type CardMode = 'filled' | 'base' | 'selected'
 
+export type CardTitleSize = 'small' | 'medium'
+
 export type CardThemeProps = {
   /** Custom theme */
   theme?: Theme,
@@ -43,7 +45,7 @@ type TitleElement = ({ component: 'toggle' } & ToggleProps) | ({ component: 'rad
 
 export type ElementBefore = TitleElement
   | ({ component: 'checkbox' } & CheckboxProps)
-  | ({ component: 'icon' } & IconProps)
+  | ({ component: 'icon' } & IconResolverProps)
 
 export type ElementAfter = TitleElement | ({ component: 'text' } & TextProps)
 
@@ -55,6 +57,7 @@ type CardAction = {
 
 export type CardTitleProps = {
   value: string,
+  size?: CardTitleSize,
   elementBefore?: ElementBefore,
   elementAfter?: ElementAfter
 }

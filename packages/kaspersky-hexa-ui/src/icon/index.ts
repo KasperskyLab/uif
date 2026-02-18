@@ -1,2 +1,3 @@
 export * from './Icon'
-export type { IconProps, IconSizes } from './types'
+export type { DeprecatedIconSizes as IconSizes, IconPackSizes, IconProps, IconResolverProps, IconNames } from './types'
+export { IconResolver } from './IconResolver'

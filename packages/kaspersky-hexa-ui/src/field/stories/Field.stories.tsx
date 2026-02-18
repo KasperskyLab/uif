@@ -1,7 +1,10 @@
 import { LabelType } from '@design-system/tokens'
 import { badges } from '@sb/badges'
+import { FieldWithCustomLabelInfo } from '@sb/components/Warnings'
+import { withDesignControls } from '@sb/components/designControls'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
+import { Space } from '@src/space'
 import {
   Checkbox,
   Field,
@@ -9,21 +12,32 @@ import {
   Radio,
   SectionMessage,
   SegmentedButton,
+  Text,
   Textbox,
   Toggle
 } from '@src/index'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import MetaData from '../__meta__/meta.json'
-import { FieldProps, LabelPosition } from '../types'
+import { FieldProps, LabelPosition, LayoutPreset } from '../types'
 
 const meta: Meta<FieldProps> = {
   title: 'Hexa UI Components/Field',
   component: Field,
   argTypes: {
-    ...sbHideControls(['theme', 'control'])
+    ...sbHideControls(['theme', 'control']),
+    getPopupContainer: {
+      table: { type: { summary: '(triggerNode: HTMLElement) => HTMLElement' } }
+    },
+    gridPreset: {
+      control: { type: 'select' },
+      options: Object.values(LayoutPreset)
+    },
+    tooltip: {
+      control: 'text'
+    }
   },
   args: {
     labelPosition: 'before',
@@ -58,6 +72,7 @@ export const LabelAdditions: Story = {
   render: (args: FieldProps) => (
     <>
       <Field {...args} description="With tooltip" tooltip="Tooltip text" />
+      <Field {...args} description="With link tooltip" tooltip="Tooltip text with a [link](https://www.kaspersky.ru/)" />
       <Field
         {...args}
         label=""
@@ -85,38 +100,41 @@ export const LabelPositions: Story = {
 }
 
 export const Description: Story = {
-  render: (args: FieldProps) => (
-    <>
-      <Field {...args} description="Some description" />
-      <Field {...args} control={<Toggle>Label</Toggle>} description="Some description"/>
-      <Field {...args} control={<Checkbox>Label</Checkbox>} description="Some description"/>
-      <SectionMessage mode="warning" title="Исключение">
-        Для Radio/Checkbox.Group не может быть общего описания, только описание на уровне конкретных айтемов внутри этой группы
-      </SectionMessage>
-      <Field
-        {...args}
-        control={
-          <Checkbox.Group options={[
-            { label: 'Checkbox 1', value: '1' },
-            { label: 'Checkbox 2', value: '2' },
-            { label: 'Checkbox 3', value: '3', description: 'Some description' },
-            { label: 'Checkbox 4', value: '4' }
-          ]}/>
-        }
-      />
-      <Field
-        {...args}
-        control={
-          <Radio vertical={true} options={[
-            { label: 'Radio 1', value: '1' },
-            { label: 'Radio 2', value: '2', description: 'Some description' },
-            { label: 'Radio 3', value: '3', description: 'Some description' },
-            { label: 'Radio 4', value: '4' }
-          ]}/>
-        }
-      />
-    </>
-  )
+  render: (args: FieldProps) => {
+    return (
+      <>
+        <Field {...args} description="Some description" />
+        <Field {...args} description="Some description with a [link](https://www.kaspersky.ru/)" />
+        <Field {...args} control={<Toggle>Label</Toggle>} description="Some description" />
+        <Field {...args} control={<Checkbox>Label</Checkbox>} description="Some description" />
+        <SectionMessage mode="warning" title="Исключение">
+          Для Radio/Checkbox.Group не может быть общего описания, только описание на уровне конкретных айтемов внутри этой группы
+        </SectionMessage>
+        <Field
+          {...args}
+          control={
+            <Checkbox.Group options={[
+              { label: 'Checkbox 1', value: '1' },
+              { label: 'Checkbox 2', value: '2' },
+              { label: 'Checkbox 3', value: '3', description: 'Some description' },
+              { label: 'Checkbox 4', value: '4' }
+            ]} />
+          }
+        />
+        <Field
+          {...args}
+          control={
+            <Radio vertical={true} options={[
+              { label: 'Radio 1', value: '1' },
+              { label: 'Radio 2', value: '2', description: 'Some description' },
+              { label: 'Radio 3', value: '3', description: 'Some description' },
+              { label: 'Radio 4', value: '4' }
+            ]} />
+          }
+        />
+      </>
+    )
+  }
 }
 
 export const Validation: Story = {
@@ -142,7 +160,7 @@ export const Validation: Story = {
               value: item,
               invalid: true
             }))
-          }/>
+          } />
         }
       />
       <Field
@@ -165,7 +183,11 @@ export const Validation: Story = {
     </>
   ),
   args: {
-    message: 'Validation text'
+    message: `Validation text example
+- Password must have:
+- At least 8 characters
+- At least 1 uppercase letter
+- At least 1 number or symbol`
   }
 }
 
@@ -178,7 +200,7 @@ export const Disabled: Story = {
         <Toggle onChange={setIsDisabled}>
           {isDisabled.toString()}
         </Toggle>
-        <Field {...args} control={<Textbox disabled={isDisabled} />}/>
+        <Field {...args} control={<Textbox disabled={isDisabled} />} />
       </FieldsContainer>
     )
   }
@@ -205,23 +227,23 @@ const LabelTypeGroup = ({ controlWidth, ...args }: FieldProps) => {
       <Field
         {...args}
         label="Basic label"
-        control={<Textbox value="min-width: 200px"/>}
+        control={<Textbox value="min-width: 200px" />}
       />
       <Field
         {...args}
         label={longLabel}
-        control={<Textbox value="min-width: 200px"/>}
+        control={<Textbox value="min-width: 200px" />}
       />
       <Field
         {...args}
         label="Basic label"
-        control={<Textbox value={`${controlWidth}px`}/>}
+        control={<Textbox value={`${controlWidth}px`} />}
         controlWidth={controlWidth}
       />
       <Field
         {...args}
         label={longLabel}
-        control={<Textbox value={`${controlWidth}px`}/>}
+        control={<Textbox value={`${controlWidth}px`} />}
         controlWidth={controlWidth}
       />
     </FieldsContainer>
@@ -243,4 +265,25 @@ export const GridLayout: Story = {
   args: {
     gridLayout: { firstCol: '123px', secondCol: '456px' }
   }
+}
+
+export const CustomLabel: Story = {
+  render: (args: FieldProps) => (
+    <>
+      <Space gap="separated" direction="vertical">
+        <FieldWithCustomLabelInfo />
+        <Field
+          {...args}
+          label={
+            <>
+              <Text type="BTR3" color="secondary">First line</Text>
+              <Text type="BTR4" color="secondary"><br />Second line</Text>
+            </>
+          }
+          control={<Textbox />}
+        />
+      </Space>
+    </>
+
+  )
 }

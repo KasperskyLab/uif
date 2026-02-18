@@ -1,6 +1,6 @@
 import { badges } from '@sb/badges'
 import { StoryColumn } from '@sb/StoryComponents'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
@@ -30,7 +30,7 @@ const meta: Meta<TagReductionGroupProps> = {
   },
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   },
   decorators: [
     (Story, context) => <div style={{ width: 400 }}><Story {...context}/></div>

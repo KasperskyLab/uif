@@ -7,11 +7,11 @@
     "migration": false,
     "apiTable": true,
     "storybook": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Accordion",
-  "description": "Компонент аккордеона. В качестве основы используется AntdCollapse из библиотеки Antd.\n\nВ заголовке аккордеона можно включать дополнительные элементы: tagBefore, indicator, tagAfter, additionalText. Каждый из них включается независимо, можно включить один или сразу несколько.",
-  "usage": "Элемент, при нажатии на который раскрывается или закрывается скрытый блок.",
-  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-UI-KIT?node-id=8415%3A35985&t=pu93diqHGcFyGjdG-0",
-  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7TGvGlgGfTltMG1OBgLq8p%2F00-%255BB2B%255D-Hexa-UI-Kit%3Ftype%3Ddesign%26node-id%3D8415%253A35985%26mode%3Ddev"
+  "description": "Компонент аккордеона. В качестве основы используется Collapse из библиотеки rc-collapse.\n\nВ заголовке аккордеона можно включать дополнительные элементы: tagBefore, indicator, tagAfter, additionalText. Каждый из них включается независимо, можно включить один или сразу несколько.",
+  "usage": "Компонент Accordion используется для группировки связанного контента, который можно разворачивать и сворачивать. В тело аккордеона можно помещать любой контент (текст / форму и т. д.).",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=8415%3A35985",
+  "pixsoView": "https://pixso.net/app/design/YvaWvrS3oaOTkwbdXGoF4Q?page-id=0%3A1"
 }

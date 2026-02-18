@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "TextDiff",
+  "description": "",
+  "usage": "Компонент TextDiff отображает различия между двумя текстовыми значениями, выделяя добавленные, удалённые и изменённые фрагменты. ",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=147666%3A320808",
+  "pixsoView": "https://pixso.net/app/design/qs-kMW-Up7rNo1Mioc4UOQ"
+}

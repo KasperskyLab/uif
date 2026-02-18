@@ -1,7 +1,7 @@
-import { useMemo } from 'react'
 import { useTheme } from '@design-system/theme/hooks'
 import { Theme, ThemeConfig } from '@design-system/types'
 import smartMerge from '@helpers/smartMerge'
+import { useMemo } from 'react'
 
 type ComponentThemeConfig = {
   colors: any,

@@ -1,6 +1,8 @@
 import { Focus } from '@design-system/tokens/focus'
 import { SizingType, ThemeKey } from '@design-system/types'
 import { TestingProps, ToViewProps, ValidationStatus } from '@helpers/typesHelpers'
+import { ButtonProps } from '@src/button'
+import { IconNames } from '@src/icon'
 import { Input, InputNumber as AntdInputNumber } from 'antd'
 import { ComponentProps, FC, FocusEventHandler, PropsWithChildren, ReactNode, RefObject } from 'react'
 import { IMaskInputProps } from 'react-imask'
@@ -51,7 +53,7 @@ export type TextboxClassNamedProps = {
 // Helping
 type BaseTextboxProps = TextboxClassNamedProps & TestingProps & TextboxThemedProps
 
-type TypesToOmit = 'onChange' | 'value' | 'defaultValue'| 'onInput' | 'size' | 'disabled' | 'readOnly' | 'className'
+type TypesToOmit = 'onChange' | 'value' | 'defaultValue'| 'onInput' | 'size' | 'disabled' | 'readOnly' | 'className' | 'addonBefore' | 'addonAfter'
 
 export type TextboxToViewProps<T> = ToViewProps<T, InputCssConfig, TextboxThemedProps>
 
@@ -64,9 +66,7 @@ export type TextboxProps = PropsWithChildren<Omit<ComponentProps<typeof Input>, 
   onBlur?: FocusEventHandler
 } & BaseTextboxProps>
 
-export type TextboxMappedProps = TextboxProps
-
-export type TextboxViewProps = TextboxToViewProps<TextboxMappedProps>
+export type TextboxViewProps = TextboxToViewProps<TextboxProps>
 
 export type TextboxVariants = {
   Textarea: FC<TextboxTextareaProps>,
@@ -83,10 +83,6 @@ export type TextboxMaskedProps = Omit<TextboxProps, 'maskOptions'> & {
   maskOptions?: IMaskInputProps
 }
 
-export type TextboxMaskedMappedProps = TextboxMaskedProps
-
-export type TextboxMaskedViewProps = TextboxToViewProps<TextboxMaskedMappedProps>
-
 export type MaskedStyledInputType = {
   inputRef:
     | ((instance: HTMLInputElement | null) => void)
@@ -101,6 +97,14 @@ export type MaskedStyledInputType = {
   validationStatus?: ValidationStatus
 }
 
+// Password validation rules
+export type ValidationRule = {
+  /** Description text of the validation rule */
+  message: string,
+  /** Indicates whether the value satisfies the rule */
+  isValid: boolean
+}
+
 // Textbox.Password
 export type TextboxPasswordProps = Omit<ComponentProps<typeof Input.Password>, TypesToOmit> & {
   /** Handler */
@@ -108,12 +112,23 @@ export type TextboxPasswordProps = Omit<ComponentProps<typeof Input.Password>, T
   /** Controlled Value */
   value?: string,
   /** Clear value before first change */
-  clearBeforeFirstChange?: boolean
-} & Omit<BaseTextboxProps, 'readOnly'>
-
-export type TextboxPasswordMappedProps = TextboxPasswordProps
-
-export type TextboxPasswordViewProps = TextboxToViewProps<TextboxPasswordMappedProps>
+  clearBeforeFirstChange?: boolean,
+  /** Validation rules */
+  validationRules?: ValidationRule[],
+  /** Show visibility icon */
+  showVisibilityIcon?: boolean,
+  /** actions displayed after input password */
+  actions?: Array<{
+    /** Tooltip text */
+    tooltip?: string,
+    /** Icon name for the action */
+    icon?: IconNames,
+    /** Button mode */
+    mode?: ButtonProps['mode'],
+    /** Handler called when the action button is clicked */
+    onClick?: () => void
+  }>
+} & BaseTextboxProps
 
 // Textbox.Number
 export type TextboxNumberProps = Omit<ComponentProps<typeof AntdInputNumber>, TypesToOmit | 'controls'> & {
@@ -124,15 +139,15 @@ export type TextboxNumberProps = Omit<ComponentProps<typeof AntdInputNumber>, Ty
     upIcon?: ReactNode,
     downIcon?: ReactNode
   },
+  /** Allow input of integers only */
+  integerOnly?: boolean
   /** Allow input have not the value  */
   allowEmpty?: boolean,
   /** Controlled Value */
-  value?: number | ''
+  value?: number | string,
+  /** The min value */
+  min?: number
 } & BaseTextboxProps
-
-export type TextboxNumberMappedProps = TextboxNumberProps
-
-export type TextboxNumberViewProps = TextboxToViewProps<TextboxNumberMappedProps>
 
 // Textbox.Textarea
 export type TextboxTextareaProps = Omit<
@@ -148,10 +163,6 @@ export type TextboxTextareaProps = Omit<
   /** Controlled Value */
   value?: string
 } & BaseTextboxProps
-
-export type TextboxTextareaMappedProps = TextboxTextareaProps
-
-export type TextboxTextareaViewProps = TextboxToViewProps<TextboxTextareaMappedProps>
 
 /** @deprecated */
 export interface IUrlInputProps extends Omit<TextboxProps, 'onChange' | 'size' | 'maskOptions'> {

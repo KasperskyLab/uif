@@ -3,7 +3,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls, sbSetDefaultValue } from '@sb/helpers'
 import { Space } from '@src/space'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import MetaData from '../__meta__/meta.json'

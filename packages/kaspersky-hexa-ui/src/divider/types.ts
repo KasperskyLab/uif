@@ -3,7 +3,7 @@ import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 
 export type DividerToViewProps<T> = ToViewProps<T, DividerCssConfig, DividerStyleProps>
 
-export type DividerMode = 'normal' | 'light' | 'bold' | 'onLight' | 'inverted'
+export type DividerMode = 'bold' | 'light' | 'onLightStatic' | 'inverted'
 
 export type DividerDirection = 'horizontal' | 'vertical'
 
@@ -15,16 +15,16 @@ export type DividerCssConfig = DividerColorConfig
 
 export type DividerStyleProps = {
   /** Custom theme */
-  theme?: Theme,
-  /** Color mode */
-  mode?: DividerMode
+  theme?: Theme
 }
 
 export type DividerProps = DividerStyleProps & {
   /** Custom class name */
   className?: string,
   /** Direction */
-  direction?: DividerDirection
+  direction?: DividerDirection,
+  /** Color mode */
+  mode?: DividerMode
 } & TestingProps
 
 export type DividerViewProps = DividerToViewProps<DividerProps>

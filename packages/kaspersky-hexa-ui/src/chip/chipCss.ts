@@ -30,7 +30,8 @@ export const chipCss = css<{
   cursor: default;
   border: none;
   outline: none;
-
+  max-width: 100%;
+  
   .ant-tag-close-icon {
     margin: 0;
     display: flex;

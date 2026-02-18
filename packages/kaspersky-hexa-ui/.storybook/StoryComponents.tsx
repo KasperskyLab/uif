@@ -47,7 +47,7 @@ export const StoryLabel: FC<StoryProps & { label: string }> = (props) => (
     horizontalGap={16}
     verticalGap={8}
     verticalWidth="100%"
-    horizontalWidth={props.horizontalWidth || "100px"}
+    horizontalWidth={props.horizontalWidth || '100px'}
     justifyContent="end"
   >
     <FormLabel mode="secondary" style={{ alignSelf: 'center' }}>{props.label}</FormLabel>
@@ -55,13 +55,17 @@ export const StoryLabel: FC<StoryProps & { label: string }> = (props) => (
   </StoryBlock>
 )
 
-export function renderVariants(variants: Array<{ label: string, content: React.ReactNode }>, vertical?: boolean) {
+export function renderVariants (
+  variants: Array<{ label: string, content: React.ReactNode }>,
+  vertical?: boolean,
+  labelSize: 'small' | 'medium' = 'small'
+) {
   if (vertical) {
     return (
       <StoryWrapper vertical horizontalWidth="100%">
         {variants.map(variant => (
           <StoryComponentContainer key={variant.label} horizontalWidth="100%">
-            <StoryLabel label={variant.label} />
+            <StoryLabel label={variant.label} horizontalWidth={labelSize === 'medium' ? '160px' : '100px'} />
             {variant.content}
           </StoryComponentContainer>
         ))}
@@ -73,7 +77,7 @@ export function renderVariants(variants: Array<{ label: string, content: React.R
     <StoryWrapper>
       {variants.map(variant => (
         <StoryComponentContainer key={variant.label} vertical>
-          <StoryLabel label={variant.label} vertical />
+          <StoryLabel label={variant.label} vertical horizontalWidth={labelSize === 'medium' ? '160px' : '100px'} />
           {variant.content}
         </StoryComponentContainer>
       ))}

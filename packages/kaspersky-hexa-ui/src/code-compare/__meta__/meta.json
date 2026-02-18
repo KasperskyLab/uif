@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "Code compare",
+  "description": "В качестве основы используется библиотека react-diff-view.",
+  "usage": "Code compare — компонент для визуального сравнения двух версий кода, конфигурационных файлов или данных.",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=139590%3A185264",
+  "pixsoView": "https://pixso.net/app/design/R2Ql8OtW_o3hdoS3U6zQiQ"
+}

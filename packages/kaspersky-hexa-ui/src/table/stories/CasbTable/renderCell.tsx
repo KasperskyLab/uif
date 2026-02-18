@@ -1,3 +1,4 @@
+import { Tag } from '@src/tag'
 import React from 'react'
 
 import { AccessSelect, GroupAccess, LoadMore, RiskLevel } from './components'
@@ -31,7 +32,28 @@ export const renderCell = (data: TData) => {
       return {
         children: <LoadMore />,
         props: {
-          colSpan: 3
+          colSpan: 4
+        }
+      }
+    case ECellType.TAGS:
+      return {
+        children: (
+          <Tag.Group
+            items={data.tags.map((tag, idx) => (
+              <Tag
+                testId={`tag-${idx}`}
+                size="small"
+                key={tag}
+                outlined
+              >
+                {tag}
+              </Tag>
+            ))}
+          />
+        ),
+        props: {
+          colSpan: 2,
+          align: 'left'
         }
       }
     default:

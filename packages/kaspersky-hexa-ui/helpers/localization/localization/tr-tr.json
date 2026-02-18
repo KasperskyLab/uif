@@ -3,7 +3,10 @@
     "common": {
       "empty": "Veri yok",
       "import": "İçe aktar",
-      "export": "Dışa aktar"
+      "export": "Dışa aktar",
+      "filters": "Filtreler",
+      "no": "Hayır",
+      "yes": "Evet"
     },
     "upload": {
       "dropFileTitle": "Dosyayı buraya bırakın",
@@ -20,7 +23,7 @@
       "successTitle": "Yükleme başarılı",
       "successDescription": "{{file, fileName}} sunucuya başarıyla yüklendi",
       "errorTitle": "Yükleme hatası",
-      "errorDescription": "{{file, fileName}} bağlantı hatası nedeniyle yüklenemedi"
+      "errorDescription": "{{file, fileName}}, bağlantı hatası nedeniyle yüklenemiyor"
     },
     "uploader": {
       "actions": {
@@ -36,9 +39,9 @@
         "endingMultiple": "veya buraya sürükleyip bırakın",
         "endingSingle": "veya buraya sürükleyip bırakın"
       },
-      "maxCountUploaded": "Yüklenen dosyaların maksimum sayısı",
+      "maxCountUploaded": "Maksimum sayıda dosya yüklendi",
       "progress": "{{progress}}/{{size}}",
-      "showFiles": "Dosyaları göster",
+      "showFiles": "Dosyaları görüntüle",
       "total": {
         "files": "{{filesCount}}/{{total}} dosya",
         "simple": "{{filesCount}} dosya",
@@ -46,10 +49,23 @@
       },
       "validation": {
         "maxCount": "Maksimum dosya sınırını aştığından {{count}} dosya yüklenemiyor.",
+        "maxCount2": "Yüklenen dosyaların toplam sayısı izin verilen limiti aşıyor",
         "maxFileSize": "İzin verilen boyutu aştığından {{count}} dosya yüklenemiyor.",
+        "maxFileSize2": "Daha önce yüklenen dosyalardan bazıları şu anda izin verilen boyut limitini aşıyor",
         "maxTotalSize": "İzin verilen toplam boyutu aştığından {{count}} dosya yüklenemiyor.",
+        "maxTotalSize2": "Yüklenen tüm dosyaların toplam boyutu şu anda izin verilen boyutu aşıyor",
+        "filesDoNotMeetRequirements": "Dosyalar, gereklilikleri karşılamıyor",
         "format": "Biçim gereksinimleri nedeniyle {{count}} dosya yüklenemiyor."
       }
+    },
+    "wizard": {
+      "actions": {
+        "cancel": "İptal",
+        "back": "Geri",
+        "next": "İleri",
+        "finish": "Son"
+      },
+      "stepStack": "Adım {{currentStep}}/{{totalSteps}}"
     },
     "severity": {
       "critical": "Kritik",
@@ -71,22 +87,13 @@
       "total": "Toplam {{count}}",
       "selected": "Seçilen {{count}}",
       "page": "sayfa",
-      "goto": "Şuraya git:"
+      "goto": "Şuraya git"
     },
     "search": {
       "raw": "Ara",
       "dotted": "Ara..."
     },
     "table": {
-      "column": {
-        "name": "İlk sütun"
-      },
-      "column2": {
-        "name": "İkinci sütun"
-      },
-      "column3": {
-        "name": "Üçüncü sütun"
-      },
       "columnDropdown": {
         "ascending": "Artan",
         "descending": "Azalan",
@@ -95,7 +102,7 @@
         "resetFilters": "Filtreyi sıfırla"
       },
       "columnsSettings": {
-        "header": "Sütun ayarları",
+        "header": "Tablo ayarları",
         "selectAll": "Tümünü seç",
         "columns": "Sütunlar",
         "grouping": "Gruplama",
@@ -103,6 +110,16 @@
         "noGrouping": "Gruplama yok",
         "apply": "Uygula",
         "cancel": "İptal",
+        "columnTitles": {
+        "name": "Ad",
+        "country": "Ülke",
+        "age": "Yaş",
+        "city": "Şehir",
+        "date": "Tarih",
+        "isSortable": "Sıralanabilir",
+        "sorter": "Sıralayıcı",
+        "sorterIsSortable": "Sıralama yapılabilir"
+        },
         "filtering": {
           "add": "Ekle",
           "clearAll": "Tümünü temizle",
@@ -111,7 +128,28 @@
           "from": "başlangıç",
           "to": "-",
           "value": "Değer"
-        }
+        },
+        "columnHideIsUnavailable": "Sütunlar gizlenememektedir"
+      },
+      "filterOperation": {
+        "⊆": "İçerir",
+        "⊄": "İçermez",
+        "cont_and": "İçeren (VE)",
+        "cont_or": "İçeren (VEYA)",
+        "ncont_or": "İçermez",
+        "*=": "Regexp",
+        "empty": "Boş",
+        "nempty": "Boş değil",
+        "range": "Dahilinde",
+        "nrange": "Dışında"
+      },
+      "filterTag": {
+        "⊆": "{{value}} içeren",
+        "⊄": "{{value}} içermeyen",
+        "empty": "boş",
+        "nempty": "boş değil",
+        "range": "{{from}}–{{to}} dahilinde",
+        "nrange": "{{from}}–{{to}} dışında"
       },
       "groupingEmpty": "Diğer"
     },
@@ -125,11 +163,57 @@
     },
     "actionBar": {
       "unsavedChanges": "Bekleyen değişiklikler",
-      "save": "Kaydet",
+      "save": "Uygula",
       "cancel": "İptal"
     },
     "textarea": {
       "wordsCount": "{{count}}/{{total}}"
+    },
+    "menu": {
+      "favoritesNavItem": "Yer işaretleri",
+      "navUserItem": {
+        "userProps": {
+          "status": {
+            "available": "Kullanılabilir",
+            "unavailable": "Kullanılamıyor"
+          }
+        }
+      }
+    },
+    "expand": {
+      "toExpand": "Genişlet",
+      "toCollapse": "Daralt"
+    },
+    "codeCompare": {
+      "compareMode": "Karşılaştırma modu",
+      "unified": "Birleştirilmiş",
+      "split": "Ayrılmış",
+      "loader": "Karşılaştırma için versiyonlar indiriliyor...",
+      "totalChanges": "Değişiklikler toplamı:",
+      "collapseAll": "Tümünü daralt",
+      "expandAll": "Tümünü genişlet",
+      "expandLines": "{{count}} satırı genişlet",
+      "empty": "Her iki dosya da boş. Karşılaştırma yapılması mümkün değil.",
+      "noChanges": "Versiyonlar arasında bir değişiklik bulunamadı",
+      "basicVersion": "Temel versiyon",
+      "comparableVersion": "Karşılaştırılabilir versiyon"
+    },
+    "licenseCard": {
+      "status": "Lisans anahtarı durumu",
+      "number": "Lisans anahtarı numarası",
+      "remaining": "Kalan",
+      "activationDate": "Etkinleştirme tarihi",
+      "expirationDate": "Sona erme tarihi",
+      "term": "Süre",
+      "dayLeft": "{{count}} gün kaldı",
+      "daysLeft": "{{count}} gün kaldı",
+      "termDays": "{{count}} gün"
+    },
+    "input": {
+      "password": {
+        "hide": "Gizle",
+        "show": "Göster"
+      }
     }
   }
 }

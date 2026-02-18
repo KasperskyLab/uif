@@ -1,4 +1,4 @@
-import { Addon_ArgType } from '@storybook/types'
+import { Addon_ArgType } from 'storybook/internal/types'
 
 export const sbSetDefaultValue = (text: string) => ({
   table: { defaultValue: { summary: text } }
@@ -33,7 +33,7 @@ export function sbFixArrayArgs<T extends Record<string, any>> (args: T, arrayKey
 
 export function sbMergeActions<T extends Record<string, any>> (args: T, actions: Partial<T>): T {
   const out = { ...args }
-  
+
   for (const key in actions) {
     const addonAction = out[key]
     const action = actions[key]

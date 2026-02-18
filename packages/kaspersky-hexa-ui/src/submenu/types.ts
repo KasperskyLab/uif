@@ -1,26 +1,9 @@
-import { Focus } from '@design-system/tokens/focus'
 import { Theme } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingAttributes, TestingProps } from '@helpers/typesHelpers'
 import { ActionButtonProps } from '@src/action-button'
 import { BadgeMode, BadgeProps } from '@src/badge'
 import { IndicatorMode } from '@src/indicator'
 import { ReactNode } from 'react'
-
-type StateConfig = {
-  color?: string,
-  border?: string,
-  icon?: string,
-  background?: string
-}
-
-type SubmenuRowStateConfig = Record<'enabled' | 'hover' | 'active' | 'disabled', StateConfig>
-
-export type SubmenuColorConfig = StateConfig & {
-  title: StateConfig,
-  row: Focus & Record<'unselected' | 'selected', SubmenuRowStateConfig>
-}
-
-export type SubmenuCssConfig = SubmenuColorConfig
 
 export type SubmenuThemeProps = {
   /** Custom theme */
@@ -47,23 +30,32 @@ export type RowProps = {
   type: 'row',
   key: string,
   text: string,
-  content: ReactNode,
+  description?: string, 
+  content?: ReactNode,
   contentClassName?: string,
   disabled?: boolean,
   draggable?: boolean,
   iconBefore?: ReactNode,
   elementAfter?: ReactNode,
+  hoverElementAfter?: ReactNode,
   notification?: BadgeNotification | IndicatorNotification,
   action?: ActionProps,
-  children?: RowProps[]
-}
+  children?: RowProps[],
+  /** Callback triggered when a submenu row is clicked 
+   * Useful when the product wants to fully control click behavior
+   * to display custom content.
+   * 
+   * If callback returns false - it prevents the default submenu activation
+  */
+  onClick?: (key: string, row?: RowProps) => boolean | void | Promise<boolean | void>
+} & TestingProps
 
 export type TitleProps = {
   type: 'title',
   key: string,
   text: string,
   action?: ActionProps
-}
+} & TestingProps
 
 export type DividerProps = {
   type: 'divider'
@@ -76,6 +68,8 @@ export type SubmenuItemType = 'row' | 'title' | 'divider'
 export type SubmenuProps = SubmenuThemeProps & TestingProps & {
   /** Array of submenu items */
   items: SubmenuItemProps[],
+  /** Initial submenu item key, if activeKey is not set */
+  defaultActiveKey?: string,
   /** Current submenu item key */
   activeKey?: string,
   /** Callback executed when active submenu item is changed */
@@ -90,12 +84,11 @@ export type SubmenuProps = SubmenuThemeProps & TestingProps & {
   elementAfter?: ReactNode
 }
 
-export type SubmenuViewProps = ToViewProps<SubmenuProps, SubmenuCssConfig, SubmenuThemeProps>
-
 export type LeveledRowProps = RowProps & {
   level?: number,
   opened?: boolean,
   extraLeftPadding?: number,
+  testAttributes?: TestingAttributes,
   children?: LeveledRowProps[]
 }
 
@@ -105,8 +98,7 @@ export type CommonSubComponentProps = {
   truncateText: boolean,
   collapseOnTextClick: boolean,
   activeRowKey?: string,
-  handleActiveRowChange: (row: LeveledRowProps) => void,
-  cssConfig: SubmenuCssConfig
+  handleActiveRowChange: (row: LeveledRowProps) => void
 }
 
 export type RowViewProps = Omit<CommonSubComponentProps, 'activeRowKey' | 'handleActiveRowChange'> & {

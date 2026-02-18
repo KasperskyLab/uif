@@ -1,4 +1,4 @@
-import { useThemedComponent } from '@helpers/useThemedComponent'
+import { useComponentCssConfig } from '@design-system/css-configs/helpers/useComponentCssConfig'
 
 import {
   CodeViewerCssConfig,
@@ -9,7 +9,7 @@ import {
 } from './types'
 
 export const useThemedCodeViewer = <T extends CustomLanguages>(props: CodeViewerProps<T>): CodeViewerViewProps<T> => (
-  useThemedComponent<CodeViewerProps<T>, CodeViewerCssConfig, CodeViewerThemeProps>(props, {
+  useComponentCssConfig<CodeViewerProps<T>, CodeViewerCssConfig, CodeViewerThemeProps>(props, {
     componentName: 'codeViewer',
     defaultValues: {}
   })

@@ -32,7 +32,7 @@ describe('Checkbox', () => {
       <Checkbox
         testId={defaultProps.testId}
         name={defaultProps.name}>
-          <div kl-id="test-react-element" />
+        <div kl-id="test-react-element" />
       </Checkbox>
     )
     expect(screen.getByTestId('test-react-element')).toBeInTheDocument()
@@ -43,7 +43,7 @@ describe('Checkbox', () => {
       <Checkbox
         testId={defaultProps.testId}
         name={defaultProps.name}>
-          <div>{defaultProps.text}</div>
+        <div>{defaultProps.text}</div>
       </Checkbox>
     )
     expect(screen.getByText(defaultProps.text)).toBeInTheDocument()
@@ -138,6 +138,12 @@ describe('Checkbox', () => {
       })
       await waitFor(() => expect(screen.getByText(tooltip)).toBeInTheDocument())
     }
+  })
+
+  test('should render checkbox with label and correct htmlFor attribute', () => {
+    const result = render(<Checkbox {...defaultProps} id="test-checkbox" />)
+    expect(result.getByRole('checkbox')).toHaveAttribute('id', 'test-checkbox')
+    expect(result.getByLabelText(defaultProps.text)).toHaveAttribute('id', 'test-checkbox')
   })
 })
 

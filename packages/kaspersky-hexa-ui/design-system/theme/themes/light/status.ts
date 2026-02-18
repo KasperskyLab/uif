@@ -1,4 +1,4 @@
-import { StatusMode, StatusColorConfig } from '@src/status/types'
+import { StatusColorConfig, StatusMode } from '@src/status/types'
 
 import { ComponentThemeContext } from '../config'
 

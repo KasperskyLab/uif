@@ -23,7 +23,9 @@ export enum ActionsMap {
 
 type ActionConfig = Partial<Record<keyof typeof ActionsMap, ActionType>>
 
-export type DetailsPageProps = Omit<SidebarProps, 'size' | 'footer'> & {
+type DetailsPageTabsProps = Pick<SubmenuProps, 'defaultActiveKey' | 'onChange'>
+
+export type DetailsPageProps = Omit<SidebarProps, 'size' | 'footer'> & DetailsPageTabsProps & {
   navigation?: DetailsPageTabPane[],
   actions?: ActionConfig
 }

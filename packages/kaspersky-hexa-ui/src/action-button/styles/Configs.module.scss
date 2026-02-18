@@ -1,0 +1,42 @@
+$sizes-config: (
+  "ghost": (
+    "small": (
+      "padding": 0,
+      "gap": 2px,
+      "padding_label": 0,
+      "padding_icon": 0
+    ),
+    "medium": (
+      "padding": 0,
+      "gap": 0,
+      "padding_label": 0,
+      "padding_icon": 0
+    ),
+    "large": (
+      "padding": 0,
+      "gap": 4px,
+      "padding_label": 0,
+      "padding_icon": 0
+    )
+  ),
+  "filled": (
+    "small": (
+      "padding": 2px 4px,
+      "gap": 2px,
+      "padding_label": 2px 4px,
+      "padding_icon": 2px
+    ),
+    "medium": (
+      "padding": 0 4px 0 0,
+      "gap": 2px,
+      "padding_label": 0 4px,
+      "padding_icon": 0
+    ),
+    "large": (
+      "padding": 0 4px,
+      "gap": 4px,
+      "padding_label": 0 4px,
+      "padding_icon": 2px
+    )
+  )
+)

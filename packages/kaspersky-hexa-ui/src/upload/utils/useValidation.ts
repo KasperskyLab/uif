@@ -6,7 +6,38 @@ function getSize (files: Array<{ size: number }>) {
   return files.reduce((sum, x) => sum + x.size, 0)
 }
 
+/**
+ * Validation for controlled Uploader
+ */
 export function validate (
+  fileList: RcFile[],
+  maxFileSizeInKB?: number,
+  maxCount?: number,
+  maxTotalSizeInKB?: number
+) {
+  const errors: string[] = []
+
+  if (maxFileSizeInKB) {
+    for (const f of fileList) {
+      if (f.size > maxFileSizeInKB * 1024) {
+        errors.push('uploader.validation.maxFileSize2')
+        break
+      }
+    }
+  }
+
+  if (maxCount && fileList.length > maxCount) {
+    errors.push('uploader.validation.maxCount2')
+  }
+
+  if (maxTotalSizeInKB && getSize(fileList) > maxTotalSizeInKB * 1024) {
+    errors.push('uploader.validation.maxTotalSize2')
+  }
+
+  return errors
+}
+
+export function validateNewFiles (
   fileList: RcFile[],
   newFiles: RcFile[],
   maxFileSizeInKB?: number,
@@ -47,8 +78,8 @@ export function validate (
   }
 }
 
-export function hasCriticalErrors (errors: Record<string, string[]>) {
-  return Object.keys(errors).filter(error => error !== 'uploader.validation.maxFileSize').length > 0
+export function hasCriticalErrors (errors: string[], dropErrors: Record<string, string[]>) {
+  return errors.length > 0 || Object.keys(dropErrors).filter(error => error !== 'uploader.validation.maxFileSize').length > 0
 }
 
 export function useValidation (
@@ -60,7 +91,11 @@ export function useValidation (
   maxCount?: number,
   maxTotalSize?: number
 ) {
-  const [validationErrors, setValidationErrors] = React.useState<Record<string, string[]>>({})
+  const errors = React.useMemo(
+    () => validate(fileList as RcFile[], maxFileSize, maxCount, maxTotalSize),
+    [fileList, maxFileSize, maxCount, maxTotalSize]
+  )
+  const [errorsForNewFiles, setValidationErrors] = React.useState<Record<string, string[]>>({})
   const validatedFiles = React.useRef<WeakMap<RcFile, true | string>>(new WeakMap())
 
   const beforeUploadInternal = (file: RcFile, fileListArgs: RcFile[]) => {
@@ -87,7 +122,7 @@ export function useValidation (
     const {
       errors,
       failedFiles
-    } = validate(fileList as RcFile[], fileListArgs, maxFileSize, maxCount, maxTotalSize)
+    } = validateNewFiles(fileList as RcFile[], fileListArgs, maxFileSize, maxCount, maxTotalSize)
 
     for (const f of failedFiles) {
       validatedFiles.current.set(f, LIST_IGNORE)
@@ -131,5 +166,5 @@ export function useValidation (
     return parsedFile as RcFile
   }
 
-  return { beforeUpload, validationErrors }
+  return { beforeUpload, errors, errorsForNewFiles }
 }

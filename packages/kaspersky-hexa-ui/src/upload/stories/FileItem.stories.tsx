@@ -1,7 +1,7 @@
 
 import { withDesignControls } from '@sb/components/designControls'
 import { renderVariants } from '@sb/StoryComponents'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -31,7 +31,7 @@ const meta: Meta<FileItemProps> = {
       },
       parameters: {
         actions: { argTypesRegex: '^(on.*)' },
-        design: MetaData.figmaView
+        design: MetaData.pixsoView
       }
     }
   })

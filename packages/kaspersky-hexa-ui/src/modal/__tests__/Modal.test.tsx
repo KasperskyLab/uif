@@ -346,4 +346,9 @@ describe('Modal', () => {
     const { baseElement } = render(<Modal actions={{}} customButtons={[]} visible mode="default" testId={testId} />)
     expect(baseElement.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
   })
+
+  it('should not render antd default footer if actions is not passed', async () => {
+    const modal = render(<Modal testId="testModal" visible/>)
+    expect(modal.container.querySelector('.ant-modal-footer')).toBeFalsy()
+  })
 })

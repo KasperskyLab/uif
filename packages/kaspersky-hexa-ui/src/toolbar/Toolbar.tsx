@@ -1,3 +1,4 @@
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { useLocalization } from '@helpers/localization/useLocalization'
 import { shouldForwardProp } from '@helpers/shouldForwardProp'
@@ -10,7 +11,8 @@ import { Link } from '@src/link'
 import { Space } from '@src/space'
 import { Tooltip } from '@src/tooltip'
 import { Text } from '@src/typography'
-import { isNumber } from 'lodash'
+import cn from 'classnames'
+import isNumber from 'lodash/isNumber'
 import React, { FC, ReactElement, useState } from 'react'
 import styled from 'styled-components'
 
@@ -39,19 +41,16 @@ import {
 } from './toolbarCss'
 import { ToolbarSearch as ToolbarCollapsibleSearch } from './ToolbarSearch'
 import {
-  StyledToolbarProps,
   ToolbarButtonProps,
   ToolbarItemKey,
   ToolbarItemKeyConst,
   ToolbarItems,
   ToolbarProps,
   ToolbarVariantButtonProps,
-  ToolbarVariants,
-  ToolbarViewProps
+  ToolbarVariants
 } from './types'
-import { useThemedToolbar } from './useThemedToolbar'
 
-export const StyledToolbar = styled.div.withConfig({ shouldForwardProp })<StyledToolbarProps>`
+export const StyledToolbar = styled.div.withConfig({ shouldForwardProp })`
   ${toolbarCss}
 `
 
@@ -91,17 +90,11 @@ const Divider = () => (
   <hr className="toolbar-divider" />
 )
 
-export const Toolbar: FC<ToolbarProps> & ToolbarVariants = (rawProps: ToolbarProps) => {
-  const themedProps = useThemedToolbar(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <ToolbarView {...props} />
-}
-
 const ToolbarComponentMapping: {
   [key in ToolbarItemKey]: FC<ToolbarItems<key>>
 } = {
   [ToolbarItemKeyConst.BUTTON]: (props) => {
-    const { type, ...rest } = props
+    const { type, visible, ...rest } = props
     return <ToolbarButton {...rest} />
   },
   [ToolbarItemKeyConst.LINK]: (props) => {
@@ -164,11 +157,11 @@ const toolbarItemsRender = (items: ToolbarItems[], wrapKeyed = false, hasInterse
     if (type) {
       const Item = ToolbarComponentMapping[type] as FC<unknown>
       return wrapKeyed
-        ? <ToolbarItemWrap data-toolbarkey={itemProps.key} isHidden={shouldHide}><Item {...itemProps} /></ToolbarItemWrap>
+        ? <ToolbarItemWrap data-toolbarkey={itemProps.key} $isHidden={shouldHide}><Item {...itemProps} /></ToolbarItemWrap>
         : <Item {...itemProps} />
     }
     return wrapKeyed
-      ? <ToolbarItemWrap data-toolbarkey={(itemProps as ToolbarItems).key} isHidden={shouldHide}>{children}</ToolbarItemWrap>
+      ? <ToolbarItemWrap data-toolbarkey={(itemProps as ToolbarItems).key} $isHidden={shouldHide}>{children}</ToolbarItemWrap>
       : children
   })
 }
@@ -177,47 +170,50 @@ const toolbarItemsOverlay = (items: ToolbarItems[]): DropdownItemProps[] => {
   const visibleItems = items.filter(({ visible }) => visible !== false)
 
   const overlay: DropdownItemProps[] = visibleItems.map((itemProps) => {
-    const { type, children } = itemProps
+    const { children, key, testId, type } = itemProps
+
     if (type) {
       switch (type) {
         case ToolbarItemKeyConst.BUTTON: {
-          const { label, iconBefore, iconAfter, onClick, disabled, key } = itemProps
+          const { label, iconBefore, iconAfter, onClick, disabled, tooltip } = itemProps
           return {
-            key: key,
+            key,
             children: label,
             ...(iconBefore && { componentsBefore: [iconBefore] }),
             ...(iconAfter && { componentsAfter: [iconAfter] }),
             disabled: !!disabled,
-            onClick: ({ domEvent }) => { onClick?.(domEvent as React.MouseEvent<HTMLElement, MouseEvent>) }
+            onClick: ({ domEvent }) => { onClick?.(domEvent as React.MouseEvent<HTMLElement, MouseEvent>) },
+            testId,
+            tooltip
           }
         }
         case ToolbarItemKeyConst.DROPDOWN: {
-          const { label, overlay, iconBefore, disabled, key } = itemProps
+          const { label, overlay, iconBefore, disabled, tooltip } = itemProps
           return {
-            key: key,
+            key,
             type: 'submenu',
             title: label,
             ...(iconBefore && { componentsBefore: [iconBefore] }),
             disabled: !!disabled,
-            children: overlay
+            children: overlay,
+            testId,
+            tooltip
           }
         }
         case ToolbarItemKeyConst.DIVIDER: {
-          const { key } = itemProps
           return {
-            key: key,
+            key,
             type: 'divider',
             children: null
           }
         }
         default: {
-          const { key } = itemProps
-          return { key: key, children: children }
+          return { key, children, testId }
         }
       }
     }
-    const { key } = itemProps
-    return { key: key, children: children }
+
+    return { key, children, testId }
   })
 
   if (overlay && overlay[0] && overlay[0].type === 'divider') {
@@ -229,22 +225,23 @@ const toolbarItemsOverlay = (items: ToolbarItems[]): DropdownItemProps[] => {
 
 const INTERSECTION_PADDING = 36
 
-const ToolbarView: FC<ToolbarViewProps> = ({
-  componentId,
-  left = [],
-  styleLeft,
-  leftLimit = 4,
-  right,
-  styleRight,
-  sticky,
-  testAttributes,
-  autoDropdown = false,
-  ...props
-}: ToolbarViewProps) => {
+export const Toolbar: FC<ToolbarProps> & ToolbarVariants = (props: ToolbarProps) => {
+  const {
+    autoDropdown = false,
+    left = [],
+    leftLimit = 4,
+    right,
+    styleLeft,
+    styleRight,
+    sticky,
+    testAttributes,
+    ...rest
+  } = useTestAttribute(props)
+
   const leftVisible = left.filter(el => el.visible !== false)
   const [dropdownOpened, setDropdownOpened] = useState(false)
 
-  const [containerRef, setContainerRef] = useImmutableRef()
+  const [containerRef, setContainerRef] = useImmutableRef<HTMLDivElement>()
 
   const lastFittingItemIndex = useIntersectionChildren(containerRef, INTERSECTION_PADDING)
   const hasIntersection = isNumber(lastFittingItemIndex)
@@ -259,9 +256,13 @@ const ToolbarView: FC<ToolbarViewProps> = ({
     <>
       <StyledToolbar
         {...testAttributes}
-        {...props}
-        className={Number(sticky) > -1000 ? 'sticky' : 'toolbar-wrapper'}
-        autoDropdown={autoDropdown}
+        {...rest}
+        className={cn(
+          getClassNameWithTheme(props),
+          Number(sticky) > -1000 ? 'sticky' : 'toolbar-wrapper'
+        )}
+        $sticky={sticky}
+        $autoDropdown={autoDropdown}
       >
         {leftVisible.length > 0 && (
           <StyledBlock
@@ -270,10 +271,10 @@ const ToolbarView: FC<ToolbarViewProps> = ({
             direction="horizontal"
             width="initial"
             wrap="nowrap"
-            side="left"
+            $side="left"
             style={styleLeft}
-            oneElement={false}
-            autoDropdown={autoDropdown}
+            $oneElement={false}
+            $autoDropdown={autoDropdown}
             ref={setContainerRef}
           >
             {toolbarItemsRender(autoDropdown ? leftVisible : leftVisible.slice(0, leftLimit), autoDropdown, hasIntersection, lastFittingItemIndex)}
@@ -283,6 +284,7 @@ const ToolbarView: FC<ToolbarViewProps> = ({
                 testId="toolbar-rest-items"
                 klId="toolbar-dropdown"
                 overlay={toolbarItemsOverlay(leftVisible.slice(leftLimit, leftVisible.length))}
+                selectedItemsKeys={[]}
               >
                 <ToolbarButton
                   mode="tertiary"
@@ -294,24 +296,25 @@ const ToolbarView: FC<ToolbarViewProps> = ({
             )}
             {autoDropdown
               ? (
-                <AutoDropdownPart isHidden={!shouldShowMoreButton}>
-                  <Dropdown
-                    trigger={['click']}
-                    testId="toolbar-rest-items"
-                    klId="toolbar-dropdown"
-                    overlay={toolbarItemsOverlay(dropdownItems)}
-                    onVisibleChange={open => setDropdownOpened(open)}
-                    onOverlayClick={() => setDropdownOpened(false)}
-                  >
-                    <ToolbarButton
-                      mode="tertiary"
-                      testId="toolbar-show-rest-items"
-                      klId="toolbar-dropdown-button"
-                      iconBefore={<Menu2 />}
-                      isPressed={dropdownOpened}
-                    />
-                  </Dropdown>
-                </AutoDropdownPart>
+                  <AutoDropdownPart $isHidden={!shouldShowMoreButton}>
+                    <Dropdown
+                      trigger={['click']}
+                      testId="toolbar-rest-items"
+                      klId="toolbar-dropdown"
+                      overlay={toolbarItemsOverlay(dropdownItems)}
+                      onVisibleChange={open => setDropdownOpened(open)}
+                      onOverlayClick={() => setDropdownOpened(false)}
+                      selectedItemsKeys={[]}
+                    >
+                      <ToolbarButton
+                        mode="tertiary"
+                        testId="toolbar-show-rest-items"
+                        klId="toolbar-dropdown-button"
+                        iconBefore={<Menu2 />}
+                        isPressed={dropdownOpened}
+                      />
+                    </Dropdown>
+                  </AutoDropdownPart>
                 )
               : null
             }
@@ -324,11 +327,11 @@ const ToolbarView: FC<ToolbarViewProps> = ({
             direction="horizontal"
             width="initial"
             wrap="nowrap"
-            side="right"
+            $side="right"
             style={styleRight}
-            oneElement={!left && right.length === 1}
-            oneElementSelector="span.ant-input-affix-wrapper"
-            autoDropdown={autoDropdown}
+            $oneElement={!left && right.length === 1}
+            $oneElementSelector="span.ant-input-affix-wrapper"
+            $autoDropdown={autoDropdown}
           >
             {toolbarItemsRender(right)}
           </StyledBlock>
@@ -337,6 +340,8 @@ const ToolbarView: FC<ToolbarViewProps> = ({
     </>
   )
 }
+
+Toolbar.Button = (props) => <ToolbarButton mode="tertiary" {...props} />
 
 Toolbar.Search = (props) => <ToolbarSearch {...props} />
 
@@ -402,10 +407,14 @@ Toolbar.ScaleItem = (props) => <ToolbarButton mode="tertiary" iconBefore={<SizeM
 Toolbar.Divider = Divider
 
 Toolbar.displayName = 'Toolbar'
+Toolbar.Button.displayName = 'Toolbar.Button'
+Toolbar.ExportItem.displayName = 'Toolbar.ExportItem'
 Toolbar.Search.displayName = 'Toolbar.Search'
 Toolbar.CollapsibleSearch.displayName = 'Toolbar.CollapsibleSearch'
 Toolbar.FilterItem.displayName = 'Toolbar.FilterItem'
 Toolbar.FilterActiveItem.displayName = 'Toolbar.FilterActiveItem'
+Toolbar.ImportItem.displayName = 'Toolbar.ImportItem'
+Toolbar.ImportExportItem.displayName = 'Toolbar.ImportExportItem'
 Toolbar.SettingsItem.displayName = 'Toolbar.SettingsItem'
 Toolbar.FilterSidebar.displayName = 'Toolbar.FilterSidebar'
 Toolbar.ScaleItem.displayName = 'Toolbar.ScaleItem'

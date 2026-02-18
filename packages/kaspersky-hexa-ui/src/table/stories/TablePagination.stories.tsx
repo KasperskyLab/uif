@@ -2,7 +2,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { Checkbox } from '@src/checkbox'
 import MetaData from '@src/table/__meta__/meta.json'
-import { Meta } from '@storybook/react'
+import { Meta } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
@@ -20,7 +20,8 @@ import {
 
 const defaultPagination = {
   current: 2,
-  pageSize: 5,
+  pageSize: 20,
+  jumper: false,
   simple: false
 }
 
@@ -43,7 +44,8 @@ const meta: Meta<ITableProps> = {
     controls: {
       exclude: ['rowSelection', 'dataSource', 'columns']
     }
-  }
+  },
+  tags: ['!autodocs']
 }
 export default meta
 
@@ -59,7 +61,39 @@ export const WithSizeChanger: Story = {
   }
 }
 
-export const PaginationSimple: Story = {
+export const WithJumper: Story = {
+  render: BasicTableStory.bind({}),
+  args: {
+    pagination: {
+      ...defaultPagination,
+      showSizeChanger: true,
+      jumper: true
+    }
+  }
+}
+
+export const WithPersistentPageSize: Story = {
+  render: BasicTableStory.bind({}),
+  args: {
+    pagination: {
+      ...defaultPagination,
+      showSizeChanger: true
+    },
+    storageKey: 'table::story::WitPersistentPageSize'
+  }
+}
+
+export const CursorPagination: Story = {
+  render: BasicTableStory.bind({}),
+  args: {
+    pagination: {
+      ...defaultPagination,
+      cursor: true
+    }
+  }
+}
+
+export const SimplePagination: Story = {
   render: BasicTableStory.bind({}),
   args: {
     pagination: {
@@ -78,6 +112,36 @@ export const PaginationHideOnSinglePage: Story = {
       hideOnSinglePage: true
     },
     dataSource: generateDataSource(5)
+  }
+}
+
+export const WithStickyPagination: Story = {
+  render: BasicTableStory.bind({}),
+  args: {
+    stickyFooter: true,
+    pagination: {
+      ...defaultPagination,
+      pageSize: 20
+    }
+  }
+}
+
+export const WithShowOnlyTotalSummary: Story = {
+  render: BasicTableStory.bind({}),
+  args: {
+    pagination: {
+      showOnlyTotalSummary: true
+    }
+  }
+}
+
+export const WithSmallDatasource: Story = {
+  render: BasicTableStory.bind({}),
+  args: {
+    pagination: {
+      showOnlyTotalSummary: true
+    },
+    dataSource: basicDataSource.slice(0, 10)
   }
 }
 

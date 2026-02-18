@@ -55,13 +55,13 @@ const CodeViewerView = <T extends CustomLanguages>(
   } = props
 
   const handle = resizable && (
-      <Handle
-        cssConfig={cssConfig}
-        readonly={readonly}
-        resizeAxis={resizeAxis}
-      >
-        <ResizeInput />
-      </Handle>
+    <Handle
+      cssConfig={cssConfig}
+      readonly={readonly}
+      resizeAxis={resizeAxis}
+    >
+      <ResizeInput />
+    </Handle>
   )
 
   return (

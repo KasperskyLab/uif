@@ -46,7 +46,7 @@ export type StatusCardProps = {
   /** Card description */
   description?: ReactNode,
   /** Action buttons */
-  actions?: (ButtonProps & TestingProps)[],
+  actions?: ButtonProps[],
   /** Whether to show the image */
   image?: boolean,
   /** Icon variant */

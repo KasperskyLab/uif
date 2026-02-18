@@ -46,8 +46,7 @@ export const Total = styled(({
   if (maxTotalSize) {
     const size = fileList.reduce((sum, file) => sum + file.size!, 0)
 
-    labels.push(t('uploader.total.size', { size: convertFileSize(size), total: convertFileSize(maxTotalSize) })
-    )
+    labels.push(t('uploader.total.size', { size: convertFileSize(size), total: convertFileSize(maxTotalSize * 1024) }))
   }
 
   const label = labels.length === 0

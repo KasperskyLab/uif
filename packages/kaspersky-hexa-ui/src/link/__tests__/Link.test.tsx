@@ -61,6 +61,11 @@ describe('Link', () => {
     expect(iconWrapper?.nextSibling?.textContent).toBe(defaultProps.text)
   })
 
+  it('should hide tooltip when isTooltipVisible is false for icon link', () => {
+    const { container } = render(<DefaultLink decoration="icon" isTooltipVisible={false}/>)
+    expect(container.querySelector('[role="tooltip"]')).toBeNull()
+  })
+
   it('should handle missing href gracefully', () => {
     const { getByText } = render(<Link text="No Href" />)
     expect(getByText('No Href')).toBeInTheDocument()

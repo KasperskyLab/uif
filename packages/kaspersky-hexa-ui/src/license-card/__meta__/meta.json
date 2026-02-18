@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "LicenseCard",
+  "description": "",
+  "usage": "LicenseCard компонент для отображения лицензий продуктов Лаборатории Касперского",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=142229%3A262350",
+  "pixsoView": "https://pixso.net/app/design/IFztaXm0xKKmOm6NV4C3zg"
+}

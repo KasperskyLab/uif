@@ -3,7 +3,10 @@
     "common": {
       "empty": "No data",
       "import": "Import",
-      "export": "Export"
+      "export": "Export",
+      "filters": "Filters",
+      "no": "No",
+      "yes": "Yes"
     },
     "upload": {
       "dropFileTitle": "Drop file here",
@@ -36,9 +39,9 @@
         "endingMultiple": "or drag and drop them here",
         "endingSingle": "or drag and drop it here"
       },
-      "maxCountUploaded": "Maximum number of uploaded files",
+      "maxCountUploaded": "Maximum number of files uploaded",
       "progress": "{{progress}} out of {{size}}",
-      "showFiles": "Show files",
+      "showFiles": "View files",
       "total": {
         "files": "{{filesCount}} out of {{total}} files",
         "simple": "{{filesCount}} file(s)",
@@ -46,10 +49,23 @@
       },
       "validation": {
         "maxCount": "{{count}} file(s) cannot be uploaded due to exceeding the maximum file limit.",
+        "maxCount2": "The total number of uploaded files exceeds the allowed limit",
         "maxFileSize": "{{count}} file(s) cannot be uploaded due to exceeding the allowed size.",
+        "maxFileSize2": "Some of the files uploaded earlier exceed the currently allowed size limit",
         "maxTotalSize": "{{count}} file(s) cannot be uploaded due to exceeding the allowed total size.",
+        "maxTotalSize2": "The total size of all uploaded files exceeds the currently allowed size limit",
+        "filesDoNotMeetRequirements": "Files do not meet the requirements",
         "format": "{{count}} file(s) cannot be uploaded due to format requirements."
       }
+    },
+    "wizard": {
+      "actions": {
+        "cancel": "Cancel",
+        "back": "Back",
+        "next": "Next",
+        "finish": "Finish"
+      },
+      "stepStack": "Step {{currentStep}} out of {{totalSteps}}"
     },
     "severity": {
       "critical": "Critical",
@@ -71,22 +87,13 @@
       "total": "Total {{count}}",
       "selected": "Selected {{count}}",
       "page": "page",
-      "goto": "Go to"
+      "goto": "Go to page"
     },
     "search": {
       "raw": "Search",
       "dotted": "Search..."
     },
     "table": {
-      "column": {
-        "name": "First column"
-      },
-      "column2": {
-        "name": "Second column"
-      },
-      "column3": {
-        "name": "Third column"
-      },
       "columnDropdown": {
         "ascending": "Ascending",
         "descending": "Descending",
@@ -94,8 +101,13 @@
         "filters": "Filter",
         "resetFilters": "Reset filter"
       },
+      "selectAll": {
+        "selectAll": "Select all",
+        "selectCurrentPage": "Select all on current page",
+        "deselectAll": "Reset all"
+      },
       "columnsSettings": {
-        "header": "Columns settings",
+        "header": "Table settings",
         "selectAll": "Select all",
         "columns": "Columns",
         "grouping": "Grouping",
@@ -103,15 +115,51 @@
         "noGrouping": "No grouping",
         "apply": "Apply",
         "cancel": "Cancel",
+        "columnTitles": {
+        "name": "Name",
+        "country": "Country",
+        "age": "Age",
+        "city": "City",
+        "date": "Date",
+        "isSortable": "Is sortable",
+        "sorter": "Sorter",
+        "sorterIsSortable": "Sorting is available"
+        },
         "filtering": {
           "add": "Add",
           "clearAll": "Clear all",
           "property": "Property",
+          "attribute": "Attribute",
           "condition": "Condition",
           "from": "from",
           "to": "to",
-          "value": "Value"
-        }
+          "value": "Value",
+          "validation": {
+            "emptyValue": "Specify the filtering value",
+            "duplicateFilters": "Duplicate filters. Ensure each filter is unique"
+          }
+        },
+        "columnHideIsUnavailable": "Column hiding is not available"
+      },
+      "filterOperation": {
+        "⊆": "Contains",
+        "⊄": "Does not contain",
+        "cont_and": "Contains (AND)",
+        "cont_or": "Contains (OR)",
+        "ncont_or": "Does not contain",
+        "*=": "Regexp",
+        "empty": "Empty",
+        "nempty": "Not empty",
+        "range": "Within",
+        "nrange": "Outside"
+      },
+      "filterTag": {
+        "⊆": "contains {{value}}",
+        "⊄": "does not contain {{value}}",
+        "empty": "is empty",
+        "nempty": "is not empty",
+        "range": "Within {{from}}–{{to}}",
+        "nrange": "Outside {{from}}–{{to}}"
       },
       "groupingEmpty": "Other"
     },
@@ -125,13 +173,14 @@
     },
     "actionBar": {
       "unsavedChanges": "Pending changes",
-      "save": "Save",
+      "save": "Apply",
       "cancel": "Cancel"
     },
     "textarea": {
       "wordsCount": "{{count}} out of {{total}}"
     },
     "menu": {
+      "favoritesNavItem": "Bookmarks",
       "navUserItem": {
         "userProps": {
           "status": {
@@ -139,6 +188,41 @@
             "unavailable": "Unavailable"
           }
         }
+      }
+    },
+    "expand": {
+      "toExpand": "Expand",
+      "toCollapse": "Collapse"
+    },
+    "codeCompare": {
+      "compareMode": "Comparison mode",
+      "unified": "Unified",
+      "split": "Split",
+      "loader": "Downloading versions for comparison...",
+      "totalChanges": "Total changes:",
+      "collapseAll": "Collapse all",
+      "expandAll": "Expand all",
+      "expandLines": "Expand {{count}} lines",
+      "empty": "Both files are empty. Comparison is not possible.",
+      "noChanges": "No changes found between versions",
+      "basicVersion": "Basic version",
+      "comparableVersion": "Comparable version"
+    },
+    "licenseCard": {
+      "status": "License key status",
+      "number": "License key number",
+      "remaining": "Remaining",
+      "activationDate": "Activation date",
+      "expirationDate": "Expiration date",
+      "term": "Term",
+      "dayLeft": "{{count}} day left",
+      "daysLeft": "{{count}} days left",
+      "termDays": "{{count}} days"
+    },
+    "input": {
+      "password": {
+        "hide": "Hide",
+        "show": "Show"
       }
     }
   }

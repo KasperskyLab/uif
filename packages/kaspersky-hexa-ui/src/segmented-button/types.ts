@@ -6,7 +6,8 @@ import { ReactNode } from 'react'
 export type SegmentedButtonToViewProps<T> = ToViewProps<T, SegmentedButtonCssConfig, SegmentedButtonThemeProps>
 
 // Styles
-export type SegmentedButtonSize = `${Extract<Size, Size.Medium | Size.Large>}`
+export const segmentedButtonSize = [Size.Medium as string, Size.Large as string] as const
+export type SegmentedButtonSize = typeof segmentedButtonSize[number]
 
 export type SegmentedButtonSizeConfig = {
   padding?: string,
@@ -40,21 +41,23 @@ export type SegmentedButtonCssConfig = SegmentedButtonSizeConfig & SegmentedButt
 
 // Helpers
 export type SegmentedButtonThemeProps = {
-  /** Default color mode of checked state */
+  /** @deprecated Not used, always defaults to marina */
   mode?: SegmentedButtonMode,
   /** Size */
   size?: SegmentedButtonSize,
   /** Custom theme */
   theme?: Theme
 }
-
+/** @deprecated checkbox is deprecated, use ToggleButtonGroup instead. Radio button is used by default */
 export type SegmentedButtonType = 'checkbox' | 'radio'
 
 export type SegmentedButtonItemClickFunc = (handledValue: string, selectedValues: string[]) => void
 
 // SegmentedButton Props
 export type SegmentedButtonProps = {
-  /** Checkbox or radio behavior */
+  /** @deprecated Checkbox or radio behavior the default is radio if checkbox behavior is needed,
+  * use ToggleButtonGroup
+  */
   type?: SegmentedButtonType,
   /** Is SegmentedButton stretched to the full container's width */
   isStretch?: boolean,
@@ -67,7 +70,8 @@ export type SegmentedButtonProps = {
   /** Handler */
   onChange: (value: string[]) => void,
   /** Custom class name of the container */
-  className?: string
+  className?: string,
+  style?: React.CSSProperties
 } & SegmentedButtonThemeProps & TestingProps
 
 // SegmentedButtonItem Props
@@ -76,6 +80,7 @@ export type SegmentedButtonOption = {
   text?: ReactNode,
   className?: string,
   disabled?: boolean,
+  tooltip?: string,
   mode?: SegmentedButtonMode,
   componentsBefore?: ReactNode[],
   componentsAfter?: ReactNode[]

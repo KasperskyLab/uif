@@ -7,8 +7,12 @@ import {
 } from '@codemirror/lang-javascript'
 import { jsonLanguage } from '@codemirror/lang-json'
 import { xmlLanguage } from '@codemirror/lang-xml'
+import { StreamLanguage } from '@codemirror/language'
+
+import { yara } from './parsers/yara'
 
 export const DEFAULT_LANGUAGES = {
+  yara: StreamLanguage.define(yara),
   xml: xmlLanguage,
   json: jsonLanguage,
   html: htmlLanguage,

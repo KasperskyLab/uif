@@ -1,0 +1,155 @@
+@use '../../design-system/tokens/typography.module.scss';
+
+@mixin apply-colors($mode) {
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    width: 8px;
+    
+    @if $mode == 'expiresSoon' {
+      background: var(--license_card--bg--status--expired);
+    } @else {
+      background: var(--license_card--bg--status--#{$mode});
+    }
+  }
+
+  h5 {
+    @if $mode == 'expired' {
+      color: var(--license_card--text--critical);
+    } @else if $mode == 'finished' {
+      color: var(--license_card--text--disabled);
+    }
+    @else {
+        color: var(--license_card--text--enabled);
+    }
+  }
+}
+
+.licenseCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px;
+  gap: 16px;
+  min-width: var(--license-card-min-width, 600px);
+  border-radius: 8px;
+  background: var(--license_card--bg--enabled);
+  box-shadow: inset 0 0 0 1px var(--license_card--border--enabled);
+  position: relative;
+  overflow: hidden;
+  white-space: pre-wrap;
+  @include apply-colors(valid);
+}
+
+.valid {
+  @include apply-colors(valid);
+}
+
+.warning {
+  @include apply-colors(warning);
+}
+
+.expired {
+  @include apply-colors(expired);
+}
+
+.finished {
+  @include apply-colors(finished);
+}
+
+.expiresSoon {
+  @include apply-colors(expiresSoon);
+}
+
+.iconExpired {
+  color: var(--license_card--text--critical);
+}
+
+.iconDisabled {
+  color: var(--license_card--text--disabled);
+}
+
+.iconEnabled {
+  color: var(--license_card--text--enabled);
+}
+
+.licenseCardContent {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-direction: column;
+  flex-wrap: initial;
+  width: 100%;
+
+  &--compact {
+    flex-wrap: wrap;
+  }
+}
+
+.licenseCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.licenseCardContentRow {
+  display: grid;
+  gap: 8px;
+  line-height: 20px;
+  &--compact {
+    display: flex;
+    gap: 24px;
+    :global(.kl6-field) {
+      width: unset;
+    }
+    :global(.kl6-field-control-box):global(.kl6-field-control-box):global(.kl6-field-control-box){
+      min-width: unset;
+    }
+  }
+}
+
+.licenseRow {
+  display: grid;
+  gap: 8px;
+  line-height: 20px;
+
+  &--compact {
+    display: flex;
+    gap: 32px;
+
+    :global(.kl6-field-control-box):global(.kl6-field-control-box):global(.kl6-field-control-box){
+      min-width: unset;
+    }
+    :global(.kl6-field-label-position-top){
+      width: unset;
+    }
+  }
+}
+
+.licenseCardFieldKey {
+  text-wrap: nowrap;
+}
+
+.licenseCardFieldNumber {
+  display: flex;
+  gap: 4px;
+}
+
+.licenseCardActions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+.licenseCardHeaderBlock {
+  display: flex;
+  gap: 4px;
+  height: 24px;
+}

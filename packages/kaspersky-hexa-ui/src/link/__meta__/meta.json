@@ -7,11 +7,11 @@
     "migration": true,
     "apiTable": true,
     "storybook": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Link",
   "description": "Компонент для отрисовки ссылки. В качестве основы используется HTML элемент Anchor.",
   "usage": "Обозначает возможность перехода на другую страницу.",
-  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1%3A2273",
-  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7TGvGlgGfTltMG1OBgLq8p%2F00-%255BB2B%255D-Hexa-UI-Kit%3Ftype%3Ddesign%26node-id%3D33293%253A116703%26mode%3Ddev"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=33293%3A116703",
+  "pixsoView": "https://pixso.net/app/design/KGurJC5_m7nSJTeVxB0zDg"
 }

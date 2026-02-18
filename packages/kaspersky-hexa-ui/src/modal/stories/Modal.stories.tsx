@@ -4,8 +4,8 @@ import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { ActionButton } from '@src/action-button'
 import { Button } from '@src/button'
-import { ButtonMode } from '@src/button/types'
-import { Meta, StoryObj } from '@storybook/react'
+import { ButtonMode, buttonModes } from '@src/button/types'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
@@ -38,17 +38,17 @@ const meta: Meta<WithButtonProps> = {
     firstButtonText: { control: { type: 'text' } },
     firstButtonMode: {
       control: { type: 'select' },
-      options: ['primary', 'secondary', 'tertiary', 'dangerFilled', 'dangerOutlined']
+      options: buttonModes
     },
     secondButtonText: { control: { type: 'text' } },
     secondButtonMode: {
       control: { type: 'select' },
-      options: ['primary', 'secondary', 'tertiary', 'dangerFilled', 'dangerOutlined']
+      options: buttonModes
     },
     thirdButtonText: { control: { type: 'text' } },
     thirdButtonMode: {
       control: { type: 'select' },
-      options: ['primary', 'secondary', 'tertiary', 'dangerFilled', 'dangerOutlined']
+      options: buttonModes
     },
     ...sbHideControls(['theme', 'actions'])
   },
@@ -71,7 +71,7 @@ const meta: Meta<WithButtonProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta
@@ -124,6 +124,12 @@ const ModalDefaultStory = (args: WithButtonProps) => {
 
 export const Basic: Story = {
   render: ModalDefaultStory.bind({})
+}
+
+export const WithoutFooter: Story = {
+  render: (args: WithButtonProps) => {
+    return <Modal {...args} visible />
+  }
 }
 
 export const WithThreeActionButtons: Story = {

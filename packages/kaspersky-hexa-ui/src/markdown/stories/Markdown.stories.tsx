@@ -1,7 +1,7 @@
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
-import { Meta } from '@storybook/react'
+import { Meta } from '@storybook/react-webpack5'
 
 import MetaData from '../__meta__/meta.json'
 import { Markdown } from '../Markdown'

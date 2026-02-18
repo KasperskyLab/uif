@@ -1,5 +1,6 @@
 import { SBArgType, SBArgTypeControl } from '@sb/helpers'
-import { Table } from '@src/table'
+import { Locale } from '@src/locale'
+import { FilterOperation, FilterType, Table, TableColumn } from '@src/table'
 import { ITableProps } from '@src/table/types'
 import { StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
@@ -7,7 +8,6 @@ import styled from 'styled-components'
 
 // Components
 export const Wrapper = styled.div`
-  padding: 50px;
   width: 100%;
 `
 
@@ -51,7 +51,13 @@ export const genArgType = (description?: string, control?: string, defaultValue?
 export const basicArgTypes = {
   columns: genArgType('An array of column objects'),
   dataSource: genArgType('An array of data. Each object should contain all field used as a "dataIndex" in "columns"'),
-  rowSelection: genArgType('rowSelection.selectedRowKeys - an array of selected rows<br/>rowSelection.onChange - controlled handler', 'object'),
+  rowSelection: genArgType(
+    'rowSelection.selectedRowKeys - an array of selected rows<br/>\
+      rowSelection.onChange - controlled handler<br/>\
+      rowSelection.type (\'checkbox\' | \'radio\')',
+    'object',
+    '{}'
+  ),
   useAccordion: genArgType('Is needed to use accordion in dataSource', 'boolean', 'false'),
   onDragStart: genArgType('Handler for start of dragging'),
   onDragEnd: genArgType('Handler for end of dragging'),
@@ -60,6 +66,10 @@ export const basicArgTypes = {
   groupBy: genArgType('dataIndex of column to group'),
   groupTitleRender: genArgType('Render function for title of group'),
   rowClassName: genArgType('Classname for each row. It can be used to style content (hover, for example)'),
+  backgroundPattern: {
+    ...genArgType('Background pattern that will be visible on rows with _blendedBackground', 'radio', 'diagonal'),
+    options: [undefined, 'diagonal']
+  },
   onColumnResize: genArgType('Handler on column resize'),
   resizingMode: {
     ...genArgType('Resizing mode', 'select'),
@@ -115,16 +125,19 @@ export const basicTwoColumns = [
   {
     title: 'table.column2.name',
     key: 'description',
-    dataIndex: 'description',
-    width: 200
+    dataIndex: 'description'
   }
 ]
 
 export const generateDataSource = (length: number) => (
-  Array.from({ length }, (_, index): BasicRowType & { key: number } => ({
+  Array.from({ length }, (_, index): BasicRowType & { key: number, details?: { city: string, email: string} } => ({
     name: `Value ${index + 1}`,
     description: `Description ${index + 1}`,
-    key: index + 1
+    key: index + 1,
+    details: {
+      city: `city-${index + 1}`,
+      email: `email-${length - index}`
+    }
   }))
 )
 
@@ -176,3 +189,145 @@ export type Story = StoryObj<ITableProps>
 export type BasicRowType = { name: string, description: string }
 
 export type BasicTreeRowType = Omit<BasicRowType, 'name'> & { name: React.ReactNode, age: number, children?: BasicTreeRowType[] }
+
+const mockCreateColumn = (name: string, width?: number, show = true, hideColumnAvailable = true) => ({
+  key: name,
+  title: <Locale localizationKey={`table.columnsSettings.columnTitles.${name}`} />,
+  dataIndex: name,
+  width: `${width}%`,
+  show,
+  hideColumnAvailable,
+  groupingAvailable: true
+})
+
+const countries = [
+  { label: 'Russian Federation', value: 'Russian Federation' },
+  { label: 'China', value: 'China' },
+  { label: 'Pakistan', value: 'Pakistan' },
+  { label: 'United States', value: 'United States' },
+  { label: 'France', value: 'France' },
+  { label: 'Germany', value: 'Germany' },
+  { label: 'Italy', value: 'Italy' },
+  { label: 'Spain', value: 'Spain' },
+  { label: 'Brazil', value: 'Brazil' },
+  { label: 'Australia', value: 'Australia' }
+]
+
+// TODO: remove after migrate to getAvailableOptions
+export const legacyCountries = [
+  'Russian Federation',
+  'China',
+  'Pakistan',
+  'United States',
+  'France',
+  'Germany',
+  'Italy',
+  'Spain',
+  'Brazil',
+  'Australia'
+]
+
+export const columns: TableColumn[] = [
+  mockCreateColumn('name', 19, true, false),
+  {
+    ...mockCreateColumn('country', 13),
+    filterType: {
+      type: FilterType.Enum,
+      operations: [
+        {
+          operation: FilterOperation.eq
+        },
+        {
+          operation: FilterOperation.neq
+        },
+        {
+          // FIXME UIF: чтобы заработал кастомный фильтр для клиентской фильтрации тут должен быть predicate
+          operation: FilterOperation.custom,
+          label: 'My custom filter!' // Could be only single, use for server side
+          // predicate: (row: any): boolean => {
+          //   return row.country === 'ru'
+          // }
+        }
+      ],
+      getAvailableOptions: () => Promise.resolve(countries)
+    },
+    filters: [
+      {
+        name: 'Longer then 5',
+        filter: (element: any): boolean => {
+          const text = element.country
+          if (text) return text.length > 5
+          return false
+        }
+      },
+      {
+        name: 'Shorter than 5',
+        filter: (element: any): boolean => {
+          const text = element.country
+          if (text) return text.length < 5
+          return false
+        }
+      }
+    ]
+  },
+  {
+    ...mockCreateColumn('age', 10),
+    filterType: {
+      type: FilterType.Number
+    },
+    isSortable: true,
+    allowMultipleFilters: true,
+    filters: [
+      {
+        name: 'Greater than 18',
+        filter: (element: any): boolean => {
+          const age = Number(element.age)
+          if (age) return age > 18
+          return false
+        }
+      },
+      {
+        name: 'Less than 60',
+        filter: (element: any): boolean => {
+          const age = Number(element.age)
+          if (age) return age < 60
+          return false
+        }
+      }
+    ]
+  },
+  {
+    ...mockCreateColumn('city', 17),
+    isSortable: true
+  },
+  {
+    ...mockCreateColumn('date', 18),
+    isSortable: true,
+    sorter: function (a: any, b: any, isAsc: boolean) {
+      const aDate = new Date(a.date).getTime()
+      const bDate = new Date(b.date).getTime()
+      return isAsc ? aDate - bDate : bDate - aDate
+    },
+    filterType: {
+      type: FilterType.DateRange
+    }
+  }
+]
+
+// TODO: remove after migrate to getAvailableOptions
+export const columnsWithLegacyEnumCountries = columns.map((col) => {
+  if (col.dataIndex === 'country') {
+    return {
+      ...col,
+      filterType: {
+        type: FilterType.Enum,
+        getAvailableValues: () => {
+          return new Promise(resolve => {
+            resolve(legacyCountries)
+          })
+        }
+      }
+    }
+  }
+  return col
+})

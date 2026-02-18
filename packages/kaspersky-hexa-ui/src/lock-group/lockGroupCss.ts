@@ -41,24 +41,24 @@ export const lockGroupCss = css`
 
     .lock-group-control {
       display: flex;
+      align-items: center;
+      gap: var(--spacing--gap_dependent)
     }
 
     .lock-group-control-icon {
-      margin: 2px ${fromProps('horizontalMargin')} 0 0;
       & path {
         fill: ${fromProps('iconColor')};
       }
-    }
-
-    .lock-group-control-label {
-      margin: 0 ${fromProps('horizontalMargin')} 0 0;
     }
 
     .information-text-icon {
-      margin: -5px 0 0 ${fromProps('horizontalMargin')};
       & path {
         fill: ${fromProps('iconColor')};
       }
+    }
+    
+    .lock-group-status-icon {
+      margin-right: var(--spacing--gap_related);
     }
   }
 `

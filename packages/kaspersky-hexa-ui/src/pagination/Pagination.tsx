@@ -1,21 +1,22 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { Select } from '@src/select'
-import { Pagination as PaginationAntd } from 'antd'
+import { Text } from '@src/typography'
+import { Pagination as PaginationAntd, PaginationProps as PaginationAntdProps } from 'antd'
 import { SelectValue } from 'antd/es/select'
 import { TFunction } from 'i18next'
-import React, { FC, useCallback, useMemo } from 'react'
+import React, { FC, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { ArrowLeft, ArrowRight } from '@kaspersky/hexa-ui-icons/16'
 
-import { Text } from '../typography'
-
-import { containerCss, paginationCss } from './paginationCss'
+import { containerCss, pageContainerCss, paginationCss, selectCss } from './paginationCss'
+import { TotalSummary } from './TotalSummary'
 import { PaginationProps, PaginationViewProps } from './types'
 import { useThemedPagination } from './useThemedPagination'
 
 const PaginationContainer = styled.div`${containerCss}`
+const PageContainer = styled.span`${pageContainerCss}`
 
 const StyledPagination = styled(PaginationAntd).withConfig({
   shouldForwardProp: prop => !['cssConfig'].includes(prop)
@@ -23,9 +24,7 @@ const StyledPagination = styled(PaginationAntd).withConfig({
   ${paginationCss}
 `
 
-const StyledTotal = styled(Text)`
-  white-space: nowrap;
-`
+const StyledSelect = styled(Select)`${selectCss}`
 
 const icons = {
   nextIcon: <ArrowRight/>,
@@ -39,6 +38,14 @@ export const getPageSizeOptions = (t: TFunction<'translation', undefined>, pageS
   value: parseInt(v)
 }))
 
+const DisabledPage = ({ pageNumber }: { pageNumber: number }) => (
+  <PageContainer onClick={(e) => { e.stopPropagation() }} aria-disabled={true}>
+    {pageNumber}
+  </PageContainer>
+)
+
+const CURSOR_PAGINATION_MIN_PAGE_COUNT = 8
+
 const PaginationView: FC<PaginationViewProps> = ({
   current = 1,
   pageSize = 10,
@@ -50,9 +57,11 @@ const PaginationView: FC<PaginationViewProps> = ({
   onChange,
   onShowSizeChange: customOnShowSizeChange,
   showSizeChanger = false,
+  jumper = false,
   disabled = false,
   cssConfig,
   hideOnSinglePage = false,
+  cursor = false,
   simple = false,
   testAttributes,
   ...props
@@ -65,21 +74,29 @@ const PaginationView: FC<PaginationViewProps> = ({
 
   const { t } = useTranslation()
 
-  const getSummaryText = () => {
-    const totalText = `${t('pagination.total', { count: total })}`
-    if (!showSelected) return totalText
-
-    const selectedText = `${t('pagination.selected', { count: selected })}`
-    return `${totalText} / ${selectedText}`
-  }
+  useEffect(() => {
+    const goToInput = document.querySelector('.ant-pagination-options-quick-jumper input') as HTMLInputElement
+    goToInput && goToInput.setAttribute('type', 'number')
+  }, [])
 
   const parsedPageSizeOptions = useMemo(() => (
     getPageSizeOptions(t, pageSizeOptions)
   ), [t, pageSizeOptions])
 
-  const itemRender = useCallback((_, type, originalElement) => (
-    type === 'page' ? <Text>{originalElement}</Text> : originalElement
-  ), [])
+  const itemRender: PaginationAntdProps['itemRender'] = (pageNumber, type, originalElement) => {
+    const shouldEnableCursor = (
+      cursor &&
+      pageNumber >= CURSOR_PAGINATION_MIN_PAGE_COUNT &&
+      pageNumber === Math.ceil(_totalRoot / Number(pageSize)) &&
+      (pageNumber - current > 3)
+    )
+
+    return type === 'page'
+      ? (shouldEnableCursor
+          ? <DisabledPage pageNumber={pageNumber} />
+          : <Text>{originalElement}</Text>)
+      : originalElement
+  }
 
   const onShowSizeChange = (pageSize: SelectValue) => {
     const pageSizeNum = Number(pageSize)
@@ -99,13 +116,11 @@ const PaginationView: FC<PaginationViewProps> = ({
       aria-disabled={disabled}
       {...testAttributes}
     >
-      {!simple && <StyledTotal testId="total">
-        {getSummaryText()}
-      </StyledTotal>}
+      {!simple && <TotalSummary total={total} showSelected={showSelected} selected={selected} testId="total" klId="total" />}
       <div className="kl6-pagination-right">
         {!(hideOnSinglePage && total <= pageSize) && (
           <StyledPagination
-            showQuickJumper={false}
+            showQuickJumper={jumper}
             showSizeChanger={false}
             itemRender={itemRender}
             current={current}
@@ -115,12 +130,13 @@ const PaginationView: FC<PaginationViewProps> = ({
             disabled={disabled || (pageSize >= total)}
             onChange={onChange}
             cssConfig={cssConfig}
+            locale={{ jump_to: t('pagination.goto') || 'Go to page', page: '' }}
             {...icons}
             {...props}
           />
         )}
         {showSizeChanger && (
-          <Select
+          <StyledSelect
             testId="select"
             value={pageSize}
             options={parsedPageSizeOptions}

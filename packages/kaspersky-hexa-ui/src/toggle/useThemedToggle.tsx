@@ -1,9 +1,9 @@
-import { useThemedComponent } from '@helpers/useThemedComponent'
+import { useComponentCssConfig } from '@design-system/css-configs/helpers/useComponentCssConfig'
 
 import { ToggleCssConfig, ToggleProps, ToggleThemeProps, ToggleViewProps } from './types'
 
 export const useThemedToggle = (props: ToggleProps): ToggleViewProps => (
-  useThemedComponent<ToggleProps, ToggleCssConfig, ToggleThemeProps>(props, {
+  useComponentCssConfig<ToggleProps, ToggleCssConfig, ToggleThemeProps>(props, {
     componentName: 'toggle',
     defaultValues: {}
   })

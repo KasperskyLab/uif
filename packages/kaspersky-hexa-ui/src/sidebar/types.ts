@@ -36,7 +36,12 @@ export type SidebarProps = PropsWithChildren<{
   /** The class name of the container of the Sidebar dialog */
   className?: string,
   /** The footer of the Sidebar */
+  /** @deprecated use footerLeft / footerRight */
   footer?: ReactNode,
+  /** The footerRight of the Sidebar */
+  footerLeft?: ReactNode,
+  /** The footerLeft of the Sidebar */
+  footerRight?: ReactNode,
   /** Whether to show mask or not */
   mask?: boolean,
   /** The title of the Sidebar */
@@ -62,7 +67,13 @@ export type SidebarProps = PropsWithChildren<{
   /** Whether to unmount child components on closing Sidebar or not */
   destroyOnClose?: DrawerProps['destroyOnClose'],
   /** An element placed below the Title at the bottom of the Header */
-  subHeader?: ReactNode
+  subHeader?: ReactNode,
+  /** @deprecated use titleLineClamp. If titleLineClamp >= 1 then truncateTitle: true */
+  truncateTitle?: boolean,
+  /** Number of not truncated lines, see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/line-clamp */
+  titleLineClamp?: number,
+  /** Remove padding from content */
+  noPaddingContent?: boolean
 }> & SidebarThemeProps & TestingProps
 
 export type SidebarViewProps = ToViewProps<SidebarProps, SidebarCssConfig, SidebarThemeProps>

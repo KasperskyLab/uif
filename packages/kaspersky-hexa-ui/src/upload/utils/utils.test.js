@@ -1,7 +1,7 @@
 import { splitFileNameForTruncation } from './splitFileNameForTruncation'
-import { validate } from './useValidation'
+import { validateNewFiles } from './useValidation'
 
-describe('Uploader validate', () => {
+describe('Uploader validateNewFiles', () => {
   test.each([
     ['1 case', [], [{ uuid: '1', size: 50 * 1024 }], undefined, undefined, undefined, { errors: {} }],
     [
@@ -74,7 +74,7 @@ describe('Uploader validate', () => {
       }
     ]
   ])('%s', (name, files, newFiles, maxFileSizeInKB, maxCount, maxTotalSizeInKB, expected) => {
-    const result = validate(files, newFiles, maxFileSizeInKB, maxCount, maxTotalSizeInKB)
+    const result = validateNewFiles(files, newFiles, maxFileSizeInKB, maxCount, maxTotalSizeInKB)
 
     expect(Object.keys(result.errors).length).toBe(Object.keys(expected.errors).length)
     expect(result.errors).toMatchObject(expected.errors)

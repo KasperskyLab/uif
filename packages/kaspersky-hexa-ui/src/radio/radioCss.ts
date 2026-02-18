@@ -11,6 +11,7 @@ export const getInternalRadioCss = (fromProps: any) => css`
     display: flex;
     flex-direction: row;
     align-items: start;
+    gap: 4px;
     padding: 0;
     margin: 0;
 

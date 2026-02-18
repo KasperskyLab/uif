@@ -1,11 +1,12 @@
+import { Focus } from '@design-system/tokens/focus'
 import { ThemeKey } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingProps } from '@helpers/typesHelpers'
 import { TreeProps } from 'antd'
 import type { NodeDragEventParams } from 'rc-tree/lib/contextTypes'
-import type { DataNode, EventDataNode, Key } from 'rc-tree/lib/interface'
-import * as React from 'react'
+import type { DataNode as BaseDataNode, EventDataNode, Key } from 'rc-tree/lib/interface'
+import React from 'react'
 
-export type { DataNode, EventDataNode, Key, NodeDragEventParams, TreeProps }
+export type { EventDataNode, Key, NodeDragEventParams, TreeProps }
 
 export type NodeDropEventParams = NodeDragEventParams & {
   dragNode: EventDataNode,
@@ -22,16 +23,18 @@ export interface DraggableConfig {
 }
 
 export type StateProps = {
+  backgroundSelected?: string,
+  colorSelected?: string,
+  background?: string,
   color?: string,
   lineColor?: string,
   arrowColor?: string
 }
 
-export type TreeColorConfig = {
+export type TreeColorConfig = Focus & {
   enabled?: StateProps,
   hover?: StateProps,
   active?: StateProps,
-  focus?: StateProps,
   disabled?: StateProps,
   error: { border: string }
 }
@@ -49,16 +52,21 @@ export type TreeCheckEvent = {
   node: { checked: boolean, key: string }
 }
 
-type TreeCommonProps = TreeThemeProps & Pick<TreeProps, 'loadData' | 'icon'> & TestingProps & {
+export type DataNode = BaseDataNode & {
+  _action?: boolean,
+  children?: DataNode[]
+}
+
+type TreeCommonProps = TreeThemeProps & Pick<TreeProps, 'loadData' | 'icon' | 'onSelect' | 'showIcon' | 'selectedKeys'> & TestingProps & {
   /** The treeNodes data Array, if set it then you need not construct children TreeNode.
    * (key should be unique across the whole array) */
-  treeData?: TreeProps['treeData'],
+  treeData?: DataNode[],
   /** Whether disabled the tree */
   disabled?: boolean,
   /** Specifies whether this Tree or the node is draggable */
   draggable?: DraggableFn | boolean | DraggableConfig,
-  /** @deprecated */
-  showLine?: boolean | { showLeafIcon: boolean },
+  /** Show tree line */
+  showLine?: boolean,
   /** Whether to check children if the parent node is checked. Has no effect if checkStrictly is true */
   checkChildren?: boolean,
   /** Whether to check/half check/uncheck parents if the node is checked. Has no effect if checkStrictly is true */
@@ -70,7 +78,7 @@ type TreeCommonProps = TreeThemeProps & Pick<TreeProps, 'loadData' | 'icon'> & T
   /** Specifies the keys of the checked treeNodes */
   checkedKeys?: string[] | undefined,
   /** Callback function for when a treeNode is expanded or collapsed */
-  onExpand?: (newExpandedKeys: string[]) => void | undefined,
+  onExpand?: (newExpandedKeys: string[], info: { node: EventDataNode, expanded: boolean }) => void | undefined,
   /** Specifies the keys of the expanded treeNodes */
   expandedKeys?: string[] | undefined,
   /** Callback function for when a treeNode is loaded by loadData function */
@@ -95,6 +103,8 @@ type TreeCommonProps = TreeThemeProps & Pick<TreeProps, 'loadData' | 'icon'> & T
   onDragEnd?: (info: NodeDragEventParams) => void,
   /** Callback function for when the onDrop event occurs */
   onDrop?: (info: NodeDropEventParams) => void,
+  /** Callback function for when the onClick event occurs on settings button */
+  onActionClick?: (node: DataNode) => void,
   /** Specify the keys of the default checked treeNodes */
   defaultCheckedKeys?: Key[],
   /** Specify the keys of the default expanded treeNodes */
@@ -112,7 +122,9 @@ type TreeCommonProps = TreeThemeProps & Pick<TreeProps, 'loadData' | 'icon'> & T
 }
 
 export type TreeNavProps = TreeCommonProps & {
-  multiple?: boolean
+  multiple?: boolean,
+  selectable?: boolean,
+  onSelect?: TreeProps['onSelect']
 }
 
 export type TreeListProps = TreeCommonProps & {
@@ -120,13 +132,10 @@ export type TreeListProps = TreeCommonProps & {
 }
 
 export type ITreeProps = TreeCommonProps & {
+  interactive?: boolean,
   checkable?: boolean,
   selectable?: boolean,
   disableNodeBg?: boolean,
   multiple?: boolean,
   icon?: TreeProps['icon']
 }
-
-export type TreeCssConfig = TreeColorConfig
-
-export type TreeViewProps = ToViewProps<ITreeProps, TreeCssConfig, TreeThemeProps>

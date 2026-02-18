@@ -36,5 +36,5 @@ export const pagination = ({ colors, effects }: ComponentThemeContext): Paginati
       background: colors.pagination.bg.disabled_selected
     }
   },
-  ...focus({ colors, effects })
+  ...focus({ effects })
 })

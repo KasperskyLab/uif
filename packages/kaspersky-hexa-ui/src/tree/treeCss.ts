@@ -1,26 +1,55 @@
-import { SPACES } from '@design-system/theme'
 import { getTextSizes } from '@design-system/tokens'
-import { getFromProps } from '@helpers/getFromProps'
 import { StyledCheckboxWrapper } from '@src/checkbox/Checkbox'
 import { css } from 'styled-components'
 
 import { TextTypes } from '@kaspersky/hexa-ui-core/typography/js'
 
-import { ITreeProps, TreeCssConfig } from './types'
+import { ITreeProps } from './types'
 
-const fromProps = getFromProps<TreeCssConfig>()
+const getLinearGradient = (color: string) => `linear-gradient(to right, rgba(0, 0, 0, 0) 0%, ${color} 75%);`
 
 const textSizes = getTextSizes(TextTypes.BTR3)
 
-export const treeCss = css<{ cssConfig: TreeCssConfig, checkable?: boolean, disableNodeBg?: boolean, invalid?: boolean }>`
+export const treeCss = css<{ checkable?: boolean, interactive?: boolean, disableNodeBg?: boolean }>`
   && {
     background: none;
-    border: 1px solid transparent;
+    border: none;
     border-radius: 8px;
 
-    ${props => props.invalid && `
-      border-color: ${fromProps('error.border')(props)};
-    `}
+    &.ant-tree-show-line {
+      .anticon-file {
+        opacity: 0;
+      }
+
+      .ant-tree-switcher-noop {
+        position: relative;
+
+        &:before {
+          content: '';
+          display: block;
+          position: absolute;
+          height: 1px;
+          top: 11px;
+          left: -2px;
+          right: 6px;
+          border-bottom: 1px solid var(--level--bg--line--enabled);
+        }
+      }
+
+      .ant-tree-indent-unit:last-of-type {
+          &:after {
+            content: '';
+            position: absolute;
+            display: block;
+            width: 7px;
+            height: 1px;
+            top: 11px;
+            left: 9px;
+            bottom: 0;
+            background-color: var(--level--bg--line--enabled);
+          }
+        }
+    }
 
     &.ant-tree-focused {
       background: transparent;
@@ -37,6 +66,8 @@ export const treeCss = css<{ cssConfig: TreeCssConfig, checkable?: boolean, disa
       font-weight: ${textSizes.fontWeight};
       font-style: ${textSizes.fontStyle};
       letter-spacing: ${textSizes.letterSpacing};
+      flex: 1;
+      display: flex;
     }
 
     .ant-tree-list .ant-tree-node-content-wrapper:hover,
@@ -46,29 +77,25 @@ export const treeCss = css<{ cssConfig: TreeCssConfig, checkable?: boolean, disa
 
     .ant-tree-node-content-wrapper {
       padding-left: 3px;
-      cursor: ${(props: ITreeProps) =>
-    props.disableNodeBg ? 'default' : 'pointer'};
+      cursor: ${(props: ITreeProps) => props.disableNodeBg ? 'default' : 'pointer'};
       flex: 1;
-    }
-
-    .ant-tree-draggable-icon + .ant-tree-switcher-noop {
-      display: none;
+      display: flex;
     }
 
     .ant-tree-checkbox + .ant-tree-node-content-wrapper {
-      padding-left: ${SPACES[3]}px;
+      padding: 0;
       cursor: pointer;
     }
 
-    .anticon-file,
     .ant-tree-draggable-icon,
     .ant-tree-switcher-icon {
       opacity: 1;
-      color: ${fromProps('enabled.arrowColor')};
+      color: var(--action_button--icon--ghost--enabled);
     }
 
     .ant-tree-switcher {
-      width: 16px;
+      width: 22px;
+      padding-right: 4px;
       background: none;
     }
 
@@ -82,12 +109,14 @@ export const treeCss = css<{ cssConfig: TreeCssConfig, checkable?: boolean, disa
       }
     }
 
+    .ant-tree-list-holder-inner .ant-tree-treenode {
+      gap: 2px;
+    }
+
     .ant-tree-treenode {
       position: relative;
-      margin: 1px 0;
-      padding: ${SPACES[1]}px ${SPACES[5]}px ${SPACES[1]}px ${SPACES[1]}px;
+      padding: 2px;
       border-radius: 8px;
-      transition-duration: 0.2s;
       border: 2px solid transparent;
       background: none;
       
@@ -96,7 +125,7 @@ export const treeCss = css<{ cssConfig: TreeCssConfig, checkable?: boolean, disa
           height: 4px;
           display: block;
           content: '';
-          background-color: ${fromProps('focus.color')};
+          background-color: var(--focus--stroke);
           position: absolute;
           bottom: -2px;
           left: 0;
@@ -111,25 +140,21 @@ export const treeCss = css<{ cssConfig: TreeCssConfig, checkable?: boolean, disa
 
       &:not(.ant-tree-treenode-selected):not(.ant-tree-treenode-checkbox-checked) {
         .ant-tree-title {
-          color: ${fromProps('enabled.color')};
+          color: var(--tree--text--enabled);
         }
 
-        &:hover {
-          &,
-          & .ant-checkbox:not(.ant-checkbox-indeterminate) .ant-checkbox-inner {
-            background-color: transparent;
+        ${(props) => props.interactive && `
+          &:hover {
+            background-color: var(--submenu_item--bg--hover);
           }
-        }
 
-        &:active {
-          &,
-          & .ant-checkbox:not(.ant-checkbox-indeterminate) .ant-checkbox-inner {
-            background-color: transparent;
+          &:active {
+            background-color: var(--submenu_item--bg--active);
           }
-        }
+        `}
 
         &.ant-tree-treenode-active {
-          border-color: ${fromProps('focus.color')};
+          border-color: var(--focus--stroke);
           background: none;
 
           .ant-tree-node-content-wrapper {
@@ -141,51 +166,37 @@ export const treeCss = css<{ cssConfig: TreeCssConfig, checkable?: boolean, disa
           background: none;
 
           .ant-tree-title {
-            color: ${fromProps('disabled.color')};
+            color: var(--tree--text--disabled);
           }
         }
       }
 
       &.ant-tree-treenode-selected,
       &.ant-tree-treenode-checkbox-checked {
-        background-color: transparent;
-
         .ant-tree-title {
-          color: ${fromProps('enabled.color')};
+          color: var(--tree--text--enabled);
         }
 
-        &:hover {
-          & {
-            background-color: transparent;
-          }
-
-          .ant-tree-title {
-            color: ${(props: ITreeProps) =>
+        &:hover .ant-tree-title {
+          color: ${(props: ITreeProps) =>
     props.disableNodeBg
-      ? fromProps('enabled.color')
-      : fromProps('hover.color')};
-          }
+      ? 'var(--tree--text--enabled)'
+      : 'var(--tree--text--hover)'};
         }
 
-        &:active {
-          & {
-            background-color: transparent;
-          }
-
-          .ant-tree-title {
-            color: ${(props: ITreeProps) =>
+        &:active .ant-tree-title {
+          color: ${(props: ITreeProps) =>
     props.disableNodeBg
-      ? fromProps('enabled.color')
-      : fromProps('active.color')};
-          }
+      ? 'var(--tree--text--enabled)'
+      : 'var(--tree--text--active)'};
         }
 
         &.ant-tree-treenode-active {
-          border-color: ${fromProps('focus.color')};
+          border-color: var(--focus--stroke);
           background-color: transparent;
 
           .ant-tree-title {
-            color: ${fromProps('enabled.color')};
+            color: var(--tree--text--enabled);
           }
 
           .ant-tree-node-content-wrapper {
@@ -194,22 +205,127 @@ export const treeCss = css<{ cssConfig: TreeCssConfig, checkable?: boolean, disa
         }
 
         &.ant-tree-treenode-disabled {
-          background-color: transparent;
+          &, &:hover, &:active {
+            background-color: transparent;
 
-          .ant-tree-title {
-            color: ${fromProps('disabled.color')};
+            .ant-tree-title {
+              color: var(--tree--text--disabled);
+            }
           }
         }
       }
 
-      .ant-tree-indent-unit {
-        width: 18px;
+      &.ant-tree-treenode-checkbox-checked {
+        background-color: var(--submenu_item--bg--enabled);
+        .ant-tree-title, .ant-tree-iconEle > svg {
+          color: var(--tree--text--enabled);
+        }
 
-        &:before {
-          top: -8px;
-          right: 10px;
-          bottom: -2px;
-          border-color: ${fromProps('enabled.lineColor')};
+        ${(props) => props.interactive && `
+          &:hover {
+            background-color: var(--submenu_item--bg--hover);
+            .ant-tree-title, .ant-tree-iconEle > svg {
+              color: var(--tree--text--hover);
+            }
+          }
+
+          &:active {
+            background-color: var(--submenu_item--bg--active);
+            .ant-tree-title, .ant-tree-iconEle > svg {
+              color: var(--tree--text--active);
+            }
+          }
+        `}
+      }
+
+      &.ant-tree-treenode-selected {
+        background-color: var(--submenu_item--bg--enabled_selected);
+        .ant-tree-title, .ant-tree-iconEle > svg {
+          color: var(--submenu_item--text--enabled_selected);
+        }
+
+        &:hover {
+          background-color: var(--submenu_item--bg--hover_selected);
+          .ant-tree-title, .ant-tree-iconEle > svg {
+            color: var(--submenu_item--text--hover_selected);
+          }
+        }
+
+        &:active {
+          background-color: var(--submenu_item--bg--active_selected);
+          .ant-tree-title, .ant-tree-iconEle > svg {
+            color: var(--submenu_item--text--active_selected);
+          }
+        }
+      }
+
+      .ant-tree-indent {
+
+        .ant-tree-indent-unit {
+          width: 18px;
+
+          &:before {
+            top: -8px;
+            right: 9px;
+            bottom: -7px;
+            border-color: var(--level--bg--line--enabled);
+          }
+        }
+
+        .ant-tree-indent-unit.ant-tree-indent-unit-end {
+          width: 18px;
+
+          &:before {
+            position: absolute;
+            display: block;
+            content: '';
+            top: -8px;
+            right: 9px;
+            bottom: -7px;
+            border-color: var(--level--bg--line--enabled);
+          }
+        }
+
+        
+      }
+
+      & .ant-tree-indent {
+        &:has(.ant-tree-indent-unit-end.ant-tree-indent-unit-start) {
+         .ant-tree-indent-unit-end:not(.ant-tree-indent-unit-start):not(:last-child) {
+            &:before {
+              opacity: 0;
+            }
+          }
+        }
+      }
+
+      &.ant-tree-treenode-leaf-last .ant-tree-indent {
+        .ant-tree-indent-unit:not(.ant-tree-indent-unit-end:last-of-type).ant-tree-indent-unit-end {
+          &:before {
+            opacity: 0;
+          }
+        }
+
+        &:has(.ant-tree-indent-unit-end + .ant-tree-indent-unit:not(.ant-tree-indent-unit-end)) {
+          .ant-tree-indent-unit-end {
+            &:before {
+              opacity: 1;
+            }
+          }
+        }
+
+        
+        .ant-tree-indent-unit-start ~ .ant-tree-indent-unit-end {
+          &:before {
+            opacity: 1;
+          }
+        }
+
+        .ant-tree-indent-unit:last-child.ant-tree-indent-unit-end,
+        .ant-tree-indent-unit:last-child.ant-tree-indent-unit-start:not(:first-child) {
+          &:before {
+            bottom: 12px;
+          }
         }
       }
 
@@ -217,7 +333,7 @@ export const treeCss = css<{ cssConfig: TreeCssConfig, checkable?: boolean, disa
         background-color: transparent !important;
 
         .ant-tree-title {
-          color: ${fromProps('enabled.color')};
+          color: var(--tree--text--enabled);
         }
 
         & > * {
@@ -237,7 +353,19 @@ export const treeCss = css<{ cssConfig: TreeCssConfig, checkable?: boolean, disa
         .ant-tree-indent-unit {
           &:before {
             top: -10px;
-            right: ${SPACES[3]}px;
+            right: 6px;
+          }
+
+          &:last-of-type {
+            &:after {
+              left: 12px;
+            }
+          }
+        }
+
+        .ant-tree-indent-unit.ant-tree-indent-unit-end {
+          &:before {
+            right: 6px;
           }
         }
       }
@@ -260,7 +388,7 @@ export const treeCss = css<{ cssConfig: TreeCssConfig, checkable?: boolean, disa
           bottom: -2px;
           right: 8px;
           top: -8px;
-          border-color: ${fromProps('enabled.lineColor')};
+          border-color: var(--level--bg--line--enabled);
         }
 
         &:after {
@@ -287,25 +415,93 @@ export const treeCss = css<{ cssConfig: TreeCssConfig, checkable?: boolean, disa
         transform: translateY(2px);
       }
 
+      .hexa-ui-tree-node-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        white-space: pre;
+
+        & > span {
+          margin-right: 4px;
+        }
+
+        .hexa-ui-tree-node-action {
+          opacity: 0;
+          position: sticky;
+          right: -8px;
+          padding: 4px 4px 4px 2px;
+          transition: none;
+
+          ::before {
+            display: block;
+            content: '';
+            position: absolute;
+            height: 100%;
+            left: -8px;
+            width: 10px;
+          }
+        }
+      }
+
+      &.ant-tree-treenode:hover .hexa-ui-tree-node-action {
+        opacity: 1;
+        background-color: var(--submenu_item--bg--hover);
+        ::before {
+          background: ${getLinearGradient('var(--submenu_item--bg--hover)')};
+        }
+      }
+
+      &.ant-tree-treenode:active .hexa-ui-tree-node-action {
+        background-color: var(--submenu_item--bg--active);
+        ::before {
+          background: ${getLinearGradient('var(--submenu_item--bg--active)')};
+        }
+      }
+
+      &.ant-tree-treenode.ant-tree-treenode-selected .hexa-ui-tree-node-action {
+        background-color: var(--submenu_item--bg--hover_selected);
+        ::before {
+          background: ${getLinearGradient('var(--submenu_item--bg--hover_selected)')};
+        }
+      }
+
+      &.ant-tree-treenode.ant-tree-treenode-selected:active .hexa-ui-tree-node-action {
+        background-color: var(--submenu_item--bg--active_selected);
+        ::before {
+          background: ${getLinearGradient('var(--submenu_item--bg--active_selected)')};
+        }
+      }
+
+      &.ant-tree-treenode.ant-tree-treenode-disabled .hexa-ui-tree-node-action {
+        background-color: var(--submenu_item--bg--enabled);
+        ::before {
+          background: ${getLinearGradient('var(--submenu_item--bg--enabled)')};
+        }
+      }
     }
 
     .ant-tree-checkbox {
-      margin: 0 0 0 -20px;
+      margin: 0 0 0 -16px;
       padding: 0;
       transform: translate(19px, 2px);
       opacity: 0;
     }
 
     .ant-tree-iconEle:not(:empty) + .ant-tree-title {
-      padding-left: ${SPACES[2]}px;
+      padding-left: 4px;
     }
 
     .ant-tree-node-content-wrapper .ant-tree-iconEle {
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
+
+      > svg {
+        margin: 4px 0 2px 0;
+      }
 
       .ant-checkbox {
-        top: ${SPACES[1]}px;
+        top: 2px;
       }
     }
 

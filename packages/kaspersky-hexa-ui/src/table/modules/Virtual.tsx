@@ -19,60 +19,60 @@ export const VirtualTanstack: TableModule = Component => (props: ITableProps) =>
       <div style={{ height: `${virtualizer.getTotalSize()}px` }}>
         <table>
           <tbody className="ant-table-tbody">
-          {virtualizer.getVirtualItems().map((virtualRow, index) => {
-            const row = data[virtualRow.index]
-            const currentRowKey = row.key
+            {virtualizer.getVirtualItems().map((virtualRow, index) => {
+              const row = data[virtualRow.index]
+              const currentRowKey = row.key
 
-            const renderSelectionColumn = () => {
-              if (!props.rowSelection) return null
+              const renderSelectionColumn = () => {
+                if (!props.rowSelection) return null
 
-              const { selectedRowKeys = [], onChange } = props.rowSelection
-              const isRowChecked = selectedRowKeys.includes(currentRowKey)
+                const { selectedRowKeys = [], onChange } = props.rowSelection
+                const isRowChecked = selectedRowKeys.includes(currentRowKey)
 
-              const handleChange = () => {
-                if (isRowChecked) {
-                  onChange?.(selectedRowKeys.filter(key => key !== currentRowKey), [])
-                } else {
-                  onChange?.([...selectedRowKeys, currentRowKey], [])
+                const handleChange = () => {
+                  if (isRowChecked) {
+                    onChange?.(selectedRowKeys.filter(key => key !== currentRowKey), [])
+                  } else {
+                    onChange?.([...selectedRowKeys, currentRowKey], [])
+                  }
                 }
+
+                return <td className="ant-table-cell ant-table-selection-column ant-table-cell-with-append">
+                  <Checkbox checked={isRowChecked} onChange={handleChange}></Checkbox>
+                </td>
               }
 
-              return <td className="ant-table-cell ant-table-selection-column ant-table-cell-with-append">
-                <Checkbox checked={isRowChecked} onChange={handleChange}></Checkbox>
-              </td>
-            }
-
-            return (
-              <tr
-                className="ant-table-row"
-                key={row.key}
-                style={{
-                  height: `${virtualRow.size}px`,
-                  transform: `translateY(${
-                    virtualRow.start - index * virtualRow.size
-                  }px)`
-                }}
-              >
-                {renderSelectionColumn()}
-                {props.columns?.map((col, index) => {
-                  const isLastColumn = props.columns?.length ? index === props.columns?.length - 1 : false
-                  return (
-                    <td
-                      className="ant-table-cell"
-                      key={`${row.key}-${col.dataIndex}`}
-                      style={{
-                        width: isLastColumn ? 'auto' : col.width ? col.width : '200px',
-                        maxWidth: '200px',
-                        minWidth: '100px'
-                      }}
-                    >
-                      {row[col.dataIndex!]}
-                    </td>
-                  )
-                })}
-              </tr>
-            )
-          })}
+              return (
+                <tr
+                  className="ant-table-row"
+                  key={row.key}
+                  style={{
+                    height: `${virtualRow.size}px`,
+                    transform: `translateY(${
+                      virtualRow.start - index * virtualRow.size
+                    }px)`
+                  }}
+                >
+                  {renderSelectionColumn()}
+                  {props.columns?.map((col, index) => {
+                    const isLastColumn = props.columns?.length ? index === props.columns?.length - 1 : false
+                    return (
+                      <td
+                        className="ant-table-cell"
+                        key={`${row.key}-${col.dataIndex}`}
+                        style={{
+                          width: isLastColumn ? 'auto' : col.width ? col.width : '200px',
+                          maxWidth: '200px',
+                          minWidth: '100px'
+                        }}
+                      >
+                        {row[col.dataIndex!]}
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

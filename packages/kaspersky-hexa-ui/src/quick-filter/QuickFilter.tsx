@@ -1,9 +1,11 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import { Calendar, RangePicker } from '@src/datepicker'
 import { SegmentedButton } from '@src/segmented-button'
 import { Toggle } from '@src/toggle'
+import { ToggleButtonGroup } from '@src/toggle-button/ToggleButtonGroup'
 import React, { FC, ReactElement } from 'react'
 
-import { StyledSelect, ToggleWrapper, StyledField, StyledQuickFilter } from './quickFilterCss'
+import { StyledField, StyledQuickFilter, StyledSelect, ToggleWrapper } from './quickFilterCss'
 import { QuickFilterItem, QuickFilterProps } from './types'
 
 type FieldConfig = {
@@ -25,14 +27,26 @@ export const getMappedFieldProps = (filter: QuickFilterItem, disabled?: boolean)
       const { component, ...props } = filter
       return { control: <ToggleWrapper><Toggle disabled={disabled} {...props} /></ToggleWrapper> }
     }
+    case 'toggle-button-group': {
+      const { component, label, ...props } = filter
+      return { control: <ToggleButtonGroup disabled={disabled} {...props} />, label }
+    }
+    case 'date-picker': {
+      const { component, label, ...props } = filter
+      return { control: <Calendar {...props} />, label }
+    }
+    case 'range-picker': {
+      const { component, label, ...props } = filter
+      return { control: <RangePicker {...props} />, label }
+    }
   }
 }
 
-export const QuickFilter: FC<QuickFilterProps> = ({ filters, disabled, labelPosition = 'before', ...rest }) => {
+export const QuickFilter: FC<QuickFilterProps> = ({ filters, disabled, className, labelPosition = 'before', ...rest }) => {
   const { testAttributes } = useTestAttribute(rest)
 
   return (
-    <StyledQuickFilter {...testAttributes}>
+    <StyledQuickFilter {...testAttributes} className={className}>
       {filters.map((filterProps: QuickFilterItem, index: number) => {
         const mappedFieldProps = getMappedFieldProps(filterProps, disabled)
 

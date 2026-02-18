@@ -1,3 +1,4 @@
+import { ConfigProvider } from '@design-system/context'
 import { render } from '@testing-library/react'
 import React from 'react'
 
@@ -10,7 +11,9 @@ const defaultProps = {
 }
 
 const DefaultQuickFilter = (props: QuickFilterProps) => (
-  <QuickFilter {...defaultProps} {...props} />
+  <ConfigProvider>
+    <QuickFilter {...defaultProps} {...props} />
+  </ConfigProvider>
 )
 
 describe('QuickFilter', () => {
@@ -41,7 +44,7 @@ describe('QuickFilter', () => {
       },
       { component: 'toggle', testId: 'filter-3-id' }
     ]
-    const { container } = render(<QuickFilter filters={filters} />)
+    const { container } = render(<DefaultQuickFilter filters={filters} />)
 
     expect(container.querySelector('[data-testid="filter-1-id"]')).toBeInTheDocument()
     expect(container.querySelector('[data-testid="filter-2-id"]')).toBeInTheDocument()
@@ -49,7 +52,7 @@ describe('QuickFilter', () => {
   })
 
   it('should handle empty filters array gracefully', () => {
-    const { container } = render(<QuickFilter filters={[]} />)
+    const { container } = render(<DefaultQuickFilter filters={[]} />)
     expect(container.firstChild).toBeEmptyDOMElement()
   })
 })

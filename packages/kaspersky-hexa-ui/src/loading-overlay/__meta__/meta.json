@@ -1,0 +1,7 @@
+{
+  "component": "LoadingOverlay",
+  "description": "",
+  "usage": "Компонент накладывается поверх контента и сообщает пользователю о процессе загрузки. Он блокирует взаимодействие с интерфейсом до завершения загрузки",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=2749%3A1",
+  "pixsoView": "https://pixso.net/app/design/i8fXxTZRpzYH0MorPCNhzA"
+}

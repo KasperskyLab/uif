@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": false,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": true,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "HorizontalNav",
+  "description": "Отображает панель с элементами навигации и управления в некоторых продуктах.",
+  "usage": "HorizontalNav — это интерактивный компонент...",
+  "designLink": "",
+  "pixsoView": ""
+}

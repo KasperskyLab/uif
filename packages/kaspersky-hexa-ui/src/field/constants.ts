@@ -13,7 +13,9 @@ export const inputLikeControlsClassnames = [
   '.ant-picker',
   '.kl6-code-viewer',
   '.ant-btn',
-  '.kl6-segmented-button'
+  '.kl6-segmented-button',
+  '.hexa-upload',
+  'label[class*="toggleBtn"]'
 ]
 
 export const checkboxLikeControlsClassnames = [

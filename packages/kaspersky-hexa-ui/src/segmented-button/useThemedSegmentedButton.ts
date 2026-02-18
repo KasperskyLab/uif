@@ -1,4 +1,4 @@
-import { useThemedComponent } from '@helpers/useThemedComponent'
+import { useComponentCssConfig } from '@design-system/css-configs/helpers/useComponentCssConfig'
 
 import {
   SegmentedButtonCssConfig,
@@ -8,7 +8,7 @@ import {
 } from './types'
 
 export const useThemedSegmentedButton = (props: SegmentedButtonItemProps): SegmentedButtonItemViewProps => (
-  useThemedComponent<SegmentedButtonItemProps, SegmentedButtonCssConfig, SegmentedButtonThemeProps>(props, {
+  useComponentCssConfig<SegmentedButtonItemProps, SegmentedButtonCssConfig, SegmentedButtonThemeProps>(props, {
     componentName: 'segmentedButton',
     defaultValues: { mode: 'marina', size: 'medium' }
   })

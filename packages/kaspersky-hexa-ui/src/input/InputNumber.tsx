@@ -1,13 +1,13 @@
-import { WithGlobalStyles } from '@helpers/hocs/WithGlobalStyles'
+import { useGlobalStyles } from '@helpers/hooks/useGlobalStyles'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { InputNumber as AntdInputNumber } from 'antd'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import styled from 'styled-components'
 
 import { ArrowDownMicro, ArrowUpMicro } from '@kaspersky/hexa-ui-icons/16'
 
 import { inputNumberStyles, inputStyles } from './inputCss'
-import { TextboxNumberMappedProps, TextboxNumberProps, TextboxNumberViewProps } from './types'
+import { TextboxNumberProps } from './types'
 import { useClassNamedTextbox } from './useClassNamedTextbox'
 import { useThemedTextbox } from './useThemedTextbox'
 
@@ -18,21 +18,20 @@ const StyledInputNumber = styled(AntdInputNumber).withConfig({
   ${inputNumberStyles}
 `
 
-const InputNumberComponent: FC<TextboxNumberProps> = (rawProps: TextboxNumberProps) => {
-  const mappedProps: TextboxNumberMappedProps = useClassNamedTextbox<TextboxNumberProps>(rawProps)
-  const themedProps: TextboxNumberViewProps = useThemedTextbox(mappedProps)
-  const props = useTestAttribute(themedProps)
-  return <InputNumberView {...props} />
-}
+export const InputNumber: FC<TextboxNumberProps> = (props: TextboxNumberProps) => {
+  const {
+    onChange,
+    controls,
+    value,
+    min,
+    testAttributes,
+    allowEmpty = false,
+    integerOnly = false,
+    ...rest
+  } = useTestAttribute(useThemedTextbox(useClassNamedTextbox(props)))
 
-const InputNumberView: FC<TextboxNumberViewProps> = ({
-  onChange,
-  controls,
-  value,
-  testAttributes,
-  allowEmpty = false,
-  ...rest
-}: TextboxNumberViewProps) => {
+  useGlobalStyles()
+
   return (
     <StyledInputNumber
       upHandler={controls?.upIcon || <ArrowUpMicro/>}
@@ -40,22 +39,28 @@ const InputNumberView: FC<TextboxNumberViewProps> = ({
       {...testAttributes}
       {...rest}
       onChange={value => {
+        onChange?.(value as TextboxNumberProps['value'])
+      }}
+      min={min}
+      value={value}
+      formatter={value => {
         let result: TextboxNumberProps['value']
         if (allowEmpty && value === null) {
           result = ''
         } else {
-          result = Number(value)
+          result = String(value)
         }
-        onChange?.(result)
+        return result
       }}
-      value={value}
       onKeyPress={(event) => {
-        if (!/\d|[.]|-/.test(event.key)) {
+        const keyValidators: Record<string, RegExp> = {
+          'true': /\d|-/,
+          'false': /\d|[.]|-/
+        }
+        if (!keyValidators[String(integerOnly)].test(event.key)) {
           event.preventDefault()
         }
       }}
     />
   )
 }
-
-export const InputNumber = WithGlobalStyles(InputNumberComponent)

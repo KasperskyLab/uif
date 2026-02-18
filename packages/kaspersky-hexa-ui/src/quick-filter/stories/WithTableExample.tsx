@@ -1,6 +1,8 @@
+import { DateInputValue, RangeDateInputValue } from '@src/datepicker'
 import { QuickFilter as QuickFilterComponent, QuickFilterProps } from '@src/quick-filter'
 import { Space } from '@src/space'
 import { Table } from '@src/table'
+import { isAfter, isBefore, isSameDay } from 'date-fns'
 import React, { useEffect, useState } from 'react'
 
 import { StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
@@ -20,7 +22,9 @@ type Filters = {
   dataType: string,
   category: string[],
   tags: string[],
-  availability: string[]
+  availability: string[],
+  date?: DateInputValue,
+  dateRange?: RangeDateInputValue
 }
 
 export const WithTableExample = (props: Omit<QuickFilterProps, 'filters'>) => {
@@ -49,7 +53,17 @@ export const WithTableExample = (props: Omit<QuickFilterProps, 'filters'>) => {
       const tagsMatch = filters.tags.some((val) => row.tags.some((item) => item === filterMappings.tags[val]))
       const availabilityMatch = filters.availability.some((val) => row.availability === filterMappings.availability[val])
 
-      return statusMatch && dataTypeMatch && categoryMatch && tagsMatch && availabilityMatch
+      const rowDate = new Date(row.date)
+
+      const filterDate = filters.date ? new Date(filters.date) : null
+      const dateMatch = !filterDate || isSameDay(rowDate, filterDate)
+
+      const [startDate, endDate] = filters.dateRange || [null, null]
+      const dateRangeMatch =
+        (!startDate || isAfter(rowDate, new Date(startDate))) &&
+        (!endDate || isBefore(rowDate, new Date(endDate)))
+
+      return statusMatch && dataTypeMatch && categoryMatch && tagsMatch && availabilityMatch && dateMatch && dateRangeMatch
     })
 
     setFilteredData(newFilteredData)
@@ -85,10 +99,9 @@ export const WithTableExample = (props: Omit<QuickFilterProps, 'filters'>) => {
     },
     {
       label: 'Category',
-      component: 'segmented-button',
+      component: 'toggle-button-group',
       value: filters.category,
       onChange: (value) => handleFilterChange('category', value),
-      size: 'large',
       items: [
         { text: 'All', value: '1' },
         { text: 'System', value: '2' },
@@ -118,17 +131,31 @@ export const WithTableExample = (props: Omit<QuickFilterProps, 'filters'>) => {
     },
     {
       label: 'Availability',
-      component: 'segmented-button',
+      component: 'toggle-button-group',
       value: filters.availability,
       onChange: (value) => handleFilterChange('availability', value),
-      size: 'large',
-      type: 'checkbox',
       items: [
-        { text: 'Available', value: '1', mode: 'grass', componentsBefore: [<StatusOkOutline key="ok-icon" />] },
-        { text: 'Restricted', value: '2', mode: 'yellow', componentsBefore: [<StatusWarningOutline key="warning-icon" />] }
+        { text: 'Available', value: '1', mode: 'grass', iconBefore: [<StatusOkOutline key="ok-icon" />] },
+        { text: 'Restricted', value: '2', mode: 'yellow', iconBefore: [<StatusWarningOutline key="warning-icon" />] }
       ],
       testId: 'availability-test-id',
       klId: 'availability-kl-id'
+    },
+    {
+      label: 'Date',
+      component: 'date-picker',
+      value: filters.date,
+      onChange: (value) => handleFilterChange('date', value),
+      testId: 'date-test-id',
+      klId: 'date-kl-id'
+    },
+    {
+      label: 'Date Range',
+      component: 'range-picker',
+      value: filters.dateRange,
+      onChange: (value) => handleFilterChange('dateRange', value),
+      testId: 'date-range-test-id',
+      klId: 'date-range-kl-id'
     }
   ]
 
@@ -137,7 +164,7 @@ export const WithTableExample = (props: Omit<QuickFilterProps, 'filters'>) => {
   }
 
   return (
-    <Space gap={16} direction="vertical" align="start" width="100%">
+    <Space gap={16} direction="vertical" align="start" width="1000px">
       <QuickFilterComponent {...props} filters={mockedFiltersForTable} />
       <Table
         columns={tableColumns}

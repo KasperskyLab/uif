@@ -1,6 +1,6 @@
 import { effects } from '@kaspersky/hexa-ui-core/colors/js'
 
-import { ThemeKey, ThemeConfig } from '../../types'
+import { ThemeConfig, ThemeKey } from '../../types'
 
 import { DARK_THEME } from './dark'
 import { LIGHT_THEME } from './light'

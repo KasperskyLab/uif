@@ -155,6 +155,11 @@ export const toggleCss = css<ToggleCssProps>`
   
   + .toggle-label {
     line-height: 20px;
+
+    .ant-table-cell & {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
   }
 
   &:not(:disabled) + .toggle-label {
@@ -172,4 +177,5 @@ export const ToggleWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  gap: 4px;
 `

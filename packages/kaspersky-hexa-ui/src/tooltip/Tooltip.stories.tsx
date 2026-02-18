@@ -1,14 +1,18 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
+import { ContentContainer, ScrollableContainer } from '@sb/components/ScrollableContainer'
 import { StyledTag } from '@sb/components/Warnings'
 import { sbHideControls } from '@sb/helpers'
 import { StoryColumn } from '@sb/StoryComponents'
 import { Button } from '@src/button'
+import { Field } from '@src/field'
 import { SectionMessage } from '@src/section-message'
+import { SegmentedButton, SegmentedButtonOption } from '@src/segmented-button'
 import { P, Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
+import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
 
@@ -33,7 +37,7 @@ const meta: Meta<TooltipProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta
@@ -83,24 +87,64 @@ export const WithDisabledComponent: Story = {
   </StoryColumn>
 }
 
+export const WithinScrollableContainer: Story = {
+  render: (args: TooltipProps) => (
+    <ScrollableContainer>
+      <ContentContainer>
+        <Tooltip {...args} getPopupContainer={trigger => trigger.parentElement as HTMLElement} />
+      </ContentContainer>
+    </ScrollableContainer>
+  ),
+  args: {
+    children: <Button>Click me and scroll my container</Button>,
+    trigger: 'click'
+  }
+}
+
 export const PerformanceExample: Story = {
   render: (args: TooltipProps) => {
+    const [performSize, setPerformSize] = React.useState(10)
     const tooltips = React.useMemo(() => {
       const arr: number[] = []
-      for (let i = 0; i <= 1000; i++) {
+      for (let i = 0; i <= performSize; i++) {
         arr.push(i)
       }
       return arr
-    }, [])
-
+    }, [performSize])
+    const items: SegmentedButtonOption[] = [
+      {
+        value: '10',
+        text: '10'
+      },
+      {
+        value: '100',
+        text: '100'
+      },
+      {
+        value: '1000',
+        text: '1000'
+      }
+    ]
     return (
       <StoryColumn>
+        <Field
+          control={<SegmentedButton
+            value={[performSize.toString()]}
+            type="radio"
+            items={items}
+            onChange={value => {
+              setPerformSize(Number(value[0]))
+            }}
+          />
+          }
+          label="Number of tooltips on page"
+        />
         {tooltips.map((t) => (
           <Tooltip
             {...args}
             key={t}
             text={t}
-            destroyTooltipOnHide={{ keepParent: false }}
+            destroyTooltipOnHide
           >
             <Text>{t}: hover me to see Tooltip</Text>
           </Tooltip>

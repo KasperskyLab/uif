@@ -7,10 +7,11 @@
     "migration": true,
     "apiTable": false,
     "storybook": true,
-    "figmaView": false
+    "pixsoView": true
   },
   "component": "Menu",
   "description": "В качестве основы используется Layout.Sider из библиотеки Antd.",
   "usage": "Боковая панель, область навигации приложения.",
-  "designLink": "https://www.figma.com/design/9hiN2DbkqbxbhR9EWRI1VK/[B2B]-Hexa-UI-Components-v6.126.7?node-id=29963-103939&t=65dpe5bv8IMBEeN6-0"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=113387%3A403890",
+  "pixsoView": "https://pixso.net/app/design/_4zadZCerA8J2uC6PWofDg"
 }

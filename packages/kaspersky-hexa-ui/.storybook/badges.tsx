@@ -1,13 +1,13 @@
 import { AlertMode } from '@src/alert'
 
 export const badges = {
-  'missingDesign': 'missingDesign',
-  'needsDesignReview': 'needsDesignReview',
-  'reviewedByDesign': 'reviewedByDesign',
-  'deprecated': 'deprecated',
-  'stable': 'stable',
-  'dev': 'dev',
-  'notProdReady': 'notProdReady'
+  missingDesign: 'missingDesign',
+  needsDesignReview: 'needsDesignReview',
+  reviewedByDesign: 'reviewedByDesign',
+  deprecated: 'deprecated',
+  stable: 'stable',
+  dev: 'dev',
+  notProdReady: 'notProdReady'
 }
 
 export type SBBadges = typeof badges[keyof typeof badges]
@@ -34,7 +34,7 @@ export const badgesConfig: SBBadgesConfig = {
   [badges.missingDesign]: {
     mode: 'warning',
     title: 'Missing design',
-    description: 'The component doesn\'t have layout page in figma',
+    description: 'The component doesn\'t have layout page in pixso'
   },
   [badges.reviewedByDesign]: {
     mode: 'success',

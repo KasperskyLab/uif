@@ -6,7 +6,7 @@ import { ArrowDown } from '@kaspersky/hexa-ui-icons/16'
 
 import { Text } from '../../src/typography'
 
-import { data, Change } from './data'
+import { Change, data } from './data'
 
 const ChangesContainer = styled.div`
   display: flex;

@@ -1,4 +1,3 @@
-import { BORDER_RADIUS, SPACES } from '@design-system/theme/themes/variables'
 import { getTextSizes } from '@design-system/tokens'
 import { getFromProps } from '@helpers/getFromProps'
 import { createGlobalStyle, css } from 'styled-components'
@@ -11,7 +10,7 @@ const fromProps = getFromProps<PickerCssConfig>()
 
 const fromInputProps = getFromProps<PickerInputCssConfig>()
 
-const DATE_PICKER_PANEL_BODY_PADDING = `${SPACES[8]}px`
+const DATE_PICKER_PANEL_BODY_PADDING = '16px'
 const DATE_PICKER_PANEL_WIDTH = '260px'
 const DATE_PICKER_PANEL_HEIGHT = '288px'
 const DATE_PICKER_PANEL_CONTENT_HEIGHT = '248px'
@@ -22,7 +21,7 @@ export const listCss = css`
   display: inline-flex;
   align-items: start;
   justify-content: start;
-  gap: ${SPACES[4]}px;
+  gap: 8px;
   padding: 0;
   width: 100%;
   flex-direction: column;
@@ -39,21 +38,23 @@ export const listCss = css`
   & > div:not(:empty) {
     margin-left: auto;
     display: inline-flex;
-    gap: ${SPACES[6]}px;
+    gap: 12px;
   }
 `
 
 export const pickerCss = css`
+
+  &&&.ant-picker-range {
+    width: 360px;
+  }
+  gap: 4px;
+  min-width: fit-content;
+
   .ant-picker-suffix {
     pointer-events: auto;
     color: ${fromInputProps('enabled.color')};
     border-radius: 3px;
     margin-left: auto;
-  }
-
-  .ant-picker-active-bar,
-  .ant-picker-range-separator {
-    display: none;
   }
 
   &.kl6-textbox-readonly {
@@ -65,6 +66,29 @@ export const pickerCss = css`
 
   &, & input {
     cursor: pointer;
+  }
+
+  &.ant-picker-range {
+    .ant-picker-active-bar {
+      display: none;
+    }
+    
+    .ant-picker-input {
+      width: auto;
+      min-width: fit-content;
+
+      input {
+        field-sizing: content;
+      }
+    }
+
+    .ant-picker-range-separator {
+      padding: 0;
+    }
+
+    &:has(input:not(:placeholder-shown), input:focus) .hexa-ui-range-separator {
+      color: var(--text--primary);
+    }
   }
 `
 
@@ -111,14 +135,14 @@ export const pickerContainerCss = css`
   }
 
   .ant-picker-header {
-    padding: ${SPACES[4]}px;
+    padding: 8px;
     height: ${DATE_PICKER_PANEL_HEADER_HEIGHT};
     width: ${DATE_PICKER_PANEL_WIDTH};
     button {
       color: ${fromProps('selected.enabled.background')};
     }
     .ant-picker-header-view {
-      line-height: ${SPACES[12]}px;
+      line-height: 24px;
 
 
       .ant-picker-month-btn,
@@ -158,8 +182,8 @@ export const pickerContainerCss = css`
     .ant-picker-header-prev-btn,
     .ant-picker-header-next-btn {
       visibility: visible !important;
-      height: ${SPACES[12]}px;
-      width: ${SPACES[12]}px;
+      height:24px;
+      width: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -168,25 +192,25 @@ export const pickerContainerCss = css`
     }
 
     .ant-picker-header-super-prev-btn {
-      margin-right: ${SPACES[2]}px;
+      margin-right: 4px;
     }
 
     .ant-picker-header-super-next-btn {
-      margin-left: ${SPACES[2]}px;
+      margin-left: 4px;
     }
   }
 
   .ant-picker-content thead th {
     ${getTextSizes(textLevels.BTR4)}
-    height: ${SPACES[12]}px;
-    width: ${SPACES[12]}px;
+    height: 24px;
+    width: 24px;
     padding: 0;
     color: ${fromProps('unselected.enabled.color')};
   }
 
   .ant-picker-cell-today {
     .ant-picker-cell-inner::before {
-      border-radius: ${BORDER_RADIUS[2]}px;
+      border-radius: 4px;
       border-color: ${fromProps('unselected.enabled.border')};
     }
 
@@ -273,8 +297,8 @@ export const pickerContainerCss = css`
   .ant-picker-cell > .ant-picker-cell-inner,
   .ant-picker-time-panel-cell-inner {
     ${getTextSizes(textLevels.BTR4)}
-    line-height: ${SPACES[12]}px;
-    border-radius: ${BORDER_RADIUS[2]}px;
+    line-height: 24px;
+    border-radius: 4px;
   }
   
   & .ant-picker-cell,
@@ -310,7 +334,7 @@ export const pickerContainerCss = css`
     
     .ant-picker-footer-extra {
       line-height: 1;
-      padding: ${SPACES[8]}px ${SPACES[2]}px;
+      padding: 16px 4px;
     }
   }
 
@@ -346,7 +370,7 @@ export const pickerContainerCss = css`
         line-height: 24px;
         padding: 0;
         text-align: center;
-        border-radius: ${BORDER_RADIUS[2]}px;
+        border-radius: 4px;
       }
     }
   }
@@ -359,7 +383,7 @@ export const pickerContainerCss = css`
 
   .ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single):not(.ant-picker-cell-range-end) {
     .ant-picker-cell-inner {
-      border-radius: ${BORDER_RADIUS[2]}px 0 0 ${BORDER_RADIUS[2]}px;
+      border-radius: 4px 0 0 4px;
     }
     &::before {
       left: 50%;
@@ -373,7 +397,7 @@ export const pickerContainerCss = css`
 
   .ant-picker-cell-range-end:not(.ant-picker-cell-range-end-single):not(.ant-picker-cell-range-start) {
     .ant-picker-cell-inner {
-      border-radius: 0 ${BORDER_RADIUS[2]}px ${BORDER_RADIUS[2]}px 0;
+      border-radius: 0 4px 4px 0;
     }
     &::before {
       right: 50%;
@@ -460,7 +484,7 @@ export const pickerContainerCss = css`
 
 export const PickerGlobalCss = createGlobalStyle`
   .ant-picker-panel-container {
-    border-radius: ${BORDER_RADIUS[4]}px;
+    border-radius: 8px;
     box-shadow: ${fromProps('boxShadow')};
   }
 

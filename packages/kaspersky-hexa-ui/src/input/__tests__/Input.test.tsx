@@ -1,3 +1,4 @@
+import { ConfigProvider } from '@design-system/context'
 import { fireEvent, render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
@@ -180,15 +181,25 @@ describe('Input - Textbox - Number ', () => {
     await userEvent.click(document.body)
     expect(textboxNumber).toHaveValue('444')
   })
+
+  test('should prevent non-integer input when integerOnly is true', async () => {
+    const { getByTestId } = render(<Textbox.Number integerOnly klId={klId} />)
+
+    const textboxNumber = getByTestId(klId)
+    await userEvent.clear(textboxNumber)
+    await userEvent.type(textboxNumber, '1.')
+    await userEvent.click(document.body)
+    expect(textboxNumber).toHaveValue('1')
+  })
 })
 
 describe('Input - Textbox - Textarea ', () => {
   const klId = 'input-id'
   test('should recieve kl-id prop', () => {
     const { getByTestId } = render(
-      <Textbox.Textarea
-        klId={klId}
-      />
+      <ConfigProvider>
+        <Textbox.Textarea klId={klId} />
+      </ConfigProvider>
     )
     expect(getByTestId(klId)).toBeInTheDocument()
   })
@@ -204,7 +215,27 @@ describe('Input - Textbox - Password ', () => {
     )
     expect(getByTestId(klId)).toBeInTheDocument()
   })
-  test('clears the password input value before first change', async () => {
+
+  test('should have visibility icon', () => {
+    const { getByTestId } = render(
+      <Textbox.Password
+        klId={klId} // not_a_secret
+      />
+    )
+    expect(getByTestId(`${klId}-input-password-icon`)).toBeInTheDocument()
+  })
+
+  test('should hide visibility icon when disabled', () => {
+    const { queryByTestId } = render(
+      <Textbox.Password
+        klId={klId} // not_a_secret
+        disabled
+      />
+    )
+    expect(queryByTestId(`${klId}-input-password-icon`)).not.toBeInTheDocument()
+  })
+
+  test('should clear the password input value before first change', async () => {
     let value = 'oldPassword'
     const onChange = (val: string) => {
       value = val

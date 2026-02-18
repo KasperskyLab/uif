@@ -8,11 +8,11 @@
     "apiTable": true,
     "storybook": true,
     "designLink": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "SegmentedControl",
   "description": "Табы с возможностью прокидывать дополнительные проперти-модификаторы в контент",
   "usage": "Префильтры, модифицированное представление одной формы несколькими табами",
-  "designLink": "https://www.figma.com/design/o46ZL4IBxvDFNc73cZrQYf/Segmented-control?node-id=8008-9363&node-type=frame&t=kkuF4ccDTty1fEOE-0",
-  "figmaView": "https://embed.figma.com/design/o46ZL4IBxvDFNc73cZrQYf/Segmented-control?node-id=0-1&embed-host=share"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=104692%3A554430",
+  "pixsoView": "https://pixso.net/app/design/AdtmI5-HzUa5gS17g9eGag"
 }

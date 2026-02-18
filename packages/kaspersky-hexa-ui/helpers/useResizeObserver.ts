@@ -1,27 +1,49 @@
-import { RefObject, useEffect, useLayoutEffect, useState } from 'react'
+import { RefObject, useLayoutEffect, useState } from 'react'
 import ResizeObserver from 'resize-observer-polyfill'
 
-export const useResizeObserver = (ref: RefObject<Element>): DOMRect => {
+export const resizeThrottle = (callback: () => void, delay: number) => {
+  let timer: ReturnType<typeof setTimeout> | null = null
+  let rafId: number | null = null
+
+  return () => {
+    if (timer) clearTimeout(timer)
+
+    timer = setTimeout(() => {
+      if (rafId !== null) return
+
+      rafId = requestAnimationFrame(() => {
+        rafId = null
+        callback()
+      })
+    }, delay)
+  }
+}
+
+export const useResizeObserver = (ref: RefObject<Element>, delay = 150): DOMRect | undefined => {
   const [dimensions, setDimensions] = useState<DOMRect>()
 
   useLayoutEffect(() => {
-    setDimensions(ref.current?.getBoundingClientRect())
-  }, [ref.current])
+    const element = ref.current
+    if (!element) return
 
-  useEffect(() => {
-    const observeTarget = ref.current
-    if (observeTarget === null) return
-
-    const resizeObserver = new ResizeObserver(entries => {
-      entries.forEach(entry => {
-        setDimensions(entry.target.getBoundingClientRect())
-      })
-    })
-    resizeObserver.observe(observeTarget)
-    return () => {
-      resizeObserver.unobserve(observeTarget)
+    const update = () => {
+      setDimensions(element.getBoundingClientRect())
     }
-  }, [ref.current])
+
+    const throttledUpdate = resizeThrottle(update, delay)
+
+    update()
+
+    const resizeObserver = new ResizeObserver(() => {
+      throttledUpdate()
+    })
+
+    resizeObserver.observe(element)
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [ref, delay])
 
   return dimensions as DOMRect
 }

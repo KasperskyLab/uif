@@ -1,8 +1,8 @@
-import React from 'react'
-import { Table, ITableProps } from '@src/table'
+import { ITableProps, Table } from '@src/table'
 import { StoryObj } from '@storybook/react'
+import React from 'react'
 
-import { generateDataSource, genArgType, Wrapper } from './_commonConstants'
+import { genArgType, generateDataSource, Wrapper } from './_commonConstants'
 
 type DashRowControls = {
   nameEmptyDash: boolean,

@@ -1,9 +1,9 @@
 import { focus } from '@design-system/tokens/focus'
 import { Size } from '@design-system/types'
 import {
+  ChipColorConfig,
   ChipSize,
-  ChipSizeConfig,
-  ChipColorConfig
+  ChipSizeConfig
 } from '@src/chip/types'
 
 import { ComponentThemeContext } from '../config'
@@ -24,7 +24,7 @@ export const chip = ({ colors, effects }: ComponentThemeContext): ChipColorConfi
     background: colors.chip.bg.disabled,
     color: colors.chip.text.disabled
   },
-  ...focus({ colors, effects })
+  ...focus({ effects })
 })
 
 export const chipSize: Record<ChipSize, ChipSizeConfig> = {

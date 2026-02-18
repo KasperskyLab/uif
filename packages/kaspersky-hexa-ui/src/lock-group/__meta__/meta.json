@@ -7,11 +7,11 @@
     "migration": false,
     "apiTable": false,
     "storybook": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "LockGroup",
   "description": "Компонент, показывающий статус распространения и наследования настроек по иерархии серверов",
   "usage": "Замок открыт — редактировать связанные с замком настройки можно, замок закрыт — редактирование распространяемой настройки запрещено",
-  "designLink": "https://www.figma.com/design/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-Hexa-UI-Components-v6.166.5?m=auto&node-id=112315-375167&t=eZTmO1rTWD52NHwp-1",
-  "figmaView": "https://embed.figma.com/design/aOX45BVARkbb2Tevt3c7j2/Lock-group?node-id=0-1&embed-host=share"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=112315%3A375167",
+  "pixsoView": "https://pixso.net/app/design/y1rTfOAVY5_kEIL9zCuTjw"
 }

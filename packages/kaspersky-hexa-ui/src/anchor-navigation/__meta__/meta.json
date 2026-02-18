@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": false,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "AnchorNavigation",
+  "description": "",
+  "usage": "AnchorNavigation — это вспомогательный компонент для ориентации пользователя внутри одной страницы. По своей сути AnchorNavigation — это карта страницы, которая отражает структуру контента, показывает взаимосвязь разделов и подразделов, помогает пользователю понимать, где он находится в рамках текущей страницы.",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?page-id=29963%3A101579",
+  "pixsoView": "https://pixso.net/app/design/hD3Tb31jr4YLaPBf6JEN5Q"
+}

@@ -1,0 +1,47 @@
+.filtersList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing--gap_grouped);
+}
+
+.filterItemContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing--gap_related);
+  width: 100%;
+}
+
+.propertyRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing--gap_grouped);
+}
+
+.valueRow {
+  display: grid;
+  gap: var(--spacing--gap_related);
+}
+
+.valueRow.valueRow.valueRow :global(.kl6-field-control-box) {
+  min-width: unset;
+}
+
+.grid48 {
+  grid-template-columns: 4fr 8fr;
+}
+
+.filtersToolbar {
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  background: var(--toolbar--bg);
+  margin: 0 24px;
+  padding: 4px;
+  gap: 4px;
+  width: 100%;
+}
+
+.filtersFooter {
+  display: flex;
+  gap: 12px;
+}

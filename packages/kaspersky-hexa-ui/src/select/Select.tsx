@@ -1,3 +1,4 @@
+import { usePopupConfig } from '@helpers/components/PopupConfigProvider'
 import { TextReducer } from '@helpers/components/TextReducer'
 import { useGlobalStyles } from '@helpers/hooks/useGlobalStyles'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
@@ -32,7 +33,7 @@ import {
   prepareValues,
   removeValue
 } from './helpers'
-import { DropdownContent, getSelectGlobalStyles, selectCss, SelectWrapper } from './selectCss'
+import { DropdownContent, getSelectGlobalStyles, OptionContent, OptionDescription, OptionTextContent, selectCss, SelectInnerWrapper, SelectWrapper } from './selectCss'
 import { OptionType, SelectProps, SelectViewProps } from './types'
 import { useThemedSelect } from './useThemedSelect'
 
@@ -48,8 +49,11 @@ export const Select = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     hasMore,
     onLoadMore,
     options,
+    cssConfig,
     ...rest
   } = useTestAttribute(useThemedSelect(props))
+
+  const [selectOffsetWidth, setSelectOffsetWidth] = useState<number>()
 
   // once - to prevent next trigger after user scrolls out and in
   const handleLoadMore = useMemo(() => once(() => {
@@ -75,16 +79,25 @@ export const Select = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         label={typeof option.label === 'string' ? option.label.trim() : option.label}
         role="option"
       >
-        {isMultiSelect && <MultiSelectCheckBox />}
-        <TextReducer>
-          {option.label}
-        </TextReducer>
+        <OptionContent>
+          {isMultiSelect && <MultiSelectCheckBox />}
+          <OptionTextContent>
+            <TextReducer truncationWidth={selectOffsetWidth}>
+              {option.label}
+            </TextReducer>
+            {option.description && (
+              <OptionDescription cssConfig={cssConfig}>
+                {option.description}
+              </OptionDescription>
+            )}
+          </OptionTextContent>
+        </OptionContent>
       </RcOption>
     )
   }
 
   return (
-    <SelectView {...rest} ref={ref} mode={props.mode}>
+    <SelectView {...rest} ref={ref} mode={props.mode} cssConfig={cssConfig} setSelectOffsetWidth={setSelectOffsetWidth}>
       {children || options?.map(renderOption)}
       {hasMore && (
         <RcOption key="loading-more-option" disabled>
@@ -96,6 +109,7 @@ export const Select = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 }) as SelectComponent
 
 const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
+  setSelectOffsetWidth,
   allowNonUniqueValues,
   autoClearSearchValue = true,
   autoFocus = false,
@@ -106,6 +120,7 @@ const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
   defaultValue,
   disabled = false,
   dropdownClassName,
+  dropdownMaxHeight,
   filterOption,
   getPopupContainer,
   loading = false,
@@ -114,6 +129,8 @@ const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
   notFoundContent,
   onChange,
   onDropdownVisibleChange,
+  onSearch,
+  onClear,
   open,
   optionFilterProp = 'label',
   optionLabelProp = 'label',
@@ -128,31 +145,67 @@ const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
   usePortal,
   validationStatus = 'default',
   value,
-  virtual = true,
+  virtual = false,
   ...rest
 }: SelectViewProps, ref: any) => {
   useGlobalStyles()
   const rootHashClass = useGlobalComponentStyles(cssConfig, getSelectGlobalStyles, Select)
 
+  const config = usePopupConfig()
+
   const { t } = useTranslation()
   const [valueInternal, setValueInternal] = useState(() => prepareValues(defaultValue, allowNonUniqueValues, mode))
 
-  const preparedValue = useMemo(
+  const preparedValueRaw = useMemo(
     () => prepareValues(value, allowNonUniqueValues, mode),
     [value]
-  ) ?? valueInternal
+  )
+  const preparedValue = preparedValueRaw !== undefined ? preparedValueRaw : valueInternal
 
-  const internalRef = useRef<HTMLElement | null>(null)
-  const selectWrapperRef = closeOnParentScroll ? internalRef : ref
   const isMultiSelect = mode === 'multiple' || mode === 'tags'
 
   const [initialOpen, setInitialOpen] = useState<boolean>(!!open)
+
+  const selectWrapperRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (selectWrapperRef.current) {
+      const width = selectWrapperRef.current.offsetWidth
+      setSelectOffsetWidth && setSelectOffsetWidth(width)
+    }
+  }, [selectWrapperRef])
 
   const handleScroll = useCallback(() => {
     if (closeOnParentScroll && selectWrapperRef?.current) {
       setInitialOpen(false)
     }
   }, [closeOnParentScroll, selectWrapperRef])
+
+  const [searchValue, setSearchValue] = useState('')
+
+  const handleSearch = (value: string) => {
+    if (autoClearSearchValue || value !== '') {
+      setSearchValue(value)
+      onSearch?.(value)
+    } else {
+      onSearch?.(searchValue)
+    }
+  }
+
+  const handleClear = () => {
+    setSearchValue('')
+    onClear?.()
+  }
+
+  const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+    if (showSearch && !autoClearSearchValue && e.code === 'Backspace' && searchValue.length === 1) {
+      handleClear()
+    }
+  }
+
+  const handleBlurCapture = () => {
+    autoClearSearchValue && setSearchValue('')
+  }
 
   const handleOnChange = useCallback((value, option) => {
     let result = value
@@ -164,8 +217,9 @@ const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
       }
     }
     setValueInternal(result)
+    autoClearSearchValue && setSearchValue('')
     onChange?.(result, option)
-  }, [onChange, preparedValue, allowNonUniqueValues])
+  }, [onChange, preparedValue, allowNonUniqueValues, autoClearSearchValue])
 
   useEffect(() => {
     const parent = findScrollableParent(selectWrapperRef?.current)
@@ -194,20 +248,20 @@ const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
         {loading
           ? <Loader centered testId="select-loader" klId="loader" />
           : <>
-            {renderHeader && (
-              <>
-                {renderHeader()}
-                <Divider mode="light" />
-              </>
-            )}
-            {renderDropdown ? renderDropdown(menu) : menu}
-            {renderFooter && (
-              <>
-                <Divider mode="light" />
-                {renderFooter()}
-              </>
-            )}
-          </>
+              {renderHeader && (
+                <>
+                  {renderHeader()}
+                  <Divider mode="light" />
+                </>
+              )}
+              {renderDropdown ? renderDropdown(menu) : menu}
+              {renderFooter && (
+                <>
+                  <Divider mode="light" />
+                  {renderFooter()}
+                </>
+              )}
+            </>
         }
       </DropdownContent>
     )
@@ -240,57 +294,66 @@ const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
 
   return (
     // broken type infer because of styled components
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     // div wrapper cause RC Select don't contain native select element in ref
-    <SelectWrapper ref={selectWrapperRef}>
-      <StyledSelect
-        ref={selectRef}
-        allowClear={isMultiSelect}
-        aria-disabled={disabled}
-        autoClearSearchValue={autoClearSearchValue}
-        autoFocus={autoFocus}
-        className={cn(className, { 'kl6-select-readonly': readOnly })}
-        clearIcon={<ClearIcon />}
-        cssConfig={cssConfig}
-        data-validationstatus={validationStatus}
-        data-value={preparedValue}
-        disabled={disabled || readOnly}
-        dropdownAlign={{ offset: [0, placement?.includes('top') ? -8 : 8] }}
-        dropdownClassName={cn('dropdown-custom', dropdownClassName, rootHashClass, {
-          'dropdown-loading': loading
-        })}
-        dropdownRender={renderDropdownMenu}
-        filterOption={filterOption as never}
-        getPopupContainer={
-          getPopupContainer ?? ((triggerNode) => usePortal ? document.body : triggerNode.parentElement)
-        }
-        listHeight={256}
-        loading={loading}
-        maxTagPlaceholder={maxTagPlaceholder}
-        menuItemSelectedIcon={null}
-        mode={mode}
-        notFoundContent={loadingErrorContent || notFoundContent || <EmptyData />}
-        onChange={handleOnChange}
-        onDropdownVisibleChange={onDropdownVisibleChangeHandler}
-        open={closeOnParentScroll ? initialOpen : open}
-        optionFilterProp={optionFilterProp}
-        optionLabelProp={optionLabelProp}
-        placement={placement}
-        prefixCls="ant-select"
-        showArrow={showSearch || showArrow}
-        showSearch={showSearch}
-        inputIcon={<ChevronIcon />}
-        tagRender={(props) => <Tag {...(props as TagProps)} disabled={disabled} readOnly={readOnly} size="small" />}
-        transitionName="ant-slide-up"
-        validationStatus={validationStatus}
-        value={preparedValue}
-        virtual={virtual}
-        {...rest}
-        {...testAttributes}
-      >
-        {loadingError ? null : children}
-      </StyledSelect>
+    <SelectWrapper ref={ref}>
+      <SelectInnerWrapper ref={selectWrapperRef}>
+        <StyledSelect
+          ref={selectRef}
+          allowClear={isMultiSelect}
+          aria-disabled={disabled}
+          autoClearSearchValue={autoClearSearchValue}
+          autoFocus={autoFocus}
+          className={cn(className, { 'kl6-select-readonly': readOnly })}
+          clearIcon={<ClearIcon />}
+          cssConfig={cssConfig}
+          data-validationstatus={validationStatus}
+          data-value={preparedValue}
+          disabled={disabled || readOnly}
+          dropdownAlign={{ offset: [0, placement?.includes('top') ? -8 : 8] }}
+          dropdownClassName={cn('dropdown-custom', dropdownClassName, rootHashClass, {
+            'dropdown-loading': loading
+          })}
+          dropdownRender={renderDropdownMenu}
+          filterOption={filterOption as never}
+          getPopupContainer={
+            getPopupContainer ?? 
+            config.getPopupContainer ??  
+            (triggerNode => (usePortal ?? config.usePortal) ? document.body : triggerNode.parentElement)
+          }
+          listHeight={dropdownMaxHeight ?? 256}
+          loading={loading}
+          maxTagPlaceholder={maxTagPlaceholder}
+          menuItemSelectedIcon={null}
+          mode={mode}
+          notFoundContent={loadingErrorContent || notFoundContent || <EmptyData />}
+          // @ts-ignore
+          onBlurCapture={handleBlurCapture}
+          onChange={handleOnChange}
+          onDropdownVisibleChange={onDropdownVisibleChangeHandler}
+          onSearch={handleSearch}
+          onClear={handleClear}
+          onKeyDown={handleKeyDown}
+          open={closeOnParentScroll ? initialOpen : open}
+          optionFilterProp={optionFilterProp}
+          optionLabelProp={optionLabelProp}
+          placement={placement}
+          prefixCls="ant-select"
+          searchValue={searchValue}
+          showArrow={showSearch || showArrow}
+          showSearch={showSearch}
+          inputIcon={<ChevronIcon />}
+          tagRender={(props) => <Tag {...(props as TagProps)} disabled={disabled} readOnly={readOnly} size="small" />}
+          transitionName="ant-slide-up"
+          validationStatus={validationStatus}
+          value={preparedValue}
+          virtual={virtual}
+          {...rest}
+          {...testAttributes}
+        >
+          {loadingError ? null : children}
+        </StyledSelect>
+      </SelectInnerWrapper>
     </SelectWrapper>
   )
 })

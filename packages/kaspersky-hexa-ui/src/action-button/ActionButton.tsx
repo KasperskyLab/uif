@@ -1,30 +1,14 @@
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { shouldForwardProp } from '@helpers/shouldForwardProp'
 import { Text } from '@src/typography'
 import cn from 'classnames'
-import React from 'react'
-import styled from 'styled-components'
+import React, { FC } from 'react'
 
 import { CrossS, CrossXs } from '@kaspersky/hexa-ui-icons/16'
 import { Close } from '@kaspersky/hexa-ui-icons/8'
 
-import ActionButtonCSS from './ActionButtonCSS'
-import {
-  ActionButtonProps,
-  ActionButtonSize,
-  ActionButtonViewProps
-} from './types'
-import { useThemedActionButton } from './useThemedActionButton'
-
-export const StyledActionButton = styled('button').withConfig({ shouldForwardProp })`
-  ${ActionButtonCSS}
-`
-
-export const ActionButton = (rawProps: ActionButtonProps): JSX.Element => {
-  const themedProps = useThemedActionButton(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <ActionButtonView {...props} />
-}
+import styles from './styles/ActionButton.module.scss'
+import { ActionButtonProps, ActionButtonSize } from './types'
 
 const getLabelSize = (size: ActionButtonSize): 'BTM3' | 'BTM4' | 'BTM5' => {
   switch (size) {
@@ -40,44 +24,60 @@ const getLabelSize = (size: ActionButtonSize): 'BTM3' | 'BTM4' | 'BTM5' => {
 const ActionIcon = ({ size }: { size: ActionButtonSize }) => {
   switch (size) {
     case 'small':
-      return <Close className="kl-action-button-icon" />
+      return <Close className={styles.icon} />
     case 'large':
-      return <CrossS className="kl-action-button-icon" />
+      return <CrossS className={styles.icon} />
     default:
-      return <CrossXs className="kl-action-button-icon" />
+      return <CrossXs className={styles.icon} />
   }
 }
 
-const ActionButtonView = ({
-  children,
-  className,
-  size = 'medium',
-  type = 'button',
-  interactive = true,
-  icon,
-  noIcon = false,
-  testAttributes,
-  ...props
-}: ActionButtonViewProps): JSX.Element => {
-  return (
-    <StyledActionButton
-      type={type}
-      className={cn(
-        'kl-action-button',
-        { 'kl-action-button-w-icon': !noIcon },
-        { 'kl-action-button-w-label': Boolean(children) },
-        className
-      )}
-      interactive={interactive}
-      {...testAttributes}
-      {...props}
-    >
+export const ActionButton: FC<ActionButtonProps> = (rawProps) => {
+  const {
+    children,
+    className,
+    size = 'medium',
+    type = 'button',
+    mode = 'ghost',
+    interactive = true,
+    icon,
+    elementAfter,
+    noIcon = false,
+    testAttributes,
+    theme,
+    _wrapInSpan = false,
+    ...rest
+  } = useTestAttribute(rawProps)
+
+  const props = {
+    className: cn(
+      getClassNameWithTheme(className, theme),
+      styles.actionButton,
+      styles[mode],
+      styles[size],
+      !noIcon && styles.withIcon,
+      Boolean(children) && styles.withLabel,
+      interactive && styles.interactive
+    ),
+    ...testAttributes,
+    ...rest
+  }
+
+  const child = (
+    <>
       {!noIcon && (icon || <ActionIcon size={size} />)}
       {children && (
-        <Text className="kl-action-button-text" type={getLabelSize(size)}>
+        <Text className={styles.label} type={getLabelSize(size)}>
           {children}
         </Text>
       )}
-    </StyledActionButton>
+      {elementAfter}
+    </>
+  )
+
+  return (
+    _wrapInSpan
+      ? <span {...props}>{child}</span>
+      : <button type={type} {...props}>{child}</button>
   )
 }

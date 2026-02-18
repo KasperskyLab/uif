@@ -7,12 +7,11 @@ import React, { FC, ReactElement, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { IconSearch } from './IconSearch'
-import { searchAddonCss, searchCss } from './searchCss'
+import { searchCss } from './searchCss'
 import { SearchProps } from './types'
 
 const StyledTextbox = styled(Textbox)`
   ${searchCss}
-  ${searchAddonCss}
 `
 
 export const Search: FC<SearchProps> = (props: SearchProps) => {
@@ -23,7 +22,8 @@ export const Search: FC<SearchProps> = (props: SearchProps) => {
     children,
     onClearClick,
     prefix,
-    suffix = <IconSearch testId="search-icon" componentId="icon-search" />,
+    suffix,
+    searchIconTestId,
     testId,
     klId,
     ...rest
@@ -31,16 +31,28 @@ export const Search: FC<SearchProps> = (props: SearchProps) => {
 
   const { testAttributes } = useTestAttribute(props)
   const localizedPlaceholder = useLocalization(placeholder)
-  const newSuffix = useMemo(() => (
-    value && value.length
-      ? <ActionButton
-          testId="search-clear"
-          klId="clear"
-          onClick={onClearClick}
-          mode="filled"
-        />
-      : !prefix && suffix
-  ), [value, prefix, suffix, onClearClick])
+  const newSuffix = useMemo(() => {
+    const iconSearchTestProps = searchIconTestId
+      ? {
+          testId: searchIconTestId,
+          klId: searchIconTestId
+        }
+      : {
+          testId: 'search-icon',
+          componentId: 'icon-search'
+        }
+
+    return (
+      value && value.length
+        ? <ActionButton
+            testId="search-clear"
+            klId="clear"
+            onClick={onClearClick}
+            mode="filled"
+          />
+        : !prefix && (suffix || <IconSearch {...iconSearchTestProps} />)
+    )
+  }, [value, prefix, suffix, onClearClick])
 
   const SearchTextbox = (
     <StyledTextbox

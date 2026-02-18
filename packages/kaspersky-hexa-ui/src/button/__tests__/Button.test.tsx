@@ -6,6 +6,7 @@ import React from 'react'
 import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import { Button } from '../Button'
+import styles from '../Button.module.scss'
 import { ButtonProps } from '../types'
 
 const defaultProps = {
@@ -69,8 +70,9 @@ describe('Button', () => {
   })
 
   test('should have loading icon if loading prop was given', () => {
-    render(<DefaultButton loading />)
-    expect(screen.getByRole('img', { name: 'loading' }))
+    const buttonKlId = 'button-kl-id'
+    render(<DefaultButton loading klId={buttonKlId} />)
+    expect(screen.getByTestId(`${buttonKlId}-loader`)).toBeInTheDocument()
   })
 
   test('should pass className prop', () => {
@@ -96,12 +98,12 @@ describe('Button', () => {
   // Claude 3 Sonnet
   it('should render correctly with children', () => {
     const { container } = render(<Button>Child Content</Button>)
-    expect(container.querySelector('.kl-components-button-text')).toHaveTextContent('Child Content')
+    expect(container.querySelector(`.${styles.buttonText}`)).toHaveTextContent('Child Content')
   })
 
   it('should render correctly with both children and text', () => {
     const { container } = render(<DefaultButton>Child Content</DefaultButton>)
-    expect(container.querySelector('.kl-components-button-text')).toHaveTextContent(defaultProps.text)
+    expect(container.querySelector(`.${styles.buttonText}`)).toHaveTextContent(defaultProps.text)
     expect(getButton()).toBeInTheDocument()
   })
 
@@ -113,6 +115,6 @@ describe('Button', () => {
 
   it('should combine className with icon-only when no text or children are provided', () => {
     const { container } = render(<Button />)
-    expect(container.querySelector('.icon-only')).toBeInTheDocument()
+    expect(container.querySelector(`.${styles.iconOnly}`)).toBeInTheDocument()
   })
 })

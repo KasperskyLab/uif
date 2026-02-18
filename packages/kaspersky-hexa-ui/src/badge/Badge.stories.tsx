@@ -1,14 +1,14 @@
 import { badges } from '@sb/badges'
 import { withDesignControls } from '@sb/components/designControls'
 import { withMeta } from '@sb/components/Meta'
+import { StyledTag, TooltipCompositionWarning } from '@sb/components/Warnings'
 import { PropsWithTooltip } from '@sb/helpers'
-import { renderVariants, StoryComponentContainer, StoryLabel, StoryWrapper } from '@sb/StoryComponents'
-import { TooltipCompositionWarning, StyledTag } from '@sb/components/Warnings'
+import { renderVariants } from '@sb/StoryComponents'
 import { SectionMessage } from '@src/section-message'
 import { Space } from '@src/space'
 import { Tooltip } from '@src/tooltip'
 import { P } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import MetaData from './__meta__/meta.json'
@@ -43,7 +43,7 @@ const storySettings: Meta = {
     controls: {
       exclude: /(title|tooltip)/
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 
@@ -64,23 +64,20 @@ type Story = StoryObj<BadgeStoryProps>
 export const Badge: Story = {}
 
 export const Mode: Story = {
-  render: (args: BadgeProps) => {
-    return (
-      <StoryWrapper vertical>
-        {badgeModes.map((mode) => (
-          <StoryComponentContainer key={mode}>
-            <StoryLabel label={mode} horizontalWidth="160px" />
-            <BadgeComponent
-              {...args}
-              key={mode}
-              size="medium"
-              mode={mode}
-            />
-          </StoryComponentContainer>
-        ))}
-      </StoryWrapper>
-    )
-  },
+  render: (args: BadgeProps) =>
+    renderVariants(
+      badgeModes.map(mode => ({
+        label: mode,
+        content:
+          <BadgeComponent
+            {...args}
+            size="medium"
+            mode={mode}
+          />
+      })),
+      true,
+      'medium'
+    ),
   argTypes: {
     mode: { control: false },
     size: { control: false }

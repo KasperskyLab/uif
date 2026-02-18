@@ -7,11 +7,11 @@
     "migration": false,
     "apiTable": true,
     "storybook": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Popover",
   "description": "Немодальный диалог, который имеет функциональную вложенность. В качестве основы используется Popover из библиотеки Antd.",
   "usage": "Элемент появляется при наведении на родительский элемент, к которому присвоен Popover",
-  "designLink": "https://www.figma.com/file/7TGvGlgGfTltMG1OBgLq8p/%F0%9F%93%96-%5BB2B%5D-Hexa-UI-Kit?node-id=51206-280121",
-  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7TGvGlgGfTltMG1OBgLq8p%2F00-%255BB2B%255D-Hexa-UI-Kit%3Ftype%3Ddesign%26node-id%3D36112%253A133325%26mode%3Ddev"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=36112%3A133325",
+  "pixsoView": "https://pixso.net/app/design/PHPHITQ2KtQY9vcutiWXbg"
 }

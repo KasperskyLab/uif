@@ -12,9 +12,6 @@ __tests__/
 .env
 babel.config.js
 .lintstagedrc
-jest.config.js*
-/icons/filenames.js
-/icons/icons-readme.md
 __mocks__
 **/__snapshots__
 tsconfig.json

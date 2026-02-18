@@ -1,29 +1,78 @@
-import { Toolbar } from '@src/toolbar'
+import { ITableProps } from '@src/table'
+import { getTabsConfig } from '@src/table/helpers/getTabsConfig'
+import { Toolbar, ToolbarProps as OriginToolbarProps } from '@src/toolbar'
 import { ToolbarItemKey, ToolbarItems } from '@src/toolbar/types'
 import React, { Key, ReactNode, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
+import { Filter, FilterWithIndicator } from '@kaspersky/hexa-ui-icons/16'
+
+import { useTableContext } from '../../context/TableContext'
+import { isFilterConfig } from '../Filters/helpers'
 import { TableModule } from '../index'
 
 import { FilterItems } from './FilterItems'
 import { Search } from './Search'
 
-export interface ToolbarProps {
-  leftLimit?: number,
-  left?: ToolbarItems<ToolbarItemKey>[],
+export type ToolbarCommonProps = Omit<OriginToolbarProps, 'right'> & {
   right?: (existingElements: ReactNode[]) => ReactNode[],
   showSearch?: boolean,
+  collapsibleSearch?: boolean,
   showFilter?: boolean,
-  showGrouping?: boolean,
-  showColumns?: boolean,
   showFilterSidebar?: boolean,
-  sticky?: React.ComponentProps<typeof Toolbar>['sticky']
+  showSettingsSearch?: boolean
 }
 
-const StyledTableContainer = styled.div`
+export type TabConfigBase = boolean | {
+  hideTabHeader?: boolean
+}
+
+export type ColumnsTabConfig = TabConfigBase & {
+  // дополнительные пропы если потребуются
+}
+
+export type GroupingTabConfig = TabConfigBase & {
+  // дополнительные пропы если потребуются
+}
+
+// все табы, заголовки не скрыты
+export type ToolbarWithAllVisibleTabHeaders = ToolbarCommonProps & {
+  showColumns?: true | ColumnsTabConfig & { hideTabHeader?: false },
+  showGrouping?: true | GroupingTabConfig & { hideTabHeader?: false }
+}
+
+// только один таб с явно скрытым заголовком
+export type ToolbarWithOnlyOneHiddenTabHeader =
+  | (ToolbarCommonProps & {
+      showColumns: ColumnsTabConfig & { hideTabHeader: true },
+      showGrouping?: never
+    })
+  | (ToolbarCommonProps & {
+      showColumns?: never,
+      showGrouping: GroupingTabConfig & { hideTabHeader: true }
+    })
+
+export type ToolbarProps =
+  | ToolbarWithAllVisibleTabHeaders
+  | ToolbarWithOnlyOneHiddenTabHeader
+
+const StyledTableContainer = styled.div<Pick<ITableProps, 'fullHeight'>>`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  [data-testid="table-toolbar"] {
+    z-index: 3;
+  }
+
+  .hexa-ui-table-ref {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  ${({ fullHeight }) => fullHeight && css`height: 100%;`}
 `
 
 const createToolbarElements = (nodes: ReactNode[]): ToolbarItems<ToolbarItemKey>[] => {
@@ -34,7 +83,8 @@ const createToolbarElements = (nodes: ReactNode[]): ToolbarItems<ToolbarItemKey>
   }))
 }
 
-const ToolbarIntegrationModule: TableModule = Component => props => {
+export const ToolbarIntegration: TableModule = Component => function ToolbarIntegrationModule (props) {
+  const { filterApi } = useTableContext()
   const [filteredRows, setFilteredRows] = useState(props.dataSource)
   const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([])
   const [openColumnsSelector, setOpenColumnsSelector] = useState(false)
@@ -59,13 +109,17 @@ const ToolbarIntegrationModule: TableModule = Component => props => {
         setExpandedRowKeys={setExpandedRowKeys}
         dataSource={props.dataSource}
         onSearch={props.onSearch}
+        onClientSearch={props.onClientSearch}
         columns={props.columns}
         tableContainer={table}
         enableSearchHighlighting={props.enableSearchHighlighting}
+        collapsibleSearch={props.toolbar.collapsibleSearch}
       />
     )
 
-    const showConfigurationPanel = props.toolbar.showColumns || props.toolbar.showGrouping
+    const { showColumnsTab, showGroupingTab } = getTabsConfig(props.toolbar)
+
+    const showConfigurationPanel = showColumnsTab || showGroupingTab
     showConfigurationPanel && additionalElements.push(
       <Toolbar.SettingsItem
         testId="table-settings"
@@ -74,17 +128,22 @@ const ToolbarIntegrationModule: TableModule = Component => props => {
       />
     )
 
-    props.toolbar.showFilterSidebar && additionalElements.push(
-      <Toolbar.FilterSidebar
-        testId="table-filter-sidebar"
-        onClick={() => setOpenFilterSidebar(true)}
-      />
-    )
+    if (props.toolbar.showFilterSidebar) {
+      const filtersApplied = !!filterApi?.getRootGroupFilters().filter(isFilterConfig).length
+      additionalElements.push(
+        <Toolbar.FilterSidebar
+          testId="table-filter-sidebar"
+          onClick={() => setOpenFilterSidebar(true)}
+          showIndicator={filtersApplied}
+          iconBefore={filtersApplied ? <FilterWithIndicator /> : <Filter />}
+        />
+      )
+    }
   }
 
   if (props.toolbar) {
     return (
-      <StyledTableContainer>
+      <StyledTableContainer className="hexa-ui-tabletoolbar-container" fullHeight={props.fullHeight}>
         <Toolbar
           testId="table-toolbar"
           componentId="table-toolbar"
@@ -95,9 +154,17 @@ const ToolbarIntegrationModule: TableModule = Component => props => {
             props.toolbar.right
               ? createToolbarElements(props.toolbar.right(additionalElements))
               : createToolbarElements(additionalElements)
-          }/>
-        <FilterItems items={props?.filterItems?.items} clearLinkText={props?.filterItems?.clearLinkText} onClear={props?.filterItems?.onClear} />
-        <div ref={tableRef}>
+          }
+          autoDropdown={props.toolbar.autoDropdown}
+        />
+        <FilterItems
+          items={props?.filterItems?.items}
+          clearLinkText={props?.filterItems?.clearLinkText}
+          onClear={props?.filterItems?.onClear}
+          onSidebarFiltersChange={props.onSidebarFiltersChange}
+          columns={props.columns}
+        />
+        <div className="hexa-ui-table-ref" ref={tableRef}>
           <Component
             {...props}
             showColumnsSelector={openColumnsSelector}
@@ -116,10 +183,9 @@ const ToolbarIntegrationModule: TableModule = Component => props => {
             }}
           />
         </div>
-    </StyledTableContainer>)
+      </StyledTableContainer>)
   }
 
   return <Component {...props} />
 }
 
-export { ToolbarIntegrationModule as ToolbarIntegration }

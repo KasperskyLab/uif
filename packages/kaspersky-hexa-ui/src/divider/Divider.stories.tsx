@@ -3,7 +3,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { StoryColumn, StoryWrapper } from '@sb/StoryComponents'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -17,10 +17,10 @@ const meta: Meta<DividerProps> = {
   title: 'Hexa UI Components/Divider',
   component: Divider,
   args: {
-    mode: 'normal',
     direction: 'horizontal',
     testId: 'divider-test-id',
-    klId: 'divider-kl-id'
+    klId: 'divider-kl-id',
+    mode: 'bold'
   },
   argTypes: {
     ...sbHideControls(['theme'])
@@ -30,7 +30,7 @@ const meta: Meta<DividerProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta

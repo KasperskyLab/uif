@@ -1,4 +1,4 @@
-import { BadgeMode, BadgeColorConfig } from '@src/badge/types'
+import { BadgeColorConfig, BadgeMode } from '@src/badge/types'
 
 import { ComponentThemeContext } from '../config'
 import { badge as defaultBadge, badgeSize as defaultBadgeSize } from '../light/badge'

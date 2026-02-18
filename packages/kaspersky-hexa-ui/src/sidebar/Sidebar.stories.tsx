@@ -1,5 +1,6 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { Size } from '@design-system/types'
+import { generateId } from '@helpers/generateId'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
@@ -7,24 +8,24 @@ import { ActionButton } from '@src/action-button'
 import { Badge } from '@src/badge'
 import { ButtonMode } from '@src/button'
 import { Modal } from '@src/modal'
-import { Pagination } from '@src/pagination'
 import { Space } from '@src/space'
-import { Submenu } from '@src/submenu'
+import { Submenu, SubmenuItemProps } from '@src/submenu'
+import { Tabs } from '@src/tabs'
 import { Toolbar } from '@src/toolbar'
-import { itemsLeft, itemsRight } from '@src/toolbar/stories/Toolbar.stories'
-import { Meta, StoryObj } from '@storybook/react'
+import { getItemsLeft, getItemsRight } from '@src/toolbar/stories/Toolbar.stories'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { v4 as uuidv4 } from 'uuid'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { Help, Youtube } from '@kaspersky/hexa-ui-icons/16'
+import { Help, SizeMaximize, SizeMinimize, Youtube } from '@kaspersky/hexa-ui-icons/16'
 import { Star } from '@kaspersky/hexa-ui-icons/24'
 
 import { Button } from '../button'
 import { Text } from '../typography'
 
 import MetaData from './__meta__/meta.json'
+import { StyledBorder, SubHeaderWrapper } from './components/SidebarHeader'
 import { Sidebar } from './Sidebar'
 import { SidebarProps, SidebarSize } from './types'
 
@@ -43,7 +44,7 @@ const meta: Meta<SidebarProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta
@@ -51,6 +52,44 @@ export default meta
 type SidebarWithButtonProps = SidebarProps & { buttonText?: string }
 
 type StoryWithButton = StoryObj<SidebarWithButtonProps>
+
+const SidebarHeader = () => (
+  <SubHeaderWrapper paddingBottom>
+    <Toolbar left={getItemsLeft()} right={getItemsRight()} />
+  </SubHeaderWrapper>
+)
+
+const tabs = (
+  <Tabs padding noMargin>
+    <Tabs.TabPane
+      tab={<Tabs.TabPaneHead text="Tab 1" indicator indicatorMode="critical" />}
+      key="1"
+    >
+    </Tabs.TabPane>
+    <Tabs.TabPane
+      tab={<Tabs.TabPaneHead text="Tab 2" indicator indicatorMode="accent" />}
+      key="2"
+    >
+    </Tabs.TabPane>
+    <Tabs.TabPane
+      tab={<Tabs.TabPaneHead text="Tab 3" indicator indicatorMode="accent" />}
+      key="3"
+    >
+    </Tabs.TabPane>
+    <Tabs.TabPane
+      tab={<Tabs.TabPaneHead text="Tab 4" />}
+      key="4"
+    >
+    </Tabs.TabPane>
+  </Tabs>
+)
+
+const leftFooter = (
+  <>
+    <Button mode="primary">Save</Button>
+    <Button mode="secondary">Cancel</Button>
+  </>
+)
 
 const SidebarWithButton = (props: SidebarWithButtonProps) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -64,7 +103,7 @@ const SidebarWithButton = (props: SidebarWithButtonProps) => {
         {...props}
         visible={isOpen}
         onClose={() => setIsOpen(false)}
-        title="Sidebar"
+        title={props.title || 'Sidebar'}
       >
         {props.children || <Text>Content</Text>}
       </Sidebar>
@@ -72,43 +111,68 @@ const SidebarWithButton = (props: SidebarWithButtonProps) => {
   )
 }
 
-const SidebarWithPagination = (props: SidebarWithButtonProps) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [pageSize, setPageSize] = useState(10)
-  const [current, setCurrent] = useState(1)
-  const clb = (page: number, pageSize?: number) => {
-    setCurrent(page)
-    setPageSize(Number(pageSize))
-  }
-
-  return (
-    <>
-      <Button onClick={() => setIsOpen(true)}>
-        {props.buttonText || 'Open'}
-      </Button>
-      <Sidebar
-        {...props}
-        visible={isOpen}
-        size="extraSmall"
-        onClose={() => setIsOpen(false)}
-        title="Sidebar"
-        footer={<Pagination
-          total={500}
-          pageSize={pageSize}
-          current={current}
-          simple={true}
-          onChange={clb}
-          onShowSizeChange={clb}
-        />}
-      >
-        {props.children || <Text>Content</Text>}
-      </Sidebar>
-    </>
-  )
-}
+const itemsSubmenu: SubmenuItemProps[] = (
+  [
+    {
+      type: 'row',
+      text: 'Tab 1.1',
+      content: 'Content 1.1',
+      key: 'tab-1-1'
+    },
+    {
+      type: 'row',
+      text: 'Tab 1.2',
+      content: 'Content 1.2',
+      key: 'tab-1-2'
+    },
+    {
+      type: 'row',
+      text: 'Tab 1.3',
+      content: 'Content 1.3',
+      key: 'tab-1-3'
+    }
+  ]
+)
 
 export const Basic: StoryWithButton = {
   render: (args) => <SidebarWithButton {...args} />
+}
+
+export const SidebarWithTwoButton: StoryObj<SidebarWithButtonProps> = {
+  render: (args) => {
+    const [isOpen1, setIsOpen1] = useState(false)
+    const [isOpen2, setIsOpen2] = useState(false)
+    return (
+      <>
+        <Button onClick={() => { setIsOpen1(true) }}>
+          {args.buttonText || 'Open1'}
+        </Button>
+        <Button onClick={() => { setIsOpen2(true) }}>
+          {args.buttonText || 'Open2'}
+        </Button>
+        <Sidebar
+          visible={isOpen1}
+          onClose={() => setIsOpen1(false)}
+          title="Sidebar 1"
+          mask={false}
+          size="small"
+          destroyOnClose={true}
+        >
+          {args.children || <Text>Content1</Text>}
+        </Sidebar>
+        <Sidebar
+          visible={isOpen2}
+          onClose={() => setIsOpen2(false)}
+          title="Sidebar 2"
+          mask={false}
+          size="small"
+          destroyOnClose={true}
+        >
+          {args.children || <Text>Content2</Text>}
+        </Sidebar>
+      </>
+    )
+  }
 }
 
 export const WithHeaderActions: StoryWithButton = {
@@ -123,8 +187,44 @@ export const WithHeaderActions: StoryWithButton = {
   }
 }
 
-export const WithPagination: StoryWithButton = {
-  render: (args) => <SidebarWithPagination size="extraSmall" {...args} />
+export const Expandable: StoryWithButton = {
+  render: (args) => {
+    const [isOpen, setIsOpen] = useState(false)
+    const [sidebarSize, setSidebarSize] = useState<'extraSmall' | 'flex'>('extraSmall')
+    const [iconSidebarSize, seticonSidebarSize] = useState<'SizeMaximize' | 'SizeMinimize'>('SizeMaximize')
+    const handleClickMaximize = () => {
+      setSidebarSize('flex')
+      seticonSidebarSize('SizeMinimize')
+    }
+    const handleClickMinimize = () => {
+      setSidebarSize('extraSmall')
+      seticonSidebarSize('SizeMaximize')
+    }
+    return (
+      <>
+        <Button onClick={() => setIsOpen(true)}>
+          {args.buttonText || 'Open'}
+        </Button>
+        <Sidebar
+          {...args}
+          visible={isOpen}
+          size={sidebarSize === 'flex' ? undefined : sidebarSize}
+          flex={sidebarSize === 'flex'}
+          onClose={() => setIsOpen(false)}
+          title="Sidebar"
+          headerActions={
+            <ActionButton
+              size="large"
+              icon={iconSidebarSize === 'SizeMaximize' ? <SizeMaximize /> : <SizeMinimize />}
+              onClick={iconSidebarSize === 'SizeMaximize' ? handleClickMaximize : handleClickMinimize}
+            />
+          }
+        >
+          {args.children || <Text>Content</Text>}
+        </Sidebar>
+      </>
+    )
+  }
 }
 
 export const WithSubtitle: StoryWithButton = {
@@ -140,14 +240,32 @@ export const WithSubtitle: StoryWithButton = {
   }
 }
 
+export const WithLongTitle: StoryWithButton = {
+  render: (args) => <SidebarWithButton {...args} />,
+  args: {
+    subtitle: 'Sidebar subtitle',
+    title: 'I am a long sidebar title. You can configure my behavior via \'titleLineClamp\' prop. If the value is 1, the text is truncated as usual. The value of this prop determines the number of lines that are not truncated.',
+    truncateTitle: true,
+    titleLineClamp: 2,
+    titlePostfix: <div><Badge count={10} /></div>,
+    titlePrefix: <Star />
+  },
+  argTypes: {
+    subtitle: { table: { disable: true } },
+    titlePostfix: { table: { disable: true } },
+    titlePrefix: { table: { disable: true } },
+    size: { table: { disable: true } }
+  }
+}
+
 export const WithFixedElements: StoryObj = {
   render: (args) => <SidebarWithButton {...args} />,
   args: {
     subHeader: (
-      <div style={{ padding: '0 24px' }}>
-        <Toolbar left={itemsLeft} right={itemsRight} />
-      </div>
-    ),
+      <>
+        <SidebarHeader /> 
+        <StyledBorder />
+      </>),
     children: (
       <div>
         <p style={{ height: '200vh' }}>Scrollable content</p>
@@ -193,11 +311,6 @@ export const Sizes: StoryWithButton = {
   }
 }
 
-const FooterContainer = styled.div`
-  display: flex;
-  gap: 8px;
-`
-
 type WithFooterProps = {
   'Button 1 Text': string,
   'Button 2 Text': string,
@@ -208,29 +321,37 @@ type WithFooterProps = {
   'Button 3 Position': 'left' | 'right' | 'none'
 } & SidebarWithButtonProps
 
-const RightSide = styled.div<{ position: 'left' | 'right' }>`
-  margin-left: ${(props) => (props.position === 'right' ? 'auto' : '')};
-`
-
 export const WithFooter: StoryObj<WithFooterProps> = {
-  render: (args: WithFooterProps) => (
-    <SidebarWithButton
-      footer={
-        <FooterContainer>
-          <Button mode={args['Button 1 Mode']}>{args['Button 1 Text']}</Button>
-          <Button mode={args['Button 2 Mode']}>{args['Button 2 Text']}</Button>
-          {args['Button 3 Position'] !== 'none' && (
-            <RightSide position={args['Button 3 Position']}>
-              <Button mode={args['Button 3 Mode']}>
-                {args['Button 3 Text']}
-              </Button>
-            </RightSide>
-          )}
-        </FooterContainer>
-      }
-      {...args}
-    />
-  ),
+  render: (args) => {
+    const left =
+      args['Button 3 Position'] === 'left'
+        ? (
+            <>
+              <Button mode={args['Button 1 Mode']}>{args['Button 1 Text']}</Button>
+              <Button mode={args['Button 2 Mode']}>{args['Button 2 Text']}</Button>
+              <Button mode={args['Button 3 Mode']}>{args['Button 3 Text']}</Button>
+            </>
+          )
+        : (
+            <>
+              <Button mode={args['Button 1 Mode']}>{args['Button 1 Text']}</Button>
+              <Button mode={args['Button 2 Mode']}>{args['Button 2 Text']}</Button>
+            </>
+          )
+
+    const right =
+      args['Button 3 Position'] === 'right'
+        ? <Button mode={args['Button 3 Mode']}>{args['Button 3 Text']}</Button>
+        : undefined
+
+    return (
+      <SidebarWithButton
+        footerLeft={left}
+        footerRight={right}
+        {...args}
+      />
+    )
+  },
   argTypes: {
     'Button 1 Text': {
       control: { type: 'text' }
@@ -281,82 +402,9 @@ export const WithFooter: StoryObj<WithFooterProps> = {
     'Button 1 Mode': 'primary',
     'Button 2 Text': 'Cancel',
     'Button 2 Mode': 'secondary',
-    'Button 3 Position': 'none',
+    'Button 3 Position': 'right',
     'Button 3 Text': 'Action',
     'Button 3 Mode': 'dangerFilled'
-  }
-}
-
-const StyledSidebarWithSubmenu = styled(Sidebar)`
-  .ant-drawer-body {
-    padding: 0;
-    .antd-sidebar-content {
-      height: 100%;
-    }
-  }
-`
-
-export const WithNavigation: StoryWithButton = {
-  render: (args: SidebarProps) => {
-    const [isOpen, setIsOpen] = useState(false)
-
-    return (
-      <>
-        <Button onClick={() => setIsOpen(true)}>Open</Button>
-        <StyledSidebarWithSubmenu
-          {...args}
-          title="Sidebar"
-          visible={isOpen}
-          onClose={() => setIsOpen(!isOpen)}
-        >
-          <Submenu
-            items={[
-              {
-                type: 'row',
-                text: 'Tab 1.1',
-                content: (
-                  'Content 1.1'
-                ),
-                key: 'tab-1-1'
-              },
-              {
-                type: 'row',
-                text: 'Tab 1.2',
-                content: (
-                  'Content 1.2'
-                ),
-                key: 'tab-1-2'
-              },
-              {
-                type: 'row',
-                text: 'Tab 1.3',
-                content: (
-                  'Content 1.3'
-                ),
-                key: 'tab-1-3'
-              }
-            ]}
-          />
-        </StyledSidebarWithSubmenu>
-      </>
-    )
-  },
-  argTypes: {
-    ...sbHideControls(['size'])
-  },
-  args: {
-    size: 'large',
-    subHeader: (
-      <div style={{ padding: '0 24px' }}>
-        <Toolbar left={itemsLeft} right={itemsRight} />
-      </div>
-    ),
-    footer: (
-      <FooterContainer>
-        <Button mode="primary">Save</Button>
-        <Button mode="secondary">Cancel</Button>
-      </FooterContainer>
-    )
   }
 }
 
@@ -395,7 +443,7 @@ export const Overlap: StoryObj = {
             <Button
               key={size}
               onClick={() => {
-                const id = uuidv4()
+                const id = generateId()
                 setSizes({ ...sizes, [id]: { size, visible: false } })
                 setTimeout(() => {
                   setSizes({ ...sizes, [id]: { size, visible: true } })
@@ -481,6 +529,60 @@ export const CloseConfirmation: StoryObj = {
         >
           <Text>Content</Text>
         </Sidebar>
+      </>
+    )
+  }
+}
+
+export const WithSubmenu: StoryWithButton = {
+  render: (args: SidebarWithButtonProps) => <SidebarWithButton {...args} />,
+  args: {
+    size: 'large',
+    footerLeft: leftFooter,
+    children: <Submenu items={itemsSubmenu} />,
+    noPaddingContent: true
+  }
+}
+
+export const WithToolbar: StoryWithButton = {
+  render: (args: SidebarWithButtonProps) => <SidebarWithButton {...args} />,
+  args: {
+    noPaddingContent: true,
+    truncateTitle: true,
+    size: 'large',
+    footerLeft: leftFooter,
+    children: <Submenu items={itemsSubmenu} />,
+    subHeader: (
+      <>
+        <SidebarHeader />
+        <StyledBorder />
+      </>
+    )
+  }
+}
+
+export const WithTabs: StoryWithButton = {
+  render: (args: SidebarWithButtonProps) => <SidebarWithButton {...args} />,
+  args: {
+    size: 'large',
+    subHeader: tabs,
+    footerLeft: leftFooter,
+    noPaddingContent: true,
+    children: <Submenu items={itemsSubmenu} />
+  }
+}
+
+export const WithToolbarAndTabs: StoryWithButton = {
+  render: (args: SidebarWithButtonProps) => <SidebarWithButton {...args} />,
+  args: {
+    size: 'large',
+    footerLeft: leftFooter,
+    noPaddingContent: true,
+    children: <Submenu items={itemsSubmenu} />,
+    subHeader: (
+      <>
+        <SidebarHeader />
+        <StyledBorder />
       </>
     )
   }

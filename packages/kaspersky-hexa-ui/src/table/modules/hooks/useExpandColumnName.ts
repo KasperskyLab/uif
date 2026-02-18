@@ -8,7 +8,7 @@ type UseExpandColumnNameParams = Pick<ITableProps, 'expandable' | 'columns' | 'r
 type UseExpandColumnNameReturnType = ITableProps['expandable']
 
 export const useExpandColumnName = ({ expandable, columns, rowSelection }: UseExpandColumnNameParams): UseExpandColumnNameReturnType => {
-  const [expandableConfig, setExpandableConfig] = useState<ITableProps['expandable']>(defaultExpandConfig)
+  const [expandableConfig, setExpandableConfig] = useState<ITableProps['expandable']>({ ...defaultExpandConfig, ...expandable })
 
   useEffect(() => {
     if (!(expandable?.expandColumnName && columns)) {

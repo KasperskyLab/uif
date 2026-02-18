@@ -1,7 +1,6 @@
-import { typography, TextLevel, TextSizes } from '@kaspersky/hexa-ui-core/typography/js'
+import { TextLevel, TextSizes, typography } from '@kaspersky/hexa-ui-core/typography/js'
 
 export const getTextSizes = (level: TextLevel): TextSizes => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { htmlTag, ...textSizes } = typography[level]
   return textSizes
 }

@@ -8,7 +8,7 @@ import {
   FIELD_MAX_WIDTH,
   inputLikeControlsClassnames
 } from './constants'
-import { FieldCssConfig, FieldViewProps } from './types'
+import { FieldCssConfig, FieldViewProps, LayoutPreset } from './types'
 
 const inputLikeControlSelector = inputLikeControlsClassnames.map(control => (
   `.kl6-field-control-box ${control}`
@@ -20,26 +20,81 @@ const checkboxLikeControlSelector = checkboxLikeControlsClassnames.map(control =
 
 const fromProps = getFromProps<FieldCssConfig>()
 
+function oneRowLayout (gridTemplateColumns: string) {
+  return `
+    max-width: none;
+    grid-template-areas: "label control .";
+    grid-template-columns: ${gridTemplateColumns};
+    gap: 16px;
+  `
+}
+
+function twoRowsLayout (gridTemplateColumns: string) {
+  return `
+    max-width: none;
+    grid-template-areas: "label ." "control .";
+    grid-template-columns: ${gridTemplateColumns}};
+  `
+}
+
+function getGridStyle ({ gridLayout, gridPreset, controlWidth }: FieldViewProps): string {
+  if (!gridLayout && gridPreset) {
+    switch (gridPreset) {
+      case LayoutPreset.p_6:
+        return twoRowsLayout('6fr 6fr')
+      case LayoutPreset.p_8:
+        return twoRowsLayout('8fr 4fr')
+      case LayoutPreset.p_12:
+        return twoRowsLayout('12fr 0fr')
+      case LayoutPreset.p_3_6:
+        return oneRowLayout('3fr 6fr 3fr')
+      case LayoutPreset.p_3_8:
+        return oneRowLayout('3fr 8fr 1fr')
+      case LayoutPreset.p_4_6:
+        return oneRowLayout('4fr 6fr 2fr')
+      case LayoutPreset.p_4_8:
+        return oneRowLayout('4fr 8fr')
+    }
+  }
+
+  if (typeof gridLayout === 'string') {
+    return oneRowLayout(gridLayout)
+  }
+
+  const label = gridLayout?.firstCol || FIELD_LABEL_DEFAULT_WIDTH
+  const control = controlWidth || gridLayout?.secondCol || 'auto'
+
+  return `
+    grid-template-areas: "label control";
+    grid-template-columns: ${label} ${control};
+  `
+}
+
 export const fieldCss = css<FieldViewProps>`
   width: 100%;
   max-width: ${FIELD_MAX_WIDTH};
   display: flex;
+
+  .kl6-field-label {
+    grid-area: label;
+  }
 
   .kl6-field-control-wrapper {
     display: flex;
     flex-direction: column;
     max-width: 100%;
     gap: 4px;
+    grid-area: control;
 
     .kl6-field-control-box {
       display: flex;
       align-items: center;
       gap: 8px;
       ${({ controlWidth }) => (
-        controlWidth
-          ? `width: ${controlWidth}px; flex: none;`
-          : `min-width: ${FIELD_CONTROL_MIN_WIDTH};`
-      )}
+    controlWidth
+      ? `width: ${controlWidth}px; flex: none;`
+      : `min-width: ${FIELD_CONTROL_MIN_WIDTH};`
+  )}
 
       .kl6-field-control-additional {
         width: 16px;
@@ -125,9 +180,7 @@ export const fieldCss = css<FieldViewProps>`
   
   &.kl6-field-grid-layout {
     display: grid;
-    grid-template-columns: ${({ gridLayout, controlWidth }) => (
-      `${gridLayout?.firstCol || FIELD_LABEL_DEFAULT_WIDTH} ${controlWidth || gridLayout?.secondCol || 'auto'}`
-    )}
+    ${getGridStyle}
   }
 
   &.kl6-field-grid-layout,
@@ -137,8 +190,8 @@ export const fieldCss = css<FieldViewProps>`
     &.kl6-field-label-type-full {
       .kl6-field-label + .kl6-field-control-wrapper {
         max-width: ${({ controlWidth }) => (
-          controlWidth || `calc(${FIELD_MAX_WIDTH} - ${FIELD_LABEL_DEFAULT_WIDTH})`
-        )};
+    controlWidth || `calc(${FIELD_MAX_WIDTH} - ${FIELD_LABEL_DEFAULT_WIDTH})`
+  )};
       }
     }
     &:has(${inputLikeControlSelector}) .kl6-field-label {

@@ -172,14 +172,14 @@ const UploadView: FC<UploadViewProps> = ({ cssConfig: config, ...props }: Upload
                     disabled={disabled}>{file?.name}</UploadHeading>
                   {file?.size
                     ? (
-                      <UploadText
-                        className="upload-text-secondary"
-                        type="BTR3"
-                        themedColor={config.normal.textSecondaryColor}
-                        config={config}
-                        disabled={disabled}>
-                        {convertFileSize(file?.size)}
-                      </UploadText>
+                        <UploadText
+                          className="upload-text-secondary"
+                          type="BTR3"
+                          themedColor={config.normal.textSecondaryColor}
+                          config={config}
+                          disabled={disabled}>
+                          {convertFileSize(file?.size)}
+                        </UploadText>
                       )
                     : null}
                 </Column>

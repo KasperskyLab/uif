@@ -27,6 +27,7 @@ type DragAndDropMessageProps = {
   className?: string,
   disabled?: boolean,
   fileList: UploadFile[],
+  hasErrors: boolean,
   maxCount?: number,
   onOpenFileDialog: () => void
 }
@@ -34,11 +35,16 @@ type DragAndDropMessageProps = {
 export const DragAndDropMessage = styled(({
   disabled,
   fileList,
+  hasErrors,
   maxCount,
   onOpenFileDialog,
   ...props
 }: DragAndDropMessageProps) => {
   const { t } = useTranslation()
+
+  if (hasErrors) {
+    return <P {...props} type="BTM3">{t('uploader.validation.filesDoNotMeetRequirements')}</P>
+  }
 
   if (maxCount && fileList.length >= maxCount) {
     return <P {...props} type="BTM3">{t('uploader.maxCountUploaded')}</P>
@@ -70,14 +76,19 @@ const ValidationPopoverWrapper = styled(P).attrs({ type: 'BTR3' })`
 type ValidationMessageProps = {
   className?: string,
   disabled?: boolean,
-  errors: Record<string, string[]>
+  errors: string[],
+  errorsForNewFiles: Record<string, string[]>
 }
 
 // @ts-ignore
-export const ValidationMessage = styled(({ disabled, errors, ...props }: ValidationMessageProps) => {
+export const ValidationMessage = styled(({ disabled, errors, errorsForNewFiles, ...props }: ValidationMessageProps) => {
   const { t } = useTranslation()
 
-  function mapError ([key, names]: [string, string[]]) {
+  function mapError (key: string) {
+    return <P {...props} key={key} type="BTR4">{t(key)}</P>
+  }
+
+  function mapErrorForNewFile ([key, names]: [string, string[]]) {
     const popoverContent = (
       <ValidationPopoverWrapper>
         <ol>
@@ -97,7 +108,11 @@ export const ValidationMessage = styled(({ disabled, errors, ...props }: Validat
     )
   }
 
-  return Object.entries(errors).map(mapError)
+  if (errors.length > 0) {
+    return errors.map(mapError)
+  }
+
+  return Object.entries(errorsForNewFiles).map(mapErrorForNewFile)
 })`
   color: ${props => props.disabled ? cssConfig.disabled.requirements : cssConfig.invalid.validation};
 
@@ -116,6 +131,7 @@ export const DragContainerWrapper = styled.div<{
   $fullHeight?: boolean,
   $invalid?: boolean,
   $maxCountReached?: boolean,
+  $minimize?: boolean,
   $size?: string,
   width?: number
 }>`
@@ -124,8 +140,8 @@ export const DragContainerWrapper = styled.div<{
   border-radius: 8px;
   cursor: initial;
   width: ${({ width }) => width ? `${width}px` : '100%'};
-  min-width: 428px;
-  ${props => props.$size === 'medium' && props.$fullHeight && `
+  min-width: 338px;
+  ${props => !props.$minimize && props.$fullHeight && `
     &, .hexa-upload-drag-container { 
       height: 100%;
     }
@@ -145,14 +161,22 @@ export const DragContainerWrapper = styled.div<{
     }
   }
 
+  ${props => props.$minimize && `
+    background: none;
+    border: none;
+    border-radius: 0;
+
+    .hexa-upload-drag-container {
+      padding: 0;
+    }
+  `}
+
   ${UploadListWrapper} {
     margin-right: -24px;
     padding-right: 24px;
+    overflow-y: auto;
 
-    ${props => props.$size === 'medium' && `
-      overflow-y: auto;
-    `}
-    ${props => props.$size === 'medium' && !props.$fullHeight && `
+    ${props => !props.$fullHeight && `
       max-height: 287px;
     `}
 
@@ -206,7 +230,7 @@ export const DragContainerWrapper = styled.div<{
 
 export const SelectContainerWrapper = styled.div<{ disabled?: boolean, width?: number }>`
   width: ${({ width }) => width ? `${width}px` : '100%'};
-  min-width: 354px;
+  min-width: 338px;
 
   .hexa-upload-select-container > :not(:first-child) {
     margin-top: 8px;

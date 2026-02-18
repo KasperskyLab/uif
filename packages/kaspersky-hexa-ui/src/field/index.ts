@@ -1,2 +1,2 @@
 export * from './Field'
-export type { FieldProps, LabelPosition } from './types'
+export { type FieldProps, type LabelPosition, LayoutPreset } from './types'

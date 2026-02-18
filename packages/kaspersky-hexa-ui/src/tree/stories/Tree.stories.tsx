@@ -2,14 +2,17 @@ import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbFixArrayArgs, sbMergeActions } from '@sb/helpers'
+import { Panel } from '@src/panel'
 import { applyDropToTreeData, DataNode, TreeList, TreeListProps, TreeNav, TreeNavProps } from '@src/tree'
-import { Meta, StoryObj as Story } from '@storybook/react'
+import { Meta, StoryObj as Story } from '@storybook/react-webpack5'
 import React from 'react'
+import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
 
 import MetaData from '../__meta__/meta.json'
 
+import { treeDataMock, treeDataMockWithIcons } from './mocks'
 import { generateTreeData, getKeys } from './utils'
 
 const meta: Meta<typeof TreeList> = {
@@ -30,19 +33,16 @@ const meta: Meta<typeof TreeList> = {
     invalid: { control: 'boolean' },
     loadData: {},
     loadedKeys: { control: 'object' },
-    treeData: { control: 'object' }
+    treeData: { control: 'object' },
+    showLine: { control: 'boolean' }
   },
   args: {
     klId: 'tree-kl-id',
-    testId: 'tree-test-id'
+    testId: 'tree-test-id',
+    showLine: false
   },
   parameters: {
-    actions: { argTypesRegex: '^(on.*)' },
     badges: [badges.stable, badges.reviewedByDesign],
-    controls: {
-      exclude: /(componentId|componentType|dataTestId|showLine|theme)/,
-      sort: 'alpha'
-    },
     docs: {
       page: withMeta(MetaData)
     }
@@ -50,108 +50,6 @@ const meta: Meta<typeof TreeList> = {
 }
 
 export default meta
-
-const treeDataMock: DataNode[] = [
-  {
-    title: 'Main',
-    key: '0-0',
-    children: [
-      {
-        title: 'Categorized assets',
-        disabled: true,
-        key: '0-0-0',
-        children: [
-          {
-            title: 'Address space',
-            key: '0-0-0-0',
-            children: [
-              {
-                title: 'Address space',
-                key: '0-0-0-0-0'
-              }
-            ]
-          },
-          {
-            title: 'Business impact',
-            key: '0-0-0-1'
-          },
-          {
-            title: 'Location',
-            key: '0-0-0-2'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    title: 'KUMA Updater',
-    key: '0-1',
-    children: [
-      {
-        title: 'Categorized assets',
-        key: '0-1-0',
-        children: [
-          {
-            title: 'Address space',
-            key: '0-1-0-0'
-          },
-          {
-            title: 'Business impact',
-            key: '0-1-0-1'
-          },
-          {
-            title: 'Location',
-            key: '0-1-0-2'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    title: 'Shared',
-    key: '0-2',
-    children: [
-      {
-        title: 'Categorized assets',
-        key: '0-2-0',
-        children: [
-          {
-            title: 'Address space',
-            key: '0-2-0-0'
-          },
-          {
-            title: 'Business impact',
-            key: '0-2-0-1'
-          },
-          {
-            title: 'Location',
-            key: '0-2-0-2'
-          }
-        ]
-      },
-      {
-        title: 'Org chart',
-        key: '0-2-1',
-        children: [
-          {
-            title: 'Shared chart',
-            key: '0-2-1-0'
-          }
-        ]
-      },
-      {
-        title: 'Test chart',
-        key: '0-2-2',
-        children: [
-          {
-            title: 'Test common',
-            key: '0-2-2-0'
-          }
-        ]
-      }
-    ]
-  }
-]
 
 function TreeWrapper ({ Component, ...props }: { Component: typeof TreeList } & Partial<TreeListProps> | { Component: typeof TreeNav } & Partial<TreeNavProps>) {
   const [checkedKeys, setCheckedKeys] = React.useState(props.checkedKeys!)
@@ -176,6 +74,15 @@ export const TreeListBasic: Story<typeof TreeList> = {
   args: {
     mode: 'multipleChoice',
     treeData: treeDataMock
+  }
+}
+
+export const TreeListWithLines: Story<typeof TreeList> = {
+  render: args => <TreeWrapper {...args} Component={TreeList} />,
+  args: {
+    mode: 'multipleChoice',
+    treeData: treeDataMock,
+    showLine: true
   }
 }
 
@@ -236,12 +143,13 @@ function LoadDataAsynchronously ({ Component, ...props }: { Component: typeof Tr
 export const TreeListLoadDataAsynchronously: Story<typeof TreeList> = {
   render: (args) => <LoadDataAsynchronously {...args} Component={TreeList} />,
   args: {
+    onActionClick: undefined,
     mode: 'multipleChoice'
   },
   parameters: {
     actions: { argTypesRegex: '^(on.*|loadData)' },
     controls: {
-      exclude: /(componentId|componentType|dataTestId|showLine|theme|treeData)/
+      exclude: /(componentId|componentType|dataTestId|theme|treeData)/
     }
   }
 }
@@ -254,8 +162,16 @@ export const TreeNavBasic: Story<typeof TreeNav> = {
   },
   parameters: {
     controls: {
-      exclude: /(componentId|componentType|mode|showLine|theme)/
+      exclude: /(componentId|componentType|mode|theme)/
     }
+  }
+}
+
+export const TreeNavWithLines: Story<typeof TreeNav> = {
+  render: args => <TreeWrapper {...args} Component={TreeNav} />,
+  args: {
+    treeData: treeDataMock,
+    showLine: true
   }
 }
 
@@ -283,7 +199,7 @@ export const TreeNavMultipleChoiceWithALotOfData: Story<typeof TreeNav> = {
   },
   parameters: {
     controls: {
-      exclude: /(componentId|componentType|defaultExpandedKeys|mode|showLine|theme|treeData)/
+      exclude: /(componentId|componentType|defaultExpandedKeys|mode|theme|treeData)/
     }
   }
 }
@@ -292,12 +208,13 @@ export const TreeNavLoadDataAsynchronously: Story<typeof TreeNav> = {
   ...TreeNavBasic,
   render: (args) => <LoadDataAsynchronously {...args} Component={TreeNav} />,
   args: {
+    onActionClick: undefined,
     multiple: true
   },
   parameters: {
     actions: { argTypesRegex: '^(on.*|loadData)' },
     controls: {
-      exclude: /(componentId|componentType|dataTestId|mode|showLine|theme|treeData)/
+      exclude: /(componentId|componentType|dataTestId|mode|theme|treeData)/
     }
   }
 }
@@ -326,6 +243,28 @@ export const TreeNavDraggable: Story<typeof TreeNav> = {
     draggable: true,
     checkParents: true,
     treeData: defaultData
+  }
+}
+
+const StyledPanel = styled(Panel)`
+  height: calc(100vh - 48px);
+`
+
+export const TreeNavWithIconsInPanel: Story<typeof TreeNav> = {
+  render: (args) => (
+    <StyledPanel resizable resizeHandle="right" padding="medium">
+      <TreeWrapper {...args} Component={TreeNav} />
+    </StyledPanel>
+  ),
+  args: {
+    multiple: true,
+    treeData: treeDataMockWithIcons
+  },
+  parameters: {
+    actions: { argTypesRegex: '^(on.*)' },
+    controls: {
+      exclude: /(componentId|componentType|mode|theme)/
+    }
   }
 }
 

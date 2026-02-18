@@ -1,13 +1,8 @@
-import { colors } from '@design-system/tokens'
-import { Subtitle } from '@storybook/addon-docs'
+import { Text } from '@src/typography'
 import React from 'react'
 import styled from 'styled-components'
 
-const Wrapper = styled('div')`
-  padding: 12px 0;
-  margin-top: 30px;
-  border-top: 1px solid ${colors.lga300};
-
+const Wrapper = styled.div`
   code {
     font-weight: bold;
   }
@@ -15,7 +10,7 @@ const Wrapper = styled('div')`
 
 const Docs: React.FC = () => (
   <Wrapper id="dropdown-troubleshooting">
-    <Subtitle>Troubleshooting багов с выпадащим списком</Subtitle>
+    <Text type="H4">Troubleshooting багов с выпадащим списком</Text>
     <h3>Известные проблемы:</h3>
     <ol>
       <li>Выпадающий список режется из-за overflow: hidden родителя;</li>

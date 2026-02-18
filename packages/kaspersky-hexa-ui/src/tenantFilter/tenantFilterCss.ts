@@ -1,7 +1,5 @@
 import styled, { css } from 'styled-components'
 
-import { TenantFilterCssConfig } from './types'
-
 export const tenantFilterTreeCss = css`
   && {
     overflow-y: hidden;
@@ -38,6 +36,6 @@ export const TreeBox = styled.div`
   overflow-x: hidden;
   height: 100%;
 `
-export const SearchedString = styled.span<{ cssConfig: TenantFilterCssConfig }>`
-  background: ${props => props.cssConfig.highlight};
+export const SearchedString = styled.span`
+  background: var(--input-code-viewer--bg--highlight);
 `

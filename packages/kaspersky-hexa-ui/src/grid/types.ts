@@ -1,5 +1,6 @@
+import { type Gap } from '@helpers/getGapStyle'
 import { TestingProps } from '@helpers/typesHelpers'
-import { PropsWithChildren } from 'react'
+import { CSSProperties, FC, PropsWithChildren } from 'react'
 import { AnyStyledComponent } from 'styled-components'
 
 type GridTypeVariants = 'fix' | 'stretch' | 'sidebar'
@@ -21,9 +22,9 @@ export type GridCssProps = LayoutDescriptor & {
 export type LayoutBaseProps = {
   alignItems?: string,
   justifyItems?: string,
-  gap?: number,
-  rowGap?: number,
-  columnGap?: number
+  gap?: Gap,
+  rowGap?: Gap,
+  columnGap?: Gap
 }
 
 export type LayoutProps = LayoutDescriptor & LayoutBaseProps & Pick<GridProps, 'className' | 'direction'>
@@ -41,9 +42,23 @@ export type GridProps = TestingProps & PropsWithChildren<{
   cols?: number,
   /** Grid width Type, stretch and sidebar are equal. 'fix', 'stretch', 'sidebar' */
   gridType?: GridTypeVariants,
+  style?: CSSProperties,
   /** Enable grid padding from sides */
   withPadding?: boolean
 }>
+
+export type GridItemProps = {
+  areaName?: string,
+  className?: string,
+  columnSpan?: number,
+  rowSpan?: number
+  span?: number,
+  style?: CSSProperties
+}
+
+export type GridVariants = {
+  Item: FC<GridItemProps>
+}
 
 export type FormGridProps = TestingProps & PropsWithChildren<{
   /** Set grid preset */

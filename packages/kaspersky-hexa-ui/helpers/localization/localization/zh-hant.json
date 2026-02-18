@@ -3,7 +3,10 @@
     "common": {
       "empty": "無資料",
       "import": "匯入",
-      "export": "匯出"
+      "export": "匯出",
+      "filters": "篩選器",
+      "no": "否",
+      "yes": "是"
     },
     "upload": {
       "dropFileTitle": "將檔案拖放在此",
@@ -36,9 +39,9 @@
         "endingMultiple": "或將他們拖放於此",
         "endingSingle": "或將其拖放於此"
       },
-      "maxCountUploaded": "上傳檔案的最大數量",
+      "maxCountUploaded": "最大上傳檔案數量",
       "progress": "{{progress}}，共 {{size}}",
-      "showFiles": "顯示檔案",
+      "showFiles": "檢視檔案",
       "total": {
         "files": "{{filesCount}} 個檔案，共 {{total}} 個檔案",
         "simple": "{{filesCount}} 個檔案",
@@ -46,10 +49,23 @@
       },
       "validation": {
         "maxCount": "由於超過最多檔案限制，{{count}} 個檔案無法上傳。",
+        "maxCount2": "上傳的檔案總數超過了允許的限制",
         "maxFileSize": "由於超過允許大小，{{count}} 個檔案無法上傳。",
+        "maxFileSize2": "早先上傳的某些檔案超過了目前允許的大小限制",
         "maxTotalSize": "由於超過允許總大小，{{count}} 個檔案無法上傳。",
+        "maxTotalSize2": "所有上傳檔案的總大小超過了目前允許的大小限制",
+        "filesDoNotMeetRequirements": "檔案不符合要求",
         "format": "由於格式要求，{{count}} 個檔案無法上傳。"
       }
+    },
+    "wizard": {
+      "actions": {
+        "cancel": "取消",
+        "back": "上一步",
+        "next": "下一步",
+        "finish": "完成"
+      },
+      "stepStack": "第 {{currentStep}} 步，共 {{totalSteps}} 步"
     },
     "severity": {
       "critical": "緊急",
@@ -71,22 +87,13 @@
       "total": "總計 {{count}}",
       "selected": "已選 {{count}}",
       "page": "頁面",
-      "goto": "轉到"
+      "goto": "轉到頁面"
     },
     "search": {
       "raw": "搜尋",
       "dotted": "搜尋..."
     },
     "table": {
-      "column": {
-        "name": "第一欄"
-      },
-      "column2": {
-        "name": "第二欄"
-      },
-      "column3": {
-        "name": "第三欄"
-      },
       "columnDropdown": {
         "ascending": "遞增",
         "descending": "遞減",
@@ -95,14 +102,24 @@
         "resetFilters": "重設篩選器"
       },
       "columnsSettings": {
-        "header": "欄設定",
+        "header": "表格設定",
         "selectAll": "全選",
-        "columns": "列",
+        "columns": "欄位",
         "grouping": "分組",
         "clear": "清除",
         "noGrouping": "不分組",
         "apply": "套用",
         "cancel": "取消",
+        "columnTitles": {
+        "name": "名稱",
+        "country": "國家",
+        "age": "年齡",
+        "city": "城市",
+        "date": "日期",
+        "isSortable": "可排序",
+        "sorter": "排序器",
+        "sorterIsSortable": "排序可用"
+        },
         "filtering": {
           "add": "新增",
           "clearAll": "全部清除",
@@ -110,8 +127,33 @@
           "condition": "條件",
           "from": "從",
           "to": "到",
-          "value": "值"
-        }
+          "value": "值",
+          "validation": {
+            "emptyValue": "指定篩選器值",
+            "duplicateFilters": "重複的篩選器。請確保每個篩選器都是唯一的"
+          }
+        },
+        "columnHideIsUnavailable": "不可隱藏欄"
+      },
+      "filterOperation": {
+        "⊆": "包含",
+        "⊄": "不包含",
+        "cont_and": "包含 (AND)",
+        "cont_or": "包含 (OR)",
+        "ncont_or": "不包含",
+        "*=": "Regexp",
+        "empty": "空",
+        "nempty": "不為空",
+        "range": "介於",
+        "nrange": "超出"
+      },
+      "filterTag": {
+        "⊆": "包含 {{value}}",
+        "⊄": "不包含 {{value}}",
+        "empty": "為空",
+        "nempty": "不為空",
+        "range": "介於 {{from}}–{{to}}",
+        "nrange": "超出 {{from}}–{{to}}"
       },
       "groupingEmpty": "其他"
     },
@@ -125,20 +167,56 @@
     },
     "actionBar": {
       "unsavedChanges": "等待變更",
-      "save": "儲存",
+      "save": "套用",
       "cancel": "取消"
     },
     "textarea": {
       "wordsCount": "{{count}}，共 {{total}}"
     },
     "menu": {
+      "favoritesNavItem": "書籤",
       "navUserItem": {
         "userProps": {
           "status": {
-            "available": "可用",
+            "available": "可用空間",
             "unavailable": "不可用"
           }
         }
+      }
+    },
+    "expand": {
+      "toExpand": "展開",
+      "toCollapse": "折疊"
+    },
+    "codeCompare": {
+      "compareMode": "比較模式",
+      "unified": "統一",
+      "split": "分開",
+      "loader": "下載用於比較的版本...",
+      "totalChanges": "變更總數：",
+      "collapseAll": "折疊所有",
+      "expandAll": "延伸所有",
+      "expandLines": "展開 {{count}} 行",
+      "empty": "兩個檔案都為空。無法進行比較。",
+      "noChanges": "沒有在版本之間發現變更",
+      "basicVersion": "基礎版本",
+      "comparableVersion": "可比較版本"
+    },
+    "licenseCard": {
+      "status": "產品授權金鑰狀態",
+      "number": "產品授權金鑰編號",
+      "remaining": "剩餘",
+      "activationDate": "啟動日期",
+      "expirationDate": "到期日期",
+      "term": "期限",
+      "dayLeft": "剩餘 {{count}} 天",
+      "daysLeft": "剩餘 {{count}} 天",
+      "termDays": "{{count}} 天"
+    },
+    "input": {
+      "password": {
+        "hide": "隱藏",
+        "show": "顯示"
       }
     }
   }

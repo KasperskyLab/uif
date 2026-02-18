@@ -1,48 +1,60 @@
-import { Tooltip } from '@src/tooltip'
-import React, { ReactNode, useEffect, useRef, useState, VFC } from 'react'
+import useTextReducer from '@helpers/hooks/useTextReducer'
+import { Tooltip, TooltipProps } from '@src/tooltip'
+import React, { ReactNode, useRef, VFC } from 'react'
 import styled from 'styled-components'
 
-const TooltipWrapper = styled.div`
+export const TooltipWrapper = styled.div<{ lineClamp?: number }>`
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
   word-break: keep-all;
+  white-space-collapse: preserve;
+  
+  ${props => typeof props.lineClamp === 'number' && props.lineClamp > 1 ? `
+    display: -webkit-box;
+    -webkit-line-clamp: ${props.lineClamp};
+    -webkit-box-orient: vertical;
+  ` : `
+    white-space: nowrap;
+  `}
 `
 
-const StyledContainer = styled.div`
-  width: 100%;
+export const StyledContainer = styled.div<{ truncationWidth?: number }>`
+  ${props => {
+    const width = props.truncationWidth
+    return typeof width === 'number' && width > 0 
+      ? `max-width: ${width}px;`
+      : 'flex: 1 1 auto; min-width: 0;'
+  }}
 `
 
-type TextReducerProps = {
+export type TextReducerProps = Pick<TooltipProps, 'placement'> & {
   children?: ReactNode,
+  lineClamp?: number,
   /** Custom tooltip text */
   tooltip?: ReactNode
+  truncationWidth?: number
+  className?: string
 }
 
-export const TextReducer: VFC<TextReducerProps> = ({ children, tooltip }: TextReducerProps) => {
-  const ref = useRef<HTMLDivElement>(null)
+export const TextReducer: VFC<TextReducerProps> = ({
+  children,
+  lineClamp,
+  tooltip,
+  truncationWidth,
+  placement,
+  className
+}: TextReducerProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [hasOverflow, setHasOverflow] = useState(false)
-
-  useEffect(() => {
-    if (!containerRef.current) return
-    const container = containerRef.current
-    const resizeObserver = new ResizeObserver(() => {
-      if (!ref.current) return
-      setHasOverflow(ref.current.offsetWidth < ref.current.scrollWidth)
-    })
-    resizeObserver.observe(container)
-    return () => resizeObserver.unobserve(container)
-  }, [containerRef.current])
+  const { ref, hasOverflow } = useTextReducer({ containerRef })
 
   return (
-    <StyledContainer ref={containerRef}>
+    <StyledContainer className={className} ref={containerRef} truncationWidth={truncationWidth}>
       {
         hasOverflow
-          ? <Tooltip text={tooltip ?? children}>
-              <TooltipWrapper ref={ref}>{children}</TooltipWrapper>
+          ? <Tooltip text={tooltip ?? children} placement={placement}>
+              <TooltipWrapper ref={ref} lineClamp={lineClamp}>{children}</TooltipWrapper>
             </Tooltip>
-          : <TooltipWrapper ref={ref}>{children}</TooltipWrapper>
+          : <TooltipWrapper ref={ref} lineClamp={lineClamp}>{children}</TooltipWrapper>
       }
     </StyledContainer>
   )

@@ -1,13 +1,18 @@
-import {
-  CodeOrSourceMdx,
-  Subtitle
-} from '@storybook/addon-docs'
+import { Text } from '@src/typography'
 import React from 'react'
+import styled from 'styled-components'
+
+const Wrapper = styled.div`
+  code {
+    display: block;
+    white-space: pre-wrap;
+  }
+`
 
 export const ToolbarDocs: React.VFC = () => {
   const codeExample = `
-import { Toolbar, Search, Link, Text } from '@kaspersky/components'
-import { ToolbarItems, ToolbarProps } from '@kaspersky/components/toolbar/types'
+import { Toolbar, Search, Link, Text } from '@kaspersky/hexa-ui'
+import { ToolbarItems, ToolbarProps } from '@kaspersky/hexa-ui/toolbar/types'
 
 const items = [
   {
@@ -115,11 +120,11 @@ const App: React.FC = () => {
 }
 `
   return (
-    <>
-      <Subtitle>Code example</Subtitle>
-      <CodeOrSourceMdx>
+    <Wrapper>
+      <Text type="H5">Code example</Text>
+      <code>
         {codeExample}
-      </CodeOrSourceMdx>
-    </>
+      </code>
+    </Wrapper>
   )
 }

@@ -1,6 +1,6 @@
 import { Icon } from '@src/icon'
 import cn from 'classnames'
-import { isEqual } from 'lodash'
+import isEqual from 'lodash/isEqual'
 import React, { useEffect, useState } from 'react'
 import {
   SortableContainer as sortableContainer,
@@ -11,7 +11,7 @@ import {
 import { TableModule } from './index'
 
 const DragHandle = sortableHandle(() => (
-  <span>
+  <span className="drag-handle-container">
     <Icon size="small" name="DragDrop" className="drag-handle" />
   </span>
 ))
@@ -28,7 +28,7 @@ const arrayMove = (array: any[], from: number, to: number) => {
   return arr
 }
 
-export const DraggableTable: TableModule = (Component) => (props: any) => {
+export const DraggableTable: TableModule = (Component) => function DraggableModule (props: any) {
   const rowsRef = React.useRef(props.dataSource ? [...props.dataSource] : [])
   const [columns, setColumns] = useState([...props.columns])
   const [components, setComponents] = useState({ ...props.components })
@@ -115,7 +115,7 @@ export const DraggableTable: TableModule = (Component) => (props: any) => {
         dataSource={rowsRef.current}
         columns={columns}
         components={components}
-        className={cn(props.className, 'table-draggable')}
+        className={cn(props.className, 'table-draggable', { 'table-row-selection': !!props.rowSelection })}
       />
     )
   } else {

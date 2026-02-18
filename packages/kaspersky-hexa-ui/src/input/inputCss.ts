@@ -5,64 +5,32 @@ import { css } from 'styled-components'
 
 import { MonoTextTypes, TextSizes, TextTypes } from '@kaspersky/hexa-ui-core/typography/js'
 
-import { InputCssConfig, InputSizeConfig, TextboxViewProps } from './types'
+import { InputCssConfig, InputSizeConfig } from './types'
+
+export const inputPaddingTop = 6
 
 const inputSize: InputSizeConfig = {
-  padding: '6px 12px',
+  padding: `${inputPaddingTop}px 12px`,
   height: '32px',
   borderRadius: '8px'
 }
 
 const fromProps = getFromProps<InputCssConfig>()
 
-export const inputAddonStyles = css<TextboxViewProps>`
-  ${({ addonAfter }) => {
-    return addonAfter
-      ? `
-          & .ant-input,
-          & .ant-input-affix-wrapper {
-            border-right: none;
-            max-height: ${inputSize.height};
-          }
-        `
-      : ''
-  }}
-
-  ${({ addonBefore }) => {
-    return addonBefore
-      ? `
-          & .ant-input,
-          & .ant-input-affix-wrapper {
-            border-left: none;
-          }
-        `
-      : ''
-  }}
-
-  ${({ addonAfter, addonBefore }) => {
-    return addonBefore || addonAfter
-      ? `
-        padding: 0;
-        border: none !important;
-        
-        & .ant-input-affix-wrapper {
-          height: ${inputSize.height};
-          background-color: ${fromProps('enabled.background')};
-          border-radius: ${inputSize.borderRadius};
-        }
-      
-        & .ant-input {
-          border-color: ${fromProps('enabled.border')};
-          border-radius: ${inputSize.borderRadius};
-        }
-      `
-      : ''
-  }}
+const fontStyles = (font: TextSizes) => css`
+  font-family: ${font.fontFamily};
+  font-size: ${font.fontSize};
+  line-height: ${font.lineHeight};
+  font-weight: ${font.fontWeight};
+  font-style: ${font.fontStyle};
+  letter-spacing: ${font.letterSpacing};
 `
 
 const inputFont: TextSizes = getTextSizes(TextTypes.BTR3)
-export const inputStyles = css`
-  &&& {
+
+export const inputTextLineHeigt: number = +inputFont.lineHeight.slice(0, -2)
+
+export const inputInnerStyles = css`
     height: ${inputSize.height};
     padding: ${inputSize.padding};
     outline: unset;
@@ -70,12 +38,7 @@ export const inputStyles = css`
 
     // font styles
     &, & input {
-      font-family: ${inputFont.fontFamily};
-      font-size: ${inputFont.fontSize};
-      line-height: ${inputFont.lineHeight};
-      font-weight: ${inputFont.fontWeight};
-      font-style: ${inputFont.fontStyle};
-      letter-spacing: ${inputFont.letterSpacing};
+      ${fontStyles(inputFont)}
       color: ${fromProps('enabled.color')};
       background-color: ${fromProps('enabled.background')};
 
@@ -96,20 +59,22 @@ export const inputStyles = css`
     }
 
     // active & focus
-    &:focus-within {
+    &:focus-visible,
+    &:not(input):has(:focus-visible) {
       box-shadow: ${fromProps('focus.boxShadow')};
       border-color: ${fromProps('enabled.border')};
     }
 
-    // validation status
-    &:not(.kl-disabled):not(.kl-readonly) {
-      &, &:hover, &:active, &:focus-within {
-        ${(props) => validationStatuses.map((status) => `
-          &.${status} {
-            box-shadow: none;
-            border-color: ${fromProps(`${status}.border`)(props)};
-          }
-        `)}
+    &:not(.kl6-textbox-disabled):not(.kl6-textbox-readonly) {
+      &, &:hover, &:active {
+        &:is(input, textarea):not(:focus-visible),
+        &:not(input):not(:has(:focus-visible)) {
+          ${props => validationStatuses.map(status => status !== 'default' && `
+            &.${status} {
+              border-color: ${fromProps(`${status}.border`)(props)};
+            }
+          `).filter(Boolean)}
+        }
       }
     }
 
@@ -117,7 +82,7 @@ export const inputStyles = css`
     &.kl6-textbox-disabled, &.kl6-textbox-readonly {
       background-color: ${fromProps('disabled.background')};
       color: ${fromProps('disabled.color')};
-      border: 1px solid transparent;
+      border: 1px solid ${fromProps('disabled.border')};
 
       &:hover {
         border-color: ${fromProps('disabled.border')};
@@ -188,23 +153,27 @@ export const inputStyles = css`
         transition: background-color 5000s ease-in-out 0s;
       }
     }
+`
+
+export const inputStyles = css`
+  &&& {
+    ${inputInnerStyles}
   }
 `
 
 const inputPasswordFont: TextSizes = getTextSizes(MonoTextTypes.MTR3)
 export const inputPasswordStyles = css`
-  &&& input, &&& input::placeholder {
-    font-family: ${inputPasswordFont.fontFamily};
-    font-size: ${inputPasswordFont.fontSize};
-    line-height: ${inputPasswordFont.lineHeight};
-    font-weight: ${inputPasswordFont.fontWeight};
-    font-style: ${inputPasswordFont.fontStyle};
-    letter-spacing: ${inputPasswordFont.letterSpacing};
+  &&& input {
+    ${fontStyles(inputPasswordFont)}
+
+    ::placeholder {
+      ${fontStyles(inputFont)}
+    }
   }
   svg {
     color: ${fromProps('enabled.color')};
   }
-  &.kl-disabled .ant-input-password-icon {
+  &.kl6-textbox-disabled .ant-input-password-icon {
     cursor: not-allowed !important;
   }
 `
@@ -215,6 +184,10 @@ export const inputNumberStyles = css`
     height: unset;
   }
   
+  .ant-input-number-input-wrap {
+    padding-right: 16px;
+  }
+
   .ant-input-number-handler-wrap {
     opacity: 1;
     display: block;
@@ -239,7 +212,7 @@ export const inputNumberStyles = css`
     }
   }
   
-  &.kl-disabled, &.kl-readonly {
+  &.kl6-textbox-disabled, &.kl6-textbox-readonly {
     .ant-input-number-handler {
       cursor: not-allowed;
       color: ${fromProps('disabled.color')};
@@ -265,9 +238,9 @@ export const inputTextareaContainerStyles = css<{cssConfig: InputCssConfig, disa
     padding: 6px 12px;
   }
 
-  &.kl6-textbox-textarea-has-counter {
+  &&&.kl6-textbox-textarea-has-counter {
     textarea {
-      padding-bottom: 26px; 
+      padding-bottom: ${inputTextLineHeigt + inputPaddingTop}px; 
     }
   }
 

@@ -1,16 +1,14 @@
 import useDimension from '@helpers/hooks/useDimension'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { shouldForwardProp } from '@helpers/shouldForwardProp'
-import { ActionButtonCustomProps, ActionButtonProps, useThemedActionButton } from '@src/action-button'
-import ActionButtonCSS from '@src/action-button/ActionButtonCSS'
+import { ActionButton } from '@src/action-button'
 import { Button } from '@src/button'
 import { Space } from '@src/space'
 import { Modal as AntdModal } from 'antd'
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-import { Cross } from '@kaspersky/hexa-ui-icons/16'
 import {
+  Kira,
   StatusDangerOutline1,
   StatusOkOutline,
   StatusWarningOutline
@@ -26,16 +24,6 @@ import {
 import { ModalMode, ModalProps, ModalViewProps } from './types'
 import { useThemedModal } from './useThemedModal'
 
-const StyledCloseIcon = styled(Cross).withConfig({ shouldForwardProp })`
-  ${ActionButtonCSS}
-`
-
-export const CloseIcon = (rawProps: ActionButtonProps): JSX.Element => {
-  const themedProps = useThemedActionButton({ ...rawProps, interactive: true })
-  const props = useTestAttribute(themedProps)
-  return <StyledCloseIcon {...props as ActionButtonCustomProps} cssConfig={themedProps.cssConfig} />
-}
-
 const StyledModal = styled(AntdModal).withConfig({
   shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
 })`${modalCss}`
@@ -48,7 +36,7 @@ export const Modal: FC<ModalProps> = (rawProps: ModalProps) => {
 
 const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
   const {
-    mode,
+    mode = 'default',
     header,
     content,
     actions,
@@ -64,17 +52,16 @@ const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
     return {
       warning: () => <StatusWarningOutline testId="modal-warning-icon" klId="icon-warning" />,
       error: () => <StatusDangerOutline1 testId="modal-error-icon" klId="icon-error" />,
-      success: () => <StatusOkOutline testId="modal-success-icon" klId="icon-success" />
+      success: () => <StatusOkOutline testId="modal-success-icon" klId="icon-success" />,
+      ai: () => <Kira testId="modal-ai-icon" klId="icon-ai" />
     }
   }, [])
 
   const IconComponent = useMemo(() => mode !== 'default' && iconMap[mode], [iconMap, mode])
 
-  const contentRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
   const footerRef = useRef<HTMLDivElement>(null)
 
-  const { height: contentHeight } = useDimension(contentRef, [visible])
   const { height: titleHeight } = useDimension(titleRef, [visible])
   const { height: footerHeight } = useDimension(footerRef, [visible])
 
@@ -102,40 +89,41 @@ const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
   }, [header, IconComponent, cssConfig])
 
   const footerMemoized = useMemo(() => {
+    if (!actions && !customButtons) {
+      return null
+    }
     return (
-      (actions || customButtons) && (
-        <div ref={footerRef}>
-          <Space direction="horizontal">
-            {actions?.FIRST_ACTION && (
-              <Button size="medium" {...actions.FIRST_ACTION}>
-                {actions.FIRST_ACTION.text}
-              </Button>
-            )}
-            {actions?.SECOND_ACTION && (
-              <Button size="medium" mode="secondary" {...actions.SECOND_ACTION}>
-                {actions.SECOND_ACTION.text}
-              </Button>
-            )}
-            {actions?.THIRD_ACTION && (
-              <Button size="medium" mode="secondary" {...actions.THIRD_ACTION}>
-                {actions.THIRD_ACTION.text}
-              </Button>
-            )}
-            {customButtons && customButtons.map(({ text, ...rest }, i) => (
-              <Button
-                key={`modalCustomButton${i}`}
-                size="medium"
-                mode="secondary"
-                {...rest}
-              >
-                {text}
-              </Button>
-            ))}
-          </Space>
-        </div>
-      )
+      <div ref={footerRef}>
+        <Space direction="horizontal" gap={8}>
+          {actions?.FIRST_ACTION && (
+            <Button size="medium" {...actions.FIRST_ACTION}>
+              {actions.FIRST_ACTION.text}
+            </Button>
+          )}
+          {actions?.SECOND_ACTION && (
+            <Button size="medium" mode="secondary" {...actions.SECOND_ACTION}>
+              {actions.SECOND_ACTION.text}
+            </Button>
+          )}
+          {actions?.THIRD_ACTION && (
+            <Button size="medium" mode="secondary" {...actions.THIRD_ACTION}>
+              {actions.THIRD_ACTION.text}
+            </Button>
+          )}
+          {customButtons && customButtons.map(({ text, ...rest }, i) => (
+            <Button
+              key={`modalCustomButton${i}`}
+              size="medium"
+              mode="secondary"
+              {...rest}
+            >
+              {text}
+            </Button>
+          ))}
+        </Space>
+      </div>
     )
-  }, [actions])
+  }, [actions, customButtons])
 
   const [showTopBorder, setShowTopBorder] = useState(false)
   const [showBottomBorder, setShowBottomBorder] = useState(false)
@@ -154,7 +142,6 @@ const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
     <>
       <ModalGlobalStyles
         cssConfig={cssConfig}
-        contentHeight={contentHeight}
         titleHeight={titleHeight}
         footerHeight={footerHeight}
         showTopBorder={showTopBorder}
@@ -170,18 +157,16 @@ const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
         keyboard={false}
         centered={centered}
         closable={closable}
-        closeIcon={<CloseIcon />}
+        closeIcon={<ActionButton _wrapInSpan size="large" />}
         {...testAttributes}
         {...props}
         cssConfig={cssConfig}
-        contentHeight={contentHeight}
         titleHeight={titleHeight}
         footerHeight={footerHeight}
         showTopBorder={showTopBorder}
         showBottomBorder={showBottomBorder}
       >
         <ModalContent
-          ref={contentRef}
           cssConfig={cssConfig}
           titleHeight={titleHeight}
           footerHeight={footerHeight}

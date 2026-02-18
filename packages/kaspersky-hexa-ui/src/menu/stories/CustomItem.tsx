@@ -27,6 +27,6 @@ export const CustomItem = styled(CustomComponent)`
   ${navItemCss}
 `
 
-export const clickHandler = (text: string) => {
-  openNotification.success({ description: text, duration: 1 })
+export const clickHandler = (text?: string) => {
+  text && openNotification.success({ description: text, duration: 1 })
 }

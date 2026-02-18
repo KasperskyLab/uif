@@ -1,2 +1,3 @@
 export * from './TimeInput'
-export type { TimeInputProps } from './types'
+export * from './RangeTimeInput'
+export type { RangeTimeInputProps, TimeInputProps } from './types'

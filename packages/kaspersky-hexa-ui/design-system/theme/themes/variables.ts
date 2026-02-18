@@ -1,4 +1,4 @@
-import { SPACE_KEY, BORDER_RADIUS_KEY } from '../../types'
+import { BORDER_RADIUS_KEY, SPACE_KEY } from '../../types'
 
 const getMappingSize = <T extends string | number | symbol>(
   count: number,

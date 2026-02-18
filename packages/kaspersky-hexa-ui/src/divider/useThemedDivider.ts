@@ -5,6 +5,6 @@ import { DividerCssConfig, DividerProps, DividerStyleProps, DividerViewProps } f
 export const useThemedDivider = (props: DividerProps): DividerViewProps => (
   useThemedComponent<DividerProps, DividerCssConfig, DividerStyleProps>(props, {
     componentName: 'divider',
-    defaultValues: { mode: 'normal' }
+    defaultValues: { mode: 'bold' }
   })
 )

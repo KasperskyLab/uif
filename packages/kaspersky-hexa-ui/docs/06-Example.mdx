@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/blocks'
+import { Meta } from '@storybook/addon-docs/blocks'
 
 <Meta title="Docs/Шаблон документации компонентов" />
 
@@ -22,9 +22,9 @@ import { Meta } from '@storybook/blocks'
 
 - `storybook` - есть ли `stories` с основными видами использования компонента,
 
-- `figmaView` - добавлена ли документация из фигмы
+- `pixsoView` - добавлена ли документация из pixso
 
-2. Название компонента, назначение с техническими особенностями, ссылка на дизайн и ссылка на `Figma View` (получается через экспорт ссылки через `Get embed code в Figma`).
+2. Название компонента, назначение с техническими особенностями, ссылка на дизайн и ссылка на `Pixso View`.
 В описание следует указать, был ли взят за основу компонент из **antd** или был использован нативный элемент.
 
 #### Пример
@@ -39,13 +39,13 @@ import { Meta } from '@storybook/blocks'
     "migration": true,
     "apiTable": true,
     "storybook": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Button",
   "description": "Компонент для отрисовки кнопок. В качестве основы используется AntdButton из библиотеки Antd.",
   "usage": "Элемент, при нажатии на который происходит какое-то действие",
   "designLink": "https://example-link",
-  "figmaView": "https://example-link"
+  "pixsoView": "https://example-link"
 }
 ```
 
@@ -55,7 +55,7 @@ import { Meta } from '@storybook/blocks'
 
 2. `deprecated`: The component is no longer supported
 
-3. `missingDesign`: The component doesn\'t have layout page in figma
+3. `missingDesign`: The component doesn\'t have layout page in pixso
   
 4. `reviewedByDesign`: The component is reviewed by design team and no further actions are required
 

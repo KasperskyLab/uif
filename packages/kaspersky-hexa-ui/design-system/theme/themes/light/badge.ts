@@ -1,5 +1,10 @@
-import { BadgeMode, BadgeSize as Size, BadgeSizeConfig as SizeConfig, BadgeColorConfig } from '@src/badge/types'
 import { getTextSizes } from '@design-system/tokens/typography'
+import {
+  BadgeColorConfig,
+  BadgeMode,
+  BadgeSize as Size,
+  BadgeSizeConfig as SizeConfig
+} from '@src/badge/types'
 
 import { TextTypes } from '@kaspersky/hexa-ui-core/typography/js'
 

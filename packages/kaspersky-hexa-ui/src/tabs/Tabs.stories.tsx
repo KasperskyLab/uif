@@ -4,13 +4,13 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Button } from '@src/button'
-import { IndicatorMode } from '@src/indicator'
+import { FieldSet } from '@src/field-set'
 import { IndicatorModes } from '@src/indicator/types'
 import { Textbox } from '@src/input'
 import { Sidebar } from '@src/sidebar'
 import { Space } from '@src/space'
 import { H3 } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -42,14 +42,15 @@ const meta: Meta<TabsProps> = {
       ))
     ),
     testId: 'tabs-test-id',
-    klId: 'tabs-kl-id'
+    klId: 'tabs-kl-id',
+    padding: false
   },
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   },
   decorators: [
     (Story, context) => (
@@ -73,31 +74,31 @@ export const WithIconAndNumber: Story = {
   render: (args: TabsProps) => (
     <Tabs {...args}>
       <Tabs.TabPane
-        tab={<Tabs.TabPaneHead text="Tab" iconBefore={<Placeholder />} />}
+        tab={<Tabs.TabPaneHead testId="tab-1" text="Tab" iconBefore={<Placeholder />} />}
         key="1"
       >
         Content of Tab Pane 1
       </Tabs.TabPane>
       <Tabs.TabPane
-        tab={<Tabs.TabPaneHead text="Tab" iconAfter={<Placeholder />} />}
+        tab={<Tabs.TabPaneHead testId="tab-2" text="Tab" iconAfter={<Placeholder />} />}
         key="2"
       >
         Content of Tab Pane 2
       </Tabs.TabPane>
       <Tabs.TabPane
         tab={
-          <Tabs.TabPaneHead text="Tab" iconBefore={<Placeholder />} iconAfter={<Placeholder />} />
+          <Tabs.TabPaneHead testId="tab-3" text="Tab" iconBefore={<Placeholder />} iconAfter={<Placeholder />} />
         }
         key="3"
       >
         Content of Tab Pane 3
       </Tabs.TabPane>
-      <Tabs.TabPane tab={<Tabs.TabPaneHead text="Tab" number={5} />} key="4">
+      <Tabs.TabPane tab={<Tabs.TabPaneHead testId="tab-4" text="Tab" number={0} />} key="4">
         Content of Tab Pane 4
       </Tabs.TabPane>
       <Tabs.TabPane
         tab={
-          <Tabs.TabPaneHead text="Tab" iconBefore={<Placeholder />} number={5} />
+          <Tabs.TabPaneHead testId="tab-5" text="Tab" iconBefore={<Placeholder />} number={5} />
         }
         key="5"
       >
@@ -105,7 +106,7 @@ export const WithIconAndNumber: Story = {
       </Tabs.TabPane>
       <Tabs.TabPane
         tab={
-          <Tabs.TabPaneHead text="Tab" iconAfter={<Placeholder />} number={5} />
+          <Tabs.TabPaneHead testId="tab-6" text="Tab" iconAfter={<Placeholder />} number={5} />
         }
         key="6"
       >
@@ -113,7 +114,7 @@ export const WithIconAndNumber: Story = {
       </Tabs.TabPane>
       <Tabs.TabPane
         tab={
-          <Tabs.TabPaneHead text="Tab" iconBefore={<Placeholder />} iconAfter={<Placeholder />} number={5} />
+          <Tabs.TabPaneHead testId="tab-7" text="Tab" iconBefore={<Placeholder />} iconAfter={<Placeholder />} number={5} />
         }
         key="7"
       >
@@ -123,7 +124,13 @@ export const WithIconAndNumber: Story = {
   )
 }
 
-type StoryTabsProps = TabsProps & { indicatorMode: IndicatorMode }
+const indicatorMode = IndicatorModes.filter(
+  (mode): mode is 'critical' | 'accent' => mode === 'critical' || mode === 'accent'
+)
+
+type StoryTabsProps = TabsProps & {
+  indicatorMode: typeof indicatorMode[number]
+};
 
 export const WithIndicator: StoryObj<StoryTabsProps> = {
   render: (args: StoryTabsProps) => {
@@ -202,8 +209,8 @@ export const WithIndicator: StoryObj<StoryTabsProps> = {
   argTypes: {
     indicatorMode: {
       control: 'select',
-      options: IndicatorModes,
-      description: 'Indicator mode'
+      options: indicatorMode,
+      description: 'Indicator mode: you can use only "critical" for errors or "accent" for updates'
     }
   }
 }
@@ -272,8 +279,8 @@ export const WithInfoIcon: StoryObj<StoryTabsProps> = {
   argTypes: {
     indicatorMode: {
       control: 'select',
-      options: IndicatorModes,
-      description: 'Indicator mode'
+      options: indicatorMode,
+      description: 'Indicator mode: you can use only "critical" for errors or "accent" for updates'
     }
   }
 }
@@ -325,16 +332,16 @@ export const CollapsedHorizontalGroup: Story = {
     return (
       <Tabs {...props}>
         {generateTabs(20, 'tabs.dropdown.more').map((el, i) => <Tabs.TabPane
-            tab={
-              <Tabs.TabPaneHead text={useLocalization(el.text) + ' ' + (i + 1)} iconBefore={<Placeholder/>}/>
-            }
-            key={i + 1}
-            disabled={el.disabled}
-          >
-             {el.content}
-          </Tabs.TabPane>
+          tab={
+            <Tabs.TabPaneHead testId={`tab-${i + 1}`} text={useLocalization(el.text) + ' ' + (i + 1)} iconBefore={<Placeholder/>}/>
+          }
+          key={i + 1}
+          disabled={el.disabled}
+        >
+          {el.content}
+        </Tabs.TabPane>
         )}
-    </Tabs>)
+      </Tabs>)
   }
 }
 
@@ -528,6 +535,109 @@ export const WithTextbox: Story = {
       </Tabs>
     </Space>
   )
+}
+
+export const WithPreventTabChange: Story = {
+  render: (args: TabsProps) => {
+
+    const [activeKey, setActiveKey] = useState('1')
+
+    const handleChange = async (key: string) => {
+      if (key === '1') {
+        alert('You cannot switch to the tab 1 because the form has unsaved changes')
+        return false
+      }
+      if (key === '2') {
+        return window.confirm('Do you really want to switch to Tab 2? unsaved changes may be lost')
+      }
+      setActiveKey(key)
+    }
+
+    return (
+      <Tabs {...args} activeKey={activeKey} onChange={handleChange}>
+        <Tabs.TabPane tab="Tab 1" key="1">
+          <FieldSet items={[
+            {
+              label: 'textbox',
+              control: {
+                component: 'textbox',
+                placeholder: 'hello'
+              }
+            },
+            {
+              label: 'textbox-masked',
+              control: {
+                component: 'textbox-masked',
+                maskOptions: {
+                  mask: 'NUM.NUM.NUM.NUM',
+                  blocks: {
+                    NUM: {
+                      mask: /^[0-9]{1,3}$/
+                    }
+                  }
+                },
+                placeholder: 'hello'
+              }
+            },
+            {
+              label: 'textbox-number',
+              control: {
+                component: 'textbox-number',
+                placeholder: '123'
+              }
+            },
+            {
+              label: 'textbox-password',
+              control: {
+                component: 'textbox-password',
+                value: '123'
+              }
+            }
+          ]}/>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Tab 2" key="2">
+          <FieldSet items={[
+            {
+              label: 'textbox',
+              control: {
+                component: 'textbox',
+                placeholder: 'hello'
+              }
+            },
+            {
+              label: 'textbox-masked',
+              control: {
+                component: 'textbox-masked',
+                maskOptions: {
+                  mask: 'NUM.NUM.NUM.NUM',
+                  blocks: {
+                    NUM: {
+                      mask: /^[0-9]{1,3}$/
+                    }
+                  }
+                },
+                placeholder: 'hello'
+              }
+            },
+            {
+              label: 'textbox-number',
+              control: {
+                component: 'textbox-number',
+                placeholder: '123'
+              }
+            },
+            {
+              label: 'textbox-password',
+              control: {
+                component: 'textbox-password',
+                value: '123'
+              }
+            }
+          ]}/>
+        </Tabs.TabPane>
+      </Tabs>
+    )
+  }
 }
 
 type PaletteStory = StoryObj<ThemedPaletteProps>

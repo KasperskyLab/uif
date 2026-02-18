@@ -7,11 +7,11 @@
     "migration": false,
     "apiTable": false,
     "storybook": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "StatusCard",
   "description": "",
   "usage": "Status card — компонент, предназначенный для явного отображения статуса сущности или устройства.",
-  "designLink": "https://www.figma.com/design/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-Hexa-UI-Components-v-6.179.1?node-id=114165-168896&p=f&t=NcTZIUn0X34XCNxI-0",
-  "figmaView": "https://embed.figma.com/design/Nk51iLxOEudxvBAtEi4lTL/Status-card?node-id=0-1&embed-host=share"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=114165%3A168896",
+  "pixsoView": "https://pixso.net/app/design/Ow2DRZgqJfIkE2mJSKYHVg"
 }

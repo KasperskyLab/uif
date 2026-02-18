@@ -1,27 +1,31 @@
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { Loader } from '@src/loader'
 import cn from 'classnames'
 import React, { ReactNode, useMemo } from 'react'
 import { v4 as uuid } from 'uuid'
 
-import { DropdownDivider, DropdownGroup, DropdownMenu, DropdownSubmenu } from './Dropdown'
 import { DropdownItem } from './DropdownItem'
 import { DropdownItemInner } from './DropdownItemInner'
-import { DropdownItemProps, DropdownViewProps } from './types'
+import styles from './styles/Dropdown.module.scss'
+import { DropdownItemProps, DropdownProps } from './types'
+import { DropdownDivider, DropdownGroup, DropdownInnerActions, DropdownMenu, DropdownSubmenu } from './wrappers'
 
 const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
   return (
     items.map(({
+      key = uuid(),
       type,
       disabled,
       title,
       description,
       tooltip,
+      icon,
       componentsAfter,
       componentsBefore,
       children,
-      ...rest
+      ...props
     }: DropdownItemProps): ReactNode | ReactNode[] => {
-      const key = uuid()
+      const { testAttributes, ...rest } = useTestAttribute(props)
       switch (type) {
         case 'submenu':
           return (
@@ -34,6 +38,7 @@ const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
                   tooltip={tooltip}
                   componentsBefore={componentsBefore}
                   componentsAfter={componentsAfter}
+                  icon={icon}
                 >
                   {title}
                 </DropdownItemInner>
@@ -41,6 +46,8 @@ const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
               popupOffset={[16, -10]}
               popupClassName={overlayClassName}
               disabled={disabled}
+              className={rest.className}
+              {...testAttributes}
             >
               {mapOverlay(children as DropdownItemProps[], overlayClassName)}
             </DropdownSubmenu>
@@ -52,6 +59,8 @@ const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
           </>
         case 'divider':
           return <DropdownDivider />
+        case 'innerActions':
+          return <DropdownInnerActions>{children}</DropdownInnerActions>
         default:
           return (
             <DropdownItem
@@ -61,10 +70,12 @@ const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
               componentsAfter={componentsAfter}
               description={description}
               tooltip={tooltip}
+              icon={icon}
               {...rest}
+              {...testAttributes}
               className={cn(rest.className, {
-                'kl6-dropdown-item-action': type === 'action',
-                'kl6-dropdown-item-custom': typeof children !== 'string'
+                [styles.dropdownItemAction]: type === 'action',
+                [styles.dropdownItemCustom]: typeof children !== 'string'
               })}
             >
               {children}
@@ -81,24 +92,40 @@ export const useMappedContent = ({
   testId,
   klId,
   overlayClassName,
+  onOverlaySelect,
+  selectedItemsKeys,
+  header,
+  footer,
   ...rest
-}: DropdownViewProps) => {
-  const content = useMemo(() => (
-    !Array.isArray(overlay)
-      ? overlay
-      : <DropdownMenu
+}: DropdownProps) => {
+  const content = useMemo(() => {
+    if (Array.isArray(overlay)) {
+      return (
+        <DropdownMenu
           data-testid={testId}
           kl-id={klId}
-          className={cn({ 'kl6-dropdown-loading': loading })}
+          className={cn({ [styles.dropdownLoading]: loading })}
           triggerSubMenuAction="click"
+          onSelect={onOverlaySelect}
+          selectedKeys={selectedItemsKeys}
         >
           {
             loading
-              ? <Loader size="medium"/>
-              : mapOverlay(overlay, overlayClassName)
+              ? <Loader size="medium" />
+              : <>
+                  {header && mapOverlay([{ ...header, className: cn(header.className, { [styles.dropdownItemStickyHeader]: header.sticky }) }])}
+                  {mapOverlay(overlay, overlayClassName)}
+                  {footer && mapOverlay([{ ...footer, className: cn(footer.className, { [styles.dropdownItemStickyFooter]: footer.sticky }) }])}
+                </>
           }
         </DropdownMenu>
-  ), [overlay, loading, klId, testId, overlayClassName])
+      )
+    } else if (typeof overlay === 'function') {
+      return React.cloneElement(overlay(), { onSelect: onOverlaySelect })
+    } else {
+      return React.cloneElement(overlay, { onSelect: onOverlaySelect })
+    }
+  }, [overlay, loading, klId, testId, overlayClassName, onOverlaySelect, selectedItemsKeys])
 
   return { overlay: content, overlayClassName, ...rest }
 }

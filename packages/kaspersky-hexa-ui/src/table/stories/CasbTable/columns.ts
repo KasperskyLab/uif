@@ -24,5 +24,14 @@ export const columns = [
     dataIndex: 'access',
     key: 'access',
     render: renderCell
+  },
+  {
+    title: 'Tags',
+    dataIndex: 'tags',
+    colSpan: 2,
+    align: 'left' as const,
+    width: 'auto',
+    key: 'tags',
+    render: renderCell
   }
 ]

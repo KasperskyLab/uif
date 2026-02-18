@@ -3,7 +3,10 @@
     "common": {
       "empty": "Brak danych",
       "import": "Importuj",
-      "export": "Eksportuj"
+      "export": "Eksportuj",
+      "filters": "Filtry",
+      "no": "Nie",
+      "yes": "Tak"
     },
     "upload": {
       "dropFileTitle": "Upuść pliki tutaj",
@@ -20,7 +23,7 @@
       "successTitle": "Przesyłanie powiodło się",
       "successDescription": "Plik {{file, fileName}} został pomyślnie przesłany na serwer",
       "errorTitle": "Błąd przesyłania",
-      "errorDescription": "{{file, fileName}} nie mógł zostać przesłany z powodu błędu połączenia"
+      "errorDescription": "{{file, fileName}} nie może zostać przesłany z powodu błędu połączenia"
     },
     "uploader": {
       "actions": {
@@ -38,7 +41,7 @@
       },
       "maxCountUploaded": "Maksymalna liczba przesłanych plików",
       "progress": "{{progress}} z {{size}}",
-      "showFiles": "Pokaż pliki",
+      "showFiles": "Wyświetl pliki",
       "total": {
         "files": "{{filesCount}} z {{total}} plików",
         "simple": "{{filesCount}} plik(i)",
@@ -46,10 +49,23 @@
       },
       "validation": {
         "maxCount": "{{count}} plik(i) nie może/-gą być przesłany/-e z powodu przekroczenia maksymalnego limitu plików.",
+        "maxCount2": "Całkowita liczba przesłanych plików przekracza dopuszczalny limit",
         "maxFileSize": "{{count}} plik(i) nie może/-gą być przesłany/-e z powodu przekroczenia dopuszczalnego rozmiaru.",
+        "maxFileSize2": "Niektóre z plików przesłanych wcześniej przekraczają obecnie dopuszczalny limit rozmiaru",
         "maxTotalSize": "{{count}} plik(i) nie może/-gą być przesłany/-e z powodu przekroczenia dopuszczalnego rozmiaru całkowitego.",
+        "maxTotalSize2": "Rozmiar całkowity wszystkich przesłanych plików przekracza obecnie dopuszczalny limit rozmiaru",
+        "filesDoNotMeetRequirements": "Pliki nie spełniają wymagań",
         "format": "{{count}} plik(i) nie może/-gą być przesłany/-e z powodu wymagań związanych z formatem."
       }
+    },
+    "wizard": {
+      "actions": {
+        "cancel": "Anuluj",
+        "back": "Wstecz",
+        "next": "Dalej",
+        "finish": "Zakończ"
+      },
+      "stepStack": "Krok {{currentStep}} z {{totalSteps}}"
     },
     "severity": {
       "critical": "Krytyczny",
@@ -78,15 +94,6 @@
       "dotted": "Szukaj..."
     },
     "table": {
-      "column": {
-        "name": "Pierwsza kolumna"
-      },
-      "column2": {
-        "name": "Druga kolumna"
-      },
-      "column3": {
-        "name": "Trzecia kolumna"
-      },
       "columnDropdown": {
         "ascending": "Rosnąco",
         "descending": "Malejąco",
@@ -95,7 +102,7 @@
         "resetFilters": "Resetuj filtr"
       },
       "columnsSettings": {
-        "header": "Ustawienia kolumn",
+        "header": "Ustawienia tabeli",
         "selectAll": "Wybierz wszystkie",
         "columns": "Kolumny",
         "grouping": "Grupowanie",
@@ -103,6 +110,16 @@
         "noGrouping": "Brak grupowania",
         "apply": "Zastosuj",
         "cancel": "Anuluj",
+        "columnTitles": {
+        "name": "Nazwa",
+        "country": "Kraj",
+        "age": "Wiek",
+        "city": "Miasto",
+        "date": "Data",
+        "isSortable": "Możliwość sortowania",
+        "sorter": "Sortownik",
+        "sorterIsSortable": "Sortowanie jest dostępne"
+        },
         "filtering": {
           "add": "Dodaj",
           "clearAll": "Wyczyść wszystkie",
@@ -111,7 +128,28 @@
           "from": "od",
           "to": "do",
           "value": "Wartość"
-        }
+        },
+        "columnHideIsUnavailable": "Ukrywanie kolumn nie jest dostępne"
+      },
+      "filterOperation": {
+        "⊆": "Zawiera",
+        "⊄": "Nie zawiera",
+        "cont_and": "Zawiera (ORAZ)",
+        "cont_or": "Zawiera (LUB)",
+        "ncont_or": "Nie zawiera",
+        "*=": "Regexp",
+        "empty": "Puste",
+        "nempty": "Nie puste",
+        "range": "W zakresie",
+        "nrange": "Poza zakresem"
+      },
+      "filterTag": {
+        "⊆": "zawiera {{value}}",
+        "⊄": "nie zawiera{{value}}",
+        "empty": "jest pusty",
+        "nempty": "nie jest pusty",
+        "range": "W zakresie {{from}}–{{to}}",
+        "nrange": "Poza zakresem {{from}}–{{to}}"
       },
       "groupingEmpty": "Inne"
     },
@@ -125,11 +163,57 @@
     },
     "actionBar": {
       "unsavedChanges": "Oczekujące zmiany",
-      "save": "Zapisz",
+      "save": "Zastosuj",
       "cancel": "Anuluj"
     },
     "textarea": {
       "wordsCount": "{{count}} z {{total}}"
+    },
+    "menu": {
+      "favoritesNavItem": "Zakładki",
+      "navUserItem": {
+        "userProps": {
+          "status": {
+            "available": "Dostępny",
+            "unavailable": "Niedostępne"
+          }
+        }
+      }
+    },
+    "expand": {
+      "toExpand": "Rozszerz",
+      "toCollapse": "Zwiń"
+    },
+    "codeCompare": {
+      "compareMode": "Tryb porównania",
+      "unified": "Ujednolicone",
+      "split": "Rozdzielone",
+      "loader": "Ładowanie wersji do porównania...",
+      "totalChanges": "Łączne zmiany:",
+      "collapseAll": "Zwiń wszystkie",
+      "expandAll": "Rozwiń wszystko",
+      "expandLines": "Rozwiń {{count}} wiersze",
+      "empty": "Oba pliki są puste. Porównanie jest niemożliwe.",
+      "noChanges": "Nie znaleziono żadnych zmian pomiędzy wersjami",
+      "basicVersion": "Wersja pierwotna",
+      "comparableVersion": "Wersja porównywana"
+    },
+    "licenseCard": {
+      "status": "Stan klucza licencyjnego",
+      "number": "Numer klucza licencyjnego",
+      "remaining": "Pozostało",
+      "activationDate": "Data aktywacji",
+      "expirationDate": "Data wygaśnięcia",
+      "term": "Warunek",
+      "dayLeft": "Pozostał {{count}} dzień",
+      "daysLeft": "Pozostało {{count}} dni",
+      "termDays": "{{count}} dni"
+    },
+    "input": {
+      "password": {
+        "hide": "Ukryj",
+        "show": "Pokaż"
+      }
     }
   }
 }

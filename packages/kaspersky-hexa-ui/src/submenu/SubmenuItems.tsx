@@ -1,3 +1,4 @@
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import React, { FC, useState } from 'react'
 
 import { SubmenuDivider, SubmenuRow, SubmenuTitle } from './SubComponents'
@@ -5,12 +6,13 @@ import { CommonSubComponentProps, LeveledRowProps, LeveledSubmenuItemProps } fro
 
 export const SubmenuItems: FC<CommonSubComponentProps & { items: LeveledSubmenuItemProps[] }> = ({ items, ...props }) => (
   <>
-    {items.map((item, index) => {
+    {items.map((rawItem, index) => {
+      const item = useTestAttribute(rawItem)
       switch (item.type) {
         case 'row':
           return <Row {...props} row={item} key={item.key} />
         case 'title':
-          return <SubmenuTitle {...item} key={item.key} cssConfig={props.cssConfig} />
+          return <SubmenuTitle {...item} key={item.key} />
         case 'divider':
           return <SubmenuDivider {...item} key={index} />
         default:
@@ -25,8 +27,11 @@ const Row: FC<CommonSubComponentProps & { row: LeveledRowProps }> = ({ row, ...p
 
   const [showChildren, setShowChildren] = useState(row.opened)
 
-  const handleRowClick = () => {
-    props.handleActiveRowChange(row)
+  const handleRowClick = async () => {
+    if ((await row.onClick?.(row.key, row)) !== false) {
+      props.handleActiveRowChange(row)
+    }
+    props.collapseOnTextClick && handleCollapsibleRowClick()
   }
 
   const handleCollapsibleRowClick = () => {

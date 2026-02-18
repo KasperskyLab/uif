@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { withTheme } from './hocs'
 
 export const ThemeProvider = withTheme(

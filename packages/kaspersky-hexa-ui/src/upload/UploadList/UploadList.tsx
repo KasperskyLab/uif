@@ -11,6 +11,7 @@ type UploadListProps = {
   onDownload?: (file: UploadFile) => void,
   onRemove?: (file: UploadFile) => void,
   onUpload?: (file: UploadFile) => void,
+  showProgress: boolean,
   truncateFileName?: boolean
 }
 
@@ -20,6 +21,7 @@ export function UploadList ({
   onDownload,
   onRemove,
   onUpload,
+  showProgress,
   truncateFileName
 }: UploadListProps) {
   const onInternalDownload = (file: UploadFile) => {
@@ -40,6 +42,7 @@ export function UploadList ({
           onDownload={() => onInternalDownload(file)}
           onRemove={() => onRemove?.(file)}
           onUpload={() => onUpload?.(file)}
+          percent={showProgress ? file.percent : undefined}
           truncateName={truncateFileName}
         />
       ))}

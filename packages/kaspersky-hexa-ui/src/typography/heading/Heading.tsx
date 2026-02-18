@@ -3,7 +3,6 @@ import React, { FC } from 'react'
 
 import { textLevels, typography } from '@kaspersky/hexa-ui-core/typography/js'
 
-import { StyledHeading } from './Heading.styled'
 import { HeadingProps } from './types'
 
 export const HTag: FC<HeadingProps> = ({
@@ -22,5 +21,3 @@ export const HTag: FC<HeadingProps> = ({
     }
   )
 }
-
-export { StyledHeading as Heading }

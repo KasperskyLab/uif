@@ -1,8 +1,15 @@
-import { Meta, StoryObj } from '@storybook/react'
-import React, { useCallback, useRef, useState } from 'react'
+import { withMeta } from '@sb/components/Meta'
+import { sbHideControls } from '@sb/helpers'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
+import React, { ReactNode, useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
 
+import MetaData from '../__meta__/meta.DynamicSelect.json'
 import { Select } from '../Select'
+import { SelectProps } from '../types'
+
+import Docs from './IntegrationDynamicDocs'
+
 
 type Option = {
   value: number,
@@ -28,7 +35,7 @@ const fetchData = async (index: number): Promise<Option[]> => {
   return fakeOptions.slice(index, index + 20)
 }
 
-function SelectPaginated (): JSX.Element {
+function SelectPaginated ({ virtual = false, placeholder = '' }: { virtual?: boolean, placeholder?: ReactNode }): JSX.Element {
   const [options, setOptions] = useState<Option[]>()
   const [hasMore, setHasMore] = useState(false)
   const initLoadRef = useRef(false)
@@ -54,18 +61,38 @@ function SelectPaginated (): JSX.Element {
 
   return (
     <Select
+      placeholder={placeholder}
       options={options}
       loading={loading}
       hasMore={hasMore}
       onLoadMore={onLoadMore}
       onDropdownVisibleChange={handleDropdownOpen}
+      virtual={virtual}
     />
   )
 }
 
-const meta: Meta = {
+const meta: Meta<SelectProps> = {
   title: 'Hexa UI Components/Inputs/Select/Integration/DynamicSelect',
   component: SelectPaginated,
+  argTypes: {
+    hasMore: {},
+    onLoadMore: {},
+    onDropdownVisibleChange: {},
+    ...sbHideControls(['theme'])
+  },
+  args: {
+    placeholder: 'Select',
+    testId: 'select-test-id',
+    klId: 'select-kl-id',
+    dropdownMaxHeight: 256
+  },
+  parameters: {
+    docs: {
+      page: withMeta(MetaData, Docs)
+    },
+    design: MetaData.pixsoView
+  },
   decorators: [
     (Story, context) => (
       <Wrapper>
@@ -74,9 +101,10 @@ const meta: Meta = {
     )
   ]
 }
+
 export default meta
 
-type Story = StoryObj
+type Story = StoryObj<SelectProps>
 
 const Wrapper = styled.div`
   max-width: 300px;
@@ -84,3 +112,10 @@ const Wrapper = styled.div`
 `
 
 export const Basic: Story = {}
+
+export const WithVirtualization: Story = {
+  args: {
+    virtual: true
+  }
+}
+

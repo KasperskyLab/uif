@@ -1,6 +1,6 @@
-import { resolve } from 'path'
-
 import { excludeFolders, getRealAndExportedFolders } from '@helpers/exportHelpers'
+
+import { resolve } from 'path'
 
 const CURRENT_PATH = resolve(__dirname)
 const FOLDERS_NOT_SUPPOSED_TO_BE_EXPORTED = ['@global-styles', '@global-tests', '@types', 'helpers']

@@ -1,0 +1,42 @@
+.header {
+  background-color: var(--top_navigation--background--enabled);
+  border-bottom: 1px solid var(--top_navigation--border--enabled);
+  color: var(--top_navigation--text--enabled);
+  height: 48px;
+  flex: 0 0 auto;
+  width: 100%;
+  padding: 0px 24px;
+  line-height: 20px;
+
+  > span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (max-width: 1024px) {
+  .accountButton span[class*="buttonText"] {
+    min-width: 130px;
+    display: flex;
+    justify-content: flex-start;
+  }
+}
+
+.headerCenterPart {
+  padding: 0px 24px;
+}
+
+.horizontalNav {
+  align-self: end;
+}
+
+.notificationButton {
+  position: relative;
+
+  > span {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+  }
+}

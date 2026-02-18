@@ -1,0 +1,151 @@
+@use '../../design-system/tokens/typography.module.scss';
+
+.accordionPanel {
+  &.hexa-ui-accordion-title-small .accordion-header-title {
+    @extend .h6;
+    min-height: var(--text--h6--line-height);
+  }
+  &.hexa-ui-accordion-title-medium .accordion-header-title {
+    @extend .h5;
+    min-height: var(--text--h5--line-height);
+  }
+  &.hexa-ui-accordion-title-large .accordion-header-title {
+    @extend .h4;
+    min-height: var(--text--h4--line-height);
+  }
+}
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing--gap_grouped);
+  width: 100%;
+  min-width: 432px;
+
+  > :global(.rc-collapse-item) {
+    background: var(--accordion--bg--enabled);
+    border: 1px solid var(--accordion--border--enabled);
+    border-radius: var(--radius--ml);
+    padding: var(--spacing--padding_l) var(--spacing--padding_xl);
+
+    :global(.rc-collapse-header) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+
+      &:focus-visible {
+        box-shadow: 0px 0px 0px 2px var(--focus--stroke);
+        outline: none;
+        border-radius: var(--radius--s);
+      }
+
+      :global(.rc-collapse-title) {
+        order: -1;
+        padding-right: var(--spacing--padding_m);
+
+        .accordion-header {
+          display: flex;
+          justify-content: space-between;
+          gap: var(--spacing--gap_related);
+          color: var(--accordion--text--enabled);
+
+          .accordion-header-block {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing--gap_related);
+
+            .accordion-header-tag {
+              margin-right: 0;
+            }
+
+            .accordion-header-title {
+              color: var(--accordion--text--enabled);
+            }
+
+            .accordion-header-additional-text {
+              color: var(--accordion--text--additional);
+            }
+          }
+        }
+      }
+
+      :global(.rc-collapse-expand-icon) {
+        height: 24px;
+        transition: transform 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+        color: var(--accordion--icon--enabled);
+      }
+    }
+
+    :global(.rc-collapse-content) {
+      color: var(--accordion--text--enabled);
+
+      :global(.rc-collapse-body) {
+        padding-top: var(--spacing--padding_l);
+      }
+
+      // do not delete! accordion won't work without it
+      &:global(.rc-collapse-content-hidden) {
+        display: none;
+      }
+      
+      // needs for open motion
+      &.hexa-ui-motion-accordion {
+        overflow: hidden;
+        transition: height 0.2s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.2s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+      }
+    }
+
+    &:global(.rc-collapse-item-active):not(:global(.rc-collapse-item-disabled)) :global(.rc-collapse-expand-icon) {
+      transform: rotate(90deg);
+    }
+  }
+
+  & > :global(.rc-collapse-item-disabled) {
+    background: var(--accordion--bg--disabled);
+    border-color: var(--accordion--border--disabled);
+
+    :global(.rc-collapse-header) {
+      cursor: not-allowed;
+      
+      :global(.rc-collapse-title) .accordion-header .accordion-header-block .accordion-header-title,
+      :global(.rc-collapse-title) .accordion-header .accordion-header-block .accordion-header-additional-text,
+      :global(.rc-collapse-expand-icon) {
+        color: var(--accordion--text--disabled);
+      }
+    }
+
+    :global(.rc-collapse-content) {
+      display: none;
+    }
+  }
+
+  &.hexa-ui-accordion-icon-position-left > :global(.rc-collapse-item) :global(.rc-collapse-header) :global(.rc-collapse-title) {
+    order: 0;
+    padding-right: 0;
+    padding-left: var(--spacing--padding_m);
+  }
+
+  &.hexa-ui-accordion-without-border > :global(.rc-collapse-item) {
+    border: none;
+    padding: 0;
+
+    :global(.rc-collapse-header) {
+      padding: 0;
+      justify-content: flex-start;
+
+      .accordion-header {
+        justify-content: start;
+      }
+    }
+  }
+
+  &.hexa-ui-accordion-without-border > :global(.rc-collapse-item-disabled) {
+    background: none;
+  }
+
+  &.hexa-ui-accordion-with-border :global(.rc-collapse-title) {
+    width: 100%;
+  }
+}

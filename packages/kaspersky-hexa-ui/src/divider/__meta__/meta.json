@@ -8,11 +8,11 @@
     "apiTable": true,
     "storybook": true,
     "designLink": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Divider",
   "description": "Это тонкое и легкое правило, которое группирует контент",
   "usage": "Для разделения/группировки контента",
-  "designLink": "https://www.figma.com/file/7TGvGlgGfTltMG1OBgLq8p/00-%5BB2B%5D-Hexa-UI-Kit?type=design&node-id=1091%3A87128&mode=dev",
-  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7TGvGlgGfTltMG1OBgLq8p%2F00-%255BB2B%255D-Hexa-UI-Kit%3Ftype%3Ddesign%26node-id%3D1091%253A87128%26mode%3Ddev"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=1091%3A87128",
+  "pixsoView": "https://pixso.net/app/design/OLGe3169NxKiF9xzs8KAtg"
 }

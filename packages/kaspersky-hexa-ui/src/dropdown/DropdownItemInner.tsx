@@ -1,18 +1,12 @@
 import { Tooltip } from '@src/tooltip'
 import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
 
-import { ArrowRight } from '@kaspersky/hexa-ui-icons/16'
-
-import { dropdownItemInnerCss } from './dropdownCss'
+import styles from './styles/Dropdown.module.scss'
 import { DropdownItemInnerProps } from './types'
-
-const StyledDropdownItemInner = styled.div`
-  ${dropdownItemInnerCss}
-`
 
 export const DropdownItemInner: FC<DropdownItemInnerProps> = ({
   children,
+  icon,
   type,
   tooltip,
   description,
@@ -20,37 +14,31 @@ export const DropdownItemInner: FC<DropdownItemInnerProps> = ({
   componentsAfter
 }: DropdownItemInnerProps) => {
   const dropdownItemInner = useMemo(() =>
-    <StyledDropdownItemInner>
-      <div className="kl6-dropdown-item-inner-block">
+    <div className={styles.dropdownItemInner}>
+      <div className={styles.block}>
+        {icon && <div className={styles.additionalComponents}>
+          {icon}
+        </div>}
         {
           componentsBefore?.map((Component, index) => (
-            <div key={index} className="kl6-dropdown-item-inner-additional">
+            <div key={index} className={styles.additionalComponents}>
               {Component}
             </div>
           ))
         }
-        <div className="kl6-dropdown-item-inner-text-wrapper">
-          <div className="kl6-dropdown-item-inner-text">{children}</div>
-          {description && <div className="kl6-dropdown-item-description">{description}</div>}
+        <div className={styles.textWrapper}>
+          <div className={styles.text}>{children}</div>
+          {description && <div className={styles.description}>{description}</div>}
         </div>
       </div>
-      {(componentsAfter || type === 'submenu') && (
-        <div className="kl6-dropdown-item-inner-block">
-          {
-            componentsAfter?.map((Component, index) => (
-              <div key={index} className="kl6-dropdown-item-inner-additional">
-                {Component}
-              </div>
-            ))
-          }
-          {
-            type === 'submenu' && (
-              <div className="kl6-dropdown-item-inner-expand-icon"><ArrowRight/></div>
-            )
-          }
-        </div>
-      )}
-    </StyledDropdownItemInner>
+      {
+        componentsAfter?.map((Component, index) => (
+          <div key={index} className={styles.additionalComponents}>
+            {Component}
+          </div>
+        ))
+      }
+    </div>
   , [children, componentsAfter, componentsBefore, description, type])
 
   return tooltip

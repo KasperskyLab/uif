@@ -1,5 +1,6 @@
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
+import { LayoutPreset, LayoutPresetKey } from '@src/field/types'
 import {
   Button,
   Field,
@@ -9,12 +10,14 @@ import {
   H4,
   SegmentedButton,
   SegmentedButtonOption,
+  Select,
+  Space,
   Tag,
   Textbox,
   Toggle
 } from '@src/index'
 import { KeyValueProps } from '@src/key-value'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
@@ -51,6 +54,12 @@ const Container = styled.div`
   gap: 8px;
 `
 
+const LayoutSwitcher = styled(Space)`
+  > * {
+    width: auto
+  }
+`
+
 export const Basic: Story = {
   render: (args: FieldSetProps) => {
     const viewItems: SegmentedButtonOption[] = [
@@ -59,14 +68,28 @@ export const Basic: Story = {
       { text: 'gridLayout', value: 'grid' }
     ]
     const [view, setView] = useState<string[]>(['top'])
+    const [gridPreset, setGridPreset] = useState<LayoutPresetKey>(LayoutPreset.p_3_6)
+
+    const isGrid = view[0] === 'grid'
 
     return (
       <Container>
-        <SegmentedButton items={viewItems} value={view} onChange={setView}/>
+        <LayoutSwitcher>
+          <SegmentedButton items={viewItems} value={view} onChange={setView} />  
+          {isGrid && (
+            <Select 
+              options={Object.values(LayoutPreset).map(x => ({ label: x, value: x }))} 
+              onChange={setGridPreset}
+              style={{ width: 125 }}
+              value={gridPreset}
+            />
+          )}
+        </LayoutSwitcher>
+
         <FieldSet
           {...args}
-          labelPosition={((view[0] === 'top' || view[0] === 'before' || undefined) && view[0]) as FieldProps['labelPosition']}
-          gridLayout={(view[0] === 'grid' && { firstCol: '123px', secondCol: '456px' }) as FieldProps['gridLayout']}
+          labelPosition={!isGrid ? view[0] as FieldProps['labelPosition'] : undefined}
+          gridPreset={isGrid ? gridPreset : undefined}
         />
       </Container>
     )
@@ -168,7 +191,7 @@ export const Basic: Story = {
         }
       },
       {
-        label: 'button '.repeat(20),
+        label: 'button',
         control: {
           component: 'button',
           text: 'Button text',
@@ -176,13 +199,38 @@ export const Basic: Story = {
         }
       },
       {
+        label: 'split-button',
+        control: {
+          component: 'split-button',
+          text: 'Split button text',
+          items: [{ children: 'Option 1' }, { children: 'Option 2' }]
+        }
+      },
+      {
+        label: 'uploader',
+        control: {
+          component: 'uploader',
+          size: 'small',
+          description: 'You can add up to 3 TXT, DOC, DOCX files up to 2 MB in size.'
+        }
+      },
+      {
         label: 'segmented-button',
         control: {
           component: 'segmented-button',
           value: ['1'],
-          onChange: (e) => e,
+          onChange: (e: string[]) => e,
           size: 'large',
           items: getOptions(3, 'SegmentedButton').map(item => ({ text: item.label, value: item.value }))
+        }
+      },
+      {
+        label: 'toggle-button-group',
+        control: {
+          component: 'toggle-button-group',
+          value: ['1'],
+          onChange: (e: string[]) => e,
+          items: getOptions(3, 'ToggleButtonGroup').map(item => ({ text: item.label, value: item.value }))
         }
       },
       {
@@ -264,6 +312,22 @@ export const Basic: Story = {
           component: 'text',
           children: 'Text'
         }
+      },
+      {
+        label: 'custom control',
+        control: <>
+          <Textbox.Number value={150} style={{ maxWidth: 150 }} />
+          {' / '}
+          <Select 
+            options={[
+              { label: 'KB', value: 'KB' },
+              { label: 'MB', value: 'MB' },
+              { label: 'GB', value: 'GB' }
+            ]}
+            style={{ width: 75 }}
+            value="MB"
+          />
+        </>
       }
     ]
   }

@@ -1,6 +1,6 @@
 ## Palette
 
-Ознакомиться с текущей палитрой можно [тут](https://kasperskylab.github.io/uif/components/?path=/story/design-colors--full-palette)
+Ознакомиться с текущей палитрой можно [тут](https://kasperskylab.github.io/uif/hexa-ui/?path=/story/design-colors--palette)
 
 Палитра предполагает наличие двух тем: светлой и темной. Цвета светлой темы имеют дополнение __Light, темной — __Dark
 

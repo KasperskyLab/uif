@@ -1,24 +1,26 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import smartMerge from '@helpers/smartMerge'
-import { getMappedClassName } from '@src/field-set/getMappedClassName'
-import { KeyValueMapper } from '@src/field-set/KeyValueMapper'
 import React, { FC } from 'react'
 
 import { StyledField, StyledFieldSet } from './fieldSetCss'
+import { getMappedClassName } from './getMappedClassName'
 import { getMappedControl } from './getMappedControl'
-import { KeyValueMapperProps } from './KeyValueMapper'
 import { FieldSetItem, FieldSetProps } from './types'
 
-export const FieldSet: FC<FieldSetProps> & { KeyValueMapper: FC<KeyValueMapperProps> } = ({
-  items,
-  className,
-  disabled,
-  ...rest
-}: FieldSetProps) => {
-  const { testAttributes, ...props } = useTestAttribute(rest)
+export const FieldSet: FC<FieldSetProps> = (rawProps: FieldSetProps) => {
+  const { 
+    className,
+    disabled,
+    items,
+    style,
+    testAttributes,
+    ...props
+  } = useTestAttribute(rawProps)
+
   return (
     <StyledFieldSet
       className={className}
+      style={style}
       {...testAttributes}
     >
       {items.map((item: FieldSetItem, index: number) => {
@@ -50,6 +52,3 @@ export const FieldSet: FC<FieldSetProps> & { KeyValueMapper: FC<KeyValueMapperPr
     </StyledFieldSet>
   )
 }
-
-FieldSet.KeyValueMapper = KeyValueMapper
-FieldSet.KeyValueMapper.displayName = 'FieldSet.KeyValueMapper'

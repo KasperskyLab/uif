@@ -1,0 +1,68 @@
+.anchorLink {
+  display: flex;  
+}
+
+.content {
+  flex: 1 1;
+  padding-right: 24px;
+}
+
+.navigation {
+  flex: 0 0 256px;
+  position: sticky;
+  top: var(--nav-offset-top);
+  align-self: flex-start;
+  overflow: auto;
+  max-height: var(--nav-max-height);
+
+  &:not(:hover) {
+    scrollbar-color: transparent transparent;
+
+    &::-webkit-scrollbar {
+      background-color: transparent;
+    }
+  }
+
+  :global(.ant-tooltip) {
+    max-width: 225px;
+  }
+
+  .items {
+    flex: 1 1;
+    border-left: 1px solid var(--tabs--border);
+    border-radius: 1px;
+    padding-left: 5px;
+
+    &:not(:first-child) {
+      margin-top: 8px;
+    }
+
+    --submenu_item--bg--enabled: transparent;
+    --submenu_item--bg--hover: var(--tabs_item--bg--unselected--hover);
+    --submenu_item--bg--active: var(--tabs_item--bg--unselected--active);
+
+    --submenu_item--bg--enabled_selected: transparent;
+    --submenu_item--bg--hover_selected: var(--tabs_item--bg--selected--hover);
+    --submenu_item--bg--active_selected: var(--tabs_item--bg--selected--hover);
+  }
+
+  .item {
+    position: relative;
+
+    &.selected::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -6px;
+      width: 2px;
+      border-radius: 2px;
+      background: var(--tabs_item--border--selected--base);
+    }
+  }
+
+  .elementAfter {
+    height: auto;
+    align-items: flex-start;
+  }
+}

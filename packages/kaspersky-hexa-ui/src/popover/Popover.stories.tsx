@@ -1,6 +1,7 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
+import { ContentContainer, ScrollableContainer } from '@sb/components/ScrollableContainer'
 import { sbHideControls } from '@sb/helpers'
 import { ActionButton } from '@src/action-button'
 import { Button } from '@src/button'
@@ -8,7 +9,7 @@ import { Textbox } from '@src/input'
 import { Link } from '@src/link'
 import { Space } from '@src/space'
 import { Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { CSSProperties } from 'react'
 import styled from 'styled-components'
 
@@ -39,7 +40,7 @@ const meta: Meta<PopoverProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta
@@ -196,6 +197,20 @@ export const Positions: Story = {
       </div>
     </div>
   )
+}
+
+export const WithinScrollableContainer: Story = {
+  render: (args: PopoverProps) => (
+    <ScrollableContainer>
+      <ContentContainer>
+        <Popover {...args} getPopupContainer={trigger => trigger.parentElement as HTMLElement} />
+      </ContentContainer>
+    </ScrollableContainer>
+  ),
+  args: {
+    children: <Button>Click me and scroll my container</Button>,
+    content: LittlePopoverContent
+  }
 }
 
 export const ThreeWaysToTrigger: Story = {

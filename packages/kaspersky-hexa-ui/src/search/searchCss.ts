@@ -1,26 +1,4 @@
-import { BORDER_RADIUS } from '@design-system/theme'
-import { TextboxProps } from '@src/input'
 import { css } from 'styled-components'
-
-export const searchAddonCss = css<TextboxProps>`
-  
-  ${({ addonAfter }) =>
-    addonAfter && `
-      .ant-input-group-addon {
-        border-top-right-radius: ${BORDER_RADIUS[3]}px !important;
-        border-bottom-right-radius: ${BORDER_RADIUS[3]}px !important;
-      }
-    `
-  }
-  ${({ addonBefore }) =>
-    addonBefore && `
-      .ant-input-group-addon {
-        border-top-left-radius: ${BORDER_RADIUS[3]}px !important;
-        border-bottom-left-radius: ${BORDER_RADIUS[3]}px !important;
-      }
-    `
-  }
-`
 
 export const searchCss = css`
   overflow: hidden;

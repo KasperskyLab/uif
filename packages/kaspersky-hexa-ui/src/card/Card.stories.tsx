@@ -4,7 +4,7 @@ import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Space } from '@src/space'
 import { Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -22,29 +22,22 @@ const Wrapper = styled.div`
   width: 400px;
 `
 
-const defaultProps = {
+const defaultProps: CardProps = {
   title: {
     value: 'Title',
     elementBefore: {
       component: 'icon',
-      name: 'Placeholder',
-      size: 'small'
+      name: 'Map',
+      size: 24,
+      testId: 'title-icon-id'
     },
     elementAfter: {
       component: 'text',
       children: 'Text',
       type: 'BTM3'
-    }
-  } as CardTitleProps,
-  longTitle: {
-    value: cardContentInner,
-    elementBefore: {
-      component: 'checkbox'
     },
-    elementAfter: {
-      component: 'toggle'
-    }
-  } as CardTitleProps,
+    size: 'small'
+  },
   actions: [
     {
       icon: <Placeholder />,
@@ -57,17 +50,35 @@ const defaultProps = {
   ]
 }
 
-const meta: Meta<CardProps> = {
+const longTitle: CardTitleProps = {
+  value: cardContentInner,
+  size: 'small',
+  elementBefore: { component: 'checkbox' },
+  elementAfter: { component: 'toggle' }
+}
+
+type StoryCardProps = CardProps & {
+  titleSize?: 'small' | 'medium'
+}
+
+const meta: Meta<StoryCardProps> = {
   title: 'Hexa UI Components/Card',
   component: Card,
   argTypes: {
-    ...sbHideControls(['theme', 'style', 'className', 'children', 'title', 'actions'])
+    ...sbHideControls(['theme', 'style', 'className', 'children', 'title', 'actions']),
+    titleSize: {
+      control: {
+        type: 'radio'
+      },
+      options: ['small', 'medium']
+    }
   },
   args: {
     children: cardContent,
     draggable: false,
     closable: false,
     interactive: false,
+    titleSize: 'small',
     testId: 'card-test-id',
     klId: 'card-kl-id'
   },
@@ -76,7 +87,7 @@ const meta: Meta<CardProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   },
   decorators: [
     (Story, context) => (
@@ -88,7 +99,7 @@ const meta: Meta<CardProps> = {
 }
 export default meta
 
-type Story = StoryObj<CardProps>
+type Story = StoryObj<StoryCardProps>
 
 export const Basic: Story = {}
 
@@ -105,14 +116,20 @@ export const Interactive: Story = {
 }
 
 export const WithTitle: Story = {
+  render: ({ titleSize, ...props }) => (
+    <Card {...props} title={{ ...defaultProps.title, size: titleSize } as CardTitleProps}/>
+  ),
   args: {
     title: defaultProps.title
   }
 }
 
 export const WithLongTitle: Story = {
+  render: ({ titleSize, ...props }) => (
+    <Card {...props} title={{ ...longTitle, size: titleSize } as CardTitleProps}/>
+  ),
   args: {
-    title: defaultProps.longTitle
+    title: longTitle
   }
 }
 
@@ -128,6 +145,9 @@ export const WithActions: Story = {
 }
 
 export const WithTitleAndActions: Story = {
+  render: ({ titleSize, ...props }) => (
+    <Card {...props} title={{ ...defaultProps.title, size: titleSize } as CardTitleProps}/>
+  ),
   args: {
     closable: true,
     title: defaultProps.title,
@@ -139,9 +159,12 @@ export const WithTitleAndActions: Story = {
 }
 
 export const WithLongTitleAndActions: Story = {
+  render: ({ titleSize, ...props }) => (
+    <Card {...props} title={{ ...longTitle, size: titleSize } as CardTitleProps}/>
+  ),
   args: {
     closable: true,
-    title: defaultProps.longTitle,
+    title: longTitle,
     actions: defaultProps.actions
   },
   argTypes: {
@@ -151,7 +174,7 @@ export const WithLongTitleAndActions: Story = {
 
 export const Mode: Story = {
   render: (args) => (
-    <Space vertical gap={16}>
+    <Space direction="vertical" gap="grouped">
       <Card mode="base" {...args}>
         {cardContent}
       </Card>
@@ -170,7 +193,7 @@ export const Mode: Story = {
 
 export const Size: Story = {
   render: (args) => (
-    <Space vertical gap={16}>
+    <Space direction="vertical" gap="grouped">
       <Card size="small" {...args}>
         {cardContent}
       </Card>
@@ -190,7 +213,7 @@ export const Size: Story = {
 export const CardsInsideCard: Story = {
   render: (args) => (
     <Card title={defaultProps.title} closable>
-      <Space vertical gap={16} style={{ paddingTop: '16px' }}>
+      <Space direction="vertical" gap="grouped" style={{ paddingTop: '16px' }}>
         <Card {...args}>
           {cardContent}
         </Card>

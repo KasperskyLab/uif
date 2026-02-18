@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": false,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "Skeleton",
+  "description": "Skeleton — это заглушка, которая используется во время загрузки страницы",
+  "usage": "Помогает создать предсказуемую структуру интерфейса перед появлением реального контента, но не является его точной имитацией",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=62851%3A220976",
+  "pixsoView": "https://pixso.net/app/design/w0W4gLFjwQpE8XQ6Kyh3nQ"
+}

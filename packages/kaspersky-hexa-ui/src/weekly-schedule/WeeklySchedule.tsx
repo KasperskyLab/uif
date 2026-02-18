@@ -135,19 +135,19 @@ const WeeklyScheduleView: FC<WeeklyScheduleViewProps> = ({
           {
             defaultItems.map((_, i) => {
               return (<Cell
-                  cssConfig={cssConfig}
-                  onMouseDown={ (e) => mouseDownHandler(e, i) }
-                  ref={(el: HTMLDivElement) => (cellRefs.current[i] = el)}
-                  key={`${i}`}
-                  selected={isStartSelected ? draftCellState[i] : cellState[i]}
-                  data-testid={`cell-id-${i}`}
-                />
+                cssConfig={cssConfig}
+                onMouseDown={ (e) => mouseDownHandler(e, i) }
+                ref={(el: HTMLDivElement) => (cellRefs.current[i] = el)}
+                key={`${i}`}
+                selected={isStartSelected ? draftCellState[i] : cellState[i]}
+                data-testid={`cell-id-${i}`}
+              />
               )
             })
           }
         </SchedulerMatrix>
         <ScheduleLegend legend={legend} cssConfig={cssConfig}/>
       </Container>
-  </Board>
+    </Board>
   )
 }

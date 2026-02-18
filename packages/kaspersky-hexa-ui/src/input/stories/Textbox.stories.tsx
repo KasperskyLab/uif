@@ -3,13 +3,18 @@ import { validationStatuses } from '@helpers/typesHelpers'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
-import { Meta, StoryObj } from '@storybook/react'
-import React, { useState } from 'react'
+import { Field } from '@src/field'
+import { clickHandler } from '@src/menu/stories/CustomItem'
+import { Notification } from '@src/notification'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
+
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
 
 import MetaData from '../__meta__/meta.json'
+import MigrationInputPasswordData from '../__meta__/migrationInputPassword.json'
 import { Textbox } from '../Textbox'
 import {
   TextboxMaskedProps,
@@ -43,7 +48,7 @@ const meta: Meta<TextboxProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   },
   decorators: [
     (Story, context) => (
@@ -135,7 +140,7 @@ export const MaskedTextbox: StoryObj<TextboxMaskedPropsForStory> = {
 // Number
 export const NumberTextbox: StoryObj<TextboxNumberProps> = {
   render: (args: TextboxNumberProps) => {
-    const [value, setValue] = useState<TextboxNumberProps['value']>(0)
+    const [value, setValue] = useState<TextboxNumberProps['value']>()
     return (
       <Textbox.Number
         {...args}
@@ -144,7 +149,18 @@ export const NumberTextbox: StoryObj<TextboxNumberProps> = {
       />
     )
   },
+  args: {
+    value: undefined
+  },
   argTypes: {
+    min: {
+      control: 'number',
+      description: 'The min value'
+    },
+    integerOnly: {
+      control: 'boolean',
+      description: 'Allow input of integers only'
+    },
     allowEmpty: {
       control: 'boolean',
       description: 'Allow input have not the value'
@@ -153,9 +169,8 @@ export const NumberTextbox: StoryObj<TextboxNumberProps> = {
 }
 
 // Password
-type TextboxPasswordPropsForStory = TextboxPasswordProps & { readOnly: boolean }
-export const PasswordTextbox: StoryObj<TextboxPasswordPropsForStory> = {
-  render: (args: TextboxPasswordPropsForStory) => {
+export const PasswordTextbox: StoryObj<TextboxPasswordProps> = {
+  render: (args: TextboxPasswordProps) => {
     const [value, setValue] = useState('')
     return (
       <Textbox.Password
@@ -164,9 +179,100 @@ export const PasswordTextbox: StoryObj<TextboxPasswordPropsForStory> = {
         onChange={value => setValue(value)}
       />
     )
+  }
+}
+
+const validationRules = [
+  {
+    message: 'Пароль содержит от 8 до 256 символов.',
+    validate: (v: string) => v.length >= 8 && v.length <= 256
   },
-  argTypes: {
-    readOnly: { table: { disable: true } }
+  {
+    message: 'Пароль содержит символы как минимум трех групп из четырех:\n- верхний регистр (A–Z);\n- нижний регистр (a–z);\n- цифры (0–9);\n- специальные символы (@ # $ % ^ & * - _ ! + = [ ] { } | : \' , . ? / \\ ` ~ " ( ) );',
+    validate: (v: string) => {
+      const groups = [
+        /[A-Z]/.test(v),
+        /[a-z]/.test(v),
+        /[0-9]/.test(v),
+        /[@#$%^&*\-_!+=[\]{}|:'",.?/\\`~"()]/.test(v)
+      ]
+      return groups.filter(Boolean).length >= 3
+    }
+  },
+  {
+    message: 'Пароль не содержит пробелов, символов Юникода или комбинаций "." и "@", расположенных рядом друг с другом.',
+    validate: (v: string) => !/[^\x20-\x7E]/.test(v) && !v.includes('.@') && !v.includes('@.')
+  }
+]
+
+const defaultValidationResult = validationRules.map((rule) => {
+  return {
+    message: rule.message,
+    isValid: false
+  }
+})
+
+export const PasswordWithValidation: StoryObj<TextboxPasswordProps> = {
+  render: (args: TextboxPasswordProps) => {
+    const [value, setValue] = useState('kXp7*8$tE!R&2f')
+    const [validationResult, setValidationResult] = useState(defaultValidationResult)
+
+    useEffect(() => {
+      setValidationResult(validationRules.map(rule => ({
+        message: rule.message,
+        isValid: rule.validate ? rule.validate(value) : false
+      })))
+    }, [value])
+
+    const isValid = useMemo(() => validationResult.every((r) => r.isValid), [validationResult])
+    const validationStatus = isValid ? 'success' : 'error'
+
+    return (
+      <Field
+        control={
+          <Textbox.Password
+            {...args}
+            value={value}
+            onChange={setValue}
+            validationRules={validationResult}
+            validationStatus={validationStatus}
+          />
+        }
+        message={isValid ? 'Все требования к паролю выполнены' : 'Некорректный пароль'}
+        messageMode={validationStatus}
+      />
+    )
+  },
+  parameters: {
+    design: MigrationInputPasswordData.pixsoView
+  }
+}
+
+export const PasswordWithActions: StoryObj<TextboxPasswordProps> = {
+  render: (args: TextboxPasswordProps) => {
+    const [value, setValue] = useState('')
+    return (
+      <>
+        <Notification />
+        <Textbox.Password
+          {...args}
+          value={value}
+          onChange={setValue}
+          actions={[
+            {
+              tooltip: 'Скопировать',
+              icon: 'Copy',
+              onClick: () => clickHandler('Пароль скопирован!')
+            },
+            {
+              tooltip: 'Сгенерировать надежный пароль',
+              icon: 'Key',
+              onClick: () => clickHandler('Пароль сгенерирован!')
+            }
+          ]}
+        />
+      </>
+    )
   }
 }
 

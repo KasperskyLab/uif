@@ -7,14 +7,15 @@ import 'jest-styled-components'
 
 describe('Tag ', () => {
   const klId = 'test-tag-id'
+  const testId = 'test-tag-id'
 
   test('should recieve kl-id prop', () => {
     const { container, getByTestId } = render(
-      <Tag klId={klId} testId="test-id">hello</Tag>
+      <Tag klId={klId} testId={testId}>hello</Tag>
     )
 
     expect(getByTestId(klId)).toBeInTheDocument()
-    expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
+    expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
   })
 
   test('should render icon if passed', async () => {
@@ -35,26 +36,26 @@ describe('Tag ', () => {
 
   test('should call onClose when close button is clicked', () => {
     const onCloseMock = jest.fn()
-    const { container } = render(
-      <Tag testId="test-tag-id" closable onClose={onCloseMock}>
+    const { getByTestId } = render(
+      <Tag klId={klId} closable onClose={onCloseMock}>
         hello
       </Tag>
     )
 
-    const closeButton = container.querySelector('.kl-action-button')
+    const closeButton = getByTestId(`${klId}-close-icon`)
     closeButton && fireEvent.click(closeButton)
     expect(onCloseMock).toHaveBeenCalled()
   })
 
   test('should not call onClose when tag is disabled', () => {
     const onCloseMock = jest.fn()
-    const { container } = render(
-      <Tag testId="test-tag-id" closable disabled onClose={onCloseMock}>
+    const { getByTestId } = render(
+      <Tag klId={klId} closable disabled onClose={onCloseMock}>
         hello
       </Tag>
     )
 
-    const closeButton = container.querySelector('.kl-action-button')
+    const closeButton = getByTestId(`${klId}-close-icon`)
     closeButton && fireEvent.click(closeButton)
     expect(onCloseMock).not.toHaveBeenCalled()
   })
@@ -77,14 +78,14 @@ describe('Tag ', () => {
   })
 
   test('should render with closable icon when closable is true', () => {
-    const { container } = render(
+    const { getByTestId } = render(
       <Tag klId={klId} closable>
         hello
       </Tag>
     )
 
-    const closeIcon = container.querySelector('.kl-action-button')
-    expect(closeIcon).toBeInTheDocument()
+    const closeButton = getByTestId(`${klId}-close-icon`)
+    expect(closeButton).toBeInTheDocument()
   })
 
   // Codium AI
@@ -112,10 +113,11 @@ describe('Tag ', () => {
   })
 
   it('should not render close button when closable is false', () => {
-    const { container } = render(
+    const { queryByTestId } = render(
       <Tag>Non-closable Tag</Tag>
     )
-    const closeButton = container.querySelector('.kl-action-button')
+
+    const closeButton = queryByTestId(`${klId}-close-icon`)
     expect(closeButton).not.toBeInTheDocument()
   })
 })

@@ -3,15 +3,14 @@ import classnames from 'classnames'
 import React, { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { inputAddonStyles, inputStyles } from './inputCss'
-import { InputCssConfig, IUrlInputProps } from './types'
+import { inputStyles } from './inputCss'
+import { IUrlInputProps } from './types'
 import { useThemedTextbox } from './useThemedTextbox'
 
 const StyledUrlInput = styled(Input).withConfig({
   shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
 })`
   ${inputStyles}
-  ${inputAddonStyles}
 `
 
 const UrlStylesView = styled.div`
@@ -38,26 +37,20 @@ const UrlPortStylesView = styled(StyledUrlInput)`
 `
 
 /** @deprecated Compose components like this in product layout */
-export const UrlInput = (rawProps: IUrlInputProps): ReactElement<IUrlInputProps> => {
-  const props = useThemedTextbox(rawProps)
-  return <UrlInputView {...props} />
-}
+export const UrlInput = (props: IUrlInputProps): ReactElement<IUrlInputProps> => {
+  const {
+    validationStatus,
+    disabled,
+    className,
+    onPathChange,
+    onPortChange,
+    pathValue,
+    portValue,
+    testId,
+    klId,
+    ...rest
+  } = useThemedTextbox(props)
 
-const UrlInputView = ({
-  validationStatus,
-  disabled,
-  className,
-  onPathChange,
-  onPortChange,
-  pathValue,
-  portValue,
-  theme,
-  testId,
-  klId,
-  ...rest
-}: IUrlInputProps & {
-  cssConfig: InputCssConfig
-}): ReactElement<IUrlInputProps> => {
   return (
     <div data-testid={testId} kl-id={klId}>
       <UrlStylesView>

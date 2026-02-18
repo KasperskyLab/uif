@@ -1,0 +1,18 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "designLink": true,
+    "pixsoView": true
+  },
+  "component": "DynamicSelect",
+  "description": "В качестве основы используется библиотека rc-select",
+  "usage": "Компонент выбора из списка с поддержкой виртуализации для больших данных",
+  "designLink": "",
+  "pixsoView": ""
+}

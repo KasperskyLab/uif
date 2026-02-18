@@ -1,6 +1,8 @@
-import { Tree, TreeListProps } from '@src/tree'
 import React from 'react'
 import styled from 'styled-components'
+
+import { Tree } from './Tree'
+import { TreeListProps } from './types'
 
 const StyledTreeList = styled(Tree)`
   && {
@@ -16,7 +18,7 @@ export const TreeList: React.FC<TreeListProps> = ({
 }) => {
   switch (mode) {
     case 'readOnly':
-      return <StyledTreeList selectable={false} checkable={false} disableNodeBg {...props} />
+      return <StyledTreeList selectable={false} checkable={false} disableNodeBg icon={() => null} showIcon={true} {...props} />
     case 'singleChoice':
       return <StyledTreeList selectable={false} checkable disableNodeBg multiple={false} allowUncheck={false} {...props} />
     case 'multipleChoice':

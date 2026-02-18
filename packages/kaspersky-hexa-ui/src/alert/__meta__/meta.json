@@ -7,11 +7,11 @@
     "migration": false,
     "apiTable": true,
     "storybook": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Alert",
   "description": "",
   "usage": "Alert — это компонент, который используется для отображения важных уведомлений или сообщений, относящихся ко всему продукту. Основное назначение компонента — привлечение внимания пользователя к критически важной информации, требующей его действия или осведомлённости. Эти уведомления отображаются на всех экранах продукта, располагаясь вверху контентной области страницы, чтобы быть видимыми независимо от того, на какой странице находится пользователь. Alert не пропадает с течением времени.",
-  "designLink": "https://www.figma.com/design/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-Hexa-UI-Components-v-6.172.3?node-id=43876-184415&p=f&t=rISb9m95nC8WRHb5-0",
-  "figmaView": "https://embed.figma.com/design/hBVFLGaRJ74TSRB4gZaiHT/Alert?node-id=0-1&embed-host=share"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=43876%3A184415",
+  "pixsoView": "https://pixso.net/app/design/R8Tue1E22g_9u5mWBIWvlQ"
 }

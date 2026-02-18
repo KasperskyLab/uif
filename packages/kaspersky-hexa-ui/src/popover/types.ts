@@ -1,13 +1,16 @@
 import { Theme } from '@design-system/types'
 import { ToViewProps } from '@helpers/typesHelpers'
-import { PopoverProps as AntdPopoverProps } from 'antd/es/popover'
+import type { RenderFunction } from 'antd/es/_util/getRenderPropValue'
+
+import { AbstractTooltipProps } from '../tooltip/AntdTooltip'
 
 export type PopoverThemeProps = {
   /** Custom theme */
   theme?: Theme
 }
 
-export type PopoverProps = Omit<AntdPopoverProps, 'placement' | 'title'> & {
+export type PopoverProps = Omit<AbstractTooltipProps, 'placement'> & {
+  content?: React.ReactNode | RenderFunction,
   /** Popover position relative to the target */
   placement?: 'top' | 'left' | 'right' | 'bottom' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'leftTop' | 'leftBottom' | 'rightTop' | 'rightBottom',
   /** Should set max width and max height */

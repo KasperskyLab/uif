@@ -1,4 +1,3 @@
-import { SPACES } from '@design-system/theme/themes/variables'
 import { getTextSizes } from '@design-system/tokens'
 import { getFromProps } from '@helpers/getFromProps'
 import { Space, SpaceProps } from '@src/space'
@@ -11,12 +10,13 @@ import { AlertCssConfig, AlertSizeConfig } from './types'
 const fromProps = getFromProps<AlertCssConfig>()
 
 export const IconStyled = styled.span`
-  min-width: ${SPACES[8]}px;
-  height: ${SPACES[10]}px;
+  min-width: 16px;
+  height: 20px;
+  display: flex;
+  align-items: center;
 
   svg {
     color: ${fromProps('icon')};
-    transform: translateY(${SPACES[1]}px);
   }
 `
 
@@ -51,9 +51,9 @@ export const alertCss = css<{
   width?: string | number
 }>`
   display: flex;
-  gap: ${SPACES[4]}px;
-  padding: ${SPACES[6]}px ${SPACES[8]}px ${SPACES[6] - 1}px ${SPACES[8]}px;
-  align-items: baseline;
+  gap: 8px;
+  padding: 12px 16px 11px 16px;
+  align-items: start;
   position: relative;
   border-bottom: 1px solid ${fromProps('border')};
   background: ${fromProps('background')};

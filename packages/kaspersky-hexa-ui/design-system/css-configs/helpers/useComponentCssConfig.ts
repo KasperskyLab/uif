@@ -1,8 +1,8 @@
 import { COMPONENTS_CONFIG } from '@design-system/css-configs/components'
 import { ComponentsConfig } from '@design-system/css-configs/types'
 import { Theme } from '@design-system/types'
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import smartMerge from '@helpers/smartMerge'
-import cn from 'classnames'
 import { useMemo } from 'react'
 
 type ComponentThemeConfig = {
@@ -59,7 +59,5 @@ export const useComponentCssConfig = <ComponentProps extends BaseComponentProps,
     mode: propsToDrill.includes('mode') ? props.mode : undefined
   }
 
-  const themeClassName = props.theme ? `theme-${props.theme}` : ''
-
-  return { ...propsDrilled, className: cn(propsDrilled?.className, themeClassName), cssConfig }
+  return { ...propsDrilled, className: getClassNameWithTheme(props), cssConfig }
 }

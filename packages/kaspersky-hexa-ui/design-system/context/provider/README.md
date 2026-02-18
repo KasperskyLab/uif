@@ -9,9 +9,8 @@ ConfigProvider является интеграцией [ThemeProvider](../../the
 ### How To Use
 ```
 import React, { useState, useCallback, useEffect } from 'react'
-import { ConfigProvider } from '@kaspersky/components/design-system/context'
-import { ThemeKey } from '@kaspersky/components/design-system/types'
-import { LangType } from '@kaspersky/components/helpers/localization/types'
+import { ConfigProvider, ThemeKey } from '@kaspersky/hexa-ui'
+import { LangType } from '@kaspersky/hexa-ui/helpers/localization/types'
 
 const Layout = () => {
   const [theme, setTheme] = useState<ThemeKey>(ThemeKey.Light)
@@ -48,10 +47,10 @@ LocalizationProvider обеспечивает поддержку локализ�
 Based on [I18nextProvider](https://react.i18next.com/latest/i18nextprovider)
 
 Локализация есть у всех компонентов, где есть элементы с текстом. 
-Для этого в @kaspersky/components/helpers/localization необходимо передать объект с новыми значениями текстовых полей. 
-Интерфейс каждого словаря экпортируется из @kaspersky/components/helpers/localization, например, `severity`
+Для этого в @kaspersky/hexa-ui/helpers/localization необходимо передать объект с новыми значениями текстовых полей. 
+Интерфейс каждого словаря экпортируется из @kaspersky/hexa-ui/helpers/localization, например, `severity`
 ```
-// ru.json
+// ru-ru.json
 {
   "translation": {
     "severity": {
@@ -66,7 +65,7 @@ Based on [I18nextProvider](https://react.i18next.com/latest/i18nextprovider)
 }
 
 
-//en.json
+// en0us.json
 
 {
   "translation": {
@@ -91,7 +90,7 @@ Based on [I18nextProvider](https://react.i18next.com/latest/i18nextprovider)
 ### How To Use
 
 ```
-import { LocalizationProvider } from '@kaspersky/components/design-system/context'
+import { LocalizationProvider } from '@kaspersky/hexa-ui/design-system/context'
 
 <LocalizationProvider locale='en-us'>
   <App />

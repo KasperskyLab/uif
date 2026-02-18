@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "Placeholder",
+  "description": "",
+  "usage": "Используется для временного отображения пустого состояния или заглушки.",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=57566%3A246710",
+  "pixsoView": "https://pixso.net/app/design/PkHTgp7W7hNqL5wjZdffhQ"
+}

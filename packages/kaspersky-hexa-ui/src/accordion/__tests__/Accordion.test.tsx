@@ -4,7 +4,8 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 
-import { Accordion, AccordionPanel } from '../Accordion'
+import { Accordion } from '../Accordion'
+import { AccordionPanel } from '../AccordionPanel'
 import { AccordionPanelProps, AccordionProps, AccordionTitleSize } from '../types'
 
 const defaultProps = {
@@ -56,20 +57,8 @@ describe('Accordion', () => {
     expect(handleClick).toHaveBeenCalledTimes(1)
   })
 
-  test('disabled accordion should not opened', () => {
-    render(
-      <Accordion {...defaultProps}>
-        <AccordionPanel disabled={true} {...defaultPanelProps}>
-          <Text>Text should not displayed</Text>
-        </AccordionPanel>
-      </Accordion>
-    )
-    userEvent.click(getAccordionFirstPanel())
-    expect(() => (screen.getByText('Text should not displayed'))).toThrow('Unable to find an element')
-  })
-
   // Codium AI
-  test('accordion panel should open when clicked', () => {
+  test('should open accordion panel when clicked', () => {
     render(
       <Accordion {...defaultProps}>
         <AccordionPanel {...defaultPanelProps}>

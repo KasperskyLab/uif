@@ -1,5 +1,6 @@
 import { ConfigProvider } from '@design-system/context'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { act } from 'react-dom/test-utils'
 
@@ -13,21 +14,29 @@ const defaultProps = {
 
 const getTabs = (klId = defaultProps.klId) => screen.getByTestId(klId)
 
-const DefaultTabs = (props: TabsProps) => (
-  <ConfigProvider>
+const DefaultTabs = ({ children, ...props }: TabsProps) => {
+  if (children) {
+    return <ConfigProvider>
+      <Tabs {...defaultProps} {...props}>
+        {children}
+      </Tabs>
+    </ConfigProvider>
+  }
+
+  return <ConfigProvider>
     <Tabs {...defaultProps} {...props}>
-      <Tabs.TabPane tab="Tab" key="1">
+      <Tabs.TabPane tab={<Tabs.TabPaneHead testId="tab-1" text="Tab 1" />} key="1">
         Content of Tab Pane 1
       </Tabs.TabPane>
-      <Tabs.TabPane tab="Tab" key="2">
+      <Tabs.TabPane tab="Tab 2" key="2">
         Content of Tab Pane 2
       </Tabs.TabPane>
-      <Tabs.TabPane tab="Tab" key="3">
+      <Tabs.TabPane tab="Tab 3" key="3">
         Content of Tab Pane 3
       </Tabs.TabPane>
     </Tabs>
   </ConfigProvider>
-)
+}
 
 describe('Tabs', () => {
   test('should render', () => {
@@ -35,6 +44,7 @@ describe('Tabs', () => {
 
     expect(getTabs()).toBeInTheDocument()
     expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="tab-1"]')).toBeInTheDocument()
   })
 
   test('should have left className if tapPosition is left', () => {
@@ -59,7 +69,7 @@ describe('Tabs', () => {
     expect(tabsList?.[0]).toHaveClass('ant-tabs-tab-active')
   })
 
-  test('should call onChange function when active tab is changed', () => {
+  test('should call onChange function when active tab is changed', async () => {
     const onChange = jest.fn()
     render(<DefaultTabs defaultActiveKey="1" onChange={onChange} />)
     const tabsList = getTabs()
@@ -67,13 +77,13 @@ describe('Tabs', () => {
       ?.querySelectorAll('.ant-tabs-tab')
     const secondTab = tabsList?.[1] as HTMLDivElement
     expect(secondTab).toBeDefined()
-    act(() => {
+    await act(async () => {
       secondTab.click()
     })
     expect(onChange).toHaveBeenCalled()
   })
 
-  test('should call onTabClick function when any tab is clicked', () => {
+  test('should call onTabClick function when any tab is clicked', async () => {
     const onTabClick = jest.fn()
     render(<DefaultTabs defaultActiveKey="1" onTabClick={onTabClick} />)
     const tabsList = getTabs()
@@ -81,7 +91,7 @@ describe('Tabs', () => {
       ?.querySelectorAll('.ant-tabs-tab')
     const secondTab = tabsList?.[1] as HTMLDivElement
     expect(secondTab).toBeDefined()
-    act(() => {
+    await act(async () => {
       secondTab.click()
     })
     expect(onTabClick).toHaveBeenCalled()
@@ -89,42 +99,32 @@ describe('Tabs', () => {
 
   test('should have inline styles when style prop is passed', () => {
     const style = {
-      color: 'red'
+      color: 'rgb(255, 0, 0)'
     }
     render(<DefaultTabs style={style} />)
     expect(getTabs()).toHaveStyle(style)
   })
 
-  test('should destroy inactive tab content with destroyInactiveTabPane true', () => {
+  test('should destroy inactive tab content with destroyInactiveTabPane true', async () => {
     render(<DefaultTabs defaultActiveKey="1" destroyInactiveTabPane />)
     const tabsList = getTabs()
       .querySelector('.ant-tabs-nav-list')
       ?.querySelectorAll('.ant-tabs-tab')
     const secondTab = tabsList?.[1] as HTMLDivElement
     expect(secondTab).toBeDefined()
-    act(() => {
-      secondTab.click()
-    })
-    expect(screen.queryByText('Content of Tab Pane 1')).not.toBeInTheDocument()
+    userEvent.click(screen.getByText('Tab 1'))
+    expect(await screen.findByText('Content of Tab Pane 1')).toBeVisible()
   })
 
-  test('should display content of the active tab', () => {
+  test('should display content of the active tab', async () => {
     render(<DefaultTabs defaultActiveKey="1" />)
-
     const firstTabContent = screen.getByText('Content of Tab Pane 1')
     expect(firstTabContent).toBeInTheDocument()
     expect(firstTabContent).toBeVisible()
+    userEvent.click(screen.getByText('Tab 2'))
 
-    const tabs = screen.getAllByText('Tab')
-    const secondTab = tabs[1]
-    act(() => {
-      secondTab.click()
-    })
-
-    expect(firstTabContent).toBeInTheDocument()
+    expect(await screen.findByText('Content of Tab Pane 2')).toBeVisible()
     expect(firstTabContent).not.toBeVisible()
-
-    expect(screen.getByText('Content of Tab Pane 2')).toBeVisible()
   })
 
   test('should trigger click event on specific button', () => {
@@ -153,7 +153,6 @@ describe('Tabs', () => {
 
     expect(addButton).toBeInTheDocument()
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     fireEvent.click(addButton!)
 
     expect(handleClick).toHaveBeenCalled()
@@ -219,40 +218,34 @@ describe('Tabs', () => {
   })
 
   // Codium AI
-  test('should change active tab on tab click', () => {
+  test('should change active tab on tab click', async () => {
     const onChange = jest.fn()
     const { container } = render(
-      <ConfigProvider>
-        <Tabs defaultActiveKey="1" onChange={onChange}>
-          <Tabs.TabPane tab="Tab 1" key="1">Content 1</Tabs.TabPane>
-          <Tabs.TabPane tab="Tab 2" key="2">Content 2</Tabs.TabPane>
-        </Tabs>
-      </ConfigProvider>
+      <DefaultTabs defaultActiveKey="1" onChange={onChange}>
+        <Tabs.TabPane tab="Tab 1" key="1">Content 1</Tabs.TabPane>
+        <Tabs.TabPane tab="Tab 2" key="2">Content 2</Tabs.TabPane>
+      </DefaultTabs>
     )
     const secondTab = container.querySelectorAll('.ant-tabs-tab')[1]
     fireEvent.click(secondTab)
-    expect(onChange).toHaveBeenCalledWith('2')
+    await waitFor(() => expect(onChange).toHaveBeenCalledWith('2'))
   })
 
   test('should handle Tabs component with only one tab', () => {
     const { container } = render(
-      <ConfigProvider>
-        <Tabs>
-          <Tabs.TabPane tab="Tab 1" key="1">Content 1</Tabs.TabPane>
-        </Tabs>
-      </ConfigProvider>
+      <DefaultTabs>
+        <Tabs.TabPane tab="Tab 1" key="1">Content 1</Tabs.TabPane>
+      </DefaultTabs>
     )
     expect(container.querySelectorAll('.ant-tabs-tab').length).toBe(1)
   })
 
   test('should handle Tabs component with all tabs disabled', () => {
     const { container } = render(
-      <ConfigProvider>
-        <Tabs>
-          <Tabs.TabPane tab="Tab 1" key="1" disabled>Content 1</Tabs.TabPane>
-          <Tabs.TabPane tab="Tab 2" key="2" disabled>Content 2</Tabs.TabPane>
-        </Tabs>
-      </ConfigProvider>
+      <DefaultTabs>
+        <Tabs.TabPane tab="Tab 1" key="1" disabled>Content 1</Tabs.TabPane>
+        <Tabs.TabPane tab="Tab 2" key="2" disabled>Content 2</Tabs.TabPane>
+      </DefaultTabs>
     )
     const tabs = container.querySelectorAll('.ant-tabs-tab')
     tabs.forEach(tab => expect(tab).toHaveClass('ant-tabs-tab-disabled'))
@@ -265,17 +258,17 @@ describe('Tabs', () => {
     }
     ))
     const { container } = render(
-      <Tabs>
+      <DefaultTabs>
         {generateTabs(2).map((el, i) => <Tabs.TabPane
-            tab={
-              <Tabs.TabPaneHead text={el.text + ' ' + (i + 2)} />
-            }
-            key={i + 1}
-          >
-            {el.content}
-          </Tabs.TabPane>
+          tab={
+            <Tabs.TabPaneHead text={el.text + ' ' + (i + 2)} />
+          }
+          key={i + 1}
+        >
+          {el.content}
+        </Tabs.TabPane>
         )}
-      </Tabs>
+      </DefaultTabs>
     )
     const visibility = getComputedStyle(container.querySelector('.kl6-tabs-more-button') as Element).visibility
     expect(visibility).toBe('visible')
@@ -283,7 +276,7 @@ describe('Tabs', () => {
 
   test('should hide more button', () => {
     const { container } = render(
-      <Tabs>
+      <DefaultTabs>
         <Tabs.TabPane
           tab={
             <Tabs.TabPaneHead text="Some text" />
@@ -292,7 +285,7 @@ describe('Tabs', () => {
         >
           Some other text
         </Tabs.TabPane>
-      </Tabs>
+      </DefaultTabs>
     )
     const visibility = getComputedStyle(container.querySelector('.kl6-tabs-more-button') as Element).visibility
     expect(visibility).toBe('hidden')

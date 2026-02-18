@@ -7,10 +7,10 @@
     "migration": false,
     "apiTable": false,
     "storybook": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "QuickFilter",
   "description": "В качестве основы используется компонент Field.",
   "usage": "Quick filter — это набор предопределенных фильтров, адаптированных под наиболее частые сценарии использования. Quick filter позволяет быстро выбирать и применять фильтры с минимальными усилиями, предоставляя мгновенную обратную связь.",
-  "figmaView": "https://embed.figma.com/design/qLqY99hC40oEBwLRUgYNWi/Table?node-id=6001-1979&embed-host=share"
+  "pixsoView": "https://pixso.net/app/design/HFxl6PkkfY7YF5YPecc03g?item-id=6001%3A1979"
 }

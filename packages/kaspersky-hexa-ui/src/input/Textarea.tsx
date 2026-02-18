@@ -1,14 +1,14 @@
-import { WithGlobalStyles } from '@helpers/hocs/WithGlobalStyles'
+import { useGlobalStyles } from '@helpers/hooks/useGlobalStyles'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { P } from '@src/typography'
 import { Input } from 'antd'
 import cn from 'classnames'
-import React, { FC } from 'react'
+import React, { FC, forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { inputStyles, inputTextareaContainerStyles } from './inputCss'
-import { TextboxTextareaMappedProps, TextboxTextareaProps, TextboxTextareaViewProps } from './types'
+import { TextboxTextareaProps } from './types'
 import { useClassNamedTextbox } from './useClassNamedTextbox'
 import { useThemedTextbox } from './useThemedTextbox'
 
@@ -28,25 +28,21 @@ const StyledTextareaContainer = styled.div.withConfig<{disabled?: boolean}>({
   ${inputTextareaContainerStyles}
 `
 
-const TextareaComponent: FC<TextboxTextareaProps> = (rawProps: TextboxTextareaProps) => {
-  const mappedProps: TextboxTextareaMappedProps = useClassNamedTextbox<TextboxTextareaProps>(rawProps)
-  const themedProps: TextboxTextareaViewProps = useThemedTextbox(mappedProps)
-  const props = useTestAttribute(themedProps)
-  return <TextareaView {...props} />
-}
+export const Textarea: FC<TextboxTextareaProps> = forwardRef((props, ref) => {
+  const {
+    className,
+    cssConfig,
+    disabled,
+    maxLength,
+    onChange,
+    onKeyDown,
+    showCount,
+    testAttributes,
+    value,
+    ...rest
+  } = useTestAttribute(useThemedTextbox(useClassNamedTextbox(props)))
 
-const TextareaView: FC<TextboxTextareaViewProps> = ({
-  onChange,
-  onKeyDown,
-  cssConfig,
-  showCount,
-  maxLength,
-  value,
-  className,
-  disabled,
-  testAttributes,
-  ...rest
-}: TextboxTextareaViewProps) => {
+  useGlobalStyles()
   const { t } = useTranslation()
 
   return (
@@ -58,7 +54,7 @@ const TextareaView: FC<TextboxTextareaViewProps> = ({
       disabled={disabled}
     >
       <StyledTextArea
-        data-component-version="v6"
+        ref={ref}
         className={cn('kl-v6-textarea', className)}
         onChange={({ target: { value } }) => onChange?.(value)}
         onKeyDown={(event) => { event.stopPropagation(); onKeyDown?.(event) }}
@@ -75,6 +71,6 @@ const TextareaView: FC<TextboxTextareaViewProps> = ({
       </P>}
     </StyledTextareaContainer>
   )
-}
+})
 
-export const Textarea = WithGlobalStyles(TextareaComponent)
+Textarea.displayName = 'Textarea'

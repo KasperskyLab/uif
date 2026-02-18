@@ -7,11 +7,11 @@
     "migration": false,
     "apiTable": true,
     "storybook": true,
-    "figmaView": false
+    "pixsoView": false
   },
   "component": "DetailsPage",
   "description": "",
   "usage": "",
   "designLink": "",
-  "figmaView": ""
+  "pixsoView": ""
 }

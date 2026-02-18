@@ -1,25 +1,36 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
+import { TextReducer } from '@helpers/components/TextReducer'
 import { validationStatuses } from '@helpers/typesHelpers'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
+import { Accordion, AccordionPanel } from '@src/accordion'
+import { ActionButton } from '@src/action-button'
+import { Button } from '@src/button'
+import { CodeViewer } from '@src/code-viewer'
 import { Field } from '@src/field'
+import { FieldSet } from '@src/field-set'
+import { Textbox } from '@src/input'
 import { Link } from '@src/link'
+import { SectionMessage } from '@src/section-message'
+import { Sidebar } from '@src/sidebar'
 import { Space } from '@src/space'
 import { Status } from '@src/status'
 import { Toggle } from '@src/toggle'
 import { P, Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
-import React from 'react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { Add, Cancel1, Placeholder } from '@kaspersky/hexa-ui-icons/16'
+import { Add, Cancel1, Delete, Edit, Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
+import { MultiSelectCheckBox } from '../helpers'
 import { Select } from '../Select'
-import { SelectProps } from '../types'
+import { OptionType, SelectProps } from '../types'
 
+import { tagsWithActions } from './codeExamples'
 import Docs from './SelectDocs'
 
 const opts = [
@@ -45,7 +56,8 @@ const opts = [
   'Barnaul'
 ].map((city, index) => ({
   label: city,
-  value: index + 1
+  value: index + 1,
+  ...(index % 5 === 0 ? { description: `description default text #${index + 1}` } : {})
 }))
 
 const meta: Meta<SelectProps> = {
@@ -70,7 +82,8 @@ const meta: Meta<SelectProps> = {
     disabled: false,
     readOnly: false,
     testId: 'select-test-id',
-    klId: 'select-kl-id'
+    klId: 'select-kl-id',
+    dropdownMaxHeight: 256
   },
   parameters: {
     actions: { argTypesRegex: '^(on.*)' },
@@ -78,7 +91,7 @@ const meta: Meta<SelectProps> = {
     docs: {
       page: withMeta(MetaData, Docs)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   },
   decorators: [
     (Story, context) => (
@@ -222,7 +235,29 @@ export const LoadingError: Story = {
 }
 
 export const SelectWithSearch: Story = {
+  render: (args) => (
+    <FieldSet
+      items={[
+        {
+          label: 'autoClearSearchValue = true',
+          control: {
+            component: 'select',
+            ...args
+          }
+        },
+        {
+          label: 'autoClearSearchValue = false',
+          control: {
+            component: 'select',
+            autoClearSearchValue: false,
+            ...args
+          }
+        }
+      ]}
+    />
+  ),
   args: {
+    onSearch: (val) => { console.log('onSearch', val) },
     showSearch: true,
     allowClear: true
   }
@@ -235,7 +270,29 @@ export const Multiselect: Story = {
 }
 
 export const MultiselectWithSearch: Story = {
+  render: (args) => (
+    <FieldSet
+      items={[
+        {
+          label: 'autoClearSearchValue = true',
+          control: {
+            component: 'select',
+            ...args
+          }
+        },
+        {
+          label: 'autoClearSearchValue = false',
+          control: {
+            component: 'select',
+            autoClearSearchValue: false,
+            ...args
+          }
+        }
+      ]}
+    />
+  ),
   args: {
+    onSearch: (val) => { console.log('onSearch', val) },
     mode: 'multiple',
     showSearch: true
   }
@@ -262,18 +319,35 @@ export const WithHeader: Story = {
 }
 
 export const WithShowSearchAndAllowClear: Story = {
-  render: (args: SelectProps) => {
-    return (
-      <div style={{ width: '550px' }}>
-        <P>No mode</P>
-        <Field control={<Select {...args} />} />
-        <P>Tags mode</P>
-        <Field control={<Select {...args} mode="tags" />} />
-        <P>Multiple mode</P>
-        <Field control={<Select {...args} mode="multiple" />} />
-      </div>
-    )
-  },
+  render: (args) => (
+    <FieldSet
+      items={[
+        {
+          label: 'No mode',
+          control: {
+            component: 'select',
+            ...args
+          }
+        },
+        {
+          label: 'Tags mode',
+          control: {
+            component: 'select',
+            mode: 'tags',
+            ...args
+          }
+        },
+        {
+          label: 'Multiple mode',
+          control: {
+            component: 'select',
+            mode: 'multiple',
+            ...args
+          }
+        }
+      ]}
+    />
+  ),
   args: {
     allowClear: true,
     showSearch: true
@@ -309,18 +383,37 @@ export const Tags: Story = {
   render: (args: SelectProps) => {
     const [val, setVal] = React.useState(['MyTag', 'MyTag'])
     return (
-      <div style={{ width: '550px' }}>
-        <Field label="Tags mode" control={<Select {...args} />} />
-        <Field label="Tags mode with allowNonUniqueValues" control={
-          <Select
-            id={args.id + '1'}
-            {...args}
-            allowNonUniqueValues={true}
-            value={val}
-            onChange={(newValue) => setVal(newValue)}
-          />
-        } />
-      </div>
+      <FieldSet
+        items={[
+          {
+            label: 'Tags mode',
+            control: {
+              component: 'select',
+              ...args
+            }
+          },
+          {
+            label: 'Tags mode with maxTagCount = responsive',
+            control: {
+              component: 'select',
+              ...args,
+              maxTagCount: 'responsive'
+            }
+          },
+          {
+            label: 'Tags mode with allowNonUniqueValues',
+            control: {
+              component: 'select',
+              mode: 'tags',
+              id: args.id + '1',
+              ...args,
+              allowNonUniqueValues: true,
+              value: val,
+              onChange: (newValue) => setVal(newValue)
+            }
+          }
+        ]}
+      />
     )
   },
   args: {
@@ -328,6 +421,138 @@ export const Tags: Story = {
     maxTagCount: 3,
     mode: 'tags',
     id: 'xxx'
+  }
+}
+
+const OptionWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+`
+
+const StyledSelect = styled(Select)`
+  width: 300px;
+  margin: 20px 0;
+`
+
+export const TagsWithActions: Story = {
+  render: (args: SelectProps) => {
+    const [options, setOptions] = useState<OptionType[]>(opts)
+    const [editingTag, setEditingTag] = useState<OptionType | null>(null)
+    const [hoveringOption, setHoveringOption] = useState<number | null>(null)
+
+    const handleEdit = (selectedOpt: OptionType) => (e: any) => {
+      e.stopPropagation()
+      setEditingTag(selectedOpt)
+    }
+
+    const handleDelete = (selectedOpt: OptionType) => (e: any) => {
+      e.stopPropagation()
+      setOptions(prevOptions => {
+        return prevOptions.filter(opt => opt.value !== selectedOpt.value)
+      })
+    }
+
+    const handleTagNameChange = (value: string) => {
+      setEditingTag(prev => {
+        return {
+          ...prev,
+          label: value
+        }
+      })
+    }
+
+    const handleTagRename = () => {
+      if (!editingTag) return
+
+      setOptions((prevOptions) => {
+        return prevOptions.map(opt => {
+          if (opt.value === editingTag.value) {
+            return editingTag
+          } else {
+            return opt
+          }
+        })
+      })
+      setEditingTag(null)
+    }
+
+    return (
+      <div style={{ width: '1000px' }}>
+        <SectionMessage
+          style={{ width: '600px' }}
+          mode="info"
+          closable={false}
+        >
+          <Text>The story demonstrates the possibilities of customizing select options by passing them directly to component via React.Children.</Text>
+          <Text>Этот пример демонстрирует возможность кастомизации опций селекта путем их прямой передачи в компонент через React.Children.</Text>
+        </SectionMessage>
+        <StyledSelect
+          {...args}
+        >
+          {options.map((opt) => {
+            return (
+              <Select.Option
+                key={opt.value}
+                value={opt.value}
+                label={opt.label}
+                style={{ paddingRight: 5 }}
+                onMouseEnter={() => setHoveringOption(opt.value)}
+                onMouseLeave={() => setHoveringOption(null)}
+              >
+                <OptionWrapper>
+                  <div style={{ width: '100%', paddingRight: 58, display: 'flex', alignItems: 'center' }}>
+                    <MultiSelectCheckBox />
+                    <TextReducer>
+                      {opt.label}
+                    </TextReducer>
+                  </div>
+                  <div style={{
+                    position: 'absolute',
+                    right: 0,
+                    display: 'flex',
+                    gap: '4px',
+                    visibility: opt.value === hoveringOption ? 'visible' : 'hidden'
+                  }}>
+                    <ActionButton icon={<Edit />} onClick={handleEdit(opt)}/>
+                    <ActionButton icon={<Delete />} onClick={handleDelete(opt)}/>
+                  </div>
+                </OptionWrapper>
+              </Select.Option>
+            )
+          })}
+        </StyledSelect>
+        <Sidebar
+          size="extraSmall"
+          visible={Boolean(editingTag)}
+          onClose={() => setEditingTag(null)}
+          title="Edit tag"
+          footer={
+            <Button onClick={handleTagRename}>Apply</Button>
+          }
+        >
+          <Field label="Tag name" control={<Textbox value={editingTag?.label} onChange={handleTagNameChange} />}/>
+        </Sidebar>
+        <Accordion withBorder={false}>
+          <AccordionPanel key={1} title="Code example">
+            <CodeViewer
+              initialValue={tagsWithActions}
+              // @ts-ignore
+              language="typescript"
+              readonly
+              width={1000}
+              height={500}
+            />
+          </AccordionPanel>
+        </Accordion>
+      </div>
+    )
+  },
+  args: {
+    allowClear: true,
+    mode: 'tags',
+    options: undefined
   }
 }
 

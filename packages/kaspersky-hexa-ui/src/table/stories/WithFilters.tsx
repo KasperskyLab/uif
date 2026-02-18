@@ -1,14 +1,15 @@
 import { Table } from '@src/table'
 import React, { useState } from 'react'
 
-import { FilterItemTagProps } from '../modules/ToolbarIntegration/FilterItems'
+import { TableInternalFilterItemsTagProps } from '../types'
 
 import { basicDataSource, basicTwoColumns, Story } from './_commonConstants'
 
 const StoryComponent = () => {
-  const [filterBtns, setFilterBtns] = useState(['Value 1', 'Value 2', 'Value 3'])
+  const value_1 = 'Value 1 '.repeat(50)
+  const [filterBtns, setFilterBtns] = useState([value_1, 'Value 2', 'Value 3'])
 
-  const items: FilterItemTagProps[] = filterBtns.map(btn => ({
+  const items: TableInternalFilterItemsTagProps[] = filterBtns.map(btn => ({
     text: btn,
     onClose: (e) => {
       e?.preventDefault()

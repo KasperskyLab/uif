@@ -1,6 +1,7 @@
 import { Theme } from '@design-system/types'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
-import React from 'react'
+import { PopoverProps } from '@src/popover'
+import React, { ReactNode } from 'react'
 
 export type FormLabelMode = 'primary' | 'secondary' | 'disabled'
 
@@ -18,9 +19,13 @@ export type FormLabelProps = React.LabelHTMLAttributes<HTMLLabelElement> & {
   disabled?: boolean,
   /** Tags after label */
   tagsAfter?: string[],
-  /** Tooltip content */
-  tooltip?: React.ReactNode,
-  /** Custom width for tooltip (popover) */
+  /** Popover content */
+  tooltip?: ReactNode,
+  /** Parent Node which the popover should be rendered to */
+  getPopupContainer?: PopoverProps['getPopupContainer'],
+  /** Popover position relative to the info icon */
+  popoverPlacement?: 'top' | 'left' | 'right' | 'bottom',
+  /** Custom width for popover */
   popoverWidth?: number
 } & FormLabelThemeProps & TestingProps
 

@@ -5,7 +5,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Button } from '@src/button'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useRef } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import styled from 'styled-components'
@@ -35,7 +35,7 @@ const meta: Meta = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta

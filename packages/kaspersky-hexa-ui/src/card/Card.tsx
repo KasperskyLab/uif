@@ -1,7 +1,7 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { ActionButton } from '@src/action-button'
 import { Dropdown } from '@src/dropdown'
-import { H6 } from '@src/typography'
+import { Heading } from '@src/typography'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
@@ -63,6 +63,7 @@ const CardView: FC<CardViewProps> = ({
             icon={<Menu2 />}
             testId={testId ? `${testId}-${MENU_ICON_TEST_ID}` : `${MENU_ICON_TEST_ID}`}
             klId={klId ? `${klId}-${MENU_ICON_TEST_ID}` : `${MENU_ICON_TEST_ID}`}
+            className="card-action-button"
           />
         </Dropdown>
       )}
@@ -73,6 +74,7 @@ const CardView: FC<CardViewProps> = ({
           onClick={onCloseButtonClick}
           testId={testId ? `${testId}-${CLOSE_ICON_TEST_ID}` : `${CLOSE_ICON_TEST_ID}`}
           klId={klId ? `${klId}-${CLOSE_ICON_TEST_ID}` : `${CLOSE_ICON_TEST_ID}`}
+          className="card-action-button"
         />
       )}
     </CardActions>
@@ -97,7 +99,12 @@ const CardView: FC<CardViewProps> = ({
         <CardTitleWrapper>
           <CardTitle>
             {title.elementBefore && <CardTitleElement>{getMappedElement(title.elementBefore)}</CardTitleElement>}
-            <H6 style={{ width: '100%' }}>{title.value}</H6>
+            <Heading
+              type={title.size === 'medium' ? 'H5' : 'H6'}
+              style={{ width: '100%' }}
+            >
+              {title.value}
+            </Heading>
             {title.elementAfter && <CardTitleElement>{getMappedElement(title.elementAfter)}</CardTitleElement>}
           </CardTitle>
           {(actions || closable) && cardActions}

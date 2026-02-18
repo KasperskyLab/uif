@@ -1,9 +1,9 @@
-import React from 'react'
-import styled from 'styled-components'
 import { badges as sbBadges, badgesConfig, SBBadges } from '@sb/badges'
 import { Link } from '@src/link'
 import { SectionMessage } from '@src/section-message'
 import { linkTo } from '@storybook/addon-links'
+import React from 'react'
+import styled from 'styled-components'
 
 const StorybookBadgeWrapper = styled.div`
   display: flex;
@@ -34,7 +34,8 @@ export const withBadges = (Story: any, context: any) => {
                 <Link onClick={linkTo(deprecatedLink, 'Basic')}>{deprecatedLink}</Link>
               )}
             </SectionMessage>
-          )})}
+          )
+        })}
       </StorybookBadgeWrapper>
       <Story {...context} />
     </>

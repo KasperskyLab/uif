@@ -1,11 +1,12 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
+import { PopupConfigProvider } from '@helpers/components/PopupConfigProvider'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { StoryColumn } from '@sb/StoryComponents'
 import { Textbox } from '@src/input'
 import { Tag } from '@src/tag'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import { CheckboxValueType } from 'antd/es/checkbox/Group'
 import React from 'react'
 
@@ -35,7 +36,7 @@ const meta: Meta<CheckboxProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta
@@ -49,6 +50,14 @@ export const Basic: StoryCheckbox = {
       <Checkbox {...args}>
         Check me
       </Checkbox>
+      <PopupConfigProvider getPopupContainer={() => document.body}>
+        <Checkbox 
+          tooltip="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam aliquet scelerisque ligula, eget aliquet sem elementum id. Suspendisse ornare scelerisque arcu, non tincidunt quam. Vestibulum a laoreet erat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur a gravida quam. Cras varius, dui quis euismod ultrices, eros leo maximus nibh, a sagittis dolor augue condimentum libero. Duis tortor est, placerat ut porta in, sagittis eu ante. Sed viverra leo magna, sed volutpat diam consequat id. Nulla pharetra nibh sit amet tempus ornare. Nunc ut quam ante."
+          {...args}
+        >
+        tooltip
+        </Checkbox>
+      </PopupConfigProvider>
       <Checkbox checked {...args}>
         Im checked
       </Checkbox>
@@ -74,7 +83,7 @@ export const Basic: StoryCheckbox = {
       >
         With description and dependentElement
       </Checkbox>
-    </StoryColumn>
+    </StoryColumn>    
   )
 }
 

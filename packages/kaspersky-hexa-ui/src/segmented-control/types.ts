@@ -41,8 +41,10 @@ export type SegmentedControlCounterMode = BadgeLargeMode
 export type SegmentedControlCssConfig = SegmentedControlSizeConfig & SegmentedControlColorConfig
 
 export type SegmentedControlThemeProps = {
-  size?: SegmentedControlSize,
-  theme?: Theme
+  /** Custom theme */
+  theme?: Theme,
+  /** Size */
+  size?: SegmentedControlSize
 }
 
 export type SegmentedControlProps = {
@@ -50,9 +52,10 @@ export type SegmentedControlProps = {
   tabsData: SegmentedControlItemProps[],
   /** Content Data */
   contentData: Record<string, (properties: SegmentedContentProperties | undefined) => ReactNode>,
-  className: string,
-  /** Size */
-  size?: SegmentedControlSize
+  /** Custom class name */
+  className?: string,
+  /** Initial segmented control item name */
+  defaultActiveTab?: string
 } & SegmentedControlThemeProps & TestingProps
 
 export type SegmentedControlItemProps = {

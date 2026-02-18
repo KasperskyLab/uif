@@ -8,11 +8,11 @@
     "apiTable": true,
     "storybook": true,
     "designLink": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Uploader",
   "description": "",
   "usage": "Компонент Uploader используется для загрузки файлов пользователями на платформу. Он позволяет выбрать один или несколько файлов вручную или перетаскиванием (drag and drop) в интерфейс. Upload автоматически проверяет размер, количество и формат файлов, чтобы соответствовать установленным ограничениям, и информирует пользователя о возникших ошибках",
-  "designLink": "https://www.figma.com/design/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-Hexa-UI-Components-v-6.175.4?node-id=2183-11211",
-  "figmaView": "https://embed.figma.com/design/EjhxsOzfg8UOxB3pyfi1Py/Uploader?node-id=0-1&embed-host=share"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=2183%3A11211",
+  "pixsoView": "https://pixso.net/app/design/85_ZxFQRnTdWU-6-KONSnA"
 }

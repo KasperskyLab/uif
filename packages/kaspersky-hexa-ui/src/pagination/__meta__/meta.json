@@ -7,11 +7,12 @@
     "migration": true,
     "apiTable": true,
     "storybook": true,
-    "designLink": true
+    "designLink": true,
+    "pixsoView": true
   },
   "component": "Pagination",
   "description": "Компонент для отрисовки пагинации. В качестве основы используется AntdPagination из библиотеки Antd.",
   "usage": "Структурирование большого объема информации, путем ее разделения на отдельные страницы",
-  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=507%3A3781",
-  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F01-%255BB2B%255D-Hexa-UI-Components%3Ftype%3Ddesign%26node-id%3D1063%253A4211%26mode%3Ddev"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=1063%3A4211",
+  "pixsoView": "https://pixso.net/app/design/hjHUr5zzgcXmN9y0toyllw"
 }

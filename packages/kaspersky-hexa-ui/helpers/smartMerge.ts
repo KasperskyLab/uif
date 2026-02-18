@@ -4,7 +4,6 @@ export type ObjectMergerConfig = {
   skipUndefined?: boolean
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const objectMerger = (config: ObjectMergerConfig = {}) => {
   type Hopper = {
     <T>(target: T): T,

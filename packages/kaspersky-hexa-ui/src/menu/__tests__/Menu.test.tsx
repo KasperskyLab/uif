@@ -1,4 +1,5 @@
-import { Nav, ServicesNav, UserNav } from '@src/menu'
+import { ConfigProvider } from '@design-system/context'
+import { ServicesNav } from '@src/menu'
 import { AppLogo } from '@src/menu/stories/AppLogo'
 import { navUserItems } from '@src/menu/stories/menu-items'
 import { getNotificationsIcon } from '@src/menu/stories/Notifications'
@@ -10,10 +11,6 @@ import { Help, UserGroup } from '@kaspersky/hexa-ui-icons/16'
 
 import { Menu } from '../Menu'
 import { MenuProps } from '../types'
-
-const defaultProps = {
-  'kl-id': 'menu-test-id'
-}
 
 const menuItemClickHandler = jest.fn()
 
@@ -47,18 +44,27 @@ const navItems = [
   }
 ]
 
+const defaultProps = {
+  'kl-id': 'menu-test-id',
+  collapsed: false,
+  navItems,
+  navUserItems
+}
+
 const getMenu = () => screen.getByTestId('menu-test-id')
 const getItem = (klId: string) => screen.getByTestId(klId)
 
-const MenuComponent = (props: MenuProps) => <Menu {...defaultProps} {...props} >
-  <ServicesNav>
-    {getNotificationsIcon(true)}
-    <Help className="item" role="button" onClick={ () => alert('open online help') } />
-  </ServicesNav>
-  <AppLogo/>
-  <Nav navItems={navItems} minimized={false} favsEnabled={true} />
-  <UserNav navItems={navUserItems} minimized={false} childPop={true} />
-</Menu>
+const MenuComponent = (props: MenuProps) => (
+  <ConfigProvider>
+    <Menu {...defaultProps} {...props} >
+      <ServicesNav>
+        {getNotificationsIcon(true)}
+        <Help className="item" role="button" onClick={ () => alert('open online help') } />
+      </ServicesNav>
+      <AppLogo/>
+    </Menu>
+  </ConfigProvider>
+)
 
 describe('Menu', () => {
   test('should render', () => {
@@ -74,13 +80,12 @@ describe('Menu', () => {
   })
 
   it('should render menu item', () => {
-    const { container } = render(<MenuComponent />)
-    expect(container.querySelector('.uif-nav-item-entry-title .title-ellipsis')).toHaveTextContent(navItems[0].key)
-    expect(getMenu()).toBeInTheDocument()
+    render(<MenuComponent />)
+    expect(getItem('navigation.main.usersAndRoles')).toBeInTheDocument()
   })
 
   it('should show user status tooltip', async () => {
-    const baseDom = render(<MenuComponent />)
+    const baseDom = render(<MenuComponent collapsed={true} />)
 
     expect(
       baseDom.queryByText('Unavailable')

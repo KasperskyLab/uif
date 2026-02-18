@@ -22,5 +22,11 @@ export const notification = ({ colors }: ComponentThemeContext): Record<Notifica
     background: colors.toast.bg.info,
     color: colors.toast.text.info,
     separator: colors.divider.bg.inverted
+  },
+  ai: {
+    background: `linear-gradient(90deg, ${colors.toast.bg.ai.green} 0%, ${colors.toast.bg.ai.green_0} 42.48%),
+      linear-gradient(247.36deg, ${colors.toast.bg.ai.marina} 8.9%, ${colors.toast.bg.ai.violet} 62.99%)`,
+    color: colors.toast.text.ai,
+    separator: colors.divider.bg.inverted
   }
 })

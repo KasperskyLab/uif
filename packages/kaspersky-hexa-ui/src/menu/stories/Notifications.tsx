@@ -2,7 +2,7 @@ import { clickHandler } from '@src/menu/stories/CustomItem'
 import React from 'react'
 import styled from 'styled-components'
 
-import { Alarm as AlarmIcon } from '@kaspersky/hexa-ui-icons/16'
+import { Bell as AlarmIcon } from '@kaspersky/hexa-ui-icons/16'
 
 export function getNotificationsIcon (hasNotifications: boolean): React.ReactNode {
   return (
@@ -31,7 +31,7 @@ const NotificationButton = styled.span`
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--criticalitystatuses--high);
+      background: var(--indicator--icon--critical);
     }
   }
 `

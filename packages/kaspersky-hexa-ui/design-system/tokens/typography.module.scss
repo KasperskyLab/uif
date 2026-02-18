@@ -1,0 +1,76 @@
+@mixin apply-font-styles($mode) {
+  font-family: var(--text--#{$mode}--font-family);
+  font-size: var(--text--#{$mode}--font-size);
+  font-style: var(--text--#{$mode}--font-style);
+  font-weight: var(--text--#{$mode}--font-weight);
+  letter-spacing: var(--text--#{$mode}--letter-spacing);
+  line-height: var(--text--#{$mode}--line-height);
+}
+
+.h1 {
+  @include apply-font-styles(h1)
+}
+
+.h2 {
+  @include apply-font-styles(h2)
+}
+
+h3 {
+  @include apply-font-styles(h3)
+}
+
+.h4 {
+  @include apply-font-styles(h4)
+}
+
+.h5 {
+  @include apply-font-styles(h5)
+}
+
+.h6 {
+  @include apply-font-styles(h6)
+}
+
+// Body Text Regular
+.btr2 {
+  @include apply-font-styles(btr2)
+}
+
+.btr3 {
+  @include apply-font-styles(btr3)
+}
+
+.btr4 {
+  @include apply-font-styles(btr4)
+}
+
+.btr5 {
+  @include apply-font-styles(btr5)
+}
+
+// Body Text Medium
+.btm2 {
+  @include apply-font-styles(btm2)
+}
+
+.btm3 {
+  @include apply-font-styles(btm3)
+}
+
+.btm4 {
+  @include apply-font-styles(btm4)
+}
+
+.btm5 {
+  @include apply-font-styles(btm5)
+}
+
+
+// Mono Text Regular
+.mtr3 {
+  @include apply-font-styles(mtr3)
+}
+
+.mtr4 {
+  @include apply-font-styles(mtr4)
+}

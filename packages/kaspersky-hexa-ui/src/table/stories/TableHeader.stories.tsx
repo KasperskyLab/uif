@@ -1,8 +1,10 @@
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
+import { ScrollableContainer } from '@sb/components/ScrollableContainer'
+import { StoryColumn } from '@sb/StoryComponents'
 import MetaData from '@src/table/__meta__/meta.json'
 import { ToolbarItems } from '@src/toolbar/types'
-import { Meta } from '@storybook/react'
+import { Meta } from '@storybook/react-webpack5'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -10,7 +12,7 @@ import { NotificationBell } from '@kaspersky/hexa-ui-icons/32'
 
 import { ITableProps, Table } from '..'
 
-import { basicArgTypes, basicDataSource, BasicTableStory, basicTwoColumns, genArgType, Story } from './_commonConstants'
+import { basicArgTypes, basicDataSource, BasicTableStory, basicTwoColumns, genArgType, Story, Wrapper } from './_commonConstants'
 
 const meta: Meta<ITableProps> = {
   title: 'Hexa UI Components/Table/Header',
@@ -31,7 +33,8 @@ const meta: Meta<ITableProps> = {
     controls: {
       exclude: ['pagination', 'dataSource', 'columns']
     }
-  }
+  },
+  tags: ['!autodocs']
 }
 export default meta
 
@@ -44,6 +47,30 @@ const StyledIconWrapper = styled.div`
   justify-content: center;
   align-items: center;
 `
+
+const itemsToolbar: ToolbarItems[] = [
+  {
+    type: 'button',
+    key: '1',
+    label: 'Tool 1',
+    onClick: () => console.log('Tool 1')
+  },
+  {
+    type: 'button',
+    key: '2',
+    label: 'Tool 2',
+    onClick: () => console.log('Tool 2')
+  },
+  {
+    type: 'dropdown',
+    key: '4',
+    label: 'Tool 4',
+    overlay: [
+      { children: 'item 1' },
+      { children: 'item 2' }
+    ]
+  }
+]
 
 export const Header: Story = {
   render: BasicTableStory.bind({}),
@@ -70,34 +97,44 @@ export const StickyHeader: Story = {
   args: { stickyHeader: 0 }
 }
 
-const itemsToolbar: ToolbarItems[] = [
-  {
-    type: 'button',
-    key: '1',
-    label: 'Tool 1',
-    onClick: () => console.log('Tool 1')
-  },
-  {
-    type: 'button',
-    key: '2',
-    label: 'Tool 2',
-    onClick: () => console.log('Tool 2')
-  },
-  {
-    type: 'dropdown',
-    key: '4',
-    label: 'Tool 4',
-    overlay: [
-      { children: 'item 1' },
-      { children: 'item 2' }
-    ]
+export const StickyToolbar: Story = {
+  render: BasicTableStory.bind({}),
+  args: {
+    stickyHeader: undefined,
+    toolbar: {
+      sticky: 0,
+      left: itemsToolbar
+    }
   }
-]
+}
 
 export const StickyHeaderWithToolbar: Story = {
   render: BasicTableStory.bind({}),
   args: {
-    stickyHeader: 48,
+    stickyHeader: 40,
+    toolbar: {
+      sticky: 0,
+      left: itemsToolbar
+    }
+  }
+}
+
+export const WithScrollableContainer: Story = {
+  render: (args) => (
+    <StoryColumn>
+      <ScrollableContainer>
+        <Table
+          {...args}
+        />
+        <ul>
+          {Array.from({ length: 100 }, (_, index) => <li key={index}>just to make page longer</li>)}
+        </ul>
+      </ScrollableContainer>
+    </StoryColumn>
+  ),
+  args: {
+    pagination: { pageSize: 20 },
+    stickyHeader: 40,
     toolbar: {
       sticky: 0,
       left: itemsToolbar

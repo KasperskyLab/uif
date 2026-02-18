@@ -3,7 +3,7 @@ import { useTheme } from '@design-system/theme'
 import { ThemeKey } from '@design-system/types'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -24,7 +24,7 @@ const meta: Meta<ScrollbarProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta

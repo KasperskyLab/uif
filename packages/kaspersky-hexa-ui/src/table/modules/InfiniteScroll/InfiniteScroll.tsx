@@ -1,4 +1,3 @@
-import { SPACES } from '@design-system/theme'
 import { Loader } from '@src/loader'
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -6,7 +5,7 @@ import styled from 'styled-components'
 import { TableModule } from '..'
 import { useTableContext } from '../../context/TableContext'
 import { fromTableProps } from '../../tableCss'
-import { TableCssConfig, TablePaginationProps, TableRecord } from '../../types'
+import { TableCssConfig, TableRecord } from '../../types'
 
 import { EndOfTable } from './EndOfTable'
 import { Error } from './Error'
@@ -15,8 +14,16 @@ const StyledLoaderContainer = styled.div.withConfig<{ cssConfig: TableCssConfig 
   shouldForwardProp: prop => !['cssConfig'].includes(prop)
 })`
   background-color: ${fromTableProps('cell.enabled.background')};
-  padding: ${SPACES[12]}px 0;
+  padding: 24px 0;
   text-align: center;
+`
+
+const StyledInfiniteScrollWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  .ant-pagination-container {
+    order: 1;
+  }
 `
 
 export const InfiniteScroll: TableModule = Component => props => {
@@ -112,8 +119,15 @@ export const InfiniteScroll: TableModule = Component => props => {
   const isError = error && !loading
   const isFinished = finished && !loading && !error
 
-  return <div>
-    <Component {...props} dataSource={rows} pagination={false} />
+  return <StyledInfiniteScrollWrapper>
+    <Component
+      {...props}
+      dataSource={rows}
+      pagination={props.pagination && props.pagination?.showOnlyTotalSummary
+        ? { showOnlyTotalSummary: true, total: props.pagination.total }
+        : false
+      }
+    />
     <StyledLoaderContainer ref={ref} cssConfig={cssConfig}>
       {isLoading && <Loader />}
       {isError && <Error
@@ -123,5 +137,5 @@ export const InfiniteScroll: TableModule = Component => props => {
       />}
       {isFinished && <EndOfTable text={props.infiniteScrollEndTableText} />}
     </StyledLoaderContainer>
-  </div>
+  </StyledInfiniteScrollWrapper>
 }
