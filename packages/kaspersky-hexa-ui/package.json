@@ -43,7 +43,7 @@
     "lint-ts": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "storybook:ci": "storybook dev -p 6006 --ci",
-    "build-storybook": "storybook build",
+    "build-storybook": "storybook build -o storybook/hexa-ui",
     "test": "npm run lint && jest --transformIgnorePatterns --maxWorkers=1 --forceExit --logHeapUsage",
     "test:only": "jest --transformIgnorePatterns --maxWorkers=1 --forceExit --logHeapUsage",
     "test:watch": "jest --watch",
