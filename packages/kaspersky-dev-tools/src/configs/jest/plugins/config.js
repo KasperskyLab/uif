@@ -71,6 +71,7 @@ const testTypeEnum = {
 
 /**
  * Function to set collect coverage option to truthy or falsy conditions
+ * TODO: Gusarov: Make ability to pass coverage property using CLI to ignore settings
  * @returns { Boolean } should coverage be collected or not
  */
 

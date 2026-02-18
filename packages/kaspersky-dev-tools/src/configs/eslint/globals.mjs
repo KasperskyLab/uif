@@ -1,0 +1,22 @@
+export const eslintCommonGlobals = {
+    Router: 'readonly',
+    createDomain: 'readonly',
+    browser: 'readonly',
+    md5: 'readonly',
+    createDeepEqualSelector: 'readonly',
+    riot: 'readonly',
+    key: 'readonly',
+    $: 'readonly',
+    $$: 'readonly',
+    Reselect: 'readonly',
+    d3: 'readonly',
+    blockingController: 'readonly',
+    test: 'readonly',
+    xml2js: 'readonly',
+    shortid: 'readonly',
+    localStorage: 'readonly',
+    alert: 'readonly',
+    prompt: 'readonly',
+    Blob: 'readonly',
+    kl: 'readonly'
+  }

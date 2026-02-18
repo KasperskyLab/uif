@@ -1,8 +1,7 @@
 module.exports = {
   configs: {
     ...require('./configs/babel'),
-    ...require('./configs/jest'),
-    ...require('./configs/eslint')
+    ...require('./configs/jest')
   },
   babelCore: require('@babel/core'),
   utils: require('./utils')
