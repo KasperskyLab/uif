@@ -1,0 +1,38 @@
+<svg width="64" height="42" viewBox="0 0 64 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_37941_2264)">
+<rect width="64" height="42" rx="5" fill="white"/>
+<rect x="0.5" y="0.5" width="63" height="41" rx="4.5" stroke="#F5F5F5"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 14H64V0H0V14Z" fill="#38BB56"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 42H64V28H0V42Z" fill="#DE1B27"/>
+<rect x="3.41956" y="10.9915" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="9.4364" y="10.9915" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="15.4536" y="10.9915" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="21.4705" y="10.9915" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="27.4874" y="10.9915" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="33.5045" y="10.9915" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="39.5215" y="10.9915" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="45.5382" y="10.9915" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="51.5554" y="10.9915" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="57.5723" y="10.9915" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="3.41956" y="28" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="9.4364" y="28" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="15.4536" y="28" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="21.4705" y="28" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="27.4874" y="28" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="33.5045" y="28" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="39.5215" y="28" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="45.5382" y="28" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="51.5554" y="28" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<rect x="57.5723" y="28" width="3.00848" height="3.00848" rx="0.752121" fill="#DADADA"/>
+<mask id="path-25-inside-1_37941_2264" fill="white">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M29.1724 17.8943C28.3292 18.6625 27.8 19.7694 27.8 21C27.8 23.3196 29.6805 25.2 32.0001 25.2C34.3197 25.2 36.2001 23.3196 36.2001 21C36.2001 19.7927 35.6907 18.7043 34.8751 17.9382"/>
+</mask>
+<path d="M28.2296 16.8594C27.1075 17.8817 26.4 19.3592 26.4 21H29.2001C29.2001 20.1797 29.551 19.4433 30.1153 18.9293L28.2296 16.8594ZM26.4 21C26.4 24.0928 28.9073 26.6 32.0001 26.6V23.8C30.4537 23.8 29.2001 22.5464 29.2001 21H26.4ZM32.0001 26.6C35.0929 26.6 37.6001 24.0928 37.6001 21H34.8001C34.8001 22.5464 33.5465 23.8 32.0001 23.8V26.6ZM37.6001 21C37.6001 19.3903 36.9191 17.9375 35.8336 16.9178L33.9165 18.9586C34.4622 19.4712 34.8001 20.195 34.8001 21H37.6001Z" fill="#D80915" mask="url(#path-25-inside-1_37941_2264)"/>
+<rect x="30.6001" y="19.6" width="2.8" height="5.60001" rx="1.4" fill="#D80915"/>
+</g>
+<defs>
+<clipPath id="clip0_37941_2264">
+<rect width="64" height="42" rx="5" fill="white"/>
+</clipPath>
+</defs>
+</svg>

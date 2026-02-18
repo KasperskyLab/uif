@@ -1,0 +1,22 @@
+<svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_41813_2788)">
+<rect x="0.25" y="0.25" width="15.5" height="11.5" rx="1.75" fill="white" stroke="#F5F5F5" stroke-width="0.5"/>
+<mask id="mask0_41813_2788" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="12">
+<rect x="0.25" y="0.25" width="15.5" height="11.5" rx="1.75" fill="white" stroke="white" stroke-width="0.5"/>
+</mask>
+<g mask="url(#mask0_41813_2788)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 4H16V0H0V4Z" fill="#DF1E35"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 12H16V8H0V12Z" fill="#262626"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M10.6666 5.35147C10.6666 5.10078 10.9329 4.93981 11.1549 5.05633L11.2501 5.10633C11.3598 5.16392 11.4285 5.27758 11.4285 5.40147V6.86665C11.4285 7.05075 11.2793 7.19999 11.0952 7.19999H11C10.8159 7.19999 10.6666 7.05075 10.6666 6.86665V5.35147Z" fill="#0F7A40"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M6.09521 5.35147C6.09521 5.10078 6.36154 4.93981 6.58349 5.05633L6.67873 5.10633C6.78842 5.16392 6.85712 5.27758 6.85712 5.40147V6.86665C6.85712 7.05075 6.70788 7.19999 6.52379 7.19999H6.42855C6.24445 7.19999 6.09521 7.05075 6.09521 6.86665V5.35147Z" fill="#0F7A40"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M9.14282 5.40147C9.14282 5.27758 9.21153 5.16392 9.32121 5.10633L9.41645 5.05633C9.63841 4.93981 9.90473 5.10078 9.90473 5.35147V6.86665C9.90473 7.05075 9.75549 7.19999 9.57139 7.19999H9.47616C9.29206 7.19999 9.14282 7.05075 9.14282 6.86665V5.40147Z" fill="#0F7A40"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M7.61902 6.20149C7.61902 6.0776 7.68772 5.96394 7.79741 5.90636L7.89265 5.85635C8.1146 5.73983 8.38092 5.9008 8.38092 6.15149V6.43584H9.52378V7.20001H8.38092H7.95235C7.76826 7.20001 7.61902 7.05077 7.61902 6.86668V6.20149Z" fill="#0F7A40"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4.57141 6.20149C4.57141 6.0776 4.64011 5.96394 4.7498 5.90636L4.84504 5.85635C5.06699 5.73983 5.33332 5.9008 5.33332 6.15149V6.43584H6.47617V7.20001H5.33332H4.90474C4.72065 7.20001 4.57141 7.05077 4.57141 6.86668V6.20149Z" fill="#0F7A40"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_41813_2788">
+<rect width="16" height="12" fill="white"/>
+</clipPath>
+</defs>
+</svg>

@@ -1,0 +1,25 @@
+<svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_41813_2044)">
+<mask id="mask0_41813_2044" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="12">
+<rect width="16" height="12" rx="2" fill="white"/>
+</mask>
+<g mask="url(#mask0_41813_2044)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M16 0V6H0V0H16Z" fill="#29C53F"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M16 6V12.4H0V6H16Z" fill="#579DED"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 12L16 6L0 0V12Z" fill="#F42D56"/>
+<circle cx="5.01086" cy="5.92511" r="2.3251" stroke="#FFC63C" stroke-width="0.8"/>
+<circle cx="4.59043" cy="5.19999" r="0.4" fill="#FFC63C"/>
+<circle cx="5.34336" cy="5.60001" r="0.4" fill="#FFC63C"/>
+<circle cx="5.34336" cy="4.80002" r="0.4" fill="#FFC63C"/>
+<circle cx="4.59043" cy="6.00001" r="0.4" fill="#FFC63C"/>
+<circle cx="5.35239" cy="6.4" r="0.4" fill="#FFC63C"/>
+<circle cx="4.59043" cy="6.79999" r="0.4" fill="#FFC63C"/>
+<circle cx="5.35239" cy="7.19999" r="0.4" fill="#FFC63C"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_41813_2044">
+<rect width="16" height="12" fill="white"/>
+</clipPath>
+</defs>
+</svg>

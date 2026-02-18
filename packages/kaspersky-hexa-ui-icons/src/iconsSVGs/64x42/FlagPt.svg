@@ -1,0 +1,15 @@
+<svg width="64" height="42" viewBox="0 0 64 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_37941_2332)">
+<rect width="64" height="42" rx="5" fill="white"/>
+<rect width="64" height="42" fill="#FF2936"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 42H22.4V0H0V42Z" fill="#128415"/>
+<circle cx="22.4003" cy="21.0001" r="7" stroke="#FAF94F" stroke-width="2.8"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M19.6001 17.5C19.6001 17.1134 19.9135 16.8 20.3001 16.8H24.5001C24.8867 16.8 25.2001 17.1134 25.2001 17.5V22.4C25.2001 23.9464 23.9465 25.2 22.4001 25.2C20.8537 25.2 19.6001 23.9464 19.6001 22.4V17.5Z" fill="white"/>
+<ellipse cx="22.4002" cy="20.2999" rx="1.4" ry="2.1" fill="#1D50B5"/>
+</g>
+<defs>
+<clipPath id="clip0_37941_2332">
+<rect width="64" height="42" rx="5" fill="white"/>
+</clipPath>
+</defs>
+</svg>

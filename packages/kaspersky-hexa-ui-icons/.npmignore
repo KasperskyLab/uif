@@ -2,6 +2,7 @@
 .idea/
 node_modules/
 src/
+todo.txt
 yarn-error.log
 .lintstagedrc
 .eslintignore

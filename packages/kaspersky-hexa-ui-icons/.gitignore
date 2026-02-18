@@ -10,22 +10,30 @@ node_modules
 # Build output
 esm/
 8/
+10/
 12/
 16/
+16x12/
 24/
+28x20/
 32/
 40/
 48/
+64x42/
 index.d.ts
 index.js
 
 src/8/
+src/10/
 src/12/
 src/16/
+src/16x12/
 src/24/
+src/28x20/
 src/32/
 src/40/
 src/48/
+src/64x42/
 
 !src/iconsSVGs/*
 

@@ -32,12 +32,16 @@
   ],
   "include": [
     "src/8/*",
+    "src/10/*",
     "src/12/*",
     "src/16/*",
+    "src/16x12/*",
     "src/24/*",
+    "src/28x20/*",
     "src/32/*",
     "src/40/*",
     "src/48/*",
+    "src/64x42/*",
     "src/helpers/resolveColorToken.js"
   ]
 }
