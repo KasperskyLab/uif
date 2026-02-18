@@ -8,7 +8,7 @@ export const cssVarString = `
   --chip--bg--enabled: var(--color--neutral_250);
   --chip--bg--hover: var(--color--neutral_300);
   --chip--bg--active: var(--color--neutral_350);
-  --chip--bg--disabled: var(--color--neutral_200);
+  --chip--bg--disabled: var(--color--neutral_a_100);
   --chip--text--enabled: var(--color--neutral_850);
   --chip--text--hover: var(--color--neutral_850);
   --chip--text--active: var(--color--neutral_850);
@@ -25,11 +25,11 @@ export const cssVarString = `
   --chip--bg--enabled: var(--color--neutral_650);
   --chip--bg--hover: var(--color--neutral_600);
   --chip--bg--active: var(--color--neutral_550);
-  --chip--bg--disabled: var(--color--neutral_700);
+  --chip--bg--disabled: var(--color--neutral_aw_800);
   --chip--text--enabled: var(--color--neutral_250);
   --chip--text--hover: var(--color--neutral_250);
   --chip--text--active: var(--color--neutral_250);
-  --chip--text--disabled: var(--color--neutral_450);
+  --chip--text--disabled: var(--color--neutral_500);
   --chip--icon--enabled: var(--color--neutral_250);
   --chip--icon--hover: var(--color--neutral_250);
   --chip--icon--active: var(--color--neutral_250);

@@ -14,7 +14,7 @@ export const cssVarString = `
   --indicator--icon--in_incident: var(--color--purple_500);
   --indicator--icon--critical: var(--color--red_500);
   --indicator--icon--high: var(--color--red_400);
-  --indicator--icon--medium: var(--color--yellow_500);
+  --indicator--icon--medium: var(--color--yellow_400);
   --indicator--icon--low: var(--color--neutral_450);
   --indicator--icon--not_active: var(--color--neutral_350);
   --indicator--icon--info: var(--color--purple_500);

@@ -5,6 +5,7 @@ export const cssVarString = `
 :root,
 .theme-light,
 .hexa-ui-light-theme {
+  --elevation--overlap: var(--color--neutral_a_250);
   --elevation--small--1: var(--color--neutral_a_300);
   --elevation--small--2: var(--color--neutral_a_450);
   --elevation--medium--1: var(--color--neutral_600);
@@ -16,6 +17,7 @@ export const cssVarString = `
 
 .theme-dark,
 .hexa-ui-dark-theme {
+  --elevation--overlap: var(--color--neutral_a_700);
   --elevation--small--1: var(--color--neutral_a_700);
   --elevation--small--2: var(--color--neutral_aw_500);
   --elevation--medium--1: var(--color--neutral_aw_450);

@@ -5,10 +5,28 @@ export const cssVarString = `
 :root,
 .theme-light,
 .hexa-ui-light-theme {
+  --button--ai--bg--violet--enabled: var(--color--violet_500);
+  --button--ai--bg--violet--hover: var(--color--violet_600);
+  --button--ai--bg--violet--active: var(--color--violet_700);
+  --button--ai--bg--marina--enabled: var(--color--marina_500);
+  --button--ai--bg--marina--hover: var(--color--marina_600);
+  --button--ai--bg--marina--active: var(--color--marina_700);
+  --button--ai--bg--green--enable: var(--color--kaspersky_green_300);
+  --button--ai--bg--green--enable_gr: var(--color--kaspersky_green_300_0);
+  --button--ai--bg--green--hover: var(--color--kaspersky_green_300);
+  --button--ai--bg--green--hover_gr: var(--color--kaspersky_green_300_0);
+  --button--ai--bg--green--active: var(--color--kaspersky_green_600);
+  --button--ai--bg--green--active_gr: var(--color--kaspersky_green_600_0);
+  --button--ai--text--enabled: var(--color--neutral_0);
+  --button--ai--text--hover: var(--color--neutral_0);
+  --button--ai--text--active: var(--color--neutral_0);
+  --button--ai--icon--enabled: var(--color--neutral_0);
+  --button--ai--icon--hover: var(--color--neutral_0);
+  --button--ai--icon--active: var(--color--neutral_0);
   --button--primary--bg--enabled: var(--color--marina_500);
   --button--primary--bg--hover: var(--color--marina_600);
   --button--primary--bg--active: var(--color--marina_700);
-  --button--primary--bg--disabled: var(--color--neutral_200);
+  --button--primary--bg--disabled: var(--color--neutral_a_100);
   --button--primary--text--enabled: var(--color--neutral_0);
   --button--primary--text--hover: var(--color--neutral_0);
   --button--primary--text--active: var(--color--neutral_0);
@@ -21,7 +39,7 @@ export const cssVarString = `
   --button--secondary--bg--enabled: var(--color--neutral_0);
   --button--secondary--bg--hover: var(--color--neutral_100);
   --button--secondary--bg--active: var(--color--neutral_150);
-  --button--secondary--bg--disabled: var(--color--neutral_200);
+  --button--secondary--bg--disabled: var(--color--neutral_a_100);
   --button--secondary--text--enabled: var(--color--neutral_850);
   --button--secondary--text--hover: var(--color--neutral_850);
   --button--secondary--text--active: var(--color--neutral_850);
@@ -34,12 +52,12 @@ export const cssVarString = `
   --button--secondary--border--enabled: var(--color--neutral_350);
   --button--secondary--border--hover: var(--color--neutral_350);
   --button--secondary--border--active: var(--color--neutral_350);
-  --button--secondary--border--disabled: var(--color--neutral_400);
-  --button--secondary--border--loading: var(--color--neutral_450);
+  --button--secondary--border--disabled: var(--color--neutral_a_100);
+  --button--secondary--border--loading: var(--color--neutral_a_100);
   --button--tertiary--bg--enabled: var(--color--neutral_a_0);
   --button--tertiary--bg--hover: var(--color--neutral_100);
   --button--tertiary--bg--active: var(--color--neutral_150);
-  --button--tertiary--bg--disabled: var(--color--neutral_200);
+  --button--tertiary--bg--disabled: var(--color--neutral_a_100);
   --button--tertiary--text--enabled: var(--color--neutral_850);
   --button--tertiary--text--hover: var(--color--neutral_850);
   --button--tertiary--text--active: var(--color--neutral_850);
@@ -52,7 +70,7 @@ export const cssVarString = `
   --button--destructive_secondary--bg--enabled: var(--color--neutral_0);
   --button--destructive_secondary--bg--hover: var(--color--red_50);
   --button--destructive_secondary--bg--active: var(--color--red_100);
-  --button--destructive_secondary--bg--disabled: var(--color--neutral_200);
+  --button--destructive_secondary--bg--disabled: var(--color--neutral_a_100);
   --button--destructive_secondary--text--enabled: var(--color--red_500);
   --button--destructive_secondary--text--hover: var(--color--red_600);
   --button--destructive_secondary--text--active: var(--color--red_700);
@@ -65,12 +83,12 @@ export const cssVarString = `
   --button--destructive_secondary--border--enabled: var(--color--red_500);
   --button--destructive_secondary--border--hover: var(--color--red_600);
   --button--destructive_secondary--border--active: var(--color--red_700);
-  --button--destructive_secondary--border--disabled: var(--color--neutral_400);
-  --button--destructive_secondary--border--loading: var(--color--neutral_450);
+  --button--destructive_secondary--border--disabled: var(--color--neutral_a_100);
+  --button--destructive_secondary--border--loading: var(--color--neutral_a_100);
   --button--destructive--bg--enabled: var(--color--red_500);
   --button--destructive--bg--hover: var(--color--red_600);
   --button--destructive--bg--active: var(--color--red_700);
-  --button--destructive--bg--disabled: var(--color--neutral_200);
+  --button--destructive--bg--disabled: var(--color--neutral_a_100);
   --button--destructive--text--enabled: var(--color--neutral_0);
   --button--destructive--text--hover: var(--color--neutral_0);
   --button--destructive--text--active: var(--color--neutral_0);
@@ -79,15 +97,34 @@ export const cssVarString = `
   --button--destructive--icon--hover: var(--color--neutral_0);
   --button--destructive--icon--active: var(--color--neutral_0);
   --button--destructive--icon--disabled: var(--color--neutral_400);
+  --button--destructive--icon--loading: var(--color--neutral_450);
 }
 
 
 .theme-dark,
 .hexa-ui-dark-theme {
+  --button--ai--bg--violet--enabled: var(--color--violet_400);
+  --button--ai--bg--violet--hover: var(--color--violet_300);
+  --button--ai--bg--violet--active: var(--color--violet_200);
+  --button--ai--bg--marina--enabled: var(--color--marina_400);
+  --button--ai--bg--marina--hover: var(--color--marina_300);
+  --button--ai--bg--marina--active: var(--color--marina_200);
+  --button--ai--bg--green--enable: var(--color--kaspersky_green_200);
+  --button--ai--bg--green--enable_gr: var(--color--kaspersky_green_200_0);
+  --button--ai--bg--green--hover: var(--color--kaspersky_green_200);
+  --button--ai--bg--green--hover_gr: var(--color--kaspersky_green_200_0);
+  --button--ai--bg--green--active: var(--color--kaspersky_green_100);
+  --button--ai--bg--green--active_gr: var(--color--kaspersky_green_100_0);
+  --button--ai--text--enabled: var(--color--neutral_850);
+  --button--ai--text--hover: var(--color--neutral_850);
+  --button--ai--text--active: var(--color--neutral_850);
+  --button--ai--icon--enabled: var(--color--neutral_850);
+  --button--ai--icon--hover: var(--color--neutral_850);
+  --button--ai--icon--active: var(--color--neutral_850);
   --button--primary--bg--enabled: var(--color--marina_400);
   --button--primary--bg--hover: var(--color--marina_300);
   --button--primary--bg--active: var(--color--marina_200);
-  --button--primary--bg--disabled: var(--color--neutral_700);
+  --button--primary--bg--disabled: var(--color--neutral_aw_800);
   --button--primary--text--enabled: var(--color--neutral_850);
   --button--primary--text--hover: var(--color--neutral_850);
   --button--primary--text--active: var(--color--neutral_850);
@@ -100,7 +137,7 @@ export const cssVarString = `
   --button--secondary--bg--enabled: var(--color--neutral_850);
   --button--secondary--bg--hover: var(--color--neutral_800);
   --button--secondary--bg--active: var(--color--neutral_750);
-  --button--secondary--bg--disabled: var(--color--neutral_700);
+  --button--secondary--bg--disabled: var(--color--neutral_aw_800);
   --button--secondary--text--enabled: var(--color--neutral_250);
   --button--secondary--text--hover: var(--color--neutral_250);
   --button--secondary--text--active: var(--color--neutral_250);
@@ -113,12 +150,12 @@ export const cssVarString = `
   --button--secondary--border--enabled: var(--color--neutral_550);
   --button--secondary--border--hover: var(--color--neutral_550);
   --button--secondary--border--active: var(--color--neutral_550);
-  --button--secondary--border--disabled: var(--color--neutral_500);
-  --button--secondary--border--loading: var(--color--neutral_450);
+  --button--secondary--border--disabled: var(--color--neutral_aw_800);
+  --button--secondary--border--loading: var(--color--neutral_aw_800);
   --button--tertiary--bg--enabled: var(--color--neutral_aw_0);
   --button--tertiary--bg--hover: var(--color--neutral_800);
   --button--tertiary--bg--active: var(--color--neutral_750);
-  --button--tertiary--bg--disabled: var(--color--neutral_700);
+  --button--tertiary--bg--disabled: var(--color--neutral_aw_800);
   --button--tertiary--text--enabled: var(--color--neutral_250);
   --button--tertiary--text--hover: var(--color--neutral_250);
   --button--tertiary--text--active: var(--color--neutral_250);
@@ -129,9 +166,9 @@ export const cssVarString = `
   --button--tertiary--icon--disabled: var(--color--neutral_500);
   --button--tertiary--icon--loading: var(--color--neutral_450);
   --button--destructive_secondary--bg--enabled: var(--color--neutral_850);
-  --button--destructive_secondary--bg--hover: var(--color--red_700);
-  --button--destructive_secondary--bg--active: var(--color--red_700);
-  --button--destructive_secondary--bg--disabled: var(--color--neutral_700);
+  --button--destructive_secondary--bg--hover: var(--color--red_900);
+  --button--destructive_secondary--bg--active: var(--color--red_800);
+  --button--destructive_secondary--bg--disabled: var(--color--neutral_aw_800);
   --button--destructive_secondary--text--enabled: var(--color--red_400);
   --button--destructive_secondary--text--hover: var(--color--red_300);
   --button--destructive_secondary--text--active: var(--color--red_200);
@@ -144,12 +181,12 @@ export const cssVarString = `
   --button--destructive_secondary--border--enabled: var(--color--red_400);
   --button--destructive_secondary--border--hover: var(--color--red_300);
   --button--destructive_secondary--border--active: var(--color--red_200);
-  --button--destructive_secondary--border--disabled: var(--color--neutral_500);
-  --button--destructive_secondary--border--loading: var(--color--neutral_500);
+  --button--destructive_secondary--border--disabled: var(--color--neutral_aw_800);
+  --button--destructive_secondary--border--loading: var(--color--neutral_aw_800);
   --button--destructive--bg--enabled: var(--color--red_400);
   --button--destructive--bg--hover: var(--color--red_300);
   --button--destructive--bg--active: var(--color--red_200);
-  --button--destructive--bg--disabled: var(--color--neutral_700);
+  --button--destructive--bg--disabled: var(--color--neutral_aw_800);
   --button--destructive--text--enabled: var(--color--neutral_850);
   --button--destructive--text--hover: var(--color--neutral_850);
   --button--destructive--text--active: var(--color--neutral_850);
@@ -158,5 +195,6 @@ export const cssVarString = `
   --button--destructive--icon--hover: var(--color--neutral_850);
   --button--destructive--icon--active: var(--color--neutral_850);
   --button--destructive--icon--disabled: var(--color--neutral_500);
+  --button--destructive--icon--loading: var(--color--neutral_450);
 }
 `

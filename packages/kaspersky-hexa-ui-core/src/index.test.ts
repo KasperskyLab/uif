@@ -4,7 +4,15 @@ import { COMPONENTS } from './colors/constants'
 import { excludeModules, getExportedModules } from './helpers/exportHelpers'
 
 const CURRENT_PATH = resolve(__dirname)
-const NON_COMPONENT_EXPORTS = ['fonts', 'typography/js', 'typography/css', 'colors/js', 'colors/css', 'colors/css/static']
+const NON_COMPONENT_EXPORTS = [
+  'fonts',
+  'typography/js',
+  'typography/css',
+  'colors/js',
+  'colors/css',
+  'colors/css/static',
+  'colors/tokens/components/static'
+]
 
 describe('Components index.ts', () => {
   test('each component should be exported in index.ts', async () => {

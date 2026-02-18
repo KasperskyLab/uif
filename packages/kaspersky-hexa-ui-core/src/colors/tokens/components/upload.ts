@@ -7,7 +7,7 @@ export const cssVarString = `
 .hexa-ui-light-theme {
   --upload--bg--enabled: var(--color--neutral_0);
   --upload--bg--active: var(--color--marina_50);
-  --upload--bg--disabled: var(--color--neutral_200);
+  --upload--bg--disabled: var(--color--neutral_a_100);
   --upload--text--requirements_enabled: var(--color--neutral_450);
   --upload--text--requirements_disabled: var(--color--neutral_400);
   --upload--text--total_disabled: var(--color--neutral_400);
@@ -37,7 +37,7 @@ export const cssVarString = `
   --upload_file--bg--active: var(--color--neutral_0);
   --upload_file--bg--loading: var(--color--neutral_0);
   --upload_file--bg--invalid: var(--color--neutral_0);
-  --upload_file--bg--disabled: var(--color--neutral_200);
+  --upload_file--bg--disabled: var(--color--neutral_a_100);
   --upload_file--text--name_enabled: var(--color--neutral_850);
   --upload_file--text--name_hover: var(--color--neutral_850);
   --upload_file--text--name_active: var(--color--neutral_850);
@@ -64,7 +64,7 @@ export const cssVarString = `
 .hexa-ui-dark-theme {
   --upload--bg--enabled: var(--color--neutral_850);
   --upload--bg--active: var(--color--marina_900);
-  --upload--bg--disabled: var(--color--neutral_700);
+  --upload--bg--disabled: var(--color--neutral_aw_800);
   --upload--text--requirements_enabled: var(--color--neutral_450);
   --upload--text--requirements_disabled: var(--color--neutral_500);
   --upload--text--total_disabled: var(--color--neutral_500);
@@ -92,7 +92,7 @@ export const cssVarString = `
   --upload_file--bg--active: var(--color--neutral_850);
   --upload_file--bg--loading: var(--color--neutral_850);
   --upload_file--bg--invalid: var(--color--neutral_850);
-  --upload_file--bg--disabled: var(--color--neutral_700);
+  --upload_file--bg--disabled: var(--color--neutral_aw_800);
   --upload_file--text--name_enabled: var(--color--neutral_250);
   --upload_file--text--name_hover: var(--color--neutral_250);
   --upload_file--text--name_active: var(--color--neutral_250);

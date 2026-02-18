@@ -21,7 +21,7 @@ export const cssVarString = `
   --submenu_item--bg--enabled_selected: var(--color--marina_100);
   --submenu_item--bg--hover_selected: var(--color--marina_200);
   --submenu_item--bg--active_selected: var(--color--marina_300);
-  --submenu_item--bg--disabled_selected: var(--color--neutral_200);
+  --submenu_item--bg--disabled_selected: var(--color--neutral_a_100);
   --submenu_item--text--enabled: var(--color--neutral_850);
   --submenu_item--text--hover: var(--color--neutral_850);
   --submenu_item--text--active: var(--color--neutral_850);
@@ -30,6 +30,8 @@ export const cssVarString = `
   --submenu_item--text--hover_selected: var(--color--marina_600);
   --submenu_item--text--active_selected: var(--color--marina_600);
   --submenu_item--text--disabled_selected: var(--color--neutral_400);
+  --submenu_item--text--description--enabled: var(--color--neutral_a_450);
+  --submenu_item--text--description--disabled: var(--color--neutral_400);
   --submenu_item--icon--enabled: var(--color--neutral_850);
   --submenu_item--icon--hover: var(--color--neutral_850);
   --submenu_item--icon--active: var(--color--neutral_850);
@@ -59,7 +61,7 @@ export const cssVarString = `
   --submenu_item--bg--enabled_selected: var(--color--marina_900);
   --submenu_item--bg--hover_selected: var(--color--marina_800);
   --submenu_item--bg--active_selected: var(--color--marina_700);
-  --submenu_item--bg--disabled_selected: var(--color--neutral_700);
+  --submenu_item--bg--disabled_selected: var(--color--neutral_aw_800);
   --submenu_item--text--enabled: var(--color--neutral_250);
   --submenu_item--text--hover: var(--color--neutral_250);
   --submenu_item--text--active: var(--color--neutral_250);
@@ -68,6 +70,8 @@ export const cssVarString = `
   --submenu_item--text--hover_selected: var(--color--marina_300);
   --submenu_item--text--active_selected: var(--color--marina_300);
   --submenu_item--text--disabled_selected: var(--color--neutral_500);
+  --submenu_item--text--description--enabled: var(--color--neutral_aw_450);
+  --submenu_item--text--description--disabled: var(--color--neutral_500);
   --submenu_item--icon--enabled: var(--color--neutral_250);
   --submenu_item--icon--hover: var(--color--neutral_250);
   --submenu_item--icon--active: var(--color--neutral_250);

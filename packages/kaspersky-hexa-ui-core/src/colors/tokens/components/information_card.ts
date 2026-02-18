@@ -28,7 +28,7 @@ export const cssVarString = `
   --information_card--selected--bg--enabled: var(--color--marina_50);
   --information_card--selected--bg--hover: var(--color--marina_50);
   --information_card--selected--bg--active: var(--color--marina_50);
-  --information_card--selected--bg--disabled: var(--color--neutral_100);
+  --information_card--selected--bg--disabled: var(--color--neutral_a_100);
   --information_card--selected--border--enabled: var(--color--marina_300);
   --information_card--selected--border--hover: var(--color--marina_400);
   --information_card--selected--border--active: var(--color--marina_500);
@@ -72,7 +72,7 @@ export const cssVarString = `
   --information_card--selected--bg--enabled: var(--color--marina_900);
   --information_card--selected--bg--hover: var(--color--marina_900);
   --information_card--selected--bg--active: var(--color--marina_900);
-  --information_card--selected--bg--disabled: var(--color--neutral_800);
+  --information_card--selected--bg--disabled: var(--color--neutral_aw_800);
   --information_card--selected--border--enabled: var(--color--marina_600);
   --information_card--selected--border--hover: var(--color--marina_500);
   --information_card--selected--border--active: var(--color--marina_400);
