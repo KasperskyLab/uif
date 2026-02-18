@@ -9,7 +9,7 @@
 <stop offset="0.5" stop-color="#FF543E"/>
 <stop offset="1" stop-color="#C837AB"/>
 </radialGradient>
-<radialGradient id="paint1_radial_21793_2502" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(-1.3451 2.00855) rotate(78.6806) scale(6.20227 25.566)">
+<radialGradient id="paint1_radial_21793_2502" cx="0" cy="0" r="1" gradientTransform="matrix(1.21737 6.08163 -25.0682 5.02074 -1.3451 2.00855)" gradientUnits="userSpaceOnUse">
 <stop stop-color="#3771C8"/>
 <stop offset="0.128" stop-color="#3771C8"/>
 <stop offset="1" stop-color="#6600FF" stop-opacity="0"/>

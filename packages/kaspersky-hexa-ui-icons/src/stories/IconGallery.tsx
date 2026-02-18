@@ -5,9 +5,10 @@ import IconLazy from './components/IconLazy'
 import './iconGallery.css'
 import './components/iconInfoModal.css'
 import { CopyBlock } from 'react-code-blocks'
+import { ICON_SIZES } from '../shared/сonstants'
 
 export const IconGallery = (args) => {
-  const folderSizes = ['8', '12', '16', '24', '32', '40', '48']
+  const folderSizes = ICON_SIZES
 
   const SeparatedIcons = Icons.map(el => {
     const separatedIcon = el.split('/')
@@ -58,7 +59,7 @@ export const IconGallery = (args) => {
   return (<>
     <h1>Галерея</h1>
     <div className="icon-gallery">
-      <p>Выберети размер иконки</p>
+      <p>Выберите размер иконки</p>
         {folderSizes.map((size, i) => (
           <label key={`icon${size}`}>
             <input type="checkbox" name={i.toString()} onChange={sizeChangeHandler} checked={sizes[i]} />

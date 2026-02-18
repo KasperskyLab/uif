@@ -9,7 +9,20 @@ const SVG_PREPARED_NAMES_FOLDER = 'iconsSVGs'
 const directoryPath = path.join(__dirname, '../' + SVG_ORIGINALS_FOLDER)
 const outputPath = path.join(__dirname, '../' + SVG_PREPARED_NAMES_FOLDER)
 
-const folderSizes = ['8', '12', '16', '24', '32', '40', '48']
+// TODO: use shared ICON_SIZES array
+const folderSizes = [
+  '8',
+  '10',
+  '12',
+  '16',
+  '16x12',
+  '24',
+  '28x20',
+  '32',
+  '40',
+  '48',
+  '64x42'
+]
 
 const removeIncorrectFolders = () => {
   const folders = fs.readdirSync(directoryPath)
@@ -126,7 +139,7 @@ const fixSize = (pathToFile) => {
     folderSize
 
   if (widthIsNumber && (!width || !height || width === height)) return
-  console.log(`File ${pathToFile} prapered, widht: ${width} -> ${rightSize}, heigth: ${height} -> ${rightSize}`)
+  console.log(`File ${pathToFile} prepared, width: ${width} -> ${rightSize}, height: ${height} -> ${rightSize}`)
 
   let newContent = content
   newContent = newContent.replace(widthReg, `width="${rightSize}"`)
@@ -139,10 +152,12 @@ const fixSize = (pathToFile) => {
   }
 }
 
+const flagsFolders = ['16x12', '28x20', '64x42']
+
 const fixIconSizes = () => {
   const folders = fs.readdirSync(outputPath)
   const iconPaths = folders.reduce((acc, curFolder) => {
-    if (folderSizes.includes(curFolder)) {
+    if (folderSizes.includes(curFolder) && !flagsFolders.includes(curFolder)) {
       const folderPath = path.join(outputPath, curFolder)
       acc.push(...getAllFilePaths(folderPath))
     }

@@ -1,0 +1,26 @@
+<svg width="28" height="20" viewBox="0 0 28 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_5138_732)">
+<rect width="28" height="20" rx="2" fill="white"/>
+<mask id="mask0_5138_732" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="28" height="20">
+<rect width="28" height="20" rx="2" fill="white"/>
+</mask>
+<g mask="url(#mask0_5138_732)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M28 0V10H0V0H28Z" fill="#29C53F"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M28 10V20.6667H0V10H28Z" fill="#579DED"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 20L28 10L0 0V20Z" fill="#F42D56"/>
+<path d="M12 10.0003C12 8.1595 10.5078 6.66653 8.66699 6.66635C6.82604 6.66635 5.33301 8.15939 5.33301 10.0003C5.33318 11.8411 6.82615 13.3333 8.66699 13.3333V14.6664L8.42676 14.6605C6.0406 14.5397 4.12701 12.6266 4.00586 10.2406L4 10.0003C4 7.42301 6.08966 5.33334 8.66699 5.33334L8.90723 5.3392C11.3728 5.46439 13.333 7.50368 13.333 10.0003L13.3271 10.2406C13.202 12.706 11.1635 14.6662 8.66699 14.6664V13.3333C10.5077 13.3332 11.9998 11.841 12 10.0003Z" fill="#FFC63C"/>
+<circle cx="8.00001" cy="8.66667" r="0.666667" fill="#FFC63C"/>
+<circle cx="9.33332" cy="9.33332" r="0.666667" fill="#FFC63C"/>
+<circle cx="8.66667" cy="8.00001" r="0.666667" fill="#FFC63C"/>
+<circle cx="8.00001" cy="10" r="0.666667" fill="#FFC63C"/>
+<circle cx="9.33332" cy="10.6667" r="0.666667" fill="#FFC63C"/>
+<circle cx="8.00001" cy="11.3333" r="0.666667" fill="#FFC63C"/>
+<circle cx="9.33332" cy="12" r="0.666667" fill="#FFC63C"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_5138_732">
+<rect width="28" height="20" fill="white"/>
+</clipPath>
+</defs>
+</svg>

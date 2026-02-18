@@ -1,0 +1,22 @@
+<svg width="64" height="42" viewBox="0 0 64 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_37941_2228)">
+<rect width="64" height="42" rx="5" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 16.8H64V0H0V16.8Z" fill="#108753"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 42H64V25.2H0V42Z" fill="#108753"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M36.2 42H27.8V25.2H2.59998V16.8H27.8V-1.52588e-05H36.2V16.8H61.4V25.2H36.2V42Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M33.4001 42H30.6001V22.4H0V19.6H30.6001V-1.52588e-05H33.4001V19.6H64V22.4H33.4001V42Z" fill="#262626"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M30.6 42H27.8V19.6H0V16.8H27.8V-1.52588e-05H30.6V16.8H64V19.6H30.6V42Z" fill="#FCD449"/>
+<circle cx="32.0001" cy="21" r="9.8" fill="url(#paint0_linear_37941_2228)"/>
+<circle cx="31.9999" cy="21" r="7" stroke="#0E673F" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="1.4 5.6"/>
+<ellipse cx="31.9999" cy="21" rx="1.40371" ry="2.8" fill="#0E673F"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_37941_2228" x1="22.2001" y1="11.2" x2="22.2001" y2="30.8" gradientUnits="userSpaceOnUse">
+<stop stop-color="#E02C42"/>
+<stop offset="1" stop-color="#D22036"/>
+</linearGradient>
+<clipPath id="clip0_37941_2228">
+<rect width="64" height="42" rx="5" fill="white"/>
+</clipPath>
+</defs>
+</svg>

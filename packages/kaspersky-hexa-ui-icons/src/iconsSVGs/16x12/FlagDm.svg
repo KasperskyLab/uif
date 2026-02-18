@@ -1,0 +1,26 @@
+<svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_41813_1971)">
+<mask id="mask0_41813_1971" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="12">
+<rect width="16" height="12" rx="2" fill="white"/>
+</mask>
+<g mask="url(#mask0_41813_1971)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 4.8H16V0H0V4.8Z" fill="#108753"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 12H16V7.20001H0V12Z" fill="#108753"/>
+<path d="M9.14258 0V4.7998H16V7.2002H9.14258V12H6.85742V7.2002H0V4.7998H6.85742V0H9.14258Z" fill="white"/>
+<path d="M8.38086 0V5.59961H16V6.40039H8.38086V12H7.61914V6.40039H0V5.59961H7.61914V0H8.38086Z" fill="#262626"/>
+<path d="M7.61914 0V4.7998H16V5.59961H7.61914V12H6.85742V5.59961H0V4.7998H6.85742V0H7.61914Z" fill="#FCD449"/>
+<ellipse cx="8.00004" cy="6.00001" rx="2.66667" ry="2.8" fill="url(#paint0_linear_41813_1971)"/>
+<ellipse cx="7.99998" cy="6" rx="1.90476" ry="2" stroke="#0E673F" stroke-width="0.8" stroke-linecap="round" stroke-dasharray="0.5 1.5"/>
+<ellipse cx="8" cy="6.00001" rx="0.381962" ry="0.8" fill="#0E673F"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_41813_1971" x1="5.33337" y1="3.20001" x2="5.33337" y2="8.80001" gradientUnits="userSpaceOnUse">
+<stop stop-color="#E02C42"/>
+<stop offset="1" stop-color="#D22036"/>
+</linearGradient>
+<clipPath id="clip0_41813_1971">
+<rect width="16" height="12" fill="white"/>
+</clipPath>
+</defs>
+</svg>

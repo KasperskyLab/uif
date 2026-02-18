@@ -1,0 +1,33 @@
+<svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_41818_3675)">
+<rect width="16" height="12" rx="2" fill="white"/>
+<mask id="mask0_41818_3675" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="12">
+<rect width="16" height="12" rx="2" fill="white"/>
+</mask>
+<g mask="url(#mask0_41818_3675)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 2.4H16V0H0V2.4Z" fill="#486BCA"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 12H16V9.6H0V12Z" fill="#486BCA"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 9.6H16V2.4H0V9.6Z" fill="#FFDF20"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 8.8H16V3.2H0V8.8Z" fill="#CF1615"/>
+</g>
+<g clip-path="url(#clip1_41818_3675)">
+<ellipse cx="7.99998" cy="6" rx="3.42857" ry="2" fill="white"/>
+<mask id="mask1_41818_3675" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="4" y="4" width="8" height="4">
+<ellipse cx="7.99998" cy="6" rx="3.42857" ry="2" fill="white"/>
+</mask>
+<g mask="url(#mask1_41818_3675)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M8.38092 4H4.5714V8H7.61902L8.38092 4Z" fill="#262626"/>
+<ellipse cx="8.76187" cy="6" rx="0.380952" ry="0.4" fill="#1A1A1A"/>
+<ellipse cx="7.23807" cy="6" rx="0.380952" ry="0.4" fill="#F6F6F6"/>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_41818_3675">
+<rect width="16" height="12" fill="white"/>
+</clipPath>
+<clipPath id="clip1_41818_3675">
+<rect width="6.85714" height="4.2" fill="white" transform="translate(4.57141 4)"/>
+</clipPath>
+</defs>
+</svg>
