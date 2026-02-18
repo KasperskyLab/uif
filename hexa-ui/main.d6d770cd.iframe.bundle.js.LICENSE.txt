@@ -1,3 +1,0 @@
-//! This file create automatically.
-
-//! Use updateColors scripts if you need update colors.
