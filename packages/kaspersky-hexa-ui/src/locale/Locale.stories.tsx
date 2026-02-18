@@ -1,7 +1,7 @@
 import { ConfigProvider } from '@design-system/context'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import { Text } from '../typography'

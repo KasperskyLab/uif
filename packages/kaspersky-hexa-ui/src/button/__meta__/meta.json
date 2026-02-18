@@ -7,11 +7,11 @@
     "migration": true,
     "apiTable": true,
     "storybook": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Button",
   "description": "В качестве основы используется AntdButton из библиотеки Antd.",
   "usage": "Button — это интерактивный компонент, который используется для инициирования действий или выполнения команд в пользовательском интерфейсе, такие как отправка форм, запуск процессов или навигация по страницам.",
-  "designLink": "https://www.figma.com/design/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-Hexa-UI-Components-v6.165.5?node-id=36803-133405&t=98ThNtVSvMryaRvy-4",
-  "figmaView": "https://embed.figma.com/design/5Fw9D3WK4arGhQglc5vNmk/Button?node-id=0-1&embed-host=share"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=1063%3A4154",
+  "pixsoView": "https://pixso.net/app/design/zItyc5R0E83xmR1qyc1SeQ"
 }

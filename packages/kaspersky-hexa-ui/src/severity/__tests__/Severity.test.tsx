@@ -1,10 +1,10 @@
 import { ConfigProvider } from '@design-system/context'
+import { localization } from '@helpers/localization'
 import { render } from '@testing-library/react'
 import { renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { localization } from '../../../helpers/localization'
 import { severityTextLocalization } from '../localization'
 import { Severity } from '../Severity'
 import { SeverityProps } from '../types'

@@ -2,7 +2,6 @@ import { Focus } from '@design-system/tokens/focus'
 import { Theme } from '@design-system/types/Theme'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 import { IndicatorMode } from '@src/indicator'
-import { SpaceProps } from '@src/space'
 import { TabPaneProps } from 'antd'
 import {
   CSSProperties,
@@ -60,19 +59,25 @@ export type TabsProps = TabsThemeProps & PropsWithChildren<{
   activeKey?: string,
   /** Initial active TabPane's key, if activeKey is not set */
   defaultActiveKey?: string,
-  /** Callback executed when active tab is changed */
-  onChange?: (activeKey: string) => void,
+  /** Callback executed when active tab is changed 
+  * If `false` is returned, tab transition will be prevented
+  */
+  onChange?: (activeKey: string) => void | boolean | Promise<void | boolean>,
   /** Callback executed when tab is clicked */
   onTabClick?: (activeKey: string, e: KeyboardEvent | MouseEvent) => void,
   /** Style properties */
   style?: CSSProperties,
   /** Whether destroy inactive TabPane when change tab */
-  destroyInactiveTabPane?: boolean
+  destroyInactiveTabPane?: boolean,
+  /** Add horizontal padding (24px) */
+  padding?: boolean,
+  /** Removes the margin from the component */
+  noMargin?: boolean
 }> & TestingProps
 
 type TabsToViewProps<T> = ToViewProps<T, TabsCssConfig>
 
-export type TabsViewProps = TabsToViewProps<TabsProps> & { rootHashClass?: string }
+export type TabsViewProps = TabsToViewProps<TabsProps>
 
 export type TabPaneHeadProps = {
   /** Tab text */
@@ -89,12 +94,12 @@ export type TabPaneHeadProps = {
   number?: number,
   /** Indicator after text */
   indicator?: boolean,
-  /** Indicator mode, if not set 'high' mode is passed */
-  indicatorMode?: IndicatorMode,
+  /** Indicator mode,  */
+  indicatorMode?: Extract<IndicatorMode, 'critical' | 'accent'>,
   cssConfig?: TabsCssConfig
-}
+} & TestingProps
 
-export type StyledTabPanedHeadProps = SpaceProps & { cssConfig: TabsCssConfig }
+export type StyledTabPanedHeadProps = { cssConfig: TabsCssConfig }
 
 export type TabPaneHeaderProps = PropsWithChildren<{
   divider?: boolean,

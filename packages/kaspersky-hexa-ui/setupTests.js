@@ -14,9 +14,9 @@ beforeAll(() => {
       removeListener: jest.fn(),
       addEventListener: jest.fn(),
       removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    })),
-  });
+      dispatchEvent: jest.fn()
+    }))
+  })
   window.ResizeObserver =
     window.ResizeObserver ||
     jest.fn().mockImplementation(() => ({
@@ -24,4 +24,9 @@ beforeAll(() => {
       observe: jest.fn(),
       unobserve: jest.fn()
     }))
-});
+
+  // omit 2nd argument to silence jsdom 'not implemented' warnings
+  const getComputedStyle = window.getComputedStyle
+
+  window.getComputedStyle = (...args) => getComputedStyle(args[0])
+})

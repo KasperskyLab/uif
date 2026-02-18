@@ -1,7 +1,12 @@
 {
   "translation": {
     "common": {
-      "empty": "Деректер жоқ"
+      "empty": "Деректер жоқ",
+      "import": "Импорттау",
+      "export": "Экспорттау",
+      "filters": "Сүзгілер",
+      "no": "Жоқ",
+      "yes": "Иә"
     },
     "upload": {
       "dropFileTitle": "Файлды осы жерге қойыңыз",
@@ -20,8 +25,50 @@
       "errorTitle": "Жүктеп салу қатесі",
       "errorDescription": "{{file, fileName}} байланыс ақауына байланысты жүктеп салынбады"
     },
+    "uploader": {
+      "actions": {
+        "deleteAll": "Барлық файлды жою",
+        "deleteErrors": "Қатесі бар барлық файлды жою ({{count}})",
+        "downloadAll": "Барлық файлды жүктеп алу",
+        "reloadErrors": "Қатесі бар барлық файлды қайта жүктеу ({{count}})",
+        "upload": "Жүктеп салу"
+      },
+      "dropText": {
+        "beginningMultiple": "Файлдар жүктеп салу",
+        "beginningSingle": "Файл жүктеп салу",
+        "endingMultiple": "немесе оларды осы жерге сүйреп әкеліңіз",
+        "endingSingle": "немесе оны осы жерге сүйреп әкеліңіз"
+      },
+      "maxCountUploaded": "Жүктеп салынатын файлдардың максималды саны",
+      "progress": "{{progress}}/{{size}}",
+      "showFiles": "Файлдарды қарап шығу",
+      "total": {
+        "files": "{{filesCount}}/{{total}} файл",
+        "simple": "{{filesCount}} файл",
+        "size": "{{size}}/{{total}}"
+      },
+      "validation": {
+        "maxCount": "Максималды файл шегінен асып кеткендіктен, {{count}} файлды жүктеп салу мүмкін емес.",
+        "maxCount2": "Жүктеп салынған файлдардың жалпы саны рұқсат етілген шектен асады",
+        "maxFileSize": "Рұқсат етілген өлшемнен асып кеткендіктен, {{count}} файлды жүктеп салу мүмкін емес.",
+        "maxFileSize2": "Бұрын жүктеп салынған файлдардың кейбіреуі қазір рұқсат етілген өлшем шегінен асады",
+        "maxTotalSize": "Рұқсат етілген жалпы өлшемнен асып кеткендіктен, {{count}} файлды жүктеп салу мүмкін емес.",
+        "maxTotalSize2": "Жүктеп салынған барлық файлдың жалпы өлшемі қазір рұқсат етілген өлшем шегінен асады",
+        "filesDoNotMeetRequirements": "Файлдар талаптарға сәйкес келмейді",
+        "format": "Формат талаптарына байланысты {{count}} файлды жүктеп салу мүмкін емес."
+      }
+    },
+    "wizard": {
+      "actions": {
+        "cancel": "Бас тарту",
+        "back": "Артқа",
+        "next": "Келесі",
+        "finish": "Аяқтау"
+      },
+      "stepStack": "{{currentStep}}/{{totalSteps}}-қадам"
+    },
     "severity": {
-      "critical": "Критикалық",
+      "critical": "Маңызды",
       "low": "Төмен",
       "medium": "Орташа",
       "high": "Жоғары",
@@ -40,22 +87,13 @@
       "total": "Жалпы {{count}}",
       "selected": "Таңдалған {{count}}",
       "page": "бет",
-      "goto": "Келесіге өту"
+      "goto": "Бетке өту"
     },
     "search": {
       "raw": "Іздеу",
       "dotted": "Іздеу..."
     },
     "table": {
-      "column": {
-        "name": "Бірінші баған"
-      },
-      "column2": {
-        "name": "Екінші баған"
-      },
-      "column3": {
-        "name": "Үшінші баған"
-      },
       "columnDropdown": {
         "ascending": "Артуы бойынша",
         "descending": "Кемуі бойынша",
@@ -63,8 +101,13 @@
         "filters": "Сүзгі",
         "resetFilters": "Сүзгіні қалпына келтіру"
       },
+      "selectAll": {
+        "selectAll": "Барлығын таңдау",
+        "selectCurrentPage": "Ағымдағы беттегінің барлығын таңдау",
+        "deselectAll": "Барлығын қалпына келтіру"
+      },
       "columnsSettings": {
-        "header": "Бағандар параметрлері",
+        "header": "Кесте параметрлері",
         "selectAll": "Барлығын таңдау",
         "columns": "Бағандар",
         "grouping": "Топтау",
@@ -72,6 +115,16 @@
         "noGrouping": "Топтаусыз",
         "apply": "Қолдану",
         "cancel": "Бас тарту",
+        "columnTitles": {
+        "name": "Атауы",
+        "country": "Ел",
+        "age": "Жасы",
+        "city": "Қала",
+        "date": "Күні",
+        "isSortable": "Сұрыпталады",
+        "sorter": "Сұрыптаушы",
+        "sorterIsSortable": "Сұрыптауға болады"
+        },
         "filtering": {
           "add": "Қосу",
           "clearAll": "Барлығын тазалау",
@@ -79,8 +132,33 @@
           "condition": "Шарт",
           "from": "бастап",
           "to": "дейін",
-          "value": "Мән"
-        }
+          "value": "Мән",
+          "validation": {
+            "emptyValue": "Сүзгілеу мәнін көрсетіңіз",
+            "duplicateFilters": "Сүзгілер қайталанған. Әрбір сүзгі бірегей екеніне көз жеткізіңіз"
+          }
+        },
+        "columnHideIsUnavailable": "Бағанды ​​жасыру мүмкін емес"
+      },
+      "filterOperation": {
+        "⊆": "Құрамы",
+        "⊄": "Қамтымайды",
+        "cont_and": "Қамтиды (ЖӘНЕ)",
+        "cont_or": "Қамтиды (НЕМЕСЕ)",
+        "ncont_or": "Қамтымайды",
+        "*=": "Тұрақты өрнек",
+        "empty": "Бос",
+        "nempty": "Бос емес",
+        "range": "Шегінде",
+        "nrange": "Ауқымынан тыс"
+      },
+      "filterTag": {
+        "⊆": "{{value}} қамтиды",
+        "⊄": "{{value}} қамтымайды",
+        "empty": "бос",
+        "nempty": "бос емес",
+        "range": "{{from}}–{{to}} шегінде",
+        "nrange": "{{from}}–{{to}} ауқымынан тыс"
       },
       "groupingEmpty": "Басқа"
     },
@@ -94,8 +172,57 @@
     },
     "actionBar": {
       "unsavedChanges": "Күтудегі өзгерістер",
-      "save": "Сақтау",
+      "save": "Қолдану",
       "cancel": "Бас тарту"
+    },
+    "textarea": {
+      "wordsCount": "{{count}}/{{total}}"
+    },
+    "menu": {
+      "favoritesNavItem": "Бетбелгілер",
+      "navUserItem": {
+        "userProps": {
+          "status": {
+            "available": "Қолжетімді",
+            "unavailable": "Қолжетімді емес"
+          }
+        }
+      }
+    },
+    "expand": {
+      "toExpand": "Жаю",
+      "toCollapse": "Жию"
+    },
+    "codeCompare": {
+      "compareMode": "Салыстыру режимі",
+      "unified": "Біріктірілген",
+      "split": "Бөлінген",
+      "loader": "Салыстыру үшін нұсқалар жүктеп алынып жатыр...",
+      "totalChanges": "Жалпы өзгерістер:",
+      "collapseAll": "Барлығын жию",
+      "expandAll": "Барлығын жаю",
+      "expandLines": "{{count}} жолды жаю",
+      "empty": "Екі файл да бос. Салыстыру мүмкін емес.",
+      "noChanges": "Нұсқалар арасында ешқандай өзгеріс табылмады",
+      "basicVersion": "Негізгі нұсқа",
+      "comparableVersion": "Салыстырылатын нұсқа"
+    },
+    "licenseCard": {
+      "status": "Лицензиялық кілт күйі",
+      "number": "Лицензиялық кілттің нөмірі",
+      "remaining": "Қалған",
+      "activationDate": "Белсендіру күні",
+      "expirationDate": "Жарамдылық мерзімінің аяқталу күні",
+      "term": "Мерзім",
+      "dayLeft": "{{count}} күн қалды",
+      "daysLeft": "{{count}} күн қалды",
+      "termDays": "{{count}} күн"
+    },
+    "input": {
+      "password": {
+        "hide": "Жасыру",
+        "show": "Көрсету"
+      }
     }
   }
 }

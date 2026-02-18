@@ -4,18 +4,6 @@ import { ButtonMode } from '@src/button/types'
 import { ModalProps as AntdModalProps } from 'antd'
 import { MouseEventHandler, ReactNode } from 'react'
 
-type CustomButtons = {
-  text: string,
-  disabled?: boolean,
-  mode?: ButtonMode,
-  loading?: boolean,
-  iconBefore?: ReactNode,
-  iconAfter?: ReactNode,
-  onClick: () => void,
-  id?: string,
-  className?: string
-} & TestingProps
-
 type ActionType = {
   text?: string,
   mode?: ButtonMode,
@@ -23,7 +11,8 @@ type ActionType = {
   disabled?: boolean,
   iconBefore?: ReactNode,
   iconAfter?: ReactNode,
-  onClick?: MouseEventHandler<HTMLElement> | undefined,
+  onClick?: MouseEventHandler<HTMLElement> | (() => void),
+  id?: string,
   className?: string
 } & TestingProps
 
@@ -40,6 +29,7 @@ export type ModalColorConfig = {
   border?: string,
   color?: string,
   boxShadow?: string,
+  icon?: string,
   maskBackground?: string,
   modeBorder: string
 }
@@ -51,7 +41,7 @@ export type ModalSizeConfig = {
 
 export type ModalCssConfig = ModalColorConfig & ModalSizeConfig
 
-export type ModalMode = 'default' | 'warning' | 'error' | 'success'
+export type ModalMode = 'default' | 'warning' | 'error' | 'success' | 'ai'
 
 export type ModalSize = 'small' | 'large'
 
@@ -59,12 +49,12 @@ export type ModalThemeProps = {
   /** Custom theme */
   theme?: Theme,
   /** Color mode */
-  mode: ModalMode,
+  mode?: ModalMode,
   /** Size */
   size?: ModalSize
 }
 
-type AntdModalPropsToOmit = 'title' | 'className' | 'okText' | 'cancelText' | 'maskClosable' | 'footer' | 'type' | 'onOk' | 'okButtonProps' | 'cancelButtonProps' | 'mask' | 'keyboard'
+type AntdModalPropsToOmit = 'title' | 'okText' | 'cancelText' | 'maskClosable' | 'footer' | 'type' | 'onOk' | 'okButtonProps' | 'cancelButtonProps' | 'mask' | 'keyboard'
 
 export type ModalProps = Omit<AntdModalProps, AntdModalPropsToOmit> & {
   /** Header */
@@ -76,7 +66,7 @@ export type ModalProps = Omit<AntdModalProps, AntdModalPropsToOmit> & {
   /** Width */
   width?: string | number,
   /** More buttons for modal, need for backward compatibility with console Confirmation Popup */
-  customButtons?: CustomButtons[]
+  customButtons?: ActionType[]
 } & ModalThemeProps & TestingProps
 
 export type ModalViewProps = ToViewProps<ModalProps, ModalCssConfig, Omit<ModalThemeProps, 'mode'>>

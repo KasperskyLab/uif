@@ -8,11 +8,11 @@
     "apiTable": true,
     "storybook": true,
     "designLink": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Tabs",
   "description": "В качестве основы используется AntdTabs из библиотеки Antd.",
-  "usage": "Переключения в одном окне, между несколькими табами.",
-  "designLink": "https://www.figma.com/file/7TGvGlgGfTltMG1OBgLq8p/%F0%9F%93%96-%5BB2B%5D-Hexa-UI-Kit?node-id=51206%3A287994",
-  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7TGvGlgGfTltMG1OBgLq8p%2F00-%255BB2B%255D-Hexa-UI-Kit%3Ftype%3Ddesign%26node-id%3D29927%253A101572%26mode%3Ddev"
+  "usage": "Переключения в одном окне, между несколькими вкладками.",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=29927%3A101572",
+  "pixsoView": "https://pixso.net/app/design/3CiCb-boVrnv77vmGH45XA"
 }

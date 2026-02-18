@@ -6,8 +6,8 @@ import {
 
 import { ComponentThemeContext } from '../config'
 import {
-  segmentedControlSize as defaultSegmentedControlSize,
-  segmentedControl as defaultSegmentedControl
+  segmentedControl as defaultSegmentedControl,
+  segmentedControlSize as defaultSegmentedControlSize
 } from '../light/segmentedControl'
 
 export const segmentedControl = ({ colors, effects }: ComponentThemeContext): ColorConfig => (

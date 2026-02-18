@@ -1,11 +1,11 @@
-/* eslint-disable react/display-name */
+import { useLocalization } from '@helpers/localization/useLocalization'
 import { Text } from '@src/typography'
 import classnames from 'classnames'
-import _ from 'lodash'
+import get from 'lodash/get'
 import React from 'react'
 
 import { isColumnReadonly } from '../helpers/common'
-import { ITableProps, TableRecord } from '../types'
+import { ITableProps, TableCustomGroupSorter, TableRecord } from '../types'
 
 import { TableModule } from './index'
 
@@ -24,44 +24,48 @@ export const groupTitleRenderer = (
     columnData.props.colSpan = columnIndex === 0 ? columnsCount : 0
     columnData.children = row.groupTitleRender
       ? row.groupTitleRender(titleText)
-      : <Text type="BTM4">{groupTitleRender ? groupTitleRender(titleText) : titleText}</Text>
+      : <Text type="BTM3">{groupTitleRender ? groupTitleRender(titleText) : titleText}</Text>
     columnData.props.className = 'group-title'
   }
 
   return columnData
 }
 
-export const Groups: TableModule = Component => (props: ITableProps) => {
-  const { groupBy, dataSource, columns, groupTitleRender, rowSelection, disabled } = props
+const defaultSorter: TableCustomGroupSorter = (valueA, valueB) => {
+  if (!!valueA?.text || typeof valueA === 'string') {
+    return valueA?.text
+      ? valueA.text.localeCompare(valueB?.text || '')
+      : valueA.localeCompare(valueB || '')
+  }
+  return valueA === valueB
+    ? 0
+    : valueA > valueB
+      ? 1
+      : -1
+}
+
+export const Groups: TableModule = Component => function GroupsModule ({
+  groupBy,
+  customGroupSorter,
+  ...props
+}: ITableProps) {
+  const { dataSource, columns, groupTitleRender, rowSelection, disabled } = props
 
   if (!(groupBy && Array.isArray(dataSource))) {
-    return <Component { ...props } />
+    return <Component {...props} />
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  const comparer = (field: string) => (columnA: object, columnB: object): number => {
-    const columnValueA = _.get(columnA, field) || ''
-    const columnValueB = _.get(columnB, field) || ''
-    let result
-    if (!!columnValueA.text || typeof columnValueA === 'string') {
-      result = columnValueA.text
-        ? columnValueA.text.localeCompare(columnValueB.text)
-        : columnValueA.localeCompare(columnValueB)
-    } else {
-      result = columnValueA === columnValueB
-        ? 0
-        : columnValueA > columnValueB
-          ? 1
-          : -1
-    }
-    return result
-  }
+  const comparer = customGroupSorter || defaultSorter
 
-  const sortedDataSource = [...dataSource].sort(comparer(groupBy))
+  const sortedDataSource = props.isClientGroupSortingDisabled
+    ? dataSource
+    : [...dataSource].sort((a, b) => comparer(get(a, groupBy, ''), get(b, groupBy, '')))
+
+  const defaultGroupTitle = useLocalization('table.groupingEmpty')
 
   const resultDataSource = sortedDataSource.reduce<TableRecord[]>((result, item, index) => {
     const key = dataSource.length + index
-    const titleText = _.get(item, groupBy, '') || ''
+    const titleText = get(item, groupBy, '') || defaultGroupTitle
 
     const groupTitleRender = (columns?.find((column) => column.dataIndex === groupBy))?.renderGroupTitle
 
@@ -76,7 +80,7 @@ export const Groups: TableModule = Component => (props: ITableProps) => {
       return [...result, groupTitleItem, item]
     }
 
-    const isGroupAdded = comparer(groupBy)(item, dataSource[dataSource.length - 1]) === 0
+    const isGroupAdded = get(item, groupBy) === get(result[result.length - 1], groupBy)
 
     if (isGroupAdded) {
       return [...result, item]
@@ -108,11 +112,13 @@ export const Groups: TableModule = Component => (props: ITableProps) => {
     return classnames('row-class', record.rowClassName)
   }
 
-  return <Component
-    { ...props }
-    columns={resultColumns}
-    dataSource={resultDataSource}
-    rowSelection={resultRowSelection}
-    rowClassName={rowClassName}
-  />
+  return (
+    <Component
+      {...props}
+      columns={resultColumns}
+      dataSource={resultDataSource}
+      rowSelection={resultRowSelection}
+      rowClassName={rowClassName}
+    />
+  )
 }

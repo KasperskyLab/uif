@@ -1,5 +1,5 @@
-import { Meta } from '@storybook/react'
 import { Components, designControlsConfig } from '@helpers/resolveDesignControls'
+import { Meta } from '@storybook/react-webpack5'
 import merge from 'lodash/merge'
 
 interface withDesignControlsArguments<ComponentProps> {
@@ -8,7 +8,7 @@ interface withDesignControlsArguments<ComponentProps> {
   designArgs?: Partial<Record<keyof ComponentProps, unknown>>
 }
 
-export function withDesignControls<ComponentProps>({
+export function withDesignControls<ComponentProps> ({
   componentName,
   meta,
   designArgs = {}
@@ -22,7 +22,7 @@ export function withDesignControls<ComponentProps>({
 
     return {
       ...meta,
-      argTypes: merge(designControls, meta.argTypes || {}),
+      argTypes: merge(meta.argTypes || {}, designControls),
       args: sortObjectByKeyOrder(keys, merge(meta.args || {}, designArgs)),
       parameters: {
         ...meta.parameters,
@@ -47,7 +47,7 @@ export function withDesignControls<ComponentProps>({
   }
 }
 
-function sortObjectByKeyOrder<T extends Record<string, unknown>>(order: string[], obj: T): T {
+function sortObjectByKeyOrder<T extends Record<string, unknown>> (order: string[], obj: T): T {
   const otherKeys = Object.keys(obj).filter(x => !order.includes(x))
   const out: any = {}
 

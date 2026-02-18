@@ -20,7 +20,7 @@ export const breadcrumbs = ({ colors, effects }: ComponentThemeContext): Breadcr
     disabled: {
       color: colors.breadcrumbs.text.disabled
     },
-    ...focus({ colors, effects })
+    ...focus({ effects })
   }
 }
 

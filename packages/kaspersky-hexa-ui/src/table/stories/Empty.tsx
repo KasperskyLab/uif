@@ -1,4 +1,5 @@
 import { Button } from '@src/button'
+import { Placeholder } from '@src/placeholder'
 import { H6, P } from '@src/typography'
 import React from 'react'
 import styled from 'styled-components'
@@ -26,9 +27,20 @@ const customEmptyText = () => (
 
 export const EmptyText: Story = {
   render: (args: ITableProps) => (
-    <Wrapper>
+    <Wrapper style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <h2>Default empty message</h2>
-      <Table {...args} />
+      <Table
+        {...args}
+        emptyText={
+          <Placeholder
+            image="noData"
+            mode="filled"
+            size="small"
+            textAlign="center"
+            title="No data"
+          />
+        }
+      />
       <h2>Custom empty message</h2>
       <Table {...args} emptyText={customEmptyText} />
     </Wrapper>

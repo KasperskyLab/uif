@@ -1,3 +1,4 @@
+import { ValidationStatus } from '@helpers/typesHelpers'
 import { css, FlattenInterpolation } from 'styled-components'
 
 import { selectCss } from '../select/selectCss'
@@ -18,7 +19,7 @@ function interpolateCss<T> (css: FlattenInterpolation<T>, props: Omit<T, 'theme'
 }
 
 function interpolateSelectCss (props: TreeSelectViewProps) {
-  return interpolateCss(selectCss, { cssConfig: props.cssConfig.select, validationStatus: 'default' })
+  return interpolateCss(selectCss, { cssConfig: props.cssConfig.select, validationStatus: props.validationStatus || 'default' })
 }
 
 function interpolateTreeCss (props: TreeSelectViewProps) {
@@ -33,10 +34,19 @@ function interpolateTreeCss (props: TreeSelectViewProps) {
 
 export const treeSelectCss = css<{
   cssConfig: TreeSelectCssConfig,
+  validationStatus?: ValidationStatus,
   disableNodeBg?: boolean,
   selectable?: boolean,
   checkable?: boolean
 }>`
   ${interpolateSelectCss}
   ${interpolateTreeCss}
+  
+  &&.has-non-empty-search > .ant-select-clear {
+    right: 12px;
+  }
+  
+  &.select-show-search .ant-select-arrow {
+    transform: rotate(0);
+  }
 `

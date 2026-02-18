@@ -1,15 +1,58 @@
+import { getTextSizes } from '@design-system/tokens'
 import { getFromProps } from '@helpers/getFromProps'
+import { inputInnerStyles } from '@src/input/inputCss'
 import { css } from 'styled-components'
 
-import { PaginationCssConfig } from './types'
+import { textLevels } from '@kaspersky/hexa-ui-core/typography/js'
 
-const fromProps = getFromProps<PaginationCssConfig>()
+import { PaginationCssConfigExtended } from './types'
 
-export const paginationCss = css`
+const fromProps = getFromProps<PaginationCssConfigExtended>()
+
+type PaginationCssProps = {
+  cssConfig: PaginationCssConfigExtended
+}
+
+export const paginationCss = css<PaginationCssProps>`
   & {
     display: flex;
     align-items: center;
     gap: 4px;
+
+    ::after {
+      display: none;
+    }
+
+    .ant-pagination-options {
+      margin-left: 0;
+      white-space: pre;
+
+      .ant-pagination-options-quick-jumper {
+        margin-left: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text--secondary);
+        ${getTextSizes(textLevels.BTR3)};
+
+        input {
+          ${inputInnerStyles}
+          width: 48px;
+          margin: 0;
+          -moz-appearance: textfield;
+
+          &::-webkit-outer-spin-button,
+          &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+        }
+      }
+
+      ::after {
+        display: none;
+      }
+    }
 
     .ant-pagination-item,
     .ant-pagination-prev,
@@ -41,7 +84,7 @@ export const paginationCss = css`
       &:focus-visible {
         box-shadow: ${fromProps('focus.boxShadow')};
       }
-      &[aria-disabled="true"] {
+      &[aria-disabled="true"], &:has([aria-disabled]) {
         &, &:hover, &:active {
           background: transparent;
           color: ${fromProps('unselected.disabled.color')};
@@ -118,4 +161,18 @@ export const containerCss = css`
     font-style: inherit !important;
     letter-spacing: inherit !important;
   }
+`
+
+export const selectCss = css`
+  & .ant-select-item.ant-select-item-option {
+    padding-right: 12px
+  }
+`
+
+export const pageContainerCss = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 `

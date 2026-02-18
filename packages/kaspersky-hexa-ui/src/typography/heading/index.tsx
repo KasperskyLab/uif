@@ -1,2 +1,2 @@
-export * from './Heading'
+export * from './Heading.styled'
 export * from './types'

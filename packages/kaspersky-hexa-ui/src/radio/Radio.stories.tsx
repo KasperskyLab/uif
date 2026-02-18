@@ -1,10 +1,11 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
+import { PopupConfigProvider } from '@helpers/components/PopupConfigProvider'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Textbox } from '@src/input'
 import { Tag } from '@src/tag'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useEffect, useState } from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
@@ -70,7 +71,7 @@ export const Basic: Story = {
 
 const radioOptionsCustomizing = [
   { label: 'Required', value: '1', required: true },
-  { label: 'With tooltip', value: '2', tooltip: 'tooltip text' },
+  { label: 'With tooltip', value: '2', tooltip: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam aliquet scelerisque ligula, eget aliquet sem elementum id. Suspendisse ornare scelerisque arcu, non tincidunt quam. Vestibulum a laoreet erat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur a gravida quam. Cras varius, dui quis euismod ultrices, eros leo maximus nibh, a sagittis dolor augue condimentum libero. Duis tortor est, placerat ut porta in, sagittis eu ante. Sed viverra leo magna, sed volutpat diam consequat id. Nulla pharetra nibh sit amet tempus ornare. Nunc ut quam ante.' },
   { label: 'Disabled', value: '3', disabled: true },
   {
     label: (
@@ -94,13 +95,15 @@ export const Customizing: Story = {
   render: (args: RadioProps) => {
     const [radioState, changeRadioState] = useState<string>()
     return (
-      <Radio
-        {...args}
-        onChange={(e) => {
-          changeRadioState(e.target.value)
-        }}
-        value={radioState}
-      />
+      <PopupConfigProvider getPopupContainer={() => document.body}>
+        <Radio
+          {...args}
+          onChange={(e) => {
+            changeRadioState(e.target.value)
+          }}
+          value={radioState}
+        />
+      </PopupConfigProvider>
     )
   },
   args: {

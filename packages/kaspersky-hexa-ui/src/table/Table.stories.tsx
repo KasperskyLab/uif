@@ -1,13 +1,20 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
 
 import MetaData from './__meta__/meta.json'
-import { basicArgTypes, basicDataSource, BasicTableStory, basicTwoColumns, Story } from './stories/_commonConstants'
+import {
+  basicArgTypes,
+  basicDataSource,
+  BasicTableStory,
+  basicTwoColumns,
+  Story
+} from './stories/_commonConstants'
+import { TableDocs } from './stories/docs/TableDocs'
 
 import { ITableProps, Table } from './index'
 
@@ -20,9 +27,9 @@ const meta: Meta<ITableProps> = {
     testId: 'test-123'
   },
   parameters: {
-    badges: [badges.stable, badges.needsDesignReview],
+    badges: [badges.stable],
     docs: {
-      page: withMeta(MetaData)
+      page: withMeta(MetaData, TableDocs)
     },
     controls: {
       exclude: ['dataSource', 'columns']
@@ -51,18 +58,21 @@ export const ColorTokens: PaletteStory = {
 
 export { EmptyText } from './stories/Empty'
 export { EmptyCellDash } from './stories/EmptyCellDash'
+export { EmptyHeightFull } from './stories/EmptyHeightFull'
 export { Disabled } from './stories/Disabled'
 export { Draggable } from './stories/Draggable'
-export { Groupping } from './stories/Groupping'
+export { HorizontalScroll } from './stories/HorizontalScroll'
 export { OnHoverContent } from './stories/OnHoverContent'
 export { CellWithTable } from './stories/CellWithTable'
 export { TagGroupCell } from './stories/TagGroupCell'
-export { Resizable } from './stories/Resizable'
-export { ResizableMax } from './stories/ResizableMax'
-export { Settings } from './stories/Settings'
 export { ColumnsWidthPercent } from './stories/ColumnsWidthPercent'
 export { RowAccordion } from './stories/RowAccordion'
+export { BgPattern } from './stories/BgPattern'
 export { Reductions } from './stories/Reductions'
+export { ExpandableText } from './stories/ExpandableText'
 export { WithFilters } from './stories/WithFilters'
 export { WithIconColumn } from './stories/WithIconColumn'
 export { KesTable } from './stories/KesTable'
+export { WithToolbar } from './stories/WithToolbar'
+export { TableSettings } from './stories/TableSettings'
+export { RenderWithTextReducer } from './stories/RenderWithTextReducer'

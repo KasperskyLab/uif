@@ -1,11 +1,12 @@
 import { AdditionalContent } from '@helpers/components/AdditionalContent'
+import { usePopupConfig } from '@helpers/components/PopupConfigProvider'
+import { useId } from '@helpers/hooks/useId'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { FormLabel } from '@src/form-label'
 import { Radio as RadioAntd } from 'antd'
 import cn from 'classnames'
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
-import { v4 as uuidv4 } from 'uuid'
 
 import { radioCss } from './radioCss'
 import { RadioOption, RadioProps, RadioViewProps } from './types'
@@ -37,14 +38,16 @@ export const RadioView: FC<RadioViewProps> = ({
   testId,
   theme,
   testAttributes,
+  getPopupContainer,
   ...rest
 }: RadioViewProps) => {
+  const id = useId()
   const newClassName = useMemo(() => cn(className, {
     'kl-radio-invalid': invalid,
     'ant-radio-vertical': vertical
   }), [vertical, invalid, className])
 
-  const optionsWithIds = React.useMemo(() => options.map(option => ({ ...option, _id: uuidv4() })), [options])
+  const config = usePopupConfig()
 
   return (
     <StyledRadioGroup
@@ -54,11 +57,13 @@ export const RadioView: FC<RadioViewProps> = ({
       {...testAttributes}
       {...rest}
     >
-      {optionsWithIds.map((option: RadioOption & { _id: string }) => {
+      {options.map((option, index) => {
+        const optionId = `${id}-${option.value}`
+
         return (
-          <div key={option._id}>
+          <div key={index}>
             <RadioAntd
-              id={option._id}
+              id={optionId}
               value={option.value}
               data-testid={`${testId}-${option.value}`}
               disabled={option.disabled || option.readonly}
@@ -69,12 +74,17 @@ export const RadioView: FC<RadioViewProps> = ({
             >
               {typeof option.label === 'string'
                 ? <FormLabel
-                    testId={`${testId}-${option.value}`}
+                    testId={`${testId}-${option.value}-label`}
                     required={option.required}
                     tooltip={option.tooltip}
                     disabled={option.disabled}
                     theme={theme}
-                    htmlFor={option._id}
+                    htmlFor={optionId}
+                    getPopupContainer={
+                      getPopupContainer ??
+                      config.getPopupContainer ??
+                      (triggerNode => config.usePortal ? document.body : triggerNode.parentElement!)
+                    }
                   >
                     {option.label}
                   </FormLabel>

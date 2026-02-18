@@ -1,0 +1,7 @@
+.separator {
+  color: var(--text--secondary);
+
+  &:before {
+    content: '–';
+  }
+}

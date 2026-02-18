@@ -3,6 +3,6 @@ import { ExpandableTextColorConfig } from '@src/expandable-text/types'
 
 import { ComponentThemeContext } from '../config'
 
-export const expandableText = ({ colors, effects }: ComponentThemeContext): ExpandableTextColorConfig => ({
-  ...focus({ colors, effects })
+export const expandableText = ({ effects }: ComponentThemeContext): ExpandableTextColorConfig => ({
+  ...focus({ effects })
 })

@@ -1,5 +1,6 @@
 export type Row = {
   name: string,
+  cssVarName: string,
   baseSpacing: number,
   usage: string
 }
@@ -11,9 +12,16 @@ export const columns = [
     dataIndex: 'name'
   },
   {
-    title: 'Base Spacing',
+    title: 'CSS-Var name',
+    key: 'cssVarName',
+    dataIndex: 'cssVarName',
+    width: 200
+  },
+  {
+    title: 'Base Spacing (px)',
     key: 'baseSpacing',
-    dataIndex: 'baseSpacing'
+    dataIndex: 'baseSpacing',
+    width: 150
   },
   {
     title: 'Usage',
@@ -22,81 +30,137 @@ export const columns = [
   }
 ]
 
-export const marginsData: Row[] = [
-  {
-    name: 'related',
-    baseSpacing: 8,
-    usage: 'Между связанными компонентами'
-  },
-  {
-    name: 'grouped',
-    baseSpacing: 16,
-    usage: 'Внутри группы компонентов,  после заголовка H6, H5'
-  },
-  {
-    name: 'section',
-    baseSpacing: 24,
-    usage: 'Между группами компонентов, после заголовка H4, перед тулбаром, табами и якорными ссылками'
-  },
-  {
-    name: 'separated',
-    baseSpacing: 32,
-    usage: 'Между блоками страницы, после заголовка H3 (главный на странице)'
-  }
-]
-
 export const paddingData: Row[] = [
   {
-    name: '2x small',
-    baseSpacing: 4,
-    usage: 'От элементов компонента до его краев'
-  },
-  {
-    name: 'x small',
-    baseSpacing: 6,
-    usage: 'От элементов компонента до его краев'
-  },
-  {
     name: 'small',
-    baseSpacing: 8,
-    usage: 'От элементов компонента до его краев'
+    cssVarName: '--spacing--padding_s',
+    baseSpacing: 4,
+    usage: 'От элементов компонента до его краев.'
+  },
+  {
+    name: 'semi_small',
+    cssVarName: '--spacing--padding_sm',
+    baseSpacing: 6,
+    usage: 'От элементов компонента до его краев.'
   },
   {
     name: 'medium',
+    cssVarName: '--spacing--padding_m',
+    baseSpacing: 8,
+    usage: 'От элементов компонента до его краев.'
+  },
+  {
+    name: 'semi_large',
+    cssVarName: '--spacing--padding_ml',
     baseSpacing: 12,
-    usage: 'От элементов компонента до его краев'
+    usage: 'От элементов компонента до его краев.'
   },
   {
     name: 'large',
+    cssVarName: '--spacing--padding_l',
     baseSpacing: 16,
-    usage: 'От элементов компонента до его краев'
+    usage: 'От элементов компонента до его краев.'
   },
   {
-    name: 'x large',
+    name: 'extra_large',
+    cssVarName: '--spacing--padding_xl',
     baseSpacing: 24,
-    usage: 'От элементов компонента до его краев'
+    usage: 'От элементов компонента до его краев. Отступ вокруг основного контента в лейауте страницы или сайдбаре.'
   }
 ]
 
 export const gapData: Row[] = [
   {
     name: 'closest',
+    cssVarName: '--spacing--gap_closest',
     baseSpacing: 2,
-    usage: 'Между ближайшими элементами'
+    usage: 'Самые плотные элементы. В основном, внутри компонентов.'
   },
   {
     name: 'dependent',
+    cssVarName: '--spacing--gap_dependent',
     baseSpacing: 4,
-    usage: 'Между близкими (радио/чекбокс и его лейбл, иконка и текст)'
+    usage: 'В основном, внутри компонентов. Инпут и его дескриптор, лейбл над инпутом.'
   },
   {
     name: 'related',
+    cssVarName: '--spacing--gap_related',
     baseSpacing: 8,
-    usage: 'Между связанными (текст и описание)'
+    usage: 'Между связанными элементами (например, поле и кнопка), между текстовыми Field.'
   },
   {
     name: 'grouped',
+    cssVarName: '--spacing--gap_grouped',
     baseSpacing: 16,
-    usage: 'Внутри группы (несколько кнопок)'
+    usage: 'Внутри группы или после H5–H6.'
+  },
+  {
+    name: 'section',
+    cssVarName: '--spacing--gap_section',
+    baseSpacing: 24,
+    usage: 'Внутри секции страницы, между логическими группами: после заголовков H4, заголовка страницы и Lock group, перед тулбаром страницы и якорными ссылками, а также перед и после табов (если они находятся внутри секции). Исключение — если новая секция начинается с табов без заголовка или с Lock group: в этом случае между секциями сохраняется отступ 32px.'
+  },
+  {
+    name: 'separated',
+    cssVarName: '--spacing--gap_separated',
+    baseSpacing: 32,
+    usage: 'Внутри страницы (между секциями) страницы, после H3.'
+  }
+]
+
+export const borderRadiusData: Row[] = [
+  {
+    name: 'none',
+    cssVarName: '--radius--none',
+    baseSpacing: 0,
+    usage: ''
+  },
+  {
+    name: 'xs',
+    cssVarName: '--radius--xs',
+    baseSpacing: 2,
+    usage: ''
+  },
+  {
+    name: 's',
+    cssVarName: '--radius--s',
+    baseSpacing: 8,
+    usage: ''
+  },
+  {
+    name: 'sm',
+    cssVarName: '--radius--sm',
+    baseSpacing: 6,
+    usage: ''
+  },
+  {
+    name: 'm',
+    cssVarName: '--radius--m',
+    baseSpacing: 8,
+    usage: ''
+  },
+  {
+    name: 'ml',
+    cssVarName: '--radius--ml',
+    baseSpacing: 12,
+    usage: ''
+  },
+  {
+    name: 'l',
+    cssVarName: '--radius--l',
+    baseSpacing: 16,
+    usage: ''
+  },
+  {
+    name: 'l',
+    cssVarName: '--radius--xl',
+    baseSpacing: 24,
+    usage: ''
+  },
+  {
+    name: 'full',
+    cssVarName: '--radius--full',
+    baseSpacing: 999,
+    usage: ''
   }
 ]

@@ -112,14 +112,14 @@ const UploadView: FC<UploadViewProps> = (props: UploadViewProps) => {
           <Loader size="large" />
           {typeof loadingTitle === 'string'
             ? (
-              <UploadHeading
-                className="upload-text-primary"
-                color={config.normal.textPrimaryColor}
-                disabled={disabled}
-                type="H4"
-              >
-                {loadingTitle}
-              </UploadHeading>
+                <UploadHeading
+                  className="upload-text-primary"
+                  color={config.normal.textPrimaryColor}
+                  disabled={disabled}
+                  type="H4"
+                >
+                  {loadingTitle}
+                </UploadHeading>
               )
             : loadingTitle
           }

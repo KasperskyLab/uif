@@ -1,4 +1,4 @@
-import { WithGlobalStyles } from '@helpers/hocs/WithGlobalStyles'
+import { useGlobalStyles } from '@helpers/hooks/useGlobalStyles'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { Input as AntdInput } from 'antd'
 import classnames from 'classnames'
@@ -7,12 +7,7 @@ import { IMaskInputProps, IMaskMixin } from 'react-imask'
 import styled from 'styled-components'
 
 import { inputStyles } from './inputCss'
-import {
-  MaskedStyledInputType,
-  TextboxMaskedMappedProps,
-  TextboxMaskedProps,
-  TextboxMaskedViewProps
-} from './types'
+import { MaskedStyledInputType, TextboxMaskedProps } from './types'
 import { useClassNamedTextbox } from './useClassNamedTextbox'
 import { useThemedTextbox } from './useThemedTextbox'
 
@@ -30,7 +25,6 @@ const MaskedStyledInput = IMaskMixin(({
 }: MaskedStyledInputType) => {
   return (
     <StyledVanillaInput
-      data-component-version="v6"
       className={classnames('ant-input', className)}
       {...props}
       ref={inputRef}
@@ -38,25 +32,22 @@ const MaskedStyledInput = IMaskMixin(({
   )
 })
 
-const InputMaskedComponent: FC<TextboxMaskedProps> = (rawProps: TextboxMaskedProps) => {
-  const mappedProps: TextboxMaskedMappedProps = useClassNamedTextbox<TextboxMaskedProps>(rawProps)
-  const themedProps: TextboxMaskedViewProps = useThemedTextbox(mappedProps)
-  const props = useTestAttribute(themedProps)
-  return <InputMaskedView {...props} />
-}
+export const InputMasked: FC<TextboxMaskedProps> = (props: TextboxMaskedProps) => {
+  const {
+    className,
+    disabled,
+    readOnly,
+    autoFocus,
+    onChange,
+    maskOptions,
+    testAttributes,
+    // just props drilling
+    id, value, cssConfig, onBlur, onKeyUp,
+    ...rest
+  } = useTestAttribute(useThemedTextbox(useClassNamedTextbox(props)))
 
-const InputMaskedView: FC<TextboxMaskedViewProps> = ({
-  className,
-  disabled,
-  readOnly,
-  autoFocus,
-  onChange,
-  maskOptions,
-  testAttributes,
-  // just props drilling
-  id, value, cssConfig, onBlur, onKeyUp,
-  ...rest
-}: TextboxMaskedViewProps) => {
+  useGlobalStyles()
+
   const ref = useRef<AntdInput | null>(null)
   useEffect(() => {
     if (autoFocus) ref?.current?.focus()
@@ -65,7 +56,10 @@ const InputMaskedView: FC<TextboxMaskedViewProps> = ({
   return (
     <MaskedStyledInput
       inputRef={(inputRef: AntdInput) => { ref.current = inputRef }}
-      onAccept={(value: string, mask?: IMaskInputProps) => onChange?.(value, mask)}
+      onAccept={(acceptValue: string, mask?: IMaskInputProps) => {
+        if (value === undefined && acceptValue === '') return
+        onChange?.(acceptValue, mask)
+      }}
       readOnly={readOnly}
       id={id}
       className={className}
@@ -80,5 +74,3 @@ const InputMaskedView: FC<TextboxMaskedViewProps> = ({
     />
   )
 }
-
-export const InputMasked = WithGlobalStyles(InputMaskedComponent)

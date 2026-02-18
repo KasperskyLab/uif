@@ -1,13 +1,13 @@
 import { getTextSizes } from '@design-system/tokens'
 import { getFromInnerProps, getFromProps } from '@helpers/getFromProps'
-import { css } from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { TextTypes } from '@kaspersky/hexa-ui-core/typography/js'
 
 import { getCheckboxCss } from '../checkbox/checkboxCss'
 import { getInternalRadioCss } from '../radio/radioCss'
 
-import { ITableProps, TableCssConfig, TableViewProps } from './types'
+import { TableCssConfig, TableViewProps } from './types'
 
 export const fromTableProps = getFromProps<TableCssConfig, TableViewProps>()
 const fromCheckboxProps = getFromInnerProps<TableCssConfig>('checkbox')
@@ -17,11 +17,11 @@ const tableSizes = {
   headSizes: getTextSizes(TextTypes.BTM3),
   cellSizes: getTextSizes(TextTypes.BTR3),
   dragHandler: {
-    size: 38
+    size: 20
   }
 }
 
-const getRowModeCss = (props: ITableProps) => {
+const getRowModeCss = (props: Pick<TableCssProps, 'rowMode'>) => {
   const { rowMode = 'standard' } = props
   return rowMode === 'standard'
     ? css`
@@ -34,33 +34,21 @@ const getRowModeCss = (props: ITableProps) => {
     `
 }
 
-const getThCss = (props: ITableProps) => {
+const getThCss = (props: Pick<TableCssProps, 'stickyHeader' | 'resizingMode' | 'rowMode'>) => {
   const stickyCss = Number(props.stickyHeader) > -1000 && props.resizingMode !== 'scroll'
     ? css`
       position: sticky;
       top: ${props.stickyHeader}px;
+      z-index: 3;
     `
     : ''
 
-  const thCss = css`
-    z-index: 3;
-
+  return css`
     &.ant-table-cell-fix-left,
     .ant-table-cell-fix-right {
       z-index: 4;
     }
-  `
-  return css`
-    ${thCss}
     ${stickyCss}
-    ${getRowModeCss(props)}
-  `
-}
-
-const getTdCss = (props: ITableProps) => {
-  const { columnVerticalAlign = 'top' } = props
-  return css`
-    vertical-align: ${columnVerticalAlign};
     ${getRowModeCss(props)}
   `
 }
@@ -68,10 +56,12 @@ const getTdCss = (props: ITableProps) => {
 const scrollableResizingCss = css`
   .ant-table {
     width: max-content;
+    min-width: 100%;
 
     & table {
       width: max-content;
-
+      min-width: 100%;
+      
       thead.ant-table-thead {
         background: ${fromTableProps('cell.enabled.background')};
       }
@@ -83,7 +73,20 @@ const tableValidationCss = css`
   outline: 1px solid ${fromTableProps('validation.outline')};
 `
 
-export const tableCss = css<TableViewProps>`
+export const tableCssProps = [
+  'cssConfig',
+  'resizingMode',
+  'useDragDrop',
+  'scroll',
+  'rowMode',
+  'stickyHeader',
+  'isValid',
+  'columnVerticalAlign'
+] as const
+
+export type TableCssProps = Pick<TableViewProps, typeof tableCssProps[number]>
+
+export const tableCss = css<TableCssProps>`
   .ant-table {
     background-color: ${fromTableProps('root.background')};
     color: ${fromTableProps('root.color')};
@@ -131,6 +134,11 @@ export const tableCss = css<TableViewProps>`
     .ant-table-tbody > tr > td {
       padding: 8px;
       max-width: 100px;
+
+      :not(.ant-table-selection-column) {
+        min-width: 100px;
+      }
+
       font-family: ${tableSizes.cellSizes.fontFamily};
       font-size: ${tableSizes.cellSizes.fontSize};
       line-height: ${tableSizes.cellSizes.lineHeight};
@@ -145,38 +153,8 @@ export const tableCss = css<TableViewProps>`
         border-bottom: none;
       }
 
-      &.ant-table-cell-ellipsis {
-        white-space: normal;
-        text-overflow: clip;
-        word-break: break-all;
-      }
-
       .hexa-ui-empty-dash-cell {
         color: var(--table_cell--text--disabled);
-      }
-
-      .drag-handle {
-        position: absolute;
-        left: -${tableSizes.dragHandler.size}px;
-        width: ${tableSizes.dragHandler.size}px;
-        height: 100%;
-        opacity: 0;
-        text-align: center;
-        transition: opacity .1s;
-
-        &:hover {
-          opacity: 1;
-          transition: opacity .1s;
-        }
-      }
-    }
-
-    .ant-table-tbody > tr {
-      &:hover {
-        td .drag-handle {
-          opacity: 1;
-          transition: opacity .1s;
-        }
       }
     }
 
@@ -189,57 +167,116 @@ export const tableCss = css<TableViewProps>`
       background: unset;
     }
   }
+
+  .ant-spin-container.ant-spin-blur {
+    overflow: inherit;
+  }
   
-  &.table-draggable .ant-table {
-    padding-left: ${tableSizes.dragHandler.size}px;
+  &.table-draggable {
+    .ant-table-header, .ant-table-body {
+      padding-left: ${tableSizes.dragHandler.size}px;
+      margin-left: -${tableSizes.dragHandler.size}px;
+    }
+
+    .ant-table-tbody > tr > td {
+      position: relative;
+    }
+
+    .drag-handle-container {
+      position: absolute;
+      display: block;
+      width: 0;
+      height: 0;
+    }
+
+    .drag-handle {
+      display: inline-block;
+      position: relative;
+      top: 3px;
+      left: -${tableSizes.dragHandler.size}px;
+      width: ${tableSizes.dragHandler.size}px;
+      opacity: 0;
+      text-align: center;
+      transition: opacity .1s;
+
+      &:hover {
+        opacity: 1;
+        transition: opacity .1s;
+      }
+    }
+
+    tr:hover .drag-handle {
+      opacity: 1;
+      transition: opacity .1s;
+    }
+
+    &.table-row-selection .drag-handle {
+      left: calc(-38px - ${tableSizes.dragHandler.size}px);
+    }
+  }
+
+  .ant-table-container::before {
+    width: ${tableSizes.dragHandler.size}px;
   }
 
   .ant-table-content {
     position: relative;
   }
 
+  .ant-table-tbody > tr.ant-table-row > td {
+    background-color: var(--table_row--bg--base);
+  }
+
+  .ant-table-tbody > tr.ant-table-placeholder:hover > td {
+    background-color: transparent;
+  }
+
   .ant-table-tbody > tr.ant-table-row:hover > td {
     background-color: ${fromTableProps('cell.hover.background')};
+  }
+
+  .ant-table-tbody > tr.ant-table-row:hover [data-expandable-gradient]::after,
+  .ant-table-tbody > tr.ant-table-row.ant-table-row-selected:hover [data-expandable-gradient]::after {
+    background-color: var(--table_row--bg--hover);
+  }
+
+  .ant-table-tbody > tr.ant-table-row.ant-table-row-selected [data-expandable-gradient]::after {
+    background-color: var(--table_row--bg--selected);
   }
 
   .ant-table-bordered td, .ant-table-bordered th {
     border-right: none !important;
   }
 
-  .react-resizable-handle:hover {
-    border-left: 2px solid ${fromTableProps('resize.hover')};
-  }
-
   .ant-table-tbody > tr.ant-table-row-selected > td {
     background-color: ${fromTableProps('cell.selected.background')};
   }
 
-  .react-resizable {
-    position: relative;
-    background-clip: padding-box;
-  }
-
-  .react-resizable-handle {
+  .resizing-handle-container {
     position: absolute;
-    right: -5px;
-    bottom: 3px;
+    right: -8px;
+    bottom: 0;
     z-index: 1;
-    width: 10px;
-    height: calc(100% - 3px);
+    width: 16px;
+    height: 100%;
     cursor: col-resize;
     display: flex;
     flex-direction: column;
-    background: ${fromTableProps('cell.enabled.background')};
+    align-items: center;
 
-    & .resizing-handle {
-      background: ${fromTableProps('resize.enabled')};
+    .resizing-handle {
+      opacity: 0;
       width: 1px;
-      height: 30px;
-      z-index: 1;
-      display: block;
-      margin-top: 8px;
-      flex-grow: 1;
-      margin-bottom: 8px;
+      background: ${fromTableProps('resize.hover')};
+      height: 100%;
+    }
+
+    &:active .resizing-handle {
+      background-color: ${fromTableProps('resize.active')};
+    }
+
+    &:hover .resizing-handle {
+      opacity: 1;
     }
   }
 
@@ -272,11 +309,16 @@ export const tableCss = css<TableViewProps>`
       }
     }
     .ant-table-thead th {
-      ${(props: ITableProps) => getThCss(props)}
+      ${props => getThCss(props)}
+    }
+
+    .hexa-ui-ellipsis {
+      display: inline-grid;
     }
 
     && td.ant-table-cell {
-      ${(props: ITableProps) => getTdCss(props)}
+      vertical-align: ${({ columnVerticalAlign }) => columnVerticalAlign || 'top'};
+      ${props => getRowModeCss(props)}
       &:has(.ant-select), &:has(.ant-input) {
         padding: 4px 8px;
       }
@@ -305,7 +347,7 @@ export const tableCss = css<TableViewProps>`
       }
     }
 
-    ${(props: ITableProps) => props.useDragDrop
+    ${props => props.useDragDrop
     ? `.drag-handle {
           &:hover {
             cursor: grab
@@ -342,13 +384,31 @@ export const tableCss = css<TableViewProps>`
       background: ${fromTableProps('cell.enabled.background')};
     }
 
-    .ant-table-thead th {
-      ${(props: ITableProps) => getThCss(props)}
-    }
+    .ant-table-tbody {
+      --line-color: var(--color--neutral_50);
+      --bg-mode: multiply;
 
-    ${(props: ITableProps) => props.resizingMode === 'scroll' ? scrollableResizingCss : ''}
+      .theme-dark & {
+        --line-color: var(--color--neutral_800);
+        --bg-mode: exclusion;
+      }
+      .table-bg-diagonal & {
+        background-image: repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 10px,
+          var(--line-color) 10px,
+          var(--line-color) 20px
+        );
+      }
+
+      .table-bg-diagonal & > tr.row-table-bg-pattern.ant-table-row td {
+        mix-blend-mode: var(--bg-mode);
+      }
+    }
+    ${props => props.resizingMode === 'scroll' ? scrollableResizingCss : ''}
     
-    ${({ isValid }: ITableProps) => isValid === false ? tableValidationCss : ''}
+    ${({ isValid }) => isValid === false ? tableValidationCss : ''}
   }
 
   col.ant-table-selection-col, .ant-table-selection-column  {
@@ -377,7 +437,7 @@ export const tableCss = css<TableViewProps>`
           overflow-y: auto !important;
         }
 
-        
+
         .ant-table-header {
           & .ant-table-cell-scrollbar::after {
             display: none;
@@ -385,26 +445,69 @@ export const tableCss = css<TableViewProps>`
         }
       `
     : ''
-  }
+}
 `
 
-export const scrollableContainerCss = css`
-  ${(props: ITableProps) => props.resizingMode === 'scroll'
+export const scrollableContainerCss = css<Pick<TableViewProps, 'resizingMode'>>`
+  &.table-height-full {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .ant-table-wrapper,
+    .ant-spin-nested-loading,
+    .ant-spin-container,
+    .ant-table,
+    .ant-table-container,
+    .ant-table-conten,
+    .ant-table-content,
+    .hexa-ui-table-ref {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .ant-table table {
+      height: 100%;
+    }
+
+    .hexa-ui-table-ref {
+      flex-direction: column;
+    }
+  }
+
+  ${props => props.resizingMode === 'scroll'
     ? `
     width: 100%;
     overflow-x: auto;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    scrollbar-width: none;
   `
     : ''}
 `
 
-export const rowDraggingContainerCss = css`
+export const rowDraggingContainerCss = css<TableCssProps>`
   .row-dragging {
     background: var(--table-row-hover-bg);
   }
+
   .row-dragging td {
     padding: 8px 0px 8px 28px;
   }
+
   .row-dragging .drag-handle {
     visibility: hidden;
   }
+
+  .ant-checkbox-wrapper {
+    ${getCheckboxCss(fromCheckboxProps)}
+  }
+`
+
+export const TableWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 `

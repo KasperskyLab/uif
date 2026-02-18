@@ -1,48 +1,53 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import * as React from 'react'
+import React, { FC } from 'react'
 import styled, { isStyledComponent } from 'styled-components'
 
 import { gridCss } from './gridCss'
+import { GridItem } from './GridItem'
 import { LayoutBase } from './layouts'
-import { GridProps } from './types'
+import { GridProps, GridVariants } from './types'
 
 const StyledGrid = styled(LayoutBase)`${gridCss}`
 const DEFAULT_COLS = 12
 const DEFAULT_GAP = 16
 
-export const Grid = ({ layout, children, className, layoutProperty, cols, gridType, withPadding, ...rest }: GridProps) => {
-  const colsValue = cols ? [`repeat(${cols}, 1fr)`] : layout?.cols
-  const { testAttributes } = useTestAttribute(rest)
+export const Grid: FC<GridProps> & GridVariants = (props: GridProps) => {
+  const { 
+    children, 
+    cols,
+    layout,
+    layoutProperty,
+    testAttributes,
+    ...rest
+  } = useTestAttribute(props)
+
+  const gridProps = {
+    ...rest,
+    ...testAttributes,
+    alignItems: layoutProperty?.alignItems,
+    cols: layout?.cols ?? [`repeat(${cols ?? DEFAULT_COLS}, 1fr)`],
+    columnGap: layoutProperty?.columnGap,
+    gap: layoutProperty?.gap ?? DEFAULT_GAP,
+    justifyItems: layoutProperty?.justifyItems,
+    rowGap: layoutProperty?.rowGap
+  }
+
   if (isStyledComponent(layout)) {
     const GridContainer = layout
 
-    return <GridContainer
-      className={className}
-      alignItems={layoutProperty?.alignItems}
-      justifyItems={layoutProperty?.justifyItems}
-      gap={layoutProperty?.gap ?? DEFAULT_GAP}
-      rowGap={layoutProperty?.rowGap}
-      cols={colsValue ?? [`repeat(${DEFAULT_COLS}, 1fr)`]}
-      columnGap={layoutProperty?.columnGap}
-      gridType={gridType}
-      withPadding={withPadding}
-      {...testAttributes}
-    >{ children }</GridContainer>
+    return <GridContainer {...gridProps}>{children}</GridContainer>
   }
 
   return <StyledGrid
-    className={className}
-    direction={layout?.direction}
-    alignItems={layoutProperty?.alignItems}
-    justifyItems={layoutProperty?.justifyItems}
-    gap={layoutProperty?.gap ?? DEFAULT_GAP}
-    rowGap={layoutProperty?.rowGap}
-    columnGap={layoutProperty?.columnGap}
-    rows={layout?.rows}
-    cols={colsValue ?? [`repeat(${DEFAULT_COLS}, 1fr)`]}
+    {...gridProps}
     areas={layout?.areas}
-    gridType={gridType}
-    withPadding={withPadding}
-    {...testAttributes}
-  >{ children }</StyledGrid>
+    direction={layout?.direction}
+    rows={layout?.rows}
+  >{children}</StyledGrid>
 }
+
+Grid.defaultProps = {
+  cols: 12
+}
+
+Grid.Item = GridItem

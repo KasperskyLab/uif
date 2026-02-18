@@ -1,56 +1,42 @@
 import { Theme } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingProps } from '@helpers/typesHelpers'
 import { DividerProps } from '@src/divider/types'
-import {
-  DropDownProps as AntdDropdownProps,
-  MenuItemProps,
-  MenuProps,
-  SubMenuProps
-} from 'antd'
-import {
-  FC,
-  KeyboardEvent,
-  MouseEvent,
-  ReactElement,
-  ReactInstance,
-  ReactNode
-} from 'react'
-
-type StateProps = {
-  background?: string,
-  color?: string,
-  descriptionColor?: string
-}
-
-type DropdownStateConfig = Record<'enabled' | 'hover' | 'active' | 'disabled', StateProps>
-
-export type DropdownColorConfig = Record<'unselected' | 'selected', DropdownStateConfig> & {
-  groupTitleColor: string,
-  background: string,
-  boxShadow: string,
-  popupMaxHeight?: number
-}
+import type { DropdownProps as RcDropdownProps } from 'rc-dropdown'
+import type { MenuItemProps, MenuProps, SubMenuProps } from 'rc-menu'
+import { FC, Key, ReactElement, ReactNode } from 'react'
 
 export type DropdownThemeProps = {
   /** Custom theme */
   theme?: Theme
 }
 
-export type Trigger = Exclude<AntdDropdownProps['trigger'], undefined>[number]
+export type Trigger = Exclude<RcDropdownProps['trigger'], undefined>[number]
 
-export type Placement = AntdDropdownProps['placement']
+export type Placement = RcDropdownProps['placement'] | 'bottomCenter' | 'topCenter'
 
 export type DropdownOverlayProp = DropdownItemProps[] | ReactElement | (() => ReactElement)
+
+export type DropdownConfigProviderProps = Pick<DropdownProps, 'children' | 'getPopupContainer' | 'usePortal'>
+
+type StickyProps = { sticky?: boolean }
 
 export type DropdownProps = {
   /** The dropdown menu */
   overlay: DropdownOverlayProp,
+  /** Header element of dropdown menu */
+  header?: DropdownItemProps & StickyProps,
+  /** Footer element of dropdown menu */
+  footer?: DropdownItemProps & StickyProps,
+  /** The dropdown menu selected keys */
+  selectedItemsKeys?: string[],
   /** The trigger mode which executes the dropdown action. Note that hover can't be used on touchscreens */
   trigger?: Trigger[],
   /** Called when the visible state is changed. Not trigger when hidden by click item */
   onVisibleChange?: (visible: boolean) => void,
   /** Called when overlay is clicked */
   onOverlayClick?: () => void,
+  /** Called when menu item is selected */
+  onOverlaySelect?: MenuProps['onSelect'],
   /** Whether the dropdown menu is currently visible */
   visible?: boolean,
   /** Whether the dropdown menu is disabled */
@@ -66,37 +52,40 @@ export type DropdownProps = {
   /** Set max height for dropdownMenu in pixels */
   popupMaxHeight?: number,
   /** To set the container of the dropdown menu */
-  getPopupContainer?: AntdDropdownProps['getPopupContainer'],
+  getPopupContainer?: RcDropdownProps['getPopupContainer'],
   /** React children */
-  children?: ReactNode
+  children?: ReactNode,
+  /** Shorthand getPopupContainer={() => document.body} */
+  usePortal?: boolean
 } & DropdownThemeProps & TestingProps
-
-export type DropdownViewProps = ToViewProps<DropdownProps, DropdownColorConfig, DropdownThemeProps> & { rootHashClass?: string }
 
 export type DropdownVariants = {
   Menu: FC<MenuProps>,
   SubMenu: FC<SubMenuProps>,
   MenuItem: FC<DropdownItemProps>,
   MenuDivider: FC<DividerProps>,
-  GroupTitle: FC<any>
+  GroupTitle: FC<any>,
+  InnerActions: FC<DropdownItemActionsProps>,
 }
 
 export type DropdownItemInnerProps = {
   children: ReactNode | DropdownItemProps[],
-  type?: 'group' | 'submenu' | 'action' | 'divider',
+  /** @deprecated Use 'componentsBefore' prop instead */
+  icon?: ReactNode
+  key?: string | Key | null,
+  type?: 'group' | 'submenu' | 'action' | 'divider' | 'innerActions',
   description?: string,
   tooltip?: string,
   componentsBefore?: ReactNode[],
   componentsAfter?: ReactNode[]
 }
 
-export type DropdownItemProps = Omit<MenuItemProps, 'onClick'> & DropdownItemInnerProps & {
-  // copy-paste from antd non-exported type
-  onClick?: (info: {
-    key: string,
-    keyPath: string[],
-    /** @deprecated This will not be supported in the future. You should avoid using this */
-    item: ReactInstance,
-    domEvent: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>
-  }) => void
-} & DropdownThemeProps
+export type DropdownItemProps = Omit<MenuItemProps, 'type' | 'title' | 'children' | 'itemIcon' | 'extra'> & DropdownItemInnerProps & {
+  title?: ReactNode
+} & DropdownThemeProps & TestingProps
+
+export type DropdownItemActionsProps = {
+  children: ReactNode,
+  className?: string,
+  key?: string | Key | null
+} & TestingProps

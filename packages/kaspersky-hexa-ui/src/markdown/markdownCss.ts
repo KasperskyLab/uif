@@ -11,14 +11,38 @@ export const StyledText = styled.span.withConfig({ shouldForwardProp })`
   ${getTextSizes(textLevels.BTR3)};
   > * {
     color: ${({ themedColor, theme }: MarkdownProps & { theme: ThemeConfig }) => {
-      if (theme?.colors) {
-        return theme.colors.textIconsElements[themedColor || 'primary']
-      }
-    }};
+    if (theme?.colors) {
+      return theme.colors.textIconsElements[themedColor || 'primary']
+    }
+  }};
   }
   
   strong {
     ${getTextSizes(textLevels.BTM3)};
+  }
+
+  h1 {
+    ${getTextSizes(textLevels.H1)};
+  }
+
+  h2 {
+    ${getTextSizes(textLevels.H2)};
+  }
+
+  h3 {
+    ${getTextSizes(textLevels.H3)};
+  }
+
+  h4 {
+    ${getTextSizes(textLevels.H4)};
+  }
+
+  h5 {
+    ${getTextSizes(textLevels.H5)};
+  }
+
+  h6 {
+    ${getTextSizes(textLevels.H6)};
   }
 
   // add LinkExternal icon from @kaspersky/hexa-ui-icons/16 package to external links

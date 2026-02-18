@@ -1,0 +1,16 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "Wizard",
+  "usage": "Компонент Wizard позволяет пользователям проходить через последовательность шагов для выполнения определённой задачи. Компонент может быть представлен в виде сайдбара, страницы или модального окна.",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=3311%3A15504",
+  "pixsoView": "https://pixso.net/app/design/39McqkUD7GOxWYM1piZJoA"
+}

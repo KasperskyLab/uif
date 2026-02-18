@@ -12,7 +12,8 @@ const generateIMaskFormat = (format: string): string => {
     .replace('YYYY', '`y')
     .replace('MM', '`m')
     .replace('DD', '`d')
-    .replace('HH', '`h')
+    .replace('/HH/', '`h')
+    .replace('/h/', '`h')
     .replace('mm', '`mm')
     .replace('ss', '`s')
     .replace('ms', '`ms')
@@ -24,10 +25,17 @@ const blocks = {
     from: 0,
     to: 9999
   },
-  h: {
+  HH: {
     mask: IMask.MaskedRange,
     from: 0,
     to: 23,
+    maxLength: 2,
+    autofix: 'pad'
+  },
+  h: {
+    mask: IMask.MaskedRange,
+    from: 1,
+    to: 12,
     maxLength: 2,
     autofix: 'pad'
   },
@@ -50,6 +58,13 @@ const blocks = {
     from: 0,
     to: 999,
     maxLength: 3
+  },
+  aaa: {
+    mask: '#m',
+    definitions: {
+      '#': /[a|p]/
+    },
+    autofix: 'pad'
   }
 }
 

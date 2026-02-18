@@ -7,10 +7,10 @@
     "migration": false,
     "apiTable": false,
     "storybook": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Page Header",
   "description": "Page header — компонент, который используется для отображения шапки страницы. Содержит набор элементов, которые могут отображаться/скрываться в зависимости от необходимости",
-  "designLink": "https://www.figma.com/proto/1QYO5bl8ObMi7X3NYIV3N7/Page-header?node-id=8001-13748&t=v4waWjBE2RFJNSZs-1",
-  "figmaView": "https://embed.figma.com/design/1QYO5bl8ObMi7X3NYIV3N7/Page-header?node-id=8001-13748&embed-host=share"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=112996%3A424358",
+  "pixsoView": "https://pixso.net/app/design/rU7ZxxlujCUls9Tm4NPAuw"
 }

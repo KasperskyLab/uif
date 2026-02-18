@@ -1,9 +1,11 @@
 import { DIGITAL_SYMBOL_IN_PLACEHOLDERS } from '@design-system/tokens'
 import { WithGlobalStyles } from '@helpers/hocs/WithGlobalStyles'
+import useLocaleOptions from '@helpers/hooks/useLocaleOptions'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { generateDateIMaskOptions, prepareFormatForDateFNS } from '@helpers/imaskDateOptionsGenerator'
 import { ActionButton } from '@src/action-button'
 import { inputStyles } from '@src/input/inputCss'
+import { startOfDay } from 'date-fns'
 import React, { useEffect, useMemo, useRef, useState, VFC } from 'react'
 import { IMask } from 'react-imask'
 import styled from 'styled-components'
@@ -18,12 +20,13 @@ import {
 } from './ActionIcons'
 import { DatePicker } from './DatePicker'
 import {
-  checkIsUserTimeSelect,
   isDigital,
   isNestedInDOM,
+  isTimeSelected,
+  isUserClickOnDate,
+  isUserClickOnTime,
   prepareDateValue,
-  useClassNamedDatepicker,
-  useLocaleOptions
+  useClassNamedDatepicker
 } from './helpers'
 import { pickerContainerCss, pickerCss, PickerGlobalCss } from './pickerCss'
 import { PresetsCalendar as Presets } from './Presets'
@@ -68,25 +71,61 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
   showTime = false,
   format,
   placeholder,
+  onOpenChange,
+  onSelect,
   ...rest
 }) => {
   const [date, setDate] = useState<DateInputValue>(value)
   const [isOpen, setOpenState] = useState(false)
   const [isMaskApply, setIsMaskApply] = useState(false)
-  const [localLocale, setLocaleLocale] = useState(useLocaleOptions(showTime))
+  const [localLocale, setLocalLocale] = useState(useLocaleOptions(showTime))
   const [dynamicKey, setDynamicKey] = useState<boolean>(false)
   const calendarRef = useRef<HTMLDivElement>(null)
   const pickerRef = useRef<HTMLDivElement>(null)
+  const lastSelectedDateRef = useRef<DateInputValue>(null)
 
   const localeOptions = useLocaleOptions(showTime)
 
   const maskOptions: IMask.MaskedDateOptions = useMemo(() => {
-    return generateDateIMaskOptions(localLocale.format)
-  }, [localLocale])
+    return generateDateIMaskOptions(format ?? localLocale.format)
+  }, [localLocale, format])
 
   const destroyMask = () => {
     maskObject?.destroy()
     setIsMaskApply(false)
+  }
+
+  /**
+   * Set the time to midnight if needed and close the panel if the last time column is clicked
+   */
+  const onClickHandler = (e: any) => {
+    const calendarElement = calendarRef.current
+    const timeSecondsWrapper = calendarElement?.querySelector('.ant-picker-time-panel-column:last-child')
+    const input = pickerRef.current?.querySelector('input')
+
+    if (!calendarElement || !timeSecondsWrapper || !input) {
+      return
+    }
+
+    if (!isUserClickOnTime(calendarElement, e.target) && !isUserClickOnDate(calendarElement, e.target)) {
+      return
+    }
+
+    let newDate = lastSelectedDateRef.current
+    const isUserTimeSelect = isUserClickOnTime(calendarElement, e.target) || isTimeSelected(calendarElement)
+
+    // If time was not selected before and not selected by the user, it should be set to midnight.
+    if (!isUserTimeSelect && newDate) {
+      newDate = startOfDay(newDate)
+    }
+
+    destroyMask()
+    // Close calendar when click on seconds in range with time
+    if (isNestedInDOM(timeSecondsWrapper, e.target, 5)) {
+      changeOpenState(false)
+    }
+    setDate(newDate)
+    handleOnChange(newDate)
   }
 
   const resetCalendarDropdownDatePosition = () => {
@@ -95,51 +134,21 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
     }, 500)
   }
 
-  const onClickHandler = (e: any) => {
-    let newDate: DateInputValue = null
-    const calendarElement = calendarRef.current
-    const timeSecondsWrapper = calendarElement?.querySelector('.ant-picker-time-panel-column:last-child')
-    const input = pickerRef.current?.querySelector('input')
-
-    if (!calendarElement || !timeSecondsWrapper || !input) {
-      return undefined
-    }
-
-    const prepareDateValueByIMask = (date: string): Date | string => maskOptions?.parse?.(date) || ''
-    // Variable should be outside debounce function.
-    const isUserTimeSelect = checkIsUserTimeSelect(calendarElement, e.target)
-
-    const getValueDebounce = async () => {
-      await new Promise(resolve => setTimeout(() => {
-        let dateInputValue = input?.value || ''
-        if (!isUserTimeSelect) {
-          // If time was not selected by the user, it should be set to midnight.
-          dateInputValue = dateInputValue.split(' ')[0] + ' 00:00:00'
-        }
-        newDate = prepareDateValue(prepareDateValueByIMask(dateInputValue))
-        resolve(newDate)
-      }))
-    }
-    getValueDebounce().then(() => {
-      destroyMask()
-      setDate(newDate)
-      // Close calendar when click on seconds in range with time
-      if (isNestedInDOM(timeSecondsWrapper, e.target, 5)) {
-        setOpenState(false)
-      }
-    })
-  }
-
-  useEffect(() => {
-    if (localeOptions.locale.lang !== localLocale.locale.lang) setLocaleLocale(localeOptions)
-  }, [localeOptions])
-
-  useEffect(() => {
-    const newOpenState = Boolean(open)
+  const changeOpenState = (state?: boolean) => {
+    const newOpenState = Boolean(state)
     setOpenState(newOpenState)
+    onOpenChange?.(newOpenState)
     if (!newOpenState) {
       resetCalendarDropdownDatePosition()
     }
+  }
+
+  useEffect(() => {
+    if (localeOptions.locale.lang !== localLocale.locale.lang) setLocalLocale(localeOptions)
+  }, [localeOptions])
+
+  useEffect(() => {
+    changeOpenState(open)
   }, [open])
 
   useEffect(() => {
@@ -178,7 +187,7 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
         }
       }, 0)
     }
-    setOpenState(true)
+    changeOpenState(true)
   }
 
   const getFormat = (format: CalendarViewProps['format']) => {
@@ -210,22 +219,21 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
         )}
         open={isOpen}
         onKeyDown={handleKeyDown}
-        onClick={() => setOpenState(true)}
+        onClick={() => changeOpenState(true)}
         onChange={(date) => {
           destroyMask()
           setDate(date)
           handleOnChange(date)
         }}
         onSelect={(value) => {
+          lastSelectedDateRef.current = value
           setDate(value)
-          handleOnChange(value)
         }}
         onOpenChange={(open) => {
           // open calendar dropdown manually
           // onOpenChange only close calendar dropdown
           if (open === false) {
-            setOpenState(open)
-            resetCalendarDropdownDatePosition()
+            changeOpenState(open)
           }
         }}
         value={date}
@@ -242,10 +250,10 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
                 }}
             />)
           : <CalendarIcon testId={`${testId}-calendar-icon`} />}
-        superNextIcon={<ArrowDoubleRightIcon testId={`${testId}-calendar-super-next-icon`} />}
-        superPrevIcon={<ArrowDoubleLeftIcon testId={`${testId}-calendar-super-prev-icon`} />}
-        nextIcon={<ArrowRightMiniIcon testId={`${testId}-calendar-next-icon`} />}
-        prevIcon={<ArrowLeftMiniIcon testId={`${testId}-calendar-prev-icon`} />}
+        superNextIcon={<ArrowDoubleRightIcon testId={testId} />}
+        superPrevIcon={<ArrowDoubleLeftIcon testId={testId} />}
+        nextIcon={<ArrowRightMiniIcon testId={testId} />}
+        prevIcon={<ArrowLeftMiniIcon testId={testId} />}
         allowClear={false}
         showToday={false}
         placeholder={placeholder ?? localLocale.placeholder}
@@ -255,8 +263,7 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
             ? () => <Presets
                 presets={presets}
                 onChange={(date) => {
-                  setOpenState(false)
-                  resetCalendarDropdownDatePosition()
+                  changeOpenState(false)
                   destroyMask()
                   setDate(date)
                   handleOnChange(date)

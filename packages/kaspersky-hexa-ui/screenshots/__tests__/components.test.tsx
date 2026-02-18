@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer'
+
 import { getBrowser } from '../browser'
 import { getStories, Stories } from '../stories'
 import { ComponentType } from '../types'

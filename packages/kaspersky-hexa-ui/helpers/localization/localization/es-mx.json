@@ -3,7 +3,10 @@
     "common": {
       "empty": "No hay datos",
       "import": "Importar",
-      "export": "Exportar"
+      "export": "Exportar",
+      "filters": "Filtros",
+      "no": "No",
+      "yes": "Sí"
     },
     "upload": {
       "dropFileTitle": "Soltar el archivo aquí",
@@ -20,7 +23,7 @@
       "successTitle": "Carga finalizada correctamente",
       "successDescription": "Se cargó {{file, fileName}} correctamente al servidor",
       "errorTitle": "Error de carga",
-      "errorDescription": "No se pudo cargar {{file, fileName}} debido a un error de conexión"
+      "errorDescription": "No se puede cargar {{file, fileName}} debido a un error de conexión"
     },
     "uploader": {
       "actions": {
@@ -36,9 +39,9 @@
         "endingMultiple": "o arrástrelos y suéltelos aquí",
         "endingSingle": "o arrástrelo y suéltelo aquí"
       },
-      "maxCountUploaded": "Número máximo de archivos cargados",
+      "maxCountUploaded": "Se cargó el número máximo de archivos",
       "progress": "{{progress}} de {{size}}",
-      "showFiles": "Mostrar archivos",
+      "showFiles": "Ver archivos",
       "total": {
         "files": "{{filesCount}} de {{total}} archivos",
         "simple": "{{filesCount}} archivo(s)",
@@ -46,10 +49,23 @@
       },
       "validation": {
         "maxCount": "No se puede(n) cargar {{count}} archivo(s) porque supera(n) el límite máximo de archivos.",
+        "maxCount2": "El número total de archivos cargados excede el límite permitido",
         "maxFileSize": "No se puede(n) cargar {{count}} archivo(s) porque supera(n) el tamaño permitido.",
+        "maxFileSize2": "Algunos de los archivos cargados excede el límite de tamaño permitido actual",
         "maxTotalSize": "No se puede(n) cargar {{count}} archivo(s) porque supera(n) el tamaño máximo permitido.",
+        "maxTotalSize2": "El tamaño total de los archivos cargados excede el límite de tamaño permitido actual",
+        "filesDoNotMeetRequirements": "Los archivos no cumplen con los requisitos",
         "format": "No se puede(n) cargar {{count}} archivo(s) debido a requisitos de formato."
       }
+    },
+    "wizard": {
+      "actions": {
+        "cancel": "Cancelar",
+        "back": "Atrás",
+        "next": "Siguiente",
+        "finish": "Finalizar"
+      },
+      "stepStack": "Paso {{currentStep}} de {{totalSteps}}"
     },
     "severity": {
       "critical": "Crítico",
@@ -78,15 +94,6 @@
       "dotted": "Buscar..."
     },
     "table": {
-      "column": {
-        "name": "Primera columna"
-      },
-      "column2": {
-        "name": "Segunda columna"
-      },
-      "column3": {
-        "name": "Tercera columna"
-      },
       "columnDropdown": {
         "ascending": "Ascendente",
         "descending": "Descendente",
@@ -95,7 +102,7 @@
         "resetFilters": "Restablecer filtro"
       },
       "columnsSettings": {
-        "header": "Configuración de las columnas",
+        "header": "Configuración de tabla",
         "selectAll": "Seleccionar todo",
         "columns": "Columnas",
         "grouping": "Agrupación",
@@ -103,6 +110,16 @@
         "noGrouping": "No agrupar",
         "apply": "Aplicar",
         "cancel": "Cancelar",
+        "columnTitles": {
+        "name": "Nombre",
+        "country": "País",
+        "age": "Edad",
+        "city": "Ciudad",
+        "date": "Fecha",
+        "isSortable": "Se puede ordenar",
+        "sorter": "Clasificador",
+        "sorterIsSortable": "Es posible ordenar"
+        },
         "filtering": {
           "add": "Agregar",
           "clearAll": "Quitar selección a todo",
@@ -111,7 +128,28 @@
           "from": "desde",
           "to": "hasta",
           "value": "Valor"
-        }
+        },
+        "columnHideIsUnavailable": "No es posible ocultar columnas"
+      },
+      "filterOperation": {
+        "⊆": "Contiene",
+        "⊄": "No contiene",
+        "cont_and": "Contiene (AND)",
+        "cont_or": "Contiene (OR)",
+        "ncont_or": "No contiene",
+        "*=": "Regexp",
+        "empty": "Vacío",
+        "nempty": "No está vacío",
+        "range": "Dentro",
+        "nrange": "Fuera"
+      },
+      "filterTag": {
+        "⊆": "contiene {{value}}",
+        "⊄": "no contiene {{value}}",
+        "empty": "está vacío",
+        "nempty": "no está vacío",
+        "range": "Dentro {{from}}–{{to}}",
+        "nrange": "Fuera {{from}}–{{to}}"
       },
       "groupingEmpty": "Otro"
     },
@@ -125,20 +163,56 @@
     },
     "actionBar": {
       "unsavedChanges": "Cambios pendientes",
-      "save": "Guardar",
+      "save": "Aplicar",
       "cancel": "Cancelar"
     },
     "textarea": {
       "wordsCount": "{{count}} de {{total}}"
     },
     "menu": {
+      "favoritesNavItem": "Marcadores",
       "navUserItem": {
         "userProps": {
           "status": {
             "available": "Disponible",
-            "unavailable": "Unavailable"
+            "unavailable": "No disponible"
           }
         }
+      }
+    },
+    "expand": {
+      "toExpand": "Expandir",
+      "toCollapse": "Contraer"
+    },
+    "codeCompare": {
+      "compareMode": "Modo de comparación",
+      "unified": "Unificado",
+      "split": "Dividido",
+      "loader": "Descargando versiones para la comparación…",
+      "totalChanges": "Cambios totales:",
+      "collapseAll": "Contraer todo",
+      "expandAll": "Expandir todo",
+      "expandLines": "Expandir {{count}} líneas",
+      "empty": "Ambos archivos están vacíos. No se puede realizar la comparación.",
+      "noChanges": "No se encontraron cambios entre las versiones",
+      "basicVersion": "Versión básica",
+      "comparableVersion": "Versión comparable"
+    },
+    "licenseCard": {
+      "status": "Estado de clave de licencia",
+      "number": "Número de clave de licencia",
+      "remaining": "Restante",
+      "activationDate": "Fecha de activación",
+      "expirationDate": "Fecha de caducidad",
+      "term": "Término",
+      "dayLeft": "{{count}} día restante",
+      "daysLeft": "{{count}} días restantes",
+      "termDays": "{{count}} días"
+    },
+    "input": {
+      "password": {
+        "hide": "Ocultar",
+        "show": "Mostrar"
       }
     }
   }

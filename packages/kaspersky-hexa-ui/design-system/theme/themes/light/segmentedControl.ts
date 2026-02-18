@@ -1,4 +1,5 @@
 import { getTextSizes } from '@design-system/tokens'
+import { focus } from '@design-system/tokens/focus'
 import {
   SegmentedControlColorConfig as ColorConfig,
   SegmentedControlSize as Size,
@@ -9,7 +10,7 @@ import { TextTypes } from '@kaspersky/hexa-ui-core/typography/js'
 
 import { ComponentThemeContext } from '../config'
 
-export const segmentedControl = ({ colors }: ComponentThemeContext): ColorConfig => {
+export const segmentedControl = ({ colors, effects }: ComponentThemeContext): ColorConfig => {
   return {
     bar: {
       background: colors.segmented_control.bg.enabled,
@@ -31,9 +32,7 @@ export const segmentedControl = ({ colors }: ComponentThemeContext): ColorConfig
         background: colors.segmented_control_item.bg.disabled,
         color: colors.segmented_control_item.text.disabled
       },
-      focus: {
-        boxShadow: colors.focus.stroke
-      }
+      ...focus({ effects })
     }
   }
 }

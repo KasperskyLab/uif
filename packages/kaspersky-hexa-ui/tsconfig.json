@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "target": "es6",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "target": "ES2019",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "jsx": "react",
     "noImplicitAny": true,
@@ -12,13 +12,11 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "baseUrl": ".",
-    "outDir": "lib",
+    "outDir": "esm",
     "paths": {
       "@src/*": ["src/*"],
       "@design-system/*": ["design-system/*"],
-      "@icons/*": ["icons/*"],
       "@helpers/*": ["helpers/*"],
-      "@style/*": ["style/*"],
       "@sb/*": [".storybook/*"]
     }
   },
@@ -31,16 +29,15 @@
     "./tests/**/*",
     "./design-system/**/*",
     "./helpers/**/*",
-    "./assets/**/*",
-    "./icons/**/*",
-    "./illustrations/**/*",
+    "./docs",
     "./.storybook/**/*",
-    "./screenshots/**/*"
+    "./screenshots/**/*",
+    "/.changelog/scripts/*"
   ],
   "exclude": [
     "node_modules",
     "lib",
-    "./icons/*.d.ts"
+    "esm"
   ],
   "files": ["fonts.d.ts"]
 }

@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "Expand",
+  "description": "Интерфейсный элемент, который позволяет пользователю развернуть или свернуть скрытый контент.",
+  "usage": "В свернутом состоянии отображается часть контента, а при нажатии на интерактивный элемент контентная область раскрывается, показывая содержимое полностью.",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=128727%3A472066",
+  "pixsoView": "https://pixso.net/app/design/kgTclsFdkV8NOvdLnAuG1Q"
+}

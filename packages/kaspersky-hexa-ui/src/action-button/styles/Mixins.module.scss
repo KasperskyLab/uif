@@ -1,0 +1,96 @@
+@use "sass:map";
+@use "./Configs.module.scss" as *;
+
+@mixin base($mode, $state) {
+  background: var(--action_button--bg--#{$mode}--#{$state});
+  &, .label {
+    color: var(--action_button--text--#{$mode}--#{$state});
+  }
+  > svg {
+    color: var(--action_button--icon--#{$mode}--#{$state});
+  }
+}
+
+@mixin base-mode($mode) {
+  &:not(:disabled) {
+    @include base($mode, enabled);
+
+    &.interactive {
+      &:hover {
+        @include base($mode, hover);
+      }
+      &:active {
+        @include base($mode, active);
+      }
+    }
+  }
+
+  &:disabled {
+    &,
+    &:hover,
+    &:active,
+    &:focus-visible {
+      cursor: default;
+      @include base($mode, disabled);
+    }
+  }
+}
+
+@mixin base-size($sizes) {
+  $padding: map.get($sizes, "padding");
+  $padding_label: map.get($sizes, "padding_label");
+  $padding_icon: map.get($sizes, "padding_icon");
+  $gap: map.get($sizes, "gap");
+
+  &.withLabel {
+    padding: $padding_label;
+  }
+  &.withIcon {
+    padding: $padding_icon;
+  }
+  &.withLabel.withIcon {
+    padding: $padding;
+    gap: $gap;
+  }
+}
+
+@mixin size-by-mode($mode) {
+  $sizes-small: map.get($sizes-config, $mode, "small");
+  $sizes-medium: map.get($sizes-config, $mode, "medium");
+  $sizes-large: map.get($sizes-config, $mode, "large");
+
+  &.small {
+    @include base-size($sizes-small);
+  }
+  &.medium {
+    @include base-size($sizes-medium);
+  }
+  &.large {
+    @include base-size($sizes-large);
+  }
+}
+
+@mixin mode-ghost() {
+  @include base-mode(ghost);
+  @include size-by-mode("ghost");
+}
+
+@mixin mode-ghostInverted() {
+  @include base-mode(ghost_inverted);
+  @include size-by-mode("ghost");
+}
+
+@mixin mode-filled() {
+  @include base-mode(filled);
+  @include size-by-mode("filled");
+}
+
+@mixin mode-filledInverted() {
+  @include base-mode(filled_inverted);
+  @include size-by-mode("filled");
+}
+
+@mixin mode-onLight() {
+  @include base-mode(on_light);
+  @include size-by-mode("ghost");
+}

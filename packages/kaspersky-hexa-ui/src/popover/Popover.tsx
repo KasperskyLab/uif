@@ -1,7 +1,9 @@
 import { useGlobalComponentStyles } from '@helpers/useGlobalComponentStyles'
-import { Popover as AntdPopover } from 'antd'
+import { getRenderPropValue } from 'antd/es/_util/getRenderPropValue'
 import cn from 'classnames'
 import React, { FC } from 'react'
+
+import { Tooltip as AntdTooltip } from '../tooltip/AntdTooltip'
 
 import { ALIGNS } from './popoverCss'
 import { getPopoverGlobalStyles } from './popoverGlobalStyles'
@@ -9,6 +11,7 @@ import { PopoverProps } from './types'
 import { useThemedPopover } from './useThemedPopover'
 
 export const Popover: FC<PopoverProps> = ({
+  content,
   defaultVisible = false,
   placement = 'bottom',
   overlayClassName,
@@ -42,8 +45,14 @@ export const Popover: FC<PopoverProps> = ({
     { shouldLimitSize }
   )
 
+  const overlay = (
+    <div className="ant-popover-inner-content">
+      {getRenderPropValue(content)}
+    </div>
+  )
+
   return (
-    <AntdPopover
+    <AntdTooltip
       ref={tooltipRef}
       onVisibleChange={(visible) => {
         setVisible(visible)
@@ -58,7 +67,10 @@ export const Popover: FC<PopoverProps> = ({
       visible={visible}
       defaultVisible={defaultVisible}
       align={ALIGNS[placement]}
+      overlay={overlay}
       placement={placement}
+      prefixCls="ant-popover"
+      transitionName="ant-zoom-big"
       trigger="click"
       {...props}
     />

@@ -1,5 +1,5 @@
-import React from 'react'
 import { getDisplayName, useGlobalComponentStyles } from '@helpers/useGlobalComponentStyles'
+import React from 'react'
 
 export function WithGlobalComponentStyles<T extends React.ComponentType<any>> (
   Component: T,

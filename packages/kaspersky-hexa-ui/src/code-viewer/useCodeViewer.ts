@@ -1,8 +1,9 @@
 import { defaultKeymap, indentLess, insertTab } from '@codemirror/commands'
 import { syntaxHighlighting } from '@codemirror/language'
 import { linter, lintGutter } from '@codemirror/lint'
-import { Compartment, EditorState, StateEffect } from '@codemirror/state'
+import { Compartment, EditorState, RangeSetBuilder, StateEffect } from '@codemirror/state'
 import {
+  Decoration,
   EditorView,
   highlightActiveLine,
   highlightActiveLineGutter,
@@ -17,6 +18,7 @@ import React, {
 } from 'react'
 
 import { DEFAULT_LANGUAGES } from './constants'
+import { applyDefaultExtensions } from './extensions'
 import { createTagsColors } from './hightlightingStyles'
 import type { CodeViewerRef, CodeViewerViewProps, CustomLanguages } from './types'
 
@@ -25,6 +27,7 @@ export function useCodeViewer<T extends CustomLanguages>
   const containerRef = useRef<HTMLDivElement | null>(null)
   const editorStateRef = useRef<EditorState | null>(null)
   const editorViewRef = useRef<EditorView | null>(null)
+  const linesHighlightingExtensionRef = useRef(new Compartment())
   const highlightingExtensionRef = useRef(new Compartment())
   const languageExtensionRef = useRef(new Compartment())
   const readOnlyExtensionRef = useRef(new Compartment())
@@ -38,23 +41,30 @@ export function useCodeViewer<T extends CustomLanguages>
   useEffect(() => {
     if (!containerRef.current) return
 
+    const defaultExtensions = applyDefaultExtensions()[props.language as keyof typeof DEFAULT_LANGUAGES]
+
+    const extensions = [
+      languageExtensionRef.current.of([]),
+      readOnlyExtensionRef.current.of([]),
+      valueChangeListenerExtensionRef.current.of([]),
+      highlightingExtensionRef.current.of([]),
+      linesHighlightingExtensionRef.current.of([]),
+      linesChangeListenerExtensionRef.current.of([]),
+      hasTextListenerExtensionRef.current.of([]),
+      keymapExtensionRef.current.of([]),
+      focusListenerExtensionRef.current.of([]),
+      lineNumbers(),
+      highlightActiveLine(),
+      highlightActiveLineGutter(),
+      ...props.linter ? [linter(props.linter)] : [],
+      ...props.linter ? [lintGutter()] : [],
+      ...props.completions ? [props.completions] : [],
+      ...(defaultExtensions || []),
+      ...(props.lineWrapping ? [EditorView.lineWrapping] : [])
+    ]
     editorStateRef.current = EditorState.create({
       doc: '',
-      extensions: [
-        languageExtensionRef.current.of([]),
-        readOnlyExtensionRef.current.of([]),
-        valueChangeListenerExtensionRef.current.of([]),
-        highlightingExtensionRef.current.of([]),
-        linesChangeListenerExtensionRef.current.of([]),
-        hasTextListenerExtensionRef.current.of([]),
-        keymapExtensionRef.current.of([]),
-        focusListenerExtensionRef.current.of([]),
-        lineNumbers(),
-        highlightActiveLine(),
-        highlightActiveLineGutter(),
-        ...props.linter ? [linter(props.linter)] : [],
-        ...props.linter ? [lintGutter()] : []
-      ]
+      extensions
     })
     editorViewRef.current = new EditorView({
       state: editorStateRef.current,
@@ -70,7 +80,10 @@ export function useCodeViewer<T extends CustomLanguages>
   useEffect(() => {
     if (!editorViewRef.current) return
 
-    const readOnlyExtension = EditorState.readOnly.of(!!props.readonly)
+    const readOnlyExtension = [
+      EditorState.readOnly.of(!!props.readonly),
+      EditorView.editable.of(!props.readonly) // hide cursor
+    ]
     editorViewRef.current.dispatch({
       effects: readOnlyExtensionRef.current.reconfigure(readOnlyExtension)
     })
@@ -91,13 +104,49 @@ export function useCodeViewer<T extends CustomLanguages>
     editorViewRef.current.dispatch(transaction)
   }, [props.initialValue])
 
+  useEffect(() => {
+    if (!editorViewRef.current || !props.readonly || !props.linesHighlighted) return
+
+    const isInRanges = (num: number, ranges: string[]): boolean =>
+      ranges.some(r => {
+        const parts = r.split('-')
+        const start = parseInt(parts[0])
+        const end = parseInt(parts[1])
+        const min = Math.min(start, end)
+        const max = Math.max(start, end)
+        return (num >= min && num <= max) || (num === start && isNaN(end))
+      })
+
+    const decoration = Decoration.line({
+      attributes: { class: 'cm-highlightedLine' }
+    })
+
+    const builder = new RangeSetBuilder<Decoration>()
+    for (const { from, to } of editorViewRef.current.visibleRanges) {
+      for (let pos = from; pos <= to;) {
+        const line = editorViewRef.current.state.doc.lineAt(pos)
+        if (isInRanges(line.number, props.linesHighlighted)) {
+          builder.add(line.from, line.from, decoration)
+        }
+        pos = line.to + 1
+      }
+    }
+
+    const decorations = builder.finish()
+    const effects = linesHighlightingExtensionRef.current.reconfigure(EditorView.decorations.of(decorations))
+
+    if (effects) {
+      editorViewRef.current.dispatch({ effects })
+    }
+  }, [props.readonly, props.linesHighlighted])
+
   /** Defines and updates «onChange» listener */
   useEffect(() => {
     if (!editorViewRef.current || !props.onChange) return
 
     const valueChangeListenerExtension = EditorView.updateListener.of((update) => {
       if (update.docChanged && props.onChange) {
-        props.onChange(update.state.doc.toString())
+        props.onChange(update.state.doc.toString(), update)
       }
     })
 

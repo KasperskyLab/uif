@@ -1,19 +1,18 @@
+import { GlobalStyle } from '@design-system/global-style'
+import { ThemeProvider } from '@design-system/theme'
+import { themeColors } from '@design-system/tokens'
+import { ThemeKey } from '@design-system/types'
 import React, { FC, HTMLAttributes } from 'react'
 import styled from 'styled-components'
-import { useDarkMode } from 'storybook-dark-mode'
-import { ThemeKey } from '@design-system/types'
-import { ThemeProvider } from '@design-system/theme'
-import { GlobalStyle } from '@design-system/global-style'
-import { themeColors } from '@design-system/tokens'
 
 export const withThemeProvider = (Story: FC, context: any) => {
-  const themeKey = useDarkMode() ? ThemeKey.Dark : ThemeKey.Light
-  document.documentElement.setAttribute('data-theme', themeKey)
+  const themeKey = context.globals.theme || ThemeKey.Light
+  const direction = context.globals.direction || 'ltr'
 
   return (
     <ThemeProvider theme={themeKey}>
       <GlobalStyle />
-      <StoryLayoutContainer theme={themeKey}>
+      <StoryLayoutContainer theme={themeKey} dir={direction}>
         <Story {...context} theme={themeKey} />
       </StoryLayoutContainer>
     </ThemeProvider>
@@ -29,6 +28,6 @@ export const StoryLayoutContainer = styled.div<HTMLAttributes<HTMLDivElement>>(
     margin: '-1rem',
     alignItems: 'flex-start',
     minHeight: '100vh',
-    background: props.inverted ? props.theme === ThemeKey.Light ? '#AB94F1' : '#1DA189' : themeColors.bg.base[props.theme],
+    background: props.inverted ? props.theme === ThemeKey.Light ? '#AB94F1' : '#1DA189' : themeColors.bg.base[props.theme]
   })
 )

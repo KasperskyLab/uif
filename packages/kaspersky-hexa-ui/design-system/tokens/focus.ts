@@ -1,4 +1,4 @@
-import { ComponentThemeContext } from '@design-system/theme/themes/config'
+import { ComponentContext } from '@design-system/css-configs'
 
 export type Focus = {
   focus?: {
@@ -6,10 +6,10 @@ export type Focus = {
   }
 }
 
-export const focus = ({ colors, effects }: ComponentThemeContext): Focus => {
+export const focus = ({ effects }: ComponentContext): Focus => {
   return {
     focus: {
-      boxShadow: `${effects.focus[1]} ${colors.focus.stroke}`
+      boxShadow: `${effects.focus[1]} var(--focus--stroke)`
     }
   }
 }

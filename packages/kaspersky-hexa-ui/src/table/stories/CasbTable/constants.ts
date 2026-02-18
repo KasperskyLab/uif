@@ -4,7 +4,8 @@ export enum ECellType {
   RISK_LEVEL = 'RISK_LEVEL',
   SERVICE_NAME = 'SERVICE_NAME',
   ACCESS = 'ACCESS',
-  BUTTON = 'BUTTON'
+  BUTTON = 'BUTTON',
+  TAGS = 'TAGS'
 }
 
 export enum ERiskLevelCode {

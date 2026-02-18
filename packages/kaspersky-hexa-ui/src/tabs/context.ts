@@ -4,8 +4,10 @@ import { createContext } from 'react'
 import { TabsCssConfig } from './types'
 
 export type ITabsContext = {
-  cssConfig?: TabsCssConfig,
+  cssConfig: TabsCssConfig,
   testAttributes?: TestingAttributes
 }
 
-export const TabsContext = createContext<ITabsContext>({})
+export const TabsContext = createContext<ITabsContext>(
+  {} as ITabsContext 
+)

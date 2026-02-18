@@ -1,36 +1,12 @@
-import { Focus } from '@design-system/tokens/focus'
-import { Theme, ThemeKey } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { ThemeKey } from '@design-system/types'
+import { TestingProps } from '@helpers/typesHelpers'
 import { DropdownItemInnerProps, DropdownItemProps } from '@src/dropdown/types'
 import { ExpandIconPosition } from 'antd/lib/collapse/Collapse'
 import * as React from 'react'
 
-import { TextSizes } from '@kaspersky/hexa-ui-core/typography/js'
+export const accordionTitleSizes = ['small', 'medium', 'large'] as const
 
-export type StateProps = {
-  background?: string,
-  color?: string,
-  border?: string,
-  additionalTextColor?: string
-}
-
-export type AccordionColorConfig = Focus & {
-  enabled?: StateProps,
-  disabled?: StateProps
-}
-
-export type AccordionStyleConfig = {
-  /** Custom theme */
-  theme?: Theme
-}
-
-export type AccordionCssConfig = AccordionStyleConfig & AccordionColorConfig
-
-export type AccordionPanelSizeConfig = TextSizes
-
-export type AccordionPanelCssConfig = AccordionPanelSizeConfig
-
-export type AccordionTitleSize = 'small' | 'medium' | 'large'
+export type AccordionTitleSize = typeof accordionTitleSizes[number]
 
 type AccordionAction = Pick<DropdownItemProps, 'onClick'>
   & Pick<DropdownItemInnerProps, 'description' | 'componentsBefore' | 'componentsAfter'>
@@ -69,8 +45,6 @@ export type AccordionPanelProps = {
   disabled?: boolean
 } & AccordionPanelThemeProps
 
-export type AccordionPanelViewProps = ToViewProps<AccordionPanelProps, AccordionPanelCssConfig, AccordionPanelThemeProps>
-
 export type AccordionProps = {
   /** Key of the active panel */
   activeKey?: string[] | string | number[] | number,
@@ -91,7 +65,5 @@ export type AccordionProps = {
   /** React children */
   children?: React.ReactNode | undefined,
   /** Handler function calling when accordion tab clicked */
-  onChange?: (key: string | string[]) => void
+  onChange?: (key: (string | number) | (string | number)[]) => void
 } & TestingProps
-
-export type AccordionViewProps = ToViewProps<AccordionProps, AccordionCssConfig, AccordionStyleConfig>

@@ -1,11 +1,12 @@
 import { AdditionalContent } from '@helpers/components/AdditionalContent'
+import { usePopupConfig } from '@helpers/components/PopupConfigProvider'
+import { useId } from '@helpers/hooks/useId'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { FormLabel } from '@src/form-label'
 import { Checkbox as AntdCheckbox } from 'antd'
 import cn from 'classnames'
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import { v4 as uuidv4 } from 'uuid'
 
 import { checkboxCss, StyledCheckboxGroup } from './checkboxCss'
 import {
@@ -43,9 +44,12 @@ const CheckboxView: FC<CheckboxViewProps> = ({
   testAttributes,
   description,
   dependentElement,
+  id,
   ...rest
 }: CheckboxViewProps) => {
-  const uid = uuidv4()
+  const uid = id || useId()
+
+  const config = usePopupConfig()
 
   return (
     <div {...testAttributes} className="kl6-checkbox-wrapper">
@@ -60,14 +64,18 @@ const CheckboxView: FC<CheckboxViewProps> = ({
       >
         {typeof children === 'string'
           ? <FormLabel
-            disabled={disabled}
-            required={required}
-            tooltip={tooltip}
-            mode={mode}
-            htmlFor={uid}
-          >
-            {children}
-          </FormLabel>
+              disabled={disabled}
+              required={required}
+              tooltip={tooltip}
+              mode={mode}
+              htmlFor={uid}
+              getPopupContainer={
+                config.getPopupContainer ??
+                (triggerNode => config.usePortal ? document.body : triggerNode.parentElement!)
+              }
+            >
+              {children}
+            </FormLabel>
           : children
         }
       </StyledCheckbox>

@@ -11,8 +11,8 @@ ThemeProvider - компонент wrapper для стилизации комп�
 ### How To Use
 ```
 import React, { useState, useCallback, useEffect } from 'react'
-import { ThemeProvider } from '@kaspersky/components/design-system/theme'
-import { ThemeKey } from '@kaspersky/components/design-system/types'
+import { ThemeProvider } from '@kaspersky/hexa-ui/design-system/theme'
+import { ThemeKey } from '@kaspersky/hexa-ui/design-system/types'
 
 const Layout = () => {
   const [theme, setTheme] = useState<ThemeKey>(ThemeKey.Light)

@@ -16,7 +16,7 @@ export const KeyValueWrapper = styled.div<{ labelPosition: LabelPosition, gridLa
       if (gridLayout.rows) styles += `grid-template-rows: ${gridLayout.rows.join(' ')};`
       return styles
     }
-  return 'display: flex;'
+    return 'display: flex;'
   }}
   ${({ labelPosition }) => {
     switch (labelPosition) {

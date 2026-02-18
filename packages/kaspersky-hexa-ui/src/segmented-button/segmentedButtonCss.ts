@@ -11,44 +11,43 @@ const fromProps = getFromProps<SegmentedButtonCssConfig>()
 
 const textSizes = getTextSizes(TextTypes.BTR3)
 
-export const segmentedButtonCss = css<{ type: SegmentedButtonType, isStretch?: boolean }>`
+export const segmentedButtonCss = css<{ isStretch?: boolean }>`
   display: flex;
   flex-direction: row;
   width: 100%;
 
-  ${({ type }: { type: SegmentedButtonType }) => (
-    type === 'checkbox'
-      ? css`
-        gap: 4px;
-      `
-      : css`
-        div:not(:first-child):not(:last-child) {
-          &, & label {
-            border-radius: 0;
-          }
-        }
-        div:first-child {
-          &, & label {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-          }
-        }
-        div:last-child {
-          &, & label {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-          }
-        }
-        div:not(:last-child):not(.kl6-segmentedButton-item-checked) {
-          &, &:hover, &:active, &:focus-visible {
-            border-right-color: transparent;
-          }
-        }
-        div:not(:last-child) {
-          margin-right: -1px;
-        }
-      `
-  )}
+  &.type-checkbox {
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  &.type-radio {
+    div:not(:first-child):not(:last-child) {
+      &, & label {
+        border-radius: 0;
+      }
+    }
+    div:first-child {
+      &, & label {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+    div:last-child {
+      &, & label {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+    div:not(:last-child):not(.kl6-segmentedButton-item-checked) {
+      &, &:hover, &:active, &:focus-visible {
+        border-right-color: transparent;
+      }
+    }
+    div:not(:last-child) {
+      margin-right: -1px;
+    }
+  }
 
   ${({ isStretch }) => isStretch && css`
     & > div {
@@ -64,6 +63,7 @@ export const segmentedButtonCss = css<{ type: SegmentedButtonType, isStretch?: b
 export const segmentedButtonItemCss = css<{ type: SegmentedButtonType, cssConfig: SegmentedButtonCssConfig }>`
   display: flex;
   transition: all 0.3s ease;
+  max-width: 300px;
 
   &, label {
     border-radius: 8px;
@@ -88,7 +88,7 @@ export const segmentedButtonItemCss = css<{ type: SegmentedButtonType, cssConfig
     background: ${fromProps('unchecked.active.background')};
   }
 
-  input:focus-visible + label {
+  .kl6-segmentedButton-item-input:focus-visible + label {
     box-shadow: ${fromProps('focus.boxShadow')};
   }
 
@@ -115,7 +115,7 @@ export const segmentedButtonItemCss = css<{ type: SegmentedButtonType, cssConfig
 
       &.kl6-segmentedButton-item-checked {
         background: ${fromProps('checked.disabled.background')};
-        border-color: transparent;
+        border-color: ${fromProps('checked.disabled.border')};
       }
       label {
         cursor: not-allowed;
@@ -131,15 +131,22 @@ export const segmentedButtonItemCss = css<{ type: SegmentedButtonType, cssConfig
     }
   `}
 
+  .kl6-segmentedButton-item-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .kl6-segmentedButton-item-additional {
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
 
-  input {
+  .kl6-segmentedButton-item-input {
     position: absolute;
     opacity: 0;
+    appearance: none;
   }
 
   label {

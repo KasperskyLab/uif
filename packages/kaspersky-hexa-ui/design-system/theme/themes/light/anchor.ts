@@ -22,5 +22,5 @@ export const anchor = ({ colors, effects }: ComponentThemeContext): AnchorColorC
     background: colors.anchor_links_item.bg.enabled_selected
   },
   boxShadow: `${effects.elevation.small[1]} ${colors.elevation.small[1]}, ${effects.elevation.small[2]} ${colors.elevation.small[2]}`,
-  ...focus({ colors, effects })
+  ...focus({ effects })
 })

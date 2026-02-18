@@ -1,8 +1,9 @@
 import { SPACES } from '@design-system/theme'
 import { Checkbox } from '@src/checkbox'
 import { Locale } from '@src/locale'
+import { Tooltip } from '@src/tooltip'
 import { Text } from '@src/typography'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
   SortableContainer as sortableContainer,
   SortableElement as sortableElement,
@@ -29,9 +30,15 @@ const ItemsContainer = styled.div`
 const Dragger = styled.div`
   cursor: pointer;
   justify-self: flex-end;
+  color: var(--action_button--icon--ghost--enabled);
 `
 const ItemLabel = styled.div`
   flex-grow: 1;
+
+  span{
+    font-weight: 400;
+    user-select: none;
+  }
 `
 
 const Item = styled.label`
@@ -59,32 +66,76 @@ const CheckboxRow = styled.div`
   align-items: center;
 `
 
+const NoDragIcon = styled.div`
+  padding-left: 20px;
+`
 interface SortableItemProps {
-  column: any & { show: boolean, title: string },
+  column: any & { show: boolean, title: string, hideColumnAvailable?: boolean, dataIndex?: number },
   onChange: (column: any) => void
+}
+
+type BaseItemProps = {
+  value: SortableItemProps
+  prefix?: React.ReactNode
+}
+
+const BaseItem: React.FC<BaseItemProps> = ({ value, prefix }) => {
+  const { column, column: { show, title, dataIndex, hideColumnAvailable } } = value
+  const CheckboxRowComponent = (
+    <CheckboxRow>
+      <Checkbox
+        checked={show}
+        disabled={!hideColumnAvailable}
+        onChange={() => value.onChange(column)}
+      />
+      <ItemLabel>
+        <Text type="BTM3">{title}</Text>
+      </ItemLabel>
+    </CheckboxRow>
+  )
+  return (
+    <Item className="selector-item" data-testid={`selector-item-${dataIndex}`}>
+      {prefix}
+      {
+        hideColumnAvailable
+          ? CheckboxRowComponent
+          : (
+              <Tooltip text={<Locale localizationKey="table.columnsSettings.columnHideIsUnavailable" />}>
+                {CheckboxRowComponent}
+              </Tooltip>
+            )
+      }
+    </Item>
+  )
 }
 
 const SortableItem = sortableElement(
   ({ value }: { value: SortableItemProps }) => (
-    <Item className="selector-item" data-testid={`selector-item-${value.column.dataIndex}`}>
-      <Dragger>
-        <DragHandle />
-      </Dragger>
-      <CheckboxRow>
-        <Checkbox
-          checked={value.column.show}
-          onChange={() => value.onChange(value.column)}
-        />
-        <ItemLabel>
-          <Text type="BTM3">{value.column.title}</Text>
-        </ItemLabel>
-      </CheckboxRow>
-    </Item>
-  )
+    <BaseItem
+      value={value}
+      prefix={
+        <Dragger>
+          <DragHandle />
+        </Dragger>
+      }
+    />
+  ))
+
+const NormalItem = ({ value }: { value: SortableItemProps }) => (
+  <BaseItem value={value} />
 )
 
 const SortableContainer = sortableContainer(
-  ({ children }: { children: any }) => {
+  ({ children, draggingAvailable }: { children: any, draggingAvailable?: boolean }) => {
+    if (!draggingAvailable) {
+      return (
+        <ItemsContainer>
+          <NoDragIcon>
+            {children}
+          </NoDragIcon>
+        </ItemsContainer>
+      )
+    }
     return <ItemsContainer>{children}</ItemsContainer>
   }
 )
@@ -118,16 +169,39 @@ function areAllSelected (columns: any[]) {
   return filteredColumns.every(({ show }) => show)
 }
 
+function isPartiallySelected (columns: any[]) {
+  const filteredColumns = columns.filter((column) => !isColumnReadonly(column) && column.hideColumnAvailable)
+  const allSelected = filteredColumns.every(({ show }) => show)
+  const hasSelected = filteredColumns.some(({ show }) => show)
+  return hasSelected && !allSelected
+}
+
 export interface ColumnsSelectorProps {
   columns: any[],
-  setColumns: (value: any[]) => void
+  setColumns: (value: any[]) => void,
+  draggingAvailable?: boolean,
+  searchValue?: string
 }
 
 export const ColumnsSelector = ({
   columns,
-  setColumns
+  setColumns,
+  draggingAvailable = true,
+  searchValue
 }: ColumnsSelectorProps) => {
   const [selectAll, setAllSelected] = useState(areAllSelected(columns))
+  const [indeterminate, setIndeterminate] = useState(isPartiallySelected(columns))
+
+  const updateSelectionStates = (newColumns: any[]) => {
+    const visibleColumns = searchValue
+      ? newColumns.filter((column) =>
+        column.dataIndex.toLowerCase().includes(searchValue.toLowerCase())
+      )
+      : newColumns
+
+    setAllSelected(areAllSelected(visibleColumns))
+    setIndeterminate(isPartiallySelected(visibleColumns))
+  }
 
   const onSortEnd = ({
     oldIndex,
@@ -140,7 +214,14 @@ export const ColumnsSelector = ({
   }
 
   const onSelectAll = () => {
+    const visibleIndexes = new Set(
+      filteredColumns.map((column) => column.dataIndex)
+    )
+
     const newColumns = columns.map((column) => {
+      if (!visibleIndexes.has(column.dataIndex)) {
+        return column
+      }
       return isColumnReadonly(column)
         ? column
         : {
@@ -149,8 +230,8 @@ export const ColumnsSelector = ({
           }
     })
 
-    setAllSelected(!selectAll)
     setColumns(newColumns)
+    updateSelectionStates(newColumns)
   }
 
   const onColumnSelect = (selectedColumn: any) => {
@@ -158,41 +239,72 @@ export const ColumnsSelector = ({
       (column) =>
         column.dataIndex?.localeCompare(selectedColumn.dataIndex) === 0
     )
-    const newColumns = [...columns]
+    const newColumns = columns.map((column, index) => {
+      if (index === columnIndex) {
+        return {
+          ...column,
+          show: selectedColumn.hideColumnAvailable
+            ? !column.show
+            : true
+        }
+      }
+      return column
+    })
 
-    if (selectedColumn.hideColumnAvailable) {
-      newColumns[columnIndex].show = !newColumns[columnIndex].show
-    } else {
-      newColumns[columnIndex].show = true
-    }
 
     setColumns(newColumns)
-    setAllSelected(areAllSelected(newColumns))
+    updateSelectionStates(newColumns)
   }
 
-  const filteredColumns = useMemo(
-    () => columns.filter((column) => !isColumnReadonly(column)),
+  const filteredColumns = useMemo(() => {
+    const columnsFilterd = columns.filter((column) => !isColumnReadonly(column))
+
+    return columnsFilterd.filter((column) =>
+      column.dataIndex.toLowerCase().includes(searchValue?.toLowerCase())
+    )
+  }, [columns, searchValue])
+
+  const isAnyColsHideAvailable = useMemo(
+    () => columns.some(({ hideColumnAvailable }) => hideColumnAvailable),
     [columns]
   )
+
+  useEffect(() => {
+    updateSelectionStates(columns)
+  }, [columns, searchValue])
 
   return (
     <SelectorWrapper>
       <Item className="selector-item select-all-item">
         <CheckboxRow>
-          <Checkbox checked={selectAll} onChange={onSelectAll} />
-          <Text type="BTM3">
-            <Locale localizationKey="table.columnsSettings.selectAll" />
-          </Text>
+          <Checkbox checked={selectAll} indeterminate={indeterminate} disabled={!isAnyColsHideAvailable} onChange={onSelectAll} />
+          <ItemLabel>
+            <Text type="BTM3">
+              <Locale localizationKey="table.columnsSettings.selectAll" />
+            </Text>
+          </ItemLabel>
         </CheckboxRow>
       </Item>
-      <SortableContainer distance={2} onSortEnd={onSortEnd} helperClass="selector-item-dragging">
-        {filteredColumns.map((value, index) => (
-          <SortableItem
-            key={`item-${value.dataIndex}-${index}`}
-            index={index}
-            value={{ column: value, onChange: () => onColumnSelect(value) }}
-          />
-        ))}
+      <SortableContainer
+        distance={2}
+        onSortEnd={onSortEnd}
+        helperClass="selector-item-dragging"
+        draggingAvailable={draggingAvailable}
+      >
+        {filteredColumns.map((value, index) =>
+          draggingAvailable ? (
+            <SortableItem
+              key={`item-${value.dataIndex}-${index}`}
+              index={index}
+              value={{ column: value, onChange: () => onColumnSelect(value) }}
+            />
+          ) : (
+            <NormalItem
+              key={`item-${value.dataIndex}-${index}`}
+              value={{ column: value, onChange: () => onColumnSelect(value) }}
+            />
+          )
+        )}
       </SortableContainer>
     </SelectorWrapper>
   )

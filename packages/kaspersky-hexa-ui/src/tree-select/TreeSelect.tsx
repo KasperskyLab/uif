@@ -6,7 +6,7 @@ import { Tag } from '@src/tag'
 import { TreeNodeCheckIcon } from '@src/tree/Tree'
 import { TreeNodeProps, TreeSelect as TreeSelectAntd, TreeSelectProps as TreeSelectAntdProps } from 'antd'
 import cn from 'classnames'
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { ArrowDownSolid } from '@kaspersky/hexa-ui-icons/8'
@@ -28,29 +28,46 @@ function addCustomCheckIcon (treeData: TreeData): TreeData {
 }
 
 const StyledTreeSelectView = styled(TreeSelectAntd).withConfig({
-  shouldForwardProp: prop => !['cssConfig'].includes(prop)
+  shouldForwardProp: prop => !['cssConfig', 'validationStatus'].includes(prop)
 })`${treeSelectCss}`
 
-const TreeSelectComponent: FC<TreeSelectProps> = ({
-  disabled,
-  dropdownClassName,
-  getPopupContainer,
-  treeCheckable,
-  treeData,
-  className,
-  ...rest
-}: TreeSelectProps) => {
-  const themedProps = useThemedTreeSelect(rest)
-  const { testAttributes, ...props } = useTestAttribute(themedProps)
+const TreeSelectComponent: FC<TreeSelectProps> = (props: TreeSelectProps) => {
+  const {
+    className,
+    disabled,
+    dropdownClassName,
+    getPopupContainer,
+    searchValue,
+    testAttributes,
+    treeCheckable,
+    treeData,
+    validationStatus = 'default',
+    ...rest
+  } = useTestAttribute(useThemedTreeSelect(props))
 
   const newTreeData = React.useMemo(
     () => treeCheckable && treeData ? addCustomCheckIcon(treeData) : treeData,
     [treeCheckable, treeData]
   )
+  const [search, setSearch] = useState<string>(searchValue ?? '')
+
+  useEffect(()=>{
+    setSearch(searchValue ?? '')
+  },[searchValue])
+
+  const handleSearchChange = (query: string) =>{
+    setSearch(query)
+    props.onSearch?.(query)
+  }
 
   return (
     <StyledTreeSelectView
-      className={cn(className, { 'select-show-search': props.showSearch })}
+      className={cn(className, {
+        'select-show-search': props.showSearch,
+        'has-non-empty-search': props.showSearch && search.length > 0
+      })}
+      searchValue={searchValue}
+      onSearch={handleSearchChange}
       clearIcon={<ClearIcon />}
       disabled={disabled}
       virtual={false}
@@ -58,14 +75,19 @@ const TreeSelectComponent: FC<TreeSelectProps> = ({
       getPopupContainer={getPopupContainer ?? (triggerNode => triggerNode.parentElement)}
       maxTagPlaceholder={maxTagPlaceholder}
       notFoundContent={<EmptyData />}
-      suffixIcon={props.showSearch ? <SearchIcon /> : <ChevronIcon />}
+      suffixIcon={
+        props.showSearch
+          ? (!search ? <SearchIcon/> : null)
+          : <ChevronIcon/>
+      }
       switcherIcon={<ArrowDownSolid />}
       tagRender={props => <Tag {...props} disabled={disabled} />}
       treeCheckable={treeCheckable}
       treeData={newTreeData}
       treeIcon
+      validationStatus={validationStatus}
       {...testAttributes}
-      {...props}
+      {...rest}
     />
   )
 }

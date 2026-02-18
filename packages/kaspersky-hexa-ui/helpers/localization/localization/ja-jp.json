@@ -3,7 +3,10 @@
     "common": {
       "empty": "データなし",
       "import": "インポート",
-      "export": "エクスポート"
+      "export": "エクスポート",
+      "filters": "フィルター",
+      "no": "いいえ",
+      "yes": "はい"
     },
     "upload": {
       "dropFileTitle": "ここにファイルをドロップしてください",
@@ -20,7 +23,7 @@
       "successTitle": "アップロード成功",
       "successDescription": "{{file, fileName}} が正常にサーバーにアップロードされました",
       "errorTitle": "アップロードエラー",
-      "errorDescription": "接続の問題により、{{file, fileName}} はアップロードできませんでした"
+      "errorDescription": "接続の問題により、{{file, fileName}} はアップロードできません"
     },
     "uploader": {
       "actions": {
@@ -38,7 +41,7 @@
       },
       "maxCountUploaded": "アップロードされるファイルの最大数",
       "progress": "{{progress}} / {{size}}",
-      "showFiles": "ファイルを表示",
+      "showFiles": "ファイルの表示",
       "total": {
         "files": "{{filesCount}} ファイル / 合計 {{total}} ファイル",
         "simple": "{{filesCount}} ファイル",
@@ -46,10 +49,23 @@
       },
       "validation": {
         "maxCount": "ファイル最大数の上限を超えるため、{{count}} ファイルがアップロードできません。",
+        "maxCount2": "アップロードされたファイルの合計数が許可される上限を超えています",
         "maxFileSize": "許可される最大サイズの上限を超えるため、{{count}} ファイルがアップロードできません。",
+        "maxFileSize2": "以前アップロードされたファイルのうち一部のファイルが、現在許可されるレイズの上限を超えています",
         "maxTotalSize": "許可される合計サイズの上限を超えるため、{{count}} ファイルがアップロードできません。",
+        "maxTotalSize2": "アップロードされたファイルの合計サイズが、現在の許可される最大サイズを超えています",
+        "filesDoNotMeetRequirements": "ファイルが要件を満たしていません",
         "format": "ファイル形式の要件を満たしていないため、{{count}} ファイルがアップロードできません。"
       }
+    },
+    "wizard": {
+      "actions": {
+        "cancel": "キャンセル",
+        "back": "戻る",
+        "next": "次へ",
+        "finish": "終了"
+      },
+      "stepStack": "ステップ {{currentStep}} / {{totalSteps}}"
     },
     "severity": {
       "critical": "緊急",
@@ -78,15 +94,6 @@
       "dotted": "検索..."
     },
     "table": {
-      "column": {
-        "name": "1 列目"
-      },
-      "column2": {
-        "name": "2 列目"
-      },
-      "column3": {
-        "name": "3 列目"
-      },
       "columnDropdown": {
         "ascending": "昇順",
         "descending": "降順",
@@ -95,7 +102,7 @@
         "resetFilters": "フィルターのリセット"
       },
       "columnsSettings": {
-        "header": "列の設定",
+        "header": "表の設定",
         "selectAll": "すべて選択",
         "columns": "列",
         "grouping": "グループ化",
@@ -103,6 +110,16 @@
         "noGrouping": "グループ化なし",
         "apply": "適用",
         "cancel": "キャンセル",
+        "columnTitles": {
+        "name": "名前",
+        "country": "国名",
+        "age": "年齢",
+        "city": "市区町村名",
+        "date": "日付",
+        "isSortable": "並べ替えの可否",
+        "sorter": "並べ替えの基準",
+        "sorterIsSortable": "並べ替え可能"
+        },
         "filtering": {
           "add": "追加",
           "clearAll": "すべてクリア",
@@ -111,7 +128,28 @@
           "from": "開始",
           "to": "終了",
           "value": "値"
-        }
+        },
+        "columnHideIsUnavailable": "列を非表示にすることはできません"
+      },
+      "filterOperation": {
+        "⊆": "次を含む",
+        "⊄": "次を含まない",
+        "cont_and": "次を含む (AND)",
+        "cont_or": "次を含む (OR)",
+        "ncont_or": "次を含まない",
+        "*=": "正規表現",
+        "empty": "空白である",
+        "nempty": "空白でない",
+        "range": "次の範囲内",
+        "nrange": "次の範囲外"
+      },
+      "filterTag": {
+        "⊆": "{{value}} を含む",
+        "⊄": "{{value}} を含まない",
+        "empty": "空白である",
+        "nempty": "空白でない",
+        "range": "{{from}}–{{to}} の範囲内",
+        "nrange": "{{from}}–{{to}} の範囲外"
       },
       "groupingEmpty": "その他"
     },
@@ -125,11 +163,57 @@
     },
     "actionBar": {
       "unsavedChanges": "保留中の変更",
-      "save": "保存",
+      "save": "適用",
       "cancel": "キャンセル"
     },
     "textarea": {
       "wordsCount": "{{count}} / {{total}}"
+    },
+    "menu": {
+      "favoritesNavItem": "ブックマーク",
+      "navUserItem": {
+        "userProps": {
+          "status": {
+            "available": "使用可能",
+            "unavailable": "使用不可"
+          }
+        }
+      }
+    },
+    "expand": {
+      "toExpand": "展開",
+      "toCollapse": "非表示"
+    },
+    "codeCompare": {
+      "compareMode": "比較モード",
+      "unified": "統一",
+      "split": "分割",
+      "loader": "比較用のバージョンをダウンロードしています...",
+      "totalChanges": "変更の合計：",
+      "collapseAll": "すべて非表示",
+      "expandAll": "すべて表示",
+      "expandLines": "{{count}} 行展開",
+      "empty": "両方のファイルが空です。比較できません。",
+      "noChanges": "バージョン間に変更は見つかりませんでした",
+      "basicVersion": "基本バージョン",
+      "comparableVersion": "比較可能バージョン"
+    },
+    "licenseCard": {
+      "status": "ライセンスのステータス",
+      "number": "ライセンスの番号",
+      "remaining": "残り期間",
+      "activationDate": "アクティベーション日時",
+      "expirationDate": "有効期限",
+      "term": "期間",
+      "dayLeft": "残り {{count}} 日",
+      "daysLeft": "残り {{count}} 日",
+      "termDays": "{{count}} 日"
+    },
+    "input": {
+      "password": {
+        "hide": "非表示",
+        "show": "表示"
+      }
     }
   }
 }

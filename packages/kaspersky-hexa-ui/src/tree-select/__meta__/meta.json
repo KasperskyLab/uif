@@ -6,13 +6,9 @@
     "screenshotTests": false,
     "migration": true,
     "apiTable": false,
-    "storybook": true,
-    "designLink": true,
-    "figmaView": true
+    "storybook": true
   },
   "component": "TreeSelect",
   "desctiption": "В качестве основы используется TreeSelect из библиотеки Antd.",
-  "usage": "Компонент TreeSelect похож на Select, но значения представлены в виде дерева. Подходит для любых данных, представленных в виде иерархии",
-  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/01-%5BB2B%5D-Hexa-UI-Components?type=design&node-id=30551%3A107886&mode=dev",
-  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F01-%255BB2B%255D-Hexa-UI-Components%3Ftype%3Ddesign%26node-id%3D30551%253A107886%26mode%3Ddev"
+  "usage": "Компонент TreeSelect похож на Select, но значения представлены в виде дерева. Подходит для любых данных, представленных в виде иерархии"
 }

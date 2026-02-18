@@ -1,6 +1,5 @@
-import { Focus } from '@design-system/tokens/focus'
 import { ThemeKey } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingProps } from '@helpers/typesHelpers'
 import { ButtonProps } from '@src/button/types'
 import { DropdownItemProps, DropdownProps } from '@src/dropdown/types'
 import { IconProps } from '@src/icon/types'
@@ -31,12 +30,14 @@ type ToolbarButtonCommonProps = {
   disabled?: boolean,
   onClick?: MouseEventHandler<HTMLElement>,
   tooltip?: string,
+  /** @deprecated Use onClick instead */
   handler?: string,
   showIndicator?: boolean
 }
 
 export type ToolbarButtonProps = ToolbarButtonCommonProps & {
   type: (typeof ToolbarItemKeyConst)['BUTTON'],
+  isPressed?: ButtonProps['isPressed'],
   label?: ReactNode
 }
 
@@ -104,6 +105,7 @@ interface ImportExportDropdownProps extends Omit<DropdownProps, 'overlay'> {
 }
 
 export type ToolbarVariants = {
+  Button: FC<ToolbarVariantButtonProps>,
   Search: FC<SearchProps>,
   ImportExportItem: FC<ImportExportButtonProps | ImportExportDropdownProps>,
   ExportItem: FC<ToolbarVariantButtonProps>,
@@ -136,38 +138,7 @@ export type ToolbarProps = {
   children?: ReactNode
 } & ToolbarThemeProps & TestingProps
 
-export type ToolbarViewProps = ToViewProps<ToolbarProps, ToolbarCssConfig, ToolbarThemeProps>
-
-export type ToolbarSearchViewProps = ToViewProps<SearchProps, ToolbarCssConfig, ToolbarThemeProps>
-
-type StateProps = {
-  background?: string,
-  color?: string,
-  border?: string
-}
-
-export type ToolbarColorConfig = StateProps & {
-  divider: StateProps,
-  search: Focus & {
-    enabled: StateProps,
-    hover: StateProps
-  },
-  button: {
-    hover: StateProps,
-    active: StateProps
-  }
-}
-
-export type ToolbarCssConfig = ToolbarColorConfig
-
 export type ToolbarBlockSide = 'left' | 'right'
-
-export type StyledToolbarProps = {
-  cssConfig: ToolbarCssConfig,
-  sticky?: number,
-  autoDropdown?: boolean,
-  dropdownedCount?: number
-}
 
 export type AutoDropdownProps = {
   enabled: boolean,

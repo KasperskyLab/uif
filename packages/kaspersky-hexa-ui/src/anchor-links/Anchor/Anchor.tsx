@@ -1,7 +1,5 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { useIntersectionChildren } from '@helpers/useIntersectionChildren'
-import { AnchorLink, AnchorLinkProps } from '@src/anchor-links'
-import { AnchorLinkCssConfig } from '@src/anchor-links/AnchorLink/types'
 import { Badge } from '@src/badge'
 import { Dropdown } from '@src/dropdown'
 import { Indicator } from '@src/indicator'
@@ -10,6 +8,8 @@ import React, { FC, KeyboardEvent, MouseEvent, useRef, useState } from 'react'
 
 import { Menu2 } from '@kaspersky/hexa-ui-icons/16'
 
+import { AnchorLink } from '../AnchorLink/AnchorLink'
+import { AnchorLinkCssConfig, AnchorLinkProps } from '../AnchorLink/types'
 import { isNumber } from '../helpers'
 import { StyledMoreButton } from '../MoreButton/StyledMoreButton'
 

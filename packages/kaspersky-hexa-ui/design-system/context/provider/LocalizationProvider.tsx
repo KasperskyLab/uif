@@ -1,8 +1,7 @@
+import { LangType, LangVariants } from '@helpers/localization/types'
 import i18next from 'i18next'
 import React, { ReactNode } from 'react'
 import { I18nextProvider } from 'react-i18next'
-
-import { LangType } from '../../../helpers/localization/types'
 
 interface Props {
   children: ReactNode,
@@ -13,7 +12,7 @@ interface Props {
 export const LocalizationProvider: React.FC<Props> = ({
   children,
   i18n,
-  locale = 'en-us'
+  locale = LangVariants.EnUs
 }) => {
   React.useEffect(() => {
     (locale !== i18n.language) && i18n.changeLanguage(locale)

@@ -3,6 +3,7 @@ import { createGlobalStyle, css } from 'styled-components'
 
 import('@kaspersky/hexa-ui-core/fonts')
 import('@kaspersky/hexa-ui-core/colors/css')
+import('@kaspersky/hexa-ui-core/typography/css')
 
 const globalRootStyleForGallery = css`
 .root-background-basic {

@@ -1,20 +1,32 @@
-import { SPACES } from '@design-system/theme'
-import { Pagination } from '@src/pagination'
-import { Table } from '@src/table'
-import React, { FC, useEffect, useState } from 'react'
+import { MakeRequired } from '@helpers/typesHelpers'
+import { Pagination as PaginationComponent } from '@src/pagination'
+import { TotalSummary } from '@src/pagination/TotalSummary'
+import React, { FC, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { getTotalRowCount } from '../helpers/getTotalRowCount'
-import { ITableProps, TablePaginationProps } from '../types'
+import { useTableContext } from '../context/TableContext'
+import { ITableProps, TableCssConfig, TablePaginationProps } from '../types'
 
 import { TableModule } from './index'
 
-const StyledPaginationContainer = styled.div`
-  margin: ${SPACES[10]}px 0;
+type StyledPaginationProps = { $enableStickyFooter: boolean } & Partial<Pick<TableCssConfig, 'pagination'>>
+
+const StyledPaginationContainer = styled.div<StyledPaginationProps>`
+  margin: 16px 0;
+  ${(props) => props.$enableStickyFooter && props.pagination && `
+    margin: 8px 0;
+    position: sticky;
+    bottom: 0;
+    clip-path: inset(-100vw 0 0 0);
+    > div {
+      padding: 5px 0;
+      background: ${props.pagination.background};
+      box-shadow: ${props.pagination.boxShadow};
+    }
+  `}
 `
 
 const getData = ({ data = [], current, pageSize }: {
-  // eslint-disable-next-line @typescript-eslint/ban-types
   data?: readonly object[],
   current: number,
   pageSize: number
@@ -22,150 +34,85 @@ const getData = ({ data = [], current, pageSize }: {
   return data.slice((current - 1) * pageSize, current * pageSize)
 }
 
-const FIRST_PAGE = 1
-const DEFAULT_PAGE_SIZE = 20
+type TablePropsWithRequired = MakeRequired<ITableProps, 'dataSource'>
 
-const PaginationModule: TableModule = Component => ({
+export const Pagination: TableModule = Component => function PaginationModuleCallback ({
   pagination,
   ...rest
-}: ITableProps) => {
-  if (pagination === false) {
+}: ITableProps) {
+  if (pagination === false || pagination?.paginationDisabled) {
     return <Component {...rest} pagination={false} />
   }
 
-  return ModuleWithPagination(Component)({ ...rest, pagination: pagination || {} })
+  return <PaginationModule {...rest as TablePropsWithRequired} pagination={pagination || {}} Component={Component} />
 }
 
-type ModuleWithPaginationProps = Omit<ITableProps, 'pagination'> & {
-  pagination: TablePaginationProps
+type ModuleWithPaginationProps = Omit<TablePropsWithRequired, 'pagination'> & {
+  pagination: TablePaginationProps,
+  Component: FC<ITableProps>
 }
-type TableModulePagination = (Component: typeof Table) => FC<ModuleWithPaginationProps>
 
-const ModuleWithPagination: TableModulePagination = Component => ({
+function PaginationModule ({
   pagination: {
-    current: propsCurrent,
-    pageSize: propsPageSize,
-    total: propsTotal,
-    totalRoot: propsTotalRoot,
-    onChange: propsOnChange,
-    onShowSizeChange: propsOnShowSizeChange,
-    simple = false,
-    restoreCurrentWhenDataChange,
+    showOnlyTotalSummary,
+    current,
+    pageSize,
+    total,
     selected: propsSelected,
     showSelected: propsShowSelected,
     showSizeChanger: propsShowSizeChanger,
-    hideOnSinglePage
+    isServerPagination,
+    ...restPagination
   },
-  dataSource = [],
+  dataSource,
+  Component,
   ...props
-}: ModuleWithPaginationProps) => {
-  const [current, setCurrent] = useState(FIRST_PAGE)
-  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
-  const [total, setTotal] = useState(getTotalRowCount(dataSource))
-  const [totalRoot, setTotalRoot] = useState(dataSource.length)
-  const [onChange, setOnChange] = useState<null |((current?: number, pageSize?: number) => void)>(null)
-  const [onShowSizeChange, setOnShowSizeChange] = useState<null |((current?: number, size?: number) => void)>(null)
-  const isCurrentPageOutOfRage = Math.ceil(total / pageSize) < current
+}: ModuleWithPaginationProps) {
+  const { cssConfig, pagination: paginationContext } = useTableContext()
 
   useEffect(() => {
-    propsCurrent && setCurrent(propsCurrent)
-    propsPageSize && setPageSize(propsPageSize)
-    propsTotal && setTotal(propsTotal)
-    if (propsTotalRoot) {
-      setTotalRoot(propsTotalRoot)
-    } else {
-      propsTotal && setTotalRoot(propsTotal)
+    if (paginationContext.shouldCountClientTotal && paginationContext.setTotal) {
+      paginationContext.setTotal(dataSource.length)
     }
-    propsOnChange && setOnChange(() => propsOnChange)
-    propsOnShowSizeChange && setOnShowSizeChange(() => propsOnShowSizeChange)
-  }, [propsCurrent, propsPageSize, propsTotal, propsOnChange, propsOnShowSizeChange, propsTotalRoot])
-
-  useEffect(() => {
-    if (typeof propsCurrent !== 'number') return
-    setCurrent(propsCurrent)
-  }, [propsCurrent])
-
-  useEffect(() => {
-    if (propsTotal) return
-    setTotal(getTotalRowCount(dataSource))
-  }, [dataSource, propsTotal])
-
-  useEffect(() => {
-    if (propsTotalRoot || propsTotal) return
-    setTotalRoot(dataSource.length)
-  }, [dataSource, propsTotal, propsTotalRoot])
-
-  const doesUsePageLoading = propsTotal !== undefined
-
-  useEffect(() => {
-    if (doesUsePageLoading) {
-      setCurrent(FIRST_PAGE)
-    }
-  }, [total, doesUsePageLoading])
-
-  useEffect(() => {
-    if (onChange && doesUsePageLoading) {
-      setCurrent(FIRST_PAGE)
-      onChange(current, pageSize)
-    }
-  }, [isCurrentPageOutOfRage, doesUsePageLoading])
-
-  useEffect(() => {
-    if (restoreCurrentWhenDataChange && isCurrentPageOutOfRage) {
-      setCurrent(FIRST_PAGE)
-    }
-  }, [isCurrentPageOutOfRage, restoreCurrentWhenDataChange])
+  }, [dataSource.length, paginationContext.shouldCountClientTotal])
 
   const selected = propsSelected !== undefined ? propsSelected : props.rowSelection?.selectedRowKeys?.length
-  const showSelected = propsShowSelected !== undefined ? propsShowSelected : Boolean(props.rowSelection)
+  const showSelected = propsShowSelected ?? props.rowSelection?.type === 'radio' ? false : Boolean(props.rowSelection)
+
+  const enableStickyFooter = Boolean(props.stickyFooter) && props.resizingMode !== 'scroll'
+
+  const slicedData = !showOnlyTotalSummary && !isServerPagination
+    ? getData({
+      data: dataSource,
+      current: Number(current),
+      pageSize: Number(pageSize)
+    })
+    : dataSource
 
   return <>
     <Component
       {...props}
       pagination={false}
-      dataSource={
-        !doesUsePageLoading
-          ? getData({
-              data: dataSource,
-              current: Number(current),
-              pageSize: Number(pageSize)
-            })
-          : dataSource
-      }
+      dataSource={slicedData}
     />
-    <StyledPaginationContainer className="ant-pagination-container">
+    { slicedData.length > 0 && 
+      <StyledPaginationContainer className="ant-pagination-container" $enableStickyFooter={enableStickyFooter} pagination={cssConfig?.pagination}>
         <div data-testid="table-pagination" kl-id="table-pagination">
-          <Pagination
-            simple={simple}
-            total={total}
-            totalRoot={totalRoot}
-            selected={selected}
-            showSelected={showSelected}
-            pageSize={pageSize}
-            current={current}
-            hideOnSinglePage={hideOnSinglePage}
-            onChange={current => {
-              if (onChange) {
-                onChange(current, pageSize)
-              } else {
-                setCurrent(current)
-              }
-            }}
-            onShowSizeChange={(_, size) => {
-              if (onShowSizeChange) {
-                onShowSizeChange(current, size)
-              } else {
-                setPageSize(size)
-              }
-            }}
-            pageSizeOptions={['5', '10', '20', '50', '100']}
-            showSizeChanger={simple ? false : propsShowSizeChanger}
-          />
+          {
+            showOnlyTotalSummary
+              ? <TotalSummary total={total!} showSelected={showSelected} selected={selected || 0} testId="total" klId="total" />
+              : <PaginationComponent
+                  {...restPagination}
+                  total={total}
+                  selected={selected}
+                  showSelected={showSelected}
+                  pageSize={pageSize}
+                  current={current}
+                  showSizeChanger={restPagination.simple ? false : propsShowSizeChanger}
+                />
+          }
         </div>
       </StyledPaginationContainer>
+    }
   </>
-}
-
-export {
-  PaginationModule as Pagination
 }

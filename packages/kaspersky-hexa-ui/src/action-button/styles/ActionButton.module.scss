@@ -1,0 +1,37 @@
+@use "./Mixins.module.scss" as *;
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  outline: 2px solid transparent;
+  user-select: none;
+  cursor: pointer;
+  border: 0;
+  border-radius: 2px;
+  transition: all .15s ease-in;
+
+  &:focus-visible {
+    box-shadow: 0px 0px 0px 2px var(--focus--stroke);
+  }
+
+  &.ghost {
+    @include mode-ghost;
+  }
+
+  &.ghostInverted {
+    @include mode-ghostInverted;
+  }
+
+  &.filled {
+    @include mode-filled;
+  }
+
+  &.filledInverted {
+    @include mode-filledInverted;
+  }
+
+  &.onLight {
+    @include mode-onLight;
+  }
+}

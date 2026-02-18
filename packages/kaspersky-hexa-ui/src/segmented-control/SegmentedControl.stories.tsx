@@ -11,7 +11,7 @@ import {
   SegmentedControlSize
 } from '@src/segmented-control/types'
 import { Space } from '@src/space'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
@@ -122,6 +122,7 @@ const meta: Meta<SegmentedControlProps> = {
     size: 'large',
     tabsData,
     contentData,
+    defaultActiveTab: 'two',
     testId: 'segmented-control-test-id'
   },
   parameters: {

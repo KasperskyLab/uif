@@ -1,5 +1,7 @@
 import { DIGITAL_SYMBOL_IN_PLACEHOLDERS } from '@design-system/tokens'
+import { RangeSeparator } from '@helpers/components/range-separator'
 import { WithGlobalStyles } from '@helpers/hocs/WithGlobalStyles'
+import useLocaleOptions from '@helpers/hooks/useLocaleOptions'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { generateDateIMaskOptions, prepareFormatForDateFNS } from '@helpers/imaskDateOptionsGenerator'
 import { ActionButton } from '@src/action-button'
@@ -19,13 +21,13 @@ import {
 } from './ActionIcons'
 import { DatePicker } from './DatePicker'
 import {
-  checkIsUserTimeSelect,
   isDigital,
   isNestedInDOM,
+  isTimeSelected,
+  isUserClickOnTime,
   isValidDate,
   prepareRangeDateValue,
-  useClassNamedDatepicker,
-  useLocaleOptions
+  useClassNamedDatepicker
 } from './helpers'
 import { pickerContainerCss, pickerCss, PickerGlobalCss } from './pickerCss'
 import { PresetsRangePicker as Presets } from './Presets'
@@ -125,7 +127,7 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
 
     const pickerElement = wrapperRef.current
     // isUserTimeSelect should be outside debounce function.
-    const isUserTimeSelect = checkIsUserTimeSelect(calendarElement, e.target)
+    const isUserTimeSelect = isUserClickOnTime(calendarElement, e.target) || isTimeSelected(calendarElement)
     let newDates: RangeDateInputValue = [null, null]
     const inputs = pickerElement?.querySelectorAll('input') || []
 
@@ -220,6 +222,7 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
         {...testAttributes}
         {...rest}
         locale={localeOptions.locale}
+        separator={<RangeSeparator/>}
         cssConfig={cssConfig.inputCssConfig}
         onKeyDown={handleKeyDown}
         open={open ?? isOpen}
@@ -249,14 +252,14 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
         renderExtraFooter={
           presets
             ? () => <Presets
-              presets={presets}
-              onChange={(dates: RangeDateInputValue) => {
-                setOpenState(false)
-                destroyMask()
-                setDate(dates)
-                handleOnChange(dates)
-              }}
-            />
+                presets={presets}
+                onChange={(dates: RangeDateInputValue) => {
+                  setOpenState(false)
+                  destroyMask()
+                  setDate(dates)
+                  handleOnChange(dates)
+                }}
+              />
             : undefined
         }
         panelRender={(container: HTMLElement) => (
@@ -283,10 +286,10 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
               }}
             />)
           : <CalendarIcon testId={`${testId}-calendar-icon`} />}
-        superNextIcon={<ArrowDoubleRightIcon testId={`${testId}-calendar-super-next-icon`} />}
-        superPrevIcon={<ArrowDoubleLeftIcon testId={`${testId}-calendar-super-prev-icon`} />}
-        nextIcon={<ArrowRightMiniIcon testId={`${testId}-calendar-next-icon`} />}
-        prevIcon={<ArrowLeftMiniIcon testId={`${testId}-calendar-prev-icon`} />}
+        superNextIcon={<ArrowDoubleRightIcon testId={testId} />}
+        superPrevIcon={<ArrowDoubleLeftIcon testId={testId} />}
+        nextIcon={<ArrowRightMiniIcon testId={testId} />}
+        prevIcon={<ArrowLeftMiniIcon testId={testId} />}
         allowClear={false}
         placeholder={placeholder ?? [localeOptions.placeholder, localeOptions.placeholder]}
         format={format ? prepareFormatForDateFNS(format) : localeOptions.format}

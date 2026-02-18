@@ -1,7 +1,7 @@
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { Loader as LoaderComponent } from '@src/loader'
-import { Meta } from '@storybook/react'
+import { Meta } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 
 import { Table } from '../'
@@ -33,7 +33,8 @@ const meta: Meta<ITableProps> = {
     controls: {
       exclude: ['columns', 'dataSource']
     }
-  }
+  },
+  tags: ['!autodocs']
 }
 export default meta
 

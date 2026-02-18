@@ -1,0 +1,72 @@
+.wizardIndicatorWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  min-width: 24px;
+  color: var(--wizard_step--base--bg--step_indicator);
+
+  &.wizardIndicatorWrapperActive {
+    color: var(--wizard_step--base--bg--step_indicator_selected);
+  }
+}
+
+.wizardIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--wizard_step--base--border--step_indicator);
+  color: var(--wizard_step--base--text--step_number);
+
+  &.wizardIndicatorActive {
+    border-color: var(--wizard_step--base--border--step_indicator_selected);
+    color: var(--wizard_step--base--text--step_number_selected);
+    background-color: var(--wizard_step--base--bg--step_indicator_selected);
+    outline-offset: 1px;
+    outline: 1px solid var(--wizard_step--base--border--step_indicator_selected);
+  }
+}
+
+.wizardModal {
+  :global(.ant-modal-footer) > div > div {
+    justify-content: flex-end;
+  }
+}
+
+.wizardSidebar {
+  :global(.antd-sidebar-content) {
+    height: 100%;
+  }
+  :global(.ant-drawer-body) {
+    padding: 0;
+  }
+}
+
+.wizardContentWrapper {
+  height: 100%;
+  padding: 24px;
+}
+
+.wizardPageFooterWrapper {
+  width: 100%;
+  padding: 24px;
+  border-top: 1px solid var(--sidebar--border);
+}
+
+.wizardDividerVertical {
+  min-height: 24px;
+  height: 100%;
+}
+
+.wizardDividerHorizontal {
+  min-width: 24px;
+}
+
+.wizardStepStackVertical {
+  padding: 24px;
+  border-right: 1px solid var(--sidebar--border);
+  flex-shrink: 0;
+}

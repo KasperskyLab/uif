@@ -1,7 +1,5 @@
-import { SPACES } from '@design-system/theme'
 import { getTextSizes } from '@design-system/tokens'
 import { getFromProps } from '@helpers/getFromProps'
-import { Button } from '@src/button'
 import { Divider } from '@src/divider'
 import { Text } from '@src/typography'
 import styled, { css } from 'styled-components'
@@ -12,32 +10,30 @@ import { TabsCssConfig } from './types'
 
 export const StyledTabPaneIcon = styled.div``
 export const StyledTabPaneText = styled.div``
-export const StyledTabPaneIndicator = styled.div``
 export const StyledDivider = styled(Divider)``
 export const StyledText = styled(Text)``
-export const StyledMoreButton = styled(Button)``
 export const StyledExtraContent = styled.div``
 
 const fromProps = getFromProps<TabsCssConfig>()
 
 const tabsSizes = {
   tabList: {
-    gap: `${SPACES[2]}px`,
-    padding: `${SPACES[12]}px ${SPACES[6]}px`,
-    margin: `0 0 ${SPACES[12]}px 0`
+    gap: '4px',
+    padding: '24px 12px',
+    margin: '0 0 24px 0'
   },
   topTab: {
-    padding: `${SPACES[1]}px ${SPACES[4]}px`,
-    margin: `${SPACES[4]}px`,
-    gap: `${SPACES[2]}px`,
-    borderRadius: `${SPACES[2]}px`
+    padding: '2px 8px',
+    margin: '8px',
+    gap: '4px',
+    borderRadius: '4px'
   },
   leftTab: {
-    padding: `${SPACES[3]}px ${SPACES[6]}px`,
-    borderRadius: `${SPACES[4]}px`
+    padding: '6px 12px',
+    borderRadius: '8px'
   },
   inkBar: {
-    borderRadius: `${SPACES[1]}px`
+    borderRadius: '2px'
   },
   ...getTextSizes(textLevels.BTM3)
 }
@@ -114,22 +110,14 @@ const leftTabsCss = css`
   ${StyledTabPaneText} {
     width: 100%;
   }
-  ${StyledTabPaneIndicator} {
-    position: unset;
-  }
 `
 
 export const tabsCss = css<{
   cssConfig: TabsCssConfig,
-  hiddenTabsLength: number,
-  containerWidth: number
+  hiddenTabsLength: number
 }>`
   width: 100%;
   overflow: visible;
-
-  &&.group-tabs .ant-tabs-tab-disabled {
-    cursor: inherit;
-  }
 
   &.ant-tabs-top > .ant-tabs-nav {
     margin: ${tabsSizes.tabList.margin};
@@ -156,7 +144,7 @@ export const tabsCss = css<{
       right: 0;
       background-color: ${fromProps('divider.color')};
       height: 1px;
-      ${props => `width: calc(${props.containerWidth}px - 1px);`}
+      width: 100%;
       border-radius: ${tabsSizes.inkBar.borderRadius};
     }
   }
@@ -201,7 +189,7 @@ export const tabsCss = css<{
       }
     `
     : ''
-  }
+}
 
   .ant-tabs-tab {
     padding: 0;
@@ -210,6 +198,7 @@ export const tabsCss = css<{
     border: none;
 
     .ant-tabs-tab-btn {
+      display: flex;
       padding: ${tabsSizes.topTab.padding};
       border-radius: ${tabsSizes.topTab.borderRadius};
       color: ${fromProps('unselected.enabled.color')};
@@ -271,7 +260,7 @@ export const tabsCss = css<{
 
 export const tabPaneHeadCss = css<{ cssConfig: TabsCssConfig }>`
   display: flex;
-  gap: ${SPACES[2]}px;
+  gap: 4px;
   align-items: center;
 
   .ant-badge-count {
@@ -289,13 +278,6 @@ export const tabPaneHeadCss = css<{ cssConfig: TabsCssConfig }>`
     ${textSizesCss};
     color: ${fromProps('unselected.enabled.color')};
   }
-  ${StyledTabPaneIndicator} {
-    display: flex;
-    align-items: start;
-    position: absolute;
-    right: 2px;
-    top: 2px;
-  }
 `
 
 export const tabsWrapperCss = css<{
@@ -308,7 +290,36 @@ export const tabsWrapperCss = css<{
   position: relative;
   display: flex;
   justify-content: space-between;
-  overflow: hidden;
+
+  &.with-padding {
+    > .ant-tabs {
+      padding: 0 var(--spacing--padding_xl);
+
+      .ant-tabs-nav-list::before,
+      .ant-tabs-content-holder {
+        margin: 0 calc(var(--spacing--padding_xl) * -1);
+      }
+    }
+
+    > .kl6-tabs-more-button {
+      right: calc(var(--spacing--padding_xl) + 4px);
+    }
+  }
+
+  &.no-margin {
+    .ant-tabs-top > .ant-tabs-nav {
+      margin: 0;
+    } 
+  }
+
+  &.group-tabs {
+    .ant-tabs-tab-disabled {
+      cursor: inherit;
+    }
+    .ant-tabs-tab-btn {
+      flex-direction: column;
+    }
+  }
 
   .ant-tabs-ink-bar {
     ${props => props.selectedMoreButton && `
@@ -325,7 +336,7 @@ export const tabsWrapperCss = css<{
     right: 0px;
   }
 
-  & > ${StyledMoreButton} {
+  & > .kl6-tabs-more-button {
     position: absolute;
     right: ${props => (props.extraContentWidth) + 'px'};
     color: ${fromProps('unselected.enabled.color')};
@@ -333,9 +344,9 @@ export const tabsWrapperCss = css<{
       color: ${fromProps('selected.enabled.color')(props)};
     `}
     ${props => props.shouldShowMoreButton
-      ? ''
-      : 'visibility: hidden;'
-    }
+    ? ''
+    : 'visibility: hidden;'
+}
     ${textSizesCss}; 
 
     padding: ${tabsSizes.topTab.padding};

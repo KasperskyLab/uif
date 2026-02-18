@@ -16,30 +16,39 @@ const DefaultToolbar = (props: ToolbarProps) => (
 )
 
 describe('Toolbar ', () => {
+  function queryByTestId (testId: string) {
+    return document.body.querySelector(`[data-testid="${testId}"]`) || 
+      document.body.querySelector(`[kl-id="${testId}"]`)!
+  }
+
   const itemsLeft: ToolbarItems[] = [
     {
       type: 'button',
       key: '1',
       label: 'Tool 1',
-      onClick: () => console.log('Tool 1')
+      onClick: () => console.log('Tool 1'),
+      testId: 'item-1'
     },
     {
       type: 'button',
       key: '2',
       label: 'Tool 2',
-      onClick: () => console.log('Tool 2')
+      onClick: () => console.log('Tool 2'),
+      testId: 'item-2'
     },
     {
       type: 'button',
       key: '3',
       label: 'Tool 3',
-      onClick: () => console.log('Tool 3')
+      onClick: () => console.log('Tool 3'),
+      testId: 'item-3'
     },
     {
       type: 'button',
       key: '4',
       label: 'Tool 4',
-      onClick: () => console.log('Tool 4')
+      onClick: () => console.log('Tool 4'),
+      testId: 'item-4'
     }
   ]
 
@@ -80,6 +89,11 @@ describe('Toolbar ', () => {
       type: 'children',
       key: '4',
       children: <Toolbar.ScaleItem klId="kl-scale-item" onClick={() => console.log('scale')} />
+    },
+    {
+      type: 'children',
+      key: '5',
+      children: <Toolbar.Button klId="kl-button-item" onClick={() => console.log('button')} />
     }
   ]
 
@@ -93,13 +107,14 @@ describe('Toolbar ', () => {
     expect(container.querySelector(`[data-testid="${testId}"]`)).toBeInTheDocument()
   })
 
-  test('should render all test attributs for all tollbar items', () => {
+  test('should render all test attributes for all toolbar items', () => {
     const itemsAllItems: ToolbarItems[] = [
       {
         type: 'children',
         key: '1',
         children: (
           <>
+            <Toolbar.Button testId="Button" />
             <Toolbar.Search testId="Search" />
             <Toolbar.ImportExportItem dropdown={false} testId="ImportExportItem" />
             <Toolbar.ImportExportItem dropdown={true} testId="ImportExportItemDropdwon" />
@@ -111,7 +126,8 @@ describe('Toolbar ', () => {
         )
       }
     ]
-    const { container } = render(<Toolbar left={itemsAllItems} klId={klId} testId={testId} />)
+    const { container } = render(<DefaultToolbar left={itemsAllItems} klId={klId} testId={testId} />)
+    expect(container.querySelector('[data-testid="Button"]')).toBeInTheDocument()
     expect(container.querySelector('[data-testid="Search"]')).toBeInTheDocument()
     expect(container.querySelector('[data-testid="ImportExportItem"]')).toBeInTheDocument()
     expect(container.querySelector('[data-testid="ImportExportItemDropdwon"]')).toBeInTheDocument()
@@ -129,6 +145,7 @@ describe('Toolbar ', () => {
     const buttonTool = screen.getByText('Tool 1')
     expect(buttonTool).toBeInTheDocument()
   })
+
   test('should correctly render toolbar items with maxLeftItemsCount', () => {
     render(
       <Toolbar testId={testId} left={itemsLeft} leftLimit={2}/>
@@ -140,6 +157,7 @@ describe('Toolbar ', () => {
     const buttonTool3 = screen.queryByText('Tool 3')
     expect(buttonTool3).not.toBeInTheDocument()
   })
+
   test('should correctly render items in dropdown with maxLeftItemsCount', async () => {
     const { container } = render(
       <Toolbar testId={testId} left={itemsLeft} leftLimit={2}/>
@@ -151,15 +169,16 @@ describe('Toolbar ', () => {
     expect(screen.queryByText('Tool 1')).toBeInTheDocument()
     expect(screen.queryByText('Tool 2')).toBeInTheDocument()
     expect(screen.queryByText('Tool 3')).not.toBeInTheDocument()
-    expect(screen.queryByText('Tool 4')).not.toBeInTheDocument()
+    expect(queryByTestId('item-4')).not.toBeInTheDocument()
 
     act(() => userEvent.click(dropdown))
 
     await waitFor(() => expect(screen.queryByText('Tool 1')).toBeInTheDocument())
     await waitFor(() => expect(screen.queryByText('Tool 2')).toBeInTheDocument())
     await waitFor(() => expect(screen.queryByText('Tool 3')).toBeInTheDocument())
-    await waitFor(() => expect(screen.queryByText('Tool 4')).toBeInTheDocument())
+    await waitFor(() => expect(queryByTestId('item-4')).toBeInTheDocument())
   })
+
   test('should correctly render items without dropdown', async () => {
     const { container } = render(
       <Toolbar testId={testId} left={itemsLeft}/>
@@ -171,6 +190,7 @@ describe('Toolbar ', () => {
     expect(screen.queryByText('Tool 3')).toBeInTheDocument()
     expect(screen.queryByText('Tool 4')).toBeInTheDocument()
   })
+
   test('should render toolbar items in right part', () => {
     const { container } = render(
       <DefaultToolbar testId={testId} left={itemsLeft} right={itemsRight}/>
@@ -181,12 +201,46 @@ describe('Toolbar ', () => {
     const btnFilter = container.querySelector('[kl-id="kl-filter-item"]')!
     const btnSettings = container.querySelector('[kl-id="kl-settings-item"]')!
     const btnScale = container.querySelector('[kl-id="kl-scale-item"]')!
+    const btnDefaultButton = container.querySelector('[kl-id="kl-button-item"]')!
 
     expect(collapsibleSearch).toBeInTheDocument()
     expect(search).toBeInTheDocument()
     expect(btnFilter).toBeInTheDocument()
     expect(btnSettings).toBeInTheDocument()
     expect(btnScale).toBeInTheDocument()
+    expect(btnDefaultButton).toBeInTheDocument()
+  })
+
+  test('should not mark items in "rest items dropdown" as selected', async () => {
+    async function waitForDropdownToBeOpened () {
+      return waitFor(() => {
+        expect(
+          document.body.querySelector('.ant-dropdown:not(.ant-dropdown-hidden)')
+        ).toBeInTheDocument()
+      })
+    }
+
+    async function waitForDropdownToBeClosed () {
+      return waitFor(() => {
+        expect(
+          document.body.querySelector('.ant-dropdown.ant-dropdown-hidden')
+        ).toBeInTheDocument()
+      })
+    }
+
+    render(
+      <Toolbar testId={testId} left={itemsLeft} leftLimit={2}/>
+    )
+    
+    act(() => userEvent.click(queryByTestId('toolbar-show-rest-items')))
+    await waitForDropdownToBeOpened()
+    act(() => userEvent.click(queryByTestId('item-4')))
+    await waitForDropdownToBeClosed()
+    act(() => userEvent.click(queryByTestId('toolbar-show-rest-items')))
+    await waitForDropdownToBeOpened()
+    expect(document.body.querySelector('.ant-dropdown-menu-item-selected')).not.toBeInTheDocument()
+    act(() => userEvent.click(queryByTestId('item-4')))
+    await waitForDropdownToBeClosed()
   })
 
   // Codium AI

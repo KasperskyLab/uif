@@ -17,7 +17,7 @@ export const tagCss = css<{ cssConfig: TagCssConfig, outlined?: boolean }>`
       border: ${fromProps(`${fillState}.enabled.border`)};
       padding: ${fromProps('padding')};
       gap: ${fromProps('gap')};
-      background-color: ${fromProps(`${fillState}.enabled.background`)};
+      background: ${fromProps(`${fillState}.enabled.background`)};
       box-sizing: border-box;
       cursor: default;
       outline: none;

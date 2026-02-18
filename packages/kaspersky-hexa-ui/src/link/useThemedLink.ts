@@ -1,9 +1,9 @@
-import { useThemedComponent } from '@helpers/useThemedComponent'
+import { useComponentCssConfig } from '@design-system/css-configs/helpers/useComponentCssConfig'
 
 import { LinkCssConfig, LinkProps, LinkThemeProps, LinkViewProps } from './types'
 
 export const useThemedLink = (props: LinkProps): LinkViewProps => (
-  useThemedComponent<LinkProps, LinkCssConfig, LinkThemeProps>(props, {
+  useComponentCssConfig<LinkProps, LinkCssConfig, LinkThemeProps>(props, {
     componentName: 'link',
     defaultValues: { size: 'noSize' }
   })

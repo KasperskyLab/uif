@@ -30,3 +30,17 @@ export const getChildTestProps = (postfix: string, attrs?: TestingAttributes, di
     testId: testId ? `${testId}-${postfix}` : postfix
   }
 }
+
+export const getChildTestAttr = (postfix = 'body', attr?: TestingAttributes, disableOnlyPostfix?: boolean): TestingAttributes => {
+  const testId = attr?.['data-testid'] || attr?.['kl-id']
+
+  if (disableOnlyPostfix) {
+    return {
+      'data-testid': testId && `${testId}-${postfix}`
+    }
+  }
+
+  return {
+    'data-testid': testId ? `${testId}-${postfix}` : postfix
+  }
+}

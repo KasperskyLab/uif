@@ -1,26 +1,37 @@
-const path = require('path');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 import { StorybookConfig } from '@storybook/react-webpack5'
+
+import { createRequire } from 'node:module'
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import path from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const require = createRequire(import.meta.url)
+
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
 const config: StorybookConfig = {
   stories: [
     '../docs/**/*.@(mdx|stories.@(ts|tsx))',
     '../docs/*.@(mdx|stories.@(ts|tsx))',
-    '../src/**/*.@(mdx|stories.@(ts|tsx))'
+    '../src/**/*.@(mdx|stories.@(ts|tsx))',
+    '../Changelog.mdx'
   ],
   addons: [
     '@storybook/addon-docs',
-    '@storybook/addon-essentials',
-    '@mihkeleidast/storybook-addon-source',
     '@storybook/addon-links',
-    'storybook-dark-mode',
     '@storybook/addon-webpack5-compiler-babel'
   ],
   refs: {
     icons: {
       title: 'Icons',
-      url: 'https://kasperskylab.github.io/uif/icons/',
+      url: 'https://kasperskylab.github.io/uif/icons/'
     },
+    charts: {
+      title: 'Charts',
+      url: 'https://kasperskylab.github.io/uif/charts/'
+    }
   },
   managerHead: () => `
     <style>
@@ -41,11 +52,9 @@ const config: StorybookConfig = {
       ...config.resolve.alias,
       '@src': path.resolve(__dirname, '../src/'),
       '@design-system': path.resolve(__dirname, '../design-system/'),
-      '@icons': path.resolve(__dirname, '../icons/'),
       '@helpers': path.resolve(__dirname, '../helpers/'),
-      '@style': path.resolve(__dirname, '../style/'),
-      '@sb': path.resolve(__dirname, '../.storybook/'),
-    };
+      '@sb': path.resolve(__dirname, '../.storybook/')
+    }
     config.module.rules.push({
       test: /\.less$/,
       include: [
@@ -74,6 +83,23 @@ const config: StorybookConfig = {
           }
         }
       ]
+    }, {
+      test: /\.(scss)$/i,
+      use: [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            modules: {
+              namedExport: false,
+              auto: true,
+              exportLocalsConvention: 'as-is',
+              localIdentName: '[local]_[hash:base64:8]'
+            }
+          }
+        },
+        'sass-loader'
+      ]
     })
 
     config.resolve.plugins = [
@@ -87,4 +113,4 @@ const config: StorybookConfig = {
   }
 }
 
-module.exports = config
+export default config

@@ -9,7 +9,9 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { v1 as uuidV1 } from 'uuid'
 
-import { ArrowDown1, Search, StatusDangerOutline1 } from '@kaspersky/hexa-ui-icons/16'
+import { ArrowDown1, StatusDangerOutline1 } from '@kaspersky/hexa-ui-icons/16'
+
+import { IconSearch } from '../search/IconSearch'
 
 import { StyledErrorWrapper } from './selectCss'
 import { LabelValue, SelectCssConfig, SelectProps } from './types'
@@ -103,7 +105,7 @@ export const ChevronIcon = (): JSX.Element => (
 )
 
 export const SearchIcon = (): JSX.Element => (
-  <Search
+  <IconSearch
     testId="select-search-icon"
     klId="search-icon"
   />

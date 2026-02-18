@@ -1,0 +1,252 @@
+@use '../../design-system/tokens/typography.module.scss';
+
+@mixin create-ai-colors {
+  --button--ai--bg--enabled:
+    linear-gradient(90deg, var(--button--ai--bg--green--enable) 0%, var(--button--ai--bg--green--enable_gr) 42.48%),
+    linear-gradient(224.45deg, var(--button--ai--bg--violet--enabled) 6.22%, var(--button--ai--bg--marina--enabled) 69.82%);
+  --button--ai--bg--hover: 
+      linear-gradient(90deg, var(--button--ai--bg--green--enable) 0%, var(--button--ai--bg--green--enable_gr) 42.48%),
+      linear-gradient(224.45deg, var(--button--ai--bg--violet--hover) 6.22%, var(--button--ai--bg--marina--hover) 69.82%);
+  --button--ai--bg--active:
+      linear-gradient(90deg, var(--button--ai--bg--green--active) 0%, var(--button--ai--bg--green--active_gr) 42.48%),
+      linear-gradient(224.45deg, var(--button--ai--bg--violet--active) 6.22%, var(--button--ai--bg--marina--active) 69.82%);
+  --button--ai--bg--disabled: var(--button--primary--bg--disabled);
+  --button--ai--text--disabled: var(--button--primary--text--disabled);
+}
+
+@mixin apply-colors($mode, $hasBorder) {
+  background: var(--button--#{$mode}--bg--enabled);
+  color: var(--button--#{$mode}--text--enabled);
+
+  @if $hasBorder {
+    border: 1px solid var(--button--#{$mode}--border--enabled);
+  } @else {
+    border: none;
+  }
+
+  &:not([disabled]) > span[role="img"] > svg {
+    color: var(--button--#{$mode}--text--enabled);
+  }
+
+  &:hover,
+  &:hover:focus {
+    background: var(--button--#{$mode}--bg--hover);
+  }
+
+  &:active,
+  &:active:focus,
+  &.buttonPressed {
+    background: var(--button--#{$mode}--bg--active);
+    transition-duration: .02s;
+  }
+
+  &[disabled],
+  &:global(.ant-btn-loading) {
+    &,
+    &:hover,
+    &:active,
+    &:focus {
+      background: var(--button--#{$mode}--bg--disabled);
+      box-shadow: none;
+      color: var(--button--#{$mode}--text--disabled);
+      cursor: not-allowed;
+
+      @if $hasBorder {
+        border-color: var(--button--#{$mode}--border--disabled);
+      }
+
+      svg {
+        color: var(--button--#{$mode}--text--disabled);
+      }
+    }
+  }
+
+  &:global(.ant-dropdown-trigger):global(.ant-dropdown-open) {
+    background: var(--button--#{$mode}--bg--active);
+  }
+}
+
+.buttonGroup {
+  gap: 6px;
+
+  :global(.ant-btn):first-child:not(:last-child) {
+    border-radius: 8px 0 0 8px;
+  }
+
+  :global(.ant-btn):not(:last-child):not(:first-child) {
+    border-radius: 0;
+  }
+
+  :global(.ant-btn):last-child:not(:first-child) {
+    border-radius: 0 8px 8px 0;
+  }
+}
+
+.splitButton.primary,
+.splitButton.dangerFilled {
+  gap: 2px;
+}
+
+.splitButton.secondary {
+  gap: 1px;
+
+  button:first-child {
+    border-right: none;
+  }
+}
+
+:global(.ant-btn).button {
+  align-items: center;
+  box-shadow: none;
+  display: inline-flex;
+  flex-direction: row;
+  gap: 4px;
+  justify-content: center;
+  max-width: 100%;
+  outline: none;
+  
+
+  &:focus-visible {
+    // can not import '@kaspersky/hexa-ui-core/colors/js'.effects.focus[1]
+    box-shadow: 0px 0px 0px 2px var(--focus--stroke);
+  }
+
+  &[ant-click-animating-without-extra-node=true]::after,
+  :global(.ant-click-animating-node) {
+    display: none;
+  }
+
+  &:global(.ant-btn-loading) {
+    > span, > svg {
+      overflow: hidden;
+      transition: visibility 0.1s;
+    }
+
+    > :global(.ant-spin-spinning) {
+      position: absolute;
+    }
+  }
+
+  :global(.ant-btn-loading-icon), &::before {
+    display: none;
+  }
+
+  :global(.anticon) {
+    line-height: 0;
+  }
+}
+
+:global(.ant-btn).buttonLoading {
+  &:global(.ant-btn-loading) {
+    > span, > svg {
+      visibility: hidden;
+    }
+  }
+}
+
+:global(.ant-btn):global(.ant-btn).primary {
+  @include apply-colors(primary, false);
+}
+
+:global(.ant-btn):global(.ant-btn).secondary {
+  @include apply-colors(secondary, true);
+}
+
+:global(.ant-btn):global(.ant-btn).tertiary {
+  @include apply-colors(tertiary, false);
+}
+
+:global(.ant-btn):global(.ant-btn).dangerFilled {
+  @include apply-colors(destructive, false);
+}
+
+:global(.ant-btn):global(.ant-btn).dangerOutlined {
+  @include apply-colors(destructive_secondary, true);
+}
+
+:global(.ant-btn):global(.ant-btn).ai {
+  @include create-ai-colors();
+  @include apply-colors(ai, false);
+}
+
+:global(.ant-btn).iconOnly {
+  line-height: unset;
+  padding: unset;
+
+  > svg {
+    min-width: min-content;
+  }
+}
+
+/* Button Size */
+:global(.ant-btn).small {
+  border-radius: 4px;
+  height: 24px;
+  min-width: 64px;
+  padding: 2px 8px;
+
+
+  &.iconOnly {
+    min-width: 24px;
+    width: 24px;
+  }
+
+  .buttonText {
+    @extend .btm4;
+  }
+}
+
+:global(.ant-btn).medium {
+  border-radius: 8px;
+  height: 32px;
+  min-width: 80px;
+  padding: 6px 12px;
+
+
+  &.iconOnly {
+    min-width: 32px;
+    width: 32px;
+  }
+
+  .buttonText {
+    @extend .btm3;
+  }
+}
+
+:global(.ant-btn).large {
+  border-radius: 8px;
+  height: 40px;
+  min-width: 80px;
+  padding: 8px 20px;
+
+  &.iconOnly {
+    min-width: 40px;
+    width: 40px;
+  }
+
+  .buttonText {
+    @extend .btm3;
+  }
+}
+
+:global(.ant-btn).extraLarge {
+  border-radius: 8px;
+  height: 48px;
+  min-width: 80px;
+  padding: 10px 24px;
+
+  &.iconOnly {
+    min-width: 48px;
+    width: 48px;
+  }
+
+  .buttonText {
+    @extend .btm2;
+  }
+}
+
+.buttonText {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

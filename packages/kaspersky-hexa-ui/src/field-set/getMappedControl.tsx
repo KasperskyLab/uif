@@ -12,7 +12,9 @@ import { Status } from '@src/status'
 import { Tag } from '@src/tag'
 import { TimeInput } from '@src/time-input'
 import { Toggle } from '@src/toggle'
+import { ToggleButtonGroup } from '@src/toggle-button/ToggleButtonGroup'
 import { Text } from '@src/typography'
+import { Uploader } from '@src/upload'
 import React, { ReactElement } from 'react'
 
 import { FieldSetControlConfig } from './types'
@@ -67,6 +69,10 @@ export const getMappedControl = (control: FieldSetControlConfig): ReactElement =
       const { component, ...props } = control
       return <Button {...props} />
     }
+    case 'split-button': {
+      const { component, ...props } = control
+      return <Button.SplitButton {...props} />
+    }
     case 'segmented-button': {
       const { component, ...props } = control
       return <SegmentedButton {...props} />
@@ -87,6 +93,10 @@ export const getMappedControl = (control: FieldSetControlConfig): ReactElement =
       const { component, ...props } = control
       return <Toggle {...props} />
     }
+    case 'toggle-button-group': {
+      const { component, ...props } = control
+      return <ToggleButtonGroup {...props} />
+    }
     case 'link': {
       const { component, ...props } = control
       return <Link {...props} />
@@ -106,6 +116,10 @@ export const getMappedControl = (control: FieldSetControlConfig): ReactElement =
     case 'status-group': {
       const { component, ...props } = control
       return <Status.Group {...props} />
+    }
+    case 'uploader': {
+      const { component, ...props } = control
+      return <Uploader {...props} />
     }
     default:
       return <></>

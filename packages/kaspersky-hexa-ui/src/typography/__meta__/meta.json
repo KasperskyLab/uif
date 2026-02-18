@@ -8,11 +8,10 @@
     "apiTable": true,
     "storybook": true,
     "designLink": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Typography",
   "description": "Компонент для отображения стилизованного текста.",
   "usage": "Компонент для отображения стилизованного текста.",
-  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=14560%3A87552",
-  "figmaView": "https://www.figma.com/design/qy3m7VFgmNYhxeJxDptLoK/_Foundation?m=auto&node-id=0-1&t=inZSiyjXUzwtH3pc-1"
+  "pixsoView": "https://pixso.net/app/design/jzo_YyAeIZQexMAHcoVIeg?item-id=2001:2167"
 }

@@ -1,4 +1,3 @@
-import { BORDER_RADIUS, SPACES } from '@design-system/theme'
 import { getTextSizes } from '@design-system/tokens'
 import { getFromProps } from '@helpers/getFromProps'
 import { ValidationStatus } from '@helpers/typesHelpers'
@@ -21,10 +20,10 @@ export const codeViewerCss = css<{
   width: min-content;
 
   .cm-editor {
-    padding: ${SPACES[3]}px ${SPACES[6]}px;
+    padding: 6px 12px;
     background: ${fromProps('enabled.background')};
     border: 1px solid ${fromProps('enabled.border')};
-    border-radius: ${BORDER_RADIUS[4]}px;
+    border-radius: 8px;
 
     &:hover {
       border-color: ${fromProps('hover.border')};
@@ -46,10 +45,10 @@ export const codeViewerCss = css<{
     && .cm-editor {
       &.cm-focused {
         box-shadow: none;
-        border-color: transparent;
+        border-color: ${fromProps('readonly.border')(props)};
       }
 
-      border-color: transparent;
+      border-color: ${fromProps('readonly.border')(props)};
       background: ${fromProps('readonly.background')(props)};
     }
   `}
@@ -71,15 +70,19 @@ export const codeViewerCss = css<{
       }
 
       .cm-activeLine {
-        background: ${fromProps('activeLine.background')};
+        background: ${fromProps('enabled.backgroundActive')};
         ${(props) => props.readonly && 'background: transparent;'}
+      }
+
+      .cm-highlightedLine {
+        ${(props) => props.readonly && `background: ${fromProps('readonly.backgroundActive')(props)};`}
       }
     }
 
     .cm-gutters {
       background: ${fromProps('enabled.background')};
-      ${(props) => props.readonly && `background: ${fromProps('readonly.background')(props)};`}
-      padding-right: ${SPACES[14]}px;
+      ${(props) => props.readonly && 'background: transparent;'}
+      padding-right: 28px;
       border: none;
       position: relative;
 
@@ -91,14 +94,14 @@ export const codeViewerCss = css<{
 
       .cm-activeLineGutter {
         background: inherit;
-        color: ${fromProps('activeLine.color')};
+        color: ${fromProps('enabled.colorActive')};
         ${(props) => props.readonly && `color: ${fromProps('enabled.color')(props)};`}
       }
 
       .cm-gutter-lint {
         position: absolute;
         right: 8px;
-        width: ${SPACES[10]}px;
+        width: 20px;
 
         .cm-gutterElement {
           position: relative;
@@ -110,13 +113,13 @@ export const codeViewerCss = css<{
   
           .cm-lint-marker-warning {
             ${(props) => `content: url(${reactSvgComponentToMarkupString(StatusWarningSolid, {
-                style: { color: fromProps('warningIconColor')(props) }
-              })});`}
+    style: { color: fromProps('warningIconColor')(props) }
+  })});`}
           }
           .cm-lint-marker-error {
             ${(props) => `content: url(${reactSvgComponentToMarkupString(StatusDangerSolid1, {
-              style: { color: fromProps('errorIconColor')(props) }
-            })});`}
+    style: { color: fromProps('errorIconColor')(props) }
+  })});`}
           }
         }
       }
@@ -124,32 +127,32 @@ export const codeViewerCss = css<{
   }
 
   .cm-tooltip {
-    border-radius: ${BORDER_RADIUS[4]}px;
+    border-radius: 8px;
     border: none;
 
     .cm-diagnostic {
       background: ${fromProps('enabled.background')};
-      padding: ${SPACES[4]}px;
-      border-radius: ${BORDER_RADIUS[4]}px;
+      padding: 8px;
+      border-radius: 8px;
       border: none;
       box-shadow: ${fromProps('tooltipBoxShadow')};
 
       .cm-diagnosticText {
         ${getTextSizes(MonoTextTypes.MTR3)}
-        color: ${fromProps('activeLine.color')};
+        color: ${fromProps('enabled.colorActive')};
       }
     }
   }
 `
 
 export const CodeWrapper = styled.div`
-  border-radius: ${BORDER_RADIUS[4]}px;
+  border-radius: 8px;
   width: 100%;
   height: 100%;
 `
 
 export const EditorContainer = styled.div`
-  border-radius: ${BORDER_RADIUS[4]}px;
+  border-radius: 8px;
   width: 100%;
   height: 100%;
   position: relative;

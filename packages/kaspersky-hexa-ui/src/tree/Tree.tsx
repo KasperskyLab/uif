@@ -1,17 +1,18 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import { ActionButton } from '@src/action-button'
 import { Checkbox } from '@src/checkbox'
 import { Radio } from '@src/radio'
 import { Tree as TreeAntd, TreeNodeProps, TreeProps } from 'antd'
-import React, { FC } from 'react'
+import React, { FC, MouseEventHandler } from 'react'
 import styled from 'styled-components'
 
+import { SettingsGear } from '@kaspersky/hexa-ui-icons/16'
 import { ArrowDownSolid } from '@kaspersky/hexa-ui-icons/8'
 
 import { Loader } from '../loader'
 
 import { treeCss } from './treeCss'
-import { DataNode, ITreeProps, Key, TreeCheckEvent, TreeViewProps } from './types'
-import { useThemedTree } from './useThemedTree'
+import { DataNode, ITreeProps, Key, TreeCheckEvent } from './types'
 import {
   checkNode,
   getParents,
@@ -21,17 +22,19 @@ import {
   uncheckNode
 } from './utils'
 
-const CustomCheckboxIcon = ({ checked, disabled }: { checked?: boolean, disabled?: boolean }) => (
+const CustomCheckboxIcon = ({ checked, disabled, invalid }: { checked?: boolean, disabled?: boolean, invalid?: boolean }) => (
   <>
-    <Checkbox className="kl-v6-checkbox-icon-normal" checked={checked} disabled={disabled} />
-    <Checkbox className="kl-v6-checkbox-icon-indeterminate" disabled={disabled} indeterminate />
+    <Checkbox className="kl-v6-checkbox-icon-normal" checked={checked} disabled={disabled} invalid={invalid} />
+    <Checkbox className="kl-v6-checkbox-icon-indeterminate" disabled={disabled} indeterminate invalid={invalid} />
   </>
 )
 
-const CustomRadioIcon = ({ checked, disabled }: { checked?: boolean, disabled?: boolean }) => (
+const CustomRadioIcon = ({ checked, disabled, invalid, testId }: { checked?: boolean, disabled?: boolean, invalid?: boolean, testId?: string }) => (
   <Radio
     disabled={disabled}
     value={checked ? '1' : '2'}
+    invalid={invalid}
+    testId={testId}
     options={[
       { label: '', value: '1' }
     ]}
@@ -42,17 +45,19 @@ export const TreeNodeCheckIcon = ({
   checkable,
   checked,
   disabled,
-  multiple
-}: { checkable?: boolean, checked?: boolean, disabled?: boolean, multiple?: boolean }) => {
+  multiple,
+  invalid,
+  ...props
+}: { checkable?: boolean, checked?: boolean, disabled?: boolean, multiple?: boolean, invalid?: boolean, 'data-testid'?: string }) => {
   if (checkable === false) {
     return null
   }
 
   if (!multiple) {
-    return <CustomRadioIcon checked={checked} disabled={disabled} />
+    return <CustomRadioIcon checked={checked} disabled={disabled} invalid={invalid} testId={props['data-testid'] ? `${props['data-testid']}-radio` : undefined} />
   }
 
-  return <CustomCheckboxIcon checked={checked} disabled={disabled} />
+  return <CustomCheckboxIcon checked={checked} disabled={disabled} invalid={invalid} />
 }
 
 export const Spinner = styled(({ className }) => {
@@ -71,9 +76,7 @@ export const Spinner = styled(({ className }) => {
   }
 `
 
-const StyledTreeView = styled(TreeAntd).withConfig({
-  shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
-})`
+const StyledTreeView = styled(TreeAntd)`
   ${treeCss}
 
   .ant-tree-icon__customize:has(${Spinner}:last-child) {
@@ -82,7 +85,8 @@ const StyledTreeView = styled(TreeAntd).withConfig({
   }
 `
 
-export const TreeView: FC<TreeViewProps> = ({
+/** @deprecated Use TreeList or TreeNav instead */
+export const Tree: FC<ITreeProps> = ({
   checkChildren = true,
   checkStrictly = false,
   checkable = false,
@@ -93,13 +97,16 @@ export const TreeView: FC<TreeViewProps> = ({
   invalid = false,
   multiple = true,
   onCheck,
+  onActionClick,
   selectable = false,
   treeData,
-  testAttributes,
   allowUncheck = true,
   checkParents = false,
+  showLine = false,
+  interactive = false,
   ...props
 }) => {
+  const { testAttributes } = useTestAttribute(props)
   const parents = React.useMemo(() => getParents(treeData), [treeData])
   const [nonStrictlyCheckedKeys, setNonStrictlyCheckedKeys] = React.useState<{ checked: Key[], halfChecked: Key[]}>(
     () => sortCheckedKeys(treeData, defaultCheckedKeys)
@@ -224,6 +231,7 @@ export const TreeView: FC<TreeViewProps> = ({
       draggable={draggable as TreeProps['draggable']}
       checkStrictly
       checkable={checkable}
+      interactive={interactive}
       checkedKeys={treeCheckedKeys}
       disabled={disabled}
       icon={(props: TreeNodeProps) => {
@@ -232,28 +240,39 @@ export const TreeView: FC<TreeViewProps> = ({
         return (
           <>
             {props.loading && <Spinner />}
-            <TreeNodeCheckIcon {...props} multiple={multiple} />
+            <TreeNodeCheckIcon {...props} disabled={props.disabled || disabled} multiple={multiple} invalid={invalid} />
           </>
         )
       }}
       invalid={invalid}
       // @ts-ignore
       onCheck={checkStrictly ? onCheck : onCheckFn}
-      selectable={checkable ? false : selectable}
+      selectable={selectable}
       showIcon={checkable}
       switcherIcon={<ArrowDownSolid />}
       treeData={treeData}
+      titleRender={(node: any) => {
+        const handleActionClick: MouseEventHandler = (e) => {
+          e.stopPropagation()
+          onActionClick?.(node)
+        }
+        return (
+          <span className="hexa-ui-tree-node-title">
+            <span>{node.title}</span>
+            {onActionClick && node._action !== false && (
+              <ActionButton
+                className="hexa-ui-tree-node-action"
+                icon={<SettingsGear />}
+                onClick={handleActionClick}
+              />
+            )}
+          </span>
+        )
+      }}
       {...testAttributes}
       {...props}
-      showLine={false}
+      showLine={showLine}
       motion={false}
     />
   )
-}
-
-/** @deprecated Use TreeList or TreeNav instead */
-export const Tree = (rawProps: ITreeProps): JSX.Element => {
-  const themedProps = useThemedTree(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <TreeView {...props} />
 }

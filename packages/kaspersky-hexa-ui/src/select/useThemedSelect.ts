@@ -1,9 +1,9 @@
-import { useThemedComponent } from '@helpers/useThemedComponent'
+import { useComponentCssConfig } from '@design-system/css-configs/helpers/useComponentCssConfig'
 
 import { SelectCssConfig, SelectProps, SelectThemeProps, SelectViewProps } from './types'
 
 export const useThemedSelect = (props: SelectProps): SelectViewProps => (
-  useThemedComponent<SelectProps, SelectCssConfig, SelectThemeProps>({ ...props, mode: undefined }, {
+  useComponentCssConfig<SelectProps, SelectCssConfig, SelectThemeProps>({ ...props, mode: undefined }, {
     componentName: 'select',
     defaultValues: {}
   })

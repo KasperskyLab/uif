@@ -1,16 +1,23 @@
-import { WithGlobalStyles } from '@helpers/hocs/WithGlobalStyles'
+import { useGlobalStyles } from '@helpers/hooks/useGlobalStyles'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { ActionButton } from '@src/action-button'
+import { Button } from '@src/button'
+import { IconResolver } from '@src/icon'
+import { Popover } from '@src/popover'
+import { Space } from '@src/space'
+import { Tooltip } from '@src/tooltip'
 import { Input } from 'antd'
 import React, { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { PasswordHide, PasswordShow } from '@kaspersky/hexa-ui-icons/16'
 
 import { inputPasswordStyles, inputStyles } from './inputCss'
-import { TextboxPasswordMappedProps, TextboxPasswordProps, TextboxPasswordViewProps } from './types'
+import { TextboxPasswordProps } from './types'
 import { useClassNamedTextbox } from './useClassNamedTextbox'
 import { useThemedTextbox } from './useThemedTextbox'
+import { ValidationRules } from './ValidationRules'
 
 const StyledPassword = styled(Input.Password).withConfig({
   shouldForwardProp: prop => !['cssConfig'].includes(prop)
@@ -19,40 +26,49 @@ const StyledPassword = styled(Input.Password).withConfig({
   ${inputPasswordStyles}
 `
 
-const InputPasswordComponent: FC<TextboxPasswordProps> = (rawProps: TextboxPasswordProps) => {
-  const mappedProps: TextboxPasswordMappedProps = useClassNamedTextbox<TextboxPasswordProps>(rawProps)
-  const props: TextboxPasswordViewProps = useThemedTextbox(mappedProps)
-  const { testAttributes } = useTestAttribute(props)
-  return <InputPasswordView testAttributes={testAttributes} {...props} />
-}
+export const InputPassword: FC<TextboxPasswordProps> = (props: TextboxPasswordProps) => {
+  const {
+    onChange,
+    testAttributes,
+    value: passValue,
+    clearBeforeFirstChange = false,
+    onFocus,
+    onBlur,
+    visibilityToggle,
+    validationRules,
+    showVisibilityIcon = true,
+    actions,
+    disabled,
+    ...rest
+  } = useTestAttribute(useThemedTextbox(useClassNamedTextbox(props)))
 
-const InputPasswordView: FC<TextboxPasswordViewProps> = ({
-  onChange,
-  testId,
-  klId,
-  testAttributes,
-  value: passValue,
-  clearBeforeFirstChange = false,
-  onFocus,
-  onBlur,
-  visibilityToggle,
-  ...rest
-}: TextboxPasswordViewProps) => {
+  useGlobalStyles()
+  const { t } = useTranslation()
+
   const [inFocus, setInFocus] = useState(false)
   const [changedOnce, setChangedOnce] = useState(false)
   const [showVisibilityToggle, setShowVisibilityToggle] = useState(!clearBeforeFirstChange)
 
   const clearValue = inFocus && clearBeforeFirstChange && !changedOnce
-  return (
+
+  const inputElement = (
     <StyledPassword
-      iconRender={(visible: boolean) => (
-        <ActionButton
-          interactive={false}
-          icon={visible ? <PasswordHide /> : <PasswordShow />}
-          klId={klId ? `${klId}-input-password-icon` : undefined}
-          testId={testId ? `${testId}-input-password-icon` : undefined}
-        />
-      )}
+      disabled={disabled}
+      iconRender={(visible: boolean) => {
+        if (!showVisibilityIcon || disabled) {
+          return null
+        }
+        return (
+          <Tooltip text={visible ? t('input.password.hide') : t('input.password.show')}>
+            <ActionButton
+              interactive={false}
+              icon={visible ? <PasswordHide /> : <PasswordShow />}
+              klId={props.klId ? `${props.klId}-input-password-icon` : undefined}
+              testId={props.testId ? `${props.testId}-input-password-icon` : undefined}
+            />
+          </Tooltip>
+        )
+      }}
       onChange={({ target: { value } }: { target: { value: string }}) => {
         onChange?.(value)
         setChangedOnce(true)
@@ -72,6 +88,27 @@ const InputPasswordView: FC<TextboxPasswordViewProps> = ({
       {...rest}
     />
   )
+  return (
+    <Space gap="related" wrap="nowrap">
+      {validationRules?.length ? (
+        <Popover
+          trigger="focus"
+          content={<ValidationRules rules={validationRules} />}
+        >
+          {inputElement}
+        </Popover>
+      ) : (
+        inputElement 
+      )} 
+      {actions && actions.map((actionConfig, index) => {
+        return <Tooltip key={`${actionConfig.tooltip} - ${index}`} text={actionConfig.tooltip}>
+          <Button
+            iconBefore={actionConfig.icon ? <IconResolver name={actionConfig.icon} size={16} /> : null}
+            mode={actionConfig.mode || 'secondary'}
+            onClick={actionConfig.onClick}
+          />
+        </Tooltip>
+      })}
+    </Space>
+  )
 }
-
-export const InputPassword = WithGlobalStyles(InputPasswordComponent)

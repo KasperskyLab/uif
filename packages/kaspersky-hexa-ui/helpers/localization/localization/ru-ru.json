@@ -3,7 +3,10 @@
     "common": {
       "empty": "Нет информации",
       "import": "Импортировать",
-      "export": "Экспортировать"
+      "export": "Экспортировать",
+      "filters": "Фильтры",
+      "no": "Нет",
+      "yes": "Да"
     },
     "upload": {
       "dropFileTitle": "Перетащить файл сюда",
@@ -31,14 +34,14 @@
         "upload": "Загрузить"
       },
       "dropText": {
-        "beginningMultiple": "Загрузить файлы",
-        "beginningSingle": "Загрузить файл",
-        "endingMultiple": "или перетащить их сюда",
-        "endingSingle": "или перетащить его сюда"
+        "beginningMultiple": "Загрузите файлы",
+        "beginningSingle": "Загрузите файл",
+        "endingMultiple": "или перетащите их сюда",
+        "endingSingle": "или перетащите его сюда"
       },
-      "maxCountUploaded": "Максимальное количество загружаемых файлов",
+      "maxCountUploaded": "Загружено максимальное количество файлов",
       "progress": "{{progress}} из {{size}}",
-      "showFiles": "Показать файлы",
+      "showFiles": "Просмотреть файлы",
       "total": {
         "files": "{{filesCount}} из {{total}}",
         "simple": "Файлов: {{filesCount}}",
@@ -46,10 +49,23 @@
       },
       "validation": {
         "maxCount": "Количество файлов, которые не могут быть загружены из-за превышения максимального количества файлов: {{count}}.",
+        "maxCount2": "Общее количество загруженных файлов превышает установленное ограничение",
         "maxFileSize": "Количество файлов, которые не могут быть загружены из-за превышения допустимого размера: {{count}}.",
+        "maxFileSize2": "Некоторые из загруженных ранее файлов превышают установленное текущее ограничение",
         "maxTotalSize": "Количество файлов, которые не могут быть загружены из-за превышения допустимого общего размера: {{count}}.",
+        "maxTotalSize2": "Общий размер всех загруженных файлов превышает текущее допустимое ограничение",
+        "filesDoNotMeetRequirements": "Файлы не соответствуют требованиям",
         "format": "Количество файлов, которые не могут быть загружены из-за недопустимого формата: {{count}}."
       }
+    },
+    "wizard": {
+      "actions": {
+        "cancel": "Отмена",
+        "back": "Назад",
+        "next": "Далее",
+        "finish": "Готово"
+      },
+      "stepStack": "Шаг {{currentStep}} из {{totalSteps}}"
     },
     "severity": {
       "critical": "Критический",
@@ -71,22 +87,13 @@
       "total": "Всего {{count}}",
       "selected": "Выбрано {{count}}",
       "page": "страница",
-      "goto": "Перейти к"
+      "goto": "Перейти на страницу"
     },
     "search": {
       "raw": "Поиск",
       "dotted": "Поиск..."
     },
     "table": {
-      "column": {
-        "name": "Первый столбец"
-      },
-      "column2": {
-        "name": "Второй столбец"
-      },
-      "column3": {
-        "name": "Третий столбец"
-      },
       "columnDropdown": {
         "ascending": "По возрастанию",
         "descending": "По убыванию",
@@ -94,15 +101,30 @@
         "filters": "Фильтр",
         "resetFilters": "Сбросить фильтр"
       },
+      "selectAll": {
+        "selectAll": "Выбрать все",
+        "selectCurrentPage": "Выбрать все на текущей странице",
+        "deselectAll": "Сбросить все"
+      },
       "columnsSettings": {
-        "header": "Параметры столбцов",
-        "selectAll": "Выделить все",
+        "header": "Параметры таблицы",
+        "selectAll": "Выбрать все",
         "columns": "Столбцы",
         "grouping": "Группировка",
         "clear": "Очистить",
         "noGrouping": "Без группировки",
         "apply": "Применить",
         "cancel": "Отмена",
+        "columnTitles": {
+        "name": "Имя",
+        "country": "Страна",
+        "age": "Возраст",
+        "city": "Город",
+        "date": "Дата",
+        "isSortable": "Сортируется",
+        "sorter": "Сортировка",
+        "sorterIsSortable": "Сортировка доступна"
+        },
         "filtering": {
           "add": "Добавить",
           "clearAll": "Очистить все",
@@ -110,8 +132,33 @@
           "condition": "Условие",
           "from": "с",
           "to": "по",
-          "value": "Значение"
-        }
+          "value": "Значение",
+          "validation": {
+            "emptyValue": "Укажите значение фильтра",
+            "duplicateFilters": "Продублировать фильтры. Убедитесь, что каждый фильтр уникален."
+          }
+        },
+        "columnHideIsUnavailable": "Скрытие столбцов недоступно"
+      },
+      "filterOperation": {
+        "⊆": "Содержит",
+        "⊄": "Не содержит",
+        "cont_and": "Содержит (AND)",
+        "cont_or": "Содержит (OR)",
+        "ncont_or": "Не содержит",
+        "*=": "Регулярное выражение",
+        "empty": "Пусто",
+        "nempty": "Не пусто",
+        "range": "Включает",
+        "nrange": "Не включает"
+      },
+      "filterTag": {
+        "⊆": "содержит {{value}}",
+        "⊄": "не содержит {{value}}",
+        "empty": "пусто",
+        "nempty": "не пусто",
+        "range": "Включает {{from}}–{{to}}",
+        "nrange": "Не включает {{from}}–{{to}}"
       },
       "groupingEmpty": "Другое"
     },
@@ -125,13 +172,14 @@
     },
     "actionBar": {
       "unsavedChanges": "Изменения, ожидающие подтверждения",
-      "save": "Сохранить",
+      "save": "Применить",
       "cancel": "Отмена"
     },
     "textarea": {
       "wordsCount": "{{count}} из {{total}}"
     },
     "menu": {
+      "favoritesNavItem": "Закладки",
       "navUserItem": {
         "userProps": {
           "status": {
@@ -139,6 +187,41 @@
             "unavailable": "Недоступно"
           }
         }
+      }
+    },
+    "expand": {
+      "toExpand": "Развернуть",
+      "toCollapse": "Свернуть"
+    },
+    "codeCompare": {
+      "compareMode": "Режим сравнения",
+      "unified": "Объединенный",
+      "split": "Раздельный",
+      "loader": "Загрузка версий для сравнения...",
+      "totalChanges": "Всего изменений:",
+      "collapseAll": "Свернуть все",
+      "expandAll": "Развернуть все",
+      "expandLines": "Развернуть строк: {{count}}",
+      "empty": "Оба файла пусты. Сравнение невозможно.",
+      "noChanges": "Изменений между версиями нет",
+      "basicVersion": "Базовая версия",
+      "comparableVersion": "Сравниваемая версия"
+    },
+    "licenseCard": {
+      "status": "Статус лицензионного ключа",
+      "number": "Номер лицензионного ключа",
+      "remaining": "Осталось",
+      "activationDate": "Дата активации",
+      "expirationDate": "Срок действия",
+      "term": "Условие",
+      "dayLeft": "дней: {{count}}",
+      "daysLeft": "дней: {{count}}",
+      "termDays": "дней: {{count}}"
+    },
+    "input": {
+      "password": {
+        "hide": "Скрыть",
+        "show": "Показать"
       }
     }
   }

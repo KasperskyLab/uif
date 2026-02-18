@@ -8,11 +8,11 @@
     "apiTable": true,
     "storybook": true,
     "designLink": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Scrollbar",
   "description": "Компонент Scrollbar представляет собой полосу прокрутки. Scrollbar предназначен для просмотра содержимого, размеры которого превышают размеры контейнера, в который это содержимое размещено.",
   "usage": "Компонент реализован в двух видах: как стилизация браузерного скроллбара (следует импортировать переменную scrollbarCss) и как React компонент.",
-  "designLink": "https://www.figma.com/file/7TGvGlgGfTltMG1OBgLq8p/00-%5BB2B%5D-Hexa-UI-Kit?node-id=1072%3A87122&mode=dev",
-  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F01-%255BB2B%255D-Hexa-UI-Components%3Ftype%3Ddesign%26node-id%3D57127%253A221741%26mode%3Ddev"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=1072%3A87122",
+  "pixsoView": "https://pixso.net/app/design/yevXVpyQAi5e1etaB1Y2Hw"
 }

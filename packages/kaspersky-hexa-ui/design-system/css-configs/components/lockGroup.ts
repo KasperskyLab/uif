@@ -4,7 +4,7 @@ export const lockGroup = (): LockGroupDesignTokens => {
   return {
     iconColor: 'var(--lock_group--icon)',
     color: 'var(--lock_group--text)',
-    borderColor: 'var(--divider--bg--light)',
+    borderColor: 'var(--divider--bg--bold)',
     horizontalMargin: '4px'
   }
 }

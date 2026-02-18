@@ -21,4 +21,5 @@ const spacing = <Spacing> function (name: SpacingName) {
 
 Object.assign(spacing, spacingMap)
 
+export { spacing }
 export default spacing

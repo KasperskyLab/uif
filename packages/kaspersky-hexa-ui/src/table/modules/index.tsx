@@ -5,13 +5,15 @@ import { TableAccordion } from './Accordion'
 import { ColumnsSelection } from './ColumnsSelection'
 import { DraggableTable } from './Draggable'
 import { EmptyCellDash } from './EmptyCellDash'
-import { FilterSidebar } from './Filters'
+import { Filters } from './Filters'
 import { Groups } from './Groups'
 import { InfiniteScroll } from './InfiniteScroll'
+import { Initial } from './Initial'
 import { LocalizeColumnTitles } from './LocalizeColumnTitles'
 import { Pagination } from './Pagination'
 import { Reductions } from './Reductions'
-import { ResizableColumns } from './ResizableColumns'
+import { ResizableColumns } from './ResizableColumns/ResizableColumns'
+import { SidebarFilters } from './SidebarFilters'
 import { SortingAndFilters } from './SortingAndFilters'
 // import { ExpandableRows } from './ExpandableRows'
 import { ToolbarIntegration } from './ToolbarIntegration'
@@ -26,7 +28,13 @@ export const composeWithModules = (Component: typeof Table, modules: TableModule
 
 /**
  * Order is important, because of ColumnDropdown transforms column.title
- * into ReactElement, which cannot be localized now
+ * into ReactElement, which cannot be localized now.
+ * Existing rules for the order of modules:
+ * -Filters must be below SidebarFilters, ToolbarIntegration and SortingAndFilters
+ * -ToolbarIntegration must be below SidebarFilters
+ * -LocalizeColumnTitles must be below SortingAndFilters and SidebarFilters
+ * -Groups must be above ColumnsSelection
+ * -to be continued...
  */
 export const tableModules: TableModule[] = [
   Groups,
@@ -34,16 +42,18 @@ export const tableModules: TableModule[] = [
   Pagination,
   SortingAndFilters,
   Reductions,
-  LocalizeColumnTitles,
   ResizableColumns,
   TableAccordion,
   EmptyCellDash,
   DraggableTable,
   ColumnsSelection,
-  FilterSidebar, // in developing, not ready for use
+  SidebarFilters,
   InfiniteScroll,
   ToolbarIntegration,
-  Virtual // in developing, not ready for use
-]
+  Virtual, // in developing, not ready for use
+  LocalizeColumnTitles,
+  Filters,
+  Initial
+] // calls in reverse order - tableModules[n], tableModules[n-1] etc...
 
 export { useTableModules } from './hooks'

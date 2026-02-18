@@ -1,5 +1,6 @@
-import { useContext, useEffect, useState, useMemo } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { I18nContext } from 'react-i18next'
+
 import i18n from './i18n'
 
 export const useLocalization = (key: string, lng = 'en-us') => {

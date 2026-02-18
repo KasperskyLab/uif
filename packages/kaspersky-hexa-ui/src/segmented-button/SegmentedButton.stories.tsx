@@ -3,7 +3,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { StoryColumn } from '@sb/StoryComponents'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -12,12 +12,16 @@ import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from './meta.json'
 import { SegmentedButton } from './SegmentedButton'
-import { SegmentedButtonProps } from './types'
+import { SegmentedButtonProps, segmentedButtonSize } from './types'
 
 const meta: Meta<SegmentedButtonProps> = {
   title: 'Hexa UI Components/SegmentedButton',
   component: SegmentedButton,
   argTypes: {
+    size: {
+      options: segmentedButtonSize,
+      control: { type: 'select' }
+    },
     ...sbHideControls(['theme'])
   },
   args: {
@@ -32,7 +36,7 @@ const meta: Meta<SegmentedButtonProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta
@@ -70,11 +74,6 @@ export const Basic: Story = {
         value: 'default',
         testId: 'testId',
         klId: 'klId'
-      },
-      {
-        text: 'custom color',
-        value: 'customColor',
-        mode: 'emerald'
       },
       {
         text: 'disabled',
@@ -147,13 +146,51 @@ export const Stretched: Story = {
   }
 }
 
+export const Overflow: Story = {
+  render: ControllableSegmentedButton,
+  args: {
+    value: ['beforeAfter'],
+    type: 'checkbox',
+    items: [
+      {
+        text: 'And thou treble-dated crow That thy sable gender mak\'st',
+        value: 'default',
+        testId: 'testId',
+        klId: 'klId',
+        componentsBefore: [<Placeholder key="icon" />],
+        componentsAfter: [<Placeholder key="icon" />]
+      },
+      {
+        text: 'With the breath thou giv\'st and tak\'st',
+        value: 'disabled',
+        disabled: true
+      },
+      {
+        text: '\'Mongst our mourners shalt thou go',
+        value: 'before',
+        componentsBefore: [<Placeholder key="icon" />]
+      },
+      {
+        text: 'Here the anthem doth commence:',
+        value: 'after',
+        componentsAfter: [<Placeholder key="icon" />]
+      },
+      {
+        text: 'Love and constancy is dead',
+        value: 'beforeAfter',
+        componentsBefore: [<Placeholder key="icon" />],
+        componentsAfter: [<Placeholder key="icon" />]
+      }
+    ]
+  }
+}
+
 type PaletteStory = StoryObj<ThemedPaletteProps>
 export const ColorTokens: PaletteStory = {
   args: {
     source: {
       segmented_button: componentColors.segmented_button,
-      segmented_button_radio_item: componentColors.segmented_button_radio_item,
-      segmented_button_checkbox_item: componentColors.segmented_button_checkbox_item
+      segmented_button_item: componentColors.segmented_button_item
     }
   },
   render: args => <ThemedPalette {...args} />

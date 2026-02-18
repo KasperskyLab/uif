@@ -17,7 +17,8 @@ export const tagModes = [
   'orange',
   'yellow',
   'violet',
-  'grass'
+  'grass',
+  'ai'
 ] as const
 
 export type TagMode = typeof tagModes[number]

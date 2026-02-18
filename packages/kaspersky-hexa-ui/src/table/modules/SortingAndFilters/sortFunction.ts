@@ -1,4 +1,4 @@
-import { get } from 'lodash'
+import get from 'lodash/get'
 
 import { CustomSorter, DefaultSorter, TableRecord } from '../../types'
 
@@ -7,15 +7,18 @@ type TDate = {
   value: string
 }
 
-export const defaultSortFunction: DefaultSorter = <T extends Record<string, unknown>>(rows: T[], propName: keyof T, isAsc: boolean): T[] => {
+export const defaultSortFunction: DefaultSorter = <T extends Record<string, unknown | any>>(rows: T[], field: keyof T, isAsc: boolean, attribute: string): T[] => {
   return [...(rows).sort((rowA, rowB) => {
     let parseValue = (v: any) => (typeof v === 'string') ? v.toUpperCase() : v
 
-    const propValueA = get(rowA, propName)
-    const propValueB = get(rowB, propName)
+    const path = attribute ? `${field as string}.${attribute}` : field
+
+    const propValueA = get(rowA, path)
+    const propValueB = get(rowB, path)
     if ((propValueA as any)?.type === 'datetime' && (propValueB as any)?.type === 'datetime') {
       parseValue = (v: TDate) => new Date(v.value).getTime()
     }
+
     const parsedPropValueA = parseValue(propValueA)
     const parsedPropValueB = parseValue(propValueB)
 

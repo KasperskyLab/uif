@@ -8,11 +8,11 @@
     "apiTable": true,
     "storybook": true,
     "designLink": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Radio",
   "description": "Компонент для отрисовки радиобаттонов. В качестве основы используется AntdRadio из библиотеки Antd.",
   "usage": "Используется для отрисовки радиобаттонов",
-  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/B2B-Kit?node-id=1%3A1586",
-  "figmaView" : "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F7TGvGlgGfTltMG1OBgLq8p%2F00-%255BB2B%255D-Hexa-UI-Kit%3Ftype%3Ddesign%26node-id%3D32988%253A116564%26mode%3Ddev"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=32988%3A116564",
+  "pixsoView" : "https://pixso.net/app/design/-zdH_8-w6aHEaUwGaHkaEA"
 }

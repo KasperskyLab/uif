@@ -1,5 +1,6 @@
 import { toMatchImageSnapshot } from 'jest-image-snapshot'
 import { Browser } from 'puppeteer'
+
 import { ComponentType } from './types'
 
 interface MatchParams {

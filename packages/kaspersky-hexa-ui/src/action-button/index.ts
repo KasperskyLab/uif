@@ -6,4 +6,3 @@ export type {
   ActionButtonProps,
   ActionButtonSize
 } from './types'
-export * from './useThemedActionButton'

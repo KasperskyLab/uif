@@ -3,7 +3,10 @@
     "common": {
       "empty": "无数据",
       "import": "导入",
-      "export": "导出"
+      "export": "导出",
+      "filters": "过滤器",
+      "no": "否",
+      "yes": "是"
     },
     "upload": {
       "dropFileTitle": "将文件放到此处",
@@ -36,9 +39,9 @@
         "endingMultiple": "或者将它们拖放到此处",
         "endingSingle": "或者将其拖放到此处"
       },
-      "maxCountUploaded": "上传文件的最大数量",
+      "maxCountUploaded": "上传的最大文件数",
       "progress": "{{progress}} / {{size}}",
-      "showFiles": "显示文件",
+      "showFiles": "查看文件",
       "total": {
         "files": "{{filesCount}} / {{total}} 个文件",
         "simple": "{{filesCount}} 个文件",
@@ -46,16 +49,29 @@
       },
       "validation": {
         "maxCount": "由于超过最大文件限制，无法上传 {{count}} 个文件。",
+        "maxCount2": "上传的文件总数超过了允许的限制",
         "maxFileSize": "由于超过允许的大小，无法上传 {{count}} 个文件。",
+        "maxFileSize2": "之前上传的一些文件超过了当前允许的大小限制",
         "maxTotalSize": "由于超过允许的总大小，无法上传 {{count}} 个文件。",
+        "maxTotalSize2": "所有上传文件的总大小超过了当前允许的大小限制",
+        "filesDoNotMeetRequirements": "文件不符合要求",
         "format": "由于格式要求，无法上传 {{count}} 个文件。"
       }
+    },
+    "wizard": {
+      "actions": {
+        "cancel": "取消",
+        "back": "后退",
+        "next": "下一步",
+        "finish": "完成"
+      },
+      "stepStack": "第 {{currentStep}} 步，共 {{totalSteps}} 步"
     },
     "severity": {
       "critical": "严重",
       "low": "低",
-      "medium": "中",
-      "high": "高",
+      "medium": "中度",
+      "high": "高度",
       "info": "信息",
       "positive": "正面"
     },
@@ -71,22 +87,13 @@
       "total": "总共 {{count}}",
       "selected": "已选择 {{count}}",
       "page": "页面",
-      "goto": "转到"
+      "goto": "转到组(&G)"
     },
     "search": {
       "raw": "搜索",
       "dotted": "搜索..."
     },
     "table": {
-      "column": {
-        "name": "第一列"
-      },
-      "column2": {
-        "name": "第二列"
-      },
-      "column3": {
-        "name": "第三列"
-      },
       "columnDropdown": {
         "ascending": "递增",
         "descending": "递减",
@@ -95,7 +102,7 @@
         "resetFilters": "重置过滤器"
       },
       "columnsSettings": {
-        "header": "列设置",
+        "header": "表格设置",
         "selectAll": "全部选择",
         "columns": "列",
         "grouping": "分组",
@@ -103,6 +110,16 @@
         "noGrouping": "不分组",
         "apply": "应用",
         "cancel": "取消",
+        "columnTitles": {
+        "name": "名称",
+        "country": "国家",
+        "age": "年龄",
+        "city": "城市",
+        "date": "日期",
+        "isSortable": "可排序",
+        "sorter": "排序器",
+        "sorterIsSortable": "可以进行排序"
+        },
         "filtering": {
           "add": "添加",
           "clearAll": "全部清空",
@@ -110,8 +127,33 @@
           "condition": "条件",
           "from": "从",
           "to": "到",
-          "value": "值"
-        }
+          "value": "值",
+          "validation": {
+            "emptyValue": "指定过滤值",
+            "duplicateFilters": "重复的过滤器。确保每个过滤器都是唯一的"
+          }
+        },
+        "columnHideIsUnavailable": "列隐藏不可用"
+      },
+      "filterOperation": {
+        "⊆": "包含",
+        "⊄": "不包含",
+        "cont_and": "包含 (AND)",
+        "cont_or": "包含 (OR)",
+        "ncont_or": "不包含",
+        "*=": "Regexp",
+        "empty": "空",
+        "nempty": "不为空",
+        "range": "位于",
+        "nrange": "不位于"
+      },
+      "filterTag": {
+        "⊆": "包含 {{value}}",
+        "⊄": "不包含 {{value}}",
+        "empty": "为空",
+        "nempty": "不为空",
+        "range": "位于 {{from}}–{{to}}",
+        "nrange": "不位于 {{from}}–{{to}}"
       },
       "groupingEmpty": "其他"
     },
@@ -125,20 +167,56 @@
     },
     "actionBar": {
       "unsavedChanges": "等待更改",
-      "save": "保存",
+      "save": "应用",
       "cancel": "取消"
     },
     "textarea": {
       "wordsCount": "{{count}} / {{total}}"
     },
     "menu": {
+      "favoritesNavItem": "书签",
       "navUserItem": {
         "userProps": {
           "status": {
-            "available": "可用",
+            "available": "可用空间",
             "unavailable": "不可用"
           }
         }
+      }
+    },
+    "expand": {
+      "toExpand": "展开",
+      "toCollapse": "折叠"
+    },
+    "codeCompare": {
+      "compareMode": "对比模式",
+      "unified": "统一",
+      "split": "拆分",
+      "loader": "正在下载版本以进行比较...",
+      "totalChanges": "更改总数：",
+      "collapseAll": "折叠所有",
+      "expandAll": "展开全部",
+      "expandLines": "展开 {{count}} 行",
+      "empty": "这两个文件都是空的。无法进行比较。",
+      "noChanges": "版本之间未发现任何更改",
+      "basicVersion": "基本版本",
+      "comparableVersion": "可比较版本"
+    },
+    "licenseCard": {
+      "status": "授权许可密钥状态",
+      "number": "授权许可密钥号",
+      "remaining": "剩余",
+      "activationDate": "激活日期",
+      "expirationDate": "过期日期",
+      "term": "期限",
+      "dayLeft": "剩余 {{count}} 天",
+      "daysLeft": "剩余 {{count}} 天",
+      "termDays": "{{count}} 天"
+    },
+    "input": {
+      "password": {
+        "hide": "隐藏",
+        "show": "显示"
       }
     }
   }

@@ -63,6 +63,7 @@ export const KesTable: Story = {
         key: 'action',
         dataIndex: 'action',
         width: '200px',
+        ellipsis: false,
         render: (value: string, record: { [key: string]: unknown }) => {
           return (
             <Select

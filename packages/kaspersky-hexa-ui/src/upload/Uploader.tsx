@@ -3,6 +3,7 @@ import { Button } from '@src/button'
 import { Space } from '@src/space'
 import cn from 'classnames'
 import RcUpload, { UploadProps as RcUploadProps } from 'rc-upload'
+import useMergedState from 'rc-util/lib/hooks/useMergedState'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -35,6 +36,7 @@ export const Uploader: React.FC<UploaderProps & React.RefAttributes<{ upload: ()
     className,
     description,
     disabled,
+    fileList: externalFileList,
     fullHeight,
     manual,
     maxCount,
@@ -44,18 +46,22 @@ export const Uploader: React.FC<UploaderProps & React.RefAttributes<{ upload: ()
     onDownload,
     onDownloadAll,
     onRemove,
+    showProgress = true,
     style,
     testAttributes,
     truncateFileName
   } = useTestAttribute(useThemedUploader(props))
 
-  const [fileList, setFileList] = React.useState<UploadFile[]>([])
+  const [fileList, setFileList] = useMergedState<UploadFile[]>([], {
+    value: externalFileList
+  })
   const [dragState, setDragState] = React.useState<string>('drop')
 
   const isManualUploadingRef = React.useRef(false)
   const uploadRef = React.useRef<any>()
 
   const maxCountReached = !!maxCount && fileList.length >= maxCount
+  const showListOnly = maxCountReached && maxCount === 1
 
   function getRcUploaderApi (): RcUploadApi {
     return {
@@ -85,7 +91,7 @@ export const Uploader: React.FC<UploaderProps & React.RefAttributes<{ upload: ()
     }
   }))
 
-  const { validationErrors, beforeUpload } = useValidation(
+  const { beforeUpload, errors, errorsForNewFiles } = useValidation(
     fileList,
     isManualUploadingRef,
     LIST_IGNORE,
@@ -148,9 +154,9 @@ export const Uploader: React.FC<UploaderProps & React.RefAttributes<{ upload: ()
   }
 
   function renderContent () {
-    const hasErrors = Object.keys(validationErrors).length > 0
+    const hasErrors = errors.length > 0 || Object.keys(errorsForNewFiles).length > 0
 
-    const validation = hasErrors && <ValidationMessage disabled={disabled} errors={validationErrors} />
+    const validation = hasErrors && <ValidationMessage disabled={disabled} errors={errors} errorsForNewFiles={errorsForNewFiles} />
     const total = fileList.length > 0 && (
       <Total
         disabled={disabled}
@@ -172,21 +178,27 @@ export const Uploader: React.FC<UploaderProps & React.RefAttributes<{ upload: ()
         onDownload={onDownload}
         onRemove={file => handleRemove(file)}
         onUpload={uploadFile}
+        showProgress={showProgress}
         truncateFileName={truncateFileName}
       />
     )
     const requirements = description && <UploadRequirements>{description}</UploadRequirements>
+
+    if (showListOnly) {
+      return list
+    }
 
     if (size === 'medium') {
       return (
         <>
           <Space align="normal" direction="vertical" gap={16} justify="start">
             <Space gap={10} justify="start" wrap="nowrap">
-              <UploadIcon invalid={hasCriticalErrors(validationErrors)} />
+              <UploadIcon invalid={hasCriticalErrors(errors, errorsForNewFiles)} />
               <div>
                 <DragAndDropMessage
                   disabled={disabled}
                   fileList={fileList}
+                  hasErrors={errors.length > 0}
                   maxCount={maxCount}
                   onOpenFileDialog={() => getRcUploaderApi().openFileDialog()}
                 />
@@ -201,20 +213,11 @@ export const Uploader: React.FC<UploaderProps & React.RefAttributes<{ upload: ()
       )
     }
 
-    if (maxCount === 1 && fileList.length > 0) {
-      return (
-        <>
-          {list}
-          {requirements}
-        </>
-      )
-    }
-
     return (
       <>
         <Space gap={8} justify="space-between">
           <Button
-            disabled={disabled || (!!maxCount && fileList.length >= maxCount)}
+            disabled={disabled || (!!maxCount && fileList.length >= maxCount) || errors.length > 0}
             iconBefore={<Upload key="upload-icon" />}
             mode="secondary"
             onClick={() => getRcUploaderApi().openFileDialog()}
@@ -249,9 +252,10 @@ export const Uploader: React.FC<UploaderProps & React.RefAttributes<{ upload: ()
       <DragContainerWrapper
         {...testAttributes}
         $dragOver={dragState === 'dragover'}
-        $invalid={hasCriticalErrors(validationErrors)}
+        $invalid={hasCriticalErrors(errors, errorsForNewFiles)}
         $fullHeight={fullHeight}
         $maxCountReached={maxCountReached}
+        $minimize={showListOnly}
         $size={size}
         className={cn(className, 'hexa-upload hexa-upload-drag')}
         disabled={disabled}

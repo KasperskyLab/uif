@@ -1,4 +1,4 @@
-import { IndicatorMode, IndicatorCssConfig } from '@src/indicator/types'
+import { IndicatorCssConfig, IndicatorMode } from '@src/indicator/types'
 
 import { ComponentThemeContext } from '../config'
 import { indicator as defaultIndicator } from '../light/indicator'

@@ -1,44 +1,61 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { badges } from '@sb/badges'
+import { withDesignControls } from '@sb/components/designControls'
 import { withMeta } from '@sb/components/Meta'
 import { Button } from '@src/button'
 import { ServicesNav } from '@src/menu'
 import { getStatusIcon } from '@src/menu/NavUserItem'
 import { Notification } from '@src/notification'
 import { Space } from '@src/space'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import { Layout as AntLayout } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { AppUpdate, Help } from '@kaspersky/hexa-ui-icons/16'
+import { AppUpdate, BookmarkOutline, BookmarkSolid, Help, Moon } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
-import { Hamburger, Menu } from '../Menu'
-import { Nav, UserNav } from '../Nav'
+import { Hamburger, Menu as MenuComponent } from '../Menu'
 import { AppLogo } from '../stories/AppLogo'
 import { clickHandler } from '../stories/CustomItem'
 import { beforeItems, favItems, navItems, navUserItems } from '../stories/menu-items'
 import { getNotificationsIcon } from '../stories/Notifications'
 import { MenuProps, UserStatus } from '../types'
 
-const meta: Meta<MenuProps> = {
-  title: 'Hexa UI Components/Menu',
-  component: Menu,
+export type MenuStoryProps = {
+  showLogo?: boolean
+}
+
+const storySettings: Meta<MenuProps & MenuStoryProps> = {
   args: {
     width: 280,
-    trigger: null,
     collapsedWidth: 64,
-    collapsible: true,
-    testId: 'menu-test-id'
+    testId: 'menu-test-id',
+    showLogo: true,
+    onItemsChanged: () => {},
+    navUserItems
+  },
+  argTypes: {
+    collapsible: { control: false },
+    submenuMarginActive: { control: false }
   },
   parameters: {
+    actions: { argTypesRegex: '^(on.*)' },
     badges: [badges.stable, badges.reviewedByDesign],
     docs: {
       page: withMeta(MetaData)
     }
   }
+}
+
+const meta: Meta<MenuProps & MenuStoryProps> = {
+  component: MenuComponent,
+  title: 'Hexa UI Components/Menu',
+  ...withDesignControls<MenuProps & MenuStoryProps>({
+    componentName: 'menu',
+    meta: storySettings
+  })
 }
 export default meta
 
@@ -53,10 +70,10 @@ const Section = styled(Space)`
   padding: 16px;
 `
 
-const MockMenuStory = (args: MenuProps) => {
-  const [menuMinimized, setMenuMinimized] = useState(false)
+const MockMenuStory = (args: MenuProps & MenuStoryProps) => {
+  const [collapsed, setCollapsed] = useState(false)
   const [menuNavState, setMenuNavState] = useState(navItems)
-  const [userMenuState, setUserMenuState] = useState(navUserItems)
+  const [userMenuState, setUserMenuState] = useState(args.navUserItems)
   const [isAdded, setIsAdded] = useState(false)
 
   const addMenuItem = () => {
@@ -79,7 +96,7 @@ const MockMenuStory = (args: MenuProps) => {
   }
 
   const toggleUser = () => {
-    setUserMenuState([...userMenuState.map((item) => {
+    userMenuState && setUserMenuState([...userMenuState.map((item) => {
       if (item.state === 'user') {
         if (item.userProps?.role !== 'Administrator') {
           item.userProps = {
@@ -99,7 +116,7 @@ const MockMenuStory = (args: MenuProps) => {
   }
 
   const changeUserStatus = (status?: UserStatus) => {
-    setUserMenuState([...userMenuState.map((item) => {
+    userMenuState && setUserMenuState([...userMenuState.map((item) => {
       if (item.state === 'user' && item.userProps) {
         if (status) {
           item.userProps && (item.userProps.status = status)
@@ -117,7 +134,6 @@ const MockMenuStory = (args: MenuProps) => {
           }
         }
       }
-      console.log(item)
       return item
     })])
   }
@@ -140,32 +156,46 @@ const MockMenuStory = (args: MenuProps) => {
           onClick: () => changeUserStatus('unavailable')
         }
       )
-      setUserMenuState([...userMenuState])
+      userMenuState && setUserMenuState([...userMenuState])
     }
   }, [])
 
   return (
     <RootLayout>
-      <Menu {...args} collapsed={menuMinimized}>
-        <ServicesNav>
-          <Hamburger className="item left" role="button" name="hamburger" onClick={ () => setMenuMinimized(!menuMinimized) } />
+      <MenuComponent
+        {...args}
+        collapsed={collapsed}
+        beforeItems={beforeItems}
+        favItems={favItems}
+        navItems={menuNavState}
+        navUserItems={userMenuState}
+        pinIcon={<BookmarkOutline />}
+        unpinIcon={<BookmarkSolid />}
+      >
+        { !args.minimizerBottom && <ServicesNav>
+          <Hamburger
+            className="item left"
+            role="button"
+            name="hamburger"
+            collapsed={collapsed}
+            onClick={() => setCollapsed(prevSate => !prevSate)}
+          />
           {getNotificationsIcon(true)}
+          <Moon className="item" role="button" onClick={ () => clickHandler('change theme') } />
           <Help className="item" role="button" onClick={ () => clickHandler('open online help') } />
-        </ServicesNav>
-        <AppLogo/>
-        <Nav beforeItems={beforeItems} navItems={menuNavState} favItems={favItems} minimized={menuMinimized} favsEnabled={true} />
-        <UserNav navItems={userMenuState} minimized={menuMinimized} childPop={true} />
-      </Menu>
-      <Section size="10" align="auto" direction="vertical">
+        </ServicesNav>}
+        { args.showLogo && <AppLogo/> }
+      </MenuComponent>
+      <Section gap={10} align="auto" direction="vertical">
         <Notification />
-        <Space size="10" justify="space-between">
+        <Space gap={10} justify="space-between">
           <Button onClick={addMenuItem} disabled={isAdded}>Add new menu item</Button>
           <Button onClick={removeMenuItem} disabled={!isAdded}>Remove new menu item</Button>
         </Space>
-        <Space size="10" justify="space-between">
+        <Space gap={10} justify="space-between">
           <Button onClick={toggleUser}>Toggle user</Button>
           <Button onClick={() => changeUserStatus()}>
-            Change user status: {userMenuState.find((item) => item.state === 'user')?.userProps?.status || 'unset'}
+            Change user status: {userMenuState && userMenuState.find((item) => item.state === 'user')?.userProps?.status || 'unset'}
           </Button>
         </Space>
       </Section>
@@ -173,10 +203,30 @@ const MockMenuStory = (args: MenuProps) => {
   )
 }
 
-export const Base: StoryObj<MenuProps> = {
+export const Menu: StoryObj<MenuProps> = {
   render: MockMenuStory.bind({}),
   args: {
     applyAppTheme: true
+  }
+}
+
+export const WithoutLogo: StoryObj<MenuProps & MenuStoryProps> = {
+  render: MockMenuStory.bind({}),
+  args: {
+    applyAppTheme: true,
+    showLogo: false
+  }
+}
+
+export { WithPanel } from './WithPanel'
+
+export const MinimizerBottom: StoryObj<MenuProps & MenuStoryProps> = {
+  render: MockMenuStory.bind({}),
+  args: {
+    applyAppTheme: true,
+    showLogo: false,
+    minimizerBottom: true,
+    navUserItems: []
   }
 }
 

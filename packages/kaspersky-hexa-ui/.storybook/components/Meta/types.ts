@@ -4,7 +4,7 @@ export type MetaList = {
   description?: string,
   usage?: string,
   designLink?: string,
-  figmaView?: string
+  pixsoView?: string
 }
 
 export const metaDod = {
@@ -15,7 +15,7 @@ export const metaDod = {
   migration: 'Migration',
   apiTable: 'API',
   storybook: 'Storybook',
-  figmaView: 'Figma'
+  pixsoView: 'Pixso'
 }
 
 export type MetaDodProps = {

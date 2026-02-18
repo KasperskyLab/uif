@@ -13,7 +13,9 @@ export const Link = forwardRef<HTMLAnchorElement, PropsWithChildren<LinkProps>>(
   : ReactElement<LinkProps> => {
   const themedProps = useThemedLink(rawProps)
   const props = useTestAttribute(themedProps)
-  return !props.disabled && props.decoration === 'icon'
+  const { disabled, decoration, isTooltipVisible = true } = props
+
+  return !disabled && decoration === 'icon' && isTooltipVisible
     ? <Tooltip text={props.href}>
         <LinkView ref={ref} {...props} />
       </Tooltip>

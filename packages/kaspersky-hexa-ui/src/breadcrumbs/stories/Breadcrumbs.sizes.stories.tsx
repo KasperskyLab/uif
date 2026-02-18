@@ -1,7 +1,7 @@
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 
 import MetaData from '../__meta__/meta.json'
 import { Breadcrumbs } from '../Breadcrumbs'
@@ -26,8 +26,9 @@ const meta: Meta<BreadcrumbsProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
-  }
+    design: MetaData.pixsoView
+  },
+  tags: ['!autodocs']
 }
 export default meta
 

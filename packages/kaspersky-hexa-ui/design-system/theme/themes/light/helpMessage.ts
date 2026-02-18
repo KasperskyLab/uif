@@ -1,4 +1,4 @@
-import { HelpMessageStateProps, HelpMessageMode } from '@src/help-message/types'
+import { HelpMessageMode, HelpMessageStateProps } from '@src/help-message/types'
 
 import { ComponentThemeContext } from '../config'
 

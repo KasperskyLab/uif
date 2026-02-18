@@ -1,10 +1,12 @@
-import React, { ReactNode, FC } from 'react'
+import i18nGlobal from '@helpers/localization/i18n'
+import { LangType, LangVariants } from '@helpers/localization/types'
+import i18next from 'i18next'
+import React, { FC, ReactNode } from 'react'
+
 import { ThemeProvider } from '../../theme'
 import { ThemeKey } from '../../types'
+
 import { LocalizationProvider } from './LocalizationProvider'
-import { LangType } from '@helpers/localization/types'
-import i18nGlobal from '@helpers/localization/i18n'
-import i18next from 'i18next'
 
 interface ConfigProviderProps {
   children: ReactNode,
@@ -16,7 +18,7 @@ interface ConfigProviderProps {
 export const ConfigProvider: FC<ConfigProviderProps> = ({
   children,
   theme = ThemeKey.Light,
-  locale = 'en-us',
+  locale = LangVariants.EnUs,
   i18n = i18nGlobal
 }) => {
   return (

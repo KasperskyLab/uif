@@ -85,6 +85,7 @@ export type UploaderProps = {
   className?: string,
   disabled?: boolean,
   description?: ReactNode,
+  fileList?: UploadFile[],
   /**
    * Expand the drag and drop container vertically as much as possible. Only for `medium` size
    */
@@ -109,6 +110,8 @@ export type UploaderProps = {
   onDownload?: (file: UploadFile) => void,
   onDownloadAll?: () => void,
   onRemove?: (file: UploadFile) => void,
+  /** Should show progress of uploading files */
+  showProgress?: boolean,
   size?: 'small' | 'medium',
   style?: CSSProperties,
   theme?: Theme,

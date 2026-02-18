@@ -1,7 +1,7 @@
-import { WithGlobalComponentStyles } from '@helpers/hocs/WithGlobalComponentStyles'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import i18n from '@helpers/localization/i18n'
 import { shouldForwardProp } from '@helpers/shouldForwardProp'
+import { useGlobalComponentStyles } from '@helpers/useGlobalComponentStyles'
 import { Badge } from '@src/badge'
 import { Indicator } from '@src/indicator'
 import { Space } from '@src/space'
@@ -32,7 +32,6 @@ import { useIntersection } from './hooks/useTabsIntersection'
 import {
   StyledExtraContent,
   StyledTabPaneIcon,
-  StyledTabPaneIndicator,
   StyledTabPaneText,
   tabPaneHeadCss,
   tabsCss,
@@ -44,7 +43,6 @@ import {
   GroupTabsProps,
   GroupTabsVariants,
   StyledTabPanedHeadProps,
-  TabPaneHeaderProps,
   TabPaneHeadProps,
   TabsCssConfig,
   TabsProps,
@@ -52,12 +50,12 @@ import {
   TabsViewProps
 } from './types'
 import { useThemedTabs } from './useThemedTabs'
-import { createGroupTabPane, extractTabPanes } from './utils'
+import { extractChildrenFromFragment, extractTabPanes, GroupTabHeader } from './utils'
 
 export const TABS_GAP = 4
 
 const StyledTabs = styled(AntdTabs).withConfig<TabsViewProps & { hiddenTabsLength: number }>({
-  shouldForwardProp: (prop) => !['cssConfig', 'hiddenTabsLength', 'containerWidth'].includes(prop as string)
+  shouldForwardProp: (prop) => !['cssConfig', 'hiddenTabsLength'].includes(prop as string)
 })`
   ${tabsCss}
 `
@@ -88,12 +86,13 @@ export const TabPaneHead: FC<TabPaneHeadProps> = ({
   iconAfter,
   number,
   indicator,
-  indicatorMode
+  indicatorMode,
+  ...rest
 }: TabPaneHeadProps) => {
   const { cssConfig, testAttributes } = useContext(TabsContext)
 
   const tabPaneHead = (
-    <StyledTabPaneHead gap={8} wrap="nowrap" cssConfig={cssConfig}>
+    <StyledTabPaneHead {...rest} gap="related" wrap="nowrap" cssConfig={cssConfig}>
       {iconBefore && <StyledTabPaneIcon>{iconBefore}</StyledTabPaneIcon>}
       <StyledTabPaneText>{text}</StyledTabPaneText>
       {iconAfter && <StyledTabPaneIcon>{iconAfter}</StyledTabPaneIcon>}
@@ -105,11 +104,9 @@ export const TabPaneHead: FC<TabPaneHeadProps> = ({
           />
         </Tooltip>
       )}
-      {number && <Badge count={number} mode="neutral" />}
+      {number !== undefined && (<Badge count={number} showZero mode="neutral" />)}
       {indicator && (
-        <StyledTabPaneIndicator>
-          <Indicator mode={indicatorMode ?? 'high'} testId={`${testAttributes?.['data-testid'] ?? 'tabs'}-tab-indicator`} />
-        </StyledTabPaneIndicator>
+        <Indicator mode={indicatorMode ?? 'critical'} testId={`${testAttributes?.['data-testid'] ?? 'tabs'}-tab-indicator`} />
       )}
     </StyledTabPaneHead>
   )
@@ -131,18 +128,9 @@ export const GroupTabs: FC<GroupTabsProps> & GroupTabsVariants = ({ className, .
   />
 )
 
-function extractChildrenFromFragment (variableToInspect: any): ReactElement[] {
-  if (variableToInspect?.type && variableToInspect.type === React.Fragment) {
-    return extractChildrenFromFragment(variableToInspect.props.children)
-  }
-  return variableToInspect
-}
-
-export const GroupTabHeader: FC<TabPaneHeaderProps> = (props: TabPaneHeaderProps) => createGroupTabPane(props)
-
 GroupTabs.TabPaneHeader = GroupTabHeader
 
-const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = ({
+const TabView: FC<TabsViewProps> = ({
   cssConfig,
   tabPosition = 'top',
   destroyInactiveTabPane = false,
@@ -154,9 +142,12 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
   testAttributes,
   className,
   tabBarExtraContent,
-  rootHashClass,
+  padding = false,
+  noMargin = false,
   ...props
 }: TabsViewProps) => {
+  const rootHashClass = useGlobalComponentStyles(cssConfig, getDropdownStyles, TabView)
+
   const tabsRef = useRef<HTMLDivElement>(null)
   const extraContentRef = useRef<HTMLDivElement>(null)
   const activeTab = activeKey ?? defaultActiveKey ?? (children as ReactElement[])[0]?.key ?? ''
@@ -214,9 +205,11 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
     setRecalculateIntersectionCounter(recalculateIntersectionCounter + 1)
   }, [existingTabs])
 
-  const onTabChange = (value: string) => {
+  const onTabChange = async (value: string) => {
+    if (await onChange?.(value) === false) {
+      return
+    }
     setActiveTabKey(value)
-    onChange?.(value)
   }
 
   const updateShowButtonWidth = () => {
@@ -274,7 +267,12 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
     <TabsContext.Provider value={{ cssConfig, testAttributes }}>
       <StyledTabsWrapper
         ref={tabsRef}
-        className={cn(className, rootHashClass)}
+        className={cn(
+          className, 
+          rootHashClass,
+          { 'with-padding': padding },
+          { 'no-margin': noMargin }
+        )}
         cssConfig={cssConfig}
         selectedMoreButton={isMoreButtonActive}
         extraContentWidth={extraContentWidthWithGap}
@@ -290,7 +288,6 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
           activeKey={activeTabKey as string}
           onChange={onTabChange}
           hiddenTabsLength={existingTabs.length - (lastFittingItemIndex)}
-          containerWidth={containerWidth}
           {...testAttributes}
         >
           {extractTabPanes(existingTabs)}
@@ -308,7 +305,3 @@ const TabViewComponent: FC<TabsViewProps> & Omit<TabsVariants, 'TabPaneHead'> = 
     </TabsContext.Provider>
   )
 }
-
-TabViewComponent.TabPane = AntdTabs.TabPane
-
-const TabView = WithGlobalComponentStyles(TabViewComponent, getDropdownStyles)

@@ -18,6 +18,9 @@ function encodeForCSS (content: string) {
 export const SelectWrapper = styled.div`
   width: 100%;
 `
+export const SelectInnerWrapper = styled.div`
+  width: 100%;
+`
 
 type SelectCssProps = {
   cssConfig: SelectCssConfig,
@@ -36,8 +39,21 @@ export const selectCss = css<SelectCssProps>`
     letter-spacing: ${selectTextSizes.letterSpacing};
 
     .ant-select-selection-overflow {
-      gap: 4px;
       padding: 3px 0;
+
+      .ant-select-selection-overflow-item {
+        display: flex;
+        align-items: center;
+        min-height: 24px;
+    
+        &.ant-select-selection-overflow-item-suffix {
+          bottom: 0;
+          top: 0;
+        }
+        &:not(.ant-select-selection-overflow-item-rest) > span {
+          margin-right: 4px;
+        }
+      }
 
       .ant-tag {
         margin-right: 0;
@@ -115,7 +131,7 @@ export const selectCss = css<SelectCssProps>`
 
       // validation status
       ${(props) => `
-      .ant-select-selector {
+      &:not(.ant-select-focused) .ant-select-selector {
         border-color: ${fromProps(`${props.validationStatus}.border`)(props)};
       }`}
 
@@ -132,7 +148,7 @@ export const selectCss = css<SelectCssProps>`
       }
 
       // hover
-      &:hover .ant-select-selector {
+      &:not(.ant-select-focused):hover .ant-select-selector {
         border-color: ${fromProps('hover.border')};
       }
     }
@@ -141,7 +157,7 @@ export const selectCss = css<SelectCssProps>`
     &.ant-select-disabled {
       .ant-select-selector {
         background-color: ${fromProps('disabled.background')};
-        border: 1px solid transparent;
+        border: 1px solid ${fromProps('disabled.border')};
 
         .ant-select-selection-item {
           color: ${fromProps('disabled.color')};
@@ -189,7 +205,7 @@ export const selectCss = css<SelectCssProps>`
     }
   }
 
-  &.ant-select-open:not(.select-show-search) .ant-select-arrow {
+  &.ant-select-open .ant-select-arrow {
     transform: rotate(0.5turn);
   }
 
@@ -241,7 +257,7 @@ const dropdownCss = css<DropdownStylesProps>`
   .ant-select-item-option {
     color: ${fromProps('enabled.option.color')};
     position: relative;
-    padding-right: 30px;
+    padding-inline-end: 30px;
 
     .ant-select-item-option-state {
       color: ${fromProps('enabled.option.color')} !important;
@@ -276,6 +292,37 @@ const dropdownCss = css<DropdownStylesProps>`
     &:focus-visible {
       background-color: ${fromProps('hover.option.background')};
       outline: none;
+    }
+  }
+
+  .rc-virtual-list {
+    & ::-webkit-scrollbar {
+      -webkit-appearance: none;
+      height: 8px;
+      width: 8px;
+      background-color: var(--scrollbar--bg--enabled);
+      border-radius: 4px;
+
+      &:hover {
+        background-color: var(--scrollbar--bg--hover);
+      }
+
+      &:active {
+        background-color: var(--scrollbar--bg--active);
+      }
+    }
+
+    & ::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background-color: var(--scrollbar--bar--enabled);
+
+      &:hover {
+        background-color: var(--scrollbar--bar--hover);
+      }
+
+      &:active {
+        background-color: var(--scrollbar--bar--active);
+      }
     }
   }
 
@@ -369,4 +416,17 @@ export const StyledErrorWrapper = styled.div<{ cssConfig: SelectCssConfig }>`
   > div {
    flex: 1;
   }
+`
+
+export const OptionDescription = styled.span<{ cssConfig: SelectCssConfig }>`
+  color: ${fromProps('enabled.option.description')};
+`
+
+export const OptionContent = styled.div`
+  display: flex;
+`
+
+export const OptionTextContent = styled.div`
+  display: flex;
+  flex-direction: column;
 `

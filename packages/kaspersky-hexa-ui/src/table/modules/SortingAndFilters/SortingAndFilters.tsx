@@ -1,5 +1,3 @@
-/* eslint-disable react/display-name */
-import { useUpdateEffect } from '@helpers/useUpdateEffect'
 import React, {
   useEffect,
   useMemo,
@@ -7,16 +5,16 @@ import React, {
   useState
 } from 'react'
 
+import { useTableContext } from '../../context/TableContext'
 import { isColumnReadonly } from '../../helpers/common'
+import { getPersistentStorageValue, updatePersistentStorage } from '../../helpers/persistentStorage'
 import { TableColumn, TableRecord } from '../../types'
 import { useInitTableSorters } from '../hooks/useInitTableSorters'
 import { TableModule } from '../index'
 
 import { DropdownColumnTitle } from './DropdownColumnTitle'
 import { customSortFunctionWrapper, defaultSortFunction } from './sortFunction'
-import { ActiveFilter, ActiveSorting } from './types'
-
-import { loadFilters, saveFilters } from './index'
+import { ActiveSorting } from './types'
 
 const hasFiltersOrSorting = (columns: TableColumn[]) => {
   return columns.some(({ filters, isSortable }) => filters || isSortable)
@@ -24,154 +22,93 @@ const hasFiltersOrSorting = (columns: TableColumn[]) => {
 
 const EMPTY_OBJ = Object.freeze({})
 
-type PreparedDataSetter = TableRecord[] | ((oldState: TableRecord[]) => TableRecord[])
-type ActiveFilterSetter = ActiveFilter | ((oldState: ActiveFilter) => ActiveFilter)
-
-export const SortingAndFilters: TableModule = Component => ({
+export const SortingAndFilters: TableModule = Component => function SortingAndFiltersModule ({
   columns,
   dataSource,
   onSortChange,
-  onFilterChange,
-  onFiltersChange,
+  onDropdownFiltersChange,
   isDefaultSortDisabled,
   externalSorting,
   setExternalSorting,
-  appliedFilters,
+  storageKey,
   ...props
-}): React.ReactElement => {
+}): React.ReactElement {
   if (!columns || !Array.isArray(dataSource)) {
-    return <Component {...props} />
+    return <Component {...props} storageKey={storageKey} />
   }
 
   if (!hasFiltersOrSorting(columns)) {
-    return <Component {...props} columns={columns} dataSource={dataSource} />
+    return <Component {...props} columns={columns} dataSource={dataSource} storageKey={storageKey} />
   }
 
-  let initialFilters: ActiveFilter = props.initialFilters || EMPTY_OBJ
+  const { filterApi, pagination, updateContext } = useTableContext()
+
   const initialSorting: ActiveSorting = props.initialSorting || EMPTY_OBJ
 
-  const [preparedData, setPreparedData]: [TableRecord[], (val: PreparedDataSetter) => void] = useState(dataSource as TableRecord[])
-  const [activeFilters, setActiveFilters]: [ActiveFilter, (val: ActiveFilterSetter) => void] = useState(initialFilters)
-  const [activeOriginalFilters, setActiveOriginalFilters] = useState<unknown[]>([])
-  const [activeSorting, setActiveSorting] = useState<ActiveSorting>(initialSorting as ActiveSorting)
+  const [activeSorting, setActiveSorting] = useState<ActiveSorting>(initialSorting)
+  const [sortingWithExternal, setSortingWithExternal] = useState<ActiveSorting>(activeSorting || initialSorting)
   const { columnsSortersConfig } = useInitTableSorters({ columns })
 
-  const processColumn = (column: TableColumn) : TableColumn => {
-    if (!(column.isSortable || column.filters || column.sorter) || isColumnReadonly(column)) {
-      return column
+  useEffect(() => {
+    setSortingWithExternal(activeSorting || initialSorting)
+  }, [props.initialSorting, activeSorting])
+  
+
+  useEffect(() => {
+    updateContext({ sorting: sortingWithExternal })
+  }, [sortingWithExternal])
+
+  useEffect(() => {
+    if (!props.initialSorting && !externalSorting && storageKey) {
+      const savedSorting = getPersistentStorageValue({ storageKey, featureKey: 'sorting' })
+      if (savedSorting) {
+        setActiveSorting(savedSorting)
+      }
     }
+  }, [props.initialSorting, externalSorting])
 
-    return {
-      ...column,
-      sorter: undefined,
-      filters: undefined,
-      title:
-        <DropdownColumnTitle
-          testId={props?.testId}
-          klId={props?.klId}
-          allowMultipleFilters={Boolean(column.allowMultipleFilters)}
-          title={column.title}
-          columnId={column.columnId}
-          dataIndex={column.dataIndex as string}
-          filters={column.filters}
-          isSortable={column.isSortable}
-          sorter={column.sorter}
-          activeFilters={activeFilters}
-          setActiveFilters={setActiveFilters}
-          setActiveOriginalFilters={setActiveOriginalFilters}
-          activeSorting={activeSorting}
-          setActiveSorting={setExternalSorting || setActiveSorting}
-        />
-    }
-  }
+  const processedColumns = useMemo(() => (
+    columns.map((column: TableColumn, index: number): TableColumn => {
+      if (!(column.isSortable || column.filters || column.sorter) || isColumnReadonly(column)) {
+        return column
+      }
 
-  const processedColumns = useMemo(
-    () => columns.map(processColumn),
-    [columns, activeFilters, activeSorting]
-  )
-
-  const areFiltersEqual = (activeFilters: ActiveFilter, currentFilters: ActiveFilter) => {
-    const activeProps: string[] = Object.keys(activeFilters)
-    const currentProps: string[] = Object.keys(currentFilters)
-
-    if (activeProps.length !== currentProps.length) {
-      return false
-    }
-
-    return currentProps.every(filterProp => {
-      const result = activeFilters[filterProp] && Object.keys(activeFilters[filterProp])[0] === Object.keys(currentFilters[filterProp])[0]
-      return result
+      return {
+        ...column,
+        sorter: undefined,
+        filters: undefined,
+        key: column.dataIndex || index,
+        title:
+          <DropdownColumnTitle
+            testId={props?.testId}
+            klId={props?.klId}
+            allowMultipleFilters={Boolean(column.allowMultipleFilters)}
+            closeDropdownOnSelect={column.closeDropdownOnSelect}
+            title={column.title}
+            columnId={column.columnId}
+            dataIndex={column.dataIndex!}
+            availableFilters={column.filters}
+            isSortable={column.isSortable}
+            sortingAttributes={column.sortingAttributes}
+            sorter={column.sorter}
+            filterApi={filterApi}
+            onDropdownFiltersChange={onDropdownFiltersChange}
+            activeSorting={activeSorting}
+            setActiveSorting={setExternalSorting || setActiveSorting}
+            showFilterIcon={column.showFilterIcon}
+          />
+      }
     })
-  }
+  ), [columns, activeSorting])
 
-  useUpdateEffect(() => {
-    onFiltersChange?.(activeOriginalFilters as any)
-  }, [activeOriginalFilters])
+  const preparedData = useMemo(() => {
+    const shouldSort = 'field' in (sortingWithExternal) && !isDefaultSortDisabled && !pagination.useDataSourceFunction
 
-  useEffect(() => {
-    if (!appliedFilters) {
-      return
-    }
-
-    const areEqual = areFiltersEqual(activeFilters, appliedFilters)
-    if (!areEqual) {
-      setActiveFilters(appliedFilters)
-    }
-  }, [appliedFilters])
-
-  useEffect(() => {
-    if (props.initialFilters) {
-      initialFilters = props.initialFilters
-    } else {
-      if (props.saveFilters) {
-        const savedFilters = localStorage.getItem(props.saveFilters.storageKey)
-
-        if (savedFilters) {
-          initialFilters = loadFilters(props.saveFilters.storageKey, columns)
-        }
-      }
-    }
-
-    setActiveFilters(initialFilters)
-  }, [props.initialFilters])
-
-  const prevSorting = useRef(activeSorting || initialSorting)
-  const prevFilters = useRef(activeFilters)
-
-  useEffect(() => {
-    const sortingWithExternal = activeSorting || initialSorting
-    if (onSortChange && activeSorting !== prevSorting.current) {
-      prevSorting.current = sortingWithExternal
-      onSortChange(sortingWithExternal)
-    }
-
-    if (onFilterChange && activeFilters !== prevFilters.current) {
-      prevFilters.current = activeFilters
-      onFilterChange(activeFilters)
-
-      if (props.saveFilters && activeFilters) {
-        saveFilters(activeFilters, props.saveFilters.storageKey)
-      }
-    }
-
-    const shouldFilter = Object.keys(activeFilters).length > 0
-    const shouldSort = 'field' in (sortingWithExternal) && !isDefaultSortDisabled
-
-    let preparedData: TableRecord[] = (dataSource as TableRecord[])
-
-    if (shouldFilter) {
-      preparedData = preparedData.filter((row) => {
-        const canPass = Object.values(activeFilters).every((filters) => {
-          const isMatched = Object.values(filters).every((predicate) => predicate?.(row))
-          return isMatched
-        })
-
-        return canPass
-      })
-    }
+    let resultDataSource: TableRecord[] = dataSource as TableRecord[]
 
     if (shouldSort) {
       const field = sortingWithExternal.columnId || sortingWithExternal.field
+      const attribute = sortingWithExternal.attribute
       const sortWithNestedItems = (data: TableRecord[]) => {
         if (!field) {
           return data
@@ -189,11 +126,11 @@ export const SortingAndFilters: TableModule = Component => ({
 
         const sortedData = customSorter
           ? customSortFunctionWrapper(
-              data,
-              customSorter,
-              isAsc
-            )
-          : sortFunction(data, field as string, isAsc)
+            data,
+            customSorter,
+            isAsc
+          )
+          : sortFunction(data, field as string, isAsc, attribute as string)
 
         sortedData.forEach(item => {
           if (item._hasChildren) {
@@ -203,11 +140,34 @@ export const SortingAndFilters: TableModule = Component => ({
         return sortedData
       }
 
-      preparedData = sortWithNestedItems(preparedData as TableRecord[])
+      resultDataSource = sortWithNestedItems(resultDataSource as TableRecord[])
     }
 
-    setPreparedData(preparedData)
-  }, [dataSource, activeSorting, activeFilters, initialSorting])
+    return resultDataSource
+  }, [dataSource, sortingWithExternal, columns, columnsSortersConfig, isDefaultSortDisabled])
+
+  const prevSorting = useRef(sortingWithExternal)
+
+  useEffect(() => {
+    if (onSortChange && activeSorting !== prevSorting.current) {
+      prevSorting.current = sortingWithExternal
+      onSortChange(sortingWithExternal)
+    }
+
+    if (storageKey) {
+      updatePersistentStorage({
+        storageKey,
+        featureKey: 'sorting',
+        updatedValue: {
+          field: sortingWithExternal.field,
+          direction: sortingWithExternal.direction,
+          columnId: sortingWithExternal.columnId,
+          columnServerField: sortingWithExternal.columnServerField,
+          isDefaultSortDisabled: sortingWithExternal.isDefaultSortDisabled
+        }
+      })
+    }
+  }, [activeSorting, sortingWithExternal, onSortChange, storageKey, isDefaultSortDisabled])
 
   useEffect(() => {
     if (externalSorting) setActiveSorting(externalSorting)
@@ -217,5 +177,6 @@ export const SortingAndFilters: TableModule = Component => ({
     {...props}
     dataSource={preparedData}
     columns={processedColumns}
+    storageKey={storageKey}
   />
 }

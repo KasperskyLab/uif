@@ -1,11 +1,11 @@
 import { ConfigProvider } from '@design-system/context'
+import { localization } from '@helpers/localization'
 import { act, render, screen } from '@testing-library/react'
 import { renderHook } from '@testing-library/react-hooks'
 import userEvent from '@testing-library/user-event'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { localization } from '../../../helpers/localization'
 import { Search } from '../Search'
 import '@testing-library/jest-dom'
 import 'jest-styled-components'

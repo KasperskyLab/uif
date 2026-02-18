@@ -94,22 +94,22 @@ export const KeyValueMigrationTable = () => {
     <StyledTableContainer>
       <table>
         <thead>
-        <tr>
-          <td><b>KeyValue</b></td>
-          <td><b>FieldSet</b></td>
-          <td><b>Комментарий</b></td>
-        </tr>
+          <tr>
+            <td><b>KeyValue</b></td>
+            <td><b>FieldSet</b></td>
+            <td><b>Комментарий</b></td>
+          </tr>
         </thead>
         <tbody>
-        {
-          dataCommon.map((item, index) => (
-            <tr key={index}>
-              <td>{item.keyValueProp}</td>
-              <td>{item.fieldSetProp}</td>
-              <td>{item.comment}</td>
-            </tr>
-          ))
-        }
+          {
+            dataCommon.map((item, index) => (
+              <tr key={index}>
+                <td>{item.keyValueProp}</td>
+                <td>{item.fieldSetProp}</td>
+                <td>{item.comment}</td>
+              </tr>
+            ))
+          }
         </tbody>
       </table>
     </StyledTableContainer>
@@ -143,22 +143,22 @@ export const DataItemsTable = () => (
   <StyledTableContainer>
     <table>
       <thead>
-      <tr>
-        <td><b>KeyValue.data</b></td>
-        <td><b>FieldSet.items</b></td>
-        <td><b>Комментарий</b></td>
-      </tr>
+        <tr>
+          <td><b>KeyValue.data</b></td>
+          <td><b>FieldSet.items</b></td>
+          <td><b>Комментарий</b></td>
+        </tr>
       </thead>
       <tbody>
-      {
-        dataItem.map((item, index) => (
-          <tr key={index}>
-            <td>{item.keyValueProp}</td>
-            <td>{item.fieldSetProp}</td>
-            <td>{item.comment}</td>
-          </tr>
-        ))
-      }
+        {
+          dataItem.map((item, index) => (
+            <tr key={index}>
+              <td>{item.keyValueProp}</td>
+              <td>{item.fieldSetProp}</td>
+              <td>{item.comment}</td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </StyledTableContainer>

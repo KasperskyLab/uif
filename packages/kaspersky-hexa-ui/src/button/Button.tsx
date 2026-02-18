@@ -1,73 +1,126 @@
-import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
+import { getChildTestProps, useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { showDeprecationWarn } from '@helpers/showDeprecationWarn'
+import { Dropdown } from '@src/dropdown'
+import { Loader } from '@src/loader'
 import { Button as AntdButton } from 'antd'
 import cn from 'classnames'
 import React from 'react'
-import styled from 'styled-components'
 
-import { buttonCss, groupCss } from './buttonCss'
-import { ButtonGroupProps, buttonModes, ButtonProps, ButtonViewProps } from './types'
-import { useThemedButton } from './useThemedButton'
+import { ArrowDown1 } from '@kaspersky/hexa-ui-icons/16'
 
-const StyledButton = styled(AntdButton).withConfig({
-  shouldForwardProp: (prop) => !['cssConfig', 'isPressed'].includes(prop)
-})`
-  ${buttonCss}
-`
+import styles from './Button.module.scss'
+import { ButtonGroupProps, buttonModes, ButtonProps, SplitButtonProps } from './types'
 
-export const Button = (rawProps: ButtonProps): JSX.Element => {
-  const { mode = 'primary', ...notDeprecatedProps } = rawProps
+const cloneWithKey = (node: React.ReactNode, key: string) => (
+  React.isValidElement(node)
+    ? React.cloneElement(node, { key })
+    : node
+)
 
-  let notDeprecatedMode = mode
-  if (!buttonModes.includes(mode)) {
-    notDeprecatedMode = 'primary'
-    showDeprecationWarn('mode', mode)
-  }
-
-  const themedProps = useThemedButton({ ...notDeprecatedProps, mode: notDeprecatedMode })
-  const props = useTestAttribute(themedProps)
-  return <ButtonView {...props} />
-}
-
-const ButtonView = ({
-  className,
-  text,
+export const Button = ({
   children,
-  type,
+  className,
   iconBefore,
   iconAfter,
-  testAttributes,
-  ...rest
-}: ButtonViewProps): JSX.Element => {
+  isPressed,
+  loading,
+  mode: rawMode = 'primary',
+  size = 'medium',
+  text,
+  theme,
+  type,
+  ...props
+}: ButtonProps): JSX.Element => {
+  const { testAttributes, ...rest } = useTestAttribute(props)
+
+  const mode = React.useMemo(() => {
+    if (!buttonModes.includes(rawMode)) {
+      showDeprecationWarn('mode', rawMode)
+      return 'primary'
+    }
+
+    return rawMode
+  }, [rawMode])
+
   const child = text || children
+
   return (
-    <StyledButton
-      className={cn(className, { 'icon-only': !child })}
-      htmlType={type}
+    <AntdButton
       {...testAttributes}
       {...rest}
+      className={cn(
+        getClassNameWithTheme(className, theme),
+        'hexa-ui-button',
+        styles.button,
+        styles[size],
+        styles[mode],
+        isPressed && styles.buttonPressed,
+        loading && styles.buttonLoading,
+        !child && styles.iconOnly
+      )}
+      htmlType={type}
       icon={undefined}
+      loading={loading}
     >
       {
         child
           ? [
-              iconBefore,
-              <span key="radio" className="kl-components-button-text"> {child} </span>,
-              iconAfter
+              cloneWithKey(iconBefore, 'iconBefore'),
+              <span key="radio" className={styles.buttonText}> {child} </span>,
+              cloneWithKey(iconAfter, 'iconAfter')
             ]
           : iconBefore || iconAfter
       }
-    </StyledButton>
+      {loading && <Loader size="small" {...getChildTestProps('loader', testAttributes)} />}
+    </AntdButton>
   )
 }
 
-const StyledButtonGroup = styled(AntdButton.Group).withConfig({
-  shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
-})`
-  ${groupCss}
-`
+const ButtonGroup = (props: ButtonGroupProps): JSX.Element => {
+  const { testAttributes, className, ...rest } = useTestAttribute(props)
 
-Button.Group = (rawProps: ButtonGroupProps): JSX.Element => {
-  const { testAttributes, ...rest } = useTestAttribute(rawProps)
-  return <StyledButtonGroup {...testAttributes} {...rest} />
+  return <AntdButton.Group {...testAttributes} {...rest} className={cn(className, styles.buttonGroup)} />
 }
+
+const SplitButton = ({
+  className,
+  disabled,
+  loading,
+  style,
+  mode = 'primary',
+  theme,
+  items,
+  dropdownPlacement,
+  ...props
+}: SplitButtonProps): JSX.Element => (
+  <ButtonGroup
+    className={cn(
+      getClassNameWithTheme(className, theme),
+      styles.splitButton,
+      styles[mode]
+    )}
+    style={style}
+  >
+    <Button
+      mode={mode}
+      loading={loading}
+      disabled={disabled}
+      {...props}
+      iconAfter={undefined}
+      isPressed={undefined}
+      size={undefined}
+    />
+    <Dropdown
+      disabled={disabled}
+      trigger={['click']}
+      overlay={items}
+      placement={dropdownPlacement}
+    >
+      <Button disabled={disabled} mode={mode} iconBefore={<ArrowDown1 />} />
+    </Dropdown>
+  </ButtonGroup>
+)
+
+Button.Group = ButtonGroup
+Button.SplitButton = SplitButton

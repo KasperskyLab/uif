@@ -1,0 +1,16 @@
+{
+  "dod": {
+    "designTokens": false,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true
+  },
+  "component": "Terminal",
+  "description": "Для использования терминала требуется внешний сервер с WebSockets, для взаимодейсвтия с внешним сервером необходимо создать DataTransferAddon унаследовав его от BasicDataTransferAddon и реализовать методы onSocketMessage, onData, примером является: CommonDataTransferAddon (/terminal/addons)",
+  "usage": "Компонент треминала, используется для связи с внешним треминалом по WebSockets",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=169090%3A233127",
+  "pixsoView": "https://pixso.net/app/design/nGSwmukind_xLZD1EKdbJw"
+}

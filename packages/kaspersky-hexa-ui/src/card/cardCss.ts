@@ -40,7 +40,7 @@ export const CardActions = styled.div`
   gap: 4px;
   height: 24px;
 
-  .kl-action-button {
+  .card-action-button {
     height: max-content;
   }
 `

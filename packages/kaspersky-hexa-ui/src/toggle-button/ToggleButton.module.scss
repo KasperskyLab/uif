@@ -1,0 +1,239 @@
+$modes: 'red', 'orange', 'yellow', 'grass', 'emerald', 'marengo', 'marina', 'purple', 'violet', 'grey';
+
+@mixin tb-outlined-colors($mode) {
+  .container.#{$mode} {
+    .input:checked + .toggleBtn {
+      background-color: var(--toggle_button--outlined--selected--#{$mode}--bg--enabled);
+      color: var(--toggle_button--outlined--selected--#{$mode}--text--enabled);
+      border-color: var(--toggle_button--outlined--selected--#{$mode}--border--enabled);
+
+      &:hover,
+      &:hover:focus {
+        background-color: var(--toggle_button--outlined--selected--#{$mode}--bg--hover);
+        color: var(--toggle_button--outlined--selected--#{$mode}--text--enabled);
+      }
+
+      &:active,
+      &:active:focus {
+        background-color: var(--toggle_button--outlined--selected--#{$mode}--bg--active);
+        color: var(--toggle_button--outlined--selected--#{$mode}--text--enabled);
+      }
+
+      .text { color: var(--toggle_button--outlined--selected--#{$mode}--text--enabled); }
+    }
+
+    .input:checked:disabled + .toggleBtn {
+      background-color: var(--toggle_button--outlined--selected--#{$mode}--bg--disabled);
+      color: var(--toggle_button--outlined--selected--#{$mode}--text--disabled);
+      border-color: var(--toggle_button--outlined--selected--#{$mode}--border--disabled);
+
+      .text {
+        color: var(--toggle_button--outlined--selected--#{$mode}--text--disabled);
+      }
+    }
+  }
+}
+
+@mixin tb-ghost-colors($mode) {
+  .extraSmall.#{$mode} {
+    .input:checked + .toggleBtn {
+      background-color: transparent;
+      border: none;
+      color: var(--toggle_button--ghost--selected--#{$mode}--text--enabled);
+
+      &:hover,
+      &:hover:focus {
+        background-color: transparent;
+        color: var(--toggle_button--ghost--selected--#{$mode}--text--hover);
+      }
+
+      &:active,
+      &:active:focus {
+        background-color: transparent;
+        color: var(--toggle_button--ghost--selected--#{$mode}--text--active);
+      }
+
+      .text {
+        color: var(--toggle_button--ghost--selected--#{$mode}--text--enabled);
+      }
+    }
+
+    .input:checked:disabled + .toggleBtn {
+      background-color: transparent;
+      border: none;
+      color: var(--toggle_button--ghost--selected--#{$mode}--text--disabled);
+
+      .text {
+        color: var(--toggle_button--ghost--selected--#{$mode}--text--disabled);
+      }
+    }
+  }
+}
+
+@each $m in $modes {
+  @include tb-outlined-colors($m);
+  @include tb-ghost-colors($m);
+}
+
+.medium {
+  --size: 32px;
+
+  .toggleBtn {
+    border-radius: var(--radius--m);
+    min-height: var(--size);
+    padding: 0 var(--spacing--padding_m);
+  }
+
+  .iconOnly {
+    min-width: var(--size);
+    padding: 0 var(--spacing--padding_sm);
+  }
+}
+
+.small {
+  --size: 24px;
+
+  .toggleBtn {
+    border-radius: 4px;
+    min-height: var(--size);
+    padding: 0 var(--spacing--padding_m);
+  }
+
+  .iconOnly {
+    min-width: var(--size);
+    padding: 0 2px;
+  }
+}
+
+.extraSmall {
+  --size: 16px;
+
+  .toggleBtn {
+    background-color: transparent;
+    border: none;
+    max-height: var(--size);
+    padding: 0;
+    color: var(--toggle_button--ghost--unselected--text--enabled);
+
+    &:hover,
+    &:hover:focus {
+      background-color: transparent;
+      color: var(--toggle_button--ghost--unselected--text--hover);
+
+      .text {
+        color: var(--toggle_button--ghost--unselected--text--hover);
+      }
+    }
+
+    &:active,
+    &:active:focus {
+      background-color: transparent;
+      color: var(--toggle_button--ghost--unselected--text--active);
+    }
+  }
+
+  .iconOnly {
+    width: var(--size);
+  }
+
+  .reducer {
+    max-height: var(--size);
+    line-height: var(--size);
+  }
+
+  .text {
+    color: var(--toggle_button--ghost--unselected--text--enabled);
+  }
+}
+
+.container {
+  display: inline-flex;
+  position: relative;
+}
+
+.input {
+  position: absolute; opacity: 0; width: 0; height: 0;
+
+  &:disabled + .toggleBtn {
+    background-color: var(--toggle_button--outlined--unselected--bg--disabled);
+    color: var(--toggle_button--outlined--unselected--text--disabled);
+    border-color: var(--toggle_button--outlined--unselected--border--disabled);
+    cursor: not-allowed;
+    .text {
+      color: var(--toggle_button--outlined--unselected--text--disabled);
+    }
+  }
+
+  &:focus-visible + .toggleBtn {
+    outline: 2px solid var(--toggle_button--outlined--selected--marina--border--enabled);
+  }
+}
+
+.toggleBtn {
+  max-width: 300px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all .3s ease;
+  outline: none;
+  background-color: var(--toggle_button--outlined--unselected--bg--enabled);
+  color: var(--toggle_button--outlined--unselected--text--enabled);
+  border: 1px solid var(--toggle_button--outlined--unselected--border--enabled);
+
+  &:hover,
+  &:hover:focus {
+    background-color: var(--toggle_button--outlined--unselected--bg--hover);
+    color: var(--toggle_button--outlined--unselected--text--hover);
+  }
+
+  &:active,
+  &:active:focus {
+    background-color: var(--toggle_button--outlined--unselected--bg--active);
+    color: var(--toggle_button--outlined--unselected--text--active);
+  }
+
+  &.toggleBtnLoading {
+    position: relative;
+    cursor: not-allowed;
+    > * { visibility: hidden; }
+    &::after {
+      content: "";
+      position: absolute;
+      margin: auto;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--toggle_button--outlined--unselected--text--disabled);
+      border-top-color: transparent;
+      animation: toggle-spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes toggle-spin { to { transform: rotate(360deg); } }
+
+.iconBefore,
+.elementAfter {
+  display: flex;
+  align-items: center;
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  gap: var(--spacing--gap_dependent);
+}
+
+.stretched {
+  > .container {
+    flex: 1 1 0;
+  }
+
+  > * label {
+    justify-content: center;
+    width: 100%;
+  }
+}

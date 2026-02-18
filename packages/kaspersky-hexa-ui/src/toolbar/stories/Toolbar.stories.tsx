@@ -1,12 +1,14 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
+import { Size } from '@design-system/types'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Button } from '@src/button'
 import { Link } from '@src/link'
+import { Sidebar } from '@src/sidebar'
 import { Space } from '@src/space'
 import { Toggle } from '@src/toggle'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
@@ -33,7 +35,7 @@ const meta: Meta<ToolbarProps> = {
     docs: {
       page: withMeta(MetaData, ToolbarDocs)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   },
   decorators: [
     (Story, context) => (
@@ -42,13 +44,13 @@ const meta: Meta<ToolbarProps> = {
       </div>
     )
   ],
-  excludeStories: ['itemsLeft', 'itemsRight']
+  excludeStories: ['getItemsLeft', 'getItemsRight']
 }
 export default meta
 
 type Story = StoryObj<ToolbarProps>
 
-const items = [
+const getItems = () => [
   {
     children: 'Action 1',
     onClick: () => console.log('Action 1')
@@ -66,7 +68,7 @@ const items = [
   }
 ]
 
-export const itemsLeft: ToolbarItems[] = [
+export const getItemsLeft = (): ToolbarItems[] => [
   {
     type: 'button',
     key: '1',
@@ -81,7 +83,7 @@ export const itemsLeft: ToolbarItems[] = [
     label: 'Button 2',
     iconBefore: <Placeholder />,
     testId: 'item-2',
-    overlay: items
+    overlay: getItems()
   },
   {
     type: 'divider',
@@ -104,7 +106,7 @@ export const itemsLeft: ToolbarItems[] = [
     type: 'dropdown',
     key: '5',
     label: 'Button 5',
-    overlay: items,
+    overlay: getItems(),
     iconBefore: <Placeholder />,
     disabled: true
   },
@@ -112,7 +114,7 @@ export const itemsLeft: ToolbarItems[] = [
     type: 'dropdown',
     key: '6',
     label: 'Button 6',
-    overlay: items
+    overlay: getItems()
   },
   {
     type: 'button',
@@ -121,6 +123,18 @@ export const itemsLeft: ToolbarItems[] = [
     iconBefore: <Placeholder />,
     iconAfter: <Placeholder />,
     onClick: () => console.log('Button 7')
+  },
+  {
+    type: 'children',
+    key: '8',
+    children: <Toolbar.Button>Button 8</Toolbar.Button>
+  },
+  {
+    type: 'button',
+    key: '9',
+    label: 'Button 9',
+    onClick: () => console.log('Button 9'),
+    disabled: true
   }
 ]
 
@@ -146,7 +160,7 @@ const CollapsibleSearch = () => {
   )
 }
 
-export const itemsRight: ToolbarItems[] = [
+export const getItemsRight = (): ToolbarItems[] => [
   {
     type: 'children',
     key: '1',
@@ -157,76 +171,11 @@ export const itemsRight: ToolbarItems[] = [
     key: '2',
     children: (
       <Space gap={4} wrap="nowrap">
+        <Toolbar.ScaleItem onClick={() => console.log('sizeMaximize')}/>
         <Toolbar.SettingsItem onClick={() => console.log('settings')} />
-        <Toolbar.FilterItem onClick={() => console.log('filter')} />
       </Space>
     )
   }
-]
-
-const itemsLeftWithIndicator: ToolbarItems[] = itemsLeft
-  .splice(0, 4)
-  .map((item, index) => (
-    index === 0
-      ? {
-        ...item,
-        showIndicator: true,
-        iconBefore: <FilterWithIndicatorIcon />
-      } as ToolbarItems
-      : item
-  ))
-
-const itemsRightWithIndicator: ToolbarItems[] = [
-  itemsRight[0],
-  {
-    type: 'children',
-    key: '2',
-    children: (
-      <Space gap={4} wrap="nowrap">
-        <Toolbar.SettingsItem onClick={() => console.log('settings')} />
-        <Toolbar.FilterItem showIndicator iconBefore={<FilterWithIndicatorIcon />} onClick={() => console.log('filter')} />
-      </Space>
-    )
-  }
-]
-
-const itemsImportExportButtons: ToolbarItems[] = [
-  {
-    type: 'children',
-    key: '2',
-    children: (
-      <Space gap={4} wrap="nowrap">
-        <Toolbar.ImportExportItem dropdown={false} onClick={() => console.log('ImportExport Button')} />
-        <Toolbar.ImportExportItem
-          dropdown={true}
-          onClick={() => console.log('ImportExport Dropdown 2')}
-          onImport={() => console.log('Import Button 2')}
-          onExport={() => console.log('Export Button 2')}
-        />
-        <Toolbar.ImportExportItem
-          dropdown={true}
-          onClick={() => console.log('ImportExport Dropdown 3')}
-          onExport={() => console.log('Export Button 3')}
-        />
-        <Toolbar.ImportExportItem
-          dropdown={true}
-          onClick={() => console.log('ImportExport Dropdown 4')}
-          onImport={() => console.log('Import Button 4')}
-        />
-        <Toolbar.ExportItem onClick={() => console.log('Export Button')} />
-        <Toolbar.ImportItem onClick={() => console.log('Import Button')} />
-      </Space>
-    )
-  }
-]
-
-const itemsWithCollapsibleSearch: ToolbarItems[] = [
-  {
-    type: 'children',
-    key: '1',
-    children: <CollapsibleSearch />
-  },
-  ...itemsRight.slice(1)
 ]
 
 const customItems: ToolbarItems[] = [
@@ -248,101 +197,198 @@ const customItems: ToolbarItems[] = [
 
 export const Basic: Story = {
   args: {
-    left: itemsLeft.slice(0, 4),
-    right: itemsRight
+    left: getItemsLeft().slice(0, 5),
+    right: getItemsRight()
   }
 }
 
 export const FilterWithIndicator: Story = {
   args: {
-    left: itemsLeftWithIndicator,
-    right: itemsRightWithIndicator
+    left: getItemsLeft()
+      .splice(0, 4)
+      .map((item, index) => (
+        index === 0
+          ? {
+            ...item,
+            showIndicator: true,
+            iconBefore: <FilterWithIndicatorIcon />
+          } as ToolbarItems
+          : item
+      )),
+    right: [
+      getItemsRight()[0],
+      {
+        type: 'children',
+        key: '2',
+        children: (
+          <Space gap={4} wrap="nowrap">
+            <Toolbar.SettingsItem onClick={() => console.log('settings')} />
+            <Toolbar.FilterItem showIndicator iconBefore={<FilterWithIndicatorIcon />} onClick={() => console.log('filter')} />
+          </Space>
+        )
+      }
+    ]
   }
 }
 
-const itemsAllItems: ToolbarItems[] = [
-  {
-    type: 'children',
-    key: '1',
-    children: (
+const buttons: ToolbarItems[] = []
+for (let i = 0; i < 10; i++) {
+  buttons.push({
+    key: i.toString(),
+    type: 'button',
+    label: `Button ${i}`,
+    onClick: () => console.log(`Button ${i}`)
+  })
+}
+
+export const AutoDropdownInsideFlexSidebar: Story = {
+  render: () => {
+    const [visible, setVisible] = useState(false)
+    const [flex, setFlex] = useState(false)
+
+    return (
       <>
-        <Toolbar.Search testId="Search" />
-        <Toolbar.ImportExportItem dropdown={false} testId="ImportExportItem" />
-        <Toolbar.ImportExportItem dropdown={true} testId="ImportExportItem" />
-        <Toolbar.ExportItem testId="ExportItem" />
-        <Toolbar.ImportItem testId="ImportItem" />
-        <Toolbar.CollapsibleSearch testId="CollapsibleSearch" />
-        <Toolbar.FilterItem testId="FilterItem" />
-        <Toolbar.FilterActiveItem testId="FilterActiveItem" />
-        <Toolbar.SettingsItem testId="SettingsItem" />
-        <Toolbar.FilterSidebar testId="FilterSidebar" />
-        <Toolbar.ScaleItem testId="ScaleItem" />
+        <Button onClick={() => setVisible(!visible)}>Toggle Sidebar</Button>
+        <Sidebar
+          visible={visible}
+          flex={flex}
+          size={Size.Small}
+          headerActions={
+            <div onClick={() => setFlex((v) => !v)}>Maximize/Minimize</div>
+          }
+          onClose={() => setVisible(false)}
+        >
+          <Toolbar
+            left={buttons}
+            right={buttons.slice(0, 2)}
+            autoDropdown={flex}
+          />
+        </Sidebar>
       </>
     )
-  },
-  {
-    type: 'dropdown',
-    key: '2',
-    label: 'Dropdown',
-    iconBefore: <Placeholder />,
-    testId: 'item-2',
-    overlay: items
-  },
-  {
-    type: 'link',
-    key: '3',
-    label: 'link',
-    testId: 'linkTestId'
-  } as ToolbarItems
-]
+  }
+}
 
 export const TestAttributes: Story = {
-  render: (args: ToolbarProps) => (
-    <Toolbar {...args} left={itemsAllItems} />
-  )
+  args: {
+    left: [
+      {
+        type: 'children',
+        key: '1',
+        children: (
+          <>
+            <Toolbar.Search testId="Search" />
+            <Toolbar.ImportExportItem dropdown={false} testId="ImportExportItem" />
+            <Toolbar.ImportExportItem dropdown={true} testId="ImportExportItem" />
+            <Toolbar.ExportItem testId="ExportItem" />
+            <Toolbar.ImportItem testId="ImportItem" />
+            <Toolbar.CollapsibleSearch testId="CollapsibleSearch" />
+            <Toolbar.FilterItem testId="FilterItem" />
+            <Toolbar.FilterActiveItem testId="FilterActiveItem" />
+            <Toolbar.SettingsItem testId="SettingsItem" />
+            <Toolbar.FilterSidebar testId="FilterSidebar" />
+            <Toolbar.ScaleItem testId="ScaleItem" />
+          </>
+        )
+      },
+      {
+        type: 'dropdown',
+        key: '2',
+        label: 'Dropdown',
+        iconBefore: <Placeholder />,
+        testId: 'item-2',
+        overlay: getItems()
+      },
+      {
+        type: 'link',
+        key: '3',
+        label: 'link',
+        testId: 'linkTestId'
+      } as ToolbarItems
+    ]
+  }
 }
 
 export const ImportExportButton: Story = {
-  render: (args: ToolbarProps) => (
-    <Toolbar {...args} left={[{ key: 'test', children: 'Toolbar', type: 'children' }]} right={itemsImportExportButtons} autoDropdown />
-  )
+  args: {
+    autoDropdown: true,
+    left: [{ key: 'test', children: 'Toolbar', type: 'children' }],
+    right: [
+      {
+        type: 'children',
+        key: '2',
+        children: (
+          <Space gap={4} wrap="nowrap">
+            <Toolbar.ImportExportItem dropdown={false} onClick={() => console.log('ImportExport Button')} />
+            <Toolbar.ImportExportItem
+              dropdown={true}
+              onClick={() => console.log('ImportExport Dropdown 2')}
+              onImport={() => console.log('Import Button 2')}
+              onExport={() => console.log('Export Button 2')}
+            />
+            <Toolbar.ImportExportItem
+              dropdown={true}
+              onClick={() => console.log('ImportExport Dropdown 3')}
+              onExport={() => console.log('Export Button 3')}
+            />
+            <Toolbar.ImportExportItem
+              dropdown={true}
+              onClick={() => console.log('ImportExport Dropdown 4')}
+              onImport={() => console.log('Import Button 4')}
+            />
+            <Toolbar.ExportItem onClick={() => console.log('Export Button')} />
+            <Toolbar.ImportItem onClick={() => console.log('Import Button')} />
+          </Space>
+        )
+      }
+    ]
+  }
 }
 
 export const WithLeftLimit: Story = {
   args: {
-    left: itemsLeft,
-    right: itemsRight,
+    left: getItemsLeft(),
+    right: getItemsRight(),
     leftLimit: 5
   }
 }
 
 export const AutoDropdown: Story = {
   args: {
-    left: itemsLeft,
+    left: getItemsLeft(),
     autoDropdown: true,
     leftLimit: undefined,
-    right: itemsRight
+    right: getItemsRight()
   }
 }
 
 export const Variations: Story = {
   render: (args: ToolbarProps) => (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '30px' }}>
-      <Toolbar {...args} left={itemsLeft.slice(0, 4)} right={itemsRight} />
-      <Toolbar {...args} left={itemsLeft.slice(0, 4)} right={itemsRight.slice(0, 1)} />
-      <Toolbar {...args} left={itemsLeft.slice(0, 4)} right={itemsRight.slice(1, 2)} />
-      <Toolbar {...args} left={itemsLeft.slice(0, 4)} />
-      <Toolbar {...args} right={itemsRight} />
-      <Toolbar {...args} right={itemsRight.slice(0, 1)} />
-      <Toolbar {...args} right={itemsRight.slice(1, 2)} />
+      <Toolbar {...args} left={getItemsLeft().slice(0, 4)} right={getItemsRight()} />
+      <Toolbar {...args} left={getItemsLeft().slice(0, 4)} right={getItemsRight().slice(0, 1)} />
+      <Toolbar {...args} left={getItemsLeft().slice(0, 4)} right={getItemsRight().slice(1, 2)} />
+      <Toolbar {...args} left={getItemsLeft().slice(0, 4)} />
+      <Toolbar {...args} right={getItemsRight()} />
+      <Toolbar {...args} right={getItemsRight().slice(0, 1)} />
+      <Toolbar {...args} right={getItemsRight().slice(1, 2)} />
     </div>
   )
 }
 
 export const WithCollapsibleSearch: Story = {
-  render: (args: ToolbarProps) => (
-    <Toolbar {...args} left={itemsLeft} right={itemsWithCollapsibleSearch} autoDropdown />
-  )
+  args: {
+    autoDropdown: true,
+    left: getItemsLeft(),
+    right: [
+      {
+        type: 'children',
+        key: '1',
+        children: <CollapsibleSearch />
+      },
+      ...getItemsRight().slice(1)
+    ]
+  }
 }
 
 export const WithCustomElements: Story = {
@@ -354,18 +400,15 @@ export const WithCustomElements: Story = {
   )
 }
 
-const itemsWithTooltip = itemsLeft
-  .splice(0, 4)
-  .map((item, index) => ({
-    ...item,
-    tooltip: `This is item with key '${item?.key}'`,
-    ...(index === 3 ? { disabled: true } : {})
-  }))
-
 export const WithTooltip: Story = {
   args: {
-    left: itemsWithTooltip as ToolbarItems[],
-    right: itemsRight
+    left: getItemsLeft()
+      .map((item, index) => ({
+        ...item,
+        tooltip: `This is item with key '${item?.key}'`,
+        ...(index === 3 ? { disabled: true } : {})
+      })) as ToolbarItems[],
+    right: getItemsRight()
   }
 }
 

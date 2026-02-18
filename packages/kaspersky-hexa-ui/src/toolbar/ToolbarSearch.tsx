@@ -2,19 +2,12 @@ import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { useLocalization } from '@helpers/localization/useLocalization'
 import { SearchProps } from '@src/search'
 import { IconSearch } from '@src/search/IconSearch'
+import { useTableContext } from '@src/table'
 import React, { FC, useState } from 'react'
 
 import { StyledSearch, StyledTextbox } from './toolbarCss'
-import { ToolbarSearchViewProps } from './types'
-import { useThemedToolbar } from './useThemedToolbar'
 
-export const ToolbarSearch: FC<SearchProps> = (rawProps: SearchProps) => {
-  const themedProps = useThemedToolbar(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <ToolbarSearchView {...props} />
-}
-
-const ToolbarSearchView: FC<ToolbarSearchViewProps> = (props: ToolbarSearchViewProps) => {
+export const ToolbarSearch: FC<SearchProps> = (props: SearchProps) => {
   const {
     value,
     placeholder = 'search.dotted',
@@ -23,17 +16,17 @@ const ToolbarSearchView: FC<ToolbarSearchViewProps> = (props: ToolbarSearchViewP
     onClearClick,
     prefix,
     suffix,
-    testId,
-    klId,
     onPressEnter,
     onChange,
-    cssConfig,
+    searchIconTestId = 'toolbar-search-icon',
     ...rest
-  } = props
+  } = useTestAttribute(props)
 
   const [visible, setVisible] = useState(false)
   const [filled, setFilled] = useState(false)
   const [changedQuery, setChangedQuery] = useState(false)
+
+  const { useV3TestId } = useTableContext()
 
   const toggleSlider = (event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLInputElement>) => {
     event.stopPropagation()
@@ -45,20 +38,17 @@ const ToolbarSearchView: FC<ToolbarSearchViewProps> = (props: ToolbarSearchViewP
     }
   }
 
-  const { testAttributes } = useTestAttribute(props)
   const localizedPlaceholder = useLocalization(placeholder)
 
   return (
     <StyledSearch
-      {...testAttributes}
-      visible={visible}
-      cssConfig={cssConfig}
+      {...rest.testAttributes}
+      $visible={visible}
       tabIndex={0}
     >
       <StyledTextbox
         {...rest}
         testId="toolbar-search-input"
-        cssConfig={cssConfig}
         $visible={visible}
         placeholder={localizedPlaceholder}
         value={value}
@@ -74,8 +64,32 @@ const ToolbarSearchView: FC<ToolbarSearchViewProps> = (props: ToolbarSearchViewP
           setChangedQuery(false)
           onPressEnter?.(event)
         }}
+        autoFocus={visible}
       />
-      <IconSearch testId="toolbar-search-icon" klId="toolbar-search-icon" indicator={filled} onClick={toggleSlider} />
+      {useV3TestId
+        ? (
+            <div
+              data-testid={searchIconTestId}
+              kl-id={searchIconTestId}
+            >
+              <IconSearch
+                className="icon"
+                indicator={filled}
+                onClick={toggleSlider}
+              />
+            </div>
+          )
+        : (
+            <IconSearch
+              className="icon"
+              indicator={filled}
+              onClick={toggleSlider}
+              testId="toolbar-search-icon"
+              klId="toolbar-search-icon"
+            />
+          )
+      }
+
     </StyledSearch>
   )
 }

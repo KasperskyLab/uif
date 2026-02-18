@@ -1,11 +1,11 @@
 import { badges } from '@sb/badges'
 import { withDesignControls } from '@sb/components/designControls'
 import { withMeta } from '@sb/components/Meta'
-import { StoryComponentContainer, StoryLabel, StoryWrapper } from '@sb/StoryComponents'
+import { renderVariants } from '@sb/StoryComponents'
 import { Space } from '@src/space'
 import { Tag } from '@src/tag'
 import { Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import MetaData from '../__meta__/meta.json'
@@ -47,7 +47,7 @@ const meta: Meta<AlertProps> = {
         docs: {
           page: withMeta(MetaData)
         },
-        design: MetaData.figmaView
+        design: MetaData.pixsoView
       }
     }
   })
@@ -76,18 +76,17 @@ export const Mode: Story = {
     children,
     actions,
     ...rest
-  }: StoryAlertProps) => (
-    <StoryWrapper vertical horizontalWidth="100%">
-      {alertModes.map(mode => (
-        <StoryComponentContainer key={mode} horizontalWidth="100%">
-          <StoryLabel label={mode} />
-          <AlertComponent {...rest} mode={mode} key={mode} actions={actions ? actionsButtons : undefined}>
+  }: StoryAlertProps) =>
+    renderVariants(
+      alertModes.map(mode => ({
+        label: mode,
+        content:
+          <AlertComponent {...rest} mode={mode} actions={actions ? actionsButtons : undefined}>
             <Text type="BTR3">{children}</Text>
           </AlertComponent>
-        </StoryComponentContainer>
-      ))}
-    </StoryWrapper>
-  ),
+      })),
+      true
+    ),
   argTypes: {
     mode: { control: false }
   }
@@ -97,18 +96,17 @@ export const Action: Story = {
   render: ({
     children,
     ...rest
-  }: StoryAlertProps) => (
-    <StoryWrapper vertical horizontalWidth="100%">
-      {alertModes.map(mode => (
-        <StoryComponentContainer key={mode} horizontalWidth="100%">
-          <StoryLabel label={mode} />
-          <AlertComponent {...rest} mode={mode} key={mode} actions={actionsButtons}>
+  }: StoryAlertProps) =>
+    renderVariants(
+      alertModes.map(mode => ({
+        label: mode,
+        content:
+          <AlertComponent {...rest} mode={mode} actions={actionsButtons}>
             <Text type="BTR3">{children}</Text>
           </AlertComponent>
-          </StoryComponentContainer>
-      ))}
-    </StoryWrapper>
-  ),
+      })),
+      true
+    ),
   argTypes: {
     mode: { control: false },
     actions: { control: false }
@@ -120,18 +118,17 @@ export const Closable: Story = {
     children,
     actions,
     ...rest
-  }: StoryAlertProps) => (
-    <StoryWrapper vertical horizontalWidth="100%">
-      {alertModes.map(mode => (
-        <StoryComponentContainer key={mode} horizontalWidth="100%">
-          <StoryLabel label={mode} />
-          <AlertComponent {...rest} mode={mode} key={mode} actions={actions ? actionsButtons : undefined} closable>
+  }: StoryAlertProps) =>
+    renderVariants(
+      alertModes.map(mode => ({
+        label: mode,
+        content:
+          <AlertComponent {...rest} mode={mode} actions={actions ? actionsButtons : undefined} closable>
             <Text type="BTR3">{children}</Text>
           </AlertComponent>
-        </StoryComponentContainer>
-      ))}
-    </StoryWrapper>
-  ),
+      })),
+      true
+    ),
   argTypes: {
     mode: { control: false },
     closable: { control: false }

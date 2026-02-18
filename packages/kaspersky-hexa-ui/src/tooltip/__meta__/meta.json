@@ -7,11 +7,11 @@
     "migration": true,
     "apiTable": true,
     "storybook": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Tooltip",
   "description": "Компонент для отрисовки подсказок. В качестве основы используется Tooltip из библиотеки Antd.",
   "usage": "Элемент появляется при наведении на родительский элемент, к которому присвоен Tooltip",
-  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/%5BB2B%5D-UI-KIT?node-id=29814%3A96714",
-  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F%255BB2B%255D-UI-KIT%3Fnode-id%3D29814%253A96714"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=29814%3A96714",
+  "pixsoView": "https://pixso.net/app/design/4XYVGB274R5-e8c7lGsxDA"
 }

@@ -1,8 +1,11 @@
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
+import { Space } from '@src/space'
 import { getPreparedTenantTreeData } from '@src/tenantFilter'
-import { Meta, StoryObj } from '@storybook/react'
+import { Toggle } from '@src/toggle'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
+import React, { useState } from 'react'
 
 import MetaData from '../__meta__/meta.json'
 import { TenantFilter } from '../TenantFilter'
@@ -155,7 +158,7 @@ const { mappedTenants, tenantsIds } = getPreparedTenantTreeData(treeDataMock)
 const defaultSelectedKeys = ['0-0-2-1']
 const callback = (keys: string[]) => {
   const mappedKeys = keys.map(key => '\n ' + key)
-  alert(`${mappedKeys.length} keys checked: ${mappedKeys}`)
+  console.log(`${mappedKeys.length} keys checked: ${mappedKeys}`)
 }
 
 const meta: Meta<TenantFilterProps> = {
@@ -216,6 +219,24 @@ export const WithoutHeader: Story = {
 }
 
 export const WithButton: Story = {
+  args: {
+    buttonText: 'Apply filter',
+    withButton: true
+  }
+}
+
+export const ChangeComponentTheme: Story = {
+  render: (args) => {
+    const [darkTheme, setDarkTheme] = useState(true)
+    return (
+      <Space size={24} direction="vertical" align="start">
+        <Toggle checked={darkTheme} onChange={setDarkTheme}>Dark theme</Toggle>
+        <div className={darkTheme ? 'theme-dark' : 'theme-light'} style={{ background: 'var(--bg--global)' }}>
+          <TenantFilter theme={darkTheme ? 'dark' : 'light'} {...args} />
+        </div>
+      </Space>
+    )
+  },
   args: {
     buttonText: 'Apply filter',
     withButton: true

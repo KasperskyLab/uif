@@ -72,6 +72,7 @@ const ToggleView: FC<ToggleViewProps> = ({
           : Children
             .map(children, child =>
               isValidElement(child)
+                // @ts-ignore
                 ? cloneElement(child, { onClick: () => !disabled && toggleValue(!isChecked, new MouseEvent('click')) })
                 : child
             )
@@ -81,7 +82,7 @@ const ToggleView: FC<ToggleViewProps> = ({
         description={description}
         dependentElement={dependentElement}
         _margin={36}
-        />
+      />
     </div>
   )
 }

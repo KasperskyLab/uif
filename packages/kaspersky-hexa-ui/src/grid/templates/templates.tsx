@@ -23,8 +23,8 @@ export const FormGrid = ({ children, gridPreset }: FormGridProps) => {
   return <Grid layout={{ cols: ['repeat(1, 12fr)'] }}>
     {Array.isArray(children)
       ? children.map((el: any, i: number) => {
-          return <GridItem key={i}>{passGridLayoutProp(el)}</GridItem>
-        })
+        return <GridItem key={i}>{passGridLayoutProp(el)}</GridItem>
+      })
       : <GridItem>{passGridLayoutProp(children)}</GridItem>}
   </Grid>
 }

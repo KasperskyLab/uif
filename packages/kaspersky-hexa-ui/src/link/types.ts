@@ -57,7 +57,9 @@ export type LinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'type'> & 
   /** Name for anchor */
   name?: string,
   /** HTML attribute 'title' */
-  title?: string
+  title?: string,
+  /** Controls tooltip visibility only for link with icon */
+  isTooltipVisible?: boolean
 } & LinkThemeProps & TestingProps
 
 export type LinkViewProps = ToViewProps<LinkProps, LinkCssConfig, LinkThemeProps>

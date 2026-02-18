@@ -15,6 +15,10 @@ export type LockGroupDesignTokens = {
   horizontalMargin: string
 }
 
+export const statusIcons = ['warning'] as const
+
+export type StatusIcon = typeof statusIcons[number]
+
 export type LockGroupProps = {
   /** Dependant from LockGroup components */
   children?: ReactNode,
@@ -44,10 +48,14 @@ export type LockGroupProps = {
   isChildrenOutlined?: boolean,
   /** Text which will be shown in LockGroup Header  */
   title?: ReactNode,
-  /** Level for LockGroup Header, i. e. H1, H2 H3, etc.  */
-  titleLevel?: TextType,
+  /** Level for LockGroup Header — H6, H5, H4  */
+   titleLevel?: Extract<TextType, 'H6' | 'H5' | 'H4'>,
   /** List of Tags near Header. Used for example to show supported operating system for LockGroup  */
-  titleTags?: string[]
+  titleTags?: string[],
+  /** Status icon */
+  statusIcon?: StatusIcon,
+  /** Tooltip text for status icon */
+  statusTooltip?: string
 } & ThemeProps & TestingProps
 
 export type LockGroupViewProps = ToViewProps<LockGroupProps, LockGroupDesignTokens, ThemeProps>

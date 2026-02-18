@@ -1,5 +1,5 @@
 import { TextReducer } from '@helpers/components/TextReducer'
-import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import { getChildTestProps, useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { ActionButton } from '@src/action-button'
 import { ActionButtonProps } from '@src/action-button/types'
 import { Tooltip } from '@src/tooltip'
@@ -72,6 +72,8 @@ const TagView: FC<TagViewProps> = ({
     ? `${content.substring(0, effectiveMaxChars - truncationSymbol.length)}${truncationSymbol}`
     : content
 
+  const { testId: closeIconTestId, klId: closeIconKlId } = getChildTestProps('close-icon', testAttributes)
+
   const tagContent = (
     <>
       {icon &&
@@ -93,6 +95,8 @@ const TagView: FC<TagViewProps> = ({
               onClose(e as any)
             }
           }}
+          testId={closeIconTestId}
+          klId={closeIconKlId}
         />
       )}
     </>

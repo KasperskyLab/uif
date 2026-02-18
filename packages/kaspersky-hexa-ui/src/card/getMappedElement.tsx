@@ -1,5 +1,5 @@
 import { Checkbox } from '@src/checkbox'
-import { Icon } from '@src/icon'
+import { IconResolver } from '@src/icon'
 import { Radio } from '@src/radio'
 import { Toggle } from '@src/toggle'
 import { Text } from '@src/typography'
@@ -23,7 +23,7 @@ export const getMappedElement = (element: ElementBefore | ElementAfter): ReactEl
     }
     case 'icon': {
       const { component, ...props } = element
-      return <Icon {...props} />
+      return <IconResolver {...props} />
     }
     case 'text': {
       const { component, ...props } = element

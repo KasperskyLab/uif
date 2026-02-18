@@ -46,8 +46,6 @@ export const dynamicHexaUIGlobalStyles = `
 
     .ant-input-number input.ant-input-number-input:not([type]) {
       border: none;
-      padding: unset;
-      height: unset;
       background: transparent;
     }
     .ant-input-number input.ant-input-number-input:not([type]):focus {

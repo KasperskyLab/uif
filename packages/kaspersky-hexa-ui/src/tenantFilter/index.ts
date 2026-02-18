@@ -10,5 +10,6 @@ export {
   getDefaultSelectedTenantsIds,
   getPreparedTenantTreeData,
   getSelectedTenantsIds,
-  saveTenantsFilterDataInCookie
+  saveTenantsFilterDataInCookie,
+  getTreeDataMap
 } from './handlers/cookie-handlers'

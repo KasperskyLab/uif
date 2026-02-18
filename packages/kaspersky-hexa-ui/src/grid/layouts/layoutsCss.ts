@@ -1,12 +1,13 @@
+import { getGapStyle } from '@helpers/getGapStyle'
 import { css } from 'styled-components'
 
 import { LayoutBaseProps } from '../types'
 
 export const layoutBaseCss = css<LayoutBaseProps>`
   display: grid;
-  gap: ${({ gap }) => `${gap}px`};
-  row-gap: ${({ rowGap }) => rowGap ? `${rowGap}px` : ''};
-  column-gap: ${({ columnGap }) => columnGap ? `${columnGap}px` : ''};
+  gap: ${({ gap }) => getGapStyle(gap)};
+  row-gap: ${({ rowGap }) => getGapStyle(rowGap)};
+  column-gap: ${({ columnGap }) => getGapStyle(columnGap)};
   align-items: ${({ alignItems = '' }) => alignItems};
   justify-items: ${({ justifyItems = '' }) => justifyItems};
 `

@@ -1,4 +1,5 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import { TextReducer } from '@helpers/index'
 import { ActionButton } from '@src/action-button'
 import { Badge } from '@src/badge'
 import { Tag as AntdTag } from 'antd'
@@ -28,6 +29,7 @@ const ChipView: FC<ChipViewProps> = ({
   testId,
   testAttributes,
   size,
+  truncationWidth,
   ...rest
 }: ChipViewProps) => {
   return (
@@ -41,7 +43,7 @@ const ChipView: FC<ChipViewProps> = ({
       {...rest}
     >
       {icon}
-      {label}
+      <TextReducer truncationWidth={truncationWidth}>{label}</TextReducer>
       {counter && <Badge count={counter} mode="neutral" />}
     </StyledChip>
   )

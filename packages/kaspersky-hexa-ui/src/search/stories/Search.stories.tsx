@@ -1,11 +1,12 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
+import { validationStatuses } from '@helpers/typesHelpers'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Locale } from '@src/locale'
 import { Search } from '@src/search'
 import { Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import { Empty } from 'antd'
 import React, { useState } from 'react'
 import styled from 'styled-components'
@@ -30,20 +31,25 @@ const meta: Meta<SearchProps> = {
     className: { description: 'Textbox class name' },
     prefix: { description: 'Component before text' },
     suffix: { description: 'Component after text' },
+    validationStatus: {
+      control: { type: 'radio' },
+      options: validationStatuses
+    },
     ...sbHideControls(['maskOptions', 'theme', 'size', 'prefix', 'suffix', 'dropdownOverlay'])
   },
   args: {
     disabled: false,
     placeholder: 'Search...',
     testId: 'search-test-id',
-    klId: 'search-kl-id'
+    klId: 'search-kl-id',
+    validationStatus: 'default'
   },
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta

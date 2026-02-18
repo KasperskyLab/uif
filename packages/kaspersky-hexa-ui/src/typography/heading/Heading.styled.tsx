@@ -7,7 +7,7 @@ import { textLevels } from '@kaspersky/hexa-ui-core/typography/js'
 import { HTag } from './Heading'
 import { HeadingProps } from './types'
 
-export const StyledHeading = styled((props: HeadingProps) => <HTag {...props} />)`
+export const Heading = styled((props: HeadingProps) => <HTag {...props} />)`
   color: ${({ color, themedColor, theme }) => {
     // @ts-ignore
     if (color) return theme?.colors?.product?.text[color] ?? colors[color]

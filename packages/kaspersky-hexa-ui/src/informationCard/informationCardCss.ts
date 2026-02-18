@@ -16,7 +16,7 @@ export const informationCardCss = css<{
   type: InformationCardType,
   selected: boolean,
   disabled: boolean,
-  interactive: boolean,
+  $interactive: boolean,
   width?: number | string
 }>`
   display: flex;
@@ -36,7 +36,7 @@ export const informationCardCss = css<{
 
   width: ${({ width }) => typeof width === 'string' ? width : `${width}px`};
 
-  ${(props) => props.interactive && `
+  ${(props) => props.$interactive && `
   cursor: pointer;
   &:hover {
     background: ${fromProps('hover.background')(props)};

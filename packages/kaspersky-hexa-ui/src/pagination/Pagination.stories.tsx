@@ -2,7 +2,7 @@ import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
@@ -29,8 +29,10 @@ const meta: Meta<PaginationProps> = {
   args: {
     total: 500,
     disabled: false,
+    cursor: false,
     simple: false,
     showSizeChanger: false,
+    jumper: false,
     current: 1,
     pageSize: 10,
     pageSizeOptions: ['10', '20', '50', '100'],
@@ -44,7 +46,7 @@ const meta: Meta<PaginationProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   },
   decorators: [
     (Story, context) => (
@@ -102,6 +104,14 @@ export const HideOnSinglePage: Story = {
 export const WithSizeChanger: Story = {
   render: PaginationTemplate.bind({}),
   args: {
+    showSizeChanger: true
+  }
+}
+
+export const WithJumper: Story = {
+  render: PaginationTemplate.bind({}),
+  args: {
+    jumper: true,
     showSizeChanger: true
   }
 }

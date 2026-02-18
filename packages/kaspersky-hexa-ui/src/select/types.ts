@@ -7,7 +7,7 @@ import { OptionProps as RcOptionProps } from 'rc-select/es/Option'
 import { BaseOptionType as RcBaseOptionType, DefaultOptionType as RcDefaultOptionType } from 'rc-select/es/Select'
 import React, { FocusEventHandler, PropsWithChildren, ReactNode } from 'react'
 
-export type OptionType = Omit<RcOptionProps, 'isSelectOption'> & { options?: OptionType[] }
+export type OptionType = Omit<RcOptionProps, 'isSelectOption'> & { options?: OptionType[], description?: string}
 
 type OptionProp = RcBaseOptionType | RcDefaultOptionType
 
@@ -31,7 +31,9 @@ export type StateProps = {
 export type SelectColorConfig = Focus & {
   enabled: StateProps & {
     dropdown: StateProps,
-    option: StateProps,
+    option: StateProps & {
+      description: string
+    },
     placeholder: StateProps,
     loadingError: StateProps
   },
@@ -83,6 +85,7 @@ export type SelectProps<ValueType = any, > = SelectThemeProps & PropsWithChildre
   validationStatus?: ValidationStatus,
   /** The class name of dropdown menu */
   dropdownClassName?: string,
+  dropdownMaxHeight?: number,
   /**
    * If true, filter options by input, if function,
    * filter options against it. The function will receive two arguments,
@@ -177,6 +180,7 @@ export type SelectProps<ValueType = any, > = SelectThemeProps & PropsWithChildre
   labelInValue?: boolean,
   /** Custom class name */
   className?: string,
+  style?: React.CSSProperties,
   /** Customize tag render, only applies when mode is set to multiple or tags */
   tagRender?: (props: CustomTagProps) => React.ReactElement,
   /** The style of dropdown menu */
@@ -185,4 +189,6 @@ export type SelectProps<ValueType = any, > = SelectThemeProps & PropsWithChildre
   usePortal?: boolean
 }> & TestingProps
 
-export type SelectViewProps = ToViewProps<SelectProps, SelectCssConfig, SelectThemeProps>
+export type SelectViewProps = ToViewProps<SelectProps, SelectCssConfig, SelectThemeProps> & {
+  setSelectOffsetWidth?: (width: number) => void
+}

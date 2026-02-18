@@ -7,6 +7,7 @@ type OmittedTextboxProps = Omit<TextboxProps, 'readOnly' | 'theme'>
 export type SearchProps = OmittedTextboxProps & {
   /** Clear icon click handler */
   onClearClick?: () => void,
+  searchIconTestId?: string,
   dropdownOverlay?: DropdownOverlayProp
 }
 

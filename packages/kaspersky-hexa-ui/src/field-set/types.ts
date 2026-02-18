@@ -1,5 +1,5 @@
 import { TestingProps } from '@helpers/typesHelpers'
-import { ButtonProps } from '@src/button/types'
+import { ButtonProps, SplitButtonProps } from '@src/button/types'
 import { CheckboxGroupProps, CheckboxProps } from '@src/checkbox/types'
 import { CodeViewerProps } from '@src/code-viewer/types'
 import { CalendarProps, RangePickerProps } from '@src/datepicker/types'
@@ -20,8 +20,10 @@ import { StatusGroupProps, StatusProps } from '@src/status/types'
 import { TagGroupProps } from '@src/tag/types'
 import { TimeInputProps } from '@src/time-input/types'
 import { ToggleProps } from '@src/toggle/types'
+import { ToggleButtonGroupProps } from '@src/toggle-button/types'
 import { TextProps } from '@src/typography/text/types'
-import { ReactElement } from 'react'
+import { UploaderProps } from '@src/upload'
+import React, { ReactElement } from 'react'
 
 export const fieldSetInputLikeComponentsArray = [
   'textbox',
@@ -36,7 +38,10 @@ export const fieldSetInputLikeComponentsArray = [
   'time-input',
   'code-viewer',
   'button',
-  'segmented-button'
+  'split-button',
+  'uploader',
+  'segmented-button',
+  'toggle-button-group'
 ] as const
 
 export type FieldSetInputLikeComponents = (typeof fieldSetInputLikeComponentsArray)[number]
@@ -72,7 +77,9 @@ export type FieldSetControlConfig =
   | ({ component: GetComponentName<'time-input'> } & TimeInputProps)
   | ({ component: GetComponentName<'code-viewer'> } & CodeViewerProps<any>)
   | ({ component: GetComponentName<'button'> } & ButtonProps)
+  | ({ component: GetComponentName<'split-button'> } & SplitButtonProps)
   | ({ component: GetComponentName<'segmented-button'> } & SegmentedButtonProps)
+  | ({ component: GetComponentName<'toggle-button-group'> } & ToggleButtonGroupProps)
   | ({ component: GetComponentName<'checkbox'> } & CheckboxProps)
   | ({ component: GetComponentName<'checkbox-group'> } & CheckboxGroupProps)
   | ({ component: GetComponentName<'radio'> } & RadioProps)
@@ -82,6 +89,7 @@ export type FieldSetControlConfig =
   | ({ component: GetComponentName<'status'> } & StatusProps)
   | ({ component: GetComponentName<'tag-group'> } & TagGroupProps)
   | ({ component: GetComponentName<'status-group'> } & StatusGroupProps)
+  | ({ component: GetComponentName<'uploader'> } & UploaderProps)
 
 export type FieldSetItemControl = ReactElement | FieldSetControlConfig
 
@@ -96,7 +104,7 @@ export type FieldSetItem = FieldSetItemConfig | ReactElement
 
 export type FieldSetProps = Pick<
   FieldProps,
-  'labelPosition' | 'labelType' | 'controlWidth' | 'gridLayout'
+  'labelPosition' | 'labelType' | 'controlWidth' | 'gridLayout' | 'gridPreset'
 > & {
   /** Custom class name for wrapper of fields */
   className?: string,
@@ -105,5 +113,6 @@ export type FieldSetProps = Pick<
   /** Custom class name for label and control wrappers of Field */
   fieldWrapperClassNames?: FieldProps['wrapperClassNames'],
   items: FieldSetItem[],
-  disabled?: boolean
+  disabled?: boolean,
+  style?: React.CSSProperties
 } & TestingProps

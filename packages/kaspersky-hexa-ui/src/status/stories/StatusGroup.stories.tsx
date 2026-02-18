@@ -1,5 +1,5 @@
 import { badges } from '@sb/badges'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
@@ -13,7 +13,7 @@ const meta: Meta<StatusGroupProps> = {
   component: Status.Group,
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta

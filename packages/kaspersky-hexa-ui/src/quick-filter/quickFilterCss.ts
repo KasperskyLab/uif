@@ -6,6 +6,7 @@ export const StyledQuickFilter = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
+  width: 100%;
 `
 
 export const StyledField = styled(Field)`

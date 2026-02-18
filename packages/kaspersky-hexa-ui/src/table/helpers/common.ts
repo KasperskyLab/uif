@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 import { REACT_SERVICE_PARAMS, READONLY_COLUMNS } from '../modules/constants'
 import { TableColumn } from '../types'
 
@@ -68,3 +70,15 @@ export const safeColumns = (
       width: safeWidth(col.width as string | number, baseValue)
     }
   })
+
+export const findParentForClassName = (el: HTMLElement, className: string) => {
+  let node: HTMLElement | null = el.parentNode as HTMLElement
+  while (node?.getElementsByClassName(className).length === 0) {
+    if (!node.parentNode) {
+      node = null
+      break
+    }
+    node = node.parentNode as HTMLElement
+  }
+  return node
+}

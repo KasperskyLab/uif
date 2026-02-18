@@ -1,6 +1,6 @@
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -80,9 +80,9 @@ export const Basic: Story = {
   render: ({
     ...args
   }: WeeklyScheduleProps) => (
-      <WeeklySchedule
-        {...args}
-      />
+    <WeeklySchedule
+      {...args}
+    />
   )
 }
 

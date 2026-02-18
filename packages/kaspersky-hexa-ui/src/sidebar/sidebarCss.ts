@@ -13,7 +13,7 @@ export const sidebarCss = css`
     background: transparent;
     border-radius: unset;
     align-items: flex-start;
-    
+
     .ant-drawer-extra {
       padding-top: 6px;
     }
@@ -47,6 +47,21 @@ export const sidebarCss = css`
     }
   }
 
+  [data-testid="sidebar-title"] {
+    width: 100%;
+  }
+
+  &.no-padding .ant-drawer-body {
+    padding: 0;
+    .antd-sidebar-content {
+      height: 100%;
+    }
+  }
+
+  .antd-sidebar-content {
+    position: relative;
+  }
+
   &.ant-drawer-right.ant-drawer-open .ant-drawer-content-wrapper {
     box-shadow: 0 18px 28px rgba(9, 30, 66, 0.15),
       0 0 1px rgba(9, 30, 66, 0.31);
@@ -55,6 +70,21 @@ export const sidebarCss = css`
   .ant-drawer-footer {
     border-top: 1px solid ${fromProps('drawer.border')};
     padding: ${fromProps('padding')};
+  }
+
+  .ant-drawer-footer > * {
+    display: flex;
+  }
+
+  .ant-drawer-footer .antd-sidebar-footer-left {
+    display: inline-flex;
+    gap: var(--spacing--gap_related);
+  }
+
+  .ant-drawer-footer .antd-sidebar-footer-right {
+    display: inline-flex;
+    gap: var(--spacing--gap_related);
+    margin-left: auto;
   }
 
   div${StyledHeaderFirstLine} {

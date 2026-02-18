@@ -1,13 +1,13 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
+import { TooltipCompositionWarning } from '@sb/components/Warnings'
 import { sbHideControls } from '@sb/helpers'
 import { StoryColumn } from '@sb/StoryComponents'
-import { TooltipCompositionWarning } from '@sb/components/Warnings'
 import { Textbox } from '@src/input'
 import { Tooltip } from '@src/tooltip'
-import { P, Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
+import { Text } from '@src/typography'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
@@ -46,7 +46,7 @@ const meta: Meta<ToggleProps> = {
     controls: {
       exclude: /(compositionTooltip|componentType)/
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta

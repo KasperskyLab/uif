@@ -1,5 +1,4 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { showDeprecationWarn } from '@helpers/showDeprecationWarn'
 import { ActionButton } from '@src/action-button'
 import { Link } from '@src/link'
 import { Space } from '@src/space'
@@ -10,7 +9,7 @@ import styled from 'styled-components'
 import { StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
 
 import { alertCss, IconStyled, SpaceBox } from './alertCss'
-import { AlertMode, alertModes, AlertProps, AlertViewProps } from './types'
+import { AlertMode, AlertProps } from './types'
 import { useThemedAlert } from './useThemedAlert'
 
 const IconMap: { [key in AlertMode]: React.FC } = {
@@ -27,35 +26,30 @@ const StyledAlert = styled.div.withConfig({
   ${alertCss}
 `
 
-export const Alert = (rawProps: AlertProps): JSX.Element => {
-  const { mode, ...notDeprecatedProps } = rawProps
+export const Alert: FC<AlertProps> = (props) => {
+  const {
+    actions,
+    children,
+    closable,
+    cssConfig,
+    mode,
+    onClose,
+    testAttributes,
+    ...forwardedProps
+  } = useTestAttribute(useThemedAlert(props))
 
-  let notDeprecatedMode = mode
-  if (!alertModes.includes(mode)) {
-    notDeprecatedMode = 'info'
-    showDeprecationWarn('mode', mode)
-  }
-
-  const themedProps = useThemedAlert({ ...notDeprecatedProps, mode: notDeprecatedMode })
-  const props = useTestAttribute(themedProps)
-  return <AlertView {...props} />
-}
-
-const AlertView: FC<AlertViewProps> = (props: AlertViewProps) => {
-  const { mode, closable, children, cssConfig } = props
-  const { actions, testAttributes, ...forwardedProps } = props
   const [visibility, setVisibility] = useState(true)
   const IconComponent = IconMap[mode as AlertMode]
 
   const closeNotification = () => {
-    if (props.onClose) props.onClose()
+    onClose?.()
     setVisibility(false)
   }
 
   if (!visibility) return null
 
   return (
-    <StyledAlert {...testAttributes} {...forwardedProps}>
+    <StyledAlert cssConfig={cssConfig} {...testAttributes} {...forwardedProps}>
       <IconStyled cssConfig={cssConfig}>
         <IconComponent/>
       </IconStyled>

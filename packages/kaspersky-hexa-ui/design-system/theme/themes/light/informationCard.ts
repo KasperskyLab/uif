@@ -3,8 +3,8 @@ import { getTextSizes } from '@design-system/tokens/typography'
 import { Size } from '@design-system/types'
 import {
   InformationCardColorConfig,
-  InformationCardSizeConfig,
-  InformationCardSize
+  InformationCardSize,
+  InformationCardSizeConfig
 } from '@src/informationCard/types'
 
 import { textLevels } from '@kaspersky/hexa-ui-core/typography/js'
@@ -31,7 +31,7 @@ export const informationCard = ({ colors, effects }: ComponentThemeContext): Inf
       color: colors.information_card.base.text.title_disabled,
       border: colors.information_card.base.border.disabled
     },
-    ...focus({ colors, effects })
+    ...focus({ effects })
   },
   selected: {
     enabled: {
@@ -51,7 +51,7 @@ export const informationCard = ({ colors, effects }: ComponentThemeContext): Inf
       color: colors.information_card.selected.text.title_disabled,
       border: colors.information_card.base.border.disabled
     },
-    ...focus({ colors, effects })
+    ...focus({ effects })
   }
 })
 

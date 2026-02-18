@@ -117,7 +117,7 @@ const SectionMessageView: FC<SectionMessageViewProps> = (props: SectionMessageVi
           </div>
         )}
       </StyledSectionMessage>
-    }
+      }
     </>)
 }
 

@@ -1,10 +1,11 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { shouldForwardProp } from '@helpers/shouldForwardProp'
+import { Tooltip } from '@src/tooltip'
 import classnames from 'classnames'
 import React, { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { Lock2, StatusInfoOutline, StatusWarningOutline, Unlock2 } from '@kaspersky/hexa-ui-icons/16'
+import { Lock2, StatusInfoOutline, StatusWarningOutline, StatusWarningSolid, Unlock2 } from '@kaspersky/hexa-ui-icons/16'
 
 import { ActionButton } from '../action-button'
 import { Popover } from '../popover'
@@ -13,7 +14,7 @@ import { Toggle } from '../toggle'
 import { Text } from '../typography'
 
 import { lockGroupCss } from './lockGroupCss'
-import { ILockIconProps, LockGroupProps } from './types'
+import { ILockIconProps, LockGroupProps, StatusIcon } from './types'
 import { useThemedLockGroup } from './useThemedLockGroup'
 
 const StyledContainer = styled.div.withConfig({ shouldForwardProp })`
@@ -27,6 +28,10 @@ const LockIcon = ({ isLockStatusNotDefined, isLockClosed }: ILockIconProps) => {
   return isLockClosed
     ? <Lock2 className="lock-group-control-icon"/>
     : <Unlock2 className="lock-group-control-icon"/>
+}
+
+const statusIconMap: Record<StatusIcon, React.FC> = {
+  warning: StatusWarningSolid
 }
 
 export const LockGroup = (rawProps: LockGroupProps & React.ComponentProps<typeof StyledContainer>): ReactElement => {
@@ -50,6 +55,8 @@ export const LockGroup = (rawProps: LockGroupProps & React.ComponentProps<typeof
     titleTags = [],
     isChildrenOutlined = false,
     testAttributes,
+    statusIcon,
+    statusTooltip,
     ...restProps
   } = props
 
@@ -74,6 +81,8 @@ export const LockGroup = (rawProps: LockGroupProps & React.ComponentProps<typeof
     'lock-group__children--outlined': isChildrenOutlined
   })
 
+  const StatusIconComponent = statusIcon ? statusIconMap[statusIcon] : StatusWarningSolid
+
   return <StyledContainer
     {...testAttributes}
     {...restProps}
@@ -97,6 +106,9 @@ export const LockGroup = (rawProps: LockGroupProps & React.ComponentProps<typeof
       )}
       {!isHideControl && (
         <div className="lock-group-control" {...generateTestId('lock-group-control-')}>
+          {statusIcon && <Tooltip text={statusTooltip}>
+            <StatusIconComponent color={`var(--icon--status--status${statusIcon})`} className="lock-group-status-icon" />
+          </Tooltip>}
           {!isHideLock && <LockIcon isLockClosed={isLockClosed} isLockStatusNotDefined={isLockStatusNotDefined} />}
           {statusText && (
             <Text
@@ -104,7 +116,7 @@ export const LockGroup = (rawProps: LockGroupProps & React.ComponentProps<typeof
               testId = {rawProps.testId && 'lock-group-status-text-' + rawProps.testId}
               type="BTR3"
               className="lock-group-control-label">
-                {statusText}
+              {statusText}
             </Text>
           )}
           <Toggle
@@ -121,15 +133,15 @@ export const LockGroup = (rawProps: LockGroupProps & React.ComponentProps<typeof
         </div>
       )}
     </div>
-    {!isStandalone && (
+    {(!isStandalone && !!children) && (
       <div className={lockGroupChildrenClass}>
         {isGroupDisabled
           ? React.Children.map(children, (child) => {
-              return React.isValidElement(child)
-                // @ts-ignore
-                ? React.cloneElement(child, { disabled: true })
-                : child
-            })
+            return React.isValidElement(child)
+            // @ts-ignore
+              ? React.cloneElement(child, { disabled: true })
+              : child
+          })
           : children}
       </div>
     )}

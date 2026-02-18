@@ -1,9 +1,7 @@
 import { CheckboxProps } from 'antd'
 import { TableRowSelection } from 'antd/lib/table/interface'
 
-/**
- * adds the "data-testid" attribute and disabled prop to the table row checkboxes
- */
+/** @deprecated All rowSelections setting now in useRowSelection */
 export const withAdditionalProps = <T>(rowSelection: undefined | TableRowSelection<T>, disabled: boolean, withSelection: boolean): undefined | TableRowSelection<T> => {
   const getCheckboxProps: TableRowSelection<T>['getCheckboxProps'] = () => {
     const props = {

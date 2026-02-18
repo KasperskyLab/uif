@@ -1,3 +1,5 @@
+import { CompletionContext } from '@codemirror/autocomplete'
+import { jsonLanguage } from '@codemirror/lang-json'
 import { Diagnostic } from '@codemirror/lint'
 import { EditorView } from '@codemirror/view'
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
@@ -8,7 +10,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { StoryColumn } from '@sb/StoryComponents'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
@@ -24,10 +26,12 @@ import {
   htmlExample,
   jsonExample,
   tsxExample,
-  xmlExample
+  xmlExample,
+  yaraExample
 } from './examples'
 
 type Languages = {
+  yara: [],
   javascript: [],
   html: [],
   json: [],
@@ -76,6 +80,7 @@ const meta: Meta<CodeViewerPropsStory> = {
     validationStatus: 'default',
     language: 'javascript',
     initialValue: basicExample,
+    linesHighlighted: ['2-4', '7-10', '15'],
     testId: 'code-viewer-test-id',
     klId: 'code-viewer-kl-id'
   },
@@ -84,7 +89,7 @@ const meta: Meta<CodeViewerPropsStory> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta
@@ -139,10 +144,69 @@ export const ExampleJSON: Story = {
   }
 }
 
+const createJSONCustomLinter = (severity: 'error' | 'warning') => {
+  const customLinter: LintSource = async (view: EditorView) => {
+    const diagnostics: Diagnostic[] = []
+    const doc = view.state.doc
+    const docString = doc.toString()
+    console.log(doc.toString())
+
+    if (!docString.includes('hello')) {
+      diagnostics.push({
+        from: docString.indexOf('title'),
+        to: docString.indexOf('title') + 5,
+        message: 'Error',
+        severity: severity
+      })
+    }
+    return diagnostics
+  }
+  return customLinter
+}
+
+function createCustomCompletions () {
+  const customCompletion = (context: CompletionContext) => {
+    const word = context.matchBefore(/\w*/)
+    if (word?.from === word?.to && !context.explicit) {
+      return null
+    }
+    return {
+      from: word?.from,
+      options: [
+        { label: 'match', type: 'keyword' },
+        { label: 'hello', type: 'variable', info: '(World)' },
+        { label: 'magic', type: 'text', apply: '⠁⭒*.✩.*⭒⠁', detail: 'macro' }
+      ]
+    }
+  }
+  return jsonLanguage.data.of({
+    autocomplete: customCompletion
+  })
+}
+
+export const ExampleJSONWithCompletions: Story = {
+  args: {
+    initialValue: jsonExample,
+    language: 'json',
+    resizeAxis: 'y',
+    width: 1000,
+    height: 300,
+    completions: createCustomCompletions(),
+    linter: createJSONCustomLinter('error')
+  }
+}
+
 export const ExampleXML: Story = {
   args: {
     initialValue: xmlExample,
     language: 'xml'
+  }
+}
+
+export const ExampleYara: Story = {
+  args: {
+    initialValue: yaraExample,
+    language: 'yara'
   }
 }
 

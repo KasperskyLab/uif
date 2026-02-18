@@ -3,7 +3,7 @@ import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 import { ArgsProps as AntdNotificationProps } from 'antd/lib/notification'
 import { ReactNode } from 'react'
 
-export const NotificationModeArray = ['error', 'success', 'info', 'warning'] as const
+export const NotificationModeArray = ['error', 'success', 'info', 'warning', 'ai'] as const
 
 export type NotificationMode = typeof NotificationModeArray[number]
 
@@ -25,7 +25,7 @@ export type NotificationProps = {
   id?: string,
   /** Component visual variant: 'error' | 'success' | 'info' | 'warning' */
   mode: NotificationMode,
-  /** Duration of showing Toast */
+  /** Duration of showing Toast where 0 - never auto close */
   duration?: number,
   /** Text inside notification */
   description?: ReactNode,

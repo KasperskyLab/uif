@@ -3,7 +3,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { SBArgType, sbHideControls, sbSetDefaultValue } from '@sb/helpers'
 import { Space } from '@src/space'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import { productColors } from '@kaspersky/hexa-ui-core/colors/js'
@@ -54,7 +54,7 @@ const meta: Meta<HeadingProps> = {
     docs: {
       page: withMeta(MetaData, HeaderDocs)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   },
   decorators: [
     (Story, context) => (

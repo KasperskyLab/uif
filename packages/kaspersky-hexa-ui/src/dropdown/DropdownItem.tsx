@@ -1,4 +1,4 @@
-import { Menu } from 'antd'
+import Menu from 'rc-menu'
 import React, { FC } from 'react'
 
 import { DropdownItemInner } from './DropdownItemInner'
@@ -11,15 +11,18 @@ export const DropdownItem: FC<DropdownItemProps> = ({
   description,
   tooltip,
   type,
+  title,
+  icon,
   ...rest
 }: DropdownItemProps) => {
   return (
-    <Menu.Item {...rest} >
+    <Menu.Item {...rest} title={typeof title === 'string' ? title : undefined}>
       <DropdownItemInner
         componentsBefore={componentsBefore}
         componentsAfter={componentsAfter}
         description={description}
         tooltip={tooltip}
+        icon={icon}
       >
         {children}
       </DropdownItemInner>

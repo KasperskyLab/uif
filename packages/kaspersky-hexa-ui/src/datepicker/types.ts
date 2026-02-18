@@ -40,6 +40,7 @@ type PropsToOmitFromAntDatepicker = 'value'
   | 'size'
   | 'previcon'
   | 'nexticon'
+  | 'picker'
 
 export type DateInputValue = Date | null
 
@@ -54,6 +55,8 @@ export type CalendarProps = Omit<ComponentProps<typeof DatePicker>, PropsToOmitF
   disabled?: boolean,
   /** Is readonly */
   readonly?: boolean,
+  /** Format to display */
+  format?: string,
   /** Validation status */
   validationStatus?: ValidationStatus,
   /** Show today button */
@@ -62,7 +65,7 @@ export type CalendarProps = Omit<ComponentProps<typeof DatePicker>, PropsToOmitF
 
 export type RangeDateInputValue = [DateInputValue, DateInputValue] | null
 
-export type RangePickerProps = Omit<ComponentProps<typeof DatePicker['RangePicker']>, 'ranges' | 'size'> & {
+export type RangePickerProps = Omit<ComponentProps<typeof DatePicker['RangePicker']>, 'ranges' | 'size' | 'picker'> & {
   /** CSS class for the dropdown */
   dropdownClassName?: string,
   /** Date value */

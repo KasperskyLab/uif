@@ -7,11 +7,11 @@
     "migration": false,
     "apiTable": true,
     "storybook": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "Help message",
   "description": "Текст дополняющий различные поля ввода дополнительной информацией. Например валидационный текст",
   "usage": "Вывод текстового значения или состояния UI-элементов",
-  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/01-%5BB2B%5D-Hexa-UI-Components?type=design&node-id=38476%3A139817&mode=dev",
-  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F01-%255BB2B%255D-Hexa-UI-Components%3Ftype%3Ddesign%26node-id%3D38476%253A139817%26mode%3Ddev"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=38476%3A139817",
+  "pixsoView": "https://pixso.net/app/design/6NkPn1KUdxbJ8Bvsexerzw"
 }

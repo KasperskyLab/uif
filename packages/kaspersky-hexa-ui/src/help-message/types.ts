@@ -1,5 +1,6 @@
 import { Theme } from '@design-system/types'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { ReactNode } from 'react'
 
 export type HelpMessageMode = 'error' | 'warning' | 'success' | 'common'
 
@@ -18,7 +19,7 @@ export type HelpMessageThemeProps = {
 
 export type HelpMessageProps = {
   /** Displayed text (instead of count) */
-  text?: string,
+  text?: string | ReactNode,
   /** Custom class name */
   className?: string
 } & HelpMessageThemeProps & TestingProps

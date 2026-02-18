@@ -19,11 +19,9 @@ export const mockedFilters: QuickFilterProps['filters'] = [
   },
   {
     label: 'Importance',
-    component: 'segmented-button',
+    component: 'toggle-button-group',
     value: ['3', '4'],
     onChange: (e) => e,
-    size: 'large',
-    type: 'checkbox',
     items: [
       { text: 'None', value: '1' },
       { text: 'Very low', value: '2' },
@@ -52,6 +50,18 @@ export const mockedFilters: QuickFilterProps['filters'] = [
     options: [{ label: 'Any', value: '1' }, { label: 'Planned', value: '2' }, { label: 'Done', value: '3' }],
     testId: 'status-disabled-test-id',
     klId: 'status-disabled-kl-id'
+  },
+  {
+    label: 'Date',
+    component: 'date-picker',
+    testId: 'date-test-id',
+    klId: 'date-kl-id'
+  },
+  {
+    label: 'Date Range',
+    component: 'range-picker',
+    testId: 'date-range-test-id',
+    klId: 'date-range-kl-id'
   },
   {
     component: 'toggle',
@@ -102,6 +112,11 @@ export const tableColumns = [
         ? <Status key="available" icon={<StatusOkOutline key="ok-icon" />} mode="positive" label="Available" />
         : <Status key="restricted" icon={<StatusWarningOutline key="warning-icon" />} mode="medium" label="Restricted" />
     )
+  },
+  {
+    title: 'Date',
+    key: 'date',
+    dataIndex: 'date'
   }
 ]
 
@@ -112,6 +127,7 @@ type RowType = {
   category: string,
   tags: string[],
   availability: boolean,
+  date: string,
   key: number
 }
 
@@ -127,15 +143,25 @@ const getRandomElements = <T, >(options: { arr: Readonly<Array<T>>, multipleElem
   return shuffled.slice(0, sampleSize)
 }
 
-const generateTableRows = (length = 10) =>
-  Array.from({ length }, (_, index): RowType => ({
-    status: getRandomElements({ arr: [true, false] })[0],
-    networkService: getRandomElements({ arr: networkServices })[0],
-    dataType: getRandomElements({ arr: dataTypes })[0],
-    category: getRandomElements({ arr: categories })[0],
-    tags: getRandomElements({ arr: tags, multipleElements: true }),
-    availability: getRandomElements({ arr: [true, false] })[0],
-    key: index + 1
-  }))
+const generateTableRows = (length = 10) => {
+  const startDate = new Date(2025, 0, 1).getTime()
+  const endDate = new Date().getTime()
+
+  return Array.from({ length }, (_, index): RowType => {
+    const randomTimestamp = startDate + Math.random() * (endDate - startDate)
+    const date = new Date(randomTimestamp).toISOString().split('T')[0]
+
+    return {
+      status: getRandomElements({ arr: [true, false] })[0],
+      networkService: getRandomElements({ arr: networkServices })[0],
+      dataType: getRandomElements({ arr: dataTypes })[0],
+      category: getRandomElements({ arr: categories })[0],
+      tags: getRandomElements({ arr: tags, multipleElements: true }),
+      availability: getRandomElements({ arr: [true, false] })[0],
+      date,
+      key: index + 1
+    }
+  })
+}
 
 export const tableDataSource = generateTableRows()

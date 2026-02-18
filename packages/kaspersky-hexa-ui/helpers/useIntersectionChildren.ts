@@ -1,4 +1,5 @@
 import { RefObject, useMemo } from 'react'
+
 import { useResizeObserver } from './useResizeObserver'
 
 /** The hook calculates the intersection of the container and its children, returns the index of last fitting child

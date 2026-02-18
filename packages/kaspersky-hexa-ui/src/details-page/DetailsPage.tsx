@@ -10,6 +10,8 @@ export const DetailsPage: FC<DetailsPageProps> = ({
   navigation,
   children,
   actions,
+  defaultActiveKey,
+  onChange,
   ...rest
 }) => {
   return (
@@ -38,20 +40,20 @@ export const DetailsPage: FC<DetailsPageProps> = ({
           </FooterContainer>
         )
       }
-     >
-        {navigation
-          ? <HorizontalTabs tabPosition="top">
-              {navigation.map(({ key, content, navigation: innerNavigation, ...rest }) => (
-                <Tabs.TabPane key={key} tab={<Tabs.TabPaneHead {...rest} />}>
-                  {innerNavigation
-                    ? <Submenu {...innerNavigation} />
-                    : <HorizontalTabsContent>{content}</HorizontalTabsContent>
-                  }
-                </Tabs.TabPane>
-              ))}
-            </HorizontalTabs>
-          : children
-        }
+    >
+      {navigation
+        ? <HorizontalTabs tabPosition="top" defaultActiveKey={defaultActiveKey} onChange={onChange}>
+            {navigation.map(({ key, content, navigation: innerNavigation, ...rest }) => (
+              <Tabs.TabPane key={key} tab={<Tabs.TabPaneHead {...rest} />}>
+                {innerNavigation
+                  ? <Submenu {...innerNavigation} />
+                  : <HorizontalTabsContent>{content}</HorizontalTabsContent>
+                }
+              </Tabs.TabPane>
+            ))}
+          </HorizontalTabs>
+        : children
+      }
     </StyledSidebar>
   )
 }

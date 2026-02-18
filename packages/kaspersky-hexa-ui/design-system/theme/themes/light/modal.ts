@@ -2,8 +2,8 @@ import { Size } from '@design-system/types'
 import {
   ModalColorConfig,
   ModalMode,
-  ModalSizeConfig,
-  ModalSize
+  ModalSize,
+  ModalSizeConfig
 } from '@src/modal/types'
 
 import { ComponentThemeContext } from '../config'
@@ -24,15 +24,23 @@ export const modal = ({ colors, effects }: ComponentThemeContext): Record<ModalM
     },
     error: {
       ...common,
+      icon: colors.modal.icon.critical,
       modeBorder: colors.modal.border.critical
     },
     warning: {
       ...common,
+      icon: colors.modal.icon.warning,
       modeBorder: colors.modal.border.warning
     },
     success: {
       ...common,
+      icon: colors.modal.icon.success,
       modeBorder: colors.modal.border.success
+    },
+    ai: {
+      ...common,
+      icon: colors.modal.icon.info,
+      modeBorder: `linear-gradient(90deg, ${colors.modal.border.ai.green} 0%, ${colors.modal.border.ai.marina} 40.38%, ${colors.modal.border.ai.violet} 100%)`
     }
   }
 }

@@ -1,7 +1,9 @@
-import { ThemeProvider } from '@design-system/theme'
+import { THEME_CONFIG } from '@design-system/theme'
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { Key, TreeCheckEvent } from '@src/tree'
-import { debounce, isEmpty } from 'lodash'
+import debounce from 'lodash/debounce'
+import isEmpty from 'lodash/isEmpty'
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -23,16 +25,12 @@ import {
   TitleBox,
   TreeBox
 } from './tenantFilterCss'
-import { ProcessedTreeDataItem, TenantFilterProps, TenantFilterTreeDataItem, TenantFilterTreeDataMapItem, TenantFilterViewProps } from './types'
-import { useThemedTenantFilter } from './useThemedTenantFilter'
+import { ProcessedTreeDataItem, TenantFilterProps, TenantFilterTreeDataItem, TenantFilterTreeDataMapItem } from './types'
 
-const StyledTenantFilterTreeView = styled(Tree).withConfig({
-  shouldForwardProp: prop => !['cssConfig'].includes(prop)
-})`${tenantFilterTreeCss}`
+const StyledTenantFilterTreeView = styled(Tree)`${tenantFilterTreeCss}`
 
-const TenantFilterView: FC<TenantFilterViewProps> = ({
+export const TenantFilter: FC<TenantFilterProps> = ({
   className,
-  cssConfig,
   theme,
   titleText = '',
   counterText = '',
@@ -44,9 +42,10 @@ const TenantFilterView: FC<TenantFilterViewProps> = ({
   defaultSelectedKeys,
   allTenantsKeys,
   applyHandler = () => undefined,
-  testId,
-  testAttributes
-}: TenantFilterViewProps) => {
+  ...props
+}) => {
+  const { testAttributes } = useTestAttribute(props)
+
   const treeDataMap = useMemo(() => getTreeDataMap(data), [data])
   const defaultExpandedKeys = useMemo(() => {
     return isEmpty(defaultSelectedKeys) ? allTenantsKeys : defaultSelectedKeys
@@ -152,7 +151,7 @@ const TenantFilterView: FC<TenantFilterViewProps> = ({
           ? (
               <span>
                 {beforeStr}
-                <SearchedString cssConfig={cssConfig}>{searchStr}</SearchedString>
+                <SearchedString>{searchStr}</SearchedString>
                 {afterStr}
               </span>
             )
@@ -179,19 +178,32 @@ const TenantFilterView: FC<TenantFilterViewProps> = ({
       })
 
     return loop(data)
-  }, [searchValue, data, cssConfig])
+  }, [searchValue, data])
 
   const renderTitle = () => {
     return (
       <TitleBox>
-        <Text themedColor="primary" type="BTM2">{titleText}</Text>
+        <Text
+          color="primary"
+          type="BTM2"
+          theme={theme ? THEME_CONFIG[theme] : undefined}
+        >
+          {titleText}
+        </Text>
       </TitleBox>
     )
   }
 
   const renderCounter = () => {
     return (
-      <Text testId={`${testId}-counter`} themedColor="primary" type="BTR3">{counterText}: {treeCheckedKeys.length}</Text>
+      <Text
+        testId={`${props.testId}-counter`}
+        color="primary"
+        type="BTR3"
+        theme={theme ? THEME_CONFIG[theme] : undefined}
+      >
+        {counterText}: {treeCheckedKeys.length}
+      </Text>
     )
   }
 
@@ -231,7 +243,7 @@ const TenantFilterView: FC<TenantFilterViewProps> = ({
           onExpand={onExpand}
           expandedKeys={expandedKeys}
           autoExpandParent={autoExpandParent}
-          testId={`${testId}-tree`}
+          testId={`${props.testId}-tree`}
           checkStrictly={true}
         />
       </TreeBox>
@@ -243,7 +255,7 @@ const TenantFilterView: FC<TenantFilterViewProps> = ({
       <Footer>
         <Button
           onClick={() => applyTenantsFilter(treeCheckedKeys)}
-          testId={`${testId}-apply-filter`}
+          testId={`${props.testId}-apply-filter`}
           text={buttonText}
         />
       </Footer>
@@ -251,19 +263,14 @@ const TenantFilterView: FC<TenantFilterViewProps> = ({
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <FilterPanel className={className} {...testAttributes}>
-        {renderHeader()}
-        {withSearch && renderSearch()}
-        {data && renderTree()}
-        {withButton && renderButton()}
-      </FilterPanel>
-    </ThemeProvider>
+    <FilterPanel
+      className={getClassNameWithTheme(className, theme)}
+      {...testAttributes}
+    >
+      {renderHeader()}
+      {withSearch && renderSearch()}
+      {data && renderTree()}
+      {withButton && renderButton()}
+    </FilterPanel>
   )
-}
-
-export const TenantFilter: FC<TenantFilterProps> = (rawProps: TenantFilterProps) => {
-  const props = useThemedTenantFilter(rawProps)
-  const { testAttributes } = useTestAttribute(props)
-  return <TenantFilterView testAttributes={testAttributes} {...props} />
 }

@@ -1,7 +1,9 @@
 import { Focus } from '@design-system/tokens/focus'
 import { Theme } from '@design-system/types'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
-import React, { MouseEvent } from 'react'
+import React, { MouseEvent, ReactNode } from 'react'
+
+import { TextReducerProps } from '../../helpers/components/TextReducer'
 
 type StateProps = {
   background?: string,
@@ -33,13 +35,15 @@ export type ChipStyleProps = {
 
 export type ChipProps = ChipStyleProps & {
   /** Chip label */
-  label?: string,
+  label?: ReactNode,
   /** Icon before label */
   icon?: React.ReactElement,
   /** Counter value */
   counter?: number,
   /** Disabled state */
   disabled?: boolean,
+  /** The width at which the chip will be truncated */
+  truncationWidth?: TextReducerProps['truncationWidth']
   /** Callback executed when tag is closed */
   onClose?: (e?: MouseEvent<HTMLElement, globalThis.MouseEvent>) => void
 } & TestingProps

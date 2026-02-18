@@ -1,6 +1,7 @@
 import { Focus } from '@design-system/tokens/focus'
 import { Theme } from '@design-system/types'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { InputCssConfig } from '@src/input/types'
 
 type StateProps = {
   background?: string,
@@ -12,6 +13,8 @@ export type PaginationColorStateConfig = Record<'enabled' | 'hover' | 'active' |
 export type PaginationColorConfig = Record<'selected' | 'unselected', PaginationColorStateConfig> & Focus
 
 export type PaginationCssConfig = PaginationColorConfig
+
+export type PaginationCssConfigExtended = PaginationColorConfig & InputCssConfig
 
 export type PaginationThemeProps = {
   /** Custom theme */
@@ -33,8 +36,11 @@ export type PaginationProps = {
   showSizeChanger?: boolean,
   /** Show less pagination items: 3 or 5 */
   showLessItems?: boolean,
+  /** Determine whether you can jump to pages directly */
+  jumper?: boolean,
   /**
-   * Total number of data items, including children, if data is tree-like structure
+   * Total number of data items, including children, if data is tree-like structure.
+   * Set in table if server pagination is used.
    */
   total?: number,
   /**
@@ -51,8 +57,10 @@ export type PaginationProps = {
   onChange?: (page: number, pageSize: number) => void,
   /** Called when pageSize is changed */
   onShowSizeChange?: (current: number, size: number) => void,
+  /** Cursor pagination */
+  cursor?: boolean,
   /** Simple Table mode. Without total, size changer and quick jumper */
   simple?: boolean
 } & PaginationThemeProps & TestingProps
 
-export type PaginationViewProps = ToViewProps<PaginationProps, PaginationCssConfig, PaginationThemeProps>
+export type PaginationViewProps = ToViewProps<PaginationProps, PaginationCssConfigExtended, PaginationThemeProps>

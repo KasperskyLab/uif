@@ -4,7 +4,7 @@ import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Space } from '@src/space'
 import { Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -48,7 +48,7 @@ const meta: Meta<TagProps> = {
     docs: {
       page: withMeta(MetaData, TagDocs)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta
@@ -93,15 +93,17 @@ const AllModesMock = (args: TagProps) => (
           >
             {`I'm a ${mode} tag`}
           </Tag>
-          <Tag
-            {...args}
-            key={`${mode}-outlined`}
-            mode={mode as TagMode}
-            onClose={() => console.log('outlined tag')}
-            outlined
-          >
-            {`I'm a ${mode} outlined tag`}
-          </Tag>
+          {mode !== 'ai' && (
+            <Tag
+              {...args}
+              key={`${mode}-outlined`}
+              mode={mode as TagMode}
+              onClose={() => console.log('outlined tag')}
+              outlined
+            >
+              {`I'm a ${mode} outlined tag`}
+            </Tag>
+          )}
         </div>
       ))}
     </TagWrapper>

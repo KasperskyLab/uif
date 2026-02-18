@@ -1,6 +1,10 @@
 @import "antd/lib/style/themes/default.less";
 @import "antd/dist/antd.less";
 
+// FIXME: clients with angular 19 cannot handle 3rd party css files itself so we do it here temporarily
+@import "@xterm/xterm/css/xterm.css";
+@import "react-diff-view/style/index.css";
+
 @font-feature-settings-base: normal;
 @font-variant-base: normal;
 

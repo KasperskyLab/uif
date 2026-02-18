@@ -1,9 +1,8 @@
+import { checkbox } from '@design-system/css-configs/components/checkbox'
+import { radio } from '@design-system/css-configs/components/radio'
 import { TableColorConfig } from '@src/table/types'
 
 import { ComponentThemeContext } from '../config'
-
-import { checkbox } from './checkbox'
-import { radio } from './radio'
 
 export const table = ({ colors, effects }: ComponentThemeContext): TableColorConfig => ({
   headCell: {
@@ -33,14 +32,14 @@ export const table = ({ colors, effects }: ComponentThemeContext): TableColorCon
     color: colors.table_cell.text.enabled
   },
   resize: {
-    enabled: colors.table_row.border,
-    hover: colors.table_cell_header.divider_hover
+    hover: colors.table_cell_header.dragger.hover,
+    active: colors.table_cell_header.dragger.active
   },
   expandable: {
     icon: colors.action_button.icon.ghost.enabled
   },
-  checkbox: checkbox({ colors, effects }),
-  radio: radio({ colors, effects }),
+  checkbox: checkbox({ effects }),
+  radio: radio({ effects }),
   filters: {
     toolbar: {
       background: colors.toolbar.bg
@@ -52,6 +51,10 @@ export const table = ({ colors, effects }: ComponentThemeContext): TableColorCon
         color: colors.label.text.subtle
       }
     }
+  },
+  pagination: {
+    background: colors.pagination_area.bg,
+    boxShadow: `0 0 7px 0 ${colors.elevation.overlap}`
   },
   validation: {
     outline: colors.input_text.border.error

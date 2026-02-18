@@ -8,6 +8,8 @@ import { segmentedButtonCss } from './segmentedButtonCss'
 import { SegmentedButtonItem } from './SegmentedButtonItem'
 import { SegmentedButtonOptionMapped, SegmentedButtonProps } from './types'
 
+const TYPE_RADIO_MODE = 'marina'
+
 const StyledSegmentedButton = styled.div.withConfig({
   shouldForwardProp: (prop) => !['isStretch', 'type'].includes(prop)
 })`
@@ -25,10 +27,13 @@ export const SegmentedButton: FC<SegmentedButtonProps> = (props) => {
     items,
     value,
     onChange,
-    isStretch
+    isStretch,
+    style
   } = props
   const optionsGroupId = useMemo(() => uuid(), [])
   const { testAttributes } = useTestAttribute(props)
+  const isTypeCheckbox = type === 'checkbox'
+  const isTypeRadio = type === 'radio'
 
   const onItemClick = useCallback((handledValue: string, selectedValues: string[]) => {
     if (type === 'checkbox') {
@@ -50,9 +55,14 @@ export const SegmentedButton: FC<SegmentedButtonProps> = (props) => {
 
   return (
     <StyledSegmentedButton
-      type={type}
-      className={cn('kl6-segmented-button', className)}
+      className={cn(
+        'kl6-segmented-button',
+        className,
+        { 'type-checkbox': isTypeCheckbox },
+        { 'type-radio': isTypeRadio }
+      )}
       isStretch={isStretch}
+      style={style}
       {...testAttributes}
     >
       {
@@ -63,7 +73,7 @@ export const SegmentedButton: FC<SegmentedButtonProps> = (props) => {
             selectedValues={value}
             onChange={onItemClick}
             theme={theme}
-            mode={ item.mode || mode}
+            mode={ type === 'radio' ? TYPE_RADIO_MODE : item.mode || mode }
             size={size}
             {...item}
             disabled={ disabled || item.disabled }

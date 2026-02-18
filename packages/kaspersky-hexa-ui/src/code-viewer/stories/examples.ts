@@ -88,3 +88,14 @@ const FunctionalCounter: FC<Props> = ({ title, initialCount }) => {
 
 export default FunctionalCounter;
 `
+
+export const yaraExample = `rule ExampleRule
+{
+    strings:  // this is comment
+        $my_text_string = "text here"
+        $my_hex_string = { E2 34 A1 C8 23 FB }
+
+    condition:
+        $my_text_string or $my_hex_string
+}
+`

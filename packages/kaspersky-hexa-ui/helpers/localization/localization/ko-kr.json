@@ -3,7 +3,10 @@
     "common": {
       "empty": "데이터 없음",
       "import": "가져오기",
-      "export": "내보내기"
+      "export": "내보내기",
+      "filters": "필터",
+      "no": "아니요",
+      "yes": "예"
     },
     "upload": {
       "dropFileTitle": "여기에 드롭",
@@ -36,7 +39,7 @@
         "endingMultiple": "또는 여기에 드래그 앤 드롭",
         "endingSingle": "또는 여기에 드래그 앤 드롭"
       },
-      "maxCountUploaded": "업로드한 파일 최대 수",
+      "maxCountUploaded": "최대 업로드 파일 수",
       "progress": "{{progress}}/{{size}}",
       "showFiles": "파일 보기",
       "total": {
@@ -46,10 +49,23 @@
       },
       "validation": {
         "maxCount": "최대 파일 한도를 초과하여 {{count}}개 파일을 업로드하지 못했습니다.",
+        "maxCount2": "업로드한 파일의 총 개수가 한도를 초과함",
         "maxFileSize": "허용 크기를 초과하여 {{count}}개 파일을 업로드하지 못했습니다.",
+        "maxFileSize2": "이전에 업로드한 일부 파일이 현재 허용된 크기 한도를 초과함",
         "maxTotalSize": "총 허용 크기를 초과하여 {{count}}개 파일을 업로드하지 못했습니다.",
+        "maxTotalSize2": "업로드한 파일의 총 크기가 현재 허용된 크기 한도를 초과함",
+        "filesDoNotMeetRequirements": "파일이 요구 사항을 만족하지 않음",
         "format": "형식 요건에 따라 {{count}}개 파일을 업로드하지 못했습니다."
       }
+    },
+    "wizard": {
+      "actions": {
+        "cancel": "취소",
+        "back": "뒤로",
+        "next": "다음",
+        "finish": "마침"
+      },
+      "stepStack": "{{currentStep}}/{{totalSteps}} 단계"
     },
     "severity": {
       "critical": "심각",
@@ -78,15 +94,6 @@
       "dotted": "검색..."
     },
     "table": {
-      "column": {
-        "name": "첫 번째 열"
-      },
-      "column2": {
-        "name": "두 번째 열"
-      },
-      "column3": {
-        "name": "세 번째 열"
-      },
       "columnDropdown": {
         "ascending": "오름차순",
         "descending": "내림차순",
@@ -95,7 +102,7 @@
         "resetFilters": "필터 초기화"
       },
       "columnsSettings": {
-        "header": "열 설정",
+        "header": "테이블 설정",
         "selectAll": "모두 선택",
         "columns": "열",
         "grouping": "그룹화",
@@ -103,6 +110,16 @@
         "noGrouping": "그룹화 안 됨",
         "apply": "적용",
         "cancel": "취소",
+        "columnTitles": {
+        "name": "이름",
+        "country": "국가",
+        "age": "나이",
+        "city": "도시",
+        "date": "날짜",
+        "isSortable": "정렬 가능",
+        "sorter": "정렬 도구",
+        "sorterIsSortable": "정렬을 이용할 수 있음"
+        },
         "filtering": {
           "add": "추가",
           "clearAll": "모두 지우기",
@@ -111,7 +128,28 @@
           "from": "시작",
           "to": "종료",
           "value": "값"
-        }
+        },
+        "columnHideIsUnavailable": "열 숨기기를 이용할 수 없음"
+      },
+      "filterOperation": {
+        "⊆": "포함",
+        "⊄": "포함 안 함",
+        "cont_and": "모두 포함(AND)",
+        "cont_or": "하나라도 포함(OR)",
+        "ncont_or": "포함 안 함",
+        "*=": "Regexp",
+        "empty": "비어 있음",
+        "nempty": "비어 있지 않음",
+        "range": "이내",
+        "nrange": "외부"
+      },
+      "filterTag": {
+        "⊆": "{{value}} 포함",
+        "⊄": "{{value}} 포함 안 함",
+        "empty": "비어 있음",
+        "nempty": "비어 있지 않음",
+        "range": "{{from}}–{{to}} 이내",
+        "nrange": "{{from}}–{{to}} 외부"
       },
       "groupingEmpty": "기타"
     },
@@ -125,11 +163,57 @@
     },
     "actionBar": {
       "unsavedChanges": "대기 중인 변경 사항",
-      "save": "저장",
+      "save": "적용",
       "cancel": "취소"
     },
     "textarea": {
       "wordsCount": "{{total}} 중 {{count}}"
+    },
+    "menu": {
+      "favoritesNavItem": "북마크",
+      "navUserItem": {
+        "userProps": {
+          "status": {
+            "available": "사용 가능",
+            "unavailable": "이용 불가"
+          }
+        }
+      }
+    },
+    "expand": {
+      "toExpand": "확장",
+      "toCollapse": "충돌"
+    },
+    "codeCompare": {
+      "compareMode": "비교 모드",
+      "unified": "통합됨",
+      "split": "분할",
+      "loader": "비교를 위해 버전을 다운로드 중...",
+      "totalChanges": "총 변경 사항:",
+      "collapseAll": "모두 축소",
+      "expandAll": "모두 확장",
+      "expandLines": "{{count}}줄 확장",
+      "empty": "두 파일이 모두 비어 있습니다. 비교할 수 없습니다.",
+      "noChanges": "버전 간 변경 사항 없음",
+      "basicVersion": "기본 버전",
+      "comparableVersion": "비교 버전"
+    },
+    "licenseCard": {
+      "status": "라이센스 키 상태",
+      "number": "라이센스 키 번호",
+      "remaining": "남음",
+      "activationDate": "활성화 날짜",
+      "expirationDate": "만료 날짜",
+      "term": "기간",
+      "dayLeft": "{{count}}일 남음",
+      "daysLeft": "{{count}}일 남음",
+      "termDays": "{{count}}일"
+    },
+    "input": {
+      "password": {
+        "hide": "숨김",
+        "show": "보기"
+      }
     }
   }
 }

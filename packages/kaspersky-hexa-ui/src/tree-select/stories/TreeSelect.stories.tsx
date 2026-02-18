@@ -1,8 +1,9 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
+import { validationStatuses } from '@helpers/typesHelpers'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import { TreeSelect as TreeSelectAntd } from 'antd'
 import React, { useState } from 'react'
 
@@ -17,6 +18,10 @@ const meta: Meta<TreeSelectProps> = {
   title: 'Hexa UI Components/TreeSelect',
   component: TreeSelect,
   argTypes: {
+    validationStatus: {
+      control: { type: 'radio' },
+      options: validationStatuses
+    },
     ...sbHideControls(['theme'])
   },
   args: {
@@ -28,8 +33,7 @@ const meta: Meta<TreeSelectProps> = {
     badges: [badges.stable, badges.missingDesign],
     docs: {
       page: withMeta(MetaData)
-    },
-    design: MetaData.figmaView
+    }
   }
 }
 export default meta

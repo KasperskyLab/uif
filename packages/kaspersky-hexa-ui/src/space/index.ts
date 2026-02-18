@@ -1,1 +1,1 @@
-export * from './Space'
+export { Space, type SpaceProps } from './Space'

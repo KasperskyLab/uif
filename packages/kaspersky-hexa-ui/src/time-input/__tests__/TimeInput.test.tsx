@@ -52,13 +52,13 @@ describe('TimeInput', () => {
 
   test('should proper mask with Milliseconds format', async () => {
     const { getByTestId } = render(
-      <TimeInput format="HH:mm:ss:ms" testId={testId} klId={testId} />
+      <TimeInput format="HH:mm:ss.ms" testId={testId} klId={testId} />
     )
     const inputPhone = getByTestId(testId)
     await userEvent.clear(inputPhone)
     await userEvent.type(inputPhone, '102030120')
 
-    expect(inputPhone).toHaveValue('10:20:30:120')
+    expect(inputPhone).toHaveValue('10:20:30.120')
   })
 
   test('should cut extra symbols', async () => {

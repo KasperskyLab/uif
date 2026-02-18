@@ -1,4 +1,4 @@
-import { AlertMode, AlertColorConfig } from '@src/alert/types'
+import { AlertColorConfig, AlertMode } from '@src/alert/types'
 
 import { ComponentThemeContext } from '../config'
 import { alert as defaultAlert } from '../light/alert'

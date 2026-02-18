@@ -1,0 +1,16 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "ToggleButton",
+  "usage": "Компонент ToggleButton предназначен для управления состояниями внутри интерфейса, где требуется переключение между несколькими взаимосвязанными вариантами",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=165938%3A227743",
+  "pixsoView": "https://pixso.net/app/design/03WtWL7_119TmMDBZQ0rkw"
+}

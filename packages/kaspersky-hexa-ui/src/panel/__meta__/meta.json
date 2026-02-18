@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "Panel",
+  "description": "Панель — сервисный компонент, являющийся контейнером для контента. Панель может встраиваться в страницу или сайдбар. Панель может быть горизонтальной или вертикальной. Панель может иметь статическую ширину или растягиваться.",
+  "usage": "Панель может располагаться на уровне контента и при раскрытии сдвигать контентную область. Панель может располагаться над уровнем контента и при раскрытии перекрывать контентную область. Например, в графах панель находится на уровне контролов и сдвигает их, а также над уровнем самого графа и перекрывает его.",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=140826%3A286962",
+  "pixsoView": "https://pixso.net/app/design/2EFkFswKkyLptDhPcW8Wbg"
+}

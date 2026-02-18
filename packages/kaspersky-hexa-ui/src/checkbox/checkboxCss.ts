@@ -13,12 +13,14 @@ export const getCheckboxCss = (fromProps: any) => css`
 
   && {
     position: relative;
-    display: inline-flex;
+    display: flex;
     align-items: flex-start;
   }
 
   &.ant-checkbox-wrapper {
     display: inline-flex;
+    flex-direction: row;
+    gap: 4px;
   }
 
   &.ant-checkbox-wrapper + &.ant-checkbox-wrapper {
@@ -31,7 +33,6 @@ export const getCheckboxCss = (fromProps: any) => css`
 
   .ant-checkbox + span {
     padding: 0;
-    margin-left: 4px;
     & .form-label {
       cursor: pointer;
     }

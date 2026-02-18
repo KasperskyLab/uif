@@ -10,7 +10,7 @@ import { Radio } from '@src/radio'
 import { Space } from '@src/space'
 import { Tag } from '@src/tag'
 import { Toggle } from '@src/toggle'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
@@ -83,7 +83,7 @@ const meta: Meta<InformationCardProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta

@@ -52,6 +52,8 @@ export type RadioProps = {
   role?: string,
   /** Array of options */
   options: RadioOption[]
+  /** Popup container for tooltips */
+  getPopupContainer?: (triggerNode: HTMLElement) => HTMLElement
 } & AntdRadioProps & RadioThemeProps & TestingProps
 
 export type RadioViewProps = ToViewProps<RadioProps, RadioCssConfig>

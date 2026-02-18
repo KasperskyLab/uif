@@ -3,7 +3,7 @@ import { validationStatuses } from '@helpers/typesHelpers'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -11,7 +11,7 @@ import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
 
 import MetaData from '../meta.json'
 import { TimeInput } from '../TimeInput'
-import { TimeInputProps } from '../types'
+import { timeFormat, TimeInputProps } from '../types'
 
 const meta: Meta<TimeInputProps> = {
   title: 'Hexa UI Components/Inputs/TimeInput',
@@ -20,6 +20,10 @@ const meta: Meta<TimeInputProps> = {
     validationStatus: {
       control: { type: 'radio' },
       options: validationStatuses
+    },
+    format: {
+      control: { type: 'radio' },
+      options: timeFormat
     },
     ...sbHideControls(['theme'])
   },
@@ -56,11 +60,13 @@ export const Basic: StoryObj<TimeInputProps> = {
 
 export const Variants: StoryObj<TimeInputProps> = {
   render: (args) => <>
-    HH:mm <TimeInput {...args} format="HH:mm" placeholder="00:00" />
+    HH:mm <TimeInput {...args} format="HH:mm" placeholder="__:__" />
     <br />
-    HH:mm:ss <TimeInput {...args} format="HH:mm:ss" placeholder="00:00:00" />
+    HH:mm:ss <TimeInput {...args} format="HH:mm:ss" placeholder="__:__:__" />
     <br />
-    HH:mm:ss:ms <TimeInput {...args} format="HH:mm:ss:ms" placeholder="00:00:00:000" />
+    HH:mm:ss.ms <TimeInput {...args} format="HH:mm:ss.ms" placeholder="__:__:__.___" />
+    <br />
+    h:mm: am/pm <TimeInput {...args} format="h:mm aaa" placeholder="__:__ am" />
   </>
 }
 

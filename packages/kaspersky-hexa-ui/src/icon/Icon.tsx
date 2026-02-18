@@ -8,11 +8,12 @@ import styled from 'styled-components'
 import Icons12Pack from '@kaspersky/hexa-ui-icons/12'
 import Icons16Pack, { StatusQuestionOutline } from '@kaspersky/hexa-ui-icons/16'
 import Icons24Pack from '@kaspersky/hexa-ui-icons/24'
+import Icons32Pack from '@kaspersky/hexa-ui-icons/32'
 import Icons48Pack from '@kaspersky/hexa-ui-icons/48'
 import Icons8Pack from '@kaspersky/hexa-ui-icons/8'
 
 import { iconsMapper, MappedObjectInterface } from './iconsMapper'
-import { IconPackSizes, IconProps, IconSizes } from './types'
+import { DeprecatedIconSizes, IconPackSizes, IconProps } from './types'
 import { useThemedIcon } from './useThemedIcon'
 
 const AllIcons = {
@@ -20,6 +21,7 @@ const AllIcons = {
   Icons12Pack,
   Icons16Pack,
   Icons24Pack,
+  Icons32Pack,
   Icons48Pack
 }
 
@@ -29,6 +31,9 @@ export type IconsPackageNames = keyof typeof Icons8Pack
   | keyof typeof Icons24Pack
   | keyof typeof Icons48Pack
 
+/**
+ * @deprecated Use IconResolver instead
+ */
 export const Icon = (rawProps: IconProps): JSX.Element => {
   const themedProps = useThemedIcon(rawProps)
   const props = useTestAttribute(themedProps)
@@ -39,7 +44,7 @@ export const StyledSpan = styled.span.withConfig({ shouldForwardProp })`
   ${wrapperSpanCss}
 `
 
-function getPackageIcon (size: IconSizes | IconPackSizes, key: IconsPackageNames) {
+function getPackageIcon (size: DeprecatedIconSizes | IconPackSizes, key: IconsPackageNames) {
   let IconByKey
   let packageSize: IconPackSizes
   if (size as IconsPackageNames) {
@@ -71,7 +76,7 @@ function getPackageIcon (size: IconSizes | IconPackSizes, key: IconsPackageNames
   return IconByKey ?? undefined
 }
 
-function getMapperIconObject (size: IconSizes, name: string): MappedObjectInterface {
+function getMapperIconObject (size: DeprecatedIconSizes, name: string): MappedObjectInterface {
   return iconsMapper?.[size]?.[name] ?? {
     size,
     key: name
@@ -115,7 +120,7 @@ const IconView = forwardRef<HTMLSpanElement, IconProps>((props: IconProps, ref: 
         ? <TagName size={size} name={name} />
         : <IconToDisplay color={colorFromMapper ?? iconColor ?? color ?? themedColor}/>
       }
-        </StyledSpan>
+    </StyledSpan>
   )
 })
 

@@ -47,7 +47,9 @@ export const NotificationCss = css<{ cssConfig: NotificationCssConfig, noIcon?: 
           position: initial;
           height: 20px;
         }
-
+        .toast-text {
+          padding-right: var(--spacing--padding_m);
+        }
         .toast-action-button {
           padding: 0;
           white-space: nowrap;
@@ -59,21 +61,15 @@ export const NotificationCss = css<{ cssConfig: NotificationCssConfig, noIcon?: 
         }
       }
     `
-    ).join('')
-  }
+  ).join('')
+}
 
-  .toast-action-button {
-    &:after {
-      display: block;
-      content: '';
-      width: 1px;
-      margin-left: 8px;
-      height: 20px;
-    }
-
-    .kl-action-button-icon {
-      display: none;
-    }
+  .toast-action-button::after {
+    display: block;
+    content: '';
+    width: 1px;
+    margin-left: 8px;
+    height: 20px;
   }
 
   .ant-notification-notice-content {
@@ -97,6 +93,7 @@ export const NotificationCss = css<{ cssConfig: NotificationCssConfig, noIcon?: 
     width: 100%;
     justify-content: space-between;
     margin-left: 0px;
+    word-break: break-word;
   }
 
   .ant-notification-notice-message {
@@ -120,5 +117,5 @@ export const NotificationCss = css<{ cssConfig: NotificationCssConfig, noIcon?: 
     .ant-notification-notice-icon {
       display: none;
     }`
-  }
+}
 `

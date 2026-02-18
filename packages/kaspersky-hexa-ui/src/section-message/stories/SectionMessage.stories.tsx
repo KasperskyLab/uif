@@ -4,7 +4,7 @@ import { withMeta } from '@sb/components/Meta'
 import { sbHideControls, sbSetDefaultValue } from '@sb/helpers'
 import { StoryColumn } from '@sb/StoryComponents'
 import { Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'

@@ -1,0 +1,18 @@
+.ruleItem {
+  .ruleIcon {
+    color: var(--input_password--icon--rules--not_completed);
+  }
+  .ruleContent {
+    white-space: pre-wrap;
+    color: var(--input_password--text--rules--not_completed);
+  }
+}
+
+.valid {
+  .ruleIcon {
+    color: var(--input_password--icon--rules--completed);
+  }
+  .ruleContent {
+    color: var(--input_password--text--rules--completed);
+  }
+}

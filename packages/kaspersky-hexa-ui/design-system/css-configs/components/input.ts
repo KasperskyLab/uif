@@ -1,5 +1,5 @@
-import { focus } from '@design-system/css-configs/tokens/focus'
 import { ComponentContext } from '@design-system/css-configs/types'
+import { focus } from '@design-system/tokens/focus'
 import { InputColorConfig } from '@src/input/types'
 
 export const input = ({ effects }: ComponentContext): InputColorConfig => ({
@@ -15,10 +15,11 @@ export const input = ({ effects }: ComponentContext): InputColorConfig => ({
   disabled: {
     color: 'var(--input_text--text--disabled--value)',
     background: 'var(--input_text--bg--disabled)',
-    border: 'var(--input_text--bg--disabled)'
+    border: 'var(--input_text--border--disabled)'
   },
   readonly: {
-    color: 'var(--input_text--text--readonly--value)'
+    color: 'var(--input_text--text--readonly--value)',
+    border: 'var(--input_text--border--readonly)'
   },
   error: {
     border: 'var(--input_text--border--error)'

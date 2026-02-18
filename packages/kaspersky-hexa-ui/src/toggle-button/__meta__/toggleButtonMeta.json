@@ -1,0 +1,41 @@
+{
+  "component": "ToggleButtonGroup",
+  "hexa-ui": "/docs/hexa-ui-components-toggle-button",
+  "v3": [],
+  "v5": [],
+  "common": [
+    {
+      "prop": "onChange",
+      "changes": "no change"
+    },
+    {
+      "prop": "value", 
+      "changes": "no change"
+    },
+    {
+      "prop": "disabled",
+      "changes": "no change"
+    },
+    {
+      "prop": "loading",
+      "changes": "add as new prop"
+    },
+    {
+      "prop": "isStretch",
+      "changes": "add as new prop"
+    },
+    {
+      "prop": "items",
+      "changes": "add as new prop"
+    },
+    {
+      "prop": "theme",
+      "changes": "add as new prop"
+    },
+    {
+      "prop": "klId",
+      "changes": "add as new prop"
+    }
+  ],
+  "pixsoView": "https://pixso.net/app/design/03WtWL7_119TmMDBZQ0rkw?item-id=6151%3A3440"
+}

@@ -1,7 +1,7 @@
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
-import { StoryComponentContainer, StoryLabel, StoryWrapper } from '@sb/StoryComponents'
-import { Meta, StoryObj } from '@storybook/react'
+import { renderVariants } from '@sb/StoryComponents'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import MetaData from './__meta__/meta.json'
@@ -30,7 +30,7 @@ const meta: Meta<ProgressBarProps> = {
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta
@@ -40,36 +40,35 @@ type Story = StoryObj<ProgressBarProps>
 export const ProgressBar: Story = {}
 
 export const Mode: Story = {
-  render: (props) => (
-    <StoryWrapper vertical>
-      {progressBarModes.map(mode => (
-        <StoryComponentContainer key={mode}>
-          <StoryLabel label={mode} horizontalWidth="120px" />
+  render: (props) =>
+    renderVariants(
+      progressBarModes.map(mode => ({
+        label: mode,
+        content:
           <div style={{ margin: 'auto' }}>
-            <ProgressBarComponent {...props} mode={mode} key={mode} width={200} track={50} />
+            <ProgressBarComponent {...props} mode={mode} width={200} track={50} />
           </div>
-        </StoryComponentContainer>
-      ))}
-    </StoryWrapper>
-  ),
+      })),
+      true,
+      'medium'
+    ),
   argTypes: {
     mode: { control: false }
   }
 }
 
 export const Size: Story = {
-  render: (props) => (
-    <StoryWrapper vertical>
-      {progressBarSizes.map(size => (
-        <StoryComponentContainer key={size}>
-          <StoryLabel label={size} horizontalWidth="120px" />
+  render: (props) =>
+    renderVariants(
+      progressBarSizes.map(size => ({
+        label: size,
+        content:
           <div style={{ margin: 'auto' }}>
-            <ProgressBarComponent {...props} size={size} key={size} width={200} track={50} />
+            <ProgressBarComponent {...props} size={size} width={200} track={50} />
           </div>
-        </StoryComponentContainer>
-      ))}
-    </StoryWrapper>
-  ),
+      })),
+      true
+    ),
   argTypes: {
     size: { control: false }
   }

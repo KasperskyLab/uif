@@ -8,11 +8,11 @@
     "apiTable": true,
     "storybook": true,
     "designLink": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "RangePicker",
   "description": "Интерактивный компонент выбора промежутка даты. В качестве основы используется стилизованный компонент `RangePicker` из `antd`, который, в свою очередь, построен на `rc-picker`",
   "usage": "",
-  "designLink": "https://www.figma.com/file/9hiN2DbkqbxbhR9EWRI1VK/01-%5BB2B%5D-Hexa-UI-Components?type=design&node-id=3828%3A16437&mode=dev",
-  "figmaView": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2F9hiN2DbkqbxbhR9EWRI1VK%2F01-%255BB2B%255D-Hexa-UI-Components%3Ftype%3Ddesign%26node-id%3D3828%253A16437%26mode%3Ddev"
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?page-id=3828%3A16437&item-id=80748%3A348477",
+  "pixsoView": "https://pixso.net/app/design/M7_B6xFkVmGWzArYruGkGA?item-id=6001%3A45944"
 }

@@ -8,10 +8,10 @@
     "apiTable": true,
     "storybook": true,
     "designLink": true,
-    "figmaView": true
+    "pixsoView": true
   },
   "component": "@kaspersky/hexa-ui-icons",
   "description": "npm пакет, содержащий все иконки из дизайн системы",
   "usage": "import { AccountIdentity, Like } from '@kaspersky/hexa-ui-icons/24'",
-  "figmaView": "https://www.figma.com/file/sFYnrrW2tEOurX8rL2OCki/Icons?type=design&mode=design&t=SLAwY6QlYlkBdfPc-0"
+  "pixsoView": "https://pixso.net/app/design/OMHorA_MCv1V-96GDDwD7Q?item-id=11:3110"
 }

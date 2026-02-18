@@ -1,9 +1,9 @@
-import React from 'react'
-import styled from 'styled-components'
 
 import { Link } from '@src/link'
 import { Space } from '@src/space'
 import { Heading, Text } from '@src/typography'
+import React from 'react'
+import styled from 'styled-components'
 
 import { MetaDod } from './MetaDod'
 import { MetaList } from './types'
@@ -31,16 +31,16 @@ export function withMeta (
       <Space gap={32} direction="vertical" align="start">
         <Space gap={16} direction="vertical" align="start">
           <StyledHeading type="H2">{list?.component}</StyledHeading>
-          {(list?.figmaView || list?.designLink) && (
+          {(list?.pixsoView || list?.designLink) && (
             <Space gap={16}>
-              {list?.figmaView && (
+              {list?.pixsoView && (
                 <StyledLink
-                  href={list.figmaView}
+                  href={list.pixsoView}
                   target="_blank"
                   decoration="icon"
                   size="medium"
                 >
-                  Документация в Figma
+                  Документация в Pixso
                 </StyledLink>
               )}
               {list?.designLink && (
@@ -50,7 +50,7 @@ export function withMeta (
                   decoration="icon"
                   size="medium"
                 >
-                  Компонент в Figma
+                  Компонент в Pixso
                 </StyledLink>
               )}
             </Space>

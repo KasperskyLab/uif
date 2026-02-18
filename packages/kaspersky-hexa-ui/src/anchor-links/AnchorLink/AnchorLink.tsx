@@ -24,6 +24,9 @@ const AnchorLinkView: FC<AnchorLinkViewProps> = (props: AnchorLinkViewProps) => 
   )
 }
 
+/**
+ * @deprecated use AnchorNavigation instead
+ */
 export const AnchorLink: FC<AnchorLinkProps> = (rawProps: AnchorLinkProps) => {
   const themedProps = useThemedAnchorLink(rawProps)
   const props = useTestAttribute(themedProps)

@@ -1,19 +1,17 @@
 import { Space } from '@src/space'
-import { Description, Subtitle, Title } from '@storybook/addon-docs'
+import { Text } from '@src/typography'
 import { TextProps } from 'antd/lib/typography/Text'
 import React from 'react'
-
-import { Text } from '../Typography'
 
 export const TextDocs: React.VFC<TextProps> = () => {
   return (
     <>
-      <Title>Body Text</Title>
-      <Subtitle>Основной текст</Subtitle>
-      <Description>
+      <Text type="H4">Body Text</Text>
+      <Text type="H5">Основной текст</Text>
+      <Text type="H6">
         Стили используются в некрупных элементах, таких как основной текст и
         заголовки
-      </Description>
+      </Text>
       <Space gap={16} direction="vertical" align="flex-start">
         <Text type="BTR2">Body Text/P2 Regular</Text>
         <Text type="BTR3">Body Text/P3 Regular</Text>
@@ -26,10 +24,10 @@ export const TextDocs: React.VFC<TextProps> = () => {
         <Text type="BTM4">Body Text/P4 Medium</Text>
         <Text type="BTM5">Body Text/P5 Medium</Text>
       </Space>
-      <Subtitle>Mono текст</Subtitle>
-      <Description>
-        Как тест в компоненте input password, code viewer
-      </Description>
+      <Text type="H5">Mono текст</Text>
+      <Text type="H6">
+        Как текст в компоненте input password, code viewer
+      </Text>
       <Space gap={16} direction="vertical" align="flex-start">
         <Text type="MTR3">Mono Text/P3 Regular</Text>
         <Text type="MTR4">Mono Text/P4 Regular</Text>

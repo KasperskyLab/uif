@@ -7,7 +7,7 @@ import { Textbox } from '@src/input'
 import { Link } from '@src/link'
 import { Radio } from '@src/radio'
 import { Tag } from '@src/tag'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
@@ -103,8 +103,7 @@ const meta: Meta<KeyValueProps> = {
     deprecatedLink: 'Hexa UI Components/FieldSet',
     docs: {
       page: withMeta(MetaData)
-    },
-    design: MetaData.figmaView
+    }
   }
 }
 export default meta

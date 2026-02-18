@@ -1,13 +1,16 @@
 import { Theme, ThemeKey } from '@design-system/types'
 import { TestingProps } from '@helpers/typesHelpers'
-import { PickerColorConfig } from '@src/datepicker/types'
-import { InputCssConfig, TextboxClassNamedProps, TextboxProps } from '@src/input/types'
+import { TextboxClassNamedProps, TextboxProps } from '@src/input/types'
+
+export const timeFormat = ['HH:mm', 'HH:mm:ss', 'HH:mm:ss.ms', 'h:mm aaa'] as const
+export type TimeFormat = typeof timeFormat[number]
 
 export type TimeInputProps = {
-  format?: 'HH:mm' | 'HH:mm:ss' | 'HH:mm:ss:ms',
+  format?: TimeFormat,
   placeholder?: string,
   theme?: ThemeKey,
   value?: TextboxProps['value'],
+  onBlur?: TextboxProps['onBlur'],
   onChange?: TextboxProps['onChange']
 } & TestingProps & TextboxClassNamedProps
 
@@ -15,8 +18,12 @@ export type TimeInputStateProps = {
   theme?: Theme
 }
 
-export type TimeInputColorConfig = PickerColorConfig
-
-export type TypeInputCssConfig = {
-  cssConfig: InputCssConfig & TimeInputColorConfig
-}
+export type RangeTimeInputProps = {
+  format?: TimeFormat,
+  placeholder?: string,
+  theme?: ThemeKey,
+  valueStart?: string,
+  valueEnd?: string,
+  onChangeStart?: TextboxProps['onChange'],
+  onChangeEnd?: TextboxProps['onChange']
+} & TestingProps

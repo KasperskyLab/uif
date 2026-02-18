@@ -3,7 +3,10 @@
     "common": {
       "empty": "Aucune information",
       "import": "Importer",
-      "export": "Exporter"
+      "export": "Exporter",
+      "filters": "Filtres",
+      "no": "Non",
+      "yes": "Oui"
     },
     "upload": {
       "dropFileTitle": "Déposez le fichier ici",
@@ -36,9 +39,9 @@
         "endingMultiple": "ou faites-les glisser ici",
         "endingSingle": "ou faites-le glisser ici"
       },
-      "maxCountUploaded": "Nombre maximal de fichiers chargés",
+      "maxCountUploaded": "Nombre maximum de fichiers chargés",
       "progress": "{{progress}} sur {{size}}",
-      "showFiles": "Afficher les fichiers",
+      "showFiles": "Consulter les fichiers",
       "total": {
         "files": "{{filesCount}} fichiers sur {{total}}",
         "simple": "{{filesCount}} fichier(s)",
@@ -46,10 +49,23 @@
       },
       "validation": {
         "maxCount": "{{count}} fichier(s) ne peut(vent) pas être chargé(s) car il(s) dépasse(nt) la limite maximale de fichiers.",
+        "maxCount2": "Le nombre total de fichiers chargés dépasse la limite autorisée",
         "maxFileSize": "{{count}} fichier(s) ne peut(vent) pas être chargé(s) car il(s) dépasse(nt) la taille autorisée.",
+        "maxFileSize2": "Certains des fichiers chargés précédemment dépassent la limite de taille actuellement autorisée",
         "maxTotalSize": "{{count}} fichier(s) ne peut(vent) pas être chargé(s) car il(s) dépasse(nt) la taille totale autorisée.",
+        "maxTotalSize2": "La taille totale de tous les fichiers téléchargés dépasse la limite de taille actuellement autorisée",
+        "filesDoNotMeetRequirements": "Les fichiers ne répondent pas aux exigences",
         "format": "{{count}} fichier(s) ne peut(vent) pas être chargé(s) en raison des exigences de format."
       }
+    },
+    "wizard": {
+      "actions": {
+        "cancel": "Annuler",
+        "back": "Précédent",
+        "next": "Suivant",
+        "finish": "Terminer"
+      },
+      "stepStack": "Étape {{currentStep}} sur {{totalSteps}}"
     },
     "severity": {
       "critical": "Critique ",
@@ -78,15 +94,6 @@
       "dotted": "Recherche..."
     },
     "table": {
-      "column": {
-        "name": "Première colonne"
-      },
-      "column2": {
-        "name": "Deuxième colonne"
-      },
-      "column3": {
-        "name": "Troisième colonne"
-      },
       "columnDropdown": {
         "ascending": "Ordre croissant",
         "descending": "Ordre décroissant",
@@ -95,7 +102,7 @@
         "resetFilters": "Réinitialiser le filtre"
       },
       "columnsSettings": {
-        "header": "Paramètres des colonnes",
+        "header": "Paramètres du tableau",
         "selectAll": "Tout sélectionner",
         "columns": "Colonnes",
         "grouping": "Groupe",
@@ -103,6 +110,16 @@
         "noGrouping": "Sans groupe",
         "apply": "Appliquer",
         "cancel": "Annuler",
+        "columnTitles": {
+        "name": "Nom",
+        "country": "Pays",
+        "age": "Âge",
+        "city": "Ville",
+        "date": "Date",
+        "isSortable": "Est triable",
+        "sorter": "Trieur",
+        "sorterIsSortable": "La fonction de tri est disponible"
+        },
         "filtering": {
           "add": "Ajouter",
           "clearAll": "Tout effacer",
@@ -111,7 +128,28 @@
           "from": "de",
           "to": "à ",
           "value": "Valeur"
-        }
+        },
+        "columnHideIsUnavailable": "Le masquage des colonnes n'est pas disponible"
+      },
+      "filterOperation": {
+        "⊆": "Contient",
+        "⊄": "Ne contient pas",
+        "cont_and": "Contient (ET)",
+        "cont_or": "Contient (OU)",
+        "ncont_or": "Ne contient pas",
+        "*=": "Regexp",
+        "empty": "Vide",
+        "nempty": "Pas vide",
+        "range": "Dans",
+        "nrange": "Hors"
+      },
+      "filterTag": {
+        "⊆": "contient {{value}}",
+        "⊄": "ne contient pas {{value}}",
+        "empty": "est vide",
+        "nempty": "n'est pas vide",
+        "range": "Dans la plage {{from}}–{{to}}",
+        "nrange": "Hors de la plage {{from}}–{{to}}"
       },
       "groupingEmpty": "Autres"
     },
@@ -125,20 +163,56 @@
     },
     "actionBar": {
       "unsavedChanges": "Modifications en attente",
-      "save": "Enregistrer",
+      "save": "Appliquer",
       "cancel": "Annuler"
     },
     "textarea": {
       "wordsCount": "{{count}} sur {{total}}"
     },
     "menu": {
+      "favoritesNavItem": "Signets",
       "navUserItem": {
         "userProps": {
           "status": {
             "available": "Présent",
-            "unavailable": "Unavailable"
+            "unavailable": "Indisponible"
           }
         }
+      }
+    },
+    "expand": {
+      "toExpand": "Développer",
+      "toCollapse": "Réduire"
+    },
+    "codeCompare": {
+      "compareMode": "Mode de comparaison",
+      "unified": "Unifié",
+      "split": "Divisé",
+      "loader": "Téléchargement des versions pour comparaison…",
+      "totalChanges": "Nombre total de changements :",
+      "collapseAll": "Réduire tout",
+      "expandAll": "Développer tout",
+      "expandLines": "Développer {{count}} lignes",
+      "empty": "Les deux fichiers sont vides. La comparaison n'est pas possible.",
+      "noChanges": "Aucun changement n'a été constaté entre les versions",
+      "basicVersion": "Version de base",
+      "comparableVersion": "Version comparable"
+    },
+    "licenseCard": {
+      "status": "État de la clé de licence",
+      "number": "Numéro de clé de licence",
+      "remaining": "Restant",
+      "activationDate": "Date d'activation",
+      "expirationDate": "Date d'expiration",
+      "term": "Durée",
+      "dayLeft": "{{count}} jour restant",
+      "daysLeft": "{{count}} jours restants",
+      "termDays": "{{count}} jours"
+    },
+    "input": {
+      "password": {
+        "hide": "Masquer",
+        "show": "Afficher"
       }
     }
   }

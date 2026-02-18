@@ -3,7 +3,7 @@ import { useTheme } from '@design-system/theme'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls, sbSetDefaultValue } from '@sb/helpers'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react-webpack5'
 import React from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
@@ -13,7 +13,7 @@ import { Anchor } from './Anchor/Anchor'
 import { AnchorProps } from './Anchor/types'
 
 const meta: Meta<AnchorProps> = {
-  title: 'Hexa UI Components/Anchor',
+  title: 'Deprecated/Anchor',
   component: Anchor,
   argTypes: {
     affix: {
@@ -68,11 +68,12 @@ const meta: Meta<AnchorProps> = {
     klId: 'anchor-kl-id'
   },
   parameters: {
-    badges: [badges.stable, badges.reviewedByDesign],
+    badges: [badges.deprecated],
+    deprecatedLink: 'Hexa UI Components/AnchorNavigation',
     docs: {
       page: withMeta(MetaData)
     },
-    design: MetaData.figmaView
+    design: MetaData.pixsoView
   }
 }
 export default meta

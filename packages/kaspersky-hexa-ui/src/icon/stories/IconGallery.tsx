@@ -27,7 +27,7 @@ const IconWrapper = styled.span`
 `
 
 export const IconGallery = (props: { color: string }) => {
-  const folderSizes = [icons8, icons16, icons24, icons24, icons32, icons40, icons48]
+  const folderSizes = [icons8, icons16, icons24, icons32, icons40, icons48]
   const folderSizesNames = ['Size 8', 'Size 16', 'Size 24', 'Size 32', 'Size 40', 'Size 48']
   return (<>
     <div>
@@ -35,17 +35,17 @@ export const IconGallery = (props: { color: string }) => {
         folderSizes.map((size, index) => <>
           <StoryLabel label={folderSizesNames[index]} vertical/>
           <SizeWrapper key={`size${index}-key`}>
-          { Object.keys(size).map((iconName, index) => {
-            // @ts-ignore
-            const SpecificStory = size[iconName]
-            return <IconWrapper key={`${size}-${iconName}-key`}>
-              <Tooltip text={iconName}><SpecificStory color={props.color}/></Tooltip>
-            </IconWrapper>
-          })}
+            {Object.keys(size).map((iconName) => {
+              // @ts-ignore
+              const SpecificStory = size[iconName]
+              return <IconWrapper key={`${size}-${iconName}-key`}>
+                <Tooltip text={iconName}><SpecificStory color={props.color}/></Tooltip>
+              </IconWrapper>
+            })}
           </SizeWrapper>
         </>)
       }
     </div>
-    </>
+  </>
   )
 }

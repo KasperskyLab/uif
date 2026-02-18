@@ -1,6 +1,5 @@
+import { getFromProps } from '@helpers/getFromProps'
 import { css } from 'styled-components'
-
-import { getFromProps } from '../../helpers/getFromProps'
 
 import { SeverityCssConfig } from './types'
 
