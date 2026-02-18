@@ -122,9 +122,10 @@
     "uuid": "9.0.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "7.16.7",
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
-    "@kaspersky/dev-tools": "3.4.1",
+    "@kaspersky/dev-tools": "2.32.2",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-replace": "6.0.2",
     "@rollup/plugin-typescript": "12.1.2",
@@ -153,6 +154,10 @@
     "babel-jest": "29.7.0",
     "babel-loader": "8.2.3",
     "babel-plugin-inline-react-svg": "2.0.1",
+    "babel-plugin-styled-components": "2.1.4",
+    "@babel/plugin-transform-logical-assignment-operators": "7.25.9",
+    "@babel/plugin-transform-nullish-coalescing-operator": "7.25.9",
+    "@babel/plugin-transform-optional-chaining": "7.25.9",
     "conventional-changelog-cli": "5.0.0",
     "del": "6.0.0",
     "dotenv": "16.0.0",
