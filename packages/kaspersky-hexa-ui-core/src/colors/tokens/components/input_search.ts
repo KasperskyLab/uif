@@ -13,9 +13,10 @@ export const cssVarString = `
   --input_search--text--disabled--placeholder: var(--color--neutral_400);
   --input_search--border--enabled: var(--color--neutral_350);
   --input_search--border--hover: var(--color--marina_400);
+  --input_search--border--disabled: var(--color--neutral_a_100);
   --input_search--bg--enabled: var(--color--neutral_0);
   --input_search--bg--hover: var(--color--neutral_0);
-  --input_search--bg--disabled: var(--color--neutral_200);
+  --input_search--bg--disabled: var(--color--neutral_a_100);
   --input_search--icon--enabled--controls: var(--color--neutral_850);
   --input_search--icon--hover--controls: var(--color--neutral_850);
   --input_search--icon--disabled--controls: var(--color--neutral_400);
@@ -33,9 +34,10 @@ export const cssVarString = `
   --input_search--text--disabled--placeholder: var(--color--neutral_500);
   --input_search--border--enabled: var(--color--neutral_550);
   --input_search--border--hover: var(--color--marina_500);
+  --input_search--border--disabled: var(--color--neutral_aw_800);
   --input_search--bg--enabled: var(--color--neutral_850);
   --input_search--bg--hover: var(--color--neutral_850);
-  --input_search--bg--disabled: var(--color--neutral_700);
+  --input_search--bg--disabled: var(--color--neutral_aw_800);
   --input_search--icon--enabled--controls: var(--color--neutral_250);
   --input_search--icon--hover--controls: var(--color--neutral_250);
   --input_search--icon--disabled--controls: var(--color--neutral_500);

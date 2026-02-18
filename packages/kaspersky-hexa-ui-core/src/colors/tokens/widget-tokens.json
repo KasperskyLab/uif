@@ -1,0 +1,2837 @@
+{
+  "version": "1.0.4",
+  "metadata": {},
+  "collections": [
+    {
+      "name": "widget_tokens",
+      "modes": [
+        {
+          "name": "Light",
+          "variables": [
+            {
+              "name": "widget/bg/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_0"
+              }
+            },
+            {
+              "name": "widget/bg/selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_50"
+              }
+            },
+            {
+              "name": "widget/border/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_300"
+              }
+            },
+            {
+              "name": "widget/border/selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_500"
+              }
+            },
+            {
+              "name": "widget_header/text/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "widget_header/text/hover",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_600"
+              }
+            },
+            {
+              "name": "widget_header/text/active",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_700"
+              }
+            },
+            {
+              "name": "widget_header/text/description",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "legend/title",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "legend/description",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "legend_item/text/primary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "legend_item/icon/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "legend_item/text/secondary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "legend_item/bg/hover",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/a/neutral_a_100"
+              }
+            },
+            {
+              "name": "axis/border/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_350"
+              }
+            },
+            {
+              "name": "axis/text/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_300"
+              }
+            },
+            {
+              "name": "widget_text/bg/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_0"
+              }
+            },
+            {
+              "name": "widget_text/bg/hover",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_0"
+              }
+            },
+            {
+              "name": "chart/overlay",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_0"
+              }
+            },
+            {
+              "name": "widget_text/text/enabled/value",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "widget_text/icon/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "widget_text/border/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_350"
+              }
+            },
+            {
+              "name": "widget_text/border/hover",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_400"
+              }
+            },
+            {
+              "name": "widget_text/text/enabled/placeholder",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_400"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_400"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_500"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_600"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_700"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_300"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_400"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_500"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_600"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_700"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_300"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_400"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_500"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_600"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_700"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_300"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_400"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_500"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_600"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_700"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_300"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_400"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_500"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_600"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_700"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_300"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_400"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_500"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_600"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_700"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_300"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_400"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_500"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_600"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_700"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_300"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_400"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_500"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_600"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_700"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_300"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_400"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_500"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_600"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_700"
+              }
+            },
+            {
+              "name": "chart/base/series/red/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_300"
+              }
+            },
+            {
+              "name": "chart/base/series/red/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_400"
+              }
+            },
+            {
+              "name": "chart/base/series/red/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_500"
+              }
+            },
+            {
+              "name": "chart/base/series/red/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_600"
+              }
+            },
+            {
+              "name": "chart/base/series/red/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_700"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_50"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_100"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_200"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_50"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_100"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_200"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_50"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_100"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_200"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_50"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_100"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_200"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_50"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_100"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_200"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_50"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_100"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_200"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_50"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_100"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_200"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_50"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_100"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_200"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_50"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_100"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_200"
+              }
+            },
+            {
+              "name": "chart/base/series/red/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_50"
+              }
+            },
+            {
+              "name": "chart/base/series/red/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_100"
+              }
+            },
+            {
+              "name": "chart/base/series/red/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_200"
+              }
+            },
+            {
+              "name": "chart/pie/bg/other",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "chart/line/bg/gradient_stop",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/aw/neutral_aw_0"
+              }
+            },
+            {
+              "name": "chart/line/border/regression",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_300"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_400"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_500"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_600"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_700"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_50"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_100"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_200"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/not active",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_400"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_marina/0",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_100"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_marina/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_400"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_marina/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_700"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/critical",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_500"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/high",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_400"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/medium",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_500"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/low",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/info",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_500"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/positive",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_500"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/new",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_400"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/update",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_500"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/in progress",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_500"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/not active",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_50"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/critical",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_50"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/high",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_50"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/medium",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_50"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/low",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_50"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/info",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_50"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/positive",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_50"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/new",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_50"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/update",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_50"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/in progress",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_50"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/resolved",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_50"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/in incident",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_50"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/resolved",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_400"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/in incident",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_500"
+              }
+            },
+            {
+              "name": "chart/pie/border/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_0"
+              }
+            },
+            {
+              "name": "chart/pie_total/text/value/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/speed/text/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/bar/text/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/bar/border/regression",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/counter/text/primary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/counter/text/secondary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "chart/counter_indicator/text/positive",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_500"
+              }
+            },
+            {
+              "name": "chart/counter_indicator/text/critical",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_500"
+              }
+            },
+            {
+              "name": "chart/counter_indicator/text/neutral",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "chart/counter_indicator/icon/positive",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_500"
+              }
+            },
+            {
+              "name": "chart/counter_indicator/icon/critical",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_500"
+              }
+            },
+            {
+              "name": "chart/counter_indicator/icon/neutral",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "chart/segmented_level_bar/bg/scale/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_0"
+              }
+            },
+            {
+              "name": "chart/segmented_level_bar/text/scale/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/segmented_level_bar/text/graph_indncator/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/segmented_level_bar/border/graph_indncator/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/segmented_level_bar/bg/graph_indncator/base",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/speed/icon/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/speed/scale/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/pie_total/text/description/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_emerald/0",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_100"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_emerald/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_400"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_emerald/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_700"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_purple/0",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_100"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_purple/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_400"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_purple/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_700"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_neutral/0",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_500"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_neutral/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_300"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_neutral/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_100"
+              }
+            },
+            {
+              "name": "widget_image/bg/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_100"
+              }
+            },
+            {
+              "name": "widget_image/border/focus",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_300"
+              }
+            },
+            {
+              "name": "widget_image/icon/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "widget_image/text/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Dark",
+          "variables": [
+            {
+              "name": "widget/bg/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "widget/bg/selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_900"
+              }
+            },
+            {
+              "name": "widget/border/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_600"
+              }
+            },
+            {
+              "name": "widget/border/selected",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_400"
+              }
+            },
+            {
+              "name": "widget_header/text/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "widget_header/text/hover",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_300"
+              }
+            },
+            {
+              "name": "widget_header/text/active",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_200"
+              }
+            },
+            {
+              "name": "widget_header/text/description",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "legend/title",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "legend/description",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "legend_item/text/primary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "legend_item/icon/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "legend_item/text/secondary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "legend_item/bg/hover",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/aw/neutral_aw_800"
+              }
+            },
+            {
+              "name": "axis/border/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_550"
+              }
+            },
+            {
+              "name": "axis/text/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_600"
+              }
+            },
+            {
+              "name": "widget_text/bg/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "widget_text/bg/hover",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/overlay",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "widget_text/text/enabled/value",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "widget_text/icon/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "widget_text/border/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_550"
+              }
+            },
+            {
+              "name": "widget_text/border/hover",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_500"
+              }
+            },
+            {
+              "name": "widget_text/text/enabled/placeholder",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_500"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_500"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_400"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_300"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_200"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_600"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_500"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_400"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_300"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_200"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_600"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_500"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_400"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_300"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_200"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_600"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_500"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_400"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_300"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_200"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_600"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_500"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_400"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_300"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_200"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_600"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_500"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_400"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_300"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_200"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_600"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_500"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_400"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_300"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_200"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_600"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_500"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_400"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_300"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_200"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_600"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_500"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_400"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_300"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_200"
+              }
+            },
+            {
+              "name": "chart/base/series/red/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_600"
+              }
+            },
+            {
+              "name": "chart/base/series/red/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_500"
+              }
+            },
+            {
+              "name": "chart/base/series/red/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_400"
+              }
+            },
+            {
+              "name": "chart/base/series/red/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_300"
+              }
+            },
+            {
+              "name": "chart/base/series/red/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_200"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_900"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_800"
+              }
+            },
+            {
+              "name": "chart/base/series/marina/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_700"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_900"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_800"
+              }
+            },
+            {
+              "name": "chart/base/series/violet/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_700"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_900"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_800"
+              }
+            },
+            {
+              "name": "chart/base/series/marengo/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_700"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_900"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_800"
+              }
+            },
+            {
+              "name": "chart/base/series/grass/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "grass/grass_700"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_900"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_800"
+              }
+            },
+            {
+              "name": "chart/base/series/purple/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_700"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_900"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_800"
+              }
+            },
+            {
+              "name": "chart/base/series/coldgrey/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_700"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_900"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_800"
+              }
+            },
+            {
+              "name": "chart/base/series/orange/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "orange/orange_700"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_900"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_800"
+              }
+            },
+            {
+              "name": "chart/base/series/emerald/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_700"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_900"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_800"
+              }
+            },
+            {
+              "name": "chart/base/series/yellow/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_700"
+              }
+            },
+            {
+              "name": "chart/base/series/red/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_900"
+              }
+            },
+            {
+              "name": "chart/base/series/red/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_800"
+              }
+            },
+            {
+              "name": "chart/base/series/red/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_700"
+              }
+            },
+            {
+              "name": "chart/pie/bg/other",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "chart/line/bg/gradient_stop",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/a/neutral_a_0"
+              }
+            },
+            {
+              "name": "chart/line/border/regression",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_0"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/primary/300",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_500"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/primary/400",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_400"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/primary/500",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_300"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/primary/600",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_200"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/primary/700",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_100"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/subtle/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_800"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/subtle/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_700"
+              }
+            },
+            {
+              "name": "chart/base/series/neutral/subtle/200",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_600"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/not active",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_500"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_marina/0",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_200"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_marina/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_500"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_marina/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_800"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/critical",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_400"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/high",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_300"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/medium",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_500"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/low",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/info",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_400"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/positive",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_400"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/new",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_300"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/update",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_400"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/in progress",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_400"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/not active",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/critical",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_900"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/high",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_900"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/medium",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "yellow/yellow_900"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/low",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/info",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_900"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/positive",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_900"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/new",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marengo/marengo_900"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/update",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "violet/violet_900"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/in progress",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "marina/marina_900"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/resolved",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_900"
+              }
+            },
+            {
+              "name": "chart/base/status/subtle/in incident",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_900"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/resolved",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "coldgrey/coldgrey_300"
+              }
+            },
+            {
+              "name": "chart/base/status/primary/in incident",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_400"
+              }
+            },
+            {
+              "name": "chart/pie/border/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/pie_total/text/value/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "chart/speed/text/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "chart/bar/text/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "chart/bar/border/regression",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_0"
+              }
+            },
+            {
+              "name": "chart/counter/text/primary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "chart/counter/text/secondary",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "chart/counter_indicator/text/positive",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_400"
+              }
+            },
+            {
+              "name": "chart/counter_indicator/text/critical",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_400"
+              }
+            },
+            {
+              "name": "chart/counter_indicator/text/neutral",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "chart/counter_indicator/icon/positive",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_400"
+              }
+            },
+            {
+              "name": "chart/counter_indicator/icon/critical",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "red/red_400"
+              }
+            },
+            {
+              "name": "chart/counter_indicator/icon/neutral",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "chart/segmented_level_bar/bg/scale/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_850"
+              }
+            },
+            {
+              "name": "chart/segmented_level_bar/text/scale/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "chart/segmented_level_bar/text/graph_indncator/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "chart/segmented_level_bar/border/graph_indncator/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "chart/segmented_level_bar/bg/graph_indncator/base",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "chart/speed/icon/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "chart/speed/scale/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_250"
+              }
+            },
+            {
+              "name": "chart/pie_total/text/description/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_emerald/0",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_200"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_emerald/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_500"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_emerald/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "emerald/emerald_800"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_purple/0",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_200"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_purple/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_500"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_purple/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "purple/purple_800"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_neutral/0",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_200"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_neutral/50",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_400"
+              }
+            },
+            {
+              "name": "chart/base/monochrome/gradient_neutral/100",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_600"
+              }
+            },
+            {
+              "name": "widget_image/bg/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_800"
+              }
+            },
+            {
+              "name": "widget_image/border/focus",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_600"
+              }
+            },
+            {
+              "name": "widget_image/icon/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            },
+            {
+              "name": "widget_image/text/enabled",
+              "type": "color",
+              "isAlias": true,
+              "value": {
+                "name": "neutral/neutral_450"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -12,7 +12,7 @@ export const cssVarString = `
   --action_button--bg--filled--enabled: var(--color--neutral_150);
   --action_button--bg--filled--hover: var(--color--neutral_200);
   --action_button--bg--filled--active: var(--color--neutral_250);
-  --action_button--bg--filled--disabled: var(--color--neutral_100);
+  --action_button--bg--filled--disabled: var(--color--neutral_a_100);
   --action_button--bg--ghost_inverted--enabled: var(--color--neutral_aw_0);
   --action_button--bg--ghost_inverted--hover: var(--color--neutral_aw_0);
   --action_button--bg--ghost_inverted--active: var(--color--neutral_aw_0);
@@ -77,7 +77,7 @@ export const cssVarString = `
   --action_button--bg--filled--enabled: var(--color--neutral_750);
   --action_button--bg--filled--hover: var(--color--neutral_700);
   --action_button--bg--filled--active: var(--color--neutral_650);
-  --action_button--bg--filled--disabled: var(--color--neutral_800);
+  --action_button--bg--filled--disabled: var(--color--neutral_aw_800);
   --action_button--bg--ghost_inverted--enabled: var(--color--neutral_a_0);
   --action_button--bg--ghost_inverted--hover: var(--color--neutral_a_0);
   --action_button--bg--ghost_inverted--active: var(--color--neutral_a_0);

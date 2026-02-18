@@ -9,7 +9,7 @@ export const cssVarString = `
   --status--icon--not_active: var(--color--neutral_400);
   --status--icon--critical: var(--color--red_500);
   --status--icon--high: var(--color--red_400);
-  --status--icon--medium: var(--color--yellow_500);
+  --status--icon--medium: var(--color--yellow_400);
   --status--icon--low: var(--color--neutral_450);
   --status--icon--info: var(--color--purple_500);
   --status--icon--positive: var(--color--emerald_500);
@@ -44,7 +44,7 @@ export const cssVarString = `
   --status_card--bg--warning_hexagon: var(--color--yellow_400);
   --status_card--bg--error_hexagon: var(--color--red_500);
   --status_card--bg--critical_hexagon: var(--color--red_500);
-  --status_card--bg--success_hexagon: var(--color--emerald_500);
+  --status_card--bg--success_hexagon: var(--color--emerald_400);
   --status_card--text--default: var(--color--neutral_850);
   --status_card--border--critical: var(--color--red_200);
   --status_card--border--error: var(--color--red_200);

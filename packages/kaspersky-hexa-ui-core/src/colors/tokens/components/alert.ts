@@ -11,8 +11,8 @@ export const cssVarString = `
   --alert--critical--border: var(--color--red_500);
   --alert--warning--bg: var(--color--yellow_50);
   --alert--warning--text: var(--color--neutral_850);
-  --alert--warning--icon: var(--color--yellow_500);
-  --alert--warning--border: var(--color--yellow_500);
+  --alert--warning--icon: var(--color--yellow_400);
+  --alert--warning--border: var(--color--yellow_400);
   --alert--success--bg: var(--color--emerald_50);
   --alert--success--text: var(--color--neutral_850);
   --alert--success--icon: var(--color--emerald_500);

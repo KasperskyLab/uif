@@ -5,6 +5,20 @@ export const cssVarString = `
 :root,
 .theme-light,
 .hexa-ui-light-theme {
+  --tag--ai--bg--violet--enabled: var(--color--violet_500);
+  --tag--ai--bg--violet--hover: var(--color--violet_600);
+  --tag--ai--bg--violet--active: var(--color--violet_700);
+  --tag--ai--bg--marina--enabled: var(--color--marina_500);
+  --tag--ai--bg--marina--hover: var(--color--marina_600);
+  --tag--ai--bg--marina--active: var(--color--marina_700);
+  --tag--ai--bg--green--enabled: var(--color--kaspersky_green_300);
+  --tag--ai--bg--green--green_0: var(--color--kaspersky_green_300_0);
+  --tag--ai--bg--green--hover: var(--color--kaspersky_green_300);
+  --tag--ai--bg--green--hover_0: var(--color--kaspersky_green_300_0);
+  --tag--ai--bg--green--active: var(--color--kaspersky_green_600);
+  --tag--ai--bg--green--active_0: var(--color--kaspersky_green_600_0);
+  --tag--ai--icon: var(--color--neutral_0);
+  --tag--ai--text: var(--color--neutral_0);
   --tag--red--text: var(--color--red_100);
   --tag--red--text_outlined: var(--color--red_600);
   --tag--red--icon: var(--color--red_100);
@@ -27,14 +41,14 @@ export const cssVarString = `
   --tag--orange--bg--enabled_outlined: var(--color--orange_50);
   --tag--orange--bg--hover_outlined: var(--color--orange_100);
   --tag--orange--bg--active_outlined: var(--color--orange_200);
-  --tag--yellow--text: var(--color--yellow_50);
-  --tag--yellow--text_outlined: var(--color--yellow_600);
-  --tag--yellow--icon: var(--color--yellow_50);
-  --tag--yellow--icon_outlined: var(--color--yellow_600);
+  --tag--yellow--text: var(--color--yellow_700);
+  --tag--yellow--text_outlined: var(--color--yellow_700);
+  --tag--yellow--icon: var(--color--yellow_700);
+  --tag--yellow--icon_outlined: var(--color--yellow_700);
   --tag--yellow--border_outlined: var(--color--yellow_200);
-  --tag--yellow--bg--enabled: var(--color--yellow_500);
-  --tag--yellow--bg--hover: var(--color--yellow_600);
-  --tag--yellow--bg--active: var(--color--yellow_700);
+  --tag--yellow--bg--enabled: var(--color--yellow_400);
+  --tag--yellow--bg--hover: var(--color--yellow_500);
+  --tag--yellow--bg--active: var(--color--yellow_600);
   --tag--yellow--bg--enabled_outlined: var(--color--yellow_50);
   --tag--yellow--bg--hover_outlined: var(--color--yellow_100);
   --tag--yellow--bg--active_outlined: var(--color--yellow_200);
@@ -141,6 +155,20 @@ export const cssVarString = `
 
 .theme-dark,
 .hexa-ui-dark-theme {
+  --tag--ai--bg--violet--enabled: var(--color--violet_400);
+  --tag--ai--bg--violet--hover: var(--color--violet_300);
+  --tag--ai--bg--violet--active: var(--color--violet_200);
+  --tag--ai--bg--marina--enabled: var(--color--marina_400);
+  --tag--ai--bg--marina--hover: var(--color--marina_300);
+  --tag--ai--bg--marina--active: var(--color--marina_200);
+  --tag--ai--bg--green--enabled: var(--color--kaspersky_green_200);
+  --tag--ai--bg--green--green_0: var(--color--kaspersky_green_200_0);
+  --tag--ai--bg--green--hover: var(--color--kaspersky_green_200);
+  --tag--ai--bg--green--hover_0: var(--color--kaspersky_green_200_0);
+  --tag--ai--bg--green--active: var(--color--kaspersky_green_100);
+  --tag--ai--bg--green--active_0: var(--color--kaspersky_green_100_0);
+  --tag--ai--icon: var(--color--neutral_850);
+  --tag--ai--text: var(--color--neutral_850);
   --tag--red--text: var(--color--red_700);
   --tag--red--text_outlined: var(--color--red_300);
   --tag--red--icon: var(--color--red_700);
@@ -164,9 +192,9 @@ export const cssVarString = `
   --tag--orange--bg--hover_outlined: var(--color--orange_800);
   --tag--orange--bg--active_outlined: var(--color--orange_700);
   --tag--yellow--text: var(--color--yellow_700);
-  --tag--yellow--text_outlined: var(--color--yellow_300);
+  --tag--yellow--text_outlined: var(--color--yellow_400);
   --tag--yellow--icon: var(--color--yellow_700);
-  --tag--yellow--icon_outlined: var(--color--yellow_300);
+  --tag--yellow--icon_outlined: var(--color--yellow_400);
   --tag--yellow--border_outlined: var(--color--yellow_700);
   --tag--yellow--bg--enabled: var(--color--yellow_200);
   --tag--yellow--bg--hover: var(--color--yellow_100);
