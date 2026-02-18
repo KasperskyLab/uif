@@ -81,7 +81,7 @@
     "@codemirror/language": "6.10.8",
     "@codemirror/state": "6.5.0",
     "@codemirror/view": "6.36.1",
-    "@kaspersky/hexa-ui-core": "0.17.0",
+    "@kaspersky/hexa-ui-core": "0.17.2",
     "@lezer/highlight": "1.2.1",
     "@popperjs/core": "2.11.2",
     "@tanstack/react-virtual": "3.10.1",
@@ -124,7 +124,7 @@
   "devDependencies": {
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
-    "@kaspersky/dev-tools": "3.0.0",
+    "@kaspersky/dev-tools": "3.4.1",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-replace": "6.0.2",
     "@rollup/plugin-typescript": "12.1.2",
