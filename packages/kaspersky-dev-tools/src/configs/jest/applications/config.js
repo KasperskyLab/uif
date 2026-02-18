@@ -39,7 +39,8 @@ const serverTestsConfig = {
   testMatch: ['**/tests/server/**/*.test.js'],
   collectCoverage: shouldCollectCoverage(),
   collectCoverageFrom: [
-    '<rootDir>/server/**/*.js'
+    '<rootDir>/server/**',
+    '!<rootDir>/server/**/*.json',
   ]
 }
 
@@ -85,6 +86,7 @@ const testTypeEnum = {
 
 /**
  * Function to set collect coverage option to truthy or falsy conditions
+ * TODO: Gusarov: Make ability to pass coverage property using CLI to ignore settings
  * @returns { Boolean } should coverage be collected or not
  */
 function shouldCollectCoverage () {

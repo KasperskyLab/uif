@@ -1,11 +1,10 @@
 node_modules/
+tests/
+src/
 .env
 .gitignore
-gulpfile.js
-CHANGELOG.md
+eslint.config.js
+eslint.config.mjs
 jest.config.js
-yarn-error.log
-__tests__/
-coverage/
-jest.config.json
-*.md
+tsconfig.json
+README.md

@@ -1,5 +1,0 @@
-{
-  "linters": {
-    "*.(js|ts|jsx|tsx)": "eslint --fix"
-  }
-}
