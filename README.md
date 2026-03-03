@@ -13,7 +13,8 @@ Currently available:
 
 * [@kaspersky/hexa-ui](./packages/kaspersky-hexa-ui/) — Hexa UI, Kaspersky Design System
 * [@kaspersky/hexa-ui-icons](./packages/kaspersky-hexa-ui-icons/) — Hexa UI icon pack
-* [@kaspersky/hexa-ui-icons](./packages/kaspersky-hexa-ui-core/) — Hexa UI design tokens
+* [@kaspersky/hexa-ui-core](./packages/kaspersky-hexa-ui-core/) — Hexa UI design tokens
+* [@kaspersky/hexa-ui-charts](./packages/kaspersky-hexa-ui-charts/) — Hexa UI charts and widgets
 * [@kaspersky/ui-builder](./packages/kaspersky-ui-builder/) — WYSIWYG editor to create HTML forms
 * [@kaspersky/runtime](./packages/kaspersky-runtime/) — Application Bus
 * [@kaspersky/dev-tools](./packages/kaspersky-dev-tools/) — Set of configs for ESLint, Babel, TypeScript
