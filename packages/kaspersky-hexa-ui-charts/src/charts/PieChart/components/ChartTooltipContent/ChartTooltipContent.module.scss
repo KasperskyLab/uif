@@ -1,0 +1,20 @@
+.row {
+  padding: 4px 6px;
+  height: 24px;
+
+  &.selected {
+    background-color: var(--legend_item--bg--hover);
+    border-radius: 4px;
+  }
+}
+
+.dot {
+  height: 16px;
+  width: 8px;
+  border-radius: 4px;
+  margin-bottom: 2px;
+}
+
+.title {
+  flex: 1 auto;
+}

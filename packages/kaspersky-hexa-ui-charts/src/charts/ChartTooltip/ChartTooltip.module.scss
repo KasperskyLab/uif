@@ -1,0 +1,11 @@
+.disablePointEvents {
+  pointer-events: none !important;
+
+  & :global(.ant-popover-inner) {
+    max-height: 360px !important;
+  }
+
+  :global(.ant-popover-arrow), :global(.ant-popover-arrow::before) {
+    pointer-events: none !important;
+  }
+}

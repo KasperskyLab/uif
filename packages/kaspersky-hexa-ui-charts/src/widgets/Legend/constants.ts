@@ -1,0 +1,1 @@
+export const DEFAULT_PERCENT_FONT_SIZE = 8.5

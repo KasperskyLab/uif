@@ -1,0 +1,72 @@
+.counterValues {
+  position: relative;
+}
+
+.value {
+  text-align: right;
+}
+
+.previousValueWrapper {
+  flex: 1;
+  position: relative;
+  top: 0;
+
+  .previousValue {
+    text-align: left;
+  }
+}
+
+.valueWrapper {
+  &.withPreviousValue {
+    flex: 1;
+  }
+}
+
+.trend {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 12px;
+  left: calc(50% + 4px);
+
+  &.bigger {
+    transform: rotate(180deg);
+  }
+
+  &.equal {
+    color: var(--chart--counter_indicator--text--neutral);
+  }
+}
+
+.description {
+  width: 100%;
+  text-align: center;
+}
+
+.good {
+  color: var(--chart--counter_indicator--text--positive) !important;
+}
+
+svg.good {
+  color: var(--chart--counter_indicator--icon--positive) !important;
+}
+
+.bad {
+  color: var(--chart--counter_indicator--text--critical) !important;
+}
+bad.good {
+  color: var(--chart--counter_indicator--icon-critical) !important;
+}
+
+.equal {
+  color: var(--text--secondary) !important;
+}
+
+.description,
+.valueWrapper,
+.value,
+.previousValueWrapper {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

@@ -1,0 +1,12 @@
+.disableAnimation {
+  transform: none !important;
+  transition: none !important;
+
+  & :global(.ant-popover-inner) {
+    max-height: 360px !important;
+  }
+
+  :global(.ant-popover-arrow), :global(.ant-popover-arrow::before) {
+    pointer-events: none !important;
+  }
+}

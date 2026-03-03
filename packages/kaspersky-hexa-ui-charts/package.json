@@ -1,0 +1,117 @@
+{
+  "name": "@kaspersky/hexa-ui-charts",
+  "version": "1.21.10",
+  "author": "AO Kaspersky Lab",
+  "description": "Kaspersky Hexa UI Design System Widgets and Charts",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/KasperskyLab/uif#readme",
+  "repository": "KasperskyLab/uif",
+  "bugs": {
+    "url": "https://github.com/KasperskyLab/uif/issues"
+  },
+  "keywords": [
+    "kaspersky",
+    "open single management platform",
+    "design system",
+    "ui kit",
+    "widgets",
+    "charts",
+    "storybook",
+    "hexa ui"
+  ],
+  "types": "./index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "require": "./src/index.js"
+    }
+  },
+  "scripts": {
+    "build": "rollup -c --bundleConfigAsCjs",
+    "watch": "rollup -c --bundleConfigAsCjs --watch",
+    "build-clean": "npm ci && npm run build",
+    "build-publish": "npm run build-clean && cd ./dist && npm publish",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build -o storybook/hexa-ui-charts",
+    "lint:fix": "eslint --cache --fix src --ext .ts,.tsx",
+    "lint": "tsc --noEmit && eslint src --ext .ts,.tsx"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "3.2.5",
+    "@kaspersky/dev-tools": "2.32.2",
+    "@rollup/plugin-commonjs": "26.0.1",
+    "@rollup/plugin-json": "6.1.0",
+    "@rollup/plugin-node-resolve": "15.2.3",
+    "@rollup/plugin-typescript": "12.1.2",
+    "@storybook/addon-essentials": "8.6.4",
+    "@storybook/addon-interactions": "8.6.4",
+    "@storybook/addon-onboarding": "8.6.4",
+    "@storybook/addon-webpack5-compiler-swc": "2.1.0",
+    "@storybook/blocks": "8.6.4",
+    "@storybook/react": "8.6.4",
+    "@storybook/react-webpack5": "8.6.4",
+    "@storybook/test": "8.6.4",
+    "@types/is-hotkey": "0.1.10",
+    "@types/lodash": "4.14.202",
+    "@types/react": "17.0.2",
+    "@types/styled-components": "5.1.34",
+    "@typescript-eslint/parser": "5.12.1",
+    "clsx": "2.1.1",
+    "dotenv": "16.0.0",
+    "eslint": "7.14.0",
+    "gulp": "4.0.2",
+    "jest": "26.1.0",
+    "rollup": "4.21.2",
+    "rollup-plugin-copy": "3.5.0",
+    "rollup-plugin-css-only": "4.5.2",
+    "rollup-plugin-import-css": "3.5.8",
+    "rollup-plugin-node-resolve": "5.2.0",
+    "rollup-plugin-peer-deps-external": "2.2.4",
+    "rollup-plugin-postcss": "4.0.2",
+    "rollup-plugin-scss": "4.0.1",
+    "rollup-plugin-typescript2": "0.31.2",
+    "sass": "1.60.0",
+    "sass-loader": "10.4.1",
+    "storybook": "8.6.4",
+    "storybook-addon-mock": "5.0.0",
+    "styled-components": "5.3.3",
+    "ts-node": "10.9.2"
+  },
+  "overrides": {
+    "es5-ext": "0.10.46",
+    "eslint-plugin-storybook": "0.6.15",
+    "slate-react": {
+      "react": "^17.x",
+      "react-dom": "^17.x"
+    },
+    "fork-ts-checker-webpack-plugin": "6.5.3"
+  },
+  "bundleDependencies": [
+    "style-inject"
+  ],
+  "dependencies": {
+    "@types/d3": "7.4.3",
+    "@wojtekmaj/color-utils": "3.2.1",
+    "d3": "7.9.0",
+    "date-fns": "2.28.0",
+    "is-hotkey": "^0.2.0",
+    "lodash": "4.17.23",
+    "slate": "^0.118.1",
+    "slate-dom": "^0.118.1",
+    "slate-history": "^0.113.1",
+    "slate-react": "^0.117.4",
+    "style-inject": "0.3.0",
+    "svg-round-corners": "0.4.3",
+    "victory": "37.3.6"
+  },
+  "peerDependencies": {
+    "@kaspersky/hexa-ui": "6.323.10",
+    "@kaspersky/hexa-ui-core": "0.17.2",
+    "@kaspersky/hexa-ui-icons": "2.13.4",
+    "eslint": "^6.0.0 || ^7.0.0 || ^8.0.0",
+    "react": "16.x || 17.x",
+    "react-dom": "16.x || 17.x",
+    "typescript": ">=4.0.0"
+  }
+}
