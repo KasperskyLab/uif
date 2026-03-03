@@ -1,0 +1,15 @@
+node_modules
+coverage
+.vscode/
+.idea
+lib
+_build
+.env
+.history
+esm/
+cjs/
+dist/
+!package-lock.json
+.eslintcache
+
+*storybook.log

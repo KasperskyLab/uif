@@ -1,0 +1,24 @@
+.imageWidgetContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: var(--placeholder--bg);
+  border-radius: 4px;
+
+  &.readonly {
+    background-color: inherit;
+  }
+
+  .notSelected {
+    width: 100%;
+    height: 100%;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+  }
+}

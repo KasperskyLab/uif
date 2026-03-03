@@ -1,0 +1,20 @@
+.simpleWidgetPieLine {
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 32px;
+  display: inline-flex;
+  flex-wrap: nowrap;
+  gap: 32px;
+}
+
+.widgetCols {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.simpleWidgetPieLineCol {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

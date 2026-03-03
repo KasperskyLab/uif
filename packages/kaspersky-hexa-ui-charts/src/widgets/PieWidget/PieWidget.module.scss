@@ -1,0 +1,19 @@
+.simpleWidgetPie {
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 32px;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.widgetCols {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.widgetDescription {
+  margin-top: 8px;
+  color: var(--text--secondary);
+}

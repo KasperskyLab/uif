@@ -1,0 +1,10 @@
+.pieLabel {
+  height: 100%;
+  padding-bottom: 16px; // bug with square height, need refactor
+
+  .pieLabelDescription {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+  }
+}

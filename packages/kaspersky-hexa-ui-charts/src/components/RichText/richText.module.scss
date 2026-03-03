@@ -1,0 +1,58 @@
+.editable {
+  padding: 8px;
+  min-height: 30px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  outline: none;
+
+  overflow: auto;
+
+  &.enabled {
+    &:hover {
+      outline: var(--focus--stroke) solid 1px;
+    }
+    &:focus {
+      outline: var(--focus--stroke) solid 2px;
+    }
+  }
+  
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+    height: 7px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+  }
+}
+
+.editableContainer {
+  .toolbar {
+    display: none;
+  }
+  &:focus-within .toolbar {
+    display: flex;
+  } 
+  h1,
+  h2,
+  h3 {
+    * {
+      color: inherit;
+      font-family: inherit;
+      font-weight: inherit;
+      font-style: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      -webkit-letter-spacing: inherit;
+      -moz-letter-spacing: inherit;
+      -ms-letter-spacing: inherit;
+      letter-spacing: inherit;
+      margin-bottom: inherit;
+    }
+  }
+  height: 100%;
+}

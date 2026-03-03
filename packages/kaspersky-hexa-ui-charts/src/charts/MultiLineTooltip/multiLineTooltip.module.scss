@@ -1,0 +1,47 @@
+.foreignObjectContainer {
+  overflow: visible;
+}
+
+.container {
+  position: absolute;
+  z-index: 1000;
+  width: max-content;
+  min-width: 240px;
+  transform: translate(-50%, 0);
+  background: var(--bg--base);
+  border-radius: 5px;
+  padding: 16px;
+  box-shadow:
+    0 8px 12px 0 rgb(0 0 0 / 15%),
+    0 0 1px 0 rgb(0 0 0 / 60%);
+  max-width: 540px;
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.dot {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+}
+
+.line {
+  stroke-width: 2px;
+}
+
+.name {
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.time {
+  grid-column: 1 / 4;
+}
+
+.timeIcon {
+  position: relative;
+  bottom: 1px;
+}

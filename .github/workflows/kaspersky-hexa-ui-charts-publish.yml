@@ -1,0 +1,20 @@
+name: "[publish] @kaspersky/hexa-ui-charts"
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: ./packages/kaspersky-hexa-ui-charts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm run build-clean
+      - run: cd ./dist && npm publish --provenance --access public

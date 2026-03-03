@@ -1,12 +1,12 @@
-name: "[storybook] @kaspersky/hexa-ui-icons"
+name: "[storybook] @kaspersky/hexa-ui-charts"
 
 on:
   push:
     branches:
       - "master"
     paths:
-      - 'packages/kaspersky-hexa-ui-icons/**'
-      - '.github/workflows/kaspersky-hexa-ui-icons-storybook.yml'
+      - 'packages/kaspersky-hexa-ui-charts/**'
+      - '.github/workflows/kaspersky-hexa-ui-charts-storybook.yml'
   workflow_dispatch:
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
       id-token: write
     defaults:
       run:
-        working-directory: ./packages/kaspersky-hexa-ui-icons
+        working-directory: ./packages/kaspersky-hexa-ui-charts
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -37,5 +37,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./packages/kaspersky-hexa-ui-icons/storybook/hexa-ui-icons
-          destination_dir: icons
+          publish_dir: ./packages/kaspersky-hexa-ui-charts/storybook/hexa-ui-charts
+          destination_dir: charts
