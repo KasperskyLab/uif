@@ -1,0 +1,17 @@
+.rootLayout {
+  display: flex;
+}
+
+.stickyMenuWrapper {
+  position: sticky;
+  top: 48px;
+  align-self: flex-start;
+  flex-shrink: 0;
+  max-height: calc(100vh - 48px);
+}
+
+.contentMenu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

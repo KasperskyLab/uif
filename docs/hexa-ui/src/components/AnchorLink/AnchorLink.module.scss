@@ -1,0 +1,72 @@
+.anchorLink {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: sticky;
+  top: 72px;
+  align-self: flex-start;
+
+  .list {
+    display: flex;
+  }
+
+  .line {
+    width: 1px;
+    background: var(--tabs--border);
+    margin-right: 4px;
+    border-radius: 1px;
+    position: relative;
+  }
+
+  .marker {
+    width: 2px;
+    height: 28px;
+    background: var(--tabs_item--border--selected--base);
+    border-radius: 2px;
+    transition: transform 0.2s ease;
+    transform: translateY(calc(var(--selected-index) * 28px));
+  }
+
+  .items {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .text {
+    display: flex;
+
+    &.selected { 
+        color: var(--tabs_item--text--selected--base);
+    }
+  }
+
+  .btn {
+    background: none;
+    border: none;
+    padding: 4px 16px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: var(--radius--m);
+    transition: background 0.2s ease;
+    width: 200px;
+    height: 28px;
+
+    &:hover {
+      background: var(--tabs_item--bg--unselected--hover);
+    }
+
+    &:active {
+      background: var(--tabs_item--bg--unselected--active);
+    }
+
+    &.selected {
+      &:hover {
+        background: var(--tabs_item--bg--selected--hover);
+      }
+
+      &:active {
+        background: var(--tabs_item--bg--selected--active);
+      }
+    }
+  }
+}
