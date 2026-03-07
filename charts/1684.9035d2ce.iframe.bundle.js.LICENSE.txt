@@ -8,6 +8,8 @@ object-assign
 
 /*! Use updateColors gulp task if you need to update colors. */
 
+/*! Use updateTypography gulp task if you need to update typography. */
+
 /**
  * @license React
  * react-is.production.min.js
