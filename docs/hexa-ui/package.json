@@ -1,0 +1,40 @@
+{
+  "name": "hexa-ui-docs",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@kaspersky/hexa-ui": "6.323.10",
+    "@kaspersky/hexa-ui-icons": "2.13.4",
+    "antd": "4.18.8",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-router-dom": "6.20.1",
+    "styled-components": "5.3.3"
+  },
+  "devDependencies": {
+    "@kaspersky/dev-tools": "3.4.1",
+    "@types/node": "^24.10.0",
+    "@types/react": "17.0.39",
+    "@types/react-dom": "17.0.11",
+    "@types/styled-components": "5.1.23",
+    "@vitejs/plugin-react": "^5.1.0",
+    "eslint": "9.39.1",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "16.5.0",
+    "jiti": "2.6.1",
+    "sass": "1.89.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "8.47.0",
+    "vite": "^7.2.2",
+    "vite-plugin-svgr": "4.5.0"
+  }
+}

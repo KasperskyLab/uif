@@ -1,0 +1,13 @@
+node_modules
+.vscode/
+.idea
+lib
+_build
+.env
+dist
+dist.zip
+.history
+/react
+esm/
+!package-lock.json
+.npmrc

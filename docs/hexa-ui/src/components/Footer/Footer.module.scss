@@ -1,0 +1,19 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  margin-top: auto;
+
+  padding: 24px;
+  background: var(--bg--section);
+}
+
+.isMain {
+  padding: 24px clamp(24px, 10vw, 220px);
+}
+
+.nowrap {
+  white-space: nowrap;
+}

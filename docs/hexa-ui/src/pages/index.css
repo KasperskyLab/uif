@@ -1,0 +1,60 @@
+/* css for main page */
+.welcome-image {
+  height: max-content;
+  flex-shrink: 0;
+  padding: 24px 0px;
+}
+
+.content-image {
+  display: flex;
+  align-items: center;
+}
+
+.link {
+  margin-left: auto;
+  padding-top: 10px;
+  white-space: nowrap;
+}
+
+.text-with-card {
+  display: flex;
+  width: 100%;
+}
+
+.card-image {
+  height: max-content;
+  flex-shrink: 0;
+  padding-top: 16px;
+  align-items: center;
+}
+
+.design-code-image {
+  height: max-content;
+  flex-shrink: 0;
+}
+
+.ant-layout-sider-children {
+  min-height: 100vh;
+}
+
+.main-content {
+  max-width: 1200px;
+}
+/* css for component page */
+.full-page {
+  background: var(--bg--base);
+  display: flex;
+  width: 100%;
+}
+
+.description-text {
+  padding-top: 8px;
+  padding-bottom: 16px;
+}
+
+.content {
+  padding: 24px;
+  max-width: 920px;
+  display: flex;
+  flex-direction: column;
+}
