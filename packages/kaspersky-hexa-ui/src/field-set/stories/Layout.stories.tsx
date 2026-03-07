@@ -28,7 +28,7 @@ import { AppLogo } from '@src/menu/stories/AppLogo'
 import { clickHandler } from '@src/menu/stories/CustomItem'
 import { beforeItems } from '@src/menu/stories/menu-items'
 import { getNotificationsIcon } from '@src/menu/stories/Notifications'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
  

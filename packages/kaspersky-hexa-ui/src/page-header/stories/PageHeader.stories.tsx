@@ -5,7 +5,7 @@ import { generateRoutes } from '@src/breadcrumbs/helpers'
 import { Button } from '@src/button'
 import { Textbox } from '@src/input'
 import { Tag } from '@src/tag'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { Placeholder, Settings } from '@kaspersky/hexa-ui-icons/24'

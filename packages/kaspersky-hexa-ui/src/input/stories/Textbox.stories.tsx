@@ -6,7 +6,7 @@ import { sbHideControls } from '@sb/helpers'
 import { Field } from '@src/field'
 import { clickHandler } from '@src/menu/stories/CustomItem'
 import { Notification } from '@src/notification'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 

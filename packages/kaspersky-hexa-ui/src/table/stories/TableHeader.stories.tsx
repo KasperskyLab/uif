@@ -4,7 +4,7 @@ import { ScrollableContainer } from '@sb/components/ScrollableContainer'
 import { StoryColumn } from '@sb/StoryComponents'
 import MetaData from '@src/table/__meta__/meta.json'
 import { ToolbarItems } from '@src/toolbar/types'
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
 

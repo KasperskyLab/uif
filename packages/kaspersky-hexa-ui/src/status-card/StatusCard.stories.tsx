@@ -4,7 +4,7 @@ import { withMeta } from '@sb/components/Meta'
 import { renderVariants } from '@sb/StoryComponents'
 import { Link } from '@src/link'
 import { Tag } from '@src/tag'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import MetaData from './__meta__/meta.json'

@@ -2,7 +2,7 @@ import { withDesignControls } from '@sb/components/designControls'
 import { withMeta } from '@sb/components/Meta'
 import { Grid, GridItem } from '@src/grid'
 import { HelpMessage } from '@src/help-message'
-import type { Meta, StoryObj } from '@storybook/react-webpack5'
+import type { Meta, StoryObj } from '@storybook/react'
 import React, { FC, useState } from 'react'
 
 import MetaData from './__meta__/meta.json'

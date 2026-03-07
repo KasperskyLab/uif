@@ -1,5 +1,5 @@
 import { badges } from '@sb/badges'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 
 import MetaData from '../__meta__/meta.json'
 import Tag from '../Tag'

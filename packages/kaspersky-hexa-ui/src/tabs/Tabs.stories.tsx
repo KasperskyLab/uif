@@ -10,7 +10,7 @@ import { Textbox } from '@src/input'
 import { Sidebar } from '@src/sidebar'
 import { Space } from '@src/space'
 import { H3 } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 

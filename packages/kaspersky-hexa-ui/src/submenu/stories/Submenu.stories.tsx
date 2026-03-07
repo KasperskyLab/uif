@@ -11,7 +11,7 @@ import { Space } from '@src/space'
 import { Tag } from '@src/tag'
 import { Toggle } from '@src/toggle'
 import { P } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 

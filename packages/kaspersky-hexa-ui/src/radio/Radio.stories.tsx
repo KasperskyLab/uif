@@ -5,7 +5,7 @@ import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Textbox } from '@src/input'
 import { Tag } from '@src/tag'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useEffect, useState } from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'

@@ -8,7 +8,7 @@ import { SectionMessage } from '@src/section-message'
 import { Space } from '@src/space'
 import { Tag } from '@src/tag'
 import { tagModes } from '@src/tag/types'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { UserAccount } from '@kaspersky/hexa-ui-icons/16'
