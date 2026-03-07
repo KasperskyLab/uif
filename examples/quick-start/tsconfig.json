@@ -5,6 +5,10 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@kaspersky/hexa-ui-charts": ["./node_modules/@kaspersky/hexa-ui-charts"]
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",

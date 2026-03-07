@@ -49,6 +49,7 @@ export const DashboardWidgets = () => (
         width={220}
         height={220}
         labelDescription="Score"
+        segments={[0, 30, 70, 100]}
       />
     </div>
   </WidgetsRow>
