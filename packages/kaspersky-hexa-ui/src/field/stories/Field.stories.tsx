@@ -16,7 +16,7 @@ import {
   Textbox,
   Toggle
 } from '@src/index'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 

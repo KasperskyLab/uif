@@ -1,0 +1,2 @@
+import{j as n}from"./jsx-runtime-CxPCTGSc.js";import{useMDXComponents as r}from"./index-lKYyQ2c7.js";import{M as s}from"./blocks-71x0kO9t.js";import"./iframe-zz6a49H8.js";import"./preload-helper-C1FmrZbK.js";function e(t){const o={h1:"h1",...r(),...t.components};return n.jsxs(n.Fragment,{children:[n.jsx(s,{title:"Docs/Полезные ссылки"}),`
+`,n.jsx(o.h1,{id:"полезные-ссылки",children:"Полезные ссылки"})]})}function u(t={}){const{wrapper:o}={...r(),...t.components};return o?n.jsx(o,{...t,children:n.jsx(e,{...t})}):e(t)}export{u as default};

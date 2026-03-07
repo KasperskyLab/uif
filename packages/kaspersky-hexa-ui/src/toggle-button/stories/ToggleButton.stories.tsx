@@ -3,7 +3,7 @@ import { withMeta } from '@sb/components/Meta'
 import { renderVariants } from '@sb/StoryComponents'
 import { Badge } from '@src/badge'
 import { Space } from '@src/space'
-import type { Meta, StoryObj } from '@storybook/react-webpack5'
+import type { Meta, StoryObj } from '@storybook/react'
 import React, { useMemo, useState } from 'react'
 
 import { Placeholder, Plus, Settings } from '@kaspersky/hexa-ui-icons/16'

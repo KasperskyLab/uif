@@ -18,7 +18,7 @@ import { Space } from '@src/space'
 import { Status } from '@src/status'
 import { Toggle } from '@src/toggle'
 import { P, Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 

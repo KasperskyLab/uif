@@ -6,7 +6,7 @@ import { sbHideControls } from '@sb/helpers'
 import { StoryColumn } from '@sb/StoryComponents'
 import { Textbox } from '@src/input'
 import { Tag } from '@src/tag'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import { CheckboxValueType } from 'antd/es/checkbox/Group'
 import React from 'react'
 

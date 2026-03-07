@@ -1,15 +1,9 @@
-import { StorybookConfig } from '@storybook/react-webpack5'
-
-import { createRequire } from 'node:module'
+import type { StorybookConfig } from '@storybook/react-vite'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import path from 'path'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const require = createRequire(import.meta.url)
-
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const config: StorybookConfig = {
   stories: [
@@ -20,8 +14,7 @@ const config: StorybookConfig = {
   ],
   addons: [
     '@storybook/addon-docs',
-    '@storybook/addon-links',
-    '@storybook/addon-webpack5-compiler-babel'
+    '@storybook/addon-links'
   ],
   refs: {
     icons: {
@@ -43,11 +36,9 @@ const config: StorybookConfig = {
       }
     </style>
   `,
-  framework: '@storybook/react-webpack5',
-  webpackFinal: async (config) => {
-    if (!config.resolve || !config.module || !config.module.rules) {
-      return config
-    }
+  framework: '@storybook/react-vite',
+  viteFinal: async (config) => {
+    config.resolve = config.resolve || {}
     config.resolve.alias = {
       ...config.resolve.alias,
       '@src': path.resolve(__dirname, '../src/'),
@@ -55,60 +46,15 @@ const config: StorybookConfig = {
       '@helpers': path.resolve(__dirname, '../helpers/'),
       '@sb': path.resolve(__dirname, '../.storybook/')
     }
-    config.module.rules.push({
-      test: /\.less$/,
-      include: [
-        path.resolve(__dirname, '..'),
-        path.resolve(__dirname, '..', 'node_modules', 'antd')
-      ],
-      use: [
-        require.resolve('style-loader'),
-        {
-          loader: require.resolve('css-loader'),
-          options: {
-            modules: {
-              mode: 'global',
-              localIdentName: '[name]_[local]_[hash:base64:8]'
-            },
-            sourceMap: true
-          }
-        },
-        {
-          loader: require.resolve('less-loader'),
-          options: {
-            lessOptions: {
-              paths: [path.resolve(__dirname, '..')],
-              javascriptEnabled: true
-            }
-          }
-        }
-      ]
-    }, {
-      test: /\.(scss)$/i,
-      use: [
-        'style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            modules: {
-              namedExport: false,
-              auto: true,
-              exportLocalsConvention: 'as-is',
-              localIdentName: '[local]_[hash:base64:8]'
-            }
-          }
-        },
-        'sass-loader'
-      ]
-    })
-
-    config.resolve.plugins = [
-      ...(config.resolve.plugins || []),
-      new TsconfigPathsPlugin({
-        extensions: config.resolve.extensions
-      })
-    ]
-
+    config.css = config.css || {}
+    config.css.preprocessorOptions = {
+      ...config.css.preprocessorOptions,
+      less: {
+        javascriptEnabled: true,
+        paths: [path.resolve(__dirname, '..')]
+      },
+      scss: {}
+    }
     return config
   }
 }
