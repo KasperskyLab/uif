@@ -1,0 +1,1 @@
+import{c as t}from"./index-Bu8D0G-Z.js";if(!document.querySelector("head > style.hexa-ui-colors")){const e=document.createElement("style");e.className="hexa-ui-colors",e.textContent=t,document.head.appendChild(e)}
