@@ -1,6 +1,5 @@
-import type { StorybookConfig } from '@storybook/react-vite'
-
-const config: StorybookConfig = {
+/** @type { import('@storybook/react-vite').StorybookConfig } */
+const config = {
   stories: [
     '../src/**/*.mdx',
     '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'
@@ -13,10 +12,13 @@ const config: StorybookConfig = {
   ],
   framework: '@storybook/react-vite',
   viteFinal: async (config) => {
+    const path = (await import('path')).default
+    const { fileURLToPath } = await import('node:url')
+    const __dirname = path.dirname(fileURLToPath(import.meta.url))
     config.resolve = config.resolve || {}
     config.resolve.alias = {
       ...config.resolve.alias,
-      assert: false
+      assert: path.resolve(__dirname, 'assert-stub.js')
     }
     config.css = config.css || {}
     config.css.preprocessorOptions = {
