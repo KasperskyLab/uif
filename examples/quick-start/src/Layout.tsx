@@ -1,8 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react'
 import styled from 'styled-components'
 import {
-  SegmentedButton,
-  Button,
   Sidebar,
   Text,
   Table,
@@ -11,16 +9,27 @@ import {
   Nav,
   UserNav,
   ServicesNav,
-  Hamburger
+  Hamburger,
+  Toolbar,
+  PageHeader
 } from '@kaspersky/hexa-ui'
-import { SegmentedButtonOption } from '@kaspersky/hexa-ui/src/segmented-button/types'
+import type { ToolbarItems } from '@kaspersky/hexa-ui'
 import { ThemeKey, themeColors } from '@kaspersky/hexa-ui/design-system'
-import { AppUpdate } from '@kaspersky/hexa-ui-icons/16'
+import {
+  AppUpdate,
+  Sun,
+  UserAccount,
+  OpenInWindow,
+  Bulb
+} from '@kaspersky/hexa-ui-icons/16'
 
 import { AppLogo } from './AppLogo'
+import { DashboardWidgets } from './DashboardWidgets'
 import { beforeItems, favItems, navUserItems, navItems } from './menu/menu-items'
 
 const StyledSpace = styled(Space)<{ themeKey: ThemeKey }>`
+  flex: 1;
+  min-width: 0;
   border-radius: 16px;
   padding: 16px;
   align-items: flex-start;
@@ -46,6 +55,13 @@ const TableWrapper = styled.div`
   width: 100%;
 `
 
+const ToolbarWrapper = styled.div`
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  align-self: stretch;
+`
+
 type RowType = { name: string, description: string, age: number, key: string }
 
 export type LayoutProps = {
@@ -61,16 +77,6 @@ export const Layout = ({ themeKey, setThemeKey }: LayoutProps) => {
   const [userMenuState, setUserMenuState] = useState(navUserItems)
   const [isAdded, setIsAdded] = useState(false)
 
-  const segmentedButtonOptions: SegmentedButtonOption[] = [
-    {
-      value: ThemeKey.Light,
-      text: ThemeKey.Light
-    },
-    {
-      value: ThemeKey.Dark,
-      text: ThemeKey.Dark
-    },
-  ]
   const [isOpen, setIsOpen] = useState(false)
 
   const tableColumns = [
@@ -146,6 +152,42 @@ export const Layout = ({ themeKey, setThemeKey }: LayoutProps) => {
     setIsAdded(false)
   }
 
+  const toolbarLeft: ToolbarItems[] = [
+    {
+      type: 'button',
+      key: 'toggle-theme',
+      label: 'Toggle theme',
+      iconBefore: <Sun />,
+      onClick: () => setThemeKey(themeKey === ThemeKey.Light ? ThemeKey.Dark : ThemeKey.Light)
+    },
+    { type: 'divider', key: 'd1' },
+    {
+      type: 'button',
+      key: 'open-modal',
+      label: 'Open modal',
+      iconBefore: <OpenInWindow />,
+      onClick: () => setIsOpen(true)
+    },
+    { type: 'divider', key: 'd2' },
+    {
+      type: 'dropdown',
+      key: 'menu-item',
+      label: 'Menu item',
+      iconBefore: <AppUpdate />,
+      overlay: [
+        { children: 'Add new menu item', onClick: addMenuItem, disabled: isAdded },
+        { children: 'Remove new menu item', onClick: removeMenuItem, disabled: !isAdded }
+      ]
+    },
+    {
+      type: 'button',
+      key: 'toggle-user',
+      label: 'Toggle user',
+      iconBefore: <UserAccount />,
+      onClick: toggleUser
+    }
+  ]
+
   return (
     <StyledRootSpace themeKey={themeKey} direction='horizontal' size={0} wrap='nowrap'>
       <StyledMenu {...menuProps} collapsed={menuMinimized}>
@@ -157,22 +199,28 @@ export const Layout = ({ themeKey, setThemeKey }: LayoutProps) => {
         <UserNav navItems={userMenuState} minimized={menuMinimized} childPop={true} />
       </StyledMenu>
       <StyledSpace themeKey={themeKey} direction='vertical' size={16}>
-        <SegmentedButton value={[themeKey]} items={segmentedButtonOptions} onChange={value => setThemeKey(value[0] as ThemeKey)}/>
-        <Button onClick={() => setIsOpen(true)} text={'Open modal'}/>
-
-        <Space size='10' align='auto' direction='vertical'>
-          <Space size='10' justify='space-between'>
-            <Button onClick={addMenuItem} disabled={isAdded}>Add new menu item</Button>
-            <Button onClick={removeMenuItem} disabled={!isAdded}>Remove new menu item</Button>
-          </Space>
-          <Space size='10' justify='space-between'>
-            <Button onClick={toggleUser}>Toggle user</Button>
-          </Space>
-        </Space>
-
         <Sidebar visible={isOpen} onClose={() => setIsOpen(false)} title="Sidebar">
           <Text>Content</Text>
         </Sidebar>
+
+        <PageHeader
+          title="Quick Start Example"
+          breadcrumbs={{
+            routes: [
+              { name: 'Home' },
+              { name: 'Examples' },
+              { name: 'Quick Start Example' }
+            ]
+          }}
+          iconBefore={<Bulb />}
+        />
+
+        <DashboardWidgets />
+
+        <ToolbarWrapper>
+          <Toolbar left={toolbarLeft} leftLimit={10} />
+        </ToolbarWrapper>
+
         <TableWrapper>
           <Table
               columns={tableColumns}
