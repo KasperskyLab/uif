@@ -4,7 +4,7 @@ import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Space } from '@src/space'
 import { Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
 

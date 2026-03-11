@@ -1,6 +1,6 @@
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 import React from 'react'
 
 import { Placeholder } from '@kaspersky/hexa-ui-icons/16'

@@ -2,7 +2,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { StoryColumn } from '@sb/StoryComponents'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import { Terminal as XTerminal } from '@xterm/xterm'
 import React from 'react'
 

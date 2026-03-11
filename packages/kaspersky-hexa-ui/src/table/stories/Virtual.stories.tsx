@@ -5,7 +5,7 @@ import { SectionMessage } from '@src/section-message'
 import { Space } from '@src/space'
 import { Tag } from '@src/tag'
 import { P, Text } from '@src/typography'
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 import React, { Key, useCallback, useState } from 'react'
 import styled from 'styled-components'
 

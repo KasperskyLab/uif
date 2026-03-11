@@ -1,0 +1,10 @@
+@import "antd/dist/antd.css";
+
+body {
+  margin: 0;
+}
+
+* {
+    font-family: "Kaspersky Sans Text", "Kaspersky Sans", Arial, sans-serif;
+    box-sizing: border-box;
+}

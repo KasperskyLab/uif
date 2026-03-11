@@ -12,7 +12,7 @@ import { Indicator } from '@src/indicator'
 import { SegmentedButton, SegmentedButtonOption } from '@src/segmented-button'
 import { Space } from '@src/space'
 import { Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { CSSProperties, useRef, useState } from 'react'
 import styled from 'styled-components'
 

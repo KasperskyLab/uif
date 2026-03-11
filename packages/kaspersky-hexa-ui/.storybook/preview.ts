@@ -1,6 +1,6 @@
 import { ThemeKey } from '@design-system/types'
 import { withBadges } from '@sb/decorators/withBadges'
-import { Preview } from '@storybook/react-webpack5'
+import type { Preview } from '@storybook/react'
 
 import { badgesConfig } from './badges'
 import { withI18n } from './decorators/withI18n'

@@ -3,7 +3,7 @@ import { useTheme } from '@design-system/theme'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls, sbSetDefaultValue } from '@sb/helpers'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'

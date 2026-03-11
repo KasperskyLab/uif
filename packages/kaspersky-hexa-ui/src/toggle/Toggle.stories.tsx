@@ -7,7 +7,7 @@ import { StoryColumn } from '@sb/StoryComponents'
 import { Textbox } from '@src/input'
 import { Tooltip } from '@src/tooltip'
 import { Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'

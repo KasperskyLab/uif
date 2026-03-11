@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 
 import { ITableProps, Table } from '..'
 

@@ -3,7 +3,7 @@ import { withMeta } from '@sb/components/Meta'
 import { TableTreeInfo } from '@sb/components/Warnings'
 import { Link } from '@src/link'
 import MetaData from '@src/table/__meta__/meta.json'
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 import React, { useEffect, useState } from 'react'
 
 import { ITableProps, Table } from '../index'

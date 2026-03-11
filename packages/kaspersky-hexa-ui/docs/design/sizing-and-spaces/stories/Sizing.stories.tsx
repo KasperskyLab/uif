@@ -1,5 +1,5 @@
 import { withMeta } from '@sb/components/Meta'
-import { StoryObj } from '@storybook/react-webpack5'
+import { StoryObj } from '@storybook/react'
 import { Table as AntTable } from 'antd'
 
 import MetaData from '../__meta__/meta.json'

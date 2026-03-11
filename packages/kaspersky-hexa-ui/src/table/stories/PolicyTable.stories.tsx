@@ -3,7 +3,7 @@ import { withMeta } from '@sb/components/Meta'
 import { StoryColumn } from '@sb/StoryComponents'
 import { Toggle } from '@src/toggle'
 import { getItemsLeft } from '@src/toolbar/stories/Toolbar.stories'
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 import React, { useState } from 'react'
 
 import { FilterType, Table } from '..'

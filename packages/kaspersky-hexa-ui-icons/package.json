@@ -102,8 +102,8 @@
   },
   "peerDependencies": {
     "@kaspersky/hexa-ui-core": "0.x",
-    "react": "16.x || 17.x || 18.x",
-    "react-dom": "16.x || 17.x || 18.x"
+    "react": "16.x || 17.x || 18.x || 19.x",
+    "react-dom": "16.x || 17.x || 18.x || 19.x"
   },
   "overrides": {
     "es5-ext": "0.10.46",

@@ -3,7 +3,7 @@ import { withDesignControls } from '@sb/components/designControls'
 import { withMeta } from '@sb/components/Meta'
 import { Button } from '@src/button'
 import { FieldSet } from '@src/field-set'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 
 import MetaData from '../__meta__/meta.json'

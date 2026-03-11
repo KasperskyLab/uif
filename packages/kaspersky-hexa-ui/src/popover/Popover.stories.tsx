@@ -9,7 +9,7 @@ import { Textbox } from '@src/input'
 import { Link } from '@src/link'
 import { Space } from '@src/space'
 import { Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { CSSProperties } from 'react'
 import styled from 'styled-components'
 

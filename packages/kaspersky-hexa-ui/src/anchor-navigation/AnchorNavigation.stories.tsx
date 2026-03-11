@@ -3,7 +3,7 @@ import { Badge } from '@src/badge'
 import { Button } from '@src/button'
 import { Sidebar } from '@src/sidebar'
 import { H3, H4, H5, P } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 

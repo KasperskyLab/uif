@@ -2,7 +2,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { Checkbox } from '@src/checkbox'
 import MetaData from '@src/table/__meta__/meta.json'
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 

@@ -1,7 +1,7 @@
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { Text } from '@src/typography'
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
 
