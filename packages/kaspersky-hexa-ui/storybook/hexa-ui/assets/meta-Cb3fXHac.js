@@ -1,1 +1,0 @@
-const e={designTokens:!0,useThemedHook:!1,unitTests:!1,screenshotTests:!1,migration:!0,apiTable:!0,storybook:!0},s="Field",t="",o="",n="https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=45875%3A275075",i="https://pixso.net/app/design/3aezZiGh786au9MJ6QNkhA",a={dod:e,component:s,description:t,usage:o,designLink:n,pixsoView:i};export{a as M};
