@@ -1,7 +1,7 @@
 import { badges } from '@sb/badges'
 import { Space } from '@src/space'
 import { H6 } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 

@@ -1,5 +1,5 @@
 import { Components, designControlsConfig } from '@helpers/resolveDesignControls'
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 import merge from 'lodash/merge'
 
 interface withDesignControlsArguments<ComponentProps> {

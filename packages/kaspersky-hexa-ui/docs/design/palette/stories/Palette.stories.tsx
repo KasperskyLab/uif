@@ -5,7 +5,7 @@ import {
   ThemedPaletteProps
 } from '@design-system/palette'
 import { withMeta } from '@sb/components/Meta'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { colors, componentColors, productColors } from '@kaspersky/hexa-ui-core/colors/js'

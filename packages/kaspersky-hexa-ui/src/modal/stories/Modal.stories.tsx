@@ -5,7 +5,7 @@ import { sbHideControls } from '@sb/helpers'
 import { ActionButton } from '@src/action-button'
 import { Button } from '@src/button'
 import { ButtonMode, buttonModes } from '@src/button/types'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 

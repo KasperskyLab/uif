@@ -2,7 +2,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { CodeViewer } from '@src/code-viewer'
 import { Markdown } from '@src/markdown'
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 import React, { useMemo, useState } from 'react'
 
 import { Table } from '..'

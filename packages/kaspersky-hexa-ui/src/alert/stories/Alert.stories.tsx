@@ -5,7 +5,7 @@ import { renderVariants } from '@sb/StoryComponents'
 import { Space } from '@src/space'
 import { Tag } from '@src/tag'
 import { Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import MetaData from '../__meta__/meta.json'

@@ -1,12 +1,14 @@
+# Build and deploy examples/quick-start to GitHub Pages (monorepo).
+
 name: "Examples: Quick Start"
 
 on:
   push:
     branches:
-      - 'master'
+      - "master"
     paths:
-      - 'examples/quick-start/**'
-      - '.github/workflows/examples-quick-start.yml'
+      - "examples/quick-start/**"
+      - ".github/workflows/examples-quick-start.yml"
   workflow_dispatch:
 
 jobs:
@@ -19,20 +21,21 @@ jobs:
       contents: write
       pages: write
       id-token: write
-    defaults:
-      run:
-        working-directory: ./examples/quick-start
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: Install dependencies
-        shell: bash
-        run: |
-          npm ci
+        run: npm ci
+
       - name: Build
-        shell: bash
-        run: |
-          npm run build
+        run: npm run build --workspace=quick-start
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:

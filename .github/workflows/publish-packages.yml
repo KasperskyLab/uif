@@ -1,0 +1,63 @@
+# Publish hexa-* packages to npm on push to master (spec: Scenario 2).
+# Creates changesets from conventional commits, then build → version → publish.
+# Requires NPM_TOKEN secret with publish rights.
+
+name: Publish packages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip ci]')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create changesets from conventional commits
+        run: |
+          if [ -n "${{ join(github.event.commits.*.id, ' ') }}" ]; then
+            for sha in ${{ join(github.event.commits.*.id, ' ') }}; do
+              node scripts/create-changeset-from-commit.js "$sha" || true
+            done
+          else
+            node scripts/create-changeset-from-commit.js HEAD || true
+          fi
+
+      - name: Build
+        run: npm run build
+
+      - name: Version packages
+        run: |
+          npx changeset version
+          npm install
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "chore: version packages [skip ci]"
+          git push
+
+      - name: Publish to npm
+        run: npx changeset publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

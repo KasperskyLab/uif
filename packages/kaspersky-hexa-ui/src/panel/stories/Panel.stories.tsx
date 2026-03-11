@@ -1,7 +1,7 @@
 import { withDesignControls } from '@sb/components/designControls'
 import { Tag } from '@src/tag'
 import { Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { Panel, PanelProps } from '../index'

@@ -3,7 +3,7 @@ import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Button } from '@src/button'
 import { Toggle } from '@src/toggle'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 
 import { Placeholder } from '@kaspersky/hexa-ui-icons/16'

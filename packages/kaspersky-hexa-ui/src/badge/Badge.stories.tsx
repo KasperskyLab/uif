@@ -8,7 +8,7 @@ import { SectionMessage } from '@src/section-message'
 import { Space } from '@src/space'
 import { Tooltip } from '@src/tooltip'
 import { P } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import MetaData from './__meta__/meta.json'

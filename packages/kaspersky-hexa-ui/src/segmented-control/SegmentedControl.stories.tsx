@@ -11,7 +11,7 @@ import {
   SegmentedControlSize
 } from '@src/segmented-control/types'
 import { Space } from '@src/space'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'

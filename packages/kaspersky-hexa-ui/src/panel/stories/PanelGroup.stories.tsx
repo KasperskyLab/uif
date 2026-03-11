@@ -1,5 +1,5 @@
 import { withDesignControls } from '@sb/components/designControls'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { Panel, PanelProps } from '../index'
