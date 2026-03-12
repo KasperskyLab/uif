@@ -1,4 +1,4 @@
-const { extractArgValue, isFormExcludet, isFromAlreadyMigrated, migrationList, message } = require('./helpers')
+const { extractArgValue, isFormExcludet, isFromAlreadyMigrated, message, migrationList } = require('./helpers')
 const COMPONENT_LIBRARY = 'v6'
 const typesWithSubElements = [
   ...['control-group', 20],
