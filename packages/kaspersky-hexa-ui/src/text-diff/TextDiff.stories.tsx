@@ -1,6 +1,6 @@
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { textLevels } from '@kaspersky/hexa-ui-core/typography/js'

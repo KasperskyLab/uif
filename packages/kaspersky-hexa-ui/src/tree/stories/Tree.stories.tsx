@@ -4,7 +4,7 @@ import { withMeta } from '@sb/components/Meta'
 import { sbFixArrayArgs, sbMergeActions } from '@sb/helpers'
 import { Panel } from '@src/panel'
 import { applyDropToTreeData, DataNode, TreeList, TreeListProps, TreeNav, TreeNavProps } from '@src/tree'
-import { Meta, StoryObj as Story } from '@storybook/react-webpack5'
+import { Meta, StoryObj as Story } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
 

@@ -9,7 +9,7 @@ import { Link } from '@src/link'
 import { SectionMessage } from '@src/section-message'
 import { Space } from '@src/space'
 import { Tooltip } from '@src/tooltip'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { Placeholder, Plus, Settings } from '@kaspersky/hexa-ui-icons/16'

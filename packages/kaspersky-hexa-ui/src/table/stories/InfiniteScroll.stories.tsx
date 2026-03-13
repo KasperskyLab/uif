@@ -7,7 +7,7 @@ import { Link } from '@src/link'
 import { Select } from '@src/select'
 import { Sidebar } from '@src/sidebar'
 import { Text } from '@src/typography'
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 import React, { Key, useMemo, useState } from 'react'
 import styled from 'styled-components'
 

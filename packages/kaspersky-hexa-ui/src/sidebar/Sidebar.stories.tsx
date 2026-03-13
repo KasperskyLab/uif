@@ -13,7 +13,7 @@ import { Submenu, SubmenuItemProps } from '@src/submenu'
 import { Tabs } from '@src/tabs'
 import { Toolbar } from '@src/toolbar'
 import { getItemsLeft, getItemsRight } from '@src/toolbar/stories/Toolbar.stories'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 

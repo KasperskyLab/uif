@@ -2,7 +2,7 @@ import { SectionMessage } from '@src/section-message'
 import { Space } from '@src/space'
 import { Table } from '@src/table'
 import { P } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
 

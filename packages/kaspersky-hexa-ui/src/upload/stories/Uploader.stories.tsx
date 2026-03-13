@@ -7,7 +7,7 @@ import { renderVariants } from '@sb/StoryComponents'
 import { Button } from '@src/button'
 import { SectionMessage } from '@src/section-message'
 import { P, Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'

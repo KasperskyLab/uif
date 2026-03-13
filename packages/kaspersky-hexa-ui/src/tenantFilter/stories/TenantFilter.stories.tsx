@@ -4,7 +4,7 @@ import { sbHideControls } from '@sb/helpers'
 import { Space } from '@src/space'
 import { getPreparedTenantTreeData } from '@src/tenantFilter'
 import { Toggle } from '@src/toggle'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 
 import MetaData from '../__meta__/meta.json'

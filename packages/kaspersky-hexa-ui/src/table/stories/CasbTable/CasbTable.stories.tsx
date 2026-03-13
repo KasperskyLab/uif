@@ -1,4 +1,4 @@
-import { StoryObj } from '@storybook/react-webpack5'
+import { StoryObj } from '@storybook/react'
 
 import { CasbTable as Component } from './CasbTable'
 import { model } from './model'
