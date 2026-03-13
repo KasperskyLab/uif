@@ -1,4 +1,4 @@
-const { extractArgValue, isFormExcludet, isFromAlreadyMigrated, migrationList, message } = require('./helpers')
+const { extractArgValue, isFormExcludet, isFromAlreadyMigrated, message, migrationList } = require('./helpers')
 
 const predefinedIndentBeforeCssClasses = {
   'indent-checkbox': 101,
@@ -45,15 +45,14 @@ const filterIndentCSSClasses = (classesString) => {
 const parseValueFromClassName = ({ customCssClasses, subString }) => {
   return customCssClasses
     ? parseInt((customCssClasses
-        .split(' ')
-        .map(cssClass => {
-          return Object.keys(predefinedIndentBeforeCssClasses).some(key => key === cssClass)
-            ? `indent-${predefinedIndentBeforeCssClasses[cssClass]}`
-            : cssClass
-        })
-        .find(cssClass => cssClass.replace(/-\d+/, '') === subString) || '')
-        .replace(/^\D+/g, '')
-      ) || 0
+      .split(' ')
+      .map(cssClass => {
+        return Object.keys(predefinedIndentBeforeCssClasses).some(key => key === cssClass)
+          ? `indent-${predefinedIndentBeforeCssClasses[cssClass]}`
+          : cssClass
+      })
+      .find(cssClass => cssClass.replace(/-\d+/, '') === subString) || '')
+      .replace(/^\D+/g, '')) || 0
     : 0
 }
 

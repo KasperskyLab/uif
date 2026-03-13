@@ -33,4 +33,10 @@ const message = {
   donePatchOffsets: '\n Patching Offsets is Done \n'
 }
 
-module.exports = { extractArgValue, isFormExcludet, isFromAlreadyMigrated, migrationList, message }
+module.exports = {
+  extractArgValue,
+  isFormExcludet,
+  isFromAlreadyMigrated,
+  message,
+  migrationList
+}

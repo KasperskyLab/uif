@@ -1,11 +1,12 @@
 import babelParser from '@babel/eslint-parser'
 import javascript from '@eslint/js'
+import stylistic from '@stylistic/eslint-plugin'
 import eslint from 'eslint/config'
 import importPlugin from 'eslint-plugin-import'
 import jestPlugin from 'eslint-plugin-jest'
 import securityPlugin from 'eslint-plugin-security'
 import globals from 'globals'
-import stylistic from '@stylistic/eslint-plugin'
+
 import { eslintCommonGlobals } from './globals.mjs'
 
 export default eslint.defineConfig([
@@ -47,7 +48,7 @@ export default eslint.defineConfig([
         overrides: {
           ObjectExpression: { singleLine: { maxItems: 4 } },
           ImportDeclaration: { singleLine: { maxItems: 4 } },
-          ExportNamedDeclaration: { singleLine: { maxItems: 4 } },
+          ExportNamedDeclaration: { singleLine: { maxItems: 4 } }
         }
       }],
 

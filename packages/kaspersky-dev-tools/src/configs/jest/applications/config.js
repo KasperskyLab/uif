@@ -40,7 +40,7 @@ const serverTestsConfig = {
   collectCoverage: shouldCollectCoverage(),
   collectCoverageFrom: [
     '<rootDir>/server/**',
-    '!<rootDir>/server/**/*.json',
+    '!<rootDir>/server/**/*.json'
   ]
 }
 
@@ -102,22 +102,26 @@ function shouldCollectCoverage () {
  */
 if (process.env.CI) {
   clientReporters.push([
-    'jest-junit', {
+    'jest-junit',
+    {
       outputName: './client_report.xml'
     }
   ])
   serverReporters.push([
-    'jest-junit', {
+    'jest-junit',
+    {
       outputName: './server_report.xml'
     }
   ])
   e2eReporters.push([
-    'jest-junit', {
+    'jest-junit',
+    {
       outputName: './e2e_report.xml'
     }
   ])
   e2eMnemonReporters.push([
-    'jest-junit', {
+    'jest-junit',
+    {
       outputName: './e2e_mnemon_report.xml'
     }
   ])

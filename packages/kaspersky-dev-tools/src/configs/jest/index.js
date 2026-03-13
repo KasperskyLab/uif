@@ -1,5 +1,5 @@
-const { parseCliConfig } = require('./helpers/command-line-parser')
 const { getApplicationsConfig } = require('./applications/config')
+const { parseCliConfig } = require('./helpers/command-line-parser')
 const { getPluginsConfig } = require('./plugins/config')
 
 const testConfigurationProductEnum = {
