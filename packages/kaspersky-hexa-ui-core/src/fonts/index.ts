@@ -1,5 +1,9 @@
 import { FontFamilySingle, FontStyle, FontWeight } from '../typography/js'
 
+import KasperskySansBold from './assets/fonts/kaspersky-sans/Kaspersky_Sans_V3_Text_Bold.woff2'
+import KasperskySansExtraBold from './assets/fonts/kaspersky-sans/Kaspersky_Sans_V3_Text_ExtraBold.woff2'
+import KasperskySansMedium from './assets/fonts/kaspersky-sans/Kaspersky_Sans_V3_Text_Medium.woff2'
+import KasperskySansRegular from './assets/fonts/kaspersky-sans/Kaspersky_Sans_V3_Text_Regular.woff2'
 import KasperskySansDisplayBold from './assets/fonts/kaspersky-sans-display/Kaspersky_Sans_Display_Bold.woff2'
 import KasperskySansDisplayExtraBold from './assets/fonts/kaspersky-sans-display/Kaspersky_Sans_Display_ExtraBold.woff2'
 import KasperskySansDisplayLight from './assets/fonts/kaspersky-sans-display/Kaspersky_Sans_Display_Light.woff2'
@@ -13,10 +17,6 @@ import KasperskySansTextExtraBold from './assets/fonts/kaspersky-sans-text/Kaspe
 import KasperskySansTextMedium from './assets/fonts/kaspersky-sans-text/Kaspersky_Sans_Text_Medium.woff2'
 import KasperskySansTextRegular from './assets/fonts/kaspersky-sans-text/Kaspersky_Sans_Text_Regular.woff2'
 import KasperskySansTextSemiBold from './assets/fonts/kaspersky-sans-text/Kaspersky_Sans_Text_SemiBold.woff2'
-import KasperskySansBold from './assets/fonts/kaspersky-sans/Kaspersky_Sans_V3_Text_Bold.woff2'
-import KasperskySansExtraBold from './assets/fonts/kaspersky-sans/Kaspersky_Sans_V3_Text_ExtraBold.woff2'
-import KasperskySansMedium from './assets/fonts/kaspersky-sans/Kaspersky_Sans_V3_Text_Medium.woff2'
-import KasperskySansRegular from './assets/fonts/kaspersky-sans/Kaspersky_Sans_V3_Text_Regular.woff2'
 
 export type FontFace = {
   fontFamily: FontFamilySingle,
