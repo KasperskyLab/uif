@@ -1,5 +1,6 @@
 module.exports = {
   testEnvironment: 'jest-environment-jsdom',
+  setupFiles: ['<rootDir>/jest.setup.js'],
   clearMocks: true,
   collectCoverage: false,
   coverageDirectory: 'coverage',
