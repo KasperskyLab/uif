@@ -21,7 +21,7 @@
     "allowJs": true
   },
   "include": [
-    "./src/*"
+    "./src/**/*"
   ],
   "exclude": [
     "dist",

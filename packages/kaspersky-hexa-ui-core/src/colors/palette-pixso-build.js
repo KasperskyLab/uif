@@ -83,8 +83,7 @@ const normalizePixsoTokenNameToCssVar = (rawName) => {
     p
       .trim()
       .toLowerCase()
-      .replace(/\s+/g, '_')
-  )
+      .replace(/\s+/g, '_'))
 
   return `--${parts.join('--')}`
 }
@@ -98,8 +97,7 @@ const normalizePixsoAliasValueToCssVar = (value) => {
       p
         .trim()
         .toLowerCase()
-        .replace(/\s+/g, '_')
-    )
+        .replace(/\s+/g, '_'))
     return `var(--${parts.join('--')})`
   })
 }
