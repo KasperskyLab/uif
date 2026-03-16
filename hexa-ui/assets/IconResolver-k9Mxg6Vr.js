@@ -1,0 +1,8 @@
+import{u as l,R as n,H as u}from"./iframe-DlY6n6Um.js";import{h as p}from"./index-i_d8OMNH.js";import{F as d,s as f,v as I,U as y,d as w}from"./index-BbitUTuv.js";import{l as r}from"./Placeholder-DRo8POZa.js";const k=[8,12,16,24,32,48],z={8:w,12:p,16:y,24:I,32:f,48:d},g={extraSmall:8,small:16,medium:24,large:48},S=e=>typeof e=="number"&&k.includes(e),b=u.span`
+  line-height: 0;
+`,h=e=>{const{name:t,size:o,testAttributes:i}=l(e),m=()=>{const a=S(o)?o:g[o],s=z[a];if(!s)return console.warn(`Could not find icon with size ${a}. Instead, a fallback icon was used`),n.createElement(r,null);const c=s[t];return c?n.createElement(c,null):(console.warn(`Could not find icon with size ${a} and name ${t}. Instead, a fallback icon was used`),n.createElement(r,null))};return n.createElement(b,{role:"img",...i},m())};h.__docgenInfo={description:"",methods:[],displayName:"IconResolver",props:{name:{required:!0,tsType:{name:"union",raw:"IconNames | string",elements:[{name:"union",raw:`keyof typeof Icons8
+| keyof typeof Icons12
+| keyof typeof Icons16
+| keyof typeof Icons24
+| keyof typeof Icons32
+| keyof typeof Icons48`,elements:[{name:"unknown"},{name:"unknown"},{name:"unknown"},{name:"unknown"},{name:"unknown"},{name:"unknown"}]},{name:"string"}]},description:"Icon name"},size:{required:!0,tsType:{name:"union",raw:"IconPackSizes | DeprecatedIconSizes",elements:[{name:"actualIconSizes[number]",raw:"typeof actualIconSizes[number]"},{name:"Exclude",elements:[{name:"SizingType"},{name:"literal",value:"'extraLarge'"}],raw:"Exclude<SizingType, 'extraLarge' >"}]},description:"Icon size. Use number value as it matches size from hexa-ui-icons package, string values are deprecated"}}};export{h as I};

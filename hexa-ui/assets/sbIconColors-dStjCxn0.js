@@ -1,0 +1,1 @@
+import{x as r}from"./iframe-DlY6n6Um.js";const{icon:n}=r,o=Object.entries(n).reduce((s,[e,t])=>[...s,...Object.keys(t).map(c=>`${e}.${c}`)],[]),l={options:o,control:{type:"select"},description:o.join(", ")};export{l as s};

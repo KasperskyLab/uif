@@ -1,0 +1,1 @@
+import{R as l}from"./iframe-DlY6n6Um.js";import{u as s}from"./useGlobalStyles-DCO_4ztA.js";function n(t){const e=a=>(s(),l.createElement(t,{...a}));return e.displayName=`WithGlobalStyles(${r(t)})`,Object.assign(e,t)}function r(t){return t.displayName||t.name||"Component"}export{n as W};
