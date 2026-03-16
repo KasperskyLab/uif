@@ -1,0 +1,1 @@
+import{r as s}from"./index-B3FZByPw.js";import{i as n}from"./isChartDataPoint-CeoHD7To.js";const l=e=>{const[i,r]=s.useState(e);s.useEffect(()=>{r(e)},[e]);const c=s.useCallback(t=>{r(u=>u.map(a=>{if(!t)return{...a,active:!1};const m=n(t)?t.metric:t.name;return{...a,active:a.metric===m}}))},[]);return{widgetData:i,updateActiveSlice:c}};export{l as u};

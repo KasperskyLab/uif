@@ -1,0 +1,1 @@
+import{g as f}from"./index-B3FZByPw.js";var e,n;function u(){if(n)return e;n=1;function i(r){for(var o=-1,s=r==null?0:r.length,t={};++o<s;){var a=r[o];t[a[0]]=a[1]}return t}return e=i,e}var m=u();const P=f(m);export{P as f};
