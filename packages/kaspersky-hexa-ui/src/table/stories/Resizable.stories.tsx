@@ -2,7 +2,7 @@ import { ExpandableText } from '@src/expandable-text'
 import { SectionMessage } from '@src/section-message'
 import { Table } from '@src/table'
 import { ITableProps } from '@src/table/types'
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 import React from 'react'
 
 import { TableViewProps } from '../types'

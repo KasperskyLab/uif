@@ -8,7 +8,7 @@ import { Link } from '@src/link'
 import { Sidebar } from '@src/sidebar'
 import { Space } from '@src/space'
 import { Toggle } from '@src/toggle'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'

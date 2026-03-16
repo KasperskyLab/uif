@@ -3,7 +3,7 @@ import { withMeta } from '@sb/components/Meta'
 import { StoryColumn } from '@sb/StoryComponents'
 import { Field } from '@src/field'
 import { SegmentedButton } from '@src/segmented-button'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 
 import { Table, TableRecord } from '..'

@@ -4,7 +4,7 @@ import { Button } from '@src/button'
 import { SectionMessage } from '@src/section-message'
 import { Tag } from '@src/tag'
 import { P } from '@src/typography'
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 import React, { useState } from 'react'
 
 import { FilterConfig, Table } from '..'

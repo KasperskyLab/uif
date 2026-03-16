@@ -10,7 +10,7 @@ import { Field } from '@src/field'
 import { SectionMessage } from '@src/section-message'
 import { SegmentedButton, SegmentedButtonOption } from '@src/segmented-button'
 import { P, Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
 

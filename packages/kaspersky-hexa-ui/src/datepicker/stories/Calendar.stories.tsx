@@ -4,7 +4,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { P } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
 

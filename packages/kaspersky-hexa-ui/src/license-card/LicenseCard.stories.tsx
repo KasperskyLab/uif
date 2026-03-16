@@ -10,7 +10,7 @@ import { Link } from '@src/link'
 import { Space } from '@src/space'
 import { Status } from '@src/status'
 import { Text } from '@src/typography'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'

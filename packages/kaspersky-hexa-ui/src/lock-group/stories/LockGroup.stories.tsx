@@ -3,7 +3,7 @@ import { withDesignControls } from '@sb/components/designControls'
 import { withMeta } from '@sb/components/Meta'
 import { SBArgType } from '@sb/helpers'
 import { Textbox } from '@src/input'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 

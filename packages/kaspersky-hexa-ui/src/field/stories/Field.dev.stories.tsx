@@ -3,7 +3,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Button, Field, FieldSet, Select, Sidebar, Textbox } from '@src/index'
-import { Meta, StoryObj } from '@storybook/react-webpack5'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 

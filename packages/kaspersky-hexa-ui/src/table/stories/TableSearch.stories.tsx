@@ -2,7 +2,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { TableTreeInfo } from '@sb/components/Warnings'
 import { Link } from '@src/link'
-import { Meta } from '@storybook/react-webpack5'
+import { Meta } from '@storybook/react'
 import React, { ReactNode, useState } from 'react'
 
 import { ITableProps, Table, TableRecord } from '../'

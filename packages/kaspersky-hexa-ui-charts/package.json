@@ -47,10 +47,9 @@
     "@storybook/addon-essentials": "8.6.4",
     "@storybook/addon-interactions": "8.6.4",
     "@storybook/addon-onboarding": "8.6.4",
-    "@storybook/addon-webpack5-compiler-swc": "2.1.0",
     "@storybook/blocks": "8.6.4",
     "@storybook/react": "8.6.4",
-    "@storybook/react-webpack5": "8.6.4",
+    "@storybook/react-vite": "8.6.4",
     "@storybook/test": "8.6.4",
     "@types/is-hotkey": "0.1.10",
     "@types/lodash": "4.14.202",
@@ -76,7 +75,8 @@
     "storybook": "8.6.4",
     "storybook-addon-mock": "5.0.0",
     "styled-components": "5.3.3",
-    "ts-node": "10.9.2"
+    "ts-node": "10.9.2",
+    "vite": "6.0.11"
   },
   "overrides": {
     "es5-ext": "0.10.46",
@@ -84,8 +84,7 @@
     "slate-react": {
       "react": "^17.x",
       "react-dom": "^17.x"
-    },
-    "fork-ts-checker-webpack-plugin": "6.5.3"
+    }
   },
   "bundleDependencies": [
     "style-inject"
