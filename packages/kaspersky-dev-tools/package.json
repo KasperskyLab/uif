@@ -1,6 +1,6 @@
 {
   "name": "@kaspersky/dev-tools",
-  "version": "3.4.3",
+  "version": "3.4.4",
   "description": "Development tools and configs for Babel, ESLint and TypeScript",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -15,8 +15,7 @@
     "test": "jest",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "prepublishOnly": "tsc",
-    "postinstall": "npm audit"
+    "prepublishOnly": "tsc"
   },
   "exports": {
     ".": {
