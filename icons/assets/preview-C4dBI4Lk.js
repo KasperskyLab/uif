@@ -1,0 +1,1 @@
+import{e as r}from"./index-ChG7qhfk.js";const o=(e,t)=>React.createElement(e,{...t});o.__docgenInfo={description:"",methods:[],displayName:"withColorTokens"};window.React=r;const c={parameters:{actions:{argTypesRegex:"^on[A-Z].*"},controls:{matchers:{color:/(background|color)$/i,date:/Date$/}}},decorators:[o]};export{c as default};
