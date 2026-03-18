@@ -1,6 +1,6 @@
 {
   "name": "@kaspersky/hexa-ui-icons",
-  "version": "2.13.4",
+  "version": "2.13.6",
   "description": "Kaspersky Hexa UI Design System icon pack",
   "author": "AO Kaspersky Lab",
   "license": "Apache-2.0",
@@ -62,12 +62,12 @@
   },
   "keywords": [],
   "devDependencies": {
-    "@kaspersky/dev-tools": "3.4.1",
+    "@kaspersky/dev-tools": "3.4.4",
     "@rollup/plugin-babel": "6.1.0",
     "@rollup/plugin-commonjs": "29.0.0",
     "@rollup/plugin-multi-entry": "7.1.0",
     "@rollup/plugin-node-resolve": "16.0.3",
-    "@rollup/plugin-terser": "0.4.4",
+    "@rollup/plugin-terser": "1.0.0",
     "@storybook/addon-essentials": "8.6.4",
     "@storybook/addon-interactions": "8.6.4",
     "@storybook/addon-links": "8.6.4",
@@ -79,26 +79,27 @@
     "@testing-library/jest-dom": "5.16.2",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
+    "@types/jest": "29.5.14",
     "@types/node": "20.3.2",
     "@types/react": "18.2.42",
     "@types/react-modal": "3.16.0",
     "css-loader": "6.8.1",
-    "eslint": "7.14.0",
+    "eslint": "^9.0.0",
     "eslint-plugin-storybook": "0.6.12",
     "gulp": "5.0.1",
-    "jest": "27.5.1",
+    "jest": "30.3.0",
+    "jest-environment-jsdom": "30.3.0",
     "prop-types": "15.8.1",
     "react": "18.2.0",
     "react-code-blocks": "0.1.6",
     "react-dom": "18.2.0",
     "rimraf": "3.0.2",
-    "rollup": "4.55.1",
-    "rollup-plugin-filesize": "10.0.0",
+    "rollup": "4.59.0",
     "rollup-plugin-peer-deps-external": "2.2.4",
     "rollup-plugin-typescript2": "0.36.0",
-    "storybook": "8.6.15",
-    "ts-jest": "27.1.4",
-    "typescript": "4.5.5"
+    "storybook": "8.6.18",
+    "ts-jest": "29.4.0",
+    "typescript": "5.4.5"
   },
   "peerDependencies": {
     "@kaspersky/hexa-ui-core": "0.x",
@@ -107,11 +108,11 @@
   },
   "overrides": {
     "es5-ext": "0.10.46",
-    "@babel/runtime": "7.17.2",
+    "@babel/runtime": "7.26.10",
     "is-core-module": "2.8.1",
-    "json5": "2.2.0",
+    "json5": "2.2.2",
+    "prismjs": "1.30.0",
     "regenerator-runtime": "0.13.9",
     "resolve": "1.22.0"
   }
 }
-
