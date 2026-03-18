@@ -58,12 +58,11 @@
     "lint:fix": "eslint ./src --fix",
     "test": "npm run lint && npm run icons:tsx-create && jest",
     "storybook": "npm run icons:tsx-create && storybook dev -p 6006",
-    "build-storybook": "npm run icons:tsx-create && storybook build -o storybook/hexa-ui-icons",
-    "postinstall": "npm audit"
+    "build-storybook": "npm run icons:tsx-create && storybook build -o storybook/hexa-ui-icons"
   },
   "keywords": [],
   "devDependencies": {
-    "@kaspersky/dev-tools": "3.4.3",
+    "@kaspersky/dev-tools": "3.4.4",
     "@rollup/plugin-babel": "6.1.0",
     "@rollup/plugin-commonjs": "29.0.0",
     "@rollup/plugin-multi-entry": "7.1.0",
@@ -80,8 +79,8 @@
     "@testing-library/jest-dom": "5.16.2",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
-    "@types/node": "20.3.2",
     "@types/jest": "29.5.14",
+    "@types/node": "20.3.2",
     "@types/react": "18.2.42",
     "@types/react-modal": "3.16.0",
     "css-loader": "6.8.1",
@@ -117,4 +116,3 @@
     "resolve": "1.22.0"
   }
 }
-
