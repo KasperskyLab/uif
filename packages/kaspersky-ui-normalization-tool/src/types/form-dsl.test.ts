@@ -23,8 +23,10 @@ import {
   type Condition,
 } from './form-dsl'
 
-const textControl = (id: string, text: string): TextControl => ({
-  type: 'text', id, text,
+const textControl = (id: string, configHook?: string): TextControl => ({
+  type: 'text',
+  id,
+  ...(configHook ? { configHook } : {}),
 })
 
 describe('form-dsl', () => {
@@ -39,14 +41,14 @@ describe('form-dsl', () => {
         const content = `export default {
         name: "Test Form",
         id: "form-1",
-        elements: [{ type: "text", id: "t1", text: "Hello" }]
+        elements: [{ type: "text", id: "t1" }]
       };`
         const data = await parseFormJs(content)
         expect(data.name).toBe('Test Form')
         expect(data.id).toBe('form-1')
         expect(data.elements).toHaveLength(1)
         expect(data.elements[0].type).toBe('text')
-        expect((data.elements[0] as TextControl).text).toBe('Hello')
+        expect((data.elements[0] as TextControl).configHook).toBeUndefined()
       }
     )
 
@@ -78,7 +80,7 @@ describe('form-dsl', () => {
       const form: FormData = {
         name: 'Serial',
         id: 's1',
-        elements: [textControl('t1', 'Hi')],
+        elements: [textControl('t1')],
       }
       const obj = formToJson(form)
       expect(obj.name).toBe('Serial')
@@ -95,24 +97,23 @@ describe('form-dsl', () => {
       const form: FormData = {
         name: 'JsForm',
         id: 'j1',
-        elements: [textControl('t1', 'Hello')],
+        elements: [textControl('t1', 'handlers/text.config-hook.ts')],
       }
       const js = formToJs(form)
       expect(js).toContain('export default')
       expect(js).toContain('name: "JsForm"')
       expect(js).toContain('id: "j1"')
       expect(js).toContain('elements:')
-      expect(js).toContain('"text"')
-      expect(js).toContain('"Hello"')
+      expect(js).toContain('() => import("./handlers/text.config-hook.ts")')
     })
   })
 
   describe('controlToJson', () => {
-    it('serializes text control', () => {
-      const c = textControl('t1', 'Label')
+    it('serializes text control with configHook', () => {
+      const c = textControl('t1', 'handlers/text.config-hook.ts')
       const json = controlToJson(c) as Record<string, unknown>
       expect(json.type).toBe('text')
-      expect(json.text).toBe('Label')
+      expect(json.configHook).toBe('handlers/text.config-hook.ts')
     })
 
     it('serializes button control with configHook', () => {
@@ -243,6 +244,18 @@ describe('form-dsl', () => {
       expect(js).toContain('() => import("./handlers/button.config-hook.ts")')
     })
 
+    it('formToJs outputs text configHook as dynamic import', () => {
+      const form: FormData = {
+        name: 'Test',
+        id: 'f1',
+        elements: [
+          { type: 'text', id: 't1', configHook: 'handlers/text.config-hook.ts' },
+        ],
+      }
+      const js = formToJs(form)
+      expect(js).toContain('() => import("./handlers/text.config-hook.ts")')
+    })
+
     it('formToJs outputs form-level handlers as import functions', () => {
       const form: FormData = {
         name: 'Test',
@@ -282,7 +295,7 @@ describe('form-dsl', () => {
       const tree: FormControl[] = [
         {
           type: 'grid', id: 'g1', rows: 1, cols: 2,
-          children: [textControl('inner', 'X'), null],
+          children: [textControl('inner'), null],
         },
       ]
       const result = removeControlFromTree(tree, 'inner')
@@ -291,7 +304,7 @@ describe('form-dsl', () => {
     })
 
     it('removes root control', () => {
-      const tree: FormControl[] = [textControl('a', 'A'), textControl('b', 'B')]
+      const tree: FormControl[] = [textControl('a'), textControl('b')]
       const result = removeControlFromTree(tree, 'a')
       expect(result).toHaveLength(1)
       expect(result[0].id).toBe('b')
@@ -303,7 +316,7 @@ describe('form-dsl', () => {
       const tree: FormControl[] = [
         {
           type: 'grid', id: 'g1', rows: 1, cols: 1,
-          children: [textControl('nested', 'N')],
+          children: [textControl('nested')],
         },
       ]
       const ids: string[] = []
@@ -315,7 +328,7 @@ describe('form-dsl', () => {
 
   describe('findControlInTree', () => {
     it('finds control in flat list', () => {
-      const tree: FormControl[] = [textControl('a', 'A'), textControl('b', 'B')]
+      const tree: FormControl[] = [textControl('a'), textControl('b')]
       const found = findControlInTree(tree, 'b')
       expect(found).toBeDefined()
       expect(found!.id).toBe('b')
@@ -326,7 +339,7 @@ describe('form-dsl', () => {
       const tree: FormControl[] = [
         {
           type: 'grid', id: 'g1', rows: 2, cols: 2,
-          children: [null, textControl('inner', 'Inner'), null, null],
+          children: [null, textControl('inner'), null, null],
         },
       ]
       const found = findControlInTree(tree, 'inner')
@@ -338,23 +351,25 @@ describe('form-dsl', () => {
 
   describe('updateControlInTree', () => {
     it('updates control in flat list', () => {
-      const tree: FormControl[] = [textControl('a', 'A'), textControl('b', 'B')]
-      const next = updateControlInTree(tree, 'b', { text: 'B updated' })
+      const tree: FormControl[] = [textControl('a'), textControl('b')]
+      const next = updateControlInTree(tree, 'b', {
+        configHook: 'handlers/t.config-hook.ts',
+      })
       const updated = next[1] as TextControl
-      expect(updated.text).toBe('B updated')
+      expect(updated.configHook).toBe('handlers/t.config-hook.ts')
     })
 
     it('updates nested control in grid', () => {
       const tree: FormControl[] = [
         {
           type: 'grid', id: 'g1', rows: 1, cols: 2,
-          children: [textControl('nested', 'Old'), null],
+          children: [textControl('nested', 'old.ts'), null],
         },
       ]
-      const next = updateControlInTree(tree, 'nested', { text: 'New' })
+      const next = updateControlInTree(tree, 'nested', { configHook: 'new.ts' })
       const grid = next[0] as GridControl
       const updated = grid.children[0] as TextControl
-      expect(updated.text).toBe('New')
+      expect(updated.configHook).toBe('new.ts')
     })
   })
 
@@ -364,12 +379,12 @@ describe('form-dsl', () => {
       const tree: (FormControl | null)[] = [
         { type: 'grid', id: gridId, rows: 2, cols: 2, children: [null, null, null, null] },
       ]
-      const newChildren: (FormControl | null)[] = [textControl('c1', 'Cell1'), null, null, null]
+      const newChildren: (FormControl | null)[] = [textControl('c1'), null, null, null]
       const result = setGridChildrenInTree(tree, gridId, newChildren)
       const grid = result[0] as GridControl
       const cell = grid.children[0] as TextControl
       expect(cell.type).toBe('text')
-      expect(cell.text).toBe('Cell1')
+      expect(cell.id).toBe('c1')
     })
   })
 
@@ -379,12 +394,12 @@ describe('form-dsl', () => {
       const tree: (FormControl | null)[] = [
         { type: 'table', id: tableId, rows: 1, cols: 2, children: [null, null] },
       ]
-      const newChildren: (FormControl | null)[] = [textControl('cell1', 'C1'), null]
+      const newChildren: (FormControl | null)[] = [textControl('cell1'), null]
       const result = setTableChildrenInTree(tree, tableId, newChildren)
       const table = result[0]
       expect(table && table.type).toBe('table')
       const cell = (table as { children: (FormControl | null)[] }).children[0] as TextControl
-      expect(cell.text).toBe('C1')
+      expect(cell.id).toBe('cell1')
     })
   })
 
@@ -401,12 +416,12 @@ describe('form-dsl', () => {
           activeKey: 'k1',
         },
       ]
-      const newChildren: (FormControl | null)[] = [textControl('tab1-text', 'In tab 1')]
+      const newChildren: (FormControl | null)[] = [textControl('tab1-text')]
       const result = setTabsChildrenInTree(tree, tabsId, 0, newChildren)
       const tabs = result[0] as { items: { children: (FormControl | null)[] }[] }
       expect(tabs.items[0].children).toHaveLength(1)
       const cell = tabs.items[0].children[0] as TextControl
-      expect(cell.text).toBe('In tab 1')
+      expect(cell.id).toBe('tab1-text')
     })
   })
 })

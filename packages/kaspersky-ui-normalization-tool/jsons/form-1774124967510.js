@@ -11,8 +11,7 @@ export default {
         {
           "type": "text",
           "id": "text-1774124983057-g88o6vy",
-          "defaultValue": "Hello world!",
-          "text": "Текст"
+          "configHook": () => import("./handlers/text.config-hook.ts")
         },
         {
           "type": "input",

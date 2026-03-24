@@ -231,7 +231,8 @@ export interface ButtonControl extends FormControlIdentity {
 
 export interface TextControl extends FormControlBase {
   type: 'text'
-  text?: string
+  /** Путь к модулю configHook; только `.ts` (см. tooling.md). */
+  configHook?: string
 }
 
 export interface InputControl extends FormControlBase {
@@ -345,7 +346,7 @@ const DEFAULT_UI_EVENTS: EventDefinition[] = [{ name: 'onClick', label: 'При 
 /** Доступные события для каждого типа контрола */
 export const CONTROL_EVENTS: Record<FormControlType, EventDefinition[]> = {
   button: [],
-  text: [{ name: 'onClick', label: 'При нажатии' }],
+  text: [],
   input: [{ name: 'onChange', label: 'При изменении' }, { name: 'onBlur', label: 'При потере фокуса' }, { name: 'onFocus', label: 'При получении фокуса' }],
   checkbox: [{ name: 'onChange', label: 'При изменении' }],
   radio: [{ name: 'onChange', label: 'При изменении' }],
@@ -456,7 +457,11 @@ function normalizeControl(item: unknown): FormControl | null {
   }
   if (type === 'text') {
     const c: TextControl = { type: 'text', id }
-    if (typeof o.text === 'string') c.text = o.text
+    if (typeof o.configHook === 'string') c.configHook = o.configHook
+    else if (typeof o.configHook === 'function') {
+      const path = getImportPathFromHandler(o.configHook)
+      if (path) c.configHook = path
+    }
     return applyFieldBinding(c)
   }
   if (type === 'input') {
@@ -650,7 +655,12 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
   if (bc.visibleWhen) base.visibleWhen = bc.visibleWhen
   if (bc.disabledWhen) base.disabledWhen = bc.disabledWhen
   if (bc.handlers && Object.keys(bc.handlers).length > 0) base.handlers = { ...bc.handlers }
-  if (c.type === 'text') return { ...base, text: (c as TextControl).text ?? '' }
+  if (c.type === 'text') {
+    const t = c as TextControl
+    const out = { ...base }
+    if (t.configHook) out.configHook = t.configHook
+    return out
+  }
   if (c.type === 'input') {
     const i = c as InputControl
     return { ...base, text: i.text ?? '', value: i.value ?? '', placeholder: i.placeholder, disabled: i.disabled, readOnly: i.readOnly }

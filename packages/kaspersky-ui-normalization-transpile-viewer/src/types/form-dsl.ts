@@ -33,7 +33,8 @@ export interface ButtonControl extends FormControlBase {
 
 export interface TextControl extends FormControlBase {
   type: 'text'
-  text?: string
+  /** Путь к модулю configHook; только `.ts` (см. tooling.md). */
+  configHook?: string
 }
 
 export interface InputControl extends FormControlBase {
@@ -170,7 +171,11 @@ function normalizeControl(item: unknown): FormControl | null {
   }
   if (type === 'text') {
     const c: TextControl = { type: 'text', id }
-    if (typeof o.text === 'string') c.text = o.text
+    if (typeof o.configHook === 'string') c.configHook = o.configHook
+    else if (typeof o.configHook === 'function') {
+      const path = getImportPathFromHandler(o.configHook)
+      if (path) c.configHook = path
+    }
     return c
   }
   if (type === 'input') {

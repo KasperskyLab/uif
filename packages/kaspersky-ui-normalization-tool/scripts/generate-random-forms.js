@@ -49,7 +49,7 @@ function elements(count) {
         out.push({
           type: 'text',
           id: cid,
-          text: pick(['Подпись', 'Описание', 'Инструкция', 'Заголовок'])
+          ...(Math.random() > 0.5 && { configHook: 'handlers/text.config-hook.ts' }),
         })
         break
       case 'input':
@@ -113,7 +113,7 @@ function elements(count) {
         })
         break
       default:
-        out.push({ type: 'text', id: cid, text: 'Текст' })
+        out.push({ type: 'text', id: cid })
     }
   }
   return out

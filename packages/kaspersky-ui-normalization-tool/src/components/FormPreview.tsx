@@ -1,11 +1,12 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
-import type { ButtonProps } from '@kaspersky/hexa-ui'
+import type { ButtonProps, TextProps } from '@kaspersky/hexa-ui'
 import { Button, Text, H6, Space, SectionMessage } from '@kaspersky/hexa-ui'
 import type {
   FormControl,
   FormControlBase,
   FormData,
   ButtonControl,
+  TextControl,
   FormSlice,
   ValidationRule,
   Condition,
@@ -15,10 +16,7 @@ import type { CanvasContext } from '../controls/types'
 import { setGridChildrenInTree, setRowChildrenInTree, setTableChildrenInTree, forEachControlInTree } from '../types/form-dsl'
 import { createControl, ALL_CONTROL_TYPES } from '../controls/registry'
 import { CanvasPreviewErrorBoundary } from './CanvasPreviewErrorBoundary'
-import {
-  isConfigHookPathTs,
-  transpileConfigHookSource,
-} from '../utils/transpileConfigHookSource'
+import { loadConfigHookDefaultExport } from '../utils/loadConfigHookModule'
 
 function validateField(value: unknown, rules: ValidationRule[]): string | null {
   for (const rule of rules) {
@@ -71,41 +69,7 @@ function evaluateCondition(condition: Condition, values: Record<string, unknown>
 
 type ButtonConfigHookFn = (formSlice: FormSlice) => ButtonProps | null
 
-async function getFileHandleFromPath(
-  dir: FileSystemDirectoryHandle,
-  path: string,
-): Promise<FileSystemFileHandle> {
-  const parts = path.split('/').filter(Boolean)
-  if (parts.length === 0) throw new Error('Empty path')
-  let current: FileSystemDirectoryHandle = dir
-  for (let i = 0; i < parts.length - 1; i++) {
-    current = await current.getDirectoryHandle(parts[i])
-  }
-  return current.getFileHandle(parts[parts.length - 1])
-}
-
-async function loadButtonConfigHookModule(
-  dir: FileSystemDirectoryHandle,
-  path: string,
-): Promise<ButtonConfigHookFn | null> {
-  try {
-    if (!isConfigHookPathTs(path)) {
-      console.error('configHook: требуется файл TypeScript (.ts), получено:', path)
-      return null
-    }
-    const fh = await getFileHandleFromPath(dir, path)
-    const file = await fh.getFile()
-    const raw = await file.text()
-    const text = transpileConfigHookSource(raw)
-    const url = URL.createObjectURL(new Blob([text], { type: 'application/javascript' }))
-    const mod = await import(/* @vite-ignore */ url)
-    URL.revokeObjectURL(url)
-    return typeof mod?.default === 'function' ? mod.default : null
-  } catch (err) {
-    console.error('configHook load error:', err)
-    return null
-  }
-}
+type TextConfigHookFn = (formSlice: FormSlice) => TextProps | null
 
 function ButtonWithHook({
   hookFn,
@@ -138,9 +102,9 @@ function PreviewButtonRenderer({
     }
     setLoading(true)
     let cancelled = false
-    loadButtonConfigHookModule(formDirectoryHandle, control.configHook).then((fn) => {
+    loadConfigHookDefaultExport(formDirectoryHandle, control.configHook).then((fn) => {
       if (!cancelled) {
-        setHookFn(() => fn)
+        setHookFn(() => fn as ButtonConfigHookFn)
         setLoading(false)
       }
     })
@@ -154,6 +118,63 @@ function PreviewButtonRenderer({
     return <Button mode="tertiary" text={`[${control.id}]`} disabled loading />
   }
   return <ButtonWithHook key={control.configHook} hookFn={hookFn} formSlice={formSlice} />
+}
+
+function TextWithHook({
+  hookFn,
+  formSlice,
+}: {
+  hookFn: TextConfigHookFn
+  formSlice: FormSlice
+}): React.ReactElement | null {
+  const props = hookFn(formSlice)
+  if (props === null) return null
+  return <Text {...props} />
+}
+
+function PreviewTextRenderer({
+  control,
+  formSlice,
+  formDirectoryHandle,
+}: {
+  control: TextControl
+  formSlice: FormSlice
+  formDirectoryHandle: FileSystemDirectoryHandle | null
+}): React.ReactElement | null {
+  const [hookFn, setHookFn] = useState<TextConfigHookFn | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!control.configHook || !formDirectoryHandle) {
+      setHookFn(null)
+      return
+    }
+    setLoading(true)
+    let cancelled = false
+    loadConfigHookDefaultExport(formDirectoryHandle, control.configHook).then((fn) => {
+      if (!cancelled) {
+        setHookFn(() => fn as TextConfigHookFn)
+        setLoading(false)
+      }
+    })
+    return () => { cancelled = true }
+  }, [control.configHook, formDirectoryHandle])
+
+  if (!control.configHook) {
+    return (
+      <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+        [{control.id}]
+      </Text>
+    )
+  }
+  if (loading || !hookFn) {
+    return (
+      <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+        …
+      </Text>
+    )
+  }
+  return <TextWithHook key={control.configHook} hookFn={hookFn} formSlice={formSlice} />
 }
 
 function PreviewControl({
@@ -176,6 +197,17 @@ function PreviewControl({
       <div style={{ marginBottom: 8, width: '100%' }}>
         <PreviewButtonRenderer
           control={control as ButtonControl}
+          formSlice={formSlice}
+          formDirectoryHandle={formDirectoryHandle}
+        />
+      </div>
+    )
+  }
+  if (control.type === 'text') {
+    return (
+      <div style={{ marginBottom: 8, width: '100%' }}>
+        <PreviewTextRenderer
+          control={control as TextControl}
           formSlice={formSlice}
           formDirectoryHandle={formDirectoryHandle}
         />

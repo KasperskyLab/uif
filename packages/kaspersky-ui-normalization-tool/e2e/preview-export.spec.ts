@@ -30,7 +30,7 @@ test.describe('Предпросмотр формы', () => {
   test('в предпросмотре отображаются контролы формы', async ({ page }) => {
     await page.getByTestId('palette-component-Text').dblclick()
     await page.getByRole('button', { name: 'Предпросмотр' }).click()
-    await expect(page.getByText('Текст')).toBeVisible()
+    await expect(page.getByText(/\[text-/)).toBeVisible()
   })
 })
 

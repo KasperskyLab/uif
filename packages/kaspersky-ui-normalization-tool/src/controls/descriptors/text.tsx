@@ -1,7 +1,8 @@
-import { Text, Textbox, Space } from '@kaspersky/hexa-ui'
+import { Button, Text } from '@kaspersky/hexa-ui'
 import { Text as TextIcon } from '@kaspersky/hexa-ui-icons/16'
 import type { ControlDescriptor } from '../types'
 import type { TextControl } from '../../types/form-dsl'
+import { ConfigHookIdentityPropsEditor } from '../../components/ConfigHookIdentityPropsEditor'
 
 export const textDescriptor: ControlDescriptor<TextControl> = {
   type: 'text',
@@ -11,20 +12,21 @@ export const textDescriptor: ControlDescriptor<TextControl> = {
   createDefault: () => ({
     type: 'text',
     id: '',
-    text: 'Текст',
   }),
 
   CanvasPreview: ({ control }) => (
-    <Text type="BTR3">{control.text ?? 'Текст'}</Text>
+    <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+      [{control.id || 'text'}]
+    </Text>
   ),
 
-  PropsEditor: ({ control, onUpdate }) => (
-    <Space size={12} direction="vertical" style={{ width: '100%' }}>
-      <Textbox
-        value={control.text ?? ''}
-        onChange={(v) => onUpdate({ text: v || undefined })}
-        placeholder="Текст"
-      />
-    </Space>
+  PropsEditor: ({ control, onUpdate, panelContext }) => (
+    <ConfigHookIdentityPropsEditor
+      id={control.id}
+      configHook={control.configHook}
+      onUpdate={onUpdate}
+      configHookPlaceholder="handlers/text.config-hook.ts"
+      formDirectoryHandle={panelContext?.formDirectoryHandle ?? null}
+    />
   ),
 }

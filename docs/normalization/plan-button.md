@@ -1,5 +1,7 @@
 # Button: план (роадмап п.1)
 
+**Статус:** ✅ **выполнено** — DSL, tool, viewer, пример `button.config-hook.ts`, `ButtonProps | null`, инспектор **`ConfigHookIdentityPropsEditor`** (readonly `id` + `configHook`).
+
 Принцип **«одна настройка — один способ»** ([tooling.md](./tooling.md#normalization-one-setting-principle)).
 
 Реализация закрывает **п.1** [roadmap.md](./roadmap.md): один **configHook** возвращает полный набор пропсов Hexa, включая колбэки; контракт «два слоя контекста» применяется **внутри** хука при написании `onClick` и т.п.
@@ -23,6 +25,7 @@
 
 - **`id`** — поле **только для чтения**: показывает идентификатор контрола в DSL (редактирование — через сценарии создания/дублирования контрола в дереве, не через текстовое поле).
 - Пикер и путь к модулю **`configHook`**.
+- Разметка инспектора вынесена в **`ConfigHookIdentityPropsEditor`** и переиспользуется для **text** (тот же набор полей).
 
 ## Холст / превью (KUNT) и FormRenderer (viewer)
 

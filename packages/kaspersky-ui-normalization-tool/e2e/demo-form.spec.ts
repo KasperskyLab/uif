@@ -18,7 +18,7 @@ test.describe('Демо-форма (e2e режим)', () => {
     await expect(paletteText).toBeVisible()
     await paletteText.dblclick()
     const canvas = page.getByTestId('form-canvas')
-    await expect(canvas.getByText('Текст')).toBeVisible()
+    await expect(canvas.getByText(/\[text-/)).toBeVisible()
   })
 
   test('двойной клик по «Кнопка» добавляет кнопку на холст', async ({ page }) => {

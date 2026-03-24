@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
-import type { ButtonProps } from '@kaspersky/hexa-ui'
+import type { ButtonProps, TextProps } from '@kaspersky/hexa-ui'
 import {
   Button,
   Text,
@@ -34,10 +34,7 @@ import type {
   MetaComponentControl,
   FormSlice,
 } from '@/types/form-dsl'
-import {
-  isConfigHookPathTs,
-  transpileConfigHookSource,
-} from '@/utils/transpileConfigHookSource'
+import { loadConfigHookDefaultExport } from '@/utils/loadConfigHookModule'
 
 const META_COMPONENT_MAP: Record<string, React.ComponentType<Record<string, unknown>>> = {
   Button,
@@ -103,20 +100,6 @@ function getInitialFormState(elements: FormControl[]): Record<string, unknown> {
   return state
 }
 
-/** Получить FileHandle по относительному пути от директории */
-async function getFileHandleFromPath(
-  dir: FileSystemDirectoryHandle,
-  path: string
-): Promise<FileSystemFileHandle> {
-  const parts = path.split('/').filter(Boolean)
-  if (parts.length === 0) throw new Error('Empty path')
-  let current: FileSystemDirectoryHandle = dir
-  for (let i = 0; i < parts.length - 1; i++) {
-    current = await current.getDirectoryHandle(parts[i])
-  }
-  return current.getFileHandle(parts[parts.length - 1])
-}
-
 const formRowStyle: React.CSSProperties = {
   marginBottom: 16,
 }
@@ -152,28 +135,7 @@ export type { FormSlice } from '@/types/form-dsl'
 
 type ButtonConfigHookFn = (formSlice: FormSlice) => ButtonProps | null
 
-async function loadButtonConfigHookModule(
-  dir: FileSystemDirectoryHandle,
-  path: string,
-): Promise<ButtonConfigHookFn | null> {
-  try {
-    if (!isConfigHookPathTs(path)) {
-      console.error('configHook: требуется файл TypeScript (.ts), получено:', path)
-      return null
-    }
-    const fh = await getFileHandleFromPath(dir, path)
-    const file = await fh.getFile()
-    const raw = await file.text()
-    const text = transpileConfigHookSource(raw)
-    const url = URL.createObjectURL(new Blob([text], { type: 'application/javascript' }))
-    const mod = await import(/* @vite-ignore */ url)
-    URL.revokeObjectURL(url)
-    return typeof mod?.default === 'function' ? mod.default : null
-  } catch (err) {
-    console.error('configHook load error:', err)
-    return null
-  }
-}
+type TextConfigHookFn = (formSlice: FormSlice) => TextProps | null
 
 function ButtonWithHook({
   hookFn,
@@ -206,9 +168,9 @@ function ButtonRenderer({
     }
     setLoading(true)
     let cancelled = false
-    loadButtonConfigHookModule(formDirectoryHandle, control.configHook).then((fn) => {
+    loadConfigHookDefaultExport(formDirectoryHandle, control.configHook).then((fn) => {
       if (!cancelled) {
-        setHookFn(() => fn)
+        setHookFn(() => fn as ButtonConfigHookFn)
         setLoading(false)
       }
     })
@@ -222,6 +184,63 @@ function ButtonRenderer({
     return <Button mode="tertiary" text={`[${control.id}]`} disabled loading />
   }
   return <ButtonWithHook key={control.configHook} hookFn={hookFn} formSlice={formSlice} />
+}
+
+function TextWithHook({
+  hookFn,
+  formSlice,
+}: {
+  hookFn: TextConfigHookFn
+  formSlice: FormSlice
+}): React.ReactElement | null {
+  const props = hookFn(formSlice)
+  if (props === null) return null
+  return <Text {...props} />
+}
+
+function TextRenderer({
+  control,
+  formSlice,
+  formDirectoryHandle,
+}: {
+  control: TextControl
+  formSlice: FormSlice
+  formDirectoryHandle: FileSystemDirectoryHandle | null
+}): React.ReactElement | null {
+  const [hookFn, setHookFn] = useState<TextConfigHookFn | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!control.configHook || !formDirectoryHandle) {
+      setHookFn(null)
+      return
+    }
+    setLoading(true)
+    let cancelled = false
+    loadConfigHookDefaultExport(formDirectoryHandle, control.configHook).then((fn) => {
+      if (!cancelled) {
+        setHookFn(() => fn as TextConfigHookFn)
+        setLoading(false)
+      }
+    })
+    return () => { cancelled = true }
+  }, [control.configHook, formDirectoryHandle])
+
+  if (!control.configHook) {
+    return (
+      <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+        [{control.id}]
+      </Text>
+    )
+  }
+  if (loading || !hookFn) {
+    return (
+      <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+        …
+      </Text>
+    )
+  }
+  return <TextWithHook key={control.configHook} hookFn={hookFn} formSlice={formSlice} />
 }
 
 export interface FormRendererProps {
@@ -270,7 +289,14 @@ export function FormRenderer({
       }
       case 'text': {
         const c = control as TextControl
-        return <Text key={c.id} type="BTR3">{c.text ?? 'Текст'}</Text>
+        return (
+          <TextRenderer
+            key={c.id}
+            control={c}
+            formSlice={formSlice}
+            formDirectoryHandle={formDirectoryHandle}
+          />
+        )
       }
       case 'input': {
         const c = control as InputControl

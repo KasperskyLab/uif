@@ -6,6 +6,7 @@
 |----------|----------|
 | **[tooling.md](./tooling.md)** | Спека: пакеты, DSL, границы и паритет, контракт **configHook**, типизация/загрузка, сценарии, IndexedDB, URL `form`, структура кода. |
 | **[roadmap.md](./roadmap.md)** | Краткий план этапов (п.1–5); детали решений — в tooling. |
-| **[plan-button.md](./plan-button.md)** | Детализация **Button** под п.1 роадмапа (configHook, паритет tool + viewer); задел под п.2 (типизация формы). |
+| **[plan-button.md](./plan-button.md)** | **Button**, п.1: ✅ выполнено (`ButtonProps \| null`, паритет tool + viewer). |
+| **[plan-text.md](./plan-text.md)** | **Text**, п.1: ✅ выполнено (`TextProps \| null`, паритет с Button). |
 
 Точка входа: **[tooling.md](./tooling.md)**.

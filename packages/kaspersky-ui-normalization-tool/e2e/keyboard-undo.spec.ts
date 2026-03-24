@@ -16,10 +16,10 @@ test.describe('Отмена / Повтор (Undo / Redo)', () => {
   test('после добавления контрола Ctrl+Z отменяет действие', async ({ page }) => {
     const canvas = page.getByTestId('form-canvas')
     await page.getByTestId('palette-text').dblclick()
-    await expect(canvas.getByText('Текст')).toBeVisible()
+    await expect(canvas.getByText(/\[text-/)).toBeVisible()
 
     await page.keyboard.press('Control+z')
-    await expect(canvas.getByText('Текст')).not.toBeVisible()
+    await expect(canvas.getByText(/\[text-/)).not.toBeVisible()
   })
 
   test('после Undo, Ctrl+Shift+Z восстанавливает действие', async ({ page }) => {
@@ -37,25 +37,25 @@ test.describe('Отмена / Повтор (Undo / Redo)', () => {
   test('кнопка «↩» отменяет действие', async ({ page }) => {
     const canvas = page.getByTestId('form-canvas')
     await page.getByTestId('palette-text').dblclick()
-    await expect(canvas.getByText('Текст')).toBeVisible()
+    await expect(canvas.getByText(/\[text-/)).toBeVisible()
 
     const undoBtn = page.getByRole('button').filter({ has: page.locator('text=↩') })
     await undoBtn.click()
-    await expect(canvas.getByText('Текст')).not.toBeVisible()
+    await expect(canvas.getByText(/\[text-/)).not.toBeVisible()
   })
 
   test('кнопка «↪» повторяет отменённое действие', async ({ page }) => {
     const canvas = page.getByTestId('form-canvas')
     await page.getByTestId('palette-text').dblclick()
-    await expect(canvas.getByText('Текст')).toBeVisible()
+    await expect(canvas.getByText(/\[text-/)).toBeVisible()
 
     const undoBtn = page.getByRole('button').filter({ has: page.locator('text=↩') })
     await undoBtn.click()
-    await expect(canvas.getByText('Текст')).not.toBeVisible()
+    await expect(canvas.getByText(/\[text-/)).not.toBeVisible()
 
     const redoBtn = page.getByRole('button').filter({ has: page.locator('text=↪') })
     await redoBtn.click()
-    await expect(canvas.getByText('Текст')).toBeVisible()
+    await expect(canvas.getByText(/\[text-/)).toBeVisible()
   })
 })
 
@@ -71,7 +71,7 @@ test.describe('Клавиатурные сочетания', () => {
   test('Delete удаляет выбранный контрол', async ({ page }) => {
     const canvas = page.getByTestId('form-canvas')
     await page.getByTestId('palette-text').dblclick()
-    await expect(canvas.getByText('Текст')).toBeVisible()
+    await expect(canvas.getByText(/\[text-/)).toBeVisible()
 
     await canvas.locator('.control-wrap').first().click()
     await page.keyboard.press('Delete')

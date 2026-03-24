@@ -9,7 +9,8 @@ import { getDescriptor } from '../controls/registry'
 import { ToolbarItemEditor } from '../controls/descriptors/toolbar'
 import { HandlersEditor } from './HandlersEditor'
 
-const INPUT_CONTROL_TYPES: string[] = ['text', 'input', 'checkbox', 'radio', 'select', 'toggle', ...EXTRA_UI_DSL_TYPES]
+/** `text` (типографика + configHook) не входит — паритет с `button`, без привязки данных в панели */
+const INPUT_CONTROL_TYPES: string[] = ['input', 'checkbox', 'radio', 'select', 'toggle', ...EXTRA_UI_DSL_TYPES]
 const DATA_TYPE_OPTIONS = [
   { value: 'string', label: 'string' },
   { value: 'number', label: 'number' },

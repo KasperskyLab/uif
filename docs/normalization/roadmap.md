@@ -17,7 +17,7 @@
 **Прогресс**
 
 - ✅ **Button** — [plan-button.md](./plan-button.md)
-- ⏳ **Text**
+- ✅ **Text** — [plan-text.md](./plan-text.md)
 - ⏳ **Grid**
 - ⏳ **Table**
 
