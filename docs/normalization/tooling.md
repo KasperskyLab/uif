@@ -8,6 +8,8 @@
 
 **Границы:** спека описывает роль пакетов, общую модель «конфиг → UI» и сценарии использования. Детали API отдельных хуков и компонентов — в `README.md` / `AGENTS.md` соответствующих пакетов.
 
+**Оглавление раздела:** [README в этой папке](./README.md).
+
 ---
 
 ## Кратко
@@ -65,6 +67,7 @@
 ## Структура в репозитории
 
 ```
+docs/normalization/                        # спецификация normalization (этот раздел)
 packages/
   kaspersky-ui-normalization-tool/          # WYSIWYG-редактор (dev)
     src/utils/directoryHandleStorage.ts   # IndexedDB: последний каталог
