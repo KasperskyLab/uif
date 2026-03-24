@@ -2,7 +2,7 @@
  * Хендлер настройки кнопки (configHook / П.2).
  * Файл обязан быть TypeScript (.ts): см. docs/normalization/tooling.md
  *
- * Типы: `FormSlice` из DSL, `ButtonProps` из Hexa UI — сквозная типизация возврата.
+ * Типы: `FormSlice` из DSL, `ButtonProps` из Hexa UI — сквозная типизация возвращаемого значения.
  */
 import type { ButtonProps } from '@kaspersky/hexa-ui'
 import type { FormSlice } from '../../src/types/form-dsl'
@@ -21,7 +21,7 @@ export default function buttonConfigHook(
 
   const result: ButtonProps = {
     mode: 'dangerFilled',
-    size: 'extraLarge',    
+    size: 'extraLarge', 
     text,
     onClick: () => {
       const keys = Object.keys(state)

@@ -62,7 +62,7 @@
 
 ### Конфиг-хуки: только TypeScript
 
-Модули **configHook** (хендлеры настройки экземпляра компонента ДС, п.2 роадмапа) пишутся **только на TypeScript**: файл с расширением **`.ts`**, `export default` — функция с сигнатурой `(formSlice) => пропсы | null`.
+Модули **configHook** (хендлеры настройки экземпляра компонента ДС, п.1 [roadmap](./roadmap.md)) пишутся **только на TypeScript**: файл с расширением **`.ts`**, `export default` — функция с сигнатурой `(formSlice) => пропсы | null`.
 
 - В DSL и в пикере файлов в **KUNT** для configHook допускаются **только** пути к `.ts`.
 - **Normalization tool** и **transpile viewer** перед динамическим `import()` в браузере **транспилируют** исходник TypeScript в JavaScript (зависимость `sucrase`), затем выполняют модуль из blob-URL.
