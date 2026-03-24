@@ -433,12 +433,14 @@ function TableRenderer({
     dataSource: _ds,
     dataSourceFunction: _dsf,
     children: _ch,
-    toolbar: _tb,
+    toolbar: hookToolbar,
     ...hookRest
   } = partial as Partial<ITableProps> & {
     children?: unknown
     dataSourceFunction?: unknown
   }
+
+  const showDslToolbarPreview = hasToolbar && hookToolbar === undefined
 
   const bodyHooked =
     !hasAnyChild && t.emptyText ? (
@@ -451,12 +453,13 @@ function TableRenderer({
         dataSource={dataSource}
         columns={columns}
         {...hookRest}
+        {...(hookToolbar !== undefined ? { toolbar: hookToolbar } : {})}
       />
     )
 
   return (
     <div style={wrapStyle}>
-      {toolbarBlock}
+      {showDslToolbarPreview ? toolbarBlock : null}
       {bodyHooked}
     </div>
   )

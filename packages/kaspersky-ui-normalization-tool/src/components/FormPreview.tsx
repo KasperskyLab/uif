@@ -420,12 +420,15 @@ function PreviewTableRenderer({
     dataSource: _ds,
     dataSourceFunction: _dsf,
     children: _ch,
-    toolbar: _tb,
+    toolbar: hookToolbar,
     ...hookRest
   } = partial as Partial<ITableProps> & {
     children?: unknown
     dataSourceFunction?: unknown
   }
+
+  /** Нативный тулбар Hexa только из хука; иначе — статический превью из DSL. */
+  const showDslToolbarPreview = hasToolbar && hookToolbar === undefined
 
   const bodyHooked =
     !hasAnyChild && t.emptyText ? (
@@ -438,12 +441,13 @@ function PreviewTableRenderer({
         dataSource={dataSource}
         columns={columns}
         {...hookRest}
+        {...(hookToolbar !== undefined ? { toolbar: hookToolbar } : {})}
       />
     )
 
   return (
     <>
-      {toolbarBlock}
+      {showDslToolbarPreview ? toolbarBlock : null}
       {bodyHooked}
     </>
   )

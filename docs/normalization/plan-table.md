@@ -4,7 +4,7 @@
 
 Принцип **«одна настройка — один способ»** ([tooling.md](./tooling.md#normalization-one-setting-principle)).
 
-**Аналогия с Grid:** таблица в tool/viewer сегодня — **матрица ячеек на Hexa `<Grid />`** (не отдельный `<Table />` из ДС). Контракт **гибридный**, как у grid: **структура и параметры, нужные редактору** — в DSL; **оформление/раскладка внутренней матрицы** — через **configHook** (`Partial<GridProps>`, без дублирования в DSL). Переход на настоящий **Hexa `<Table />`** — открытый вопрос в roadmap §3.
+Матрица ячеек в tool/viewer строится через Hexa **`<Table />`** (`columns` + `dataSource` из DSL); **configHook** — **`Partial<ITableProps>`** (без подмены `columns` / `dataSource`). Открытые вопросы по превью/редактору и тулбару — [roadmap §3](./roadmap.md#3-превью-в-редакторе).
 
 ---
 
@@ -23,11 +23,11 @@
 | **`disabled`** | Блокировка взаимодействия с ячейками. |
 | **`toolbar`** | Конфиг тулбара над таблицей (как сейчас в инспекторе). |
 
-**Не дублируем в DSL** (хук или дефолты в коде): прочие **`GridProps`** внутренней матрицы — `layout`, `layoutProperty` (в т.ч. `gap` при согласовании с текущим `gap: 0`), `className`, `style` и т.д.
+**Не дублируем в DSL** (хук или дефолты в коде): прочие поля **`ITableProps`**, кроме **`columns`**, **`dataSource`**, **`dataSourceFunction`** и React-**`children`** — их задаёт рендерер по матрице DSL.
 
-**`cols` для внутреннего `<Grid />`:** всегда **`cols={t.cols}`** из DSL, вровень с `children`.
+**Размерность матрицы** — всегда из DSL: **`rows`**, **`cols`**, **`children`**.
 
-**Возвращаемое значение хука:** **`null`** — не рендерить контейнер таблицы. Иначе **`Partial<GridProps>`** без `children`; **`cols`** и React-**`children`** ячеек задаёт рендерер из DSL.
+**Возвращаемое значение хука:** **`null`** — не рендерить контейнер таблицы. Иначе **`Partial<ITableProps>`**; **`columns`** и **`dataSource`** из хука отбрасываются при мёрже.
 
 **`CONTROL_EVENTS.table`:** без расширения смысла; события — через пропсы при необходимости.
 
@@ -41,16 +41,16 @@
 
 1. **`loadConfigHookDefaultExport`**, **`ConfigHookIdentityPropsEditor`** — как у button/text/grid.
 2. **Редактор `rows` / `cols`** — тот же компонент/паттерн, что у grid (`GridRowsColsPropsEditor` или обобщение).
-3. **Дефолты матрицы** — `defaultGridLayoutRows(rows)` + **`layoutProperty: { gap: 0 }`** (как сейчас в `TableControlBlock` / viewer).
-4. **Паттерн рендера** — по аналогии с **Grid**: `PreviewTableRenderer` / `TableRenderer`, загрузка, мерж, `null`, плейсхолдер загрузки; обёртка с **emptyText**, **disabled**, **toolbar** из DSL.
+3. **Матрица** — `buildTableMatrixColumnsAndDataSource` + Hexa **`<Table />`**.
+4. **Паттерн рендера** — по аналогии с **Grid**: `PreviewTableRenderer` / `TableRenderer`, загрузка хука, мерж, `null`, плейсхолдер; **emptyText**, **disabled**; тулбар — DSL-превью и/или **`toolbar`** из хука (см. [roadmap §3](./roadmap.md#3-превью-в-редакторе)).
 5. Опционально: общий **`useConfigHookModule`**.
 
 ---
 
 ## Холст / превью (tool) и `FormRenderer` (viewer)
 
-- Холст: **`TableControlBlock`** — дефолтная матрица без загрузки хука (как grid); при необходимости позже — выровнять с §3 roadmap.
-- **FormPreview** / **FormRenderer**: загрузка хука, мерж во **внутренний `<Grid />`**, рекурсивный рендер ячеек; DSL-поля таблицы вне матрицы без изменения контракта.
+- Холст: **`TableControlBlock`** — **`<Table />`** без загрузки **configHook** (хук на холсте не подмешивается).
+- **FormPreview** / **FormRenderer**: загрузка хука, мерж в **`<Table />`**, рекурсивный рендер ячеек; DSL-поля таблицы вне матрицы без изменения контракта.
 
 ---
 
@@ -64,10 +64,10 @@
 
 ## Связь с п.2
 
-Цепочка **`FormSlice`** → **`TableControl`** → тип возврата хука (`GridProps` матрицы) — проверяема после типизации формы.
+Цепочка **`FormSlice`** → **`TableControl`** → тип возврата хука (**`Partial<ITableProps>`**) — проверяема после типизации формы.
 
 ---
 
 ## Согласование
 
-Решения по статике DSL, гибриду и матрице на `<Grid />` для п.1 зафиксированы и внедрены в код (см. статус выше). Вопросы про **`<Table />` ДС** и про **rows/cols на холсте vs хук** — в [roadmap §3](./roadmap.md#3-превью-в-редакторе).
+Решения по статике DSL и матрице на **`<Table />`** для п.1 зафиксированы и внедрены в код (см. статус выше). Вопросы про **rows/cols на холсте vs хук**, **тулбар** и **выбор строк** — в [roadmap §3](./roadmap.md#3-превью-в-редакторе).
