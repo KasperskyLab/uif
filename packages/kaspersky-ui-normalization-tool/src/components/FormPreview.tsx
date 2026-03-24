@@ -61,7 +61,7 @@ interface FormSlice {
   config: { elements: FormControl[] }
 }
 
-type ConfigHookFn = (formSlice: FormSlice, componentType: string) => Record<string, unknown> | null
+type ConfigHookFn = (formSlice: FormSlice) => Record<string, unknown> | null
 
 async function getFileHandleFromPath(
   dir: FileSystemDirectoryHandle,
@@ -101,7 +101,7 @@ function ButtonWithHook({
   hookFn: ConfigHookFn
   formSlice: FormSlice
 }): React.ReactElement | null {
-  const props = hookFn(formSlice, 'Button')
+  const props = hookFn(formSlice)
   if (props === null) return null
   return <Button {...props} />
 }

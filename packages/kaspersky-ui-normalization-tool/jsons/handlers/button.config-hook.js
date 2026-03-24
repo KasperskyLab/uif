@@ -8,14 +8,9 @@
  * @param {Record<string, unknown>} formSlice.state — значения интерактивных контролов по их id
  *   (input, checkbox, select, toggle, radio и т.д.; у type: text значения в state нет)
  * @param {{ elements: unknown[] }} formSlice.config — дерево контролов из DSL
- * @param {string} componentType — для кнопки всегда 'Button'
  */
-export default function buttonConfigHook(formSlice, componentType) {
-  if (componentType !== 'Button') {
-    return null
-  }
-
-  const { state, config } = formSlice
+export default function buttonConfigHook(formSlice) {
+  const { state } = formSlice
 
   // Пример условной видимости: вернуть null, чтобы не монтировать кнопку
   // if (String(state['some-input-id'] ?? '') === 'hide') return null
@@ -25,9 +20,10 @@ export default function buttonConfigHook(formSlice, componentType) {
   // const text = note ? `Отправить «${note}»` : 'Введите текст в поле выше'
 
   return {
-    mode: 'dangerFilled',
+    mode: 'secondary',
     text: 'Демо: configHook',
-    onClick: () => {
+    onClick: (...args) => {
+      console.log('args', args)
       const keys = Object.keys(state)
       const preview =
         keys.length === 0
