@@ -1,13 +1,12 @@
 {
   "name": "@kaspersky/dev-tools",
-  "version": "3.4.3",
+  "version": "3.4.4",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
       "name": "@kaspersky/dev-tools",
-      "version": "3.4.3",
-      "hasInstallScript": true,
+      "version": "3.4.4",
       "license": "Apache-2.0",
       "dependencies": {
         "@babel/core": "7.26.10",
@@ -5501,9 +5500,9 @@
       }
     },
     "node_modules/flatted": {
-      "version": "3.4.1",
-      "resolved": "https://registry.npmjs.org/flatted/-/flatted-3.4.1.tgz",
-      "integrity": "sha512-IxfVbRFVlV8V/yRaGzk0UVIcsKKHMSfYw66T/u4nTwlWteQePsxe//LjudR1AMX4tZW3WFCh3Zqa/sjlqpbURQ==",
+      "version": "3.4.2",
+      "resolved": "https://registry.npmjs.org/flatted/-/flatted-3.4.2.tgz",
+      "integrity": "sha512-PjDse7RzhcPkIJwy5t7KPWQSZ9cAbzQXcafsetQoD7sOJRQlGikNbx7yZp2OotDnJyrDcbyRq3Ttb18iYOqkxA==",
       "license": "ISC"
     },
     "node_modules/for-each": {
@@ -14282,9 +14281,9 @@
       }
     },
     "flatted": {
-      "version": "3.4.1",
-      "resolved": "https://registry.npmjs.org/flatted/-/flatted-3.4.1.tgz",
-      "integrity": "sha512-IxfVbRFVlV8V/yRaGzk0UVIcsKKHMSfYw66T/u4nTwlWteQePsxe//LjudR1AMX4tZW3WFCh3Zqa/sjlqpbURQ=="
+      "version": "3.4.2",
+      "resolved": "https://registry.npmjs.org/flatted/-/flatted-3.4.2.tgz",
+      "integrity": "sha512-PjDse7RzhcPkIJwy5t7KPWQSZ9cAbzQXcafsetQoD7sOJRQlGikNbx7yZp2OotDnJyrDcbyRq3Ttb18iYOqkxA=="
     },
     "for-each": {
       "version": "0.3.5",
