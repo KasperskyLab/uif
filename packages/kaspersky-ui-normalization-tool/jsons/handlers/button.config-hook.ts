@@ -21,7 +21,7 @@ export default function buttonConfigHook(
 
   const result: ButtonProps = {
     mode: 'dangerFilled',
-    size: 'extraLarge', 
+    size: 'medium',
     text,
     onClick: () => {
       const keys = Object.keys(state)
