@@ -94,8 +94,18 @@ const canvasWrapperStyle: React.CSSProperties = {
 function App() {
   const [themeKey] = useState<ThemeKey>(ThemeKey.Light)
   const [saveError, setSaveError] = useState<string | null>(null)
-  const { directoryHandle, directoryName, selectDirectory, error: pickerError, clearError: clearPickerError } =
-    useDirectoryPicker()
+  const e2eDemo = typeof window !== 'undefined' && window.__E2E_DEMO__
+  const {
+    directoryHandle,
+    directoryName,
+    selectDirectory,
+    error: pickerError,
+    clearError: clearPickerError,
+    restoringDirectory,
+  } = useDirectoryPicker({
+    persistenceKey: 'normalization-tool',
+    disablePersistence: e2eDemo,
+  })
   const { treeNodes, loading, error: listError, clearError: clearListError, refresh: refreshFileList } =
     useFormFilesList(directoryHandle)
   const {
@@ -381,6 +391,11 @@ function App() {
               iconBefore={<Add />}
               disabled={!directoryHandle}
             />
+            {restoringDirectory && (
+              <Text type="BTR3" style={{ color: 'var(--text--secondary, #666)' }}>
+                Восстановление каталога…
+              </Text>
+            )}
             {directoryName && (
               <Text type="BTR3" style={{ color: '#666' }}>
                 Каталог: {directoryName}

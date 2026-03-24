@@ -1,4 +1,16 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
+import {
+  savePersistedDirectoryHandle,
+  loadPersistedDirectoryHandle,
+  ensureDirectoryPermission,
+  type DirectoryPersistenceKey,
+} from '@/utils/directoryHandleStorage'
+
+export interface UseDirectoryPickerOptions {
+  persistenceKey: DirectoryPersistenceKey
+  restorePermissionMode?: 'read' | 'readwrite'
+  disablePersistence?: boolean
+}
 
 export interface UseDirectoryPickerResult {
   directoryHandle: FileSystemDirectoryHandle | null
@@ -6,12 +18,45 @@ export interface UseDirectoryPickerResult {
   selectDirectory: () => Promise<void>
   error: string | null
   clearError: () => void
+  restoringDirectory: boolean
 }
 
-export function useDirectoryPicker(): UseDirectoryPickerResult {
+export function useDirectoryPicker(
+  options: UseDirectoryPickerOptions
+): UseDirectoryPickerResult {
+  const { persistenceKey, restorePermissionMode = 'read', disablePersistence = false } = options
+
   const [directoryHandle, setDirectoryHandle] = useState<FileSystemDirectoryHandle | null>(null)
   const [directoryName, setDirectoryName] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [restoringDirectory, setRestoringDirectory] = useState(!disablePersistence)
+
+  useEffect(() => {
+    if (disablePersistence) {
+      setRestoringDirectory(false)
+      return
+    }
+
+    let cancelled = false
+    ;(async () => {
+      try {
+        const stored = await loadPersistedDirectoryHandle(persistenceKey)
+        if (cancelled || !stored) return
+        const ok = await ensureDirectoryPermission(stored, restorePermissionMode)
+        if (cancelled || !ok) return
+        setDirectoryHandle(stored)
+        setDirectoryName(stored.name)
+      } catch {
+        /* ignore */
+      } finally {
+        if (!cancelled) setRestoringDirectory(false)
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [persistenceKey, restorePermissionMode, disablePersistence])
 
   const selectDirectory = useCallback(async () => {
     setError(null)
@@ -25,6 +70,13 @@ export function useDirectoryPicker(): UseDirectoryPickerResult {
       const handle = await window.showDirectoryPicker!({ mode: 'read' })
       setDirectoryHandle(handle)
       setDirectoryName(handle.name)
+      if (!disablePersistence) {
+        try {
+          await savePersistedDirectoryHandle(persistenceKey, handle)
+        } catch {
+          /* non-fatal */
+        }
+      }
     } catch (err) {
       if (err instanceof Error) {
         if (err.name === 'AbortError') return
@@ -33,7 +85,7 @@ export function useDirectoryPicker(): UseDirectoryPickerResult {
         setError('Не удалось открыть каталог')
       }
     }
-  }, [])
+  }, [persistenceKey, disablePersistence])
 
   const clearError = useCallback(() => setError(null), [])
 
@@ -43,5 +95,6 @@ export function useDirectoryPicker(): UseDirectoryPickerResult {
     selectDirectory,
     error,
     clearError,
+    restoringDirectory,
   }
 }

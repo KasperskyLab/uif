@@ -67,10 +67,12 @@
 ```
 packages/
   kaspersky-ui-normalization-tool/          # WYSIWYG-редактор (dev)
+    src/utils/directoryHandleStorage.ts   # IndexedDB: последний каталог
     src/types/form-dsl.ts                 # DSL, parseFormJs, formToJs, …
     src/controls/                          # реестр типов, дескрипторы, палитра
     src/components/                      # холст, свойства, предпросмотр, экспорт
   kaspersky-ui-normalization-transpile-viewer/   # просмотр DSL
+    src/utils/directoryHandleStorage.ts   # IndexedDB (тот же DB name, ключ viewer)
     src/types/form-dsl.ts                 # тот же контракт загрузки
     src/components/FormRenderer.tsx       # визуализация FormData
 ```
@@ -81,6 +83,14 @@ packages/
 
 - **Браузер:** Chrome или Edge (desktop) — выбор каталога и запись файлов.
 - **Node.js:** 18+ для `npm install` / `npm run dev` / `npm run build` в каждом пакете.
+
+---
+
+## Память выбранного каталога
+
+После успешного выбора папки **`FileSystemDirectoryHandle`** сохраняется в **IndexedDB** (база `kaspersky-ui-normalization-fsa`, отдельные ключи: `normalization-tool` и `transpile-viewer`). При следующем открытии страницы приложение восстанавливает handle и запрашивает **`queryPermission` / `requestPermission`** для режима `read`; при `granted` диалог выбора каталога не показывается. Новый выбор каталога перезаписывает сохранённый handle.
+
+У **normalization-tool** при **`window.__E2E_DEMO__`** персистентность отключена (Playwright).
 
 ---
 

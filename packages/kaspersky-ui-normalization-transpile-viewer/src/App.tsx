@@ -67,8 +67,14 @@ function buildMenuTree(nodes: FormFileNode[]): DataNode[] {
 
 function App() {
   const [themeKey] = useState<ThemeKey>(ThemeKey.Light)
-  const { directoryHandle, directoryName, selectDirectory, error: pickerError, clearError: clearPickerError } =
-    useDirectoryPicker()
+  const {
+    directoryHandle,
+    directoryName,
+    selectDirectory,
+    error: pickerError,
+    clearError: clearPickerError,
+    restoringDirectory,
+  } = useDirectoryPicker({ persistenceKey: 'transpile-viewer' })
   const { treeNodes, loading, error: listError, clearError: clearListError } =
     useFormFilesList(directoryHandle)
   const {
@@ -144,6 +150,11 @@ function App() {
                 onClick={selectDirectory}
                 iconBefore={<Folder />}
               />
+              {restoringDirectory && (
+                <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+                  Восстановление каталога…
+                </Text>
+              )}
               {directoryName && (
                 <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
                   Каталог: {directoryName}
