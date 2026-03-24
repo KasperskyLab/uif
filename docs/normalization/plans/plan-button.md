@@ -2,9 +2,9 @@
 
 **Статус:** ✅ **выполнено** — DSL, tool, viewer, пример `button.config-hook.ts`, `ButtonProps | null`, инспектор **`ConfigHookIdentityPropsEditor`** (readonly `id` + `configHook`).
 
-Принцип **«одна настройка — один способ»** ([tooling.md](./tooling.md#normalization-one-setting-principle)).
+Принцип **«одна настройка — один способ»** ([tooling.md](../tooling.md#normalization-one-setting-principle)).
 
-Реализация закрывает **п.1** [roadmap.md](./roadmap.md): один **configHook** возвращает полный набор пропсов Hexa, включая колбэки; контракт «два слоя контекста» применяется **внутри** хука при написании `onClick` и т.п.
+Реализация закрывает **п.1** [roadmap.md](../roadmap.md): один **configHook** возвращает полный набор пропсов Hexa, включая колбэки; контракт «два слоя контекста» применяется **внутри** хука при написании `onClick` и т.п.
 
 ---
 
@@ -13,7 +13,7 @@
 | Поле | Тип | Назначение |
 |------|-----|------------|
 | `id` | `string` | Идентификация контрола в форме. |
-| `configHook` | `string` | Путь к модулю configHook, **только `.ts`** ([tooling.md](./tooling.md#normalization-config-hooks)). |
+| `configHook` | `string` | Путь к модулю configHook, **только `.ts`** ([tooling.md](../tooling.md#normalization-config-hooks)). |
 
 Все пропсы Hexa (`text`, `mode`, `disabled`, `loading`, `onClick`, …) возвращает `configHook`. Если хук вернул `null` — компонент не монтируется (управление видимостью). Статических полей Hexa-пропсов в DSL нет. `onClickHandler` удаляется.
 
@@ -40,4 +40,4 @@
 
 ## Связь с п.2 роадмапа (типизация DSL)
 
-После введения **п.2** [roadmap.md](./roadmap.md) (см. [типизация и загрузка](./tooling.md#normalization-dsl-typing-loading)) ожидается, что идентификаторы полей в `state` (например константа вроде `BUTTON_TEXT_FIELD_ID` в примере) и структура `elements` будут сверяемы с типом корневого объекта формы — без расхождения между `.js` формой и типами в `form-dsl.ts`.
+После введения **п.2** [roadmap.md](../roadmap.md) (см. [типизация и загрузка](../tooling.md#normalization-dsl-typing-loading)) ожидается, что идентификаторы полей в `state` (например константа вроде `BUTTON_TEXT_FIELD_ID` в примере) и структура `elements` будут сверяемы с типом корневого объекта формы — без расхождения между `.js` формой и типами в `form-dsl.ts`.

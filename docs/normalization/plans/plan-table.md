@@ -1,10 +1,10 @@
 # Table: план (роадмап п.1)
 
-**Статус:** ✅ **реализовано** — `configHook` для `Table`, дескриптор `table.tsx`, паритет tool / viewer, пример `jsons/handlers/table.config-hook.ts`. Открытые вопросы — [roadmap §3](./roadmap.md#3-превью-в-редакторе).
+**Статус:** ✅ **реализовано** — `configHook` для `Table`, дескриптор `table.tsx`, паритет tool / viewer, пример `jsons/handlers/table.config-hook.ts`. Открытые вопросы — [roadmap §3](../roadmap.md#3-превью-в-редакторе).
 
-Принцип **«одна настройка — один способ»** ([tooling.md](./tooling.md#normalization-one-setting-principle)).
+Принцип **«одна настройка — один способ»** ([tooling.md](../tooling.md#normalization-one-setting-principle)).
 
-Матрица ячеек в tool/viewer строится через Hexa **`<Table />`** (`columns` + `dataSource` из DSL); **configHook** — **`Partial<ITableProps>`** (без подмены `columns` / `dataSource`). Открытые вопросы по превью/редактору и тулбару — [roadmap §3](./roadmap.md#3-превью-в-редакторе).
+Матрица ячеек в tool/viewer строится через Hexa **`<Table />`** (`columns` + `dataSource` из DSL); **configHook** — **`Partial<ITableProps>`** (без подмены `columns` / `dataSource`). Открытые вопросы по превью/редактору и тулбару — [roadmap §3](../roadmap.md#3-превью-в-редакторе).
 
 ---
 
@@ -42,7 +42,7 @@
 1. **`loadConfigHookDefaultExport`**, **`ConfigHookIdentityPropsEditor`** — как у button/text/grid.
 2. **Редактор `rows` / `cols`** — тот же компонент/паттерн, что у grid (`GridRowsColsPropsEditor` или обобщение).
 3. **Матрица** — `buildTableMatrixColumnsAndDataSource` + Hexa **`<Table />`**.
-4. **Паттерн рендера** — по аналогии с **Grid**: `PreviewTableRenderer` / `TableRenderer`, загрузка хука, мерж, `null`, плейсхолдер; **emptyText**, **disabled**; тулбар — DSL-превью и/или **`toolbar`** из хука (см. [roadmap §3](./roadmap.md#3-превью-в-редакторе)).
+4. **Паттерн рендера** — по аналогии с **Grid**: `PreviewTableRenderer` / `TableRenderer`, загрузка хука, мерж, `null`, плейсхолдер; **emptyText**, **disabled**; тулбар — DSL-превью и/или **`toolbar`** из хука (см. [roadmap §3](../roadmap.md#3-превью-в-редакторе)).
 5. Опционально: общий **`useConfigHookModule`**.
 
 ---
@@ -70,4 +70,4 @@
 
 ## Согласование
 
-Решения по статике DSL и матрице на **`<Table />`** для п.1 зафиксированы и внедрены в код (см. статус выше). Вопросы про **rows/cols на холсте vs хук**, **тулбар** и **выбор строк** — в [roadmap §3](./roadmap.md#3-превью-в-редакторе).
+Решения по статике DSL и матрице на **`<Table />`** для п.1 зафиксированы и внедрены в код (см. статус выше). Вопросы про **rows/cols на холсте vs хук**, **тулбар** и **выбор строк** — в [roadmap §3](../roadmap.md#3-превью-в-редакторе).

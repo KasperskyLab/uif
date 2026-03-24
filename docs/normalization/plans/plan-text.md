@@ -2,9 +2,9 @@
 
 **Статус:** ✅ **выполнено** — DSL, tool, viewer, пример `text.config-hook.ts`, инспектор как у Button (`ConfigHookIdentityPropsEditor`, без привязки данных в панели).
 
-Принцип **«одна настройка — один способ»** ([tooling.md](./tooling.md#normalization-one-setting-principle)).
+Принцип **«одна настройка — один способ»** ([tooling.md](../tooling.md#normalization-one-setting-principle)).
 
-Реализация закрывает **п.1** [roadmap.md](./roadmap.md) по той же схеме, что [plan-button.md](./plan-button.md): один **configHook** возвращает полный набор пропсов **`Text`** из `@kaspersky/hexa-ui` (**`TextProps | null`**), включая колбэки DOM (`onClick`, …) при необходимости. Содержимое (`children`), типографика (`type`), `color`, `style` и остальное — **только из хука**, без статических полей Hexa в DSL.
+Реализация закрывает **п.1** [roadmap.md](../roadmap.md) по той же схеме, что [plan-button.md](./plan-button.md): один **configHook** возвращает полный набор пропсов **`Text`** из `@kaspersky/hexa-ui` (**`TextProps | null`**), включая колбэки DOM (`onClick`, …) при необходимости. Содержимое (`children`), типографика (`type`), `color`, `style` и остальное — **только из хука**, без статических полей Hexa в DSL.
 
 ---
 
@@ -13,7 +13,7 @@
 | Поле | Тип | Назначение |
 |------|-----|------------|
 | `id` | `string` | Идентификация контрола в форме. |
-| `configHook` | `string` | Путь к модулю configHook, **только `.ts`** ([tooling.md](./tooling.md#normalization-config-hooks)). |
+| `configHook` | `string` | Путь к модулю configHook, **только `.ts`** ([tooling.md](../tooling.md#normalization-config-hooks)). |
 
 Поле **`text?: string`** в DSL **снято** (раньше дублировало содержимое; источник — хук). Статических полей под пропсы Hexa `Text` в DSL нет. Если хук вернул **`null`** — `<Text />` не монтируется (как видимость у кнопки).
 
@@ -46,4 +46,4 @@
 
 ## Связь с п.2 роадмапа
 
-Как в [plan-button.md](./plan-button.md): после типизации артефакта формы цепочка **`FormSlice`** → **`TextControl`** → **`TextProps`** должна быть проверяемой ([tooling.md → типизация](./tooling.md#normalization-dsl-typing-loading)).
+Как в [plan-button.md](./plan-button.md): после типизации артефакта формы цепочка **`FormSlice`** → **`TextControl`** → **`TextProps`** должна быть проверяемой ([tooling.md → типизация](../tooling.md#normalization-dsl-typing-loading)).
