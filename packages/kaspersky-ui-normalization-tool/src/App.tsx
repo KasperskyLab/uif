@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { ConfigProvider } from '@kaspersky/hexa-ui/design-system/context/provider'
 import { ThemeKey } from '@kaspersky/hexa-ui/design-system'
 import { GlobalStyle } from '@kaspersky/hexa-ui/design-system/global-style'
-import { Button, Tree, PageHeader, Space, SectionMessage, Text, H6, Tooltip } from '@kaspersky/hexa-ui'
+import { Button, Tree, Space, SectionMessage, Text, H6, Tooltip } from '@kaspersky/hexa-ui'
 import type { DataNode } from '@kaspersky/hexa-ui'
 import { Folder, Save, Cross, Add, Delete, Copy } from '@kaspersky/hexa-ui-icons/16'
 import { useDirectoryPicker } from './hooks/useDirectoryPicker'
@@ -22,12 +22,36 @@ import type { FormFileNode } from './hooks/useFormFilesList'
 import { FORM_EXT } from './constants'
 import { getFormPathFromSearch, setFormPathInUrl } from './utils/formUrlSync'
 
-const layoutStyle: React.CSSProperties = {
+const appShellStyle: React.CSSProperties = {
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'row',
   height: '100vh',
   width: '100%',
-  padding: 24,
+  overflow: 'hidden',
+}
+
+const unifiedLeftSidebarStyle: React.CSSProperties = {
+  flexShrink: 0,
+  minHeight: 0,
+  alignSelf: 'stretch',
+  padding: 16,
+  borderRight: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)',
+  background: 'var(--surface--neutral, #FFFFFF)',
+  overflow: 'hidden',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'stretch',
+  gap: 12,
+}
+
+const mainColumnStyle: React.CSSProperties = {
+  flex: 1,
+  minWidth: 0,
+  minHeight: 0,
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  padding: 16,
   overflow: 'hidden',
 }
 
@@ -39,23 +63,11 @@ const editorLayoutStyle: React.CSSProperties = {
   overflow: 'hidden',
 }
 
-const MIN_PALETTE_WIDTH = 160
-const MAX_PALETTE_WIDTH = 480
+const MIN_PALETTE_WIDTH = 200
+const MAX_PALETTE_WIDTH = 520
 const MIN_PANEL_WIDTH = 200
 const MAX_PANEL_WIDTH = 520
 const RESIZER_WIDTH = 6
-
-const leftSidebarBaseStyle: React.CSSProperties = {
-  flexShrink: 0,
-  padding: 16,
-  borderRight: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)',
-  background: 'var(--surface--neutral, #FFFFFF)',
-  overflowY: 'auto',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  textAlign: 'left',
-}
 
 const resizerStyle: React.CSSProperties = {
   width: RESIZER_WIDTH,
@@ -185,7 +197,7 @@ function App() {
   const [selectedControlId, setSelectedControlId] = useState<string | null>(null)
   const [createFormError, setCreateFormError] = useState<string | null>(null)
   const [deleteError, setDeleteError] = useState<string | null>(null)
-  const [paletteWidth, setPaletteWidth] = useState(240)
+  const [paletteWidth, setPaletteWidth] = useState(288)
   const [panelWidth, setPanelWidth] = useState(280)
   const [resizing, setResizing] = useState<'palette' | 'panel' | null>(null)
   const [resizerHover, setResizerHover] = useState<'left' | 'right' | null>(null)
@@ -389,31 +401,35 @@ function App() {
     clearListError()
   }, [clearPickerError, clearListError])
 
-  const contentWrapperStyle: React.CSSProperties = {
-    flex: 1,
-    minHeight: 0,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-    width: '100%',
-  }
+  const showEditorPalette =
+    Boolean(selectedFile) && !fileLoading && !previewMode
 
   return (
     <ConfigProvider theme={themeKey}>
       <GlobalStyle />
-      <div style={layoutStyle}>
-        <PageHeader
-          title="UISB — Редактор форм"
-          description="Визуальный редактор UI-форм на базе Hexa UI"
-        />
-        <div style={contentWrapperStyle}>
-        <div style={{ flex: 1, minHeight: 0, minWidth: 0, width: '100%', display: 'flex', flexDirection: 'column', gap: 16, overflow: 'hidden' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', flexShrink: 0 }}>
+      <div style={appShellStyle}>
+        <aside
+          className="app-chrome-sidebar editor-sidebar editor-sidebar--left"
+          style={{ ...unifiedLeftSidebarStyle, width: paletteWidth }}
+        >
+          <H6 style={{ margin: 0, lineHeight: 1.3 }}>UISB — Редактор форм</H6>
+          <Text
+            type="BTR3"
+            style={{
+              margin: 0,
+              color: 'var(--text--secondary, #666)',
+              lineHeight: 1.45,
+            }}
+          >
+            Визуальный редактор UI-форм на базе Hexa UI
+          </Text>
+          <Space direction="vertical" size={8} style={{ width: '100%' }}>
             <Button
               mode="primary"
               text="Выбрать каталог"
               onClick={selectDirectory}
               iconBefore={<Folder />}
+              style={{ width: '100%', justifyContent: 'center' }}
             />
             <Button
               mode="secondary"
@@ -421,19 +437,98 @@ function App() {
               onClick={handleCreateNewForm}
               iconBefore={<Add />}
               disabled={!directoryHandle}
+              style={{ width: '100%', justifyContent: 'center' }}
             />
-            {restoringDirectory && (
-              <Text type="BTR3" style={{ color: 'var(--text--secondary, #666)' }}>
-                Восстановление каталога…
-              </Text>
-            )}
-            {directoryName && (
-              <Text type="BTR3" style={{ color: '#666' }}>
-                Каталог: {directoryName}
-              </Text>
-            )}
-          </div>
+          </Space>
+          {restoringDirectory && (
+            <Text type="BTR3" style={{ color: 'var(--text--secondary, #666)' }}>
+              Восстановление каталога…
+            </Text>
+          )}
+          {directoryName ? (
+            <Text type="BTR3" style={{ color: '#666', wordBreak: 'break-word' }}>
+              Каталог: {directoryName}
+            </Text>
+          ) : null}
 
+          {showEditorPalette ? (
+            <div
+              style={{
+                width: '100%',
+                borderTop:
+                  '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)',
+                marginTop: 4,
+                paddingTop: 12,
+                flex: 1,
+                minHeight: 0,
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                textAlign: 'left',
+              }}
+            >
+              <ControlsPalette onAddControl={handleAddControl} />
+              {FORM_TEMPLATES.length > 0 && (
+                <div
+                  style={{
+                    width: '100%',
+                    borderTop:
+                      '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)',
+                    marginTop: 12,
+                    paddingTop: 12,
+                  }}
+                >
+                  <H6
+                    style={{
+                      margin: '0 0 6px 0',
+                      textAlign: 'left',
+                      color: 'var(--text--secondary, #666)',
+                    }}
+                  >
+                    Шаблоны
+                  </H6>
+                  <Space size={4} direction="vertical" style={{ width: '100%' }}>
+                    {FORM_TEMPLATES.map((tpl) => (
+                      <Button
+                        key={tpl.id}
+                        mode="tertiary"
+                        text={tpl.name}
+                        onClick={() => handleApplyTemplate(tpl.elements)}
+                        style={{
+                          width: '100%',
+                          justifyContent: 'flex-start',
+                          textAlign: 'left',
+                        }}
+                        size="small"
+                      />
+                    ))}
+                  </Space>
+                </div>
+              )}
+            </div>
+          ) : null}
+        </aside>
+
+        <div
+          role="separator"
+          aria-label="Изменить ширину левой панели"
+          style={
+            resizing === 'palette' || resizerHover === 'left'
+              ? resizerHoverStyle
+              : resizerStyle
+          }
+          onMouseDown={(e) => {
+            e.preventDefault()
+            dragRef.current = { startX: e.clientX, startWidth: paletteWidth }
+            setResizing('palette')
+          }}
+          onMouseEnter={() => setResizerHover('left')}
+          onMouseLeave={() => setResizerHover(null)}
+        />
+
+        <div style={mainColumnStyle}>
+        <div style={{ flex: 1, minHeight: 0, minWidth: 0, width: '100%', display: 'flex', flexDirection: 'column', gap: 16, overflow: 'hidden' }}>
           {showMessage && (
             <SectionMessage mode="warning" title="Внимание" closable onClose={clearMessageError}>
               {messageText}
@@ -518,40 +613,6 @@ function App() {
                 </div>
               ) : (
                 <div style={editorLayoutStyle}>
-                  <aside className="editor-sidebar editor-sidebar--left" style={{ ...leftSidebarBaseStyle, width: paletteWidth }}>
-                    <ControlsPalette onAddControl={handleAddControl} />
-                    {FORM_TEMPLATES.length > 0 && (
-                      <div style={{ width: '100%', borderTop: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)', marginTop: 12, paddingTop: 12 }}>
-                        <H6 style={{ margin: '0 0 6px 0', textAlign: 'left', color: 'var(--text--secondary, #666)' }}>
-                          Шаблоны
-                        </H6>
-                        <Space size={4} direction="vertical" style={{ width: '100%' }}>
-                          {FORM_TEMPLATES.map((tpl) => (
-                            <Button
-                              key={tpl.id}
-                              mode="tertiary"
-                              text={tpl.name}
-                              onClick={() => handleApplyTemplate(tpl.elements)}
-                              style={{ width: '100%', justifyContent: 'flex-start', textAlign: 'left' }}
-                              size="small"
-                            />
-                          ))}
-                        </Space>
-                      </div>
-                    )}
-                  </aside>
-                  <div
-                    role="separator"
-                    aria-label="Изменить ширину палитры"
-                    style={resizing === 'palette' || resizerHover === 'left' ? resizerHoverStyle : resizerStyle}
-                    onMouseDown={(e) => {
-                      e.preventDefault()
-                      dragRef.current = { startX: e.clientX, startWidth: paletteWidth }
-                      setResizing('palette')
-                    }}
-                    onMouseEnter={() => setResizerHover('left')}
-                    onMouseLeave={() => setResizerHover(null)}
-                  />
                   <main style={mainAreaStyle}>
                     <div
                       style={{

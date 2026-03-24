@@ -5,7 +5,6 @@ import { GlobalStyle } from '@kaspersky/hexa-ui/design-system/global-style'
 import {
   Button,
   Tree,
-  PageHeader,
   Space,
   SectionMessage,
   Text,
@@ -23,21 +22,14 @@ import { getFormPathFromSearch, setFormPathInUrl } from '@/utils/formUrlSync'
 
 const layoutStyle: React.CSSProperties = {
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'row',
   height: '100vh',
   width: '100%',
   overflow: 'hidden',
 }
 
-const contentRowStyle: React.CSSProperties = {
-  display: 'flex',
-  flex: 1,
-  minHeight: 0,
-  width: '100%',
-}
-
-const sidebarStyle: React.CSSProperties = {
-  width: 280,
+const appChromeSidebarStyle: React.CSSProperties = {
+  width: 300,
   flexShrink: 0,
   padding: 16,
   borderRight: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)',
@@ -45,14 +37,31 @@ const sidebarStyle: React.CSSProperties = {
   overflowY: 'auto',
   display: 'flex',
   flexDirection: 'column',
+  alignItems: 'stretch',
+  gap: 12,
+}
+
+const sidebarFormsBlockStyle: React.CSSProperties = {
+  borderTop: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)',
+  marginTop: 4,
+  paddingTop: 12,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 8,
+  flex: 1,
+  minHeight: 0,
 }
 
 const mainStyle: React.CSSProperties = {
   flex: 1,
   minWidth: 0,
-  padding: 24,
+  minHeight: 0,
+  padding: 16,
   overflow: 'auto',
   background: 'var(--surface--neutral-subtle, #F7F7F8)',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 12,
 }
 
 function buildMenuTree(nodes: FormFileNode[]): DataNode[] {
@@ -166,57 +175,56 @@ function App() {
     <ConfigProvider theme={themeKey}>
       <GlobalStyle />
       <div style={layoutStyle}>
-        <PageHeader
-          title="View Transpile — Формы из DSL"
-          description="Выберите каталог с .js-файлами форм. В меню слева — идентификаторы форм, заголовок формы — свойство name."
-        />
-        <div style={{ padding: '0 24px 16px' }}>
-          <Space size={16} direction="vertical" style={{ width: '100%' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-              <Button
-                mode="primary"
-                text="Выбрать каталог"
-                onClick={selectDirectory}
-                iconBefore={<Folder />}
-              />
-              {restoringDirectory && (
-                <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-                  Восстановление каталога…
-                </Text>
-              )}
-              {directoryName && (
-                <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-                  Каталог: {directoryName}
-                </Text>
-              )}
-            </div>
+        <aside className="app-chrome-sidebar" style={appChromeSidebarStyle}>
+          <H6 style={{ margin: 0, lineHeight: 1.3 }}>
+            View Transpile — Формы из DSL
+          </H6>
+          <Text
+            type="BTR3"
+            style={{
+              margin: 0,
+              color: 'var(--text--secondary)',
+              lineHeight: 1.45,
+            }}
+          >
+            Выберите каталог с .js-файлами форм. В дереве ниже — файлы;
+            заголовок формы — свойство name.
+          </Text>
+          <Button
+            mode="primary"
+            text="Выбрать каталог"
+            onClick={selectDirectory}
+            iconBefore={<Folder />}
+            style={{ width: '100%', justifyContent: 'center' }}
+          />
+          {restoringDirectory && (
+            <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+              Восстановление каталога…
+            </Text>
+          )}
+          {directoryName ? (
+            <Text
+              type="BTR3"
+              style={{ color: 'var(--text--secondary)', wordBreak: 'break-word' }}
+            >
+              Каталог: {directoryName}
+            </Text>
+          ) : null}
 
-            {showMessage && (
-              <SectionMessage mode="warning" title="Внимание" closable onClose={clearMessageError}>
-                {messageText}
-              </SectionMessage>
-            )}
-
-            {loadError && (
-              <SectionMessage mode="error" title="Ошибка загрузки формы" closable onClose={() => {}}>
-                {loadError}
-              </SectionMessage>
-            )}
-          </Space>
-        </div>
-
-        <div style={contentRowStyle}>
-          {directoryHandle && (
-            <aside style={sidebarStyle}>
-              <Text type="BTR2" style={{ marginBottom: 8, display: 'block' }}>
+          {directoryHandle ? (
+            <div style={sidebarFormsBlockStyle}>
+              <Text type="BTR2" style={{ margin: 0, display: 'block' }}>
                 Формы
               </Text>
               {loading ? (
                 <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
                   Загрузка списка…
                 </Text>
-              ) :               menuTreeData.length > 0 ? (
-                <div className="form-forms-nav">
+              ) : menuTreeData.length > 0 ? (
+                <div
+                  className="form-forms-nav"
+                  style={{ flex: 1, minHeight: 0, overflow: 'auto' }}
+                >
                   <Tree
                     treeData={menuTreeData}
                     selectable
@@ -232,32 +240,58 @@ function App() {
                   В выбранном каталоге нет файлов .js
                 </SectionMessage>
               )}
-            </aside>
-          )}
+            </div>
+          ) : null}
+        </aside>
 
-          <main style={mainStyle}>
-            {fileLoading ? (
-              <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-                Загрузка формы…
-              </Text>
-            ) : formData ? (
-              <Card mode="filled" size="medium">
-                <H6 style={{ marginTop: 0, marginBottom: 16 }}>
-                  {formData.name || formData.id}
-                </H6>
-                <FormRenderer
-                  elements={formData.elements}
-                  formKey={selectedFile?.path ?? ''}
-                  formDirectoryHandle={formDirectoryHandle}
-                />
-              </Card>
-            ) : (
-              <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-                Выберите форму в меню слева.
-              </Text>
+        <main style={mainStyle}>
+          <Space size={12} direction="vertical" style={{ width: '100%' }}>
+            {showMessage && (
+              <SectionMessage
+                mode="warning"
+                title="Внимание"
+                closable
+                onClose={clearMessageError}
+              >
+                {messageText}
+              </SectionMessage>
             )}
-          </main>
-        </div>
+
+            {loadError && (
+              <SectionMessage
+                mode="error"
+                title="Ошибка загрузки формы"
+                closable
+                onClose={() => {}}
+              >
+                {loadError}
+              </SectionMessage>
+            )}
+          </Space>
+
+          {fileLoading ? (
+            <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+              Загрузка формы…
+            </Text>
+          ) : formData ? (
+            <Card mode="filled" size="medium" style={{ flex: 1, minHeight: 0 }}>
+              <H6 style={{ marginTop: 0, marginBottom: 16 }}>
+                {formData.name || formData.id}
+              </H6>
+              <FormRenderer
+                elements={formData.elements}
+                formKey={selectedFile?.path ?? ''}
+                formDirectoryHandle={formDirectoryHandle}
+              />
+            </Card>
+          ) : (
+            <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+              {directoryHandle
+                ? 'Выберите форму в дереве слева.'
+                : 'Выберите каталог с формами слева.'}
+            </Text>
+          )}
+        </main>
       </div>
     </ConfigProvider>
   )
