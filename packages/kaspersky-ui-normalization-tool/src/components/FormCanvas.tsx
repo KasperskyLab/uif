@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react'
 import { Button, Space, Text, Grid, GridItem, Tabs } from '@kaspersky/hexa-ui'
 import { Delete, ArrowsVertical } from '@kaspersky/hexa-ui-icons/16'
-import type { FormControl, FormControlType, GridControl, TableControl, TabsControl, RowControl } from '../types/form-dsl'
+import type { FormControl, FormControlBase, FormControlType, GridControl, TableControl, TabsControl, RowControl } from '../types/form-dsl'
 import { setGridChildrenInTree, setRowChildrenInTree, setTableChildrenInTree, setTabsChildrenInTree } from '../types/form-dsl'
 import { createControl, getDescriptor, ALL_CONTROL_TYPES } from '../controls/registry'
 import type { CanvasContext } from '../controls/types'
@@ -854,57 +854,62 @@ function ControlBlock({
           </CanvasPreviewErrorBoundary>
         </div>
       )}
-      {(control.fieldName || (control.validation && control.validation.some((r) => r.type === 'required'))) && (
-        <span style={{
-          fontSize: 10,
-          padding: '1px 6px',
-          borderRadius: 4,
-          background: 'var(--primary--main, #00a88e)',
-          color: '#fff',
-          whiteSpace: 'nowrap',
-          lineHeight: '16px',
-          fontWeight: 500,
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 2,
-        }}>
-          {control.validation?.some((r) => r.type === 'required') && (
-            <span style={{ color: '#ffccc7', fontWeight: 700 }}>*</span>
+      {(() => {
+        const bc = control as FormControlBase
+        return <>
+          {(bc.fieldName || (bc.validation && bc.validation.some((r) => r.type === 'required'))) && (
+            <span style={{
+              fontSize: 10,
+              padding: '1px 6px',
+              borderRadius: 4,
+              background: 'var(--primary--main, #00a88e)',
+              color: '#fff',
+              whiteSpace: 'nowrap',
+              lineHeight: '16px',
+              fontWeight: 500,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 2,
+            }}>
+              {bc.validation?.some((r) => r.type === 'required') && (
+                <span style={{ color: '#ffccc7', fontWeight: 700 }}>*</span>
+              )}
+              {bc.fieldName || ''}
+            </span>
           )}
-          {control.fieldName || ''}
-        </span>
-      )}
-      {(control.visibleWhen || control.disabledWhen) && (
-        <span style={{
-          fontSize: 9,
-          padding: '1px 4px',
-          borderRadius: 3,
-          background: '#faad14',
-          color: '#fff',
-          whiteSpace: 'nowrap',
-          lineHeight: '14px',
-        }} title={
-          [
-            control.visibleWhen ? `Видим: ${control.visibleWhen.fieldName} ${control.visibleWhen.operator} ${control.visibleWhen.value ?? ''}` : '',
-            control.disabledWhen ? `Блок: ${control.disabledWhen.fieldName} ${control.disabledWhen.operator} ${control.disabledWhen.value ?? ''}` : '',
-          ].filter(Boolean).join('; ')
-        }>
-          ⚡
-        </span>
-      )}
-      {control.handlers && Object.keys(control.handlers).length > 0 && (
-        <span style={{
-          fontSize: 9,
-          padding: '1px 5px',
-          borderRadius: 4,
-          background: '#722ed1',
-          color: '#fff',
-          whiteSpace: 'nowrap',
-          lineHeight: '14px',
-        }} title={Object.entries(control.handlers).map(([k, v]) => `${k}: ${v}`).join('\n')}>
-          fn{Object.keys(control.handlers).length > 1 ? ` ×${Object.keys(control.handlers).length}` : ''}
-        </span>
-      )}
+          {(bc.visibleWhen || bc.disabledWhen) && (
+            <span style={{
+              fontSize: 9,
+              padding: '1px 4px',
+              borderRadius: 3,
+              background: '#faad14',
+              color: '#fff',
+              whiteSpace: 'nowrap',
+              lineHeight: '14px',
+            }} title={
+              [
+                bc.visibleWhen ? `Видим: ${bc.visibleWhen.fieldName} ${bc.visibleWhen.operator} ${bc.visibleWhen.value ?? ''}` : '',
+                bc.disabledWhen ? `Блок: ${bc.disabledWhen.fieldName} ${bc.disabledWhen.operator} ${bc.disabledWhen.value ?? ''}` : '',
+              ].filter(Boolean).join('; ')
+            }>
+              ⚡
+            </span>
+          )}
+          {bc.handlers && Object.keys(bc.handlers).length > 0 && (
+            <span style={{
+              fontSize: 9,
+              padding: '1px 5px',
+              borderRadius: 4,
+              background: '#722ed1',
+              color: '#fff',
+              whiteSpace: 'nowrap',
+              lineHeight: '14px',
+            }} title={Object.entries(bc.handlers).map(([k, v]) => `${k}: ${v}`).join('\n')}>
+              fn{Object.keys(bc.handlers).length > 1 ? ` ×${Object.keys(bc.handlers).length}` : ''}
+            </span>
+          )}
+        </>
+      })()}
       <Button
         mode="tertiary"
         size="small"

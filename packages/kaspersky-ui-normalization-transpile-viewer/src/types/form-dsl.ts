@@ -21,19 +21,13 @@ export type FormControlType =
   | 'toggle'
   | 'meta'
 
-export type ButtonMode = 'primary' | 'secondary' | 'tertiary' | 'dangerFilled' | 'dangerOutlined'
-
 export interface FormControlBase {
   id: string
 }
 
 export interface ButtonControl extends FormControlBase {
   type: 'button'
-  text?: string
-  mode?: ButtonMode
-  disabled?: boolean
-  loading?: boolean
-  onClickHandler?: string
+  configHook?: string
 }
 
 export interface TextControl extends FormControlBase {
@@ -160,15 +154,10 @@ function normalizeControl(item: unknown): FormControl | null {
   const kind = o.kind as string | undefined
   if (kind === 'button' || type === 'button') {
     const c: ButtonControl = { type: 'button', id }
-    if (typeof o.text === 'string') c.text = o.text
-    const mode = (o.mode ?? (type === 'primary' || type === 'secondary' ? type : undefined)) as ButtonMode | undefined
-    if (mode && ['primary', 'secondary', 'tertiary', 'dangerFilled', 'dangerOutlined'].includes(mode)) c.mode = mode
-    if (typeof o.disabled === 'boolean') c.disabled = o.disabled
-    if (typeof o.loading === 'boolean') c.loading = o.loading
-    if (typeof o.onClickHandler === 'string') c.onClickHandler = o.onClickHandler
-    else if (typeof o.onClickHandler === 'function') {
-      const path = getImportPathFromHandler(o.onClickHandler)
-      if (path) c.onClickHandler = path
+    if (typeof o.configHook === 'string') c.configHook = o.configHook
+    else if (typeof o.configHook === 'function') {
+      const path = getImportPathFromHandler(o.configHook)
+      if (path) c.configHook = path
     }
     return c
   }

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import {
   Button,
   Text,
@@ -142,10 +142,84 @@ const emptyTableTextStyle: React.CSSProperties = {
   textAlign: 'center',
 }
 
+export interface FormSlice {
+  state: Record<string, unknown>
+  config: { elements: FormControl[] }
+}
+
+type ConfigHookFn = (formSlice: FormSlice, componentType: string) => Record<string, unknown> | null
+
+async function loadModuleDefault(
+  dir: FileSystemDirectoryHandle,
+  path: string,
+): Promise<ConfigHookFn | null> {
+  try {
+    const fh = await getFileHandleFromPath(dir, path)
+    const file = await fh.getFile()
+    const text = await file.text()
+    const url = URL.createObjectURL(new Blob([text], { type: 'application/javascript' }))
+    const mod = await import(/* @vite-ignore */ url)
+    URL.revokeObjectURL(url)
+    return typeof mod?.default === 'function' ? mod.default : null
+  } catch (err) {
+    console.error('configHook load error:', err)
+    return null
+  }
+}
+
+function ButtonWithHook({
+  hookFn,
+  formSlice,
+}: {
+  hookFn: ConfigHookFn
+  formSlice: FormSlice
+}): React.ReactElement | null {
+  const props = hookFn(formSlice, 'Button')
+  if (props === null) return null
+  return <Button {...props} />
+}
+
+function ButtonRenderer({
+  control,
+  formSlice,
+  formDirectoryHandle,
+}: {
+  control: ButtonControl
+  formSlice: FormSlice
+  formDirectoryHandle: FileSystemDirectoryHandle | null
+}): React.ReactElement | null {
+  const [hookFn, setHookFn] = useState<ConfigHookFn | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!control.configHook || !formDirectoryHandle) {
+      setHookFn(null)
+      return
+    }
+    setLoading(true)
+    let cancelled = false
+    loadModuleDefault(formDirectoryHandle, control.configHook).then((fn) => {
+      if (!cancelled) {
+        setHookFn(() => fn)
+        setLoading(false)
+      }
+    })
+    return () => { cancelled = true }
+  }, [control.configHook, formDirectoryHandle])
+
+  if (!control.configHook) {
+    return <Button mode="tertiary" text={`[${control.id}]`} disabled />
+  }
+  if (loading || !hookFn) {
+    return <Button mode="tertiary" text={`[${control.id}]`} disabled loading />
+  }
+  return <ButtonWithHook key={control.configHook} hookFn={hookFn} formSlice={formSlice} />
+}
+
 export interface FormRendererProps {
   elements: FormControl[]
   gap?: number
-  /** Директория, в которой лежит файл формы (для разрешения onClickHandler) */
+  /** Директория, в которой лежит файл формы (для разрешения configHook) */
   formDirectoryHandle?: FileSystemDirectoryHandle | null
   /** Ключ формы (например путь к файлу) — при смене сбрасывается состояние */
   formKey?: string
@@ -160,8 +234,6 @@ export function FormRenderer({
   const [formState, setFormState] = useState<Record<string, unknown>>(() =>
     getInitialFormState(elements)
   )
-  const [buttonLoadingId, setButtonLoadingId] = useState<string | null>(null)
-
   useEffect(() => {
     setFormState(getInitialFormState(elements))
   }, [formKey])
@@ -170,46 +242,21 @@ export function FormRenderer({
     setFormState((prev) => ({ ...prev, [id]: value }))
   }, [])
 
-  const runButtonHandler = useCallback(
-    async (controlId: string, handlerPath: string) => {
-      if (!formDirectoryHandle) return
-      setButtonLoadingId(controlId)
-      try {
-        const fileHandle = await getFileHandleFromPath(formDirectoryHandle, handlerPath)
-        const file = await fileHandle.getFile()
-        const content = await file.text()
-        const url = URL.createObjectURL(new Blob([content], { type: 'application/javascript' }))
-        const mod = await import(/* @vite-ignore */ url)
-        URL.revokeObjectURL(url)
-        if (typeof mod?.default === 'function') {
-          mod.default()
-        }
-      } catch (err) {
-        console.error('Button handler error:', err)
-      } finally {
-        setButtonLoadingId(null)
-      }
-    },
-    [formDirectoryHandle]
+  const formSlice = useMemo(
+    () => ({ state: formState, config: { elements } }),
+    [formState, elements]
   )
 
   function renderControl(control: FormControl): React.ReactNode {
     switch (control.type) {
       case 'button': {
         const c = control as ButtonControl
-        const isLoading = buttonLoadingId === c.id
         return (
-          <Button
+          <ButtonRenderer
             key={c.id}
-            mode={c.mode ?? 'primary'}
-            text={c.text ?? 'Кнопка'}
-            disabled={c.disabled}
-            loading={isLoading}
-            onClick={() => {
-              if (c.onClickHandler) {
-                runButtonHandler(c.id, c.onClickHandler)
-              }
-            }}
+            control={c}
+            formSlice={formSlice}
+            formDirectoryHandle={formDirectoryHandle}
           />
         )
       }

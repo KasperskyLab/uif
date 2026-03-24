@@ -124,8 +124,11 @@ export interface Condition {
   value?: string
 }
 
-export interface FormControlBase {
+export interface FormControlIdentity {
   id: string
+}
+
+export interface FormControlBase extends FormControlIdentity {
   /** Имя поля для привязки к данным формы */
   fieldName?: string
   /** Начальное значение поля */
@@ -220,13 +223,9 @@ export interface ToolbarControl extends FormControlBase {
   autoDropdown?: boolean
 }
 
-export interface ButtonControl extends FormControlBase {
+export interface ButtonControl extends FormControlIdentity {
   type: 'button'
-  text?: string
-  mode?: 'primary' | 'secondary' | 'tertiary' | 'dangerFilled' | 'dangerOutlined'
-  disabled?: boolean
-  loading?: boolean
-  onClickHandler?: string
+  configHook?: string
 }
 
 export interface TextControl extends FormControlBase {
@@ -338,7 +337,7 @@ const DEFAULT_UI_EVENTS: EventDefinition[] = [{ name: 'onClick', label: 'При 
 
 /** Доступные события для каждого типа контрола */
 export const CONTROL_EVENTS: Record<FormControlType, EventDefinition[]> = {
-  button: [{ name: 'onClick', label: 'При нажатии' }],
+  button: [],
   text: [{ name: 'onClick', label: 'При нажатии' }],
   input: [{ name: 'onChange', label: 'При изменении' }, { name: 'onBlur', label: 'При потере фокуса' }, { name: 'onFocus', label: 'При получении фокуса' }],
   checkbox: [{ name: 'onChange', label: 'При изменении' }],
@@ -441,17 +440,12 @@ function normalizeControl(item: unknown): FormControl | null {
 
   if (kind === 'button' || type === 'button') {
     const c: ButtonControl = { type: 'button', id }
-    if (typeof o.text === 'string') c.text = o.text
-    const mode = (o.mode ?? (type === 'primary' || type === 'secondary' ? type : undefined)) as ButtonControl['mode']
-    if (mode && ['primary', 'secondary', 'tertiary', 'dangerFilled', 'dangerOutlined'].includes(mode)) c.mode = mode
-    if (typeof o.disabled === 'boolean') c.disabled = o.disabled
-    if (typeof o.loading === 'boolean') c.loading = o.loading
-    if (typeof o.onClickHandler === 'string') (handlers as Record<string, string>).onClick = o.onClickHandler
-    else if (typeof o.onClickHandler === 'function') {
-      const path = getImportPathFromHandler(o.onClickHandler)
-      if (path) (handlers as Record<string, string>).onClick = path
+    if (typeof o.configHook === 'string') c.configHook = o.configHook
+    else if (typeof o.configHook === 'function') {
+      const path = getImportPathFromHandler(o.configHook)
+      if (path) c.configHook = path
     }
-    return applyFieldBinding(c)
+    return c
   }
   if (type === 'text') {
     const c: TextControl = { type: 'text', id }
@@ -634,20 +628,21 @@ function normalizeControl(item: unknown): FormControl | null {
 }
 
 export function controlToJson(c: FormControl): Record<string, unknown> {
-  const base: Record<string, unknown> = { type: c.type, id: c.id }
-  if (c.fieldName) base.fieldName = c.fieldName
-  if (c.defaultValue !== undefined) base.defaultValue = c.defaultValue
-  if (c.dataType) base.dataType = c.dataType
-  if (c.validation && c.validation.length > 0) base.validation = c.validation
-  if (c.visibleWhen) base.visibleWhen = c.visibleWhen
-  if (c.disabledWhen) base.disabledWhen = c.disabledWhen
-  if (c.handlers && Object.keys(c.handlers).length > 0) base.handlers = { ...c.handlers }
   if (c.type === 'button') {
     const b = c as ButtonControl
-    const out: Record<string, unknown> = { ...base, text: b.text ?? '', mode: b.mode ?? 'primary', disabled: b.disabled, loading: b.loading }
-    if (b.onClickHandler != null) out.onClickHandler = b.onClickHandler
+    const out: Record<string, unknown> = { type: 'button', id: b.id }
+    if (b.configHook) out.configHook = b.configHook
     return out
   }
+  const bc = c as FormControlBase
+  const base: Record<string, unknown> = { type: c.type, id: c.id }
+  if (bc.fieldName) base.fieldName = bc.fieldName
+  if (bc.defaultValue !== undefined) base.defaultValue = bc.defaultValue
+  if (bc.dataType) base.dataType = bc.dataType
+  if (bc.validation && bc.validation.length > 0) base.validation = bc.validation
+  if (bc.visibleWhen) base.visibleWhen = bc.visibleWhen
+  if (bc.disabledWhen) base.disabledWhen = bc.disabledWhen
+  if (bc.handlers && Object.keys(bc.handlers).length > 0) base.handlers = { ...bc.handlers }
   if (c.type === 'text') return { ...base, text: (c as TextControl).text ?? '' }
   if (c.type === 'input') {
     const i = c as InputControl
@@ -876,12 +871,13 @@ function formatJsValue(val: unknown, indent: string): string {
 
 /** Рекурсивно заменяет в объекте (результат controlToJson) строковые handlers на строки-импорты. */
 function convertHandlersToImportInObj(obj: Record<string, unknown>): void {
+  if (typeof obj.configHook === 'string' && obj.configHook) {
+    const pathEsc = (obj.configHook as string).replace(/\\/g, '/')
+    obj.configHook = `() => import(${JSON.stringify('./' + pathEsc)})`
+  }
   const handlerEntries: [string, string][] = obj.handlers && typeof obj.handlers === 'object'
     ? Object.entries(obj.handlers as Record<string, string>)
     : []
-  if (typeof obj.onClickHandler === 'string' && obj.onClickHandler && !handlerEntries.some(([k]) => k === 'onClick')) {
-    handlerEntries.push(['onClick', obj.onClickHandler])
-  }
   if (handlerEntries.length > 0) {
     const converted: Record<string, unknown> = {}
     for (const [key, val] of handlerEntries) {
@@ -892,11 +888,9 @@ function convertHandlersToImportInObj(obj: Record<string, unknown>): void {
     }
     if (Object.keys(converted).length > 0) {
       obj.handlers = converted
-      delete obj.onClickHandler
     }
   } else {
     delete obj.handlers
-    delete obj.onClickHandler
   }
   // Рекурсия: вложенные контролы (row, grid, table, tabs)
   if (Array.isArray(obj.children)) {

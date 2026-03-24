@@ -19,12 +19,7 @@ export default {
         {
           "type": "button",
           "id": "button-1774124998740-k5kscyr",
-          "defaultValue": "Click me!",
-          "handlers": {
-            "onClick": () => import("./handlers/click.js")
-          },
-          "text": "Кнопка",
-          "mode": "dangerFilled"
+          "configHook": () => import("./handlers/button.config-hook.js")
         }
       ]
     }

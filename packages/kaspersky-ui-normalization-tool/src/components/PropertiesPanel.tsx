@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import { Space, Text, H6, Textbox, Select, Checkbox as HexaCheckbox, Button } from '@kaspersky/hexa-ui'
 import { Add, Delete } from '@kaspersky/hexa-ui-icons/16'
 import { SelectWithOptionWidth } from './SelectWithOptionWidth'
-import type { FormControl, FormData, GridControl, TableControl, FieldSchema, ValidationRule, ValidationRuleType, Condition } from '../types/form-dsl'
+import type { FormControl, FormControlBase, FormData, GridControl, TableControl, FieldSchema, ValidationRule, ValidationRuleType, Condition } from '../types/form-dsl'
 import { EXTRA_UI_DSL_TYPES } from '../types/form-dsl'
 import { CONTROL_EVENTS, FORM_EVENTS } from '../types/form-dsl'
 import { getDescriptor } from '../controls/registry'
 import { ToolbarItemEditor } from '../controls/descriptors/toolbar'
 import { HandlersEditor } from './HandlersEditor'
 
-const INPUT_CONTROL_TYPES: string[] = ['button', 'text', 'input', 'checkbox', 'radio', 'select', 'toggle', ...EXTRA_UI_DSL_TYPES]
+const INPUT_CONTROL_TYPES: string[] = ['text', 'input', 'checkbox', 'radio', 'select', 'toggle', ...EXTRA_UI_DSL_TYPES]
 const DATA_TYPE_OPTIONS = [
   { value: 'string', label: 'string' },
   { value: 'number', label: 'number' },
@@ -35,7 +35,8 @@ function FieldBindingEditor({
   onSelectClose: () => void
 }) {
   if (!isInputControl(control)) return null
-  const hasRequired = (control.validation ?? []).some((r) => r.type === 'required')
+  const bc = control as FormControlBase
+  const hasRequired = (bc.validation ?? []).some((r) => r.type === 'required')
   return (
     <>
       <div style={{ width: '100%', borderTop: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)', paddingTop: 16 }}>
@@ -47,7 +48,7 @@ function FieldBindingEditor({
           <div>
             <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Имя поля (fieldName)</Text>
             <Textbox
-              value={control.fieldName ?? ''}
+              value={bc.fieldName ?? ''}
               onChange={(v) => onUpdate({ fieldName: v || undefined } as Partial<FormControl>)}
               placeholder="например: email"
             />
@@ -58,9 +59,9 @@ function FieldBindingEditor({
               <Select
                 key={`datatype-${selectCloseKey}`}
                 options={DATA_TYPE_OPTIONS}
-                value={control.dataType ?? 'string'}
+                value={bc.dataType ?? 'string'}
                 onChange={(v: string | undefined) => {
-                  onUpdate({ dataType: (v as FormControl['dataType']) || 'string' } as Partial<FormControl>)
+                  onUpdate({ dataType: (v as FormControlBase['dataType']) || 'string' } as Partial<FormControl>)
                   onSelectClose()
                 }}
                 getPopupContainer={() => document.body}
@@ -70,7 +71,7 @@ function FieldBindingEditor({
           <div>
             <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Значение по умолчанию</Text>
             <Textbox
-              value={control.defaultValue != null ? String(control.defaultValue) : ''}
+              value={bc.defaultValue != null ? String(bc.defaultValue) : ''}
               onChange={(v) => onUpdate({ defaultValue: v || undefined } as Partial<FormControl>)}
               placeholder="начальное значение"
             />
@@ -78,7 +79,7 @@ function FieldBindingEditor({
         </Space>
       </div>
       <ValidationEditor
-        rules={control.validation ?? []}
+        rules={bc.validation ?? []}
         onChange={(rules) => onUpdate({ validation: rules.length > 0 ? rules : undefined } as Partial<FormControl>)}
       />
       <div style={{ width: '100%', borderTop: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)', paddingTop: 16 }}>
@@ -86,12 +87,12 @@ function FieldBindingEditor({
         <Space size={8} direction="vertical" style={{ width: '100%' }}>
           <ConditionEditor
             label="Показывать когда..."
-            condition={control.visibleWhen}
+            condition={bc.visibleWhen}
             onChange={(c) => onUpdate({ visibleWhen: c } as Partial<FormControl>)}
           />
           <ConditionEditor
             label="Блокировать когда..."
-            condition={control.disabledWhen}
+            condition={bc.disabledWhen}
             onChange={(c) => onUpdate({ disabledWhen: c } as Partial<FormControl>)}
           />
         </Space>
@@ -615,7 +616,7 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
           <HandlersEditor
             title="Обработчики событий"
             events={CONTROL_EVENTS[control.type]}
-            handlers={control.handlers ?? {}}
+            handlers={(control as FormControlBase).handlers ?? {}}
             onChange={(h) => update({ handlers: Object.keys(h).length > 0 ? h : undefined } as Partial<FormControl>)}
             directoryHandle={formDirectoryHandle}
           />

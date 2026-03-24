@@ -115,14 +115,13 @@ describe('form-dsl', () => {
       expect(json.text).toBe('Label')
     })
 
-    it('serializes button control', () => {
+    it('serializes button control with configHook', () => {
       const c: ButtonControl = {
-        type: 'button', id: 'b1', text: 'Save', mode: 'primary',
+        type: 'button', id: 'b1', configHook: 'handlers/button.js',
       }
       const out = controlToJson(c) as Record<string, unknown>
       expect(out.type).toBe('button')
-      expect(out.text).toBe('Save')
-      expect(out.mode).toBe('primary')
+      expect(out.configHook).toBe('handlers/button.js')
     })
   })
 
@@ -133,7 +132,6 @@ describe('form-dsl', () => {
     const bindingProps = { fieldName: 'testField', dataType: 'string' as const, defaultValue: 'abc', validation, visibleWhen, disabledWhen }
 
     const cases: { label: string; control: FormControl }[] = [
-      { label: 'button', control: { type: 'button', id: 'h1', text: 'OK', ...bindingProps } },
       { label: 'input', control: { type: 'input', id: 'h2', placeholder: '', ...bindingProps } },
       { label: 'icon', control: { type: 'icon', id: 'ic1', name: 'Add', size: 16, ...bindingProps } },
       { label: 'toolbar', control: { type: 'toolbar', id: 'tb1', left: [], right: [], ...bindingProps } },
@@ -233,17 +231,16 @@ describe('form-dsl', () => {
       expect(js).toContain('() => import("./handlers/change.js")')
     })
 
-    it('formToJs outputs button click handler as import only, not as path string', () => {
+    it('formToJs outputs button configHook as dynamic import', () => {
       const form: FormData = {
         name: 'Test',
         id: 'f1',
         elements: [
-          { type: 'button', id: 'b1', text: 'OK', mode: 'primary', handlers: { onClick: 'handlers/click.js' } },
+          { type: 'button', id: 'b1', configHook: 'handlers/button.js' },
         ],
       }
       const js = formToJs(form)
-      expect(js).toContain('() => import("./handlers/click.js")')
-      expect(js).not.toMatch(/"onClickHandler":\s*"handlers/)
+      expect(js).toContain('() => import("./handlers/button.js")')
     })
 
     it('formToJs outputs form-level handlers as import functions', () => {
@@ -270,13 +267,13 @@ describe('form-dsl', () => {
       expect(json.handlers).toEqual({ onSubmit: 'handlers/submit.js' })
     })
 
-    it('controlToJson preserves handlers for hexa controls', () => {
+    it('controlToJson preserves configHook for button', () => {
       const c: FormControl = {
-        type: 'button', id: 'h1', text: '',
-        handlers: { onClick: 'handlers/click.js' },
+        type: 'button', id: 'h1',
+        configHook: 'handlers/button.js',
       }
       const json = controlToJson(c) as Record<string, unknown>
-      expect(json.handlers).toEqual({ onClick: 'handlers/click.js' })
+      expect(json.configHook).toBe('handlers/button.js')
     })
   })
 

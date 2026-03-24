@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import { Button, Text, H6, Space, SectionMessage } from '@kaspersky/hexa-ui'
-import type { FormControl, FormData, ValidationRule, Condition } from '../types/form-dsl'
+import type { FormControl, FormControlBase, FormData, ButtonControl, ValidationRule, Condition } from '../types/form-dsl'
 import { getDescriptor } from '../controls/registry'
 import type { CanvasContext } from '../controls/types'
 import { setGridChildrenInTree, setRowChildrenInTree, setTableChildrenInTree, forEachControlInTree } from '../types/form-dsl'
@@ -56,23 +56,127 @@ function evaluateCondition(condition: Condition, values: Record<string, unknown>
   }
 }
 
+interface FormSlice {
+  state: Record<string, unknown>
+  config: { elements: FormControl[] }
+}
+
+type ConfigHookFn = (formSlice: FormSlice, componentType: string) => Record<string, unknown> | null
+
+async function getFileHandleFromPath(
+  dir: FileSystemDirectoryHandle,
+  path: string,
+): Promise<FileSystemFileHandle> {
+  const parts = path.split('/').filter(Boolean)
+  if (parts.length === 0) throw new Error('Empty path')
+  let current: FileSystemDirectoryHandle = dir
+  for (let i = 0; i < parts.length - 1; i++) {
+    current = await current.getDirectoryHandle(parts[i])
+  }
+  return current.getFileHandle(parts[parts.length - 1])
+}
+
+async function loadModuleDefault(
+  dir: FileSystemDirectoryHandle,
+  path: string,
+): Promise<ConfigHookFn | null> {
+  try {
+    const fh = await getFileHandleFromPath(dir, path)
+    const file = await fh.getFile()
+    const text = await file.text()
+    const url = URL.createObjectURL(new Blob([text], { type: 'application/javascript' }))
+    const mod = await import(/* @vite-ignore */ url)
+    URL.revokeObjectURL(url)
+    return typeof mod?.default === 'function' ? mod.default : null
+  } catch (err) {
+    console.error('configHook load error:', err)
+    return null
+  }
+}
+
+function ButtonWithHook({
+  hookFn,
+  formSlice,
+}: {
+  hookFn: ConfigHookFn
+  formSlice: FormSlice
+}): React.ReactElement | null {
+  const props = hookFn(formSlice, 'Button')
+  if (props === null) return null
+  return <Button {...props} />
+}
+
+function PreviewButtonRenderer({
+  control,
+  formSlice,
+  formDirectoryHandle,
+}: {
+  control: ButtonControl
+  formSlice: FormSlice
+  formDirectoryHandle: FileSystemDirectoryHandle | null
+}): React.ReactElement | null {
+  const [hookFn, setHookFn] = useState<ConfigHookFn | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!control.configHook || !formDirectoryHandle) {
+      setHookFn(null)
+      return
+    }
+    setLoading(true)
+    let cancelled = false
+    loadModuleDefault(formDirectoryHandle, control.configHook).then((fn) => {
+      if (!cancelled) {
+        setHookFn(() => fn)
+        setLoading(false)
+      }
+    })
+    return () => { cancelled = true }
+  }, [control.configHook, formDirectoryHandle])
+
+  if (!control.configHook) {
+    return <Button mode="tertiary" text={`[${control.id}]`} disabled />
+  }
+  if (loading || !hookFn) {
+    return <Button mode="tertiary" text={`[${control.id}]`} disabled loading />
+  }
+  return <ButtonWithHook key={control.configHook} hookFn={hookFn} formSlice={formSlice} />
+}
+
 function PreviewControl({
   control,
   values,
   errors,
   onValueChange,
+  formSlice,
+  formDirectoryHandle,
 }: {
   control: FormControl
   values: Record<string, unknown>
   errors: Record<string, string>
   onValueChange: (fieldName: string, value: unknown) => void
+  formSlice: FormSlice
+  formDirectoryHandle: FileSystemDirectoryHandle | null
 }) {
-  if (control.visibleWhen && !evaluateCondition(control.visibleWhen, values)) {
+  if (control.type === 'button') {
+    return (
+      <div style={{ marginBottom: 8, width: '100%' }}>
+        <PreviewButtonRenderer
+          control={control as ButtonControl}
+          formSlice={formSlice}
+          formDirectoryHandle={formDirectoryHandle}
+        />
+      </div>
+    )
+  }
+
+  const bc = control as FormControlBase
+  if (bc.visibleWhen && !evaluateCondition(bc.visibleWhen, values)) {
     return null
   }
 
-  const isDisabledByCondition = control.disabledWhen ? evaluateCondition(control.disabledWhen, values) : false
-  const fieldName = control.fieldName
+  const isDisabledByCondition = bc.disabledWhen ? evaluateCondition(bc.disabledWhen, values) : false
+  const fieldName = bc.fieldName
   const error = fieldName ? errors[fieldName] : undefined
 
   const noop = () => {}
@@ -98,7 +202,7 @@ function PreviewControl({
       {fieldName && (
         <Text type="BTR3" style={{ display: 'block', marginBottom: 4, color: '#666' }}>
           {fieldName}
-          {control.validation?.some((r) => r.type === 'required') && (
+          {bc.validation?.some((r) => r.type === 'required') && (
             <span style={{ color: 'var(--danger--main, #e00)', marginLeft: 2 }}>*</span>
           )}
         </Text>
@@ -142,15 +246,18 @@ function PreviewControl({
 export function FormPreview({
   controls,
   formData,
+  formDirectoryHandle = null,
 }: {
   controls: FormControl[]
   formData: FormData
+  formDirectoryHandle?: FileSystemDirectoryHandle | null
 }) {
   const [values, setValues] = useState<Record<string, unknown>>(() => {
     const init: Record<string, unknown> = {}
     forEachControlInTree(controls, (c) => {
-      if (c.fieldName && c.defaultValue !== undefined) {
-        init[c.fieldName] = c.defaultValue
+      const bc = c as FormControlBase
+      if (bc.fieldName && bc.defaultValue !== undefined) {
+        init[bc.fieldName] = bc.defaultValue
       }
     })
     return init
@@ -168,12 +275,18 @@ export function FormPreview({
     })
   }, [])
 
+  const formSlice = useMemo(
+    () => ({ state: values, config: { elements: controls } }),
+    [values, controls]
+  )
+
   const handleSubmit = useCallback(() => {
     const newErrors: Record<string, string> = {}
     forEachControlInTree(controls, (c) => {
-      if (c.fieldName && c.validation && c.validation.length > 0) {
-        const err = validateField(values[c.fieldName], c.validation)
-        if (err) newErrors[c.fieldName] = err
+      const bc = c as FormControlBase
+      if (bc.fieldName && bc.validation && bc.validation.length > 0) {
+        const err = validateField(values[bc.fieldName], bc.validation)
+        if (err) newErrors[bc.fieldName] = err
       }
     })
     setErrors(newErrors)
@@ -203,6 +316,8 @@ export function FormPreview({
             values={values}
             errors={errors}
             onValueChange={handleValueChange}
+            formSlice={formSlice}
+            formDirectoryHandle={formDirectoryHandle}
           />
         ))}
       </Space>

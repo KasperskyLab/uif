@@ -42,9 +42,7 @@ function elements(count) {
         out.push({
           type: 'button',
           id: cid,
-          text: pick(['Отправить', 'Сохранить', 'Отмена', 'Далее', 'Назад']),
-          mode: pick(BUTTON_MODES),
-          ...(Math.random() > 0.7 && { onClickHandler: 'handlers/handler.js' })
+          ...(Math.random() > 0.5 && { configHook: 'handlers/button.js' })
         })
         break
       case 'text':
@@ -126,7 +124,7 @@ function toJsSource(form) {
   const elLines = form.elements.map((el) => {
     const entries = Object.entries(el).filter(([, v]) => v !== undefined)
     const inner = entries.map(([k, v]) => {
-      const val = k === 'onClickHandler' && typeof v === 'string'
+      const val = k === 'configHook' && typeof v === 'string'
         ? `() => import("./${v.replace(/\\/g, '/')}")`
         : JSON.stringify(v)
       return `      ${esc(k)}: ${val}`

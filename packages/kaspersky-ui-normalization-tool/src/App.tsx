@@ -514,7 +514,7 @@ function App() {
                     <H6 style={{ margin: 0 }}>Предпросмотр: {formData.name || selectedFile.path}</H6>
                     <Button mode="secondary" text="Назад к редактору" iconBefore={<Cross />} onClick={() => setPreviewMode(false)} />
                   </div>
-                  <FormPreview controls={formControls} formData={formData} />
+                  <FormPreview controls={formControls} formData={formData} formDirectoryHandle={directoryHandle} />
                 </div>
               ) : (
                 <div style={editorLayoutStyle}>
