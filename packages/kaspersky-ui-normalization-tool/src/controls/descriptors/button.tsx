@@ -43,7 +43,7 @@ export const buttonDescriptor: ControlDescriptor<ButtonControl> = {
             <Textbox
               value={value}
               onChange={(v) => setPath(v || undefined)}
-              placeholder="handlers/button.js"
+              placeholder="handlers/button.config-hook.ts"
               style={{ flex: 1 }}
             />
             {value && (
@@ -66,6 +66,7 @@ export const buttonDescriptor: ControlDescriptor<ButtonControl> = {
           {pickerOpen && directoryHandle && (
             <HandlerFilePicker
               directoryHandle={directoryHandle}
+              fileExtensions={['.ts']}
               onSelect={(path) => {
                 setPath(path)
                 setPickerOpen(false)

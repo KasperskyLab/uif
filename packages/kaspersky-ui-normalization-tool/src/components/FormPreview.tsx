@@ -1,11 +1,24 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import type { ButtonProps } from '@kaspersky/hexa-ui'
 import { Button, Text, H6, Space, SectionMessage } from '@kaspersky/hexa-ui'
-import type { FormControl, FormControlBase, FormData, ButtonControl, ValidationRule, Condition } from '../types/form-dsl'
+import type {
+  FormControl,
+  FormControlBase,
+  FormData,
+  ButtonControl,
+  FormSlice,
+  ValidationRule,
+  Condition,
+} from '../types/form-dsl'
 import { getDescriptor } from '../controls/registry'
 import type { CanvasContext } from '../controls/types'
 import { setGridChildrenInTree, setRowChildrenInTree, setTableChildrenInTree, forEachControlInTree } from '../types/form-dsl'
 import { createControl, ALL_CONTROL_TYPES } from '../controls/registry'
 import { CanvasPreviewErrorBoundary } from './CanvasPreviewErrorBoundary'
+import {
+  isConfigHookPathTs,
+  transpileConfigHookSource,
+} from '../utils/transpileConfigHookSource'
 
 function validateField(value: unknown, rules: ValidationRule[]): string | null {
   for (const rule of rules) {
@@ -56,12 +69,7 @@ function evaluateCondition(condition: Condition, values: Record<string, unknown>
   }
 }
 
-interface FormSlice {
-  state: Record<string, unknown>
-  config: { elements: FormControl[] }
-}
-
-type ConfigHookFn = (formSlice: FormSlice) => Record<string, unknown> | null
+type ButtonConfigHookFn = (formSlice: FormSlice) => ButtonProps | null
 
 async function getFileHandleFromPath(
   dir: FileSystemDirectoryHandle,
@@ -76,14 +84,19 @@ async function getFileHandleFromPath(
   return current.getFileHandle(parts[parts.length - 1])
 }
 
-async function loadModuleDefault(
+async function loadButtonConfigHookModule(
   dir: FileSystemDirectoryHandle,
   path: string,
-): Promise<ConfigHookFn | null> {
+): Promise<ButtonConfigHookFn | null> {
   try {
+    if (!isConfigHookPathTs(path)) {
+      console.error('configHook: требуется файл TypeScript (.ts), получено:', path)
+      return null
+    }
     const fh = await getFileHandleFromPath(dir, path)
     const file = await fh.getFile()
-    const text = await file.text()
+    const raw = await file.text()
+    const text = transpileConfigHookSource(raw)
     const url = URL.createObjectURL(new Blob([text], { type: 'application/javascript' }))
     const mod = await import(/* @vite-ignore */ url)
     URL.revokeObjectURL(url)
@@ -98,7 +111,7 @@ function ButtonWithHook({
   hookFn,
   formSlice,
 }: {
-  hookFn: ConfigHookFn
+  hookFn: ButtonConfigHookFn
   formSlice: FormSlice
 }): React.ReactElement | null {
   const props = hookFn(formSlice)
@@ -115,7 +128,7 @@ function PreviewButtonRenderer({
   formSlice: FormSlice
   formDirectoryHandle: FileSystemDirectoryHandle | null
 }): React.ReactElement | null {
-  const [hookFn, setHookFn] = useState<ConfigHookFn | null>(null)
+  const [hookFn, setHookFn] = useState<ButtonConfigHookFn | null>(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -125,7 +138,7 @@ function PreviewButtonRenderer({
     }
     setLoading(true)
     let cancelled = false
-    loadModuleDefault(formDirectoryHandle, control.configHook).then((fn) => {
+    loadButtonConfigHookModule(formDirectoryHandle, control.configHook).then((fn) => {
       if (!cancelled) {
         setHookFn(() => fn)
         setLoading(false)

@@ -117,11 +117,11 @@ describe('form-dsl', () => {
 
     it('serializes button control with configHook', () => {
       const c: ButtonControl = {
-        type: 'button', id: 'b1', configHook: 'handlers/button.js',
+        type: 'button', id: 'b1', configHook: 'handlers/button.config-hook.ts',
       }
       const out = controlToJson(c) as Record<string, unknown>
       expect(out.type).toBe('button')
-      expect(out.configHook).toBe('handlers/button.js')
+      expect(out.configHook).toBe('handlers/button.config-hook.ts')
     })
   })
 
@@ -236,11 +236,11 @@ describe('form-dsl', () => {
         name: 'Test',
         id: 'f1',
         elements: [
-          { type: 'button', id: 'b1', configHook: 'handlers/button.js' },
+          { type: 'button', id: 'b1', configHook: 'handlers/button.config-hook.ts' },
         ],
       }
       const js = formToJs(form)
-      expect(js).toContain('() => import("./handlers/button.js")')
+      expect(js).toContain('() => import("./handlers/button.config-hook.ts")')
     })
 
     it('formToJs outputs form-level handlers as import functions', () => {
@@ -270,10 +270,10 @@ describe('form-dsl', () => {
     it('controlToJson preserves configHook for button', () => {
       const c: FormControl = {
         type: 'button', id: 'h1',
-        configHook: 'handlers/button.js',
+        configHook: 'handlers/button.config-hook.ts',
       }
       const json = controlToJson(c) as Record<string, unknown>
-      expect(json.configHook).toBe('handlers/button.js')
+      expect(json.configHook).toBe('handlers/button.config-hook.ts')
     })
   })
 

@@ -20,6 +20,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "jsons/handlers/**/*.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

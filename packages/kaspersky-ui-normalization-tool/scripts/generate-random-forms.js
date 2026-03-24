@@ -42,7 +42,7 @@ function elements(count) {
         out.push({
           type: 'button',
           id: cid,
-          ...(Math.random() > 0.5 && { configHook: 'handlers/button.js' })
+          ...(Math.random() > 0.5 && { configHook: 'handlers/button.config-hook.ts' })
         })
         break
       case 'text':

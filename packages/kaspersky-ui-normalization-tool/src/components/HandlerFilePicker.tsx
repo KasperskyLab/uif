@@ -3,16 +3,19 @@ import { Button, Text, Space } from '@kaspersky/hexa-ui'
 import { Folder, ArrowUp1, Files } from '@kaspersky/hexa-ui-icons/16'
 import { getErrorMessage } from '../utils/getErrorMessage'
 
-const HANDLER_EXT = ['.js', '.ts']
+const DEFAULT_FILE_EXTENSIONS: readonly string[] = ['.js', '.ts']
 
 export function HandlerFilePicker({
   directoryHandle,
   onSelect,
   onClose,
+  fileExtensions = DEFAULT_FILE_EXTENSIONS,
 }: {
   directoryHandle: FileSystemDirectoryHandle
   onSelect: (path: string) => void
   onClose: () => void
+  /** Расширения файлов в пикере (configHook — только `.ts`) */
+  fileExtensions?: readonly string[]
 }) {
   const [stack, setStack] = useState<{ handle: FileSystemDirectoryHandle; pathPrefix: string }[]>([
     { handle: directoryHandle, pathPrefix: '' },
@@ -32,7 +35,7 @@ export function HandlerFilePicker({
           if (cancelled) return
           const kind = handle.kind as 'file' | 'directory'
           if (kind === 'directory') list.push({ name, kind: 'directory' })
-          else if (HANDLER_EXT.some((e) => name.toLowerCase().endsWith(e))) list.push({ name, kind: 'file' })
+          else if (fileExtensions.some((e) => name.toLowerCase().endsWith(e))) list.push({ name, kind: 'file' })
         }
         if (!cancelled) {
           list.sort((a, b) => (a.kind !== b.kind ? (a.kind === 'directory' ? -1 : 1) : a.name.localeCompare(b.name)))
@@ -43,7 +46,7 @@ export function HandlerFilePicker({
       }
     })()
     return () => { cancelled = true }
-  }, [current.handle])
+  }, [current.handle, fileExtensions])
 
   const [dirError, setDirError] = useState<string | null>(null)
   const goIn = useCallback(
@@ -89,7 +92,9 @@ export function HandlerFilePicker({
       {loading ? (
         <Text type="BTR3" style={{ color: '#999' }}>Загрузка…</Text>
       ) : entries.length === 0 ? (
-        <Text type="BTR3" style={{ color: '#999' }}>Нет файлов .js / .ts</Text>
+        <Text type="BTR3" style={{ color: '#999' }}>
+          Нет файлов {fileExtensions.join(' / ')}
+        </Text>
       ) : (
         <Space size={2} direction="vertical" style={{ width: '100%' }}>
           {entries.map(({ name, kind }) => (

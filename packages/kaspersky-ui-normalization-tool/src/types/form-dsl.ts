@@ -225,6 +225,7 @@ export interface ToolbarControl extends FormControlBase {
 
 export interface ButtonControl extends FormControlIdentity {
   type: 'button'
+  /** Путь к модулю configHook; только `.ts` (см. tooling.md). */
   configHook?: string
 }
 
@@ -326,6 +327,12 @@ export type FormControl =
   | TabsControl
   | ToolbarControl
   | IconControl
+
+/** Аргумент configHook (П.2): стейт формы и дерево контролов. */
+export interface FormSlice {
+  state: Record<string, unknown>
+  config: { elements: FormControl[] }
+}
 
 /** Описание события для UI редактора */
 export interface EventDefinition {

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import type { ButtonProps } from '@kaspersky/hexa-ui'
 import {
   Button,
   Text,
@@ -31,7 +32,12 @@ import type {
   SelectControl,
   ToggleControl,
   MetaComponentControl,
+  FormSlice,
 } from '@/types/form-dsl'
+import {
+  isConfigHookPathTs,
+  transpileConfigHookSource,
+} from '@/utils/transpileConfigHookSource'
 
 const META_COMPONENT_MAP: Record<string, React.ComponentType<Record<string, unknown>>> = {
   Button,
@@ -142,21 +148,23 @@ const emptyTableTextStyle: React.CSSProperties = {
   textAlign: 'center',
 }
 
-export interface FormSlice {
-  state: Record<string, unknown>
-  config: { elements: FormControl[] }
-}
+export type { FormSlice } from '@/types/form-dsl'
 
-type ConfigHookFn = (formSlice: FormSlice) => Record<string, unknown> | null
+type ButtonConfigHookFn = (formSlice: FormSlice) => ButtonProps | null
 
-async function loadModuleDefault(
+async function loadButtonConfigHookModule(
   dir: FileSystemDirectoryHandle,
   path: string,
-): Promise<ConfigHookFn | null> {
+): Promise<ButtonConfigHookFn | null> {
   try {
+    if (!isConfigHookPathTs(path)) {
+      console.error('configHook: требуется файл TypeScript (.ts), получено:', path)
+      return null
+    }
     const fh = await getFileHandleFromPath(dir, path)
     const file = await fh.getFile()
-    const text = await file.text()
+    const raw = await file.text()
+    const text = transpileConfigHookSource(raw)
     const url = URL.createObjectURL(new Blob([text], { type: 'application/javascript' }))
     const mod = await import(/* @vite-ignore */ url)
     URL.revokeObjectURL(url)
@@ -171,7 +179,7 @@ function ButtonWithHook({
   hookFn,
   formSlice,
 }: {
-  hookFn: ConfigHookFn
+  hookFn: ButtonConfigHookFn
   formSlice: FormSlice
 }): React.ReactElement | null {
   const props = hookFn(formSlice)
@@ -188,7 +196,7 @@ function ButtonRenderer({
   formSlice: FormSlice
   formDirectoryHandle: FileSystemDirectoryHandle | null
 }): React.ReactElement | null {
-  const [hookFn, setHookFn] = useState<ConfigHookFn | null>(null)
+  const [hookFn, setHookFn] = useState<ButtonConfigHookFn | null>(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -198,7 +206,7 @@ function ButtonRenderer({
     }
     setLoading(true)
     let cancelled = false
-    loadModuleDefault(formDirectoryHandle, control.configHook).then((fn) => {
+    loadButtonConfigHookModule(formDirectoryHandle, control.configHook).then((fn) => {
       if (!cancelled) {
         setHookFn(() => fn)
         setLoading(false)

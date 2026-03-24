@@ -27,6 +27,7 @@ export interface FormControlBase {
 
 export interface ButtonControl extends FormControlBase {
   type: 'button'
+  /** Путь к модулю configHook; только `.ts` (см. tooling.md). */
   configHook?: string
 }
 
@@ -127,6 +128,12 @@ export type FormControl =
   | SelectControl
   | ToggleControl
   | MetaComponentControl
+
+/** Аргумент configHook (П.2): стейт формы и дерево контролов. */
+export interface FormSlice {
+  state: Record<string, unknown>
+  config: { elements: FormControl[] }
+}
 
 function normOption(x: unknown): { label: string; value: string } | null {
   if (!x || typeof x !== 'object' || !('value' in (x as object))) return null

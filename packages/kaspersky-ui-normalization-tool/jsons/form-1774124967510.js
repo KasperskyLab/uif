@@ -14,12 +14,18 @@ export default {
           "defaultValue": "Hello world!",
           "text": "Текст"
         },
-        null,
+        {
+          "type": "input",
+          "id": "demo-button-text-source",
+          "text": "Текст кнопки (state)",
+          "value": "Значение из формы",
+          "placeholder": "Меняется подпись кнопки"
+        },
         null,
         {
           "type": "button",
           "id": "button-1774124998740-k5kscyr",
-          "configHook": () => import("./handlers/button.config-hook.js")
+          "configHook": () => import("./handlers/button.config-hook.ts")
         }
       ]
     }
