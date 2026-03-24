@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useRef, useEffect } from 'react'
-import { Button, Space, Text, Grid, GridItem, Tabs } from '@kaspersky/hexa-ui'
+import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react'
+import { Button, Space, Text, Grid, GridItem, Tabs, Table } from '@kaspersky/hexa-ui'
 import { Delete, ArrowsVertical } from '@kaspersky/hexa-ui-icons/16'
 import type { FormControl, FormControlBase, FormControlType, GridControl, TableControl, TabsControl, RowControl } from '../types/form-dsl'
 import { setGridChildrenInTree, setRowChildrenInTree, setTableChildrenInTree, setTabsChildrenInTree } from '../types/form-dsl'
@@ -7,9 +7,10 @@ import {
   defaultGridLayoutRows,
   DEFAULT_GRID_LAYOUT_PROPERTY,
 } from '../utils/defaultGridHexaProps'
+import { buildTableMatrixColumnsAndDataSource } from '../utils/tableControlHexa'
+import { ToolbarStaticPreview } from '../controls/descriptors/toolbar'
 import { createControl, getDescriptor, ALL_CONTROL_TYPES } from '../controls/registry'
 import type { CanvasContext } from '../controls/types'
-import { ToolbarStaticPreview } from '../controls/descriptors/toolbar'
 import { CanvasPreviewErrorBoundary } from './CanvasPreviewErrorBoundary'
 
 const canvasStyle: React.CSSProperties = {
@@ -390,6 +391,118 @@ function RowControlBlock({
   )
 }
 
+function TableMatrixEditor({
+  t,
+  cellStyle,
+  cellAlign,
+  selectedId,
+  onSelect,
+  setTableChildren,
+  rootSetControls,
+}: {
+  t: TableControl
+  cellStyle: React.CSSProperties
+  cellAlign: TableControl['columnVerticalAlign']
+  selectedId: string | null
+  onSelect: (id: string | null) => void
+  setTableChildren: (
+    next: React.SetStateAction<(FormControl | null)[]>
+  ) => void
+  rootSetControls: React.Dispatch<React.SetStateAction<FormControl[]>>
+}) {
+  const { dataSource, columns } = useMemo(
+    () =>
+      buildTableMatrixColumnsAndDataSource(t, (i) => {
+        const handleCellDrop = (e: React.DragEvent) => {
+          e.preventDefault()
+          e.stopPropagation()
+          const id = e.dataTransfer.getData(DATA_ID_KEY)
+          const dropInfo = getDropTypeAndOptions(e)
+          if (id) {
+            const idx = t.children.findIndex((ch) => ch && ch.id === id)
+            if (idx === -1) return
+            if (idx === i) return
+            const movingControl = t.children[idx]
+            setTableChildren((prev) => {
+              const next = [...prev]
+              const wasInTarget = next[i]
+              next[idx] = wasInTarget
+              next[i] = movingControl
+              return next
+            })
+          } else if (dropInfo) {
+            setTableChildren((prev) => {
+              const next = [...prev]
+              next[i] = createControl(dropInfo.type, dropInfo.options)
+              return next
+            })
+          }
+        }
+        const slotControl = t.children[i]
+        return (
+          <div
+            style={{
+              ...gridCellDropStyle,
+              ...cellStyle,
+              verticalAlign:
+                cellAlign !== 'inherit' ? cellAlign : undefined,
+            }}
+            onDragOver={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              e.dataTransfer.dropEffect = e.dataTransfer.types.includes(
+                DATA_ID_KEY
+              )
+                ? 'move'
+                : 'copy'
+            }}
+            onDrop={handleCellDrop}
+          >
+            {slotControl ? (
+              <ControlBlock
+                control={slotControl}
+                selectedId={selectedId}
+                onSelect={onSelect}
+                onRemove={(_id) =>
+                  setTableChildren((prev) => {
+                    const next = [...prev]
+                    next[i] = null
+                    return next
+                  })
+                }
+                onControlsChange={setTableChildren}
+                rootSetControls={rootSetControls}
+              />
+            ) : null}
+          </div>
+        )
+      }),
+    [
+      t,
+      t.rows,
+      t.cols,
+      t.id,
+      t.children,
+      cellStyle,
+      cellAlign,
+      selectedId,
+      onSelect,
+      setTableChildren,
+      rootSetControls,
+    ]
+  )
+
+  return (
+    <Table
+      pagination={false}
+      rowMode={t.rowMode ?? 'standard'}
+      columnVerticalAlign={t.columnVerticalAlign ?? 'inherit'}
+      dataSource={dataSource}
+      columns={columns}
+    />
+  )
+}
+
 function TableControlBlock({
   control,
   selectedId,
@@ -425,83 +538,33 @@ function TableControlBlock({
     padding: isCompact ? 4 : 8,
   }
 
-  const hasToolbar = t.toolbar && ((t.toolbar.left?.length ?? 0) > 0 || (t.toolbar.right?.length ?? 0) > 0)
+  const hasToolbar =
+    t.toolbar &&
+    ((t.toolbar.left?.length ?? 0) > 0 || (t.toolbar.right?.length ?? 0) > 0)
   return (
     <div style={{ ...tableWrapStyle, opacity: t.disabled ? 0.6 : 1, pointerEvents: t.disabled ? 'none' : undefined }}>
-      {hasToolbar && (
+      {hasToolbar ? (
         <div style={{ marginBottom: 8 }}>
-          <ToolbarStaticPreview left={t.toolbar!.left ?? []} right={t.toolbar!.right ?? []} />
+          <ToolbarStaticPreview
+            left={t.toolbar!.left ?? []}
+            right={t.toolbar!.right ?? []}
+          />
         </div>
-      )}
+      ) : null}
       {!hasAnyChild && t.emptyText ? (
         <div style={{ padding: 16, color: '#999', textAlign: 'center' }}>
           <Text type="BTR3">{t.emptyText}</Text>
         </div>
       ) : (
-      <Grid
-        cols={t.cols}
-        layout={{ rows: Array.from({ length: t.rows }, () => '1fr') }}
-        layoutProperty={{ gap: 0 }}
-      >
-        {Array.from({ length: t.rows * t.cols }, (_, i) => {
-          const handleCellDrop = (e: React.DragEvent) => {
-            e.preventDefault()
-            e.stopPropagation()
-            const id = e.dataTransfer.getData(DATA_ID_KEY)
-            const dropInfo = getDropTypeAndOptions(e)
-            if (id) {
-              const idx = t.children.findIndex((ch) => ch && ch.id === id)
-              if (idx === -1) return
-              if (idx === i) return
-              const movingControl = t.children[idx]
-              setTableChildren((prev) => {
-                const next = [...prev]
-                const wasInTarget = next[i]
-                next[idx] = wasInTarget
-                next[i] = movingControl
-                return next
-              })
-            } else if (dropInfo) {
-              setTableChildren((prev) => {
-                const next = [...prev]
-                next[i] = createControl(dropInfo.type, dropInfo.options)
-                return next
-              })
-            }
-          }
-          const slotControl = t.children[i]
-          return (
-            <GridItem key={i} style={cellStyle}>
-              <div
-                style={{ ...gridCellDropStyle, verticalAlign: cellAlign !== 'inherit' ? cellAlign : undefined }}
-                onDragOver={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  e.dataTransfer.dropEffect = e.dataTransfer.types.includes(DATA_ID_KEY) ? 'move' : 'copy'
-                }}
-                onDrop={handleCellDrop}
-              >
-                {slotControl ? (
-                  <ControlBlock
-                    control={slotControl}
-                    selectedId={selectedId}
-                    onSelect={onSelect}
-                    onRemove={(_id) =>
-                      setTableChildren((prev) => {
-                        const next = [...prev]
-                        next[i] = null
-                        return next
-                      })
-                    }
-                    onControlsChange={setTableChildren}
-                    rootSetControls={rootSetControls}
-                  />
-                ) : null}
-              </div>
-            </GridItem>
-          )
-        })}
-      </Grid>
+      <TableMatrixEditor
+        t={t}
+        cellStyle={cellStyle}
+        cellAlign={cellAlign}
+        selectedId={selectedId}
+        onSelect={onSelect}
+        setTableChildren={setTableChildren}
+        rootSetControls={rootSetControls}
+      />
       )}
     </div>
   )

@@ -187,6 +187,8 @@ export interface TableControl extends FormControlBase {
   disabled?: boolean
   /** Тулбар над таблицей (как в Hexa UI Table settings) */
   toolbar?: TableToolbarConfig
+  /** Путь к модулю configHook; только `.ts` (см. tooling.md). */
+  configHook?: string
 }
 
 /** Один таб: ключ, подпись, дочерние контролы (контейнер). */
@@ -581,12 +583,47 @@ function normalizeControl(item: unknown): FormControl | null {
     if (o.rowMode === 'standard' || o.rowMode === 'compact') c.rowMode = o.rowMode
     if (['top', 'middle', 'bottom', 'inherit'].includes(o.columnVerticalAlign as string)) c.columnVerticalAlign = o.columnVerticalAlign as TableControl['columnVerticalAlign']
     if (typeof o.disabled === 'boolean') c.disabled = o.disabled
+    if (o.toolbar && typeof o.toolbar === 'object' && !Array.isArray(o.toolbar)) {
+      const tb = o.toolbar as Record<string, unknown>
+      const normTbItem = (x: unknown): ToolbarItem | null => {
+        if (!x || typeof x !== 'object' || !('key' in (x as object))) return null
+        const item = x as Record<string, unknown>
+        const key = String(item.key ?? '')
+        const it = item.type === 'divider' ? 'divider' : 'button'
+        if (it === 'divider') return { type: 'divider', key }
+        return { type: 'button', key, label: typeof item.label === 'string' ? item.label : '' }
+      }
+      const left = Array.isArray(tb.left)
+        ? tb.left.map(normTbItem).filter((x): x is ToolbarItem => x != null)
+        : undefined
+      const right = Array.isArray(tb.right)
+        ? tb.right.map(normTbItem).filter((x): x is ToolbarItem => x != null)
+        : undefined
+      if (
+        (left && left.length > 0) ||
+        (right && right.length > 0) ||
+        typeof tb.leftLimit === 'number' ||
+        typeof tb.sticky === 'number'
+      ) {
+        c.toolbar = {
+          left: left ?? [],
+          right: right ?? [],
+          ...(typeof tb.leftLimit === 'number' ? { leftLimit: tb.leftLimit } : {}),
+          ...(typeof tb.sticky === 'number' ? { sticky: tb.sticky } : {}),
+        }
+      }
+    }
     if (Array.isArray(o.children)) {
       const list = o.children.map(normalizeControl)
       for (let i = 0; i < len && i < list.length; i++) {
         const x = list[i]
         if (x != null) c.children[i] = x
       }
+    }
+    if (typeof o.configHook === 'string') c.configHook = o.configHook
+    else if (typeof o.configHook === 'function') {
+      const path = getImportPathFromHandler(o.configHook)
+      if (path) c.configHook = path
     }
     return applyFieldBinding(c)
   }
@@ -721,6 +758,8 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
     if (t.rowMode != null) out.rowMode = t.rowMode
     if (t.columnVerticalAlign != null) out.columnVerticalAlign = t.columnVerticalAlign
     if (t.disabled != null) out.disabled = t.disabled
+    if (t.toolbar != null) out.toolbar = t.toolbar
+    if (t.configHook) out.configHook = t.configHook
     return out
   }
   if (c.type === 'tabs') {

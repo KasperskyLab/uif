@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
-import type { ButtonProps, GridProps, TextProps } from '@kaspersky/hexa-ui'
+import type { ButtonProps, GridProps, ITableProps, TextProps } from '@kaspersky/hexa-ui'
 import {
   Button,
   Text,
@@ -10,6 +10,7 @@ import {
   Toggle,
   Grid,
   GridItem,
+  Table,
   Space,
   SectionMessage,
   Tag,
@@ -39,6 +40,8 @@ import {
   defaultGridLayoutRows,
   DEFAULT_GRID_LAYOUT_PROPERTY,
 } from '@/utils/defaultGridHexaProps'
+import { buildTableMatrixColumnsAndDataSource } from '@/utils/tableControlHexa'
+import { ToolbarStaticPreview } from '@/components/ToolbarStaticPreview'
 
 const META_COMPONENT_MAP: Record<string, React.ComponentType<Record<string, unknown>>> = {
   Button,
@@ -122,14 +125,6 @@ const tableWrapStyle: React.CSSProperties = {
   overflow: 'auto',
 }
 
-const tableCellStyle: React.CSSProperties = {
-  minHeight: 40,
-  padding: 8,
-  border: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)',
-  verticalAlign: 'middle',
-  boxSizing: 'border-box',
-}
-
 const emptyTableTextStyle: React.CSSProperties = {
   padding: 16,
   textAlign: 'center',
@@ -142,6 +137,8 @@ type ButtonConfigHookFn = (formSlice: FormSlice) => ButtonProps | null
 type TextConfigHookFn = (formSlice: FormSlice) => TextProps | null
 
 type GridConfigHookFn = (formSlice: FormSlice) => Partial<GridProps> | null
+
+type TableConfigHookFn = (formSlice: FormSlice) => Partial<ITableProps> | null
 
 function ButtonWithHook({
   hookFn,
@@ -327,6 +324,144 @@ function GridRenderer({
   )
 }
 
+function TableRenderer({
+  control: t,
+  formSlice,
+  formDirectoryHandle,
+  renderControl,
+}: {
+  control: TableControl
+  formSlice: FormSlice
+  formDirectoryHandle: FileSystemDirectoryHandle | null
+  renderControl: (c: FormControl) => React.ReactNode
+}): React.ReactElement | null {
+  const [hookFn, setHookFn] = useState<TableConfigHookFn | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!t.configHook || !formDirectoryHandle) {
+      setHookFn(null)
+      return
+    }
+    setLoading(true)
+    let cancelled = false
+    loadConfigHookDefaultExport(formDirectoryHandle, t.configHook).then((fn) => {
+      if (!cancelled) {
+        setHookFn(() => fn as TableConfigHookFn)
+        setLoading(false)
+      }
+    })
+    return () => { cancelled = true }
+  }, [t.configHook, formDirectoryHandle])
+
+  const hasAnyChild = t.children.some((ch) => ch != null)
+  const hasToolbar =
+    t.toolbar &&
+    ((t.toolbar.left?.length ?? 0) > 0 || (t.toolbar.right?.length ?? 0) > 0)
+
+  const wrapStyle: React.CSSProperties = {
+    ...formRowStyle,
+    ...tableWrapStyle,
+    opacity: t.disabled ? 0.6 : 1,
+    pointerEvents: t.disabled ? 'none' : undefined,
+  }
+
+  const { dataSource, columns } = useMemo(
+    () =>
+      buildTableMatrixColumnsAndDataSource(t, (i) => {
+        const ch = t.children[i]
+        return ch ? renderControl(ch) : null
+      }),
+    [t.id, t.rows, t.cols, t.children, renderControl]
+  )
+
+  const toolbarBlock =
+    hasToolbar ? (
+      <div style={{ marginBottom: 8 }}>
+        <ToolbarStaticPreview
+          left={t.toolbar!.left ?? []}
+          right={t.toolbar!.right ?? []}
+        />
+      </div>
+    ) : null
+
+  const defaultTable = (
+    <Table
+      pagination={false}
+      rowMode={t.rowMode ?? 'standard'}
+      columnVerticalAlign={t.columnVerticalAlign ?? 'inherit'}
+      dataSource={dataSource}
+      columns={columns}
+    />
+  )
+
+  const emptyBody = (
+    <div style={emptyTableTextStyle}>
+      <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+        {t.emptyText}
+      </Text>
+    </div>
+  )
+
+  const bodyNoHook = !hasAnyChild && t.emptyText ? emptyBody : defaultTable
+
+  if (!t.configHook) {
+    return (
+      <div style={wrapStyle}>
+        {toolbarBlock}
+        {bodyNoHook}
+      </div>
+    )
+  }
+
+  if (!formDirectoryHandle || loading || !hookFn) {
+    return (
+      <div style={wrapStyle}>
+        {toolbarBlock}
+        <Text type="BTR3" style={{ color: 'var(--text--secondary)', marginBottom: 8 }}>
+          …
+        </Text>
+        {bodyNoHook}
+      </div>
+    )
+  }
+
+  const partial = hookFn(formSlice)
+  if (partial === null) return null
+  const {
+    columns: _cols,
+    dataSource: _ds,
+    dataSourceFunction: _dsf,
+    children: _ch,
+    toolbar: _tb,
+    ...hookRest
+  } = partial as Partial<ITableProps> & {
+    children?: unknown
+    dataSourceFunction?: unknown
+  }
+
+  const bodyHooked =
+    !hasAnyChild && t.emptyText ? (
+      emptyBody
+    ) : (
+      <Table
+        pagination={false}
+        rowMode={t.rowMode ?? 'standard'}
+        columnVerticalAlign={t.columnVerticalAlign ?? 'inherit'}
+        dataSource={dataSource}
+        columns={columns}
+        {...hookRest}
+      />
+    )
+
+  return (
+    <div style={wrapStyle}>
+      {toolbarBlock}
+      {bodyHooked}
+    </div>
+  )
+}
+
 export interface FormRendererProps {
   elements: FormControl[]
   gap?: number
@@ -418,36 +553,14 @@ export function FormRenderer({
       }
       case 'table': {
         const t = control as TableControl
-        const hasAnyChild = t.children.some((ch) => ch != null)
-        const cellAlign = t.columnVerticalAlign ?? 'inherit'
         return (
-          <div key={t.id} style={{ ...formRowStyle, ...tableWrapStyle }}>
-            {!hasAnyChild && t.emptyText ? (
-              <div style={emptyTableTextStyle}>
-                <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>{t.emptyText}</Text>
-              </div>
-            ) : (
-              <Grid
-                cols={t.cols}
-                layout={{ rows: Array.from({ length: t.rows }, () => '1fr') }}
-                layoutProperty={{ gap: 0 }}
-              >
-                {t.children.map((ch, i) => (
-                  <GridItem
-                    key={`${t.id}-cell-${i}`}
-                    style={{
-                      ...tableCellStyle,
-                      verticalAlign: cellAlign !== 'inherit' ? cellAlign : undefined,
-                      opacity: t.disabled ? 0.6 : 1,
-                      pointerEvents: t.disabled ? 'none' : undefined,
-                    }}
-                  >
-                    {ch ? renderControl(ch) : null}
-                  </GridItem>
-                ))}
-              </Grid>
-            )}
-          </div>
+          <TableRenderer
+            key={t.id}
+            control={t}
+            formSlice={formSlice}
+            formDirectoryHandle={formDirectoryHandle}
+            renderControl={renderControl}
+          />
         )
       }
       case 'checkbox': {

@@ -1,6 +1,20 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
-import type { ButtonProps, GridProps, TextProps } from '@kaspersky/hexa-ui'
-import { Button, Text, H6, Space, SectionMessage, Grid, GridItem } from '@kaspersky/hexa-ui'
+import type {
+  ButtonProps,
+  GridProps,
+  ITableProps,
+  TextProps,
+} from '@kaspersky/hexa-ui'
+import {
+  Button,
+  Text,
+  H6,
+  Space,
+  SectionMessage,
+  Grid,
+  GridItem,
+  Table,
+} from '@kaspersky/hexa-ui'
 import type {
   FormControl,
   FormControlBase,
@@ -8,6 +22,7 @@ import type {
   ButtonControl,
   TextControl,
   GridControl,
+  TableControl,
   FormSlice,
   ValidationRule,
   Condition,
@@ -22,6 +37,8 @@ import {
   defaultGridLayoutRows,
   DEFAULT_GRID_LAYOUT_PROPERTY,
 } from '../utils/defaultGridHexaProps'
+import { buildTableMatrixColumnsAndDataSource } from '../utils/tableControlHexa'
+import { ToolbarStaticPreview } from '../controls/descriptors/toolbar'
 
 function validateField(value: unknown, rules: ValidationRule[]): string | null {
   for (const rule of rules) {
@@ -77,6 +94,8 @@ type ButtonConfigHookFn = (formSlice: FormSlice) => ButtonProps | null
 type TextConfigHookFn = (formSlice: FormSlice) => TextProps | null
 
 type GridConfigHookFn = (formSlice: FormSlice) => Partial<GridProps> | null
+
+type TableConfigHookFn = (formSlice: FormSlice) => Partial<ITableProps> | null
 
 function ButtonWithHook({
   hookFn,
@@ -276,6 +295,160 @@ function PreviewGridRenderer({
   )
 }
 
+function PreviewTableRenderer({
+  control: t,
+  values,
+  errors,
+  onValueChange,
+  formSlice,
+  formDirectoryHandle,
+}: {
+  control: TableControl
+  values: Record<string, unknown>
+  errors: Record<string, string>
+  onValueChange: (fieldName: string, value: unknown) => void
+  formSlice: FormSlice
+  formDirectoryHandle: FileSystemDirectoryHandle | null
+}) {
+  const [hookFn, setHookFn] = useState<TableConfigHookFn | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!t.configHook || !formDirectoryHandle) {
+      setHookFn(null)
+      return
+    }
+    setLoading(true)
+    let cancelled = false
+    loadConfigHookDefaultExport(formDirectoryHandle, t.configHook).then((fn) => {
+      if (!cancelled) {
+        setHookFn(() => fn as TableConfigHookFn)
+        setLoading(false)
+      }
+    })
+    return () => { cancelled = true }
+  }, [t.configHook, formDirectoryHandle])
+
+  const hasAnyChild = t.children.some((ch) => ch != null)
+  const hasToolbar =
+    t.toolbar &&
+    ((t.toolbar.left?.length ?? 0) > 0 || (t.toolbar.right?.length ?? 0) > 0)
+
+  const { dataSource, columns } = useMemo(
+    () =>
+      buildTableMatrixColumnsAndDataSource(t, (i) => {
+        const ch = t.children[i]
+        return ch ? (
+          <PreviewControl
+            control={ch}
+            values={values}
+            errors={errors}
+            onValueChange={onValueChange}
+            formSlice={formSlice}
+            formDirectoryHandle={formDirectoryHandle}
+          />
+        ) : null
+      }),
+    [
+      t.id,
+      t.rows,
+      t.cols,
+      t.children,
+      values,
+      errors,
+      onValueChange,
+      formSlice,
+      formDirectoryHandle,
+    ]
+  )
+
+  const toolbarBlock =
+    hasToolbar ? (
+      <div style={{ marginBottom: 8 }}>
+        <ToolbarStaticPreview
+          left={t.toolbar!.left ?? []}
+          right={t.toolbar!.right ?? []}
+        />
+      </div>
+    ) : null
+
+  const defaultTable = (
+    <Table
+      pagination={false}
+      rowMode={t.rowMode ?? 'standard'}
+      columnVerticalAlign={t.columnVerticalAlign ?? 'inherit'}
+      dataSource={dataSource}
+      columns={columns}
+    />
+  )
+
+  const emptyBody = (
+    <div style={{ padding: 16, textAlign: 'center' }}>
+      <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+        {t.emptyText}
+      </Text>
+    </div>
+  )
+
+  const bodyNoHook = !hasAnyChild && t.emptyText ? emptyBody : defaultTable
+
+  if (!t.configHook) {
+    return (
+      <>
+        {toolbarBlock}
+        {bodyNoHook}
+      </>
+    )
+  }
+
+  if (!formDirectoryHandle || loading || !hookFn) {
+    return (
+      <>
+        {toolbarBlock}
+        <Text type="BTR3" style={{ color: 'var(--text--secondary)', marginBottom: 8 }}>
+          …
+        </Text>
+        {bodyNoHook}
+      </>
+    )
+  }
+
+  const partial = hookFn(formSlice)
+  if (partial === null) return null
+  const {
+    columns: _cols,
+    dataSource: _ds,
+    dataSourceFunction: _dsf,
+    children: _ch,
+    toolbar: _tb,
+    ...hookRest
+  } = partial as Partial<ITableProps> & {
+    children?: unknown
+    dataSourceFunction?: unknown
+  }
+
+  const bodyHooked =
+    !hasAnyChild && t.emptyText ? (
+      emptyBody
+    ) : (
+      <Table
+        pagination={false}
+        rowMode={t.rowMode ?? 'standard'}
+        columnVerticalAlign={t.columnVerticalAlign ?? 'inherit'}
+        dataSource={dataSource}
+        columns={columns}
+        {...hookRest}
+      />
+    )
+
+  return (
+    <>
+      {toolbarBlock}
+      {bodyHooked}
+    </>
+  )
+}
+
 function PreviewControl({
   control,
   values,
@@ -332,6 +505,35 @@ function PreviewControl({
       >
         <PreviewGridRenderer
           control={control as GridControl}
+          values={values}
+          errors={errors}
+          onValueChange={onValueChange}
+          formSlice={formSlice}
+          formDirectoryHandle={formDirectoryHandle}
+        />
+      </div>
+    )
+  }
+
+  if (control.type === 'table') {
+    const tc = control as FormControlBase & TableControl
+    if (tc.visibleWhen && !evaluateCondition(tc.visibleWhen, values)) {
+      return null
+    }
+    const isDisabledByCondition = tc.disabledWhen
+      ? evaluateCondition(tc.disabledWhen, values)
+      : false
+    return (
+      <div
+        style={{
+          marginBottom: 8,
+          width: '100%',
+          opacity: isDisabledByCondition ? 0.5 : 1,
+          pointerEvents: tc.disabled ? 'none' : undefined,
+        }}
+      >
+        <PreviewTableRenderer
+          control={control as TableControl}
           values={values}
           errors={errors}
           onValueChange={onValueChange}

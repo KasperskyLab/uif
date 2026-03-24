@@ -2,11 +2,10 @@ import React, { useState } from 'react'
 import { Space, Text, H6, Textbox, Select, Checkbox as HexaCheckbox, Button } from '@kaspersky/hexa-ui'
 import { Add, Delete } from '@kaspersky/hexa-ui-icons/16'
 import { SelectWithOptionWidth } from './SelectWithOptionWidth'
-import type { FormControl, FormControlBase, FormData, TableControl, FieldSchema, ValidationRule, ValidationRuleType, Condition } from '../types/form-dsl'
+import type { FormControl, FormControlBase, FormData, FieldSchema, ValidationRule, ValidationRuleType, Condition } from '../types/form-dsl'
 import { EXTRA_UI_DSL_TYPES } from '../types/form-dsl'
 import { CONTROL_EVENTS, FORM_EVENTS } from '../types/form-dsl'
 import { getDescriptor } from '../controls/registry'
-import { ToolbarItemEditor } from '../controls/descriptors/toolbar'
 import { HandlersEditor } from './HandlersEditor'
 
 /** `text` (типографика + configHook) не входит — паритет с `button`, без привязки данных в панели */
@@ -397,165 +396,7 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
     <aside className="properties-panel editor-sidebar editor-sidebar--right" style={panelStyle}>
       <H6 style={{ margin: 0, textAlign: 'left' }}>Свойства</H6>
       <div className="props-section" style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', marginTop: 12 }}>
-        {control.type === 'table' && (
-          <>
-            <div style={{ width: '100%' }}>
-              <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Rows (строки)</Text>
-              <Textbox
-                value={String((control as TableControl).rows)}
-                onChange={(v) => {
-                  const n = parseInt(v, 10)
-                  if (!isNaN(n) && n >= 1 && n <= 12) {
-                    const t = control as TableControl
-                    const newLen = n * t.cols
-                    const children = [...t.children]
-                    while (children.length < newLen) children.push(null)
-                    if (children.length > newLen) children.splice(newLen)
-                    update({ rows: n, children } as Partial<TableControl>)
-                  }
-                }}
-                placeholder="2"
-              />
-            </div>
-            <div style={{ width: '100%' }}>
-              <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Cols (колонки)</Text>
-              <Textbox
-                value={String((control as TableControl).cols)}
-                onChange={(v) => {
-                  const n = parseInt(v, 10)
-                  if (!isNaN(n) && n >= 1 && n <= 12) {
-                    const t = control as TableControl
-                    const newLen = t.rows * n
-                    const children = [...t.children]
-                    while (children.length < newLen) children.push(null)
-                    if (children.length > newLen) children.splice(newLen)
-                    update({ cols: n, children } as Partial<TableControl>)
-                  }
-                }}
-                placeholder="2"
-              />
-            </div>
-            <div style={{ width: '100%' }}>
-              <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Empty text</Text>
-              <Textbox
-                value={(control as TableControl).emptyText ?? ''}
-                onChange={(v) => update({ emptyText: v || undefined } as Partial<TableControl>)}
-                placeholder="Нет данных"
-              />
-            </div>
-            <div style={{ width: '100%' }}>
-              <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Row mode</Text>
-              <SelectWithOptionWidth options={[{ value: 'standard', label: 'standard' }, { value: 'compact', label: 'compact' }]}>
-                <Select
-                  key={`table-rowmode-${selectCloseKey}`}
-                  options={[{ value: 'standard', label: 'standard' }, { value: 'compact', label: 'compact' }]}
-                  value={(control as TableControl).rowMode ?? 'standard'}
-                  onChange={(v: string | undefined) => { update({ rowMode: (v as 'standard' | 'compact') || 'standard' } as Partial<TableControl>); setSelectCloseKey((k) => k + 1) }}
-                  getPopupContainer={() => document.body}
-                />
-              </SelectWithOptionWidth>
-            </div>
-            <div style={{ width: '100%' }}>
-              <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Column vertical align</Text>
-              <SelectWithOptionWidth options={[{ value: 'top', label: 'top' }, { value: 'middle', label: 'middle' }, { value: 'bottom', label: 'bottom' }, { value: 'inherit', label: 'inherit' }]}>
-                <Select
-                  key={`table-colalign-${selectCloseKey}`}
-                  options={[{ value: 'top', label: 'top' }, { value: 'middle', label: 'middle' }, { value: 'bottom', label: 'bottom' }, { value: 'inherit', label: 'inherit' }]}
-                  value={(control as TableControl).columnVerticalAlign ?? 'inherit'}
-                  onChange={(v: string | undefined) => { update({ columnVerticalAlign: (v as TableControl['columnVerticalAlign']) || 'inherit' } as Partial<TableControl>); setSelectCloseKey((k) => k + 1) }}
-                  getPopupContainer={() => document.body}
-                />
-              </SelectWithOptionWidth>
-            </div>
-            <HexaCheckbox
-              checked={(control as TableControl).disabled}
-              onChange={(e) => update({ disabled: e.target.checked } as Partial<TableControl>)}
-            >
-              Disabled
-            </HexaCheckbox>
-            <div style={{ marginTop: 12, width: '100%' }}>
-              <HexaCheckbox
-                checked={!!(control as TableControl).toolbar}
-                onChange={(e) =>
-                  update({
-                    toolbar: e.target.checked
-                      ? { left: [{ type: 'button', key: '1', label: 'Действие' }], right: [] }
-                      : undefined,
-                  } as Partial<TableControl>)
-                }
-              >
-                Тулбар над таблицей
-              </HexaCheckbox>
-              {(control as TableControl).toolbar && (
-                <Space size={8} direction="vertical" style={{ width: '100%', marginTop: 8 }}>
-                  <Text type="BTR3" style={{ display: 'block', fontWeight: 600 }}>Слева</Text>
-                  {((control as TableControl).toolbar!.left ?? []).map((item, i) => (
-                    <ToolbarItemEditor
-                      key={item.key + i}
-                      item={item}
-                      index={i}
-                      onChange={(patch) => {
-                        const t = control as TableControl
-                        const next = [...(t.toolbar!.left ?? [])]
-                        next[i] = { ...next[i], ...patch }
-                        update({ toolbar: { ...t.toolbar!, left: next.length ? next : [] } } as Partial<TableControl>)
-                      }}
-                      onRemove={() => {
-                        const t = control as TableControl
-                        const left = (t.toolbar!.left ?? []).filter((_, j) => j !== i)
-                        update({ toolbar: { ...t.toolbar!, left } } as Partial<TableControl>)
-                      }}
-                      canRemove={(control as TableControl).toolbar!.left!.length > 0}
-                    />
-                  ))}
-                  <Button
-                    mode="secondary"
-                    text="Добавить слева"
-                    iconBefore={<Add />}
-                    onClick={() => {
-                      const t = control as TableControl
-                      const left = [...(t.toolbar!.left ?? []), { type: 'button' as const, key: `l-${Date.now()}`, label: 'Кнопка' }]
-                      update({ toolbar: { ...t.toolbar!, left } } as Partial<TableControl>)
-                    }}
-                    style={{ width: '100%' }}
-                  />
-                  <Text type="BTR3" style={{ display: 'block', fontWeight: 600, marginTop: 8 }}>Справа</Text>
-                  {((control as TableControl).toolbar!.right ?? []).map((item, i) => (
-                    <ToolbarItemEditor
-                      key={item.key + i}
-                      item={item}
-                      index={i}
-                      onChange={(patch) => {
-                        const t = control as TableControl
-                        const next = [...(t.toolbar!.right ?? [])]
-                        next[i] = { ...next[i], ...patch }
-                        update({ toolbar: { ...t.toolbar!, right: next.length ? next : [] } } as Partial<TableControl>)
-                      }}
-                      onRemove={() => {
-                        const t = control as TableControl
-                        const right = (t.toolbar!.right ?? []).filter((_, j) => j !== i)
-                        update({ toolbar: { ...t.toolbar!, right } } as Partial<TableControl>)
-                      }}
-                      canRemove={(control as TableControl).toolbar!.right!.length > 0}
-                    />
-                  ))}
-                  <Button
-                    mode="secondary"
-                    text="Добавить справа"
-                    iconBefore={<Add />}
-                    onClick={() => {
-                      const t = control as TableControl
-                      const right = [...(t.toolbar!.right ?? []), { type: 'button' as const, key: `r-${Date.now()}`, label: 'Кнопка' }]
-                      update({ toolbar: { ...t.toolbar!, right } } as Partial<TableControl>)
-                    }}
-                    style={{ width: '100%' }}
-                  />
-                </Space>
-              )}
-            </div>
-          </>
-        )}
-        {control.type !== 'table' && (() => {
+        {(() => {
           const descriptor = getDescriptor(control.type)
           return descriptor ? (
             <descriptor.PropsEditor

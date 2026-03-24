@@ -1,22 +1,33 @@
 import { Text, Textbox } from '@kaspersky/hexa-ui'
-import type { GridControl } from '../types/form-dsl'
+import type { FormControl } from '../types/form-dsl'
 
-export interface GridRowsColsPropsEditorProps {
-  control: GridControl
-  onUpdate: (patch: Partial<GridControl>) => void
+/** Общее для grid/table: размерность матрицы и длина `children`. */
+export type MatrixRowsColsShape = {
+  rows: number
+  cols: number
+  children: (FormControl | null)[]
 }
 
-/** Редактор `rows` / `cols` с пересчётом `children` (как раньше в PropertiesPanel). */
+export interface GridRowsColsPropsEditorProps {
+  control: MatrixRowsColsShape
+  onUpdate: (patch: Partial<MatrixRowsColsShape>) => void
+  rowLabel?: string
+  colLabel?: string
+}
+
+/** Редактор `rows` / `cols` с пересчётом `children` (grid и table). */
 export function GridRowsColsPropsEditor({
   control,
   onUpdate,
+  rowLabel = 'Rows',
+  colLabel = 'Cols',
 }: GridRowsColsPropsEditorProps) {
   const g = control
   return (
     <>
       <div style={{ width: '100%' }}>
         <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
-          Rows
+          {rowLabel}
         </Text>
         <Textbox
           value={String(g.rows)}
@@ -35,7 +46,7 @@ export function GridRowsColsPropsEditor({
       </div>
       <div style={{ width: '100%' }}>
         <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
-          Cols
+          {colLabel}
         </Text>
         <Textbox
           value={String(g.cols)}
