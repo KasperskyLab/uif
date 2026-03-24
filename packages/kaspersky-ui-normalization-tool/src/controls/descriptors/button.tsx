@@ -37,6 +37,16 @@ export const buttonDescriptor: ControlDescriptor<ButtonControl> = {
       <Space size={12} direction="vertical" style={{ width: '100%' }}>
         <div style={{ width: '100%' }}>
           <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
+            Идентификатор (id)
+          </Text>
+          <Textbox
+            value={control.id}
+            readOnly
+            style={{ width: '100%' }}
+          />
+        </div>
+        <div style={{ width: '100%' }}>
+          <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
             Хендлер настройки (configHook)
           </Text>
           <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
