@@ -20,6 +20,7 @@ import { FORM_TEMPLATES } from './templates'
 import type { FormControl, FormControlType } from './types/form-dsl'
 import type { FormFileNode } from './hooks/useFormFilesList'
 import { FORM_EXT } from './constants'
+import { getFormPathFromSearch, setFormPathInUrl } from './utils/formUrlSync'
 
 const layoutStyle: React.CSSProperties = {
   display: 'flex',
@@ -123,6 +124,36 @@ function App() {
     loading: fileLoading,
     loadError,
   } = useFormFile(directoryHandle)
+
+  const urlFormPrevRef = useRef<string | null>(null)
+  useEffect(() => {
+    if (e2eDemo) return
+    const p = selectedFile?.path ?? null
+    if (p) {
+      setFormPathInUrl(p)
+    } else if (urlFormPrevRef.current !== null) {
+      setFormPathInUrl(null)
+    }
+    urlFormPrevRef.current = p
+  }, [selectedFile?.path, e2eDemo])
+
+  useEffect(() => {
+    if (e2eDemo || !directoryHandle || loading || restoringDirectory) return
+    const want = getFormPathFromSearch()
+    if (!want) return
+    if (selectedFile?.path === want) return
+    const found = findFileInTree(treeNodes, want)
+    if (!found) return
+    void selectFile(found)
+  }, [
+    e2eDemo,
+    directoryHandle,
+    loading,
+    restoringDirectory,
+    treeNodes,
+    selectedFile?.path,
+    selectFile,
+  ])
 
   const history = useHistory<FormControl[]>(formControls)
   const lastFormControlsRef = useRef(formControls)

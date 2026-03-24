@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
 import { ConfigProvider } from '@kaspersky/hexa-ui/design-system/context/provider'
 import { ThemeKey } from '@kaspersky/hexa-ui/design-system'
 import { GlobalStyle } from '@kaspersky/hexa-ui/design-system/global-style'
@@ -19,6 +19,7 @@ import { useFormFilesList, findFileInTree } from '@/hooks/useFormFilesList'
 import { useFormLoader } from '@/hooks/useFormLoader'
 import { FormRenderer } from '@/components/FormRenderer'
 import type { FormFileNode } from '@/hooks/useFormFilesList'
+import { getFormPathFromSearch, setFormPathInUrl } from '@/utils/formUrlSync'
 
 const layoutStyle: React.CSSProperties = {
   display: 'flex',
@@ -84,6 +85,34 @@ function App() {
     loadError,
     loadFile,
   } = useFormLoader()
+
+  const urlFormPrevRef = useRef<string | null>(null)
+  useEffect(() => {
+    const p = selectedFile?.path ?? null
+    if (p) {
+      setFormPathInUrl(p)
+    } else if (urlFormPrevRef.current !== null) {
+      setFormPathInUrl(null)
+    }
+    urlFormPrevRef.current = p
+  }, [selectedFile?.path])
+
+  useEffect(() => {
+    if (!directoryHandle || loading || restoringDirectory) return
+    const want = getFormPathFromSearch()
+    if (!want) return
+    if (selectedFile?.path === want) return
+    const found = findFileInTree(treeNodes, want)
+    if (!found) return
+    void loadFile({ path: found.path, handle: found.handle })
+  }, [
+    directoryHandle,
+    loading,
+    restoringDirectory,
+    treeNodes,
+    selectedFile?.path,
+    loadFile,
+  ])
 
   const [formDirectoryHandle, setFormDirectoryHandle] =
     useState<FileSystemDirectoryHandle | null>(null)
