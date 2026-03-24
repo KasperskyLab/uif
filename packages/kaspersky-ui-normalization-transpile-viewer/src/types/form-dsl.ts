@@ -51,6 +51,8 @@ export interface GridControl extends FormControlBase {
   rows: number
   cols: number
   children: (FormControl | null)[]
+  /** Путь к модулю configHook; только `.ts` (см. tooling.md). */
+  configHook?: string
 }
 
 export interface TableControl extends FormControlBase {
@@ -204,6 +206,11 @@ function normalizeControl(item: unknown): FormControl | null {
         const x = list[i]
         if (x != null) c.children[i] = x
       }
+    }
+    if (typeof o.configHook === 'string') c.configHook = o.configHook
+    else if (typeof o.configHook === 'function') {
+      const path = getImportPathFromHandler(o.configHook)
+      if (path) c.configHook = path
     }
     return c
   }

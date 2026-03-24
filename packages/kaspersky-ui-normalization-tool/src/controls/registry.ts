@@ -18,7 +18,8 @@ import { tabsDescriptor } from './descriptors/tabs'
 import { toolbarDescriptor } from './descriptors/toolbar'
 import { iconDescriptor } from './descriptors/icon'
 import { rowDescriptor } from './descriptors/row'
-import { ArrangeGrid, Table, WindowLayout } from '@kaspersky/hexa-ui-icons/16'
+import { gridDescriptor } from './descriptors/grid'
+import { Table, WindowLayout } from '@kaspersky/hexa-ui-icons/16'
 
 const DESCRIPTORS: ControlDescriptor<FormControl>[] = [
   buttonDescriptor as ControlDescriptor<FormControl>,
@@ -34,6 +35,7 @@ const DESCRIPTORS: ControlDescriptor<FormControl>[] = [
   toolbarDescriptor as ControlDescriptor<FormControl>,
   iconDescriptor as ControlDescriptor<FormControl>,
   rowDescriptor as ControlDescriptor<FormControl>,
+  gridDescriptor as ControlDescriptor<FormControl>,
 ]
 
 const BY_TYPE = new Map<FormControlType, ControlDescriptor>(
@@ -75,7 +77,7 @@ export interface PaletteItem {
 export function getPaletteGroups(): { group: string; items: PaletteItem[] }[] {
   const layoutItems: PaletteItem[] = [
     { type: 'row', label: 'Ряд', Icon: rowDescriptor.Icon },
-    { type: 'grid', label: 'Сетка', Icon: ArrangeGrid },
+    { type: 'grid', label: 'Сетка', Icon: gridDescriptor.Icon },
     { type: 'table', label: 'Таблица', Icon: Table },
     { type: 'tabs', label: 'Табы', Icon: WindowLayout },
   ]
@@ -110,9 +112,6 @@ export function createControl(type: FormControlType, _options?: { componentId?: 
   const descriptor = BY_TYPE.get(type)
   if (!descriptor) {
     const id = `${type}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
-    if (type === 'grid') {
-      return { type: 'grid', id, rows: 2, cols: 2, children: Array(4).fill(null) } as FormControl
-    }
     if (type === 'table') {
       return { type: 'table', id, rows: 2, cols: 2, children: Array(4).fill(null) } as FormControl
     }

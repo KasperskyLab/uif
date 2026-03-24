@@ -1,12 +1,13 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
-import type { ButtonProps, TextProps } from '@kaspersky/hexa-ui'
-import { Button, Text, H6, Space, SectionMessage } from '@kaspersky/hexa-ui'
+import type { ButtonProps, GridProps, TextProps } from '@kaspersky/hexa-ui'
+import { Button, Text, H6, Space, SectionMessage, Grid, GridItem } from '@kaspersky/hexa-ui'
 import type {
   FormControl,
   FormControlBase,
   FormData,
   ButtonControl,
   TextControl,
+  GridControl,
   FormSlice,
   ValidationRule,
   Condition,
@@ -17,6 +18,10 @@ import { setGridChildrenInTree, setRowChildrenInTree, setTableChildrenInTree, fo
 import { createControl, ALL_CONTROL_TYPES } from '../controls/registry'
 import { CanvasPreviewErrorBoundary } from './CanvasPreviewErrorBoundary'
 import { loadConfigHookDefaultExport } from '../utils/loadConfigHookModule'
+import {
+  defaultGridLayoutRows,
+  DEFAULT_GRID_LAYOUT_PROPERTY,
+} from '../utils/defaultGridHexaProps'
 
 function validateField(value: unknown, rules: ValidationRule[]): string | null {
   for (const rule of rules) {
@@ -70,6 +75,8 @@ function evaluateCondition(condition: Condition, values: Record<string, unknown>
 type ButtonConfigHookFn = (formSlice: FormSlice) => ButtonProps | null
 
 type TextConfigHookFn = (formSlice: FormSlice) => TextProps | null
+
+type GridConfigHookFn = (formSlice: FormSlice) => Partial<GridProps> | null
 
 function ButtonWithHook({
   hookFn,
@@ -177,6 +184,98 @@ function PreviewTextRenderer({
   return <TextWithHook key={control.configHook} hookFn={hookFn} formSlice={formSlice} />
 }
 
+function PreviewGridRenderer({
+  control: g,
+  values,
+  errors,
+  onValueChange,
+  formSlice,
+  formDirectoryHandle,
+}: {
+  control: GridControl
+  values: Record<string, unknown>
+  errors: Record<string, string>
+  onValueChange: (fieldName: string, value: unknown) => void
+  formSlice: FormSlice
+  formDirectoryHandle: FileSystemDirectoryHandle | null
+}) {
+  const [hookFn, setHookFn] = useState<GridConfigHookFn | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  const renderCell = (ch: FormControl | null) =>
+    ch ? (
+      <PreviewControl
+        control={ch}
+        values={values}
+        errors={errors}
+        onValueChange={onValueChange}
+        formSlice={formSlice}
+        formDirectoryHandle={formDirectoryHandle}
+      />
+    ) : null
+
+  useEffect(() => {
+    if (!g.configHook || !formDirectoryHandle) {
+      setHookFn(null)
+      return
+    }
+    setLoading(true)
+    let cancelled = false
+    loadConfigHookDefaultExport(formDirectoryHandle, g.configHook).then((fn) => {
+      if (!cancelled) {
+        setHookFn(() => fn as GridConfigHookFn)
+        setLoading(false)
+      }
+    })
+    return () => { cancelled = true }
+  }, [g.configHook, formDirectoryHandle])
+
+  const defaultGrid = (
+    <Grid
+      cols={g.cols}
+      layout={defaultGridLayoutRows(g.rows)}
+      layoutProperty={DEFAULT_GRID_LAYOUT_PROPERTY}
+    >
+      {g.children.map((ch, i) => (
+        <GridItem key={`${g.id}-c-${i}`} style={{ minHeight: 32 }}>
+          {renderCell(ch)}
+        </GridItem>
+      ))}
+    </Grid>
+  )
+
+  if (!g.configHook) {
+    return defaultGrid
+  }
+  if (!formDirectoryHandle || loading || !hookFn) {
+    return (
+      <>
+        <Text type="BTR3" style={{ color: 'var(--text--secondary)', marginBottom: 8 }}>
+          …
+        </Text>
+        {defaultGrid}
+      </>
+    )
+  }
+  const partial = hookFn(formSlice)
+  if (partial === null) return null
+  const { children: _ch, cols: _ignoreCols, ...hookRest } = partial
+  return (
+    <Grid
+      layout={defaultGridLayoutRows(g.rows)}
+      layoutProperty={DEFAULT_GRID_LAYOUT_PROPERTY}
+      {...hookRest}
+      cols={g.cols}
+    >
+      {g.children.map((ch, i) => (
+        <GridItem key={`${g.id}-h-${i}`} style={{ minHeight: 32 }}>
+          {renderCell(ch)}
+        </GridItem>
+      ))}
+    </Grid>
+  )
+}
+
 function PreviewControl({
   control,
   values,
@@ -208,6 +307,34 @@ function PreviewControl({
       <div style={{ marginBottom: 8, width: '100%' }}>
         <PreviewTextRenderer
           control={control as TextControl}
+          formSlice={formSlice}
+          formDirectoryHandle={formDirectoryHandle}
+        />
+      </div>
+    )
+  }
+
+  if (control.type === 'grid') {
+    const gc = control as FormControlBase & GridControl
+    if (gc.visibleWhen && !evaluateCondition(gc.visibleWhen, values)) {
+      return null
+    }
+    const isDisabledByCondition = gc.disabledWhen
+      ? evaluateCondition(gc.disabledWhen, values)
+      : false
+    return (
+      <div
+        style={{
+          marginBottom: 8,
+          width: '100%',
+          opacity: isDisabledByCondition ? 0.5 : 1,
+        }}
+      >
+        <PreviewGridRenderer
+          control={control as GridControl}
+          values={values}
+          errors={errors}
+          onValueChange={onValueChange}
           formSlice={formSlice}
           formDirectoryHandle={formDirectoryHandle}
         />

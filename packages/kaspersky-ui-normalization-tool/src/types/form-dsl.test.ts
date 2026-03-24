@@ -124,6 +124,20 @@ describe('form-dsl', () => {
       expect(out.type).toBe('button')
       expect(out.configHook).toBe('handlers/button.config-hook.ts')
     })
+
+    it('serializes grid control with configHook', () => {
+      const c: GridControl = {
+        type: 'grid',
+        id: 'g1',
+        rows: 1,
+        cols: 1,
+        children: [null],
+        configHook: 'handlers/grid.config-hook.ts',
+      }
+      const out = controlToJson(c) as Record<string, unknown>
+      expect(out.type).toBe('grid')
+      expect(out.configHook).toBe('handlers/grid.config-hook.ts')
+    })
   })
 
   describe('controlToJson preserves field binding for all types', () => {
@@ -254,6 +268,25 @@ describe('form-dsl', () => {
       }
       const js = formToJs(form)
       expect(js).toContain('() => import("./handlers/text.config-hook.ts")')
+    })
+
+    it('formToJs outputs grid configHook as dynamic import', () => {
+      const form: FormData = {
+        name: 'Test',
+        id: 'f1',
+        elements: [
+          {
+            type: 'grid',
+            id: 'g1',
+            rows: 1,
+            cols: 1,
+            children: [null],
+            configHook: 'handlers/grid.config-hook.ts',
+          },
+        ],
+      }
+      const js = formToJs(form)
+      expect(js).toContain('() => import("./handlers/grid.config-hook.ts")')
     })
 
     it('formToJs outputs form-level handlers as import functions', () => {

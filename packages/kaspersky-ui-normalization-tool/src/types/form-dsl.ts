@@ -150,6 +150,8 @@ export interface GridControl extends FormControlBase {
   rows: number
   cols: number
   children: (FormControl | null)[]
+  /** Путь к модулю configHook; только `.ts` (см. tooling.md). */
+  configHook?: string
 }
 
 /** Ряд: горизонтальный flex-контейнер для размещения контролов бок о бок. */
@@ -548,6 +550,11 @@ function normalizeControl(item: unknown): FormControl | null {
         if (x != null) c.children[i] = x
       }
     }
+    if (typeof o.configHook === 'string') c.configHook = o.configHook
+    else if (typeof o.configHook === 'function') {
+      const path = getImportPathFromHandler(o.configHook)
+      if (path) c.configHook = path
+    }
     return applyFieldBinding(c)
   }
   if (type === 'row') {
@@ -691,7 +698,14 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
   }
   if (c.type === 'grid') {
     const g = c as GridControl
-    return { ...base, rows: g.rows, cols: g.cols, children: g.children.map((ch) => (ch ? controlToJson(ch) : null)) }
+    const out: Record<string, unknown> = {
+      ...base,
+      rows: g.rows,
+      cols: g.cols,
+      children: g.children.map((ch) => (ch ? controlToJson(ch) : null)),
+    }
+    if (g.configHook) out.configHook = g.configHook
+    return out
   }
   if (c.type === 'row') {
     const r = c as RowControl

@@ -29,6 +29,12 @@ describe('registry', () => {
         expect(getDescriptor(type)).toBeDefined()
       }
     })
+
+    it('returns descriptor for grid', () => {
+      const d = getDescriptor('grid')
+      expect(d).toBeDefined()
+      expect(d?.type).toBe('grid')
+    })
   })
 
   describe('createControl', () => {

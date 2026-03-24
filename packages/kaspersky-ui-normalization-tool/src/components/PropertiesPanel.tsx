@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Space, Text, H6, Textbox, Select, Checkbox as HexaCheckbox, Button } from '@kaspersky/hexa-ui'
 import { Add, Delete } from '@kaspersky/hexa-ui-icons/16'
 import { SelectWithOptionWidth } from './SelectWithOptionWidth'
-import type { FormControl, FormControlBase, FormData, GridControl, TableControl, FieldSchema, ValidationRule, ValidationRuleType, Condition } from '../types/form-dsl'
+import type { FormControl, FormControlBase, FormData, TableControl, FieldSchema, ValidationRule, ValidationRuleType, Condition } from '../types/form-dsl'
 import { EXTRA_UI_DSL_TYPES } from '../types/form-dsl'
 import { CONTROL_EVENTS, FORM_EVENTS } from '../types/form-dsl'
 import { getDescriptor } from '../controls/registry'
@@ -397,46 +397,6 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
     <aside className="properties-panel editor-sidebar editor-sidebar--right" style={panelStyle}>
       <H6 style={{ margin: 0, textAlign: 'left' }}>Свойства</H6>
       <div className="props-section" style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', marginTop: 12 }}>
-        {control.type === 'grid' && (
-          <>
-            <div style={{ width: '100%' }}>
-              <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Rows</Text>
-              <Textbox
-                value={String((control as GridControl).rows)}
-                onChange={(v) => {
-                  const n = parseInt(v, 10)
-                  if (!isNaN(n) && n >= 1 && n <= 12) {
-                    const g = control as GridControl
-                    const newLen = n * g.cols
-                    const children = [...g.children]
-                    while (children.length < newLen) children.push(null)
-                    if (children.length > newLen) children.splice(newLen)
-                    update({ rows: n, children } as Partial<GridControl>)
-                  }
-                }}
-                placeholder="2"
-              />
-            </div>
-            <div style={{ width: '100%' }}>
-              <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Cols</Text>
-              <Textbox
-                value={String((control as GridControl).cols)}
-                onChange={(v) => {
-                  const n = parseInt(v, 10)
-                  if (!isNaN(n) && n >= 1 && n <= 12) {
-                    const g = control as GridControl
-                    const newLen = g.rows * n
-                    const children = [...g.children]
-                    while (children.length < newLen) children.push(null)
-                    if (children.length > newLen) children.splice(newLen)
-                    update({ cols: n, children } as Partial<GridControl>)
-                  }
-                }}
-                placeholder="2"
-              />
-            </div>
-          </>
-        )}
         {control.type === 'table' && (
           <>
             <div style={{ width: '100%' }}>
@@ -595,7 +555,7 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
             </div>
           </>
         )}
-        {control.type !== 'grid' && control.type !== 'table' && (() => {
+        {control.type !== 'table' && (() => {
           const descriptor = getDescriptor(control.type)
           return descriptor ? (
             <descriptor.PropsEditor

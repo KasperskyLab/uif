@@ -3,6 +3,10 @@ import { Button, Space, Text, Grid, GridItem, Tabs } from '@kaspersky/hexa-ui'
 import { Delete, ArrowsVertical } from '@kaspersky/hexa-ui-icons/16'
 import type { FormControl, FormControlBase, FormControlType, GridControl, TableControl, TabsControl, RowControl } from '../types/form-dsl'
 import { setGridChildrenInTree, setRowChildrenInTree, setTableChildrenInTree, setTabsChildrenInTree } from '../types/form-dsl'
+import {
+  defaultGridLayoutRows,
+  DEFAULT_GRID_LAYOUT_PROPERTY,
+} from '../utils/defaultGridHexaProps'
 import { createControl, getDescriptor, ALL_CONTROL_TYPES } from '../controls/registry'
 import type { CanvasContext } from '../controls/types'
 import { ToolbarStaticPreview } from '../controls/descriptors/toolbar'
@@ -194,10 +198,8 @@ function GridControlBlock({
     <div style={gridWrapStyle}>
       <Grid
         cols={g.cols}
-        layout={{
-          rows: Array.from({ length: g.rows }, () => '1fr'),
-        }}
-        layoutProperty={{ gap: 8 }}
+        layout={defaultGridLayoutRows(g.rows)}
+        layoutProperty={DEFAULT_GRID_LAYOUT_PROPERTY}
       >
         {Array.from({ length: g.rows * g.cols }, (_, i) => {
           const handleCellDrop = (e: React.DragEvent) => {
