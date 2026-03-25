@@ -50,7 +50,7 @@ export function HandlersEditor({
                 <Textbox
                   value={value}
                   onChange={(v) => setHandler(event.name, v || undefined)}
-                  placeholder="handlers/example.js"
+                  placeholder="handlers/example.ts"
                   style={{ flex: 1 }}
                 />
                 {value && (

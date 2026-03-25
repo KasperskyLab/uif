@@ -44,6 +44,6 @@
 
 ---
 
-## Связь с п.2 роадмапа
+## Связь с п.2.1 роадмапа
 
-Как в [plan-button.md](./plan-button.md): после типизации артефакта формы цепочка **`FormSlice`** → **`TextControl`** → **`TextProps`** должна быть проверяемой ([tooling.md → типизация](../tooling.md#normalization-dsl-typing-loading)).
+Как в [plan-button.md](./plan-button.md): цепочка **`FormSlice`** → **`TextControl`** → **`TextProps`** проверяема при типизированной **`.ts`**-форме ([tooling → типизация](../tooling.md#normalization-dsl-typing-loading)).

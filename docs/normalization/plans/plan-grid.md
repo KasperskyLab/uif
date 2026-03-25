@@ -56,9 +56,9 @@
 
 ---
 
-## Связь с п.2
+## Связь с п.2.1
 
-После типизации формы — цепочка **`FormSlice`** → **`GridControl`** → тип возврата хука (layout-пропсы `Grid`) должна быть проверяемой.
+При **`.ts`**-форме цепочка **`FormSlice`** → **`GridControl`** → пропсы хука (layout `Grid`) — проверяема ([tooling → типизация](../tooling.md#normalization-dsl-typing-loading)).
 
 ---
 

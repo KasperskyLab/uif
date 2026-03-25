@@ -38,6 +38,6 @@
 
 `runButtonHandler` в viewer — legacy, заменяется вызовом `configHook`.
 
-## Связь с п.2 роадмапа (типизация DSL)
+## Связь с п.2.1 роадмапа (типизация DSL)
 
-**П.2.1** [roadmap §2](../roadmap.md) (см. [типизация и загрузка](../tooling.md#normalization-dsl-typing-loading)) закрепляет артефакты форм как **`.ts`** и общий тип **`FormData`**: идентификаторы полей в `state` (например константа вроде `BUTTON_TEXT_FIELD_ID` в примере) и структура `elements` сверяемы с корнем формы — без расхождения между файлом формы и типами в shared DSL (**`form-dsl.ts`**).
+**П.2.1** ([roadmap](../roadmap.md), [tooling → решения](../tooling.md#normalization-architecture-decisions)) закрепляет артефакты форм как **`.ts`** и общий тип **`FormData`**: идентификаторы полей в `state` (например константа вроде `BUTTON_TEXT_FIELD_ID` в примере) и структура `elements` сверяемы с корнем формы — без расхождения между файлом формы и типами в shared DSL (**`form-dsl.ts`**).

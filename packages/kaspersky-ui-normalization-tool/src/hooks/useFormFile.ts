@@ -38,7 +38,7 @@ declare global {
 const e2eDemoFormData: FormData = { name: 'E2E Demo', id: 'e2e-demo', elements: [] }
 
 const e2eFakeFile: SelectedFormFile = {
-  path: 'e2e-demo.json',
+  path: 'e2e-demo.ts',
   handle: {} as FileSystemFileHandle,
 }
 
