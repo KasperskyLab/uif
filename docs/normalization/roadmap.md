@@ -52,14 +52,17 @@
 
 **Готово.** В режиме превью tool использует тот же **`FormRenderer`**, что и **transpile-viewer** — один рендер-движок для обоих приложений. Механизм: Vite-алиас **`@viewer`**, ambient-модуль `.d.ts`, шим `ToolbarStaticPreview`, `resolve.dedupe`. Детали: [plan-editor-preview](./plans/plan-editor-preview.md), [feat-editor-preview-target](./features/feat-editor-preview-target.md).
 
-### ⏳ 3.2. Проработка ограничений
+### ✅ 3.2. Хук управляет структурой Grid/Table
 
 <a id="normalization-roadmap-p32"></a>
 
-**Открыто:**
+**Готово.** `configHook` полностью управляет `cols`/`rows` Grid и `dslCols`/`dslRows`/`toolbar` Table. При смене размерности renderer выполняет **pad/truncate** массива `children`. Утилита `buildTableMatrixColumnsAndDataSource` принимает overrides.
 
-- **Grid / Table:** синхронизация **`rows`/`cols`** в DSL с тем, что может вернуть хук.
-- **Table:** один контракт для **тулбара** (DSL vs Hexa из хука); пример с **`rowSelection`** и состоянием формы.
+### ⏳ 3.3. WYSIWYG-canvas
+
+<a id="normalization-roadmap-p33"></a>
+
+**Цель:** canvas редактора всегда рендерит live-результат `FormRenderer` с наложенным слоем интерактивности (DnD, выделение, редактирование свойств). Единый визуальный контур: то, что редактируешь — то и видишь.
 
 ---
 

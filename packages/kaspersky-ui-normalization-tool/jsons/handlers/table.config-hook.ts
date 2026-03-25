@@ -1,11 +1,12 @@
 /**
  * Настройка Hexa `<Table />` для контрола `type: 'table'`.
- * Рендерер всегда подставляет `columns` и `dataSource` по матрице DSL —
- * из хука эти поля отбрасываются.
+ * Рендерер подставляет `columns` и `dataSource` по матрице DSL — из хука
+ * эти поля отбрасываются. Для управления размерностью матрицы используйте
+ * `dslCols` / `dslRows` — renderer перестроит columns/dataSource и
+ * pad/truncate children.
  *
- * Ниже — развёрнутый набор **примерных** пропсов `ITableProps`: в проде
- * оставьте только нужное. Нативный тулбар: если вернуть `toolbar`, в
- * превью/viewer не показывается статический превью из DSL.
+ * Нативный тулбар: если вернуть `toolbar`, статический превью из DSL
+ * не показывается.
  *
  * Типы: `FormSlice` из DSL, `ITableProps` из `@kaspersky/hexa-ui`.
  */
@@ -15,12 +16,15 @@ import type { FormSlice } from '../../src/types/form-dsl'
 
 export default function tableConfigHook(
   formSlice: FormSlice,
-): Partial<ITableProps> | null {
+): Partial<ITableProps> & { dslCols?: number; dslRows?: number } | null {
   const state = formSlice.state ?? {}
   const keys = Object.keys(state)
   const hasValues = keys.length > 0
 
   return {
+    /* --- размерность матрицы (перекрывают DSL cols/rows) ---------------- */
+    dslCols: 4,
+
     /* --- внешний вид / скролл ------------------------------------------- */
     ...(hasValues ? { stickyHeader: 48 } : {}),
     stickyScrollbarOffset: 0,

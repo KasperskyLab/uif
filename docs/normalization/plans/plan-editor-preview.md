@@ -17,8 +17,9 @@
 
 ---
 
-## Вне скоупа (→ п.3.2)
+## П.3.2 — Хук управляет структурой Grid/Table (✅)
 
-- Синхронизация **`rows`/`cols`** Grid/Table с возвратом хука.
-- Контракт **тулбара** и **`rowSelection`** у Table (DSL vs Hexa из хука).
-- **`editor.preview.scenario-hook`** (черновик) — опциональный модуль моков/патча **`state`** для превью.
+- ✅ Grid: `configHook` может вернуть `cols`; renderer вычисляет `effectiveCols`, `effectiveRows` и делает pad/truncate children.
+- ✅ Table: хук возвращает `dslCols`/`dslRows`; renderer перестраивает matrix через `buildTableMatrixColumnsAndDataSource(t, renderCell, overrides)`.
+- ✅ Table toolbar: `toolbar` из хука заменяет DSL-превью; `rowSelection` проходит через хук.
+- ⏳ **`editor.preview.scenario-hook`** — остаётся открытым.

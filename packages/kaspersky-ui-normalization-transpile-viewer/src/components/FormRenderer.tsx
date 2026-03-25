@@ -135,6 +135,17 @@ const emptyTableTextStyle: React.CSSProperties = {
 
 export type { FormSlice } from '@/types/form-dsl'
 
+function padOrTruncateChildren(
+  children: (FormControl | null)[],
+  targetLength: number,
+): (FormControl | null)[] {
+  if (children.length === targetLength) return children
+  const result = [...children]
+  while (result.length < targetLength) result.push(null)
+  if (result.length > targetLength) result.splice(targetLength)
+  return result
+}
+
 type ButtonConfigHookFn = (formSlice: FormSlice) => ButtonProps | null
 
 type TextConfigHookFn = (formSlice: FormSlice) => TextProps | null
@@ -142,6 +153,13 @@ type TextConfigHookFn = (formSlice: FormSlice) => TextProps | null
 type GridConfigHookFn = (formSlice: FormSlice) => Partial<GridProps> | null
 
 type TableConfigHookFn = (formSlice: FormSlice) => Partial<ITableProps> | null
+
+type TableHookResult = (Partial<ITableProps> & {
+  dslCols?: number
+  dslRows?: number
+  children?: unknown
+  dataSourceFunction?: unknown
+}) | null
 
 function ButtonWithHook({
   hookFn,
@@ -308,16 +326,25 @@ function GridRenderer({
   }
   const partial = hookFn(formSlice)
   if (partial === null) return null
-  const { children: _ch, cols: _ignoreCols, ...hookRest } = partial
+  const { children: _ch, ...hookRest } = partial
+  const effectiveCols = hookRest.cols ?? g.cols
+  const hasHookLayout = 'layout' in hookRest && hookRest.layout != null
+  const effectiveChildren = padOrTruncateChildren(
+    g.children,
+    hasHookLayout
+      ? g.children.length
+      : Math.ceil(g.children.length / g.cols) * effectiveCols,
+  )
+  const effectiveRows = Math.ceil(effectiveChildren.length / effectiveCols)
   return (
     <div style={{ ...formRowStyle, ...gridWrapStyle }}>
       <Grid
-        layout={defaultGridLayoutRows(g.rows)}
+        layout={defaultGridLayoutRows(effectiveRows)}
         layoutProperty={DEFAULT_GRID_LAYOUT_PROPERTY}
         {...hookRest}
-        cols={g.cols}
+        cols={effectiveCols}
       >
-        {g.children.map((ch, i) => (
+        {effectiveChildren.map((ch, i) => (
           <GridItem key={`${g.id}-h-${i}`} style={{ minHeight: 32 }}>
             {ch ? renderControl(ch) : null}
           </GridItem>
@@ -429,19 +456,35 @@ function TableRenderer({
     )
   }
 
-  const partial = hookFn(formSlice)
+  const partial = hookFn(formSlice) as TableHookResult
   if (partial === null) return null
   const {
     columns: _cols,
     dataSource: _ds,
     dataSourceFunction: _dsf,
     children: _ch,
+    dslCols: hookDslCols,
+    dslRows: hookDslRows,
     toolbar: hookToolbar,
     ...hookRest
-  } = partial as Partial<ITableProps> & {
-    children?: unknown
-    dataSourceFunction?: unknown
-  }
+  } = partial
+
+  const effectiveCols = hookDslCols ?? t.cols
+  const effectiveRows = hookDslRows ?? t.rows
+  const effectiveChildren = padOrTruncateChildren(
+    t.children,
+    effectiveRows * effectiveCols,
+  )
+
+  const { dataSource: hookedDs, columns: hookedCols } =
+    buildTableMatrixColumnsAndDataSource(
+      t,
+      (i) => {
+        const ch = effectiveChildren[i]
+        return ch ? renderControl(ch) : null
+      },
+      { cols: effectiveCols, rows: effectiveRows },
+    )
 
   const showDslToolbarPreview = hasToolbar && hookToolbar === undefined
 
@@ -453,8 +496,8 @@ function TableRenderer({
         pagination={false}
         rowMode={t.rowMode ?? 'standard'}
         columnVerticalAlign={t.columnVerticalAlign ?? 'inherit'}
-        dataSource={dataSource}
-        columns={columns}
+        dataSource={hookedDs}
+        columns={hookedCols}
         {...hookRest}
         {...(hookToolbar !== undefined ? { toolbar: hookToolbar } : {})}
       />

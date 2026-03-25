@@ -6,18 +6,21 @@ export const TABLE_MATRIX_ROW_INDEX_KEY = 'dslRowIndex'
 
 export function buildTableMatrixColumnsAndDataSource(
   t: TableControl,
-  renderCell: (flatIndex: number) => ReactNode
+  renderCell: (flatIndex: number) => ReactNode,
+  overrides?: { cols?: number; rows?: number },
 ): { dataSource: TableRecord[]; columns: TableColumn[] } {
-  const dataSource: TableRecord[] = Array.from({ length: t.rows }, (_, r) => ({
+  const cols = overrides?.cols ?? t.cols
+  const rows = overrides?.rows ?? t.rows
+  const dataSource: TableRecord[] = Array.from({ length: rows }, (_, r) => ({
     key: `${t.id}-row-${r}`,
     [TABLE_MATRIX_ROW_INDEX_KEY]: r,
   }))
-  const columns: TableColumn[] = Array.from({ length: t.cols }, (_, c) => ({
+  const columns: TableColumn[] = Array.from({ length: cols }, (_, c) => ({
     key: `${t.id}-col-${c}`,
     title: '',
     render: (_value, record) => {
       const r = record[TABLE_MATRIX_ROW_INDEX_KEY] as number
-      const i = r * t.cols + c
+      const i = r * cols + c
       return renderCell(i)
     },
   }))

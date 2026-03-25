@@ -1,6 +1,6 @@
 # Фича: превью в редакторе — единый рендер-движок
 
-**Родитель:** решение config-driven. Роадмап **п.3.1** ✅ ([якорь](../roadmap.md#normalization-roadmap-p31)); открытые вопросы — **п.3.2** ⏳ ([якорь](../roadmap.md#normalization-roadmap-p32)).
+**Родитель:** решение config-driven. Роадмап **п.3.1** ✅ ([якорь](../roadmap.md#normalization-roadmap-p31)); структура Grid/Table — **п.3.2** ✅ ([якорь](../roadmap.md#normalization-roadmap-p32)); WYSIWYG-canvas — **п.3.3** ⏳ ([якорь](../roadmap.md#normalization-roadmap-p33)).
 
 ---
 
@@ -32,19 +32,22 @@
 | `editor.preview.ts-isolation` | Ambient `.d.ts` вместо `tsconfig`-включения viewer | ✅ |
 | `editor.preview.toolbar-shim` | Шим `ToolbarStaticPreview` для `FormRenderer` | ✅ |
 | `editor.preview.vite-dedupe` | `resolve.dedupe` react/hexa — единый экземпляр | ✅ |
-| `editor.preview.scenario-hook` | Опциональный модуль моков/патча `state` для превью (черновик) | ⏳ (п.3.2) |
+| `editor.preview.scenario-hook` | Опциональный модуль моков/патча `state` для превью (черновик) | ⏳ |
+| `editor.preview.grid-hook-cols` | `configHook` может вернуть `cols` для Grid; renderer — pad/truncate children | ✅ (п.3.2) |
+| `editor.preview.table-hook-dims` | `configHook` может вернуть `dslCols`/`dslRows` для Table; rebuild matrix | ✅ (п.3.2) |
+| `editor.preview.table-toolbar` | `toolbar` из хука — нативный Hexa; при отсутствии — статический превью DSL | ✅ (п.3.2) |
 
 ---
 
-## Открытые вопросы (→ п.3.2)
+## Решённые вопросы (п.3.2 ✅)
 
-- Синхронизация **`rows`/`cols`** у Grid/Table в DSL с возвратом хука.
-- Единый контракт **тулбара** и **`rowSelection`** у Table (DSL vs Hexa из хука).
-- **`editor.preview.scenario-hook`** — точное имя поля и сигнатура при реализации.
+- ~~Синхронизация **`rows`/`cols`** у Grid/Table~~ → хук возвращает нужные размерности, renderer делает pad/truncate.
+- ~~Единый контракт **тулбара**~~ → `toolbar` из хука заменяет DSL-превью; `rowSelection` — пропс Hexa Table, проходит через хук.
+- **`editor.preview.scenario-hook`** — остаётся открытым, не привязан к п.3.2.
 
 ---
 
 ## Ссылки
 
 - [plan-editor-preview.md](../plans/plan-editor-preview.md)
-- [roadmap §3.1](../roadmap.md#normalization-roadmap-p31), [§3.2](../roadmap.md#normalization-roadmap-p32)
+- [roadmap §3.1](../roadmap.md#normalization-roadmap-p31), [§3.2](../roadmap.md#normalization-roadmap-p32), [§3.3](../roadmap.md#normalization-roadmap-p33)
