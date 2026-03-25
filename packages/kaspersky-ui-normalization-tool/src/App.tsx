@@ -401,7 +401,7 @@ function App() {
   }, [clearPickerError, clearListError])
 
   const showEditorPalette =
-    Boolean(selectedFile) && !fileLoading && !previewMode
+    Boolean(selectedFile) && !fileLoading
 
   return (
     <ConfigProvider theme={themeKey}>
@@ -682,6 +682,7 @@ function App() {
                       {previewMode ? (
                         <WysiwygCanvas
                           controls={formControls}
+                          onControlsChange={historySetControls}
                           selectedId={selectedControlId}
                           onSelect={setSelectedControlId}
                           formDirectoryHandle={directoryHandle}

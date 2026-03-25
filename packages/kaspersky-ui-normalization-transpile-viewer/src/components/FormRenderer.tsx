@@ -305,7 +305,9 @@ function GridRenderer({
     >
       {g.children.map((ch, i) => (
         <GridItem key={`${g.id}-c-${i}`} style={{ minHeight: 32 }}>
-          {ch ? renderControl(ch) : null}
+          <div data-container-id={g.id} data-grid-cell-index={i} style={{ height: '100%' }}>
+            {ch ? renderControl(ch) : null}
+          </div>
         </GridItem>
       ))}
     </Grid>
@@ -346,7 +348,9 @@ function GridRenderer({
       >
         {effectiveChildren.map((ch, i) => (
           <GridItem key={`${g.id}-h-${i}`} style={{ minHeight: 32 }}>
-            {ch ? renderControl(ch) : null}
+            <div data-container-id={g.id} data-grid-cell-index={i} style={{ height: '100%' }}>
+              {ch ? renderControl(ch) : null}
+            </div>
           </GridItem>
         ))}
       </Grid>
@@ -400,7 +404,15 @@ function TableRenderer({
     () =>
       buildTableMatrixColumnsAndDataSource(t, (i) => {
         const ch = t.children[i]
-        return ch ? renderControl(ch) : null
+        return (
+          <div
+            data-container-id={t.id}
+            data-table-cell-index={i}
+            style={{ minHeight: 24, height: '100%' }}
+          >
+            {ch ? renderControl(ch) : null}
+          </div>
+        )
       }),
     [t.id, t.rows, t.cols, t.children, renderControl]
   )
@@ -481,7 +493,15 @@ function TableRenderer({
       t,
       (i) => {
         const ch = effectiveChildren[i]
-        return ch ? renderControl(ch) : null
+        return (
+          <div
+            data-container-id={t.id}
+            data-table-cell-index={i}
+            style={{ minHeight: 24, height: '100%' }}
+          >
+            {ch ? renderControl(ch) : null}
+          </div>
+        )
       },
       { cols: effectiveCols, rows: effectiveRows },
     )

@@ -40,7 +40,7 @@
 
 ---
 
-## ⏳ 3. Превью в редакторе
+## ✅ 3. Превью в редакторе
 
 <a id="normalization-roadmap-p3"></a>
 
@@ -58,15 +58,17 @@
 
 **Готово.** `configHook` полностью управляет `cols`/`rows` Grid и `dslCols`/`dslRows`/`toolbar` Table. При смене размерности renderer выполняет **pad/truncate** массива `children`. Утилита `buildTableMatrixColumnsAndDataSource` принимает overrides.
 
-### ⏳ 3.3. WYSIWYG-canvas
+### ✅ 3.3. WYSIWYG-canvas
 
 <a id="normalization-roadmap-p33"></a>
 
-**В работе (итерация 1 — selection).** Canvas редактора рендерит live-результат `FormRenderer` с наложенным слоем интерактивности. Итерация 1: overlay для click-to-select + панель свойств. DnD — следующая итерация.
+**Готово.** Canvas редактора рендерит live-результат `FormRenderer` с наложенным слоем интерактивности.
 
-- `data-control-id` на каждом контроле в `FormRenderer` → DOM-якоря для overlay.
-- `WysiwygCanvas` (`normalization-tool`): `pointer-events: none` на форме, прозрачный overlay, `elementFromPoint` → selection highlight (`ResizeObserver`, scroll-tracking).
-- Режим «WYSIWYG» в `App.tsx` заменяет «Предпросмотр»: `WysiwygCanvas` + панель свойств.
+- Итерация 1 ✅: hover chrome (тень + шестерёнка), click-to-select, `ResizeObserver`-highlight.
+- Итерация 2 ✅: DnD — шестерёнка как drag source, drop zones overlay (root reorder, palette drop, grid/table cell), палитра отображается в обоих режимах.
+- `data-container-id` + `data-grid-cell-index` / `data-table-cell-index` в `FormRenderer` → DOM-якоря для cell drop zones.
+- `src/utils/dnd.ts`: shared-константы (`DATA_ID_KEY`, `DATA_TYPE_KEY`), `getDropTypeAndOptions`, tree mutation helpers (applyRootReorder/Insert, applyGridCell/TableCell Move/Insert).
+- Режим Editor (FormCanvas) сохраняется как fallback; кнопка переключения остаётся.
 
 ---
 

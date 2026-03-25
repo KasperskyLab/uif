@@ -1,6 +1,6 @@
 # Фича: превью в редакторе — единый рендер-движок
 
-**Родитель:** решение config-driven. Роадмап **п.3.1** ✅ ([якорь](../roadmap.md#normalization-roadmap-p31)); структура Grid/Table — **п.3.2** ✅ ([якорь](../roadmap.md#normalization-roadmap-p32)); WYSIWYG-canvas — **п.3.3** ⏳ ([якорь](../roadmap.md#normalization-roadmap-p33)).
+**Родитель:** решение config-driven. Роадмап **п.3.1** ✅ ([якорь](../roadmap.md#normalization-roadmap-p31)); структура Grid/Table — **п.3.2** ✅ ([якорь](../roadmap.md#normalization-roadmap-p32)); WYSIWYG-canvas — **п.3.3** ✅ ([якорь](../roadmap.md#normalization-roadmap-p33)).
 
 ---
 
@@ -39,7 +39,9 @@
 | `editor.wysiwyg.data-control-id` | Каждый контрол в `FormRenderer` обёрнут в `div[data-control-id]` — DOM-якорь для overlay | ✅ (п.3.3) |
 | `editor.wysiwyg.overlay-selection` | `WysiwygCanvas`: transparent overlay, `elementFromPoint` → click-to-select, highlight с `ResizeObserver` | ✅ (п.3.3) |
 | `editor.wysiwyg.props-panel` | Панель свойств видна в WYSIWYG-режиме; редактирование свойств через панель, undo/redo | ✅ (п.3.3) |
-| `editor.wysiwyg.dnd` | DnD в WYSIWYG-режиме (reorder, palette drop, cell drop) | ⏳ |
+| `editor.wysiwyg.dnd` | DnD в WYSIWYG-режиме: шестерёнка = drag source, drop zones overlay, root reorder/insert, palette drop, grid/table cell move/insert | ✅ (п.3.3 it.2) |
+| `editor.wysiwyg.dnd-utils` | `src/utils/dnd.ts`: shared DATA_ID_KEY/DATA_TYPE_KEY, getDropTypeAndOptions, tree mutation helpers; FormCanvas переходит на импорты из utils | ✅ (п.3.3 it.2) |
+| `editor.wysiwyg.palette-both-modes` | Палитра компонентов видна в обоих режимах (Editor и WYSIWYG) | ✅ (п.3.3 it.2) |
 
 ---
 

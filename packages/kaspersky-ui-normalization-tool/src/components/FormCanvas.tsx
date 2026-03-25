@@ -12,6 +12,7 @@ import { ToolbarStaticPreview } from '../controls/descriptors/toolbar'
 import { createControl, getDescriptor, ALL_CONTROL_TYPES } from '../controls/registry'
 import type { CanvasContext } from '../controls/types'
 import { CanvasPreviewErrorBoundary } from './CanvasPreviewErrorBoundary'
+import { DATA_ID_KEY, DATA_TYPE_KEY, getDropTypeAndOptions } from '../utils/dnd'
 
 const canvasStyle: React.CSSProperties = {
   padding: 24,
@@ -151,15 +152,6 @@ const tabsWrapStyle: React.CSSProperties = {
   boxSizing: 'border-box',
 }
 
-const DATA_TYPE_KEY = 'application/x-form-control-type'
-const DATA_ID_KEY = 'application/x-form-control-id'
-
-function getDropTypeAndOptions(e: React.DragEvent): { type: FormControlType; options?: { componentId?: string } } | null {
-  const raw = e.dataTransfer.getData(DATA_TYPE_KEY) || e.dataTransfer.getData('text/plain')
-  const type = raw.includes(':') ? raw.split(':')[0] : raw
-  if (!type || !ALL_CONTROL_TYPES.includes(type as FormControl['type'])) return null
-  return { type: type as FormControlType }
-}
 
 export interface FormCanvasProps {
   controls: FormControl[]
