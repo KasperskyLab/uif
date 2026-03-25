@@ -23,20 +23,20 @@
 
 ---
 
-## 2. DSL: типы и форматы
+## ✅ 2. DSL: типы, форматы и ленивая загрузка
 
-Решения по shared-модулю, **`.ts`**-формам и **`FormSlice.state`**: [tooling → архитектурные решения](./tooling.md#normalization-architecture-decisions), [tooling → типизация](./tooling.md#normalization-dsl-typing-loading).
+Решения по shared-модулю, **`.ts`**-формам, **`FormSlice.state`**, чанкам и **`import()`**: [tooling → архитектура](./tooling.md#normalization-architecture-decisions), [tooling → ленивый рантайм DSL](./tooling.md#normalization-dynamic-dsl-runtime), [tooling → типизация](./tooling.md#normalization-dsl-typing-loading).
 
 ### ✅ 2.1. Переход на TypeScript
 
-**Готово.** См. [plan-dsl-typing.md](./plans/plan-dsl-typing.md) (итоги п.2.1).
+**Готово.** [plan-dsl-typing.md](./plans/plan-dsl-typing.md).
 
-### ⏳ 2.2. Динамические импорты
+### ✅ 2.2. Динамические импорты и чанки
 
 <a id="normalization-roadmap-p21"></a>
 <a id="normalization-roadmap-p22"></a>
 
-**Отложено.** Единые типы и контракт **`import()`** для форм, **`configHook`**, прочих модулей — согласование с бандлерами и песочницей.
+**Готово.** Парсинг форм и транспиляция **`configHook`** подгружаются через **`loadFormDslBrowserRuntime()`**; в сгенерированном **`.ts`** формы пути к хукам — **`() => import('./…')`**. Детали — [tooling → ленивый рантайм](./tooling.md#normalization-dynamic-dsl-runtime).
 
 ---
 

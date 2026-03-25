@@ -1,8 +1,5 @@
 import type { FormSlice } from '../types/form-dsl'
-import {
-  isConfigHookPathTs,
-  transpileConfigHookSource,
-} from './transpileConfigHookSource'
+import { loadFormDslBrowserRuntime } from '@normalization/load-form-dsl-runtime'
 
 export type ConfigHookDefaultFn = (formSlice: FormSlice) => unknown
 
@@ -25,6 +22,8 @@ export async function loadConfigHookDefaultExport(
   path: string,
 ): Promise<ConfigHookDefaultFn | null> {
   try {
+    const { transpileConfigHookSource, isConfigHookPathTs } =
+      await loadFormDslBrowserRuntime()
     if (!isConfigHookPathTs(path)) {
       console.error('configHook: требуется файл TypeScript (.ts), получено:', path)
       return null

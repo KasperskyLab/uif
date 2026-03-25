@@ -18,7 +18,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@normalization/form-dsl": ["../../shared/normalization-form-dsl/form-dsl.ts"]
+      "@normalization/form-dsl": ["../../shared/normalization-form-dsl/form-dsl.ts"],
+      "@normalization/load-form-dsl-runtime": ["../../shared/normalization-form-dsl/load-form-dsl-runtime.ts"],
+      "sucrase": ["./node_modules/sucrase"]
     }
   },
   "include": [
@@ -26,6 +28,10 @@
     "jsons/handlers/**/*.ts",
     "../../shared/types/form.ts",
     "../../shared/normalization-form-dsl/transpile-form-module.ts",
+    "../../shared/normalization-form-dsl/parse-form-ts.ts",
+    "../../shared/normalization-form-dsl/load-form-dsl-runtime.ts",
+    "../../shared/normalization-form-dsl/form-dsl-browser-runtime.ts",
+    "../../shared/normalization-form-dsl/transpile-config-hook-module.ts",
     "../../shared/normalization-form-dsl/form-dsl.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]

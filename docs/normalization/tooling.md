@@ -17,9 +17,9 @@
 | Слой | Содержание |
 |------|------------|
 | **Цель** | Зачем tool и viewer; что такое config-driven. |
-| **Механика** | Кратко: файлы `.ts`, `parseFormTs`, таблица ролей приложений. |
+| **Механика** | Файлы `.ts`, ленивый рантайм **`loadFormDslBrowserRuntime`**, таблица ролей приложений. |
 | **Ограничения** | Браузер, паритет пакетов, границы продукта (источники контролов). |
-| **Контракты / API** | Корень DSL, принцип «одна настройка», **`configHook`**, типизация и загрузка модулей. |
+| **Контракты / API** | Корень DSL, принцип «одна настройка», **`configHook`**, [ленивый рантайм](#normalization-dynamic-dsl-runtime), типизация. |
 | **Решения** | Зафиксированная архитектура и целевые направления ([§ зафиксированные решения](#normalization-architecture-decisions)). |
 | **Операции** | Сценарии, IndexedDB, URL `form`, дерево репозитория. |
 
@@ -29,7 +29,7 @@
 
 ## Config-driven: суть
 
-Форма задаётся **TS-модулем** с **`export default { ... }`**, совместимым с типом **`FormData`**. Редактор и viewer читают файл через **`parseFormTs`** (транспиляция **Sucrase** → выполнение модуля из **blob URL**, по той же идее, что и для **`configHook`**).
+Форма задаётся **TS-модулем** с **`export default { ... }`**, совместимым с типом **`FormData`**. Редактор и viewer вызывают **`parseFormTs`** из ленивого чанка (**`loadFormDslBrowserRuntime()`**): **Sucrase** → **blob URL** → **`import()`** (см. [§ ленивый рантайм](#normalization-dynamic-dsl-runtime)).
 
 | | **Normalization Tool** | **Transpile Viewer** |
 |---|------------------------|----------------------|
@@ -61,11 +61,12 @@
 
 ## Зафиксированные и целевые архитектурные решения
 
-**DSL и код (сделано, п.2.1):**
+**DSL и код (сделано, п.2.1–2.2):**
 
-- Один **общий модуль** в дереве репозитория: **`shared/types/form.ts`** (`FormData`, `FieldSchema`), **`shared/normalization-form-dsl/`** (ядро + **`formToTs`** / **`parseFormTs`**). Entry **`form-dsl.ts`**, в пакетах — реэкспорт через **`src/types/form-dsl.ts`** и alias **`@normalization/form-dsl`**.
-- **Отдельный publishable-пакет** под DSL **не вводится**; **двух расходящихся копий** полного `form-dsl` **нет**.
+- Один **общий модуль** в дереве репозитория: **`shared/types/form.ts`**, **`shared/normalization-form-dsl/`** — ядро **`form-dsl-core.ts`** (без зависимости от Sucrase), **`parse-form-ts.ts`** (**`parseFormTs`**), **`transpile-config-hook-module.ts`**, entry **`form-dsl.ts`**, **`load-form-dsl-runtime.ts`**, **`form-dsl-browser-runtime.ts`**. В пакетах — реэкспорт **`src/types/form-dsl.ts`**, alias **`@normalization/form-dsl`**, **`@normalization/load-form-dsl-runtime`**.
+- **Отдельный publishable-пакет** под DSL **не вводится**; **двух расходящихся копий** полного DSL **нет**.
 - Артефакты форм в каталоге — **только `.ts`**.
+- **П.2.2:** приложения **не** импортируют Sucrase и **`parseFormTs`** статически из основного entry; тяжёлый рантайм подгружается **одним** async-чанком до первого парсинга формы / транспиляции **`configHook`** ([детали ниже](#normalization-dynamic-dsl-runtime)).
 
 **Модель состояния (текущий этап):**
 
@@ -90,7 +91,26 @@
 - Контракт **`form-dsl`** и артефакты — **обратная совместимость** с **JSON UI Builder** (или явный мост версий).
 - Viewer на **адаптерах** и **Auto UI** без монолитного маппинга «все типы»; **Auto UI** — миграция на **React** end-to-end. Детали — отдельные планы при старте этапа.
 
-**В работе / отложено (п.2.2):** типизация и единые сигнатуры **динамических `import()`** для форм, **`configHook`** и прочих модулей — см. [roadmap §2.2](./roadmap.md#normalization-roadmap-p22).
+---
+
+<a id="normalization-dynamic-dsl-runtime"></a>
+
+## Ленивый рантайм DSL и динамические импорты (п.2.2)
+
+**Цель:** основной бандл **tool** / **viewer** не включает **Sucrase** и логику **`parseFormTs`** до первого открытия **`.ts`** формы, сохранения, экспорта в TS или загрузки **`configHook`**.
+
+**Механика**
+
+1. **`loadFormDslBrowserRuntime()`** (`shared/normalization-form-dsl/load-form-dsl-runtime.ts`) — один раз выполняет **`import('./form-dsl-browser-runtime')`** и кэширует `Promise`. Повторные вызовы возвращают тот же промис.
+2. **`form-dsl-browser-runtime.ts`** реэкспортирует **`parseFormTs`**, **`formToTs`**, **`formToJsonString`**, **`transpileConfigHookSource`**, **`isConfigHookPathTs`** — всё, что тянет или сопровождает Sucrase в браузере.
+3. **`parseFormTs`** живёт в **`parse-form-ts.ts`** и импортирует только **`normalizeFormData`** из **`form-dsl-core.ts`**; ядро **не** импортирует Sucrase (разделение для tree-shaking основного бандла).
+4. **Артефакт формы** при сериализации (**`formToTs`**) записывает **`configHook`** и пути **`handlers`** как **`() => import('./относительный-путь')`**, чтобы при выполнении модуля формы из blob подгрузка хуков оставалась **ленивой** (исполнение — по запросу рендерера, как и сейчас).
+
+**Где вызывается `loadFormDslBrowserRuntime`:** **`useFormFile`**, **`CodeExportDialog`**, **`loadConfigHookModule`** (tool); **`useFormLoader`**, **`loadConfigHookModule`** (viewer).
+
+**Тесты:** **`form-dsl-browser-runtime.test.ts`**, **`transpile-config-hook-module.test.ts`**, **`form-dsl.test.ts`** (Vitest в **normalization-tool**).
+
+**Публичный API:** типы и функции дерева / JSON без парсинга — по-прежнему из **`@normalization/form-dsl`**. Для **`parseFormTs`** в скриптах или тестах можно импортировать **`./parse-form-ts`** напрямую; в браузерных приложениях пакетов — предпочтительно **`loadFormDslBrowserRuntime`**.
 
 ---
 
@@ -135,8 +155,8 @@
 
 | Артефакт | Расширение | Загрузка в приложениях |
 |----------|------------|-------------------------|
-| Файл формы | **`.ts` только** | **`parseFormTs`** → Sucrase → `import` blob |
-| **`configHook`** | **`.ts` только** | То же (пути в DSL и пикере — только `.ts`) |
+| Файл формы | **`.ts` только** | **`loadFormDslBrowserRuntime()`** → **`parseFormTs`**: Sucrase → blob → `import()` |
+| **`configHook`** | **`.ts` только** | Тот же ленивый рантайм → **`transpileConfigHookSource`** → blob → `import()`; в **`.ts`** формы путь задаётся как **`() => import('./…')`** |
 | Пути в **`handlers`** (форма/контрол) | В UI пикера допустимы **`.js`** и **`.ts`** | Контракт исполнения в рантайме выравнивается с песочницей модулей; **приоритет спеки — TS** для новых артефактов |
 
 Тип аргумента хука — **`FormSlice`**. Примеры возврата: кнопка — **`ButtonProps \| null`**, текст — **`TextProps \| null`** (типы Hexa UI).
@@ -149,9 +169,9 @@
 
 **Типизация автором:** форма как **`export default`** с опорой на **`FormData`** из **`@normalization/form-dsl`** — `satisfies`, аннотация, `.d.ts` рядом, codegen при сохранении (на выбор). Цель — проверяемая цепочка **`FormSlice`** → контрол → пропсы Hexa в хуке.
 
-**Потребитель viewer как библиотеки:** конфиг формы и модули хуков подключают через **динамический `import()`** / чанки, а не один статический бандл всего каталога — **lazy loading** и размер бандла.
+**Потребитель viewer как библиотеки:** помимо внутреннего чанка **`loadFormDslBrowserRuntime`**, конфиг формы и модули хуков в проде подключают через **динамический `import()`** по URL/чанкам, а не один статический бандл всего каталога.
 
-Подробности закрытого этапа **п.2.1** и открытого **п.2.2:** [plan-dsl-typing.md](./plans/plan-dsl-typing.md), [roadmap §2](./roadmap.md).
+Итоги **п.2.1–2.2:** [plan-dsl-typing.md](./plans/plan-dsl-typing.md), [roadmap §2](./roadmap.md).
 
 ---
 
@@ -194,6 +214,12 @@ packages/kaspersky-ui-normalization-transpile-viewer/
   src/components/FormRenderer.tsx
 shared/types/form.ts
 shared/normalization-form-dsl/
+  form-dsl.ts                    # entry типов и ядра (без статического Sucrase)
+  form-dsl-core.ts
+  parse-form-ts.ts               # parseFormTs + Sucrase
+  load-form-dsl-runtime.ts       # кэшированный dynamic import чанка
+  form-dsl-browser-runtime.ts    # чанк: parse + formToTs + transpile hook
+  transpile-config-hook-module.ts
 ```
 
 ---

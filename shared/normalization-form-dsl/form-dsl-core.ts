@@ -2,7 +2,6 @@
  * Контролы и функции DSL. Модель корня формы (`FormData`) — в `../types/form`.
  */
 import type { FieldSchema, FormData } from '../types/form'
-import { transpileFormModuleSource } from './transpile-form-module'
 
 /** Расширение файла формы (только TypeScript). */
 export const FORM_MODULE_FILE_EXT = '.ts' as const
@@ -823,7 +822,7 @@ export function createEmptyFormData(): FormData {
 const emptyFormData = createEmptyFormData
 
 /** Нормализует сырые данные (из JSON или default export JS-модуля) в FormData. */
-function normalizeFormData(data: unknown): FormData {
+export function normalizeFormData(data: unknown): FormData {
   if (Array.isArray(data)) {
     const elements = data
       .map(normalizeControl)
@@ -867,27 +866,6 @@ function normalizeFormData(data: unknown): FormData {
     return result
   }
   return emptyFormData()
-}
-
-/**
- * Парсит **`.ts`‑модуль** формы (`export default { name, id, elements }`).
- * Исходник транспилируется через Sucrase, затем выполняется динамический `import(blobUrl)`.
- */
-export function parseFormTs(content: string): Promise<FormData> {
-  let code: string
-  try {
-    code = transpileFormModuleSource(content)
-  } catch (e) {
-    return Promise.reject(e)
-  }
-  const blob = new Blob([code], { type: 'application/javascript' })
-  const url = URL.createObjectURL(blob)
-  return import(/* @vite-ignore */ url)
-    .then((mod) => {
-      const data = mod?.default
-      return normalizeFormData(data)
-    })
-    .finally(() => URL.revokeObjectURL(url))
 }
 
 /** Сериализует форму в JSON (новый формат: корень с name, id, schema, handlers, elements). */

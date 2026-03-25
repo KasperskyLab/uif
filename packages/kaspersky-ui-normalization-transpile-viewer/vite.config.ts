@@ -12,6 +12,10 @@ export default defineConfig({
         __dirname,
         '../../shared/normalization-form-dsl/form-dsl.ts'
       ),
+      '@normalization/load-form-dsl-runtime': path.resolve(
+        __dirname,
+        '../../shared/normalization-form-dsl/load-form-dsl-runtime.ts'
+      ),
       sucrase: path.resolve(__dirname, 'node_modules/sucrase'),
     },
   },

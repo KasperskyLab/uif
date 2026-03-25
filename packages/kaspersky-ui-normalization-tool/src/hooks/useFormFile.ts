@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from 'react'
 import type { FormControl, FormData } from '../types/form-dsl'
-import { parseFormTs, formToTs, createEmptyFormData } from '../types/form-dsl'
+import { createEmptyFormData } from '../types/form-dsl'
+import { loadFormDslBrowserRuntime } from '@normalization/load-form-dsl-runtime'
 import { FORM_EXT } from '../constants'
 import { getErrorMessage } from '../utils/getErrorMessage'
 
@@ -87,6 +88,7 @@ export function useFormFile(
     try {
       const f = await file.handle.getFile()
       const content = await f.text()
+      const { parseFormTs } = await loadFormDslBrowserRuntime()
       const data = await parseFormTs(content)
       if (requestId !== selectFileRequestRef.current) return
       setSelectedFile(file)
@@ -122,6 +124,7 @@ export function useFormFile(
         return 'Нет разрешения на запись в каталог'
       }
       const writable = await selectedFile.handle.createWritable()
+      const { formToTs } = await loadFormDslBrowserRuntime()
       const content = formToTs(dataToSave)
       await writable.write(content)
       await writable.close()
@@ -144,6 +147,7 @@ export function useFormFile(
       const fileHandle = await directoryHandle.getFileHandle(path, { create: true })
       const initialData = createEmptyFormData()
       const writable = await fileHandle.createWritable()
+      const { formToTs } = await loadFormDslBrowserRuntime()
       await writable.write(formToTs(initialData))
       await writable.close()
       setSelectedFile({ path, handle: fileHandle })

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
+import { parseFormTs } from './parse-form-ts'
 import {
-  parseFormTs,
   formToJsonString,
   formToJson,
   formToTs,

@@ -58,7 +58,7 @@ src/
   hooks/
     useDirectoryPicker.ts
     useFormFilesList.ts  # дерево файлов .ts в выбранном каталоге
-    useFormFile.ts       # загрузка/сохранение (parseFormTs, formToTs)
+    useFormFile.ts       # загрузка/сохранение (loadFormDslBrowserRuntime → parseFormTs, formToTs)
     useHistory.ts        # undo/redo стек для состояния контролов
   templates.ts           # предустановленные шаблоны форм (FORM_TEMPLATES)
   App.tsx                # корневой компонент: layout, хоткеи, интеграция хуков
@@ -120,8 +120,8 @@ export default {
 
 - **В DSL у каждого элемента свой семантический тип**: кнопка — `type: "button"`, табы — `type: "tabs"`, алерт — `type: "alert"` и т.д. Метатипа («component», «hexa») нет; реализация (Hexa UI) не входит в описание формы.
 - **Обработчики** в данных хранятся как строки путей (например `handlers/submit.js`); при сериализации в модуль подставляется `() => import("./handlers/submit.js")`.
-- **Загрузка**: Sucrase → JS; затем Blob → `import(url)` → `normalizeFormData(mod.default)` (`parseFormTs`).
-- **Сохранение**: **`formToTs(formData)`** → исходник модуля.
+- **Загрузка**: **`loadFormDslBrowserRuntime()`** → **`parseFormTs`**: Sucrase → Blob → `import(url)` → **`normalizeFormData(mod.default)`**.
+- **Сохранение**: тот же ленивый рантайм → **`formToTs(formData)`** → исходник модуля.
 
 ---
 
@@ -245,14 +245,14 @@ export default {
 ## Безопасность
 
 - **hexa** (Link и др. с ссылками): в превью URL в `href`/`src`/`url` проверяются по белому списку схем (`http:`, `https:`, `mailto:`, `tel:`) во избежание XSS.
-- **parseFormTs**: Sucrase, затем динамический `import(blobUrl)`.
+- **parseFormTs** (через **`loadFormDslBrowserRuntime`**): Sucrase, затем динамический `import(blobUrl)`.
 
 ---
 
 ## Файлы и каталог формы
 
 - **useFormFilesList**: только **`.ts`** (`isFormModuleFile` из DSL).
-- **useFormFile**: **`parseFormTs(content)`**, сохранение **`formToTs`**, новые файлы — **`FORM_EXT = '.ts'`**.
+- **useFormFile**: **`loadFormDslBrowserRuntime()`** → **`parseFormTs(content)`** / **`formToTs`**, новые файлы — **`FORM_EXT = '.ts'`**.
 
 ---
 
@@ -288,7 +288,7 @@ export default {
 |--------|--------|
 | Новый компонент Hexa UI | `hexa.tsx` (HEXA_COMPONENT_MAP, COMPONENT_PROPS, HEXA_PALETTE_GROUPS) |
 | Новое свойство на FormControlBase | `form-dsl.ts` (тип + normalizeControl + controlToJson + base) |
-| Логика загрузки/сохранения формы | DSL (`parseFormTs`, `formToTs`), `useFormFile.ts` |
+| Логика загрузки/сохранения формы | `loadFormDslBrowserRuntime`, `useFormFile.ts`, shared `parse-form-ts` / `form-dsl-core` |
 | DnD, контейнеры (grid/row/table/tabs) на холсте | `FormCanvas.tsx`, `form-dsl.ts` (set*ChildrenInTree) |
 | Панель свойств | `PropertiesPanel.tsx`, отдельные дескрипторы (PropsEditor) |
 | Обработчики событий | `HandlersEditor.tsx`, `HandlerFilePicker.tsx`, `form-dsl.ts` (CONTROL_EVENTS, FORM_EVENTS) |

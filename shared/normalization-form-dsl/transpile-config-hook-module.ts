@@ -1,6 +1,6 @@
 import { transform } from 'sucrase'
 
-/** Исходник .ts → JS для динамического import() в браузере (configHook). */
+/** Исходник `.ts` configHook → JS для `import(blobUrl)` в браузере. */
 export function transpileConfigHookSource(source: string): string {
   return transform(source, {
     transforms: ['typescript'],

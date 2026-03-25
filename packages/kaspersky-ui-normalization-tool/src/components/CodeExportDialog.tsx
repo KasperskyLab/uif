@@ -1,8 +1,8 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Text, H6, Space } from '@kaspersky/hexa-ui'
 import { Cross, Copy } from '@kaspersky/hexa-ui-icons/16'
 import type { FormData } from '../types/form-dsl'
-import { formToTs, formToJsonString } from '../types/form-dsl'
+import { loadFormDslBrowserRuntime } from '@normalization/load-form-dsl-runtime'
 
 type ExportTab = 'ts' | 'json'
 
@@ -20,15 +20,42 @@ export function CodeExportDialog({
 }) {
   const [activeTab, setActiveTab] = useState<ExportTab>('ts')
   const [copied, setCopied] = useState(false)
+  const [code, setCode] = useState('')
+  const [exportError, setExportError] = useState<string | null>(null)
 
-  const code = useMemo(() => {
-    switch (activeTab) {
-      case 'ts': return formToTs(formData)
-      case 'json': return formToJsonString(formData)
+  useEffect(() => {
+    let cancelled = false
+    setExportError(null)
+    setCode('')
+    loadFormDslBrowserRuntime()
+      .then((m) => {
+        if (cancelled) return
+        try {
+          const next =
+            activeTab === 'ts'
+              ? m.formToTs(formData)
+              : m.formToJsonString(formData)
+          setCode(next)
+        } catch (e) {
+          setExportError(
+            e instanceof Error ? e.message : 'Ошибка экспорта',
+          )
+        }
+      })
+      .catch((e) => {
+        if (!cancelled) {
+          setExportError(
+            e instanceof Error ? e.message : 'Ошибка загрузки модуля DSL',
+          )
+        }
+      })
+    return () => {
+      cancelled = true
     }
   }, [formData, activeTab])
 
   const handleCopy = async () => {
+    if (!code) return
     try {
       await navigator.clipboard.writeText(code)
       setCopied(true)
@@ -81,6 +108,11 @@ export function CodeExportDialog({
           ))}
         </div>
         <div style={{ flex: 1, overflow: 'auto', padding: '12px 20px' }}>
+          {exportError ? (
+            <Text type="BTR3" style={{ color: 'var(--severity--negative, #c00)' }}>
+              {exportError}
+            </Text>
+          ) : null}
           <pre style={{
             background: '#1e1e1e',
             color: '#d4d4d4',
@@ -93,7 +125,7 @@ export function CodeExportDialog({
             whiteSpace: 'pre-wrap',
             wordBreak: 'break-word',
           }}>
-            {code}
+            {code || (exportError ? '' : 'Загрузка…')}
           </pre>
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, padding: '12px 20px 16px', borderTop: '1px solid #e7e7e9' }}>
@@ -101,7 +133,7 @@ export function CodeExportDialog({
             <Text type="BTR3" style={{ color: copied ? 'var(--primary--main, #00a88e)' : 'transparent' }}>
               Скопировано!
             </Text>
-            <Button mode="primary" text="Копировать" iconBefore={<Copy />} onClick={handleCopy} />
+            <Button mode="primary" text="Копировать" iconBefore={<Copy />} onClick={handleCopy} disabled={!code} />
             <Button mode="secondary" text="Закрыть" onClick={onClose} />
           </Space>
         </div>

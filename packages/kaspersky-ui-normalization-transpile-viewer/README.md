@@ -8,13 +8,13 @@
 - **Меню слева** — дерево файлов форм; пункты меню отображают **имя файла** (или папки).
 - **Заголовок формы** — свойство **`name`** из DSL.
 - **Рендеринг формы** — объект DSL преобразуется в UI на компонентах [Hexa UI](https://github.com/KasperskyLab/uif): Button, Text, Textbox, Select, Checkbox, Radio, Toggle, Grid, Table, meta-компоненты. Все свойства компонентов передаются в Hexa UI.
-- **URL** — параметр `?form=…` (относительный путь к `.js`) синхронизируется с открытой формой; при перезагрузке и восстановлении каталога форма открывается по ссылке.
+- **URL** — параметр `?form=…` (относительный путь к **`.ts`**) синхронизируется с открытой формой; при перезагрузке и восстановлении каталога форма открывается по ссылке.
 
 ## DSL (по проекту uisb)
 
 Формат формы: `export default { name: string, id: string, elements: FormControl[] }`.  
 Типы контролов: `button`, `text`, `input`, `grid`, `table`, `checkbox`, `radio`, `select`, `toggle`, `meta`.  
-Структура корня формы — `shared/types/form.ts`; остальной DSL — `shared/normalization-form-dsl/` (`form-dsl-core.ts`, entry `form-dsl.ts`); в приложении — реэкспорт из `src/types/form-dsl.ts`.
+Структура корня формы — `shared/types/form.ts`; DSL — `shared/normalization-form-dsl/` (`form-dsl-core.ts`, `parse-form-ts.ts`, `load-form-dsl-runtime.ts`, entry `form-dsl.ts`); парсинг и Sucrase подгружаются лениво через **`loadFormDslBrowserRuntime()`**. В приложении — реэкспорт из `src/types/form-dsl.ts`.
 
 ## Развёртывание (любая ОС)
 
