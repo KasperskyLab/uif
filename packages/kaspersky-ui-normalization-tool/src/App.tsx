@@ -11,7 +11,7 @@ import { useFormFile } from './hooks/useFormFile'
 import { useHistory } from './hooks/useHistory'
 import { ControlsPalette } from './components/ControlsPalette'
 import { FormCanvas } from './components/FormCanvas'
-import { FormRenderer } from '@viewer/components/FormRenderer'
+import { WysiwygCanvas } from './components/WysiwygCanvas'
 import { CodeExportDialog } from './components/CodeExportDialog'
 import { PropertiesPanel } from './components/PropertiesPanel'
 import { updateControlInTree, findControlInTree, removeControlFromTree } from './types/form-dsl'
@@ -616,37 +616,33 @@ function App() {
                       }}
                     >
                       <H6 style={{ margin: 0 }}>
-                        {previewMode ? 'Предпросмотр' : 'Форма'}: {formData.name || selectedFile.path}
-                        {!previewMode && hasUnsavedChanges && (
+                        {previewMode ? 'WYSIWYG' : 'Форма'}: {formData.name || selectedFile.path}
+                        {hasUnsavedChanges && (
                           <Text type="BTR3" style={{ color: '#fa8c16', marginLeft: 8 }}>
                             не сохранено
                           </Text>
                         )}
                       </H6>
                       <Space size={8}>
-                        {!previewMode && (
+                        <Tooltip text="Ctrl+Z">
+                          <Button mode="tertiary" text="↩" onClick={history.undo} disabled={!history.canUndo} size="small" />
+                        </Tooltip>
+                        <Tooltip text="Ctrl+Shift+Z">
+                          <Button mode="tertiary" text="↪" onClick={history.redo} disabled={!history.canRedo} size="small" />
+                        </Tooltip>
+                        {!previewMode && selectedControl && (
                           <>
-                            <Tooltip text="Ctrl+Z">
-                              <Button mode="tertiary" text="↩" onClick={history.undo} disabled={!history.canUndo} size="small" />
+                            <Tooltip text="Ctrl+C">
+                              <Button mode="tertiary" iconBefore={<Copy />} onClick={handleCopyControl} size="small" />
                             </Tooltip>
-                            <Tooltip text="Ctrl+Shift+Z">
-                              <Button mode="tertiary" text="↪" onClick={history.redo} disabled={!history.canRedo} size="small" />
+                            <Tooltip text="Ctrl+D">
+                              <Button mode="tertiary" text="Дубл." onClick={handleDuplicateControl} size="small" />
                             </Tooltip>
-                            {selectedControl && (
-                              <>
-                                <Tooltip text="Ctrl+C">
-                                  <Button mode="tertiary" iconBefore={<Copy />} onClick={handleCopyControl} size="small" />
-                                </Tooltip>
-                                <Tooltip text="Ctrl+D">
-                                  <Button mode="tertiary" text="Дубл." onClick={handleDuplicateControl} size="small" />
-                                </Tooltip>
-                              </>
-                            )}
                           </>
                         )}
                         <Button
                           mode={previewMode ? 'primary' : 'secondary'}
-                          text={previewMode ? 'Редактор' : 'Предпросмотр'}
+                          text={previewMode ? 'Редактор' : 'WYSIWYG'}
                           onClick={() => setPreviewMode((p) => !p)}
                           size="small"
                         />
@@ -684,23 +680,13 @@ function App() {
                     </div>
                     <div style={canvasWrapperStyle}>
                       {previewMode ? (
-                        <div
-                          style={{
-                            border: '2px solid var(--primary--main, #00a88e)',
-                            borderRadius: 12,
-                            padding: 24,
-                            background: 'var(--surface--neutral, #fafafa)',
-                            flex: 1,
-                            overflow: 'auto',
-                          }}
-                        >
-                          <FormRenderer
-                            elements={formControls}
-                            formDirectoryHandle={directoryHandle}
-                            formKey={selectedFile.path}
-                            gap={16}
-                          />
-                        </div>
+                        <WysiwygCanvas
+                          controls={formControls}
+                          selectedId={selectedControlId}
+                          onSelect={setSelectedControlId}
+                          formDirectoryHandle={directoryHandle}
+                          formKey={selectedFile.path}
+                        />
                       ) : (
                         <FormCanvas
                           controls={formControls}
@@ -712,7 +698,6 @@ function App() {
                       )}
                     </div>
                   </main>
-                  {!previewMode && (
                   <div style={{ width: panelWidth, flexShrink: 0, overflow: 'hidden', display: 'flex', flexDirection: 'row', position: 'relative' }}>
                     <div
                       role="separator"
@@ -741,7 +726,6 @@ function App() {
                     />
                     </div>
                   </div>
-                  )}
                 </div>
               )}
             </>

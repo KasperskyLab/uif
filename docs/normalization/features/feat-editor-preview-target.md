@@ -36,6 +36,10 @@
 | `editor.preview.grid-hook-cols` | `configHook` может вернуть `cols` для Grid; renderer — pad/truncate children | ✅ (п.3.2) |
 | `editor.preview.table-hook-dims` | `configHook` может вернуть `dslCols`/`dslRows` для Table; rebuild matrix | ✅ (п.3.2) |
 | `editor.preview.table-toolbar` | `toolbar` из хука — нативный Hexa; при отсутствии — статический превью DSL | ✅ (п.3.2) |
+| `editor.wysiwyg.data-control-id` | Каждый контрол в `FormRenderer` обёрнут в `div[data-control-id]` — DOM-якорь для overlay | ✅ (п.3.3) |
+| `editor.wysiwyg.overlay-selection` | `WysiwygCanvas`: transparent overlay, `elementFromPoint` → click-to-select, highlight с `ResizeObserver` | ✅ (п.3.3) |
+| `editor.wysiwyg.props-panel` | Панель свойств видна в WYSIWYG-режиме; редактирование свойств через панель, undo/redo | ✅ (п.3.3) |
+| `editor.wysiwyg.dnd` | DnD в WYSIWYG-режиме (reorder, palette drop, cell drop) | ⏳ |
 
 ---
 

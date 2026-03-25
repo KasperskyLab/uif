@@ -62,7 +62,11 @@
 
 <a id="normalization-roadmap-p33"></a>
 
-**Цель:** canvas редактора всегда рендерит live-результат `FormRenderer` с наложенным слоем интерактивности (DnD, выделение, редактирование свойств). Единый визуальный контур: то, что редактируешь — то и видишь.
+**В работе (итерация 1 — selection).** Canvas редактора рендерит live-результат `FormRenderer` с наложенным слоем интерактивности. Итерация 1: overlay для click-to-select + панель свойств. DnD — следующая итерация.
+
+- `data-control-id` на каждом контроле в `FormRenderer` → DOM-якоря для overlay.
+- `WysiwygCanvas` (`normalization-tool`): `pointer-events: none` на форме, прозрачный overlay, `elementFromPoint` → selection highlight (`ResizeObserver`, scroll-tracking).
+- Режим «WYSIWYG» в `App.tsx` заменяет «Предпросмотр»: `WysiwygCanvas` + панель свойств.
 
 ---
 

@@ -312,11 +312,11 @@ function GridRenderer({
   )
 
   if (!g.configHook) {
-    return <div style={{ ...formRowStyle, ...gridWrapStyle }}>{defaultGrid}</div>
+    return <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>{defaultGrid}</div>
   }
   if (!formDirectoryHandle || loading || !hookFn) {
     return (
-      <div style={{ ...formRowStyle, ...gridWrapStyle }}>
+      <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>
         <Text type="BTR3" style={{ color: 'var(--text--secondary)', marginBottom: 8 }}>
           …
         </Text>
@@ -337,7 +337,7 @@ function GridRenderer({
   )
   const effectiveRows = Math.ceil(effectiveChildren.length / effectiveCols)
   return (
-    <div style={{ ...formRowStyle, ...gridWrapStyle }}>
+    <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>
       <Grid
         layout={defaultGridLayoutRows(effectiveRows)}
         layoutProperty={DEFAULT_GRID_LAYOUT_PROPERTY}
@@ -437,7 +437,7 @@ function TableRenderer({
 
   if (!t.configHook) {
     return (
-      <div style={wrapStyle}>
+      <div data-control-id={t.id} style={wrapStyle}>
         {toolbarBlock}
         {bodyNoHook}
       </div>
@@ -446,7 +446,7 @@ function TableRenderer({
 
   if (!formDirectoryHandle || loading || !hookFn) {
     return (
-      <div style={wrapStyle}>
+      <div data-control-id={t.id} style={wrapStyle}>
         {toolbarBlock}
         <Text type="BTR3" style={{ color: 'var(--text--secondary)', marginBottom: 8 }}>
           …
@@ -504,7 +504,7 @@ function TableRenderer({
     )
 
   return (
-    <div style={wrapStyle}>
+    <div data-control-id={t.id} style={wrapStyle}>
       {showDslToolbarPreview ? toolbarBlock : null}
       {bodyHooked}
     </div>
@@ -547,23 +547,25 @@ export function FormRenderer({
       case 'button': {
         const c = control as ButtonControl
         return (
-          <ButtonRenderer
-            key={c.id}
-            control={c}
-            formSlice={formSlice}
-            formDirectoryHandle={formDirectoryHandle}
-          />
+          <div key={c.id} data-control-id={c.id}>
+            <ButtonRenderer
+              control={c}
+              formSlice={formSlice}
+              formDirectoryHandle={formDirectoryHandle}
+            />
+          </div>
         )
       }
       case 'text': {
         const c = control as TextControl
         return (
-          <TextRenderer
-            key={c.id}
-            control={c}
-            formSlice={formSlice}
-            formDirectoryHandle={formDirectoryHandle}
-          />
+          <div key={c.id} data-control-id={c.id}>
+            <TextRenderer
+              control={c}
+              formSlice={formSlice}
+              formDirectoryHandle={formDirectoryHandle}
+            />
+          </div>
         )
       }
       case 'input': {
@@ -579,7 +581,7 @@ export function FormRenderer({
           />
         )
         return (
-          <div key={c.id} style={formRowStyle}>
+          <div key={c.id} data-control-id={c.id} style={formRowStyle}>
             {c.text ? (
               <Field label={c.text} labelPosition="top" control={textbox} />
             ) : (
@@ -616,7 +618,7 @@ export function FormRenderer({
         const c = control as CheckboxControl
         const checked = (formState[c.id] as boolean | undefined) ?? c.checked ?? false
         return (
-          <div key={c.id} style={formRowStyle}>
+          <div key={c.id} data-control-id={c.id} style={formRowStyle}>
             <Checkbox
               checked={checked}
               disabled={c.disabled}
@@ -635,7 +637,7 @@ export function FormRenderer({
         const c = control as RadioControl
         const value = (formState[c.id] as string | undefined) ?? c.value ?? ''
         return (
-          <div key={c.id} style={formRowStyle}>
+          <div key={c.id} data-control-id={c.id} style={formRowStyle}>
             <Radio
               options={c.options?.map((o) => ({ label: o.label, value: o.value })) ?? []}
               value={value}
@@ -655,7 +657,7 @@ export function FormRenderer({
         // Hexa UI Select supports both single and multiple values (string | string[])
         const value = (formState[c.id] as string | string[] | undefined) ?? c.value ?? undefined
         return (
-          <div key={c.id} style={formRowStyle}>
+          <div key={c.id} data-control-id={c.id} style={formRowStyle}>
             <Select
               options={c.options ?? []}
               value={value}
@@ -677,7 +679,7 @@ export function FormRenderer({
         const c = control as ToggleControl
         const checked = (formState[c.id] as boolean | undefined) ?? c.checked ?? false
         return (
-          <div key={c.id} style={formRowStyle}>
+          <div key={c.id} data-control-id={c.id} style={formRowStyle}>
             <Toggle
               text={c.text ?? 'Переключатель'}
               checked={checked}
@@ -697,21 +699,22 @@ export function FormRenderer({
         const Comp = META_COMPONENT_MAP[m.componentId]
         if (!Comp) {
           return (
-            <Text key={m.id} type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-              Компонент «{m.componentId}»
-            </Text>
+            <div key={m.id} data-control-id={m.id}>
+              <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+                Компонент «{m.componentId}»
+              </Text>
+            </div>
           )
         }
         const builtProps: Record<string, unknown> = {}
         for (const [k, v] of Object.entries(m.props ?? {})) {
           builtProps[k] = k === 'children' ? v : coercePropValue(v)
         }
-        // Для Loader по умолчанию spinning=true (анимация вращения)
         if (m.componentId === 'Loader' && builtProps.spinning === undefined) {
           builtProps.spinning = true
         }
         return (
-          <div key={m.id} style={formRowStyle}>
+          <div key={m.id} data-control-id={m.id} style={formRowStyle}>
             <Comp {...builtProps} disabled={m.props?.disabled === 'true' || undefined} />
           </div>
         )
@@ -726,9 +729,11 @@ export function FormRenderer({
         const Comp = META_COMPONENT_MAP[componentId]
         if (!Comp) {
           return (
-            <Text key={u.id} type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-              Компонент «{u.type}»
-            </Text>
+            <div key={u.id} data-control-id={u.id}>
+              <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+                Компонент «{u.type}»
+              </Text>
+            </div>
           )
         }
         const builtProps: Record<string, unknown> = {}
@@ -739,7 +744,7 @@ export function FormRenderer({
           builtProps.spinning = true
         }
         return (
-          <div key={u.id} style={formRowStyle}>
+          <div key={u.id} data-control-id={u.id} style={formRowStyle}>
             <Comp {...builtProps} disabled={u.props?.disabled === 'true' || undefined} />
           </div>
         )
