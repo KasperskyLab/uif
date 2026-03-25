@@ -1,6 +1,6 @@
 # Roadmap: Normalization
 
-Порядок этапов и статусы. **Контракты, ограничения, архитектурные решения и механика** — в **[tooling.md](./tooling.md)**.
+Порядок этапов и статусы. **Обзор решения** — **[tooling.md](./tooling.md)**; **декомпозиция по фичам** — **[features/](./features/README.md)**; **требования по эпикам** — **[plans/](./plans/)**.
 
 ---
 
@@ -25,7 +25,7 @@
 
 ## ✅ 2. DSL: типы, форматы и ленивая загрузка
 
-Решения по shared-модулю, **`.ts`**-формам, **`FormSlice.state`**, чанкам и **`import()`**: [tooling → архитектура](./tooling.md#normalization-architecture-decisions), [tooling → ленивый рантайм DSL](./tooling.md#normalization-dynamic-dsl-runtime), [tooling → типизация](./tooling.md#normalization-dsl-typing-loading).
+Решения по shared-модулю, **`.ts`**-формам, **`FormSlice.state`**, чанкам: [feat-architecture-directions](./features/feat-architecture-directions.md), [feat-lazy-dsl-runtime](./features/feat-lazy-dsl-runtime.md), [feat-typing-and-imports](./features/feat-typing-and-imports.md) (сводка в [tooling](./tooling.md)).
 
 ### ✅ 2.1. Переход на TypeScript
 
@@ -36,7 +36,7 @@
 <a id="normalization-roadmap-p21"></a>
 <a id="normalization-roadmap-p22"></a>
 
-**Готово.** Парсинг форм и транспиляция **`configHook`** подгружаются через **`loadFormDslBrowserRuntime()`**; в сгенерированном **`.ts`** формы пути к хукам — **`() => import('./…')`**. Детали — [tooling → ленивый рантайм](./tooling.md#normalization-dynamic-dsl-runtime).
+**Готово.** Парсинг форм и транспиляция **`configHook`** подгружаются через **`loadFormDslBrowserRuntime()`**; в сгенерированном **`.ts`** формы пути к хукам — **`() => import('./…')`**. Детали — [feat-lazy-dsl-runtime](./features/feat-lazy-dsl-runtime.md).
 
 ---
 
@@ -44,7 +44,7 @@
 
 <a id="normalization-roadmap-p3"></a>
 
-**План.** Целевая спека: [tooling → превью в редакторе](./tooling.md#normalization-editor-preview-planned).
+**План.** Целевая спека: [feat-editor-preview-target](./features/feat-editor-preview-target.md).
 
 **Открыто:**
 
@@ -62,22 +62,32 @@
 
 ## ⏳ 5. Storybook и прод
 
-Tool — аддон Storybook; viewer — общий движок рендера для Storybook и прод. Детали направления: [tooling → инструменты как продукты](./tooling.md#normalization-architecture-decisions).
+Tool — аддон Storybook; viewer — общий движок рендера для Storybook и прод. Детали: [feat-architecture-directions](./features/feat-architecture-directions.md).
 
 ---
 
 ## ⏳ 6. Архитектура кода и нейминг
 
-Общие механизмы + дескрипторы вместо копипасты; переименование пакетов в **`kant-editor`** / **`kant-renderer`**. Зафиксировано в [tooling](./tooling.md#normalization-architecture-decisions).
+Общие механизмы + дескрипторы вместо копипасты; переименование пакетов в **`kant-editor`** / **`kant-renderer`**. [feat-architecture-directions](./features/feat-architecture-directions.md).
 
 ---
 
 ## ⏳ 7. JSON UI Builder и адаптеры
 
-Совместимость контракта, адаптеры viewer, миграция **Auto UI** на React — [tooling](./tooling.md#normalization-architecture-decisions). Детальные планы — по старту этапа.
+Совместимость контракта, адаптеры viewer, миграция **Auto UI** на React — [feat-architecture-directions](./features/feat-architecture-directions.md). Детальные планы — по старту этапа.
 
 ---
 
 ## ⏳ 8. UI инструментов
 
-Только **Hexa UI** для оболочек; в перспективе — **dogfooding** через DSL + общий рендерер. [tooling](./tooling.md#normalization-architecture-decisions).
+Только **Hexa UI** для оболочек; в перспективе — **dogfooding** через DSL + общий рендерер. [feat-architecture-directions](./features/feat-architecture-directions.md).
+
+---
+
+## ✅ 9. Документация: фичи и требования
+
+**Цель:** спецификация в трёх слоях — **обзор решения** ([tooling.md](./tooling.md)), **иерархия фич** ([features/](./features/README.md)), **проверяемые требования по эпикам** ([plans/](./plans/) в формате *идентификатор фичи — описание*).
+
+**Статус:** структура введена. Обязательный порядок ввода новых фич (план → фича → код) и исключения — **[tooling → Роадмап и требования](./tooling.md#normalization-spec-driven-process)**.
+
+При изменении поведения или контрактов — обновлять **`features/`** и **`plans/`**; **`tooling.md`** — короткий указатель.

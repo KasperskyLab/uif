@@ -1,49 +1,23 @@
-# Text: план (роадмап п.1)
+# Text: требования (роадмап п.1)
 
-**Статус:** ✅ **выполнено** — DSL, tool, viewer, пример `text.config-hook.ts`, инспектор как у Button (`ConfigHookIdentityPropsEditor`, без привязки данных в панели).
-
-Принцип **«одна настройка — один способ»** ([tooling.md](../tooling.md#normalization-one-setting-principle)).
-
-Реализация закрывает **п.1** [roadmap.md](../roadmap.md) по той же схеме, что [plan-button.md](./plan-button.md): один **configHook** возвращает полный набор пропсов **`Text`** из `@kaspersky/hexa-ui` (**`TextProps | null`**), включая колбэки DOM (`onClick`, …) при необходимости. Содержимое (`children`), типографика (`type`), `color`, `style` и остальное — **только из хука**, без статических полей Hexa в DSL.
+**Статус:** ✅ выполнено  
+**Связанные фичи:** [feat-config-hook](../features/feat-config-hook.md), [feat-dsl-one-setting](../features/feat-dsl-one-setting.md), [feat-typing-and-imports](../features/feat-typing-and-imports.md)
 
 ---
 
-## DSL `TextControl`
+## Требования
 
-| Поле | Тип | Назначение |
-|------|-----|------------|
-| `id` | `string` | Идентификация контрола в форме. |
-| `configHook` | `string` | Путь к модулю configHook, **только `.ts`** ([tooling.md](../tooling.md#normalization-config-hooks)). |
-
-Поле **`text?: string`** в DSL **снято** (раньше дублировало содержимое; источник — хук). Статических полей под пропсы Hexa `Text` в DSL нет. Если хук вернул **`null`** — `<Text />` не монтируется (как видимость у кнопки).
-
-**Тип в коде:** `TextControl` расширяет **`FormControlBase`**, но в **инспекторе** для `text` не показываются привязка данных, валидация и условная логика (**`text`** не входит в **`INPUT_CONTROL_TYPES`** в `PropertiesPanel`) — паритет с **Button**.
-
-**`CONTROL_EVENTS.text`:** пустой массив — блок «Обработчики событий» в панели не показывается; `onClick` задаётся через **`TextProps`** в configHook (как у кнопки).
-
-Реактивность — через React-хук и стейт внутри configHook, без `configHookDeps` в DSL.
+| ID | Фича | Описание |
+|----|------|----------|
+| `dsl.text.surface` | Модель **TextControl** | В DSL только **`id`** и опционально **`configHook`**. Поля **`text`** и статические пропсы Hexa для **`<Text />`** не дублируются в DSL. |
+| `config-hook.text.contract` | Возврат хука | **`TextProps \| null`**; **`null`** — не монтировать **`<Text />`**. |
+| `editor.text.inspector` | Инспектор | Как у Button: **`ConfigHookIdentityPropsEditor`** (readonly **`id`** + **`configHook`**). Нет блока привязки данных / валидации в панели (не в **`INPUT_CONTROL_TYPES`**). |
+| `editor.text.events-ui` | События в панели | **`CONTROL_EVENTS.text`** — пусто; **`onClick`** и др. задаются через пропсы в **`configHook`**. |
+| `parity.text.render` | Паритет tool / viewer | Загрузка хука, **`null`**, **`<Text {...props} />`**. Без **`configHook`** — плейсхолдер **`[id]`** и индикатор загрузки при подгрузке модуля. |
+| `runtime.text.load` | Загрузка модуля | Общий контур **`loadConfigHookDefaultExport`**, как для кнопки. |
 
 ---
 
-## Инспектор (KUNT)
+## Примечание
 
-Как у **Button**: только **readonly `id`** и **`configHook`** (пикер `.ts`). Общий UI — **`ConfigHookIdentityPropsEditor`** (`src/components/ConfigHookIdentityPropsEditor.tsx`), используется в дескрипторах **button** и **text** без дублирования разметки.
-
----
-
-## Холст / превью (KUNT) и FormRenderer (viewer)
-
-Паритет с кнопкой:
-
-1. Загрузить `.ts` configHook, вызвать **`(formSlice) => TextProps | null`**.
-2. **`null`** — не рендерить `<Text />`.
-3. Иначе — **`<Text {...props} />`**.
-4. Нет **`configHook`** — плейсхолдер **`[id]`** (и в превью индикатор загрузки **`…`** при подгрузке модуля).
-
-Общая загрузка модулей — **`loadConfigHookDefaultExport`** (как для кнопки).
-
----
-
-## Связь с п.2.1 роадмапа
-
-Как в [plan-button.md](./plan-button.md): цепочка **`FormSlice`** → **`TextControl`** → **`TextProps`** проверяема при типизированной **`.ts`**-форме ([tooling → типизация](../tooling.md#normalization-dsl-typing-loading)).
+Схема как у [plan-button](./plan-button.md); типизация цепочки **`FormSlice`** → **Text** — [feat-typing-and-imports](../features/feat-typing-and-imports.md).

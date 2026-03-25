@@ -1,73 +1,24 @@
-# Table: план (роадмап п.1)
+# Table: требования (роадмап п.1)
 
-**Статус:** ✅ **реализовано** — `configHook` для `Table`, дескриптор `table.tsx`, паритет tool / viewer, пример `jsons/handlers/table.config-hook.ts`. Открытые вопросы — [roadmap §3](../roadmap.md#normalization-roadmap-p3).
-
-Принцип **«одна настройка — один способ»** ([tooling.md](../tooling.md#normalization-one-setting-principle)).
-
-Матрица ячеек в tool/viewer строится через Hexa **`<Table />`** (`columns` + `dataSource` из DSL); **configHook** — **`Partial<ITableProps>`** (без подмены `columns` / `dataSource`). Открытые вопросы по превью/редактору и тулбару — [roadmap §3](../roadmap.md#normalization-roadmap-p3).
+**Статус:** ✅ выполнено (открытые продуктовые вопросы — [roadmap §3](../roadmap.md#normalization-roadmap-p3))  
+**Связанные фичи:** [feat-config-hook](../features/feat-config-hook.md), [feat-dsl-one-setting](../features/feat-dsl-one-setting.md), [feat-dsl-root-model](../features/feat-dsl-root-model.md), [feat-editor-preview-target](../features/feat-editor-preview-target.md)
 
 ---
 
-## Какие свойства остаются статичными в DSL
+## Требования
 
-| Поле | Назначение |
-|------|------------|
-| **`id`** | Идентификатор контрола. |
-| **`type`** | `'table'`. |
-| **`rows`**, **`cols`** | Размер матрицы (`rows * cols` = длина `children`); редактор, холст, DnD. |
-| **`children`** | `(FormControl \| null)[]` — содержимое ячеек. |
-| **`configHook`** | Путь к `.ts` модулю (опционально), **только `.ts`**. |
-| **`emptyText`** | Текст при отсутствии контента в ячейках (пустая таблица). |
-| **`rowMode`** | `standard` \| `compact` — влияние на отступы ячеек в превью/холсте. |
-| **`columnVerticalAlign`** | Выравнивание содержимого ячеек. |
-| **`disabled`** | Блокировка взаимодействия с ячейками. |
-| **`toolbar`** | Конфиг тулбара над таблицей (как сейчас в инспекторе). |
-
-**Не дублируем в DSL** (хук или дефолты в коде): прочие поля **`ITableProps`**, кроме **`columns`**, **`dataSource`**, **`dataSourceFunction`** и React-**`children`** — их задаёт рендерер по матрице DSL.
-
-**Размерность матрицы** — всегда из DSL: **`rows`**, **`cols`**, **`children`**.
-
-**Возвращаемое значение хука:** **`null`** — не рендерить контейнер таблицы. Иначе **`Partial<ITableProps>`**; **`columns`** и **`dataSource`** из хука отбрасываются при мёрже.
-
-**`CONTROL_EVENTS.table`:** без расширения смысла; события — через пропсы при необходимости.
-
-**Инспектор:** **`ConfigHookIdentityPropsEditor`** + **`GridRowsColsPropsEditor`** (или обобщённый редактор матрицы, общий с grid) + блоки **emptyText**, **rowMode**, **columnVerticalAlign**, **disabled**, **toolbar** (логика переносится из **`PropertiesPanel`** в дескриптор **`table.tsx`**).
-
-**FieldBinding:** как у grid — таблица не в списке полей ввода; без изменений по смыслу.
+| ID | Фича | Описание |
+|----|------|----------|
+| `dsl.table.matrix` | Матрица в DSL | **`rows`**, **`cols`**, **`children`** задают размерность и содержимое ячеек; **`columns`** / **`dataSource`** для Hexa строятся рендерером из DSL, не из хука. |
+| `dsl.table.static-fields` | Статические поля таблицы | В DSL допускаются **`emptyText`**, **`rowMode`**, **`columnVerticalAlign`**, **`disabled`**, **`toolbar`** (как в инспекторе). |
+| `config-hook.table.contract` | Возврат хука | **`Partial<ITableProps>`**; **`null`** — не рендерить таблицу. Из возврата хука отбрасываются **`columns`**, **`dataSource`**, **`dataSourceFunction`**, React-**`children`**. |
+| `editor.table.inspector` | Инспектор | **`ConfigHookIdentityPropsEditor`** + редактор **`rows`/`cols`** + блоки статических полей таблицы (логика в дескрипторе **`table`**). |
+| `canvas.table.no-hook` | Холст tool | **`<Table />`** на холсте **без** подмешивания **`configHook`** (упрощённый вид редактора). |
+| `parity.table.preview` | Превью и viewer | **FormPreview** / **FormRenderer**: загрузка хука, мерж, рекурсивный рендер ячеек. |
+| `open.table.toolbar-rows` | Открыто (п.3) | Единый контракт тулбара и **`rowSelection`** (DSL vs Hexa из хука) — [feat-editor-preview-target](../features/feat-editor-preview-target.md). |
 
 ---
 
-## Переиспользование кода (максимум)
+## Примечание
 
-1. **`loadConfigHookDefaultExport`**, **`ConfigHookIdentityPropsEditor`** — как у button/text/grid.
-2. **Редактор `rows` / `cols`** — тот же компонент/паттерн, что у grid (`GridRowsColsPropsEditor` или обобщение).
-3. **Матрица** — `buildTableMatrixColumnsAndDataSource` + Hexa **`<Table />`**.
-4. **Паттерн рендера** — по аналогии с **Grid**: `PreviewTableRenderer` / `TableRenderer`, загрузка хука, мерж, `null`, плейсхолдер; **emptyText**, **disabled**; тулбар — DSL-превью и/или **`toolbar`** из хука (см. [roadmap §3](../roadmap.md#normalization-roadmap-p3)).
-5. Опционально: общий **`useConfigHookModule`**.
-
----
-
-## Холст / превью (tool) и `FormRenderer` (viewer)
-
-- Холст: **`TableControlBlock`** — **`<Table />`** без загрузки **configHook** (хук на холсте не подмешивается).
-- **FormPreview** / **FormRenderer**: загрузка хука, мерж в **`<Table />`**, рекурсивный рендер ячеек; DSL-поля таблицы вне матрицы без изменения контракта.
-
----
-
-## Файлы и тесты (при реализации)
-
-- `form-dsl.ts` (tool + viewer): **`configHook?: string`** в `TableControl`, нормализация, `controlToJson`, `formToTs`.
-- Дескриптор **`table.tsx`**, **`registry`**, убрать **`createControl('table')`** и блок table из **`PropertiesPanel`**.
-- **`FormCanvas`**, **`FormPreview`**, viewer **`FormRenderer`**, пример **`jsons/handlers/table.config-hook.ts`**, **`form-dsl.test.ts`**, **`registry.test.ts`**.
-
----
-
-## Связь с п.2.1
-
-Цепочка **`FormSlice`** → **`TableControl`** → **`Partial<ITableProps>`** — проверяема при **`.ts`**-форме ([tooling → типизация](../tooling.md#normalization-dsl-typing-loading)).
-
----
-
-## Согласование
-
-Решения по статике DSL и матрице на **`<Table />`** для п.1 зафиксированы и внедрены в код (см. статус выше). Вопросы про **rows/cols на холсте vs хук**, **тулбар** и **выбор строк** — в [roadmap §3](../roadmap.md#normalization-roadmap-p3).
+Матрица и **`configHook`** — по той же логике, что **Grid**, с учётом API **`<Table />`** Hexa.
