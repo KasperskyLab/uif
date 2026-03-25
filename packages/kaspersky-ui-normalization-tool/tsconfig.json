@@ -17,9 +17,16 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@normalization/form-dsl": ["../../shared/normalization-form-dsl/form-dsl.ts"]
     }
   },
-  "include": ["src", "jsons/handlers/**/*.ts"],
+  "include": [
+    "src",
+    "jsons/handlers/**/*.ts",
+    "../../shared/types/form.ts",
+    "../../shared/normalization-form-dsl/transpile-form-module.ts",
+    "../../shared/normalization-form-dsl/form-dsl.ts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

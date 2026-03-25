@@ -153,7 +153,7 @@ function generateForms() {
       id: `form-${Date.now()}-${n}-${Math.random().toString(36).slice(2, 6)}`,
       elements: elements(randInt(2, 6))
     }
-    const filename = `form-random-${n}.js`
+    const filename = `form-random-${n}.ts`
     const filepath = path.join(OUT_DIR, filename)
     fs.writeFileSync(filepath, toJsSource(form), 'utf8')
     console.log('Created', filename)

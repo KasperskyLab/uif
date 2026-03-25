@@ -21,19 +21,22 @@ import {
   Link,
   Field,
 } from '@kaspersky/hexa-ui'
-import type {
-  FormControl,
-  ButtonControl,
-  TextControl,
-  InputControl,
-  GridControl,
-  TableControl,
-  CheckboxControl,
-  RadioControl,
-  SelectControl,
-  ToggleControl,
-  MetaComponentControl,
-  FormSlice,
+import {
+  EXTRA_UI_DSL_TYPES,
+  getComponentIdFromDslType,
+  type ButtonControl,
+  type CheckboxControl,
+  type ExtraUiControl,
+  type FormControl,
+  type FormSlice,
+  type GridControl,
+  type InputControl,
+  type MetaComponentControl,
+  type RadioControl,
+  type SelectControl,
+  type TableControl,
+  type TextControl,
+  type ToggleControl,
 } from '@/types/form-dsl'
 import { loadConfigHookDefaultExport } from '@/utils/loadConfigHookModule'
 import {
@@ -670,8 +673,34 @@ export function FormRenderer({
           </div>
         )
       }
-      default:
-        return null
+      default: {
+        if (!EXTRA_UI_DSL_TYPES.includes(control.type as (typeof EXTRA_UI_DSL_TYPES)[number])) {
+          return null
+        }
+        const u = control as ExtraUiControl
+        const componentId = getComponentIdFromDslType(u.type)
+        if (!componentId) return null
+        const Comp = META_COMPONENT_MAP[componentId]
+        if (!Comp) {
+          return (
+            <Text key={u.id} type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+              Компонент «{u.type}»
+            </Text>
+          )
+        }
+        const builtProps: Record<string, unknown> = {}
+        for (const [k, v] of Object.entries(u.props ?? {})) {
+          builtProps[k] = k === 'children' ? v : coercePropValue(v)
+        }
+        if (componentId === 'Loader' && builtProps.spinning === undefined) {
+          builtProps.spinning = true
+        }
+        return (
+          <div key={u.id} style={formRowStyle}>
+            <Comp {...builtProps} disabled={u.props?.disabled === 'true' || undefined} />
+          </div>
+        )
+      }
     }
   }
 

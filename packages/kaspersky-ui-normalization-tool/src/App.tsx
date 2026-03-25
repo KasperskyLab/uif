@@ -19,7 +19,6 @@ import { createControl } from './controls/registry'
 import { FORM_TEMPLATES } from './templates'
 import type { FormControl, FormControlType } from './types/form-dsl'
 import type { FormFileNode } from './hooks/useFormFilesList'
-import { FORM_EXT } from './constants'
 import { getFormPathFromSearch, setFormPathInUrl } from './utils/formUrlSync'
 
 const appShellStyle: React.CSSProperties = {
@@ -581,7 +580,7 @@ function App() {
             ) : treeData.length > 0 ? (
               <div className="form-files-tree" style={{ marginTop: 8 }}>
                 <Text type="BTR2" style={{ marginBottom: 8, display: 'block' }}>
-                  {`Выберите файл формы ${FORM_EXT} (дерево каталогов):`}
+                  Выберите файл формы (.ts), дерево каталогов:
                 </Text>
                 <Tree
                   treeData={treeData}
@@ -595,7 +594,7 @@ function App() {
               </div>
             ) : (
               <SectionMessage mode="info" title="Нет файлов форм">
-                {`В выбранном каталоге нет файлов ${FORM_EXT}`}
+                В выбранном каталоге нет файлов форм (.ts)
               </SectionMessage>
             ))}
 

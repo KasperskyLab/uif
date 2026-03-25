@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import {
-  parseFormJs,
+  parseFormTs,
   formToJsonString,
   formToJson,
-  formToJs,
+  formToTs,
   findControlInTree,
   updateControlInTree,
   removeControlFromTree,
@@ -30,20 +30,20 @@ const textControl = (id: string, configHook?: string): TextControl => ({
 })
 
 describe('form-dsl', () => {
-  describe('parseFormJs', () => {
+  describe('parseFormTs', () => {
     /** Тесты зависят от окружения: в jsdom может не быть полной поддержки URL.createObjectURL / dynamic import. */
     const hasBlobURL =
       typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function'
 
     it.skipIf(!hasBlobURL)(
-      'parses JS module with text type (requires browser createObjectURL)',
+      'parses module with text type (sucrase + import blob)',
       async () => {
         const content = `export default {
         name: "Test Form",
         id: "form-1",
         elements: [{ type: "text", id: "t1" }]
       };`
-        const data = await parseFormJs(content)
+        const data = await parseFormTs(content)
         expect(data.name).toBe('Test Form')
         expect(data.id).toBe('form-1')
         expect(data.elements).toHaveLength(1)
@@ -53,14 +53,14 @@ describe('form-dsl', () => {
     )
 
     it.skipIf(!hasBlobURL)(
-      'parses export default with empty elements (requires browser)',
+      'parses export default with empty elements',
       async () => {
         const content = `export default {
         name: "Exported",
         id: "f2",
         elements: []
       };`
-        const data = await parseFormJs(content)
+        const data = await parseFormTs(content)
         expect(data.name).toBe('Exported')
         expect(data.id).toBe('f2')
         expect(data.elements).toEqual([])
@@ -68,9 +68,25 @@ describe('form-dsl', () => {
     )
 
     it.skipIf(!hasBlobURL)(
-      'rejects when import fails (e.g. syntax error) (requires browser)',
+      'rejects on invalid syntax (sucrase or import)',
       async () => {
-        await expect(parseFormJs('{{{{')).rejects.toBeDefined()
+        await expect(parseFormTs('{{{{')).rejects.toBeDefined()
+      }
+    )
+
+    it.skipIf(!hasBlobURL)(
+      'parses source with TypeScript `as const` on default export',
+      async () => {
+        const content = `export default {
+          name: "TS Form",
+          id: "ts-1",
+          elements: [{ type: "text", id: "t1" }]
+        } as const`
+        const data = await parseFormTs(content)
+        expect(data.name).toBe('TS Form')
+        expect(data.id).toBe('ts-1')
+        expect(data.elements).toHaveLength(1)
+        expect(data.elements[0].type).toBe('text')
       }
     )
   })
@@ -92,14 +108,14 @@ describe('form-dsl', () => {
     })
   })
 
-  describe('formToJs', () => {
+  describe('formToTs', () => {
     it('outputs export default with name, id, elements', () => {
       const form: FormData = {
         name: 'JsForm',
         id: 'j1',
         elements: [textControl('t1', 'handlers/text.config-hook.ts')],
       }
-      const js = formToJs(form)
+      const js = formToTs(form)
       expect(js).toContain('export default')
       expect(js).toContain('name: "JsForm"')
       expect(js).toContain('id: "j1"')
@@ -200,7 +216,7 @@ describe('form-dsl', () => {
     })
   })
 
-  describe('formToJs preserves schema', () => {
+  describe('formToTs preserves schema', () => {
     it('outputs schema block in JS module', () => {
       const form: FormData = {
         name: 'SchemaTest',
@@ -211,7 +227,7 @@ describe('form-dsl', () => {
         },
         elements: [{ type: 'input', id: 'i1', placeholder: '', fieldName: 'email', dataType: 'string' }],
       }
-      const js = formToJs(form)
+      const js = formToTs(form)
       expect(js).toContain('schema:')
       expect(js).toContain('"email"')
       expect(js).toContain('"string"')
@@ -248,7 +264,7 @@ describe('form-dsl', () => {
       expect(json.handlers).toEqual({ onChange: 'handlers/on-change.js', onBlur: 'handlers/blur.js' })
     })
 
-    it('formToJs outputs handlers as import functions for controls', () => {
+    it('formToTs outputs handlers as import functions for controls', () => {
       const form: FormData = {
         name: 'Test',
         id: 'f1',
@@ -256,11 +272,11 @@ describe('form-dsl', () => {
           { type: 'input', id: 'i1', placeholder: '', handlers: { onChange: 'handlers/change.js' } },
         ],
       }
-      const js = formToJs(form)
+      const js = formToTs(form)
       expect(js).toContain('() => import("./handlers/change.js")')
     })
 
-    it('formToJs outputs button configHook as dynamic import', () => {
+    it('formToTs outputs button configHook as dynamic import', () => {
       const form: FormData = {
         name: 'Test',
         id: 'f1',
@@ -268,11 +284,11 @@ describe('form-dsl', () => {
           { type: 'button', id: 'b1', configHook: 'handlers/button.config-hook.ts' },
         ],
       }
-      const js = formToJs(form)
+      const js = formToTs(form)
       expect(js).toContain('() => import("./handlers/button.config-hook.ts")')
     })
 
-    it('formToJs outputs text configHook as dynamic import', () => {
+    it('formToTs outputs text configHook as dynamic import', () => {
       const form: FormData = {
         name: 'Test',
         id: 'f1',
@@ -280,11 +296,11 @@ describe('form-dsl', () => {
           { type: 'text', id: 't1', configHook: 'handlers/text.config-hook.ts' },
         ],
       }
-      const js = formToJs(form)
+      const js = formToTs(form)
       expect(js).toContain('() => import("./handlers/text.config-hook.ts")')
     })
 
-    it('formToJs outputs grid configHook as dynamic import', () => {
+    it('formToTs outputs grid configHook as dynamic import', () => {
       const form: FormData = {
         name: 'Test',
         id: 'f1',
@@ -299,11 +315,11 @@ describe('form-dsl', () => {
           },
         ],
       }
-      const js = formToJs(form)
+      const js = formToTs(form)
       expect(js).toContain('() => import("./handlers/grid.config-hook.ts")')
     })
 
-    it('formToJs outputs table configHook as dynamic import', () => {
+    it('formToTs outputs table configHook as dynamic import', () => {
       const form: FormData = {
         name: 'Test',
         id: 'f1',
@@ -318,18 +334,18 @@ describe('form-dsl', () => {
           },
         ],
       }
-      const js = formToJs(form)
+      const js = formToTs(form)
       expect(js).toContain('() => import("./handlers/table.config-hook.ts")')
     })
 
-    it('formToJs outputs form-level handlers as import functions', () => {
+    it('formToTs outputs form-level handlers as import functions', () => {
       const form: FormData = {
         name: 'Test',
         id: 'f1',
         handlers: { onSubmit: 'handlers/submit.js', onInit: 'handlers/init.js' },
         elements: [],
       }
-      const js = formToJs(form)
+      const js = formToTs(form)
       expect(js).toContain('handlers:')
       expect(js).toContain('() => import("./handlers/submit.js")')
       expect(js).toContain('() => import("./handlers/init.js")')

@@ -50,7 +50,7 @@
 
 ## Файлы и тесты (при реализации)
 
-- `form-dsl.ts` (tool + viewer): добавить **`configHook?: string`** в `GridControl`, нормализация / `controlToJson` / `formToJs` — по образцу button.
+- `form-dsl.ts` (tool + viewer): добавить **`configHook?: string`** в `GridControl`, нормализация / `controlToJson` / `formToTs` — по образцу button.
 - Дескриптор **`grid.tsx`** (новый или расширение registry): `CanvasPreview`, `PropsEditor` = `ConfigHookIdentityPropsEditor` + rows/cols; убрать дублирующий блок grid из **`PropertiesPanel`**.
 - **`FormPreview`**, **`FormRenderer`**, пример **`jsons/handlers/grid.config-hook.ts`**, **`form-dsl.test.ts`**, при необходимости e2e.
 

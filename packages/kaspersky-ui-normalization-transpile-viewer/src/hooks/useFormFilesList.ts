@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-
-const FORM_EXT = '.js'
+import { isFormModuleFile } from '@/types/form-dsl'
 
 export interface FormFileItem {
   key: string
@@ -54,7 +53,7 @@ export function useFormFilesList(
       for await (const [name, handle] of dir.entries()) {
         if (cancelled) return []
         if (handle.kind === 'file') {
-          if (name.toLowerCase().endsWith(FORM_EXT)) {
+          if (isFormModuleFile(name)) {
             nodes.push({
               key: pathPrefix + name,
               path: pathPrefix + name,

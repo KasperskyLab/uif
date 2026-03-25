@@ -56,7 +56,7 @@
 
 ## Файлы и тесты (при реализации)
 
-- `form-dsl.ts` (tool + viewer): **`configHook?: string`** в `TableControl`, нормализация, `controlToJson`, `formToJs`.
+- `form-dsl.ts` (tool + viewer): **`configHook?: string`** в `TableControl`, нормализация, `controlToJson`, `formToTs`.
 - Дескриптор **`table.tsx`**, **`registry`**, убрать **`createControl('table')`** и блок table из **`PropertiesPanel`**.
 - **`FormCanvas`**, **`FormPreview`**, viewer **`FormRenderer`**, пример **`jsons/handlers/table.config-hook.ts`**, **`form-dsl.test.ts`**, **`registry.test.ts`**.
 

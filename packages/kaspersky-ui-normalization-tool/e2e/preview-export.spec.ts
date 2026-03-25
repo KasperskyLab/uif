@@ -46,17 +46,17 @@ test.describe('Экспорт кода', () => {
   test('открытие диалога экспорта показывает «Экспорт DSL»', async ({ page }) => {
     await page.getByRole('button', { name: 'Экспорт кода' }).click()
     await expect(page.getByText('Экспорт DSL')).toBeVisible()
-    await expect(page.getByRole('button', { name: 'JS модуль (.js)' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'TS модуль (.ts)' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'JSON' })).toBeVisible()
   })
 
-  test('переключение между «JS модуль» и «JSON» меняет содержимое', async ({ page }) => {
+  test('переключение между «TS модуль» и «JSON» меняет содержимое', async ({ page }) => {
     await page.getByTestId('palette-button').dblclick()
     await page.getByRole('button', { name: 'Экспорт кода' }).click()
 
-    const jsContent = page.locator('pre').first()
-    await expect(jsContent).toContainText('export default')
-    await expect(jsContent).toContainText('elements')
+    const tsContent = page.locator('pre').first()
+    await expect(tsContent).toContainText('export default')
+    await expect(tsContent).toContainText('elements')
 
     await page.getByRole('button', { name: 'JSON' }).click()
     await expect(page.locator('pre').first()).toContainText('"elements"')
@@ -68,7 +68,7 @@ test.describe('Экспорт кода', () => {
     await expect(page.getByText('Скопировано!')).toBeVisible()
   })
 
-  test('экспортированный JS содержит корректную структуру', async ({ page }) => {
+  test('экспортированный TS-модуль содержит корректную структуру', async ({ page }) => {
     await page.getByTestId('palette-component-Text').dblclick()
     await page.getByRole('button', { name: 'Экспорт кода' }).click()
     const pre = page.locator('pre').first()

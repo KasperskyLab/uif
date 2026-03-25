@@ -8,7 +8,15 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@normalization/form-dsl': path.resolve(
+        __dirname,
+        '../../shared/normalization-form-dsl/form-dsl.ts'
+      ),
+      sucrase: path.resolve(__dirname, 'node_modules/sucrase'),
     },
+  },
+  optimizeDeps: {
+    include: ['sucrase'],
   },
   css: {
     preprocessorOptions: {

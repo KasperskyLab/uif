@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import type { FormData } from '@/types/form-dsl'
-import { parseFormJs } from '@/types/form-dsl'
+import { parseFormTs } from '@/types/form-dsl'
 
 export interface SelectedFormFile {
   path: string
@@ -25,7 +25,7 @@ export function useFormLoader(): {
     try {
       const f = await file.handle.getFile()
       const content = await f.text()
-      const data = await parseFormJs(content)
+      const data = await parseFormTs(content)
       setSelectedFile(file)
       setFormData(data)
     } catch (err) {

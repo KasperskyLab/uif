@@ -1,11 +1,11 @@
 import { useState, useCallback, useRef } from 'react'
 import type { FormControl, FormData } from '../types/form-dsl'
-import { parseFormJs, formToJs, createEmptyFormData } from '../types/form-dsl'
+import { parseFormTs, formToTs, createEmptyFormData } from '../types/form-dsl'
 import { FORM_EXT } from '../constants'
 import { getErrorMessage } from '../utils/getErrorMessage'
 
 export interface SelectedFormFile {
-  /** Относительный путь (например "form.js" или "forms/main.js") */
+  /** Относительный путь (например "form.ts" или "forms/main.ts") */
   path: string
   handle: FileSystemFileHandle
 }
@@ -87,7 +87,7 @@ export function useFormFile(
     try {
       const f = await file.handle.getFile()
       const content = await f.text()
-      const data = await parseFormJs(content)
+      const data = await parseFormTs(content)
       if (requestId !== selectFileRequestRef.current) return
       setSelectedFile(file)
       setFormDataState(data)
@@ -122,7 +122,7 @@ export function useFormFile(
         return 'Нет разрешения на запись в каталог'
       }
       const writable = await selectedFile.handle.createWritable()
-      const content = formToJs(dataToSave)
+      const content = formToTs(dataToSave)
       await writable.write(content)
       await writable.close()
       setHasUnsavedChanges(false)
@@ -144,7 +144,7 @@ export function useFormFile(
       const fileHandle = await directoryHandle.getFileHandle(path, { create: true })
       const initialData = createEmptyFormData()
       const writable = await fileHandle.createWritable()
-      await writable.write(formToJs(initialData))
+      await writable.write(formToTs(initialData))
       await writable.close()
       setSelectedFile({ path, handle: fileHandle })
       setFormDataState(initialData)

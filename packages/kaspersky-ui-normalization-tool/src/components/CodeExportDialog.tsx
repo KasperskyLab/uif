@@ -2,12 +2,12 @@ import { useState, useMemo } from 'react'
 import { Button, Text, H6, Space } from '@kaspersky/hexa-ui'
 import { Cross, Copy } from '@kaspersky/hexa-ui-icons/16'
 import type { FormData } from '../types/form-dsl'
-import { formToJs, formToJsonString } from '../types/form-dsl'
+import { formToTs, formToJsonString } from '../types/form-dsl'
 
-type ExportTab = 'js' | 'json'
+type ExportTab = 'ts' | 'json'
 
 const tabLabels: Record<ExportTab, string> = {
-  js: 'JS модуль (.js)',
+  ts: 'TS модуль (.ts)',
   json: 'JSON',
 }
 
@@ -18,12 +18,12 @@ export function CodeExportDialog({
   formData: FormData
   onClose: () => void
 }) {
-  const [activeTab, setActiveTab] = useState<ExportTab>('js')
+  const [activeTab, setActiveTab] = useState<ExportTab>('ts')
   const [copied, setCopied] = useState(false)
 
   const code = useMemo(() => {
     switch (activeTab) {
-      case 'js': return formToJs(formData)
+      case 'ts': return formToTs(formData)
       case 'json': return formToJsonString(formData)
     }
   }, [formData, activeTab])
