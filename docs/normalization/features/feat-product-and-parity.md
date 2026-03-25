@@ -25,7 +25,7 @@
 | **Роль** | Сборка и правка формы | Только просмотр |
 | **Редактирование** | Холст, DnD, свойства, undo/redo | Нет |
 | **Файлы форм** | **`.ts`** (File System Access API) | То же |
-| **Рендер** | Холст + **`FormPreview`** | **`FormRenderer`** |
+| **Рендер** | Холст (editor) + **`FormRenderer`** (превью, [п.3.1](../roadmap.md#normalization-roadmap-p31)) | **`FormRenderer`** |
 | **Тесты** | Vitest, Playwright e2e | По необходимости |
 
 ---

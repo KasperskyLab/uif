@@ -72,14 +72,11 @@
 - Вложенные папки отображаются в дереве
 - Обновление дерева при создании/удалении файлов
 
-### FormPreview (превью формы)
+### Предпросмотр (FormRenderer из viewer)
 
-- `collectDefaults` собирает `defaultValue` из вложенных контролов (`grid`, `table`, `tabs`, `row`)
-- `validateField` для каждого типа правила: `required`, `minLength`, `maxLength`, `min`, `max`, `pattern`, `custom`
-- `evaluateCondition` для каждого оператора: `eq`, `neq`, `gt`, `lt`, `contains`, `empty`, `notEmpty`
-- Условное отображение: контрол скрывается при несоответствии `visibleWhen`
-- Условная блокировка: контрол блокируется при соответствии `disabledWhen`
-- Рендер вложенных контролов из контейнеров
+- Рендер всех типов контролов идентичен transpile-viewer
+- `configHook` загружается и применяется для Button, Text, Grid, Table
+- Рендер вложенных контролов из контейнеров (grid, table)
 
 ### getErrorMessage (утилита ошибок)
 

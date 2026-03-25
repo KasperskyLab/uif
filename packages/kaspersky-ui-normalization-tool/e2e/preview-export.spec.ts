@@ -13,7 +13,7 @@ test.describe('Предпросмотр формы', () => {
     await expect(page.getByTestId('form-canvas')).toBeVisible()
   })
 
-  test('открытие предпросмотра показывает FormPreview и кнопку «Назад к редактору»', async ({ page }) => {
+  test('открытие предпросмотра показывает область превью и кнопку «Назад к редактору»', async ({ page }) => {
     await page.getByRole('button', { name: 'Предпросмотр' }).click()
     await expect(page.getByText(/Предпросмотр:/i)).toBeVisible()
     await expect(page.getByRole('button', { name: 'Назад к редактору' })).toBeVisible()

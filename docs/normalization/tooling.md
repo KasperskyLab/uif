@@ -40,7 +40,7 @@
 | Типизация и импорты | [feat-typing-and-imports.md](./features/feat-typing-and-imports.md) | Автор формы, потребитель библиотеки |
 | Рабочее пространство | [feat-workspace-browser.md](./features/feat-workspace-browser.md) | FSA, IndexedDB, `?form=`, сценарии |
 | Архитектура и направления | [feat-architecture-directions.md](./features/feat-architecture-directions.md) | Shared-модуль, Storybook, совместимость |
-| Превью в редакторе (цель) | [feat-editor-preview-target.md](./features/feat-editor-preview-target.md) | Роадмап п.3 |
+| Превью в редакторе (цель) | [feat-editor-preview-target.md](./features/feat-editor-preview-target.md) | Роадмап п.3.1 / п.3.2 |
 | Структура репозитория | [feat-repo-layout.md](./features/feat-repo-layout.md) | Пакеты, `shared/` |
 
 ---

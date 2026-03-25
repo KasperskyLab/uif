@@ -14,8 +14,8 @@
 - **Условную логику** (visibleWhen, disabledWhen — показ/блокировка контролов по значению других полей)
 - **Обработчики событий** уровня формы и отдельных контролов (файлы `.js`/`.ts` из каталога формы, по принципу Unity)
 - **Undo/redo**, копирование, дублирование, горячие клавиши
-- **Предпросмотр формы** с валидацией и условной логикой
-- **Экспорт DSL** (JS-модуль, JSON)
+- **Предпросмотр формы** — единый рендер-движок (`FormRenderer` из transpile-viewer)
+- **Экспорт DSL** (TS-модуль, JSON)
 - **Шаблоны** типовых форм
 
 В будущем DSL будет трансформироваться в формы на произвольных библиотеках и дизайн-системах; сейчас рендеринг реализован только через Hexa UI. Генерация React-компонентов и TypeScript-типов из DSL **не входит** в scope — разработчику не важно, что под капотом.
@@ -51,7 +51,8 @@ src/
                          # ConditionEditor, SchemaEditor + HandlersEditor
     HandlersEditor.tsx   # универсальный редактор обработчиков событий
     HandlerFilePicker.tsx # файловый браузер для выбора обработчика из каталога формы
-    FormPreview.tsx      # предпросмотр формы с валидацией и условной логикой
+    ToolbarStaticPreview.tsx  # шим ToolbarStaticPreview для FormRenderer из viewer
+    viewer-form-renderer.d.ts # ambient-модуль типов @viewer/components/FormRenderer
     CodeExportDialog.tsx # диалог экспорта DSL (JS-модуль, JSON)
     SelectWithOptionWidth.tsx
     CanvasPreviewErrorBoundary.tsx
@@ -216,7 +217,7 @@ export default {
 ```
 
 - В редакторе: `ConditionEditor` в панели свойств (чекбокс + поля).
-- В предпросмотре (`FormPreview`): `evaluateCondition` скрывает/блокирует контролы в реальном времени.
+- В предпросмотре (`FormRenderer` из viewer): визуализация идентична transpile-viewer.
 - На холсте: бейдж ⚡ с тултипом условия.
 
 ---
@@ -235,7 +236,7 @@ export default {
 
 - **Undo/redo**: `useHistory<T>` (`src/hooks/useHistory.ts`) — стек до 50 состояний. Ctrl+Z / Ctrl+Shift+Z.
 - **Горячие клавиши**: Ctrl+S (сохранить), Ctrl+C (копировать), Ctrl+V (вставить), Ctrl+D (дублировать), Delete (удалить), Escape (сбросить выбор / выйти из предпросмотра).
-- **Предпросмотр**: `FormPreview` — рендер формы с интерактивными контролами, валидацией, условной логикой. Кнопка «Предпросмотр» в тулбаре.
+- **Предпросмотр**: `FormRenderer` из `transpile-viewer` (единый рендер-движок, Vite-алиас `@viewer`). Кнопка «Предпросмотр» в тулбаре.
 - **Экспорт DSL**: `CodeExportDialog` — вкладки «JS модуль» и «JSON» с кнопкой копирования. Генерация React/TS-компонентов **не** входит в scope.
 - **Шаблоны**: `FORM_TEMPLATES` (`src/templates.ts`) — предустановленные формы (вход, регистрация и т.д.). Отображаются в левой панели под палитрой.
 - **Предупреждение при закрытии**: `useFormFile.closeFile` спрашивает подтверждение при наличии несохранённых изменений.
@@ -292,10 +293,10 @@ export default {
 | DnD, контейнеры (grid/row/table/tabs) на холсте | `FormCanvas.tsx`, `form-dsl.ts` (set*ChildrenInTree) |
 | Панель свойств | `PropertiesPanel.tsx`, отдельные дескрипторы (PropsEditor) |
 | Обработчики событий | `HandlersEditor.tsx`, `HandlerFilePicker.tsx`, `form-dsl.ts` (CONTROL_EVENTS, FORM_EVENTS) |
-| Валидация / условная логика | `PropertiesPanel.tsx` (ValidationEditor, ConditionEditor), `FormPreview.tsx` |
+| Валидация / условная логика | `PropertiesPanel.tsx` (ValidationEditor, ConditionEditor) |
 | Список файлов в каталоге | `useFormFilesList.ts` |
 | Undo/redo | `useHistory.ts`, `App.tsx` (интеграция) |
-| Предпросмотр формы | `FormPreview.tsx` |
+| Предпросмотр формы | `App.tsx` (`previewMode` → `FormRenderer` через `@viewer`), `viewer-form-renderer.d.ts`, `ToolbarStaticPreview.tsx` |
 | Экспорт DSL | `CodeExportDialog.tsx`, DSL (`formToTs`, `formToJsonString`) |
 | Шаблоны форм | `templates.ts` |
 | Безопасность ссылок (XSS) | дескрипторы с URL (например `hexa.tsx` — CanvasPreview) |

@@ -8,8 +8,13 @@ export default defineConfig({
   server: { port: 5173, strictPort: true },
   plugins: [react()],
   resolve: {
+    dedupe: ['react', 'react-dom', '@kaspersky/hexa-ui'],
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@viewer': path.resolve(
+        __dirname,
+        '../kaspersky-ui-normalization-transpile-viewer/src'
+      ),
       '@normalization/form-dsl': path.resolve(
         __dirname,
         '../../shared/normalization-form-dsl/form-dsl.ts'

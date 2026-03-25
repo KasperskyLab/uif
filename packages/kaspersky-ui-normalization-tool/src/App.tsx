@@ -11,7 +11,7 @@ import { useFormFile } from './hooks/useFormFile'
 import { useHistory } from './hooks/useHistory'
 import { ControlsPalette } from './components/ControlsPalette'
 import { FormCanvas } from './components/FormCanvas'
-import { FormPreview } from './components/FormPreview'
+import { FormRenderer } from '@viewer/components/FormRenderer'
 import { CodeExportDialog } from './components/CodeExportDialog'
 import { PropertiesPanel } from './components/PropertiesPanel'
 import { updateControlInTree, findControlInTree, removeControlFromTree } from './types/form-dsl'
@@ -602,14 +602,6 @@ function App() {
             <>
               {fileLoading ? (
                 <div>Загрузка формы…</div>
-              ) : previewMode ? (
-                <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, gap: 8 }}>
-                    <H6 style={{ margin: 0 }}>Предпросмотр: {formData.name || selectedFile.path}</H6>
-                    <Button mode="secondary" text="Назад к редактору" iconBefore={<Cross />} onClick={() => setPreviewMode(false)} />
-                  </div>
-                  <FormPreview controls={formControls} formData={formData} formDirectoryHandle={directoryHandle} />
-                </div>
               ) : (
                 <div style={editorLayoutStyle}>
                   <main style={mainAreaStyle}>
@@ -624,42 +616,48 @@ function App() {
                       }}
                     >
                       <H6 style={{ margin: 0 }}>
-                        Форма: {selectedFile.path}
-                        {hasUnsavedChanges && (
+                        {previewMode ? 'Предпросмотр' : 'Форма'}: {formData.name || selectedFile.path}
+                        {!previewMode && hasUnsavedChanges && (
                           <Text type="BTR3" style={{ color: '#fa8c16', marginLeft: 8 }}>
                             не сохранено
                           </Text>
                         )}
                       </H6>
                       <Space size={8}>
-                        <Tooltip text="Ctrl+Z">
-                          <Button mode="tertiary" text="↩" onClick={history.undo} disabled={!history.canUndo} size="small" />
-                        </Tooltip>
-                        <Tooltip text="Ctrl+Shift+Z">
-                          <Button mode="tertiary" text="↪" onClick={history.redo} disabled={!history.canRedo} size="small" />
-                        </Tooltip>
-                        {selectedControl && (
+                        {!previewMode && (
                           <>
-                            <Tooltip text="Ctrl+C">
-                              <Button mode="tertiary" iconBefore={<Copy />} onClick={handleCopyControl} size="small" />
+                            <Tooltip text="Ctrl+Z">
+                              <Button mode="tertiary" text="↩" onClick={history.undo} disabled={!history.canUndo} size="small" />
                             </Tooltip>
-                            <Tooltip text="Ctrl+D">
-                              <Button mode="tertiary" text="Дубл." onClick={handleDuplicateControl} size="small" />
+                            <Tooltip text="Ctrl+Shift+Z">
+                              <Button mode="tertiary" text="↪" onClick={history.redo} disabled={!history.canRedo} size="small" />
                             </Tooltip>
+                            {selectedControl && (
+                              <>
+                                <Tooltip text="Ctrl+C">
+                                  <Button mode="tertiary" iconBefore={<Copy />} onClick={handleCopyControl} size="small" />
+                                </Tooltip>
+                                <Tooltip text="Ctrl+D">
+                                  <Button mode="tertiary" text="Дубл." onClick={handleDuplicateControl} size="small" />
+                                </Tooltip>
+                              </>
+                            )}
                           </>
                         )}
                         <Button
-                          mode="secondary"
-                          text="Предпросмотр"
-                          onClick={() => setPreviewMode(true)}
+                          mode={previewMode ? 'primary' : 'secondary'}
+                          text={previewMode ? 'Редактор' : 'Предпросмотр'}
+                          onClick={() => setPreviewMode((p) => !p)}
                           size="small"
                         />
-                        <Button
-                          mode="secondary"
-                          text="Экспорт кода"
-                          onClick={() => setShowExport(true)}
-                          size="small"
-                        />
+                        {!previewMode && (
+                          <Button
+                            mode="secondary"
+                            text="Экспорт кода"
+                            onClick={() => setShowExport(true)}
+                            size="small"
+                          />
+                        )}
                         {hasUnsavedChanges && (
                           <Button
                             mode="primary"
@@ -674,24 +672,47 @@ function App() {
                           iconBefore={<Cross />}
                           onClick={closeFile}
                         />
-                        <Button
-                          mode="secondary"
-                          text="Удалить форму"
-                          iconBefore={<Delete />}
-                          onClick={handleDeleteForm}
-                        />
+                        {!previewMode && (
+                          <Button
+                            mode="secondary"
+                            text="Удалить форму"
+                            iconBefore={<Delete />}
+                            onClick={handleDeleteForm}
+                          />
+                        )}
                       </Space>
                     </div>
                     <div style={canvasWrapperStyle}>
-                      <FormCanvas
-                        controls={formControls}
-                        onControlsChange={historySetControls}
-                        onDropControl={(type) => handleAddControl(type as FormControlType, undefined)}
-                        selectedId={selectedControlId}
-                        onSelect={setSelectedControlId}
-                      />
+                      {previewMode ? (
+                        <div
+                          style={{
+                            border: '2px solid var(--primary--main, #00a88e)',
+                            borderRadius: 12,
+                            padding: 24,
+                            background: 'var(--surface--neutral, #fafafa)',
+                            flex: 1,
+                            overflow: 'auto',
+                          }}
+                        >
+                          <FormRenderer
+                            elements={formControls}
+                            formDirectoryHandle={directoryHandle}
+                            formKey={selectedFile.path}
+                            gap={16}
+                          />
+                        </div>
+                      ) : (
+                        <FormCanvas
+                          controls={formControls}
+                          onControlsChange={historySetControls}
+                          onDropControl={(type) => handleAddControl(type as FormControlType, undefined)}
+                          selectedId={selectedControlId}
+                          onSelect={setSelectedControlId}
+                        />
+                      )}
                     </div>
                   </main>
+                  {!previewMode && (
                   <div style={{ width: panelWidth, flexShrink: 0, overflow: 'hidden', display: 'flex', flexDirection: 'row', position: 'relative' }}>
                     <div
                       role="separator"
@@ -720,6 +741,7 @@ function App() {
                     />
                     </div>
                   </div>
+                  )}
                 </div>
               )}
             </>

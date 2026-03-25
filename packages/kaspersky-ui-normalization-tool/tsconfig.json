@@ -20,7 +20,11 @@
       "@/*": ["src/*"],
       "@normalization/form-dsl": ["../../shared/normalization-form-dsl/form-dsl.ts"],
       "@normalization/load-form-dsl-runtime": ["../../shared/normalization-form-dsl/load-form-dsl-runtime.ts"],
-      "sucrase": ["./node_modules/sucrase"]
+      "sucrase": ["./node_modules/sucrase"],
+      "@kaspersky/hexa-ui": ["./node_modules/@kaspersky/hexa-ui"],
+      "@kaspersky/hexa-ui/*": ["./node_modules/@kaspersky/hexa-ui/*"],
+      "@kaspersky/hexa-ui-icons": ["./node_modules/@kaspersky/hexa-ui-icons"],
+      "@kaspersky/hexa-ui-icons/*": ["./node_modules/@kaspersky/hexa-ui-icons/*"]
     }
   },
   "include": [

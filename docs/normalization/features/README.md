@@ -24,7 +24,7 @@
 │
 ├── Целевое состояние (роадмап)
 │   ├── [Архитектурные решения и направления](./feat-architecture-directions.md)
-│   └── [Превью в редакторе (цель)](./feat-editor-preview-target.md)
+│   └── [Превью в редакторе — единый рендер-движок](./feat-editor-preview-target.md)
 │
 └── Репозиторий
     └── [Пакеты и shared-модули](./feat-repo-layout.md)

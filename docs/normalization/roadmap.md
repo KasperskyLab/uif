@@ -44,7 +44,17 @@
 
 <a id="normalization-roadmap-p3"></a>
 
-**План.** Целевая спека: [feat-editor-preview-target](./features/feat-editor-preview-target.md).
+Целевая спека: [feat-editor-preview-target](./features/feat-editor-preview-target.md).
+
+### ✅ 3.1. Единый рендер-движок
+
+<a id="normalization-roadmap-p31"></a>
+
+**Готово.** В режиме превью tool использует тот же **`FormRenderer`**, что и **transpile-viewer** — один рендер-движок для обоих приложений. Механизм: Vite-алиас **`@viewer`**, ambient-модуль `.d.ts`, шим `ToolbarStaticPreview`, `resolve.dedupe`. Детали: [plan-editor-preview](./plans/plan-editor-preview.md), [feat-editor-preview-target](./features/feat-editor-preview-target.md).
+
+### ⏳ 3.2. Проработка ограничений
+
+<a id="normalization-roadmap-p32"></a>
 
 **Открыто:**
 
