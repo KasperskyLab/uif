@@ -40,7 +40,7 @@
 
 ---
 
-## ✅ 3. Превью в редакторе
+## 3. Превью в редакторе
 
 <a id="normalization-roadmap-p3"></a>
 
@@ -69,6 +69,8 @@
 - `data-container-id` + `data-grid-cell-index` / `data-table-cell-index` в `FormRenderer` → DOM-якоря для cell drop zones.
 - `src/utils/dnd.ts`: shared-константы (`DATA_ID_KEY`, `DATA_TYPE_KEY`), `getDropTypeAndOptions`, tree mutation helpers (applyRootReorder/Insert, applyGridCell/TableCell Move/Insert).
 - Режим Editor (FormCanvas) сохраняется как fallback; кнопка переключения остаётся.
+
+3.4 Сделать split-screen: слева код с конфиг хуками, справа визивиг
 
 ---
 
