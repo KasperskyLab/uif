@@ -132,8 +132,8 @@
       },
       "peerDependencies": {
         "@kaspersky/hexa-ui-icons": "^2.13.0",
-        "react": "16.x || 17.x || 18.x",
-        "react-dom": "16.x || 17.x || 18.x",
+        "react": "16.x || 17.x || 18.x || 19.x",
+        "react-dom": "16.x || 17.x || 18.x || 19.x",
         "typescript": ">=4.0.0"
       }
     },
