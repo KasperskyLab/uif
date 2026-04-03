@@ -42,6 +42,8 @@ const NavItemComponent = ({
     active,
     isNew,
     isCaption,
+    description,
+    itemClass,
     itemDivider,
     elementAfter,
     submenuItems,
@@ -49,7 +51,6 @@ const NavItemComponent = ({
     skipActivation = false,
     lineClamp
   } = data
-  const NavItemIcon = icon
   const hasChild = Boolean(items && items.length)
   const submenuChild = Boolean(submenuItems)
   const {
@@ -143,6 +144,23 @@ const NavItemComponent = ({
   const hasNew = hasItems ? lookForNewItems(items) : false
   const shouldBeMarkedAsNewIndicator = hasNew
   const shouldBeMarkedAsNewBadge = !hasItems && isNew
+  const renderIcon = () => {
+    if (!icon) {
+      return null
+    }
+
+    if (React.isValidElement(icon)) {
+      return icon
+    }
+
+    if (typeof icon === 'function') {
+      const NavItemIcon = icon
+
+      return <NavItemIcon />
+    }
+
+    return null
+  }
 
   const navEntry = (
     <div
@@ -156,15 +174,19 @@ const NavItemComponent = ({
       onClick={entryClick}
     >
       { icon && <div className="uif-nav-item-entry-icon">
-        <NavItemIcon/>
+        {renderIcon()}
       </div> }
       <div className={cn(
         'uif-nav-item-entry-title',
-        {'title-wo-icon': !icon}
+        {
+          'title-wo-icon': !icon,
+          'has-description': Boolean(description)
+        }
       )}>
         <TextWithTruncation text={key} lineClamp={lineClamp}>
           <span>{key}</span>
         </TextWithTruncation>
+        {description && <span className="uif-nav-item-entry-description">{description}</span>}
       </div>
       <div className="uif-nav-item-entry-props">
         { shouldBeMarkedAsNewIndicator && NewIndicator }
@@ -182,6 +204,7 @@ const NavItemComponent = ({
       <div className={cn(
         className,
         'uif-nav-item',
+        itemClass,
         {
           'uif-nav-caption': isCaption,
           'expanded': !minimized && expanded,
@@ -199,7 +222,10 @@ const NavItemComponent = ({
           hasChild && <div className="uif-nav-item-child">
             <div className="uif-nav-item-child-wrapper">
               { items?.map((item: NavItemData) => {
-                const { isCaption, isRoot } = item
+                const { component: ItemCustomComponent, isCaption, isRoot } = item
+                if (ItemCustomComponent) {
+                  return <ItemCustomComponent key={`${item.key}-child`} />
+                }
                 if (isCaption) {
                   return <NavCaptionItem
                     className={cn({ 'caption-root': isRoot })}

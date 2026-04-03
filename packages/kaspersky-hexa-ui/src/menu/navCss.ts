@@ -72,10 +72,24 @@ export const navItemCss = css`
     text-overflow: ellipsis;
     overflow-wrap: break-word;
     line-height: var(--base-menu-item-height);
+
+    &.has-description {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      line-height: normal;
+    }
     
     .title-ellipsis {
       white-space: nowrap;
     }
+  }
+
+  .uif-nav-item-entry-description {
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--menu_item--text--label--disabled);
   }
   
   .uif-nav-item-entry-props {

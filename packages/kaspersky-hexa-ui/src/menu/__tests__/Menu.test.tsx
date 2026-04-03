@@ -84,6 +84,25 @@ describe('Menu', () => {
     expect(getItem('navigation.main.usersAndRoles')).toBeInTheDocument()
   })
 
+  it('should apply custom item class', () => {
+    const { container } = render(<MenuComponent />)
+
+    expect(container.querySelector('.js-tutorial-welcome-step-13-selector')).toBeInTheDocument()
+  })
+
+  it('should render menu item description', () => {
+    render(
+      <MenuComponent
+        navItems={[{
+          ...navItems[0],
+          description: 'Manage users and roles'
+        }]}
+      />
+    )
+
+    expect(screen.getByText('Manage users and roles')).toBeInTheDocument()
+  })
+
   it('should show user status tooltip', async () => {
     const baseDom = render(<MenuComponent collapsed={true} />)
 

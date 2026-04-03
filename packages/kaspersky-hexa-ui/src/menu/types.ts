@@ -23,6 +23,7 @@ export type NavItemData = {
   id?: string,
   iconClass?: any,
   itemClass?: string | null,
+  component?: any,
   icon?: any,
   klId?: string,
   items?: NavItemData[],
@@ -33,6 +34,7 @@ export type NavItemData = {
   groupsTree?: boolean,
   isRoot?: boolean,
   isNew?: boolean,
+  description?: string,
   elementAfter?: ReactNode,
   /** not ready to use in production */
   submenuItems?: SubmenuItemProps[],

@@ -32,7 +32,8 @@
     "./docs",
     "./.storybook/**/*",
     "./screenshots/**/*",
-    "/.changelog/scripts/*"
+    "/.changelog/scripts/*",
+    "./uxpin/**/*"
   ],
   "exclude": [
     "node_modules",

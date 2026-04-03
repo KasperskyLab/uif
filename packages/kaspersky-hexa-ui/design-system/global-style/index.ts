@@ -1,9 +1,8 @@
 import { buildCssVarsPalette, buildCssVarsTokens } from '@helpers/build-css-vars'
+import { colorsCssVarString } from '@kaspersky/hexa-ui-core/colors/js'
+import { fontsCssVarString } from '@kaspersky/hexa-ui-core/fonts'
+import { typographyCssVarString } from '@kaspersky/hexa-ui-core/typography/js'
 import { createGlobalStyle, css } from 'styled-components'
-
-import('@kaspersky/hexa-ui-core/fonts')
-import('@kaspersky/hexa-ui-core/colors/css')
-import('@kaspersky/hexa-ui-core/typography/css')
 
 const globalRootStyleForGallery = css`
 .root-background-basic {
@@ -20,6 +19,9 @@ body:has(.antd-sidebar-wrapper_last) .antd-sidebar-wrapper:not(.antd-sidebar-wra
 `
 
 export const GlobalStyle = createGlobalStyle`
+  ${fontsCssVarString}
+  ${colorsCssVarString}
+  ${typographyCssVarString}
   ${buildCssVarsPalette()}
   ${buildCssVarsTokens()}
   ${globalRootStyleForGallery}

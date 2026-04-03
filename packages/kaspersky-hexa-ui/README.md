@@ -43,4 +43,24 @@ deployPath={YOUR_PROJECT_PATH}/node_modules/@kaspersky/hexa-ui
 ```
 npm run release
 ```
+### Интеграция с UXPin Merge
+В проект добавлена базовая интеграция дизайн-системы с UXPin через обертки (wrappers):
 
+- конфиг UXPin: `uxpin.config.js`
+- Webpack-конфиг для Merge CLI: `uxpin.webpack.config.js`
+- общий враппер с `DesignSystemProvider`: `uxpin/UXPinWrapper.tsx`
+- стартовый набор компонентов для UXPin: `uxpin/components/*`
+
+#### Запуск локального Merge-сервера
+1. Убедитесь, что зависимости установлены (`npm i`)
+2. Запустите Merge сервер:
+```bash
+npm run uxpin:dev
+```
+
+#### Публикация компонентов в UXPin
+```bash
+npm run uxpin:push
+```
+
+Перед публикацией убедитесь, что вы авторизованы в UXPin CLI и настроили проект в UXPin Dashboard.
