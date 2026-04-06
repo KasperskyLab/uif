@@ -69,9 +69,9 @@ src/
   utils/
     getErrorMessage.ts   # единообразная обработка ошибок
 dsl/                     # DSL форм: подкаталог `formId/` с `formId.schema.ts` и `formId.config-hook.ts`
-  demo-form/             # демо (сетка + таблица)
+  demo/                  # демо (сетка + таблица), id формы `demo`
   ...
-e2e/                     # Playwright: app-load, demo-form
+e2e/                     # Playwright: app-load, demo
 TESTING-GAPS.md          # документация непокрытых сценариев тестирования
 ```
 
@@ -259,7 +259,7 @@ export default {
 ## E2E и демо-режим
 
 - При `window.__E2E_DEMO__ = true` приложение открывает редактор с пустой формой без выбора каталога (для тестов).
-- E2E: `e2e/README.md`, сценарии `app-load.spec.ts`, `demo-form.spec.ts`; перед первым запуском — `npx playwright install`.
+- E2E: `e2e/README.md`, сценарии `app-load.spec.ts`, `demo.spec.ts`; перед первым запуском — `npx playwright install`.
 
 ---
 

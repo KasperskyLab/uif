@@ -16,7 +16,7 @@
 | `form.config-hook.341.contract` | **Default export** — функция **без аргументов**, возвращающая объект **`Record<controlId, (FormSlice) => ComponentProps | null>`**. Значения по ключам — те же семантики, что у прежнего default export per-control модуля (см. [feat-config-hook](../features/feat-config-hook.md)). | ✅ |
 | `form.config-hook.341.runtime` | **`FormRenderer`** (tool + viewer): один раз загрузить модуль формы, вызвать фабрику, получить реестр; для каждого контрола — **`registry[control.id]`** или только статические пропсы из DSL, **без** попыток подгрузить отдельный файл по контролу. | ✅ |
 | `form.config-hook.341.tool-ui` | Редактор: пути/пикер для форменного хука; **не** вводить scaffold файла дефолтов на этом этапе (дефолты — вне scope, см. ниже). | ✅ |
-| `form.config-hook.341.demo` | Демо: **`dsl/demo-form/`** с **`demo-form.schema.ts`** и **`demo-form.config-hook.ts`**, один `configHook` на форму. | ✅ |
+| `form.config-hook.341.demo` | Демо: **`dsl/demo/`** с **`demo.schema.ts`** и **`demo.config-hook.ts`**, один `configHook` на форму. | ✅ |
 | `form.config-hook.341.tests` | Тесты: `normalizeFormData`, сериализация, при необходимости — сценарий рендера с реестром. | ✅ |
 
 ---

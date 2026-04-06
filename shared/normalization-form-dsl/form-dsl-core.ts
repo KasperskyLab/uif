@@ -846,7 +846,12 @@ export function formToJson(form: FormData): Record<string, unknown> {
     id: form.id,
   }
   if (form.configHook) {
-    result.configHook = form.configHook
+    if (typeof form.configHook === 'string') {
+      result.configHook = form.configHook
+    } else {
+      const p = getImportPathFromHandler(form.configHook)
+      if (p) result.configHook = p
+    }
   }
   if (form.schema && Object.keys(form.schema).length > 0) {
     result.schema = form.schema
@@ -886,8 +891,14 @@ export function formToTs(form: FormData): string {
   }
   let configHookSource = ''
   if (form.configHook) {
-    const pathEsc = form.configHook.replace(/\\/g, '/')
-    configHookSource = `\n  configHook: () => import(${JSON.stringify('./' + pathEsc)}),`
+    const path =
+      typeof form.configHook === 'string'
+        ? form.configHook
+        : getImportPathFromHandler(form.configHook)
+    if (path) {
+      const pathEsc = path.replace(/\\/g, '/')
+      configHookSource = `\n  configHook: () => import(${JSON.stringify('./' + pathEsc)}),`
+    }
   }
   return `export default {
   name: ${nameEsc},

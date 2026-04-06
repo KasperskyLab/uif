@@ -2,7 +2,6 @@ import { Button } from '@kaspersky/hexa-ui'
 import { Cursor } from '@kaspersky/hexa-ui-icons/16'
 import type { ControlDescriptor } from '../types'
 import type { ButtonControl } from '../../types/form-dsl'
-import { ControlIdPropsEditor } from '../../components/ControlIdPropsEditor'
 
 export const buttonDescriptor: ControlDescriptor<ButtonControl> = {
   type: 'button',
@@ -23,5 +22,5 @@ export const buttonDescriptor: ControlDescriptor<ButtonControl> = {
     />
   ),
 
-  PropsEditor: ({ control }) => <ControlIdPropsEditor id={control.id} />,
+  PropsEditor: () => null,
 }

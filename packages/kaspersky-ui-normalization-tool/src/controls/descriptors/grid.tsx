@@ -1,8 +1,7 @@
-import { Space, Text } from '@kaspersky/hexa-ui'
+import { Text } from '@kaspersky/hexa-ui'
 import { ArrangeGrid } from '@kaspersky/hexa-ui-icons/16'
 import type { ControlDescriptor } from '../types'
 import type { FormControl, GridControl } from '../../types/form-dsl'
-import { ControlIdPropsEditor } from '../../components/ControlIdPropsEditor'
 
 export const gridDescriptor: ControlDescriptor<GridControl> = {
   type: 'grid',
@@ -25,9 +24,5 @@ export const gridDescriptor: ControlDescriptor<GridControl> = {
     )
   },
 
-  PropsEditor: ({ control, onUpdate: _onUpdate }) => (
-    <Space size={12} direction="vertical" style={{ width: '100%' }}>
-      <ControlIdPropsEditor id={control.id} />
-    </Space>
-  ),
+  PropsEditor: () => null,
 }

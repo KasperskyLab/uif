@@ -2,7 +2,6 @@ import { Text } from '@kaspersky/hexa-ui'
 import { Text as TextIcon } from '@kaspersky/hexa-ui-icons/16'
 import type { ControlDescriptor } from '../types'
 import type { TextControl } from '../../types/form-dsl'
-import { ControlIdPropsEditor } from '../../components/ControlIdPropsEditor'
 
 export const textDescriptor: ControlDescriptor<TextControl> = {
   type: 'text',
@@ -20,5 +19,5 @@ export const textDescriptor: ControlDescriptor<TextControl> = {
     </Text>
   ),
 
-  PropsEditor: ({ control }) => <ControlIdPropsEditor id={control.id} />,
+  PropsEditor: () => null,
 }

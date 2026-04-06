@@ -15,7 +15,11 @@ import { FormEditorConfigHookProvider } from './context/FormEditorConfigHookCont
 import { WysiwygCanvas } from './components/WysiwygCanvas'
 import { CodeExportDialog } from './components/CodeExportDialog'
 import { PropertiesPanel } from './components/PropertiesPanel'
-import { updateControlInTree, findControlInTree, removeControlFromTree } from './types/form-dsl'
+import {
+  updateControlInTree,
+  findControlInTree,
+  removeControlFromTree,
+} from './types/form-dsl'
 import { createControl } from './controls/registry'
 import { FORM_TEMPLATES } from './templates'
 import type { FormControl, FormControlType } from './types/form-dsl'
@@ -259,9 +263,28 @@ function App() {
 
   const handleUpdateControl = useCallback(
     (id: string, patch: Partial<FormControl>) => {
-      historySetControls((prev) => updateControlInTree(prev, id, patch))
+      let nextPatch = patch
+      if (typeof patch.id === 'string') {
+        const t = patch.id.trim()
+        if (t === '') {
+          window.alert('Идентификатор не может быть пустым')
+          return
+        }
+        nextPatch = { ...patch, id: t }
+        if (t !== id && findControlInTree(formControls, t)) {
+          window.alert(`Идентификатор «${t}» уже занят другим контролом`)
+          return
+        }
+      }
+      historySetControls((prev) => updateControlInTree(prev, id, nextPatch))
+      if (
+        typeof nextPatch.id === 'string' &&
+        nextPatch.id !== id
+      ) {
+        setSelectedControlId((sel) => (sel === id ? nextPatch.id! : sel))
+      }
     },
-    [historySetControls]
+    [historySetControls, formControls]
   )
 
   const selectedControl =

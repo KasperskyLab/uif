@@ -37,5 +37,5 @@
 
 ## Ссылки
 
-- Пример стиля: `packages/kaspersky-ui-normalization-tool/dsl/demo-form/demo-form.config-hook.ts`
+- Пример стиля: `packages/kaspersky-ui-normalization-tool/dsl/demo/demo.config-hook.ts`
 - Код: `loadConfigHookDefaultExport` в tool и viewer

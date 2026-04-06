@@ -1,19 +1,21 @@
-export default {
+import { defineFormSchema } from '@normalization/form-dsl'
+
+export default defineFormSchema({
   name: 'Демо: сетка и таблица',
-  id: 'demo-form',
-  configHook: () => import('./demo-form.config-hook.ts'),
+  id: 'demo',
+  configHook: './demo.config-hook.ts',
   elements: [
     {
       type: 'grid',
-      id: 'grid-1774124980818-7sslddg',
+      id: 'demo.grid',
       children: [
         {
           type: 'text',
-          id: 'text-1774124983057-g88o6vy',
+          id: 'demo.grid.text',
         },
         {
           type: 'input',
-          id: 'demo-button-text-source',
+          id: 'demo.grid.input',
           text: 'Текст кнопки (state)',
           value: 'Значение из формы',
           placeholder: 'Меняется подпись кнопки',
@@ -21,36 +23,36 @@ export default {
         null,
         {
           type: 'button',
-          id: 'button-1774124998740-k5kscyr',
+          id: 'demo.grid.button',
         },
       ],
     },
     {
       type: 'table',
-      id: 'table-demo-main',
+      id: 'demo.table',
       rows: 2,
       cols: 3,
       children: [
         null,
         {
           type: 'text',
-          id: 'text-table-1',
+          id: 'demo.table.text1',
         },
         {
           type: 'button',
-          id: 'button-table-1',
+          id: 'demo.table.button1',
         },
         {
           type: 'text',
-          id: 'text-table-plain',
+          id: 'demo.table.textPlain',
         },
         {
           type: 'button',
-          id: 'button-table-2',
+          id: 'demo.table.button2',
         },
         {
           type: 'text',
-          id: 'text-table-2',
+          id: 'demo.table.text2',
         },
       ],
       emptyText: 'Нет данных в ячейках',
@@ -58,12 +60,29 @@ export default {
       columnVerticalAlign: 'middle',
       toolbar: {
         left: [
-          { type: 'button', key: 'add', label: 'Добавить' },
-          { type: 'divider', key: 'd1' },
-          { type: 'button', key: 'refresh', label: 'Обновить' },
+          {
+            type: 'button',
+            key: 'add',
+            label: 'Добавить',
+          },
+          {
+            type: 'divider',
+            key: 'd1',
+          },
+          {
+            type: 'button',
+            key: 'refresh',
+            label: 'Обновить',
+          },
         ],
-        right: [{ type: 'button', key: 'export', label: 'Экспорт' }],
+        right: [
+          {
+            type: 'button',
+            key: 'export',
+            label: 'Экспорт',
+          },
+        ],
       },
     },
-  ],
-}
+  ] as const,
+})

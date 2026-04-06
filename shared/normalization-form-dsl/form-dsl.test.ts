@@ -32,11 +32,11 @@ const textControl = (id: string): TextControl => ({
 describe('form-dsl', () => {
   describe('isFormSchemaModuleFile', () => {
     it('accepts *.schema.ts', () => {
-      expect(isFormSchemaModuleFile('demo-form.schema.ts')).toBe(true)
+      expect(isFormSchemaModuleFile('demo.schema.ts')).toBe(true)
       expect(isFormSchemaModuleFile('path/to/x.schema.ts')).toBe(true)
     })
     it('rejects other ts files', () => {
-      expect(isFormSchemaModuleFile('demo-form.config-hook.ts')).toBe(false)
+      expect(isFormSchemaModuleFile('demo.config-hook.ts')).toBe(false)
       expect(isFormSchemaModuleFile('form.ts')).toBe(false)
     })
   })
@@ -99,6 +99,25 @@ describe('form-dsl', () => {
         expect(data.elements).toHaveLength(1)
         expect(data.elements[0].type).toBe('text')
       }
+    )
+
+    it.skipIf(!hasBlobURL)(
+      'parses schema that imports defineFormSchema from @normalization/form-dsl',
+      async () => {
+        const content = `
+import { defineFormSchema } from '@normalization/form-dsl'
+const s = defineFormSchema({
+  name: 'Alias Form',
+  id: 'alias-1',
+  elements: [{ type: 'text', id: 't1' }],
+})
+export default s
+`
+        const data = await parseFormTs(content)
+        expect(data.name).toBe('Alias Form')
+        expect(data.id).toBe('alias-1')
+        expect(data.elements).toHaveLength(1)
+      },
     )
   })
 

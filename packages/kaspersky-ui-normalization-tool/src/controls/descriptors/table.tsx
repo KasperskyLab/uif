@@ -10,7 +10,6 @@ import {
 import { Add, Table as TableIcon } from '@kaspersky/hexa-ui-icons/16'
 import type { ControlDescriptor } from '../types'
 import type { FormControl, TableControl } from '../../types/form-dsl'
-import { ControlIdPropsEditor } from '../../components/ControlIdPropsEditor'
 import { GridRowsColsPropsEditor } from '../../components/GridRowsColsPropsEditor'
 import { SelectWithOptionWidth } from '../../components/SelectWithOptionWidth'
 import { buildTableMatrixColumnsAndDataSource } from '../../utils/tableControlHexa'
@@ -247,7 +246,6 @@ export const tableDescriptor: ControlDescriptor<TableControl> = {
             </Space>
           )}
         </div>
-        <ControlIdPropsEditor id={t.id} />
       </Space>
     )
   },

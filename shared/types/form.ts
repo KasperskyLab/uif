@@ -15,9 +15,9 @@ export interface FormData {
   id: string
   /**
    * Единый модуль `configHook` на форму (только `.ts`).
-   * Каноническое имя рядом с файлом формы: `{id}.config-hook.ts`.
+   * В исходнике — строка пути или `() => import('...')`; после нормализации — строка.
    */
-  configHook?: string
+  configHook?: string | (() => Promise<unknown>)
   /** Схема данных формы: имя поля -> тип и описание */
   schema?: Record<string, FieldSchema>
   /** Обработчики событий формы: имя события → путь к файлу-обработчику */

@@ -1,16 +1,26 @@
 /**
- * Единый configHook демо-формы: default export — фабрика реестра по control.id.
+ * Единый configHook формы `demo`: default export — фабрика реестра по control.id.
  */
 import type { ReactNode } from 'react'
 import type { ButtonProps, GridProps, TextProps } from '@kaspersky/hexa-ui'
 import type { ITableProps } from '@kaspersky/hexa-ui'
-import type { FormSlice } from '../../src/types/form-dsl'
+import type {
+  FormConfigHookFactoryFor,
+  FormConfigHookRegistryFor,
+  FormControlIdsOf,
+  FormSlice,
+} from '@normalization/form-dsl'
+import demoSchema from './demo.schema'
 
-const BUTTON_TEXT_FIELD_ID = 'demo-button-text-source'
+type DemoSchema = typeof demoSchema
+type DemoRegistry = FormConfigHookRegistryFor<DemoSchema>
 
-function buttonConfigHook(formSlice: FormSlice): ButtonProps | null {
+const DEMO_GRID_INPUT_ID =
+  'demo.grid.input' satisfies FormControlIdsOf<DemoSchema>
+
+function useDemoButton(formSlice: FormSlice): ButtonProps | null {
   const { state } = formSlice
-  const fromState = String(state[BUTTON_TEXT_FIELD_ID] ?? '').trim()
+  const fromState = String(state[DEMO_GRID_INPUT_ID] ?? '').trim()
   const text =
     fromState || 'Введите текст в поле «Текст кнопки» выше'
   const result: ButtonProps = {
@@ -29,7 +39,7 @@ function buttonConfigHook(formSlice: FormSlice): ButtonProps | null {
   return result
 }
 
-function textConfigHook(formSlice: FormSlice): TextProps | null {
+function useDemoText(formSlice: FormSlice): TextProps | null {
   const keys = Object.keys(formSlice.state)
   const preview =
     keys.length === 0
@@ -44,14 +54,14 @@ function textConfigHook(formSlice: FormSlice): TextProps | null {
   }
 }
 
-function gridConfigHook(_formSlice: FormSlice): Partial<GridProps> | null {
+function useDemoGrid(_formSlice: FormSlice): Partial<GridProps> | null {
   return {
     cols: 2,
     layoutProperty: { gap: 10 },
   }
 }
 
-function tableConfigHook(
+function useDemoTable(
   formSlice: FormSlice,
 ): Partial<ITableProps> & { dslCols?: number; dslRows?: number } | null {
   const state = formSlice.state ?? {}
@@ -102,18 +112,17 @@ function tableConfigHook(
   }
 }
 
-export default function demoFormConfigHookRegistry(): Record<
-  string,
-  (slice: FormSlice) => unknown
-> {
-  return {
-    'grid-1774124980818-7sslddg': gridConfigHook,
-    'text-1774124983057-g88o6vy': textConfigHook,
-    'button-1774124998740-k5kscyr': buttonConfigHook,
-    'text-table-1': textConfigHook,
-    'button-table-1': buttonConfigHook,
-    'button-table-2': buttonConfigHook,
-    'text-table-2': textConfigHook,
-    'table-demo-main': tableConfigHook,
-  }
-}
+const useDemo: FormConfigHookFactoryFor<DemoSchema> = () =>
+  ({
+    'demo.grid': useDemoGrid,
+    'demo.grid.text': useDemoText,
+    'demo.grid.button': useDemoButton,
+    'demo.table': useDemoTable,
+    'demo.table.text1': useDemoText,
+    'demo.table.textPlain': useDemoText,
+    'demo.table.text2': useDemoText,
+    'demo.table.button1': useDemoButton,
+    'demo.table.button2': useDemoButton,
+  }) satisfies DemoRegistry
+
+export default useDemo

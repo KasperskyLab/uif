@@ -8,6 +8,7 @@ import { CONTROL_EVENTS, FORM_EVENTS } from '../types/form-dsl'
 import { getDescriptor } from '../controls/registry'
 import { HandlersEditor } from './HandlersEditor'
 import { FormConfigHookPathEditor } from './FormConfigHookPathEditor'
+import { ControlIdPropsEditor } from './ControlIdPropsEditor'
 
 /** Поля ввода и прочие контролы с привязкой данных; `button`/`text`/`grid`/`table` — только id */
 const INPUT_CONTROL_TYPES: string[] = ['input', 'checkbox', 'radio', 'select', 'toggle', ...EXTRA_UI_DSL_TYPES]
@@ -405,6 +406,7 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
     <aside className="properties-panel editor-sidebar editor-sidebar--right" style={panelStyle}>
       <H6 style={{ margin: 0, textAlign: 'left' }}>Свойства</H6>
       <div className="props-section" style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', marginTop: 12 }}>
+        <ControlIdPropsEditor id={control.id} onUpdate={update} />
         {(() => {
           const descriptor = getDescriptor(control.type)
           return descriptor ? (
