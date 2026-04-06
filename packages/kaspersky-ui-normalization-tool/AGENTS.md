@@ -65,13 +65,12 @@ src/
   App.tsx                # корневой компонент: layout, хоткеи, интеграция хуков
   main.tsx               # точка входа; проверка наличия #root
   main.css
-  constants.ts           # FORM_EXT = '.ts' (новые файлы)
+  constants.ts           # FORM_SCHEMA_SUFFIX, FORM_EXT
   utils/
     getErrorMessage.ts   # единообразная обработка ошибок
-jsons/                   # демо-каталог: одна форма + обработчик (можно указать при разработке)
-  form-*.ts              # примеры форм (в т.ч. демо с grid/table)
-  handlers/
-    handler.js           # пример обработчика
+dsl/                     # DSL форм: подкаталог `formId/` с `formId.schema.ts` и `formId.config-hook.ts`
+  demo-form/             # демо (сетка + таблица)
+  ...
 e2e/                     # Playwright: app-load, demo-form
 TESTING-GAPS.md          # документация непокрытых сценариев тестирования
 ```
@@ -252,8 +251,8 @@ export default {
 
 ## Файлы и каталог формы
 
-- **useFormFilesList**: только **`.ts`** (`isFormModuleFile` из DSL).
-- **useFormFile**: **`loadFormDslBrowserRuntime()`** → **`parseFormTs(content)`** / **`formToTs`**, новые файлы — **`FORM_EXT = '.ts'`**.
+- **useFormFilesList**: только **`*.schema.ts`** (`isFormSchemaModuleFile` из DSL).
+- **useFormFile**: **`loadFormDslBrowserRuntime()`** → **`parseFormTs(content)`** / **`formToTs`**, новая форма — каталог `{id}/` и **`{id}.schema.ts`** (`FORM_SCHEMA_SUFFIX`).
 
 ---
 
@@ -278,7 +277,7 @@ export default {
 
 - **Типы**: возвращаемые типы хуков вынесены в интерфейсы (`UseFormFileResult`, `UseFormFilesListResult`) для переиспользования.
 - **Ошибки**: единообразная обработка через `getErrorMessage(err, fallback)` (`src/utils/getErrorMessage.ts`).
-- **Константы**: `FORM_EXT = '.ts'` в `src/constants.ts`; фильтр списка — `isFormModuleFile` из DSL.
+- **Константы**: `FORM_SCHEMA_SUFFIX`, `FORM_EXT` в `src/constants.ts`; фильтр списка — `isFormSchemaModuleFile` из DSL.
 - **Цвета**: в стилях предпочтительны CSS-переменные Hexa (`var(--primary--main, ...)`, `var(--surface--neutral, ...)`, `var(--tagsoutlined--neutral-border, ...)`) для единообразия и темы. Бейджи на холсте: зелёный (#00a88e) — данные, жёлтый (#fa8c16) — условия, фиолетовый (#722ed1) — обработчики.
 
 ---

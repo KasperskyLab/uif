@@ -1,4 +1,11 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  createContext,
+  useContext,
+} from 'react'
 import type { ButtonProps, GridProps, ITableProps, TextProps } from '@kaspersky/hexa-ui'
 import {
   Button,
@@ -161,6 +168,15 @@ type TableHookResult = (Partial<ITableProps> & {
   dataSourceFunction?: unknown
 }) | null
 
+/** Реестр: control.id → хук (результат вызова default export модуля формы). */
+type ConfigHookRegistry = Record<string, (formSlice: FormSlice) => unknown>
+
+const FormConfigHookContext = createContext<{
+  registry: ConfigHookRegistry | null
+  loading: boolean
+  path: string | null
+}>({ registry: null, loading: false, path: null })
+
 function ButtonWithHook({
   hookFn,
   formSlice,
@@ -176,38 +192,20 @@ function ButtonWithHook({
 function ButtonRenderer({
   control,
   formSlice,
-  formDirectoryHandle,
 }: {
   control: ButtonControl
   formSlice: FormSlice
-  formDirectoryHandle: FileSystemDirectoryHandle | null
 }): React.ReactElement | null {
-  const [hookFn, setHookFn] = useState<ButtonConfigHookFn | null>(null)
-  const [loading, setLoading] = useState(false)
+  const { registry, loading, path } = useContext(FormConfigHookContext)
+  const hookFn = (registry?.[control.id] ?? null) as ButtonConfigHookFn | null
 
-  useEffect(() => {
-    if (!control.configHook || !formDirectoryHandle) {
-      setHookFn(null)
-      return
+  if (!path || !hookFn) {
+    if (path && loading) {
+      return <Button mode="tertiary" text={`[${control.id}]`} disabled loading />
     }
-    setLoading(true)
-    let cancelled = false
-    loadConfigHookDefaultExport(formDirectoryHandle, control.configHook).then((fn) => {
-      if (!cancelled) {
-        setHookFn(() => fn as ButtonConfigHookFn)
-        setLoading(false)
-      }
-    })
-    return () => { cancelled = true }
-  }, [control.configHook, formDirectoryHandle])
-
-  if (!control.configHook) {
     return <Button mode="tertiary" text={`[${control.id}]`} disabled />
   }
-  if (loading || !hookFn) {
-    return <Button mode="tertiary" text={`[${control.id}]`} disabled loading />
-  }
-  return <ButtonWithHook key={control.configHook} hookFn={hookFn} formSlice={formSlice} />
+  return <ButtonWithHook key={control.id} hookFn={hookFn} formSlice={formSlice} />
 }
 
 function TextWithHook({
@@ -225,77 +223,41 @@ function TextWithHook({
 function TextRenderer({
   control,
   formSlice,
-  formDirectoryHandle,
 }: {
   control: TextControl
   formSlice: FormSlice
-  formDirectoryHandle: FileSystemDirectoryHandle | null
 }): React.ReactElement | null {
-  const [hookFn, setHookFn] = useState<TextConfigHookFn | null>(null)
-  const [loading, setLoading] = useState(false)
+  const { registry, loading, path } = useContext(FormConfigHookContext)
+  const hookFn = (registry?.[control.id] ?? null) as TextConfigHookFn | null
 
-  useEffect(() => {
-    if (!control.configHook || !formDirectoryHandle) {
-      setHookFn(null)
-      return
+  if (!path || !hookFn) {
+    if (path && loading) {
+      return (
+        <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+          …
+        </Text>
+      )
     }
-    setLoading(true)
-    let cancelled = false
-    loadConfigHookDefaultExport(formDirectoryHandle, control.configHook).then((fn) => {
-      if (!cancelled) {
-        setHookFn(() => fn as TextConfigHookFn)
-        setLoading(false)
-      }
-    })
-    return () => { cancelled = true }
-  }, [control.configHook, formDirectoryHandle])
-
-  if (!control.configHook) {
     return (
       <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
         [{control.id}]
       </Text>
     )
   }
-  if (loading || !hookFn) {
-    return (
-      <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-        …
-      </Text>
-    )
-  }
-  return <TextWithHook key={control.configHook} hookFn={hookFn} formSlice={formSlice} />
+  return <TextWithHook key={control.id} hookFn={hookFn} formSlice={formSlice} />
 }
 
 function GridRenderer({
   control: g,
   formSlice,
-  formDirectoryHandle,
   renderControl,
 }: {
   control: GridControl
   formSlice: FormSlice
-  formDirectoryHandle: FileSystemDirectoryHandle | null
   renderControl: (c: FormControl) => React.ReactNode
 }): React.ReactElement | null {
-  const [hookFn, setHookFn] = useState<GridConfigHookFn | null>(null)
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    if (!g.configHook || !formDirectoryHandle) {
-      setHookFn(null)
-      return
-    }
-    setLoading(true)
-    let cancelled = false
-    loadConfigHookDefaultExport(formDirectoryHandle, g.configHook).then((fn) => {
-      if (!cancelled) {
-        setHookFn(() => fn as GridConfigHookFn)
-        setLoading(false)
-      }
-    })
-    return () => { cancelled = true }
-  }, [g.configHook, formDirectoryHandle])
+  const { registry, loading, path } = useContext(FormConfigHookContext)
+  const hookFn = (registry?.[g.id] ?? null) as GridConfigHookFn | null
 
   const defaultGrid = (
     <Grid
@@ -313,18 +275,18 @@ function GridRenderer({
     </Grid>
   )
 
-  if (!g.configHook) {
+  if (!path || !hookFn) {
+    if (path && loading) {
+      return (
+        <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>
+          <Text type="BTR3" style={{ color: 'var(--text--secondary)', marginBottom: 8 }}>
+            …
+          </Text>
+          {defaultGrid}
+        </div>
+      )
+    }
     return <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>{defaultGrid}</div>
-  }
-  if (!formDirectoryHandle || loading || !hookFn) {
-    return (
-      <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>
-        <Text type="BTR3" style={{ color: 'var(--text--secondary)', marginBottom: 8 }}>
-          …
-        </Text>
-        {defaultGrid}
-      </div>
-    )
   }
   const partial = hookFn(formSlice)
   if (partial === null) return null
@@ -361,32 +323,14 @@ function GridRenderer({
 function TableRenderer({
   control: t,
   formSlice,
-  formDirectoryHandle,
   renderControl,
 }: {
   control: TableControl
   formSlice: FormSlice
-  formDirectoryHandle: FileSystemDirectoryHandle | null
   renderControl: (c: FormControl) => React.ReactNode
 }): React.ReactElement | null {
-  const [hookFn, setHookFn] = useState<TableConfigHookFn | null>(null)
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    if (!t.configHook || !formDirectoryHandle) {
-      setHookFn(null)
-      return
-    }
-    setLoading(true)
-    let cancelled = false
-    loadConfigHookDefaultExport(formDirectoryHandle, t.configHook).then((fn) => {
-      if (!cancelled) {
-        setHookFn(() => fn as TableConfigHookFn)
-        setLoading(false)
-      }
-    })
-    return () => { cancelled = true }
-  }, [t.configHook, formDirectoryHandle])
+  const { registry, loading, path } = useContext(FormConfigHookContext)
+  const hookFn = (registry?.[t.id] ?? null) as TableConfigHookFn | null
 
   const hasAnyChild = t.children.some((ch) => ch != null)
   const hasToolbar =
@@ -447,22 +391,21 @@ function TableRenderer({
 
   const bodyNoHook = !hasAnyChild && t.emptyText ? emptyBody : defaultTable
 
-  if (!t.configHook) {
+  if (!path || !hookFn) {
+    if (path && loading) {
+      return (
+        <div data-control-id={t.id} style={wrapStyle}>
+          {toolbarBlock}
+          <Text type="BTR3" style={{ color: 'var(--text--secondary)', marginBottom: 8 }}>
+            …
+          </Text>
+          {bodyNoHook}
+        </div>
+      )
+    }
     return (
       <div data-control-id={t.id} style={wrapStyle}>
         {toolbarBlock}
-        {bodyNoHook}
-      </div>
-    )
-  }
-
-  if (!formDirectoryHandle || loading || !hookFn) {
-    return (
-      <div data-control-id={t.id} style={wrapStyle}>
-        {toolbarBlock}
-        <Text type="BTR3" style={{ color: 'var(--text--secondary)', marginBottom: 8 }}>
-          …
-        </Text>
         {bodyNoHook}
       </div>
     )
@@ -536,22 +479,59 @@ export interface FormRendererProps {
   gap?: number
   /** Директория, в которой лежит файл формы (для разрешения configHook) */
   formDirectoryHandle?: FileSystemDirectoryHandle | null
+  /** Относительный путь к единому `.ts` модулю configHook формы */
+  formConfigHook?: string | null
   /** Ключ формы (например путь к файлу) — при смене сбрасывается состояние */
   formKey?: string
+}
+
+function buildConfigHookRegistry(
+  factory: unknown,
+): ConfigHookRegistry | null {
+  if (typeof factory !== 'function') return null
+  try {
+    const out = (factory as () => unknown)()
+    if (!out || typeof out !== 'object' || Array.isArray(out)) return null
+    return out as ConfigHookRegistry
+  } catch {
+    return null
+  }
 }
 
 export function FormRenderer({
   elements,
   gap = 16,
   formDirectoryHandle = null,
+  formConfigHook = null,
   formKey = '',
 }: FormRendererProps): React.ReactElement {
   const [formState, setFormState] = useState<Record<string, unknown>>(() =>
     getInitialFormState(elements)
   )
+  const [registry, setRegistry] = useState<ConfigHookRegistry | null>(null)
+  const [registryLoading, setRegistryLoading] = useState(false)
+
   useEffect(() => {
     setFormState(getInitialFormState(elements))
   }, [formKey])
+
+  useEffect(() => {
+    if (!formConfigHook || !formDirectoryHandle) {
+      setRegistry(null)
+      setRegistryLoading(false)
+      return
+    }
+    let cancelled = false
+    setRegistryLoading(true)
+    loadConfigHookDefaultExport(formDirectoryHandle, formConfigHook).then((factory) => {
+      if (cancelled) return
+      setRegistry(buildConfigHookRegistry(factory))
+      setRegistryLoading(false)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [formKey, formConfigHook, formDirectoryHandle])
 
   const updateValue = useCallback((id: string, value: unknown) => {
     setFormState((prev) => ({ ...prev, [id]: value }))
@@ -562,17 +542,22 @@ export function FormRenderer({
     [formState, elements]
   )
 
+  const hookCtx = useMemo(
+    () => ({
+      registry,
+      loading: registryLoading,
+      path: formConfigHook && formConfigHook.length > 0 ? formConfigHook : null,
+    }),
+    [registry, registryLoading, formConfigHook],
+  )
+
   function renderControl(control: FormControl): React.ReactNode {
     switch (control.type) {
       case 'button': {
         const c = control as ButtonControl
         return (
           <div key={c.id} data-control-id={c.id}>
-            <ButtonRenderer
-              control={c}
-              formSlice={formSlice}
-              formDirectoryHandle={formDirectoryHandle}
-            />
+            <ButtonRenderer control={c} formSlice={formSlice} />
           </div>
         )
       }
@@ -580,11 +565,7 @@ export function FormRenderer({
         const c = control as TextControl
         return (
           <div key={c.id} data-control-id={c.id}>
-            <TextRenderer
-              control={c}
-              formSlice={formSlice}
-              formDirectoryHandle={formDirectoryHandle}
-            />
+            <TextRenderer control={c} formSlice={formSlice} />
           </div>
         )
       }
@@ -617,7 +598,6 @@ export function FormRenderer({
             key={g.id}
             control={g}
             formSlice={formSlice}
-            formDirectoryHandle={formDirectoryHandle}
             renderControl={renderControl}
           />
         )
@@ -629,7 +609,6 @@ export function FormRenderer({
             key={t.id}
             control={t}
             formSlice={formSlice}
-            formDirectoryHandle={formDirectoryHandle}
             renderControl={renderControl}
           />
         )
@@ -773,8 +752,10 @@ export function FormRenderer({
   }
 
   return (
-    <Space size={gap} direction="vertical" style={{ width: '100%' }}>
-      {elements.map((el) => renderControl(el))}
-    </Space>
+    <FormConfigHookContext.Provider value={hookCtx}>
+      <Space size={gap} direction="vertical" style={{ width: '100%' }}>
+        {elements.map((el) => renderControl(el))}
+      </Space>
+    </FormConfigHookContext.Provider>
   )
 }

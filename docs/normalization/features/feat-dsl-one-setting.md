@@ -20,3 +20,4 @@
 ## Ссылки
 
 - Контракт динамики: [feat-config-hook.md](./feat-config-hook.md)
+- Один модуль на форму: [feat-form-config-hook-unified.md](./feat-form-config-hook-unified.md)

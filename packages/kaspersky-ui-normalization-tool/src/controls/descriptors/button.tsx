@@ -1,8 +1,8 @@
-import { Button, Text } from '@kaspersky/hexa-ui'
+import { Button } from '@kaspersky/hexa-ui'
 import { Cursor } from '@kaspersky/hexa-ui-icons/16'
 import type { ControlDescriptor } from '../types'
 import type { ButtonControl } from '../../types/form-dsl'
-import { ConfigHookIdentityPropsEditor } from '../../components/ConfigHookIdentityPropsEditor'
+import { ControlIdPropsEditor } from '../../components/ControlIdPropsEditor'
 
 export const buttonDescriptor: ControlDescriptor<ButtonControl> = {
   type: 'button',
@@ -23,13 +23,5 @@ export const buttonDescriptor: ControlDescriptor<ButtonControl> = {
     />
   ),
 
-  PropsEditor: ({ control, onUpdate, panelContext }) => (
-    <ConfigHookIdentityPropsEditor
-      id={control.id}
-      configHook={control.configHook}
-      onUpdate={onUpdate}
-      configHookPlaceholder="handlers/button.config-hook.ts"
-      formDirectoryHandle={panelContext?.formDirectoryHandle ?? null}
-    />
-  ),
+  PropsEditor: ({ control }) => <ControlIdPropsEditor id={control.id} />,
 }

@@ -1,6 +1,6 @@
 # Фича: превью в редакторе — единый рендер-движок
 
-**Родитель:** решение config-driven. Роадмап **п.3.1** ✅ ([якорь](../roadmap.md#normalization-roadmap-p31)); структура Grid/Table — **п.3.2** ✅ ([якорь](../roadmap.md#normalization-roadmap-p32)); WYSIWYG-canvas — **п.3.3** ✅ ([якорь](../roadmap.md#normalization-roadmap-p33)).
+**Родитель:** решение config-driven. Роадмап **п.3.1** ✅ ([якорь](../roadmap.md#normalization-roadmap-p31)); структура Grid/Table — **п.3.2** ✅ ([якорь](../roadmap.md#normalization-roadmap-p32)); WYSIWYG-canvas — **п.3.3** ✅ ([якорь](../roadmap.md#normalization-roadmap-p33)); один `configHook` на форму — **п.3.4.1** ✅ ([якорь](../roadmap.md#normalization-roadmap-p341), [план](../plans/plan-form-config-hook-341.md), [фича](./feat-form-config-hook-unified.md)).
 
 ---
 
@@ -56,4 +56,5 @@
 ## Ссылки
 
 - [plan-editor-preview.md](../plans/plan-editor-preview.md)
-- [roadmap §3.1](../roadmap.md#normalization-roadmap-p31), [§3.2](../roadmap.md#normalization-roadmap-p32), [§3.3](../roadmap.md#normalization-roadmap-p33)
+- [plan-form-config-hook-341.md](../plans/plan-form-config-hook-341.md) (п.3.4.1)
+- [roadmap §3.1](../roadmap.md#normalization-roadmap-p31), [§3.2](../roadmap.md#normalization-roadmap-p32), [§3.3](../roadmap.md#normalization-roadmap-p33), [§3.4.1](../roadmap.md#normalization-roadmap-p341), [§3.4](../roadmap.md#normalization-roadmap-p34)

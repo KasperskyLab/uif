@@ -166,6 +166,36 @@ function App() {
     selectFile,
   ])
 
+  const [formFileDirectoryHandle, setFormFileDirectoryHandle] =
+    useState<FileSystemDirectoryHandle | null>(null)
+
+  useEffect(() => {
+    if (e2eDemo || !directoryHandle || !selectedFile) {
+      setFormFileDirectoryHandle(null)
+      return
+    }
+    const parts = selectedFile.path.split('/').filter(Boolean).slice(0, -1)
+    if (parts.length === 0) {
+      setFormFileDirectoryHandle(directoryHandle)
+      return
+    }
+    let cancelled = false
+    ;(async () => {
+      try {
+        let dir: FileSystemDirectoryHandle = directoryHandle
+        for (const p of parts) {
+          dir = await dir.getDirectoryHandle(p)
+        }
+        if (!cancelled) setFormFileDirectoryHandle(dir)
+      } catch {
+        if (!cancelled) setFormFileDirectoryHandle(null)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [e2eDemo, directoryHandle, selectedFile?.path])
+
   const history = useHistory<FormControl[]>(formControls)
   const lastFormControlsRef = useRef(formControls)
 
@@ -685,8 +715,11 @@ function App() {
                           onControlsChange={historySetControls}
                           selectedId={selectedControlId}
                           onSelect={setSelectedControlId}
-                          formDirectoryHandle={directoryHandle}
+                          formDirectoryHandle={
+                            formFileDirectoryHandle ?? directoryHandle
+                          }
                           formKey={selectedFile.path}
+                          formConfigHook={formData.configHook ?? null}
                         />
                       ) : (
                         <FormCanvas

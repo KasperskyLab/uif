@@ -29,7 +29,7 @@
   },
   "include": [
     "src",
-    "jsons/handlers/**/*.ts",
+    "dsl/**/*.ts",
     "../../shared/types/form.ts",
     "../../shared/normalization-form-dsl/transpile-form-module.ts",
     "../../shared/normalization-form-dsl/parse-form-ts.ts",

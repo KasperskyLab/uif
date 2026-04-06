@@ -5,6 +5,7 @@ declare module '@viewer/components/FormRenderer' {
     elements: import('./types/form-dsl').FormControl[]
     gap?: number
     formDirectoryHandle?: FileSystemDirectoryHandle | null
+    formConfigHook?: string | null
     formKey?: string
   }
   export function FormRenderer(props: FormRendererProps): ReactElement

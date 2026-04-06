@@ -9,7 +9,7 @@ test.describe('Демо-форма (e2e режим)', () => {
   })
 
   test('открывается редактор с пустой формой', async ({ page }) => {
-    await expect(page.getByText(/Форма: e2e-demo\.ts/i)).toBeVisible()
+    await expect(page.getByText(/Форма:.*E2E Demo/i)).toBeVisible()
     await expect(page.getByRole('heading', { name: /Разметка/i })).toBeVisible()
   })
 

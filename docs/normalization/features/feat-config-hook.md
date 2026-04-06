@@ -6,13 +6,13 @@
 
 ## Описание
 
-В динамическом режиме пропсы экземпляра компонента ДС задаёт **один** TS-модуль (**`configHook`**). Колбэки (`onClick`, `onChange`, …) объявляются **внутри** возвращаемого объекта пропсов.
+В динамическом режиме пропсы экземпляра компонента ДС задаёт логика **`configHook`**. Для **нормализованной** формы модуль **один на всю форму** — см. [feat-form-config-hook-unified](./feat-form-config-hook-unified.md): default export возвращает объект **`control.id` → хук контрола**. Колбэки (`onClick`, `onChange`, …) объявляются **внутри** объекта пропсов, который возвращает функция для конкретного контрола.
 
 ---
 
 ## Требования
 
-- **`config-hook.api.input`:** единственный аргумент — **`FormSlice`** (`state` + `config.elements`); тип контрола задаётся самим модулем (один файл — один вид).
+- **`config-hook.api.input`:** единственный аргумент функции для контрола — **`FormSlice`** (`state` + `config.elements`); тип контрола задаётся телом этой функции в форменном модуле (по ключу **`control.id`** в реестре).
 - **`config-hook.api.output`:** полный объект пропсов экземпляра компонента ДС **или `null`**; **`null`** — не монтировать компонент; отдельных полей `visible` в DSL для этого нет.
 - **`config-hook.react`:** модуль исполняется как React-хук; пересчёт через React и стейт, без декларативного списка зависимостей в DSL.
 - **`config-hook.context.layers`:** в колбэках автор разводит контекст **формы/инструмента** и контекст **Hexa** (события, пропсы экземпляра).
@@ -37,5 +37,5 @@
 
 ## Ссылки
 
-- Пример стиля: `packages/kaspersky-ui-normalization-tool/jsons/handlers/*.config-hook.ts`
+- Пример стиля: `packages/kaspersky-ui-normalization-tool/dsl/demo-form/demo-form.config-hook.ts`
 - Код: `loadConfigHookDefaultExport` в tool и viewer

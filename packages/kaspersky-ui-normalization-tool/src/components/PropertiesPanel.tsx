@@ -7,8 +7,9 @@ import { EXTRA_UI_DSL_TYPES } from '../types/form-dsl'
 import { CONTROL_EVENTS, FORM_EVENTS } from '../types/form-dsl'
 import { getDescriptor } from '../controls/registry'
 import { HandlersEditor } from './HandlersEditor'
+import { FormConfigHookPathEditor } from './FormConfigHookPathEditor'
 
-/** `text` (типографика + configHook) не входит — паритет с `button`, без привязки данных в панели */
+/** Поля ввода и прочие контролы с привязкой данных; `button`/`text`/`grid`/`table` — только id */
 const INPUT_CONTROL_TYPES: string[] = ['input', 'checkbox', 'radio', 'select', 'toggle', ...EXTRA_UI_DSL_TYPES]
 const DATA_TYPE_OPTIONS = [
   { value: 'string', label: 'string' },
@@ -379,6 +380,14 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
               handlers={formData.handlers ?? {}}
               onChange={(h) => onFormUpdate({ handlers: Object.keys(h).length > 0 ? h : undefined })}
               directoryHandle={formDirectoryHandle}
+            />
+            <FormConfigHookPathEditor
+              value={formData.configHook}
+              onChange={(path) =>
+                onFormUpdate({ configHook: path || undefined })
+              }
+              formDirectoryHandle={formDirectoryHandle}
+              placeholder={`${formData.id}.config-hook.ts`}
             />
           </div>
         ) : (

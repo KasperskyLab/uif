@@ -41,6 +41,7 @@
 | Рабочее пространство | [feat-workspace-browser.md](./features/feat-workspace-browser.md) | FSA, IndexedDB, `?form=`, сценарии |
 | Архитектура и направления | [feat-architecture-directions.md](./features/feat-architecture-directions.md) | Shared-модуль, Storybook, совместимость |
 | Превью в редакторе (цель) | [feat-editor-preview-target.md](./features/feat-editor-preview-target.md) | Роадмап п.3.1 / п.3.2 |
+| Один `configHook` на форму | [feat-form-config-hook-unified.md](./features/feat-form-config-hook-unified.md) | ✅ п.3.4.1: `dsl/{formId}/` — `{formId}.schema.ts` + `{formId}.config-hook.ts` |
 | Структура репозитория | [feat-repo-layout.md](./features/feat-repo-layout.md) | Пакеты, `shared/` |
 
 ---

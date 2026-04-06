@@ -13,6 +13,11 @@ export interface FormData {
   name: string
   /** Идентификатор формы */
   id: string
+  /**
+   * Единый модуль `configHook` на форму (только `.ts`).
+   * Каноническое имя рядом с файлом формы: `{id}.config-hook.ts`.
+   */
+  configHook?: string
   /** Схема данных формы: имя поля -> тип и описание */
   schema?: Record<string, FieldSchema>
   /** Обработчики событий формы: имя события → путь к файлу-обработчику */

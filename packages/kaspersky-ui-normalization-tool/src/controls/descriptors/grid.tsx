@@ -2,7 +2,7 @@ import { Grid, GridItem, Space, Text } from '@kaspersky/hexa-ui'
 import { ArrangeGrid } from '@kaspersky/hexa-ui-icons/16'
 import type { ControlDescriptor } from '../types'
 import type { FormControl, GridControl } from '../../types/form-dsl'
-import { ConfigHookIdentityPropsEditor } from '../../components/ConfigHookIdentityPropsEditor'
+import { ControlIdPropsEditor } from '../../components/ControlIdPropsEditor'
 import { GridRowsColsPropsEditor } from '../../components/GridRowsColsPropsEditor'
 import {
   defaultGridLayoutRows,
@@ -43,16 +43,10 @@ export const gridDescriptor: ControlDescriptor<GridControl> = {
     )
   },
 
-  PropsEditor: ({ control, onUpdate, panelContext }) => (
+  PropsEditor: ({ control, onUpdate }) => (
     <Space size={12} direction="vertical" style={{ width: '100%' }}>
       <GridRowsColsPropsEditor control={control as GridControl} onUpdate={onUpdate} />
-      <ConfigHookIdentityPropsEditor
-        id={control.id}
-        configHook={(control as GridControl).configHook}
-        onUpdate={onUpdate}
-        configHookPlaceholder="handlers/grid.config-hook.ts"
-        formDirectoryHandle={panelContext?.formDirectoryHandle ?? null}
-      />
+      <ControlIdPropsEditor id={control.id} />
     </Space>
   ),
 }

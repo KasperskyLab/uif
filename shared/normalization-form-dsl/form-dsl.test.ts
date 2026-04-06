@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { parseFormTs } from './parse-form-ts'
 import {
+  isFormSchemaModuleFile,
   formToJsonString,
   formToJson,
   formToTs,
@@ -23,13 +24,23 @@ import {
   type Condition,
 } from './form-dsl'
 
-const textControl = (id: string, configHook?: string): TextControl => ({
+const textControl = (id: string): TextControl => ({
   type: 'text',
   id,
-  ...(configHook ? { configHook } : {}),
 })
 
 describe('form-dsl', () => {
+  describe('isFormSchemaModuleFile', () => {
+    it('accepts *.schema.ts', () => {
+      expect(isFormSchemaModuleFile('demo-form.schema.ts')).toBe(true)
+      expect(isFormSchemaModuleFile('path/to/x.schema.ts')).toBe(true)
+    })
+    it('rejects other ts files', () => {
+      expect(isFormSchemaModuleFile('demo-form.config-hook.ts')).toBe(false)
+      expect(isFormSchemaModuleFile('form.ts')).toBe(false)
+    })
+  })
+
   describe('parseFormTs', () => {
     /** Тесты зависят от окружения: в jsdom может не быть полной поддержки URL.createObjectURL / dynamic import. */
     const hasBlobURL =
@@ -48,7 +59,7 @@ describe('form-dsl', () => {
         expect(data.id).toBe('form-1')
         expect(data.elements).toHaveLength(1)
         expect(data.elements[0].type).toBe('text')
-        expect((data.elements[0] as TextControl).configHook).toBeUndefined()
+        expect((data.elements[0] as TextControl).id).toBe('t1')
       }
     )
 
@@ -106,6 +117,17 @@ describe('form-dsl', () => {
       expect(str).toContain('"name": "Serial"')
       expect(JSON.parse(str)).toEqual(obj)
     })
+
+    it('includes form-level configHook in JSON', () => {
+      const form: FormData = {
+        name: 'F',
+        id: 'fid',
+        configHook: 'fid.config-hook.ts',
+        elements: [],
+      }
+      const obj = formToJson(form)
+      expect(obj.configHook).toBe('fid.config-hook.ts')
+    })
   })
 
   describe('formToTs', () => {
@@ -113,60 +135,40 @@ describe('form-dsl', () => {
       const form: FormData = {
         name: 'JsForm',
         id: 'j1',
-        elements: [textControl('t1', 'handlers/text.config-hook.ts')],
+        elements: [textControl('t1')],
       }
       const js = formToTs(form)
       expect(js).toContain('export default')
       expect(js).toContain('name: "JsForm"')
       expect(js).toContain('id: "j1"')
       expect(js).toContain('elements:')
-      expect(js).toContain('() => import("./handlers/text.config-hook.ts")')
+    })
+
+    it('outputs form-level configHook as dynamic import', () => {
+      const form: FormData = {
+        name: 'Hooked',
+        id: 'hf1',
+        configHook: 'hf1.config-hook.ts',
+        elements: [textControl('t1')],
+      }
+      const js = formToTs(form)
+      expect(js).toContain('() => import("./hf1.config-hook.ts")')
     })
   })
 
   describe('controlToJson', () => {
-    it('serializes text control with configHook', () => {
-      const c = textControl('t1', 'handlers/text.config-hook.ts')
+    it('serializes text control without per-control configHook', () => {
+      const c = textControl('t1')
       const json = controlToJson(c) as Record<string, unknown>
       expect(json.type).toBe('text')
-      expect(json.configHook).toBe('handlers/text.config-hook.ts')
+      expect(json.configHook).toBeUndefined()
     })
 
-    it('serializes button control with configHook', () => {
-      const c: ButtonControl = {
-        type: 'button', id: 'b1', configHook: 'handlers/button.config-hook.ts',
-      }
+    it('serializes button control', () => {
+      const c: ButtonControl = { type: 'button', id: 'b1' }
       const out = controlToJson(c) as Record<string, unknown>
       expect(out.type).toBe('button')
-      expect(out.configHook).toBe('handlers/button.config-hook.ts')
-    })
-
-    it('serializes grid control with configHook', () => {
-      const c: GridControl = {
-        type: 'grid',
-        id: 'g1',
-        rows: 1,
-        cols: 1,
-        children: [null],
-        configHook: 'handlers/grid.config-hook.ts',
-      }
-      const out = controlToJson(c) as Record<string, unknown>
-      expect(out.type).toBe('grid')
-      expect(out.configHook).toBe('handlers/grid.config-hook.ts')
-    })
-
-    it('serializes table control with configHook', () => {
-      const c: TableControl = {
-        type: 'table',
-        id: 'tbl1',
-        rows: 1,
-        cols: 1,
-        children: [null],
-        configHook: 'handlers/table.config-hook.ts',
-      }
-      const out = controlToJson(c) as Record<string, unknown>
-      expect(out.type).toBe('table')
-      expect(out.configHook).toBe('handlers/table.config-hook.ts')
+      expect(out.configHook).toBeUndefined()
     })
   })
 
@@ -276,68 +278,6 @@ describe('form-dsl', () => {
       expect(js).toContain('() => import("./handlers/change.js")')
     })
 
-    it('formToTs outputs button configHook as dynamic import', () => {
-      const form: FormData = {
-        name: 'Test',
-        id: 'f1',
-        elements: [
-          { type: 'button', id: 'b1', configHook: 'handlers/button.config-hook.ts' },
-        ],
-      }
-      const js = formToTs(form)
-      expect(js).toContain('() => import("./handlers/button.config-hook.ts")')
-    })
-
-    it('formToTs outputs text configHook as dynamic import', () => {
-      const form: FormData = {
-        name: 'Test',
-        id: 'f1',
-        elements: [
-          { type: 'text', id: 't1', configHook: 'handlers/text.config-hook.ts' },
-        ],
-      }
-      const js = formToTs(form)
-      expect(js).toContain('() => import("./handlers/text.config-hook.ts")')
-    })
-
-    it('formToTs outputs grid configHook as dynamic import', () => {
-      const form: FormData = {
-        name: 'Test',
-        id: 'f1',
-        elements: [
-          {
-            type: 'grid',
-            id: 'g1',
-            rows: 1,
-            cols: 1,
-            children: [null],
-            configHook: 'handlers/grid.config-hook.ts',
-          },
-        ],
-      }
-      const js = formToTs(form)
-      expect(js).toContain('() => import("./handlers/grid.config-hook.ts")')
-    })
-
-    it('formToTs outputs table configHook as dynamic import', () => {
-      const form: FormData = {
-        name: 'Test',
-        id: 'f1',
-        elements: [
-          {
-            type: 'table',
-            id: 't1',
-            rows: 1,
-            cols: 1,
-            children: [null],
-            configHook: 'handlers/table.config-hook.ts',
-          },
-        ],
-      }
-      const js = formToTs(form)
-      expect(js).toContain('() => import("./handlers/table.config-hook.ts")')
-    })
-
     it('formToTs outputs form-level handlers as import functions', () => {
       const form: FormData = {
         name: 'Test',
@@ -362,14 +302,6 @@ describe('form-dsl', () => {
       expect(json.handlers).toEqual({ onSubmit: 'handlers/submit.js' })
     })
 
-    it('controlToJson preserves configHook for button', () => {
-      const c: FormControl = {
-        type: 'button', id: 'h1',
-        configHook: 'handlers/button.config-hook.ts',
-      }
-      const json = controlToJson(c) as Record<string, unknown>
-      expect(json.configHook).toBe('handlers/button.config-hook.ts')
-    })
   })
 
   describe('removeControlFromTree', () => {
@@ -433,25 +365,28 @@ describe('form-dsl', () => {
 
   describe('updateControlInTree', () => {
     it('updates control in flat list', () => {
-      const tree: FormControl[] = [textControl('a'), textControl('b')]
+      const tree: FormControl[] = [
+        { type: 'input', id: 'a', placeholder: '' },
+        { type: 'input', id: 'b', placeholder: '' },
+      ]
       const next = updateControlInTree(tree, 'b', {
-        configHook: 'handlers/t.config-hook.ts',
+        placeholder: 'x',
       })
-      const updated = next[1] as TextControl
-      expect(updated.configHook).toBe('handlers/t.config-hook.ts')
+      const updated = next[1] as { placeholder?: string }
+      expect(updated.placeholder).toBe('x')
     })
 
     it('updates nested control in grid', () => {
       const tree: FormControl[] = [
         {
           type: 'grid', id: 'g1', rows: 1, cols: 2,
-          children: [textControl('nested', 'old.ts'), null],
+          children: [textControl('nested'), null],
         },
       ]
-      const next = updateControlInTree(tree, 'nested', { configHook: 'new.ts' })
+      const next = updateControlInTree(tree, 'nested', { fieldName: 'fn' })
       const grid = next[0] as GridControl
       const updated = grid.children[0] as TextControl
-      expect(updated.configHook).toBe('new.ts')
+      expect(updated.fieldName).toBe('fn')
     })
   })
 

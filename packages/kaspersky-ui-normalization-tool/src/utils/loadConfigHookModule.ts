@@ -1,7 +1,8 @@
 import type { FormSlice } from '../types/form-dsl'
 import { loadFormDslBrowserRuntime } from '@normalization/load-form-dsl-runtime'
 
-export type ConfigHookDefaultFn = (formSlice: FormSlice) => unknown
+/** Default export формы: фабрика реестра хуков по `control.id`. */
+export type FormConfigHookFactory = () => Record<string, (formSlice: FormSlice) => unknown>
 
 async function getFileHandleFromPath(
   dir: FileSystemDirectoryHandle,
@@ -16,11 +17,11 @@ async function getFileHandleFromPath(
   return current.getFileHandle(parts[parts.length - 1])
 }
 
-/** Загружает default export из `.ts` configHook (транспиляция + dynamic import). */
+/** Загружает default export модуля (транспиляция + dynamic import). */
 export async function loadConfigHookDefaultExport(
   dir: FileSystemDirectoryHandle,
   path: string,
-): Promise<ConfigHookDefaultFn | null> {
+): Promise<FormConfigHookFactory | null> {
   try {
     const { transpileConfigHookSource, isConfigHookPathTs } =
       await loadFormDslBrowserRuntime()

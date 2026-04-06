@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from 'react'
 import type { FormControl, FormData } from '../types/form-dsl'
 import { createEmptyFormData } from '../types/form-dsl'
 import { loadFormDslBrowserRuntime } from '@normalization/load-form-dsl-runtime'
-import { FORM_EXT } from '../constants'
+import { FORM_SCHEMA_SUFFIX } from '../constants'
 import { getErrorMessage } from '../utils/getErrorMessage'
 
 export interface SelectedFormFile {
@@ -39,7 +39,7 @@ declare global {
 const e2eDemoFormData: FormData = { name: 'E2E Demo', id: 'e2e-demo', elements: [] }
 
 const e2eFakeFile: SelectedFormFile = {
-  path: 'e2e-demo.ts',
+  path: `e2e-demo/e2e-demo${FORM_SCHEMA_SUFFIX}`,
   handle: {} as FileSystemFileHandle,
 }
 
@@ -143,9 +143,19 @@ export function useFormFile(
       if (permission !== 'granted') {
         return 'Нет разрешения на запись в каталог'
       }
-      const path = `form-${Date.now()}${FORM_EXT}`
-      const fileHandle = await directoryHandle.getFileHandle(path, { create: true })
-      const initialData = createEmptyFormData()
+      const folderId = `form-${Date.now()}`
+      const subdir = await directoryHandle.getDirectoryHandle(folderId, {
+        create: true,
+      })
+      const schemaName = `${folderId}${FORM_SCHEMA_SUFFIX}`
+      const fileHandle = await subdir.getFileHandle(schemaName, { create: true })
+      const path = `${folderId}/${schemaName}`
+      const empty = createEmptyFormData()
+      const initialData: FormData = {
+        ...empty,
+        id: folderId,
+        name: empty.name || 'Новая форма',
+      }
       const writable = await fileHandle.createWritable()
       const { formToTs } = await loadFormDslBrowserRuntime()
       await writable.write(formToTs(initialData))

@@ -6,9 +6,18 @@ import type { FieldSchema, FormData } from '../types/form'
 /** Расширение файла формы (только TypeScript). */
 export const FORM_MODULE_FILE_EXT = '.ts' as const
 
-/** Имя файла — модуль формы (`.ts`). */
+/** Имя файла — модуль формы (любой `.ts`). */
 export function isFormModuleFile(fileNameOrPath: string): boolean {
   return fileNameOrPath.toLowerCase().endsWith('.ts')
+}
+
+/**
+ * Описание формы в каталоге `dsl/{formId}/`: файл `{formId}.schema.ts`.
+ */
+export const FORM_SCHEMA_FILE_SUFFIX = '.schema.ts' as const
+
+export function isFormSchemaModuleFile(fileNameOrPath: string): boolean {
+  return fileNameOrPath.toLowerCase().endsWith(FORM_SCHEMA_FILE_SUFFIX)
 }
 
 /** Маппинг идентификатора компонента (реализация) → семантический тип DSL. Кнопка в DSL — type: "button", не метатип. */
@@ -143,8 +152,6 @@ export interface GridControl extends FormControlBase {
   rows: number
   cols: number
   children: (FormControl | null)[]
-  /** Путь к модулю configHook; только `.ts` (см. tooling.md). */
-  configHook?: string
 }
 
 /** Ряд: горизонтальный flex-контейнер для размещения контролов бок о бок. */
@@ -180,8 +187,6 @@ export interface TableControl extends FormControlBase {
   disabled?: boolean
   /** Тулбар над таблицей (как в Hexa UI Table settings) */
   toolbar?: TableToolbarConfig
-  /** Путь к модулю configHook; только `.ts` (см. tooling.md). */
-  configHook?: string
 }
 
 /** Один таб: ключ, подпись, дочерние контролы (контейнер). */
@@ -222,14 +227,10 @@ export interface ToolbarControl extends FormControlBase {
 
 export interface ButtonControl extends FormControlIdentity {
   type: 'button'
-  /** Путь к модулю configHook; только `.ts` (см. tooling.md). */
-  configHook?: string
 }
 
 export interface TextControl extends FormControlBase {
   type: 'text'
-  /** Путь к модулю configHook; только `.ts` (см. tooling.md). */
-  configHook?: string
 }
 
 export interface InputControl extends FormControlBase {
@@ -453,21 +454,10 @@ function normalizeControl(item: unknown): FormControl | null {
   const kind = o.kind as string | undefined
 
   if (kind === 'button' || type === 'button') {
-    const c: ButtonControl = { type: 'button', id }
-    if (typeof o.configHook === 'string') c.configHook = o.configHook
-    else if (typeof o.configHook === 'function') {
-      const path = getImportPathFromHandler(o.configHook)
-      if (path) c.configHook = path
-    }
-    return c
+    return { type: 'button', id }
   }
   if (type === 'text') {
     const c: TextControl = { type: 'text', id }
-    if (typeof o.configHook === 'string') c.configHook = o.configHook
-    else if (typeof o.configHook === 'function') {
-      const path = getImportPathFromHandler(o.configHook)
-      if (path) c.configHook = path
-    }
     return applyFieldBinding(c)
   }
   if (type === 'input') {
@@ -568,11 +558,6 @@ function normalizeControl(item: unknown): FormControl | null {
         if (x != null) c.children[i] = x
       }
     }
-    if (typeof o.configHook === 'string') c.configHook = o.configHook
-    else if (typeof o.configHook === 'function') {
-      const path = getImportPathFromHandler(o.configHook)
-      if (path) c.configHook = path
-    }
     return applyFieldBinding(c)
   }
   if (type === 'row') {
@@ -636,11 +621,6 @@ function normalizeControl(item: unknown): FormControl | null {
         if (x != null) c.children[i] = x
       }
     }
-    if (typeof o.configHook === 'string') c.configHook = o.configHook
-    else if (typeof o.configHook === 'function') {
-      const path = getImportPathFromHandler(o.configHook)
-      if (path) c.configHook = path
-    }
     return applyFieldBinding(c)
   }
   if (type === 'tabs') {
@@ -702,9 +682,7 @@ function normalizeControl(item: unknown): FormControl | null {
 export function controlToJson(c: FormControl): Record<string, unknown> {
   if (c.type === 'button') {
     const b = c as ButtonControl
-    const out: Record<string, unknown> = { type: 'button', id: b.id }
-    if (b.configHook) out.configHook = b.configHook
-    return out
+    return { type: 'button', id: b.id }
   }
   const bc = c as FormControlBase
   const base: Record<string, unknown> = { type: c.type, id: c.id }
@@ -716,10 +694,7 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
   if (bc.disabledWhen) base.disabledWhen = bc.disabledWhen
   if (bc.handlers && Object.keys(bc.handlers).length > 0) base.handlers = { ...bc.handlers }
   if (c.type === 'text') {
-    const t = c as TextControl
-    const out = { ...base }
-    if (t.configHook) out.configHook = t.configHook
-    return out
+    return { ...base }
   }
   if (c.type === 'input') {
     const i = c as InputControl
@@ -755,14 +730,12 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
   }
   if (c.type === 'grid') {
     const g = c as GridControl
-    const out: Record<string, unknown> = {
+    return {
       ...base,
       rows: g.rows,
       cols: g.cols,
       children: g.children.map((ch) => (ch ? controlToJson(ch) : null)),
     }
-    if (g.configHook) out.configHook = g.configHook
-    return out
   }
   if (c.type === 'row') {
     const r = c as RowControl
@@ -779,7 +752,6 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
     if (t.columnVerticalAlign != null) out.columnVerticalAlign = t.columnVerticalAlign
     if (t.disabled != null) out.disabled = t.disabled
     if (t.toolbar != null) out.toolbar = t.toolbar
-    if (t.configHook) out.configHook = t.configHook
     return out
   }
   if (c.type === 'tabs') {
@@ -830,7 +802,14 @@ export function normalizeFormData(data: unknown): FormData {
     return { name: '', id: `form-${Date.now()}`, elements }
   }
   if (data && typeof data === 'object' && Array.isArray((data as { elements?: unknown }).elements)) {
-    const obj = data as { name?: unknown; id?: unknown; schema?: unknown; handlers?: unknown; elements: unknown[] }
+    const obj = data as {
+      name?: unknown
+      id?: unknown
+      configHook?: unknown
+      schema?: unknown
+      handlers?: unknown
+      elements: unknown[]
+    }
     const elements = obj.elements
       .map(normalizeControl)
       .filter((x: FormControl | null): x is FormControl => x != null)
@@ -863,6 +842,12 @@ export function normalizeFormData(data: unknown): FormData {
       }
       if (Object.keys(formHandlers).length > 0) result.handlers = formHandlers
     }
+    if (typeof obj.configHook === 'string' && obj.configHook) {
+      result.configHook = obj.configHook
+    } else if (typeof obj.configHook === 'function') {
+      const path = getImportPathFromHandler(obj.configHook)
+      if (path) result.configHook = path
+    }
     return result
   }
   return emptyFormData()
@@ -873,6 +858,9 @@ export function formToJson(form: FormData): Record<string, unknown> {
   const result: Record<string, unknown> = {
     name: form.name,
     id: form.id,
+  }
+  if (form.configHook) {
+    result.configHook = form.configHook
   }
   if (form.schema && Object.keys(form.schema).length > 0) {
     result.schema = form.schema
@@ -910,9 +898,14 @@ export function formToTs(form: FormData): string {
     }
     handlersSource = `\n  handlers: ${formatJsValue(converted, '  ')},`
   }
+  let configHookSource = ''
+  if (form.configHook) {
+    const pathEsc = form.configHook.replace(/\\/g, '/')
+    configHookSource = `\n  configHook: () => import(${JSON.stringify('./' + pathEsc)}),`
+  }
   return `export default {
   name: ${nameEsc},
-  id: ${idEsc},${schemaSource}${handlersSource}
+  id: ${idEsc},${schemaSource}${handlersSource}${configHookSource}
   elements: [
 ${elementsSource}
   ]
@@ -947,10 +940,6 @@ function formatJsValue(val: unknown, indent: string): string {
 
 /** Рекурсивно заменяет в объекте (результат controlToJson) строковые handlers на строки-импорты. */
 function convertHandlersToImportInObj(obj: Record<string, unknown>): void {
-  if (typeof obj.configHook === 'string' && obj.configHook) {
-    const pathEsc = (obj.configHook as string).replace(/\\/g, '/')
-    obj.configHook = `() => import(${JSON.stringify('./' + pathEsc)})`
-  }
   const handlerEntries: [string, string][] = obj.handlers && typeof obj.handlers === 'object'
     ? Object.entries(obj.handlers as Record<string, string>)
     : []

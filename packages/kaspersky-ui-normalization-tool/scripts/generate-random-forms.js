@@ -1,19 +1,19 @@
 /**
- * Генерирует 10 случайных форм в папке jsons. Запуск: node scripts/generate-random-forms.js
+ * Генерирует 10 случайных форм в `dsl/`. У каждой формы — каталог `form-…/` и
+ * файл `form-….schema.ts`. Запуск: node scripts/generate-random-forms.js
  */
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const OUT_DIR = path.join(__dirname, '..', 'jsons')
+const OUT_DIR = path.join(__dirname, '..', 'dsl')
 
 const NAMES = [
   'Регистрация', 'Опрос', 'Настройки', 'Профиль', 'Заказ', 'Обратная связь',
-  'Логин', 'Фильтры', 'Поиск', 'Карточка товара'
+  'Логин', 'Фильтры', 'Поиск', 'Карточка товара',
 ]
 
-const BUTTON_MODES = ['primary', 'secondary', 'tertiary', 'dangerFilled', 'dangerOutlined']
 const LABEL_POSITIONS = ['after', 'before']
 const META_COMPONENTS = ['Button', 'Text', 'Textbox', 'Badge', 'Tag', 'Link', 'H6']
 
@@ -31,7 +31,7 @@ function randInt(min, max) {
 
 function elements(count) {
   const types = [
-    'button', 'text', 'input', 'checkbox', 'radio', 'select', 'toggle', 'meta'
+    'button', 'text', 'input', 'checkbox', 'radio', 'select', 'toggle', 'meta',
   ]
   const out = []
   for (let i = 0; i < count; i++) {
@@ -42,14 +42,12 @@ function elements(count) {
         out.push({
           type: 'button',
           id: cid,
-          ...(Math.random() > 0.5 && { configHook: 'handlers/button.config-hook.ts' })
         })
         break
       case 'text':
         out.push({
           type: 'text',
           id: cid,
-          ...(Math.random() > 0.5 && { configHook: 'handlers/text.config-hook.ts' }),
         })
         break
       case 'input':
@@ -58,7 +56,7 @@ function elements(count) {
           id: cid,
           text: pick(['Имя', 'Email', 'Телефон', 'Адрес']),
           value: '',
-          placeholder: pick(['Введите значение', '...', 'Не обязательно'])
+          placeholder: pick(['Введите значение', '...', 'Не обязательно']),
         })
         break
       case 'checkbox':
@@ -66,7 +64,7 @@ function elements(count) {
           type: 'checkbox',
           id: cid,
           text: pick(['Согласен с условиями', 'Подписаться', 'Запомнить']),
-          checked: Math.random() > 0.5
+          checked: Math.random() > 0.5,
         })
         break
       case 'radio':
@@ -76,10 +74,10 @@ function elements(count) {
           options: [
             { label: 'Вариант A', value: 'a' },
             { label: 'Вариант B', value: 'b' },
-            { label: 'Вариант C', value: 'c' }
+            { label: 'Вариант C', value: 'c' },
           ],
           value: pick(['a', 'b', 'c']),
-          vertical: Math.random() > 0.5
+          vertical: Math.random() > 0.5,
         })
         break
       case 'select':
@@ -89,10 +87,10 @@ function elements(count) {
           options: [
             { label: 'Опция 1', value: '1' },
             { label: 'Опция 2', value: '2' },
-            { label: 'Опция 3', value: '3' }
+            { label: 'Опция 3', value: '3' },
           ],
           placeholder: 'Выберите...',
-          mode: Math.random() > 0.8 ? 'multiple' : undefined
+          mode: Math.random() > 0.8 ? 'multiple' : undefined,
         })
         break
       case 'toggle':
@@ -101,7 +99,7 @@ function elements(count) {
           id: cid,
           text: pick(['Включить', 'Уведомления', 'Тёмная тема']),
           checked: Math.random() > 0.5,
-          labelPosition: pick(LABEL_POSITIONS)
+          labelPosition: pick(LABEL_POSITIONS),
         })
         break
       case 'meta':
@@ -109,7 +107,7 @@ function elements(count) {
           type: 'meta',
           id: cid,
           componentId: pick(META_COMPONENTS),
-          props: { text: pick(['Мета', 'Бейдж', 'Ссылка']), mode: 'primary' }
+          props: { text: pick(['Мета', 'Бейдж', 'Ссылка']), mode: 'primary' },
         })
         break
       default:
@@ -124,9 +122,10 @@ function toJsSource(form) {
   const elLines = form.elements.map((el) => {
     const entries = Object.entries(el).filter(([, v]) => v !== undefined)
     const inner = entries.map(([k, v]) => {
-      const val = k === 'configHook' && typeof v === 'string'
-        ? `() => import("./${v.replace(/\\/g, '/')}")`
-        : JSON.stringify(v)
+      let val = JSON.stringify(v)
+      if (k === 'configHook' && typeof v === 'string') {
+        val = `() => import("./${v.replace(/\\/g, '/')}")`
+      }
       return `      ${esc(k)}: ${val}`
     }).join(',\n')
     return `    {\n${inner}\n    }`
@@ -148,15 +147,18 @@ function generateForms() {
     let name = pick(NAMES)
     while (usedNames.has(name)) name = pick(NAMES)
     usedNames.add(name)
+    const formId = `form-random-${Date.now()}-${n}-${Math.random().toString(36).slice(2, 6)}`
     const form = {
       name,
-      id: `form-${Date.now()}-${n}-${Math.random().toString(36).slice(2, 6)}`,
-      elements: elements(randInt(2, 6))
+      id: formId,
+      elements: elements(randInt(2, 6)),
     }
-    const filename = `form-random-${n}.ts`
-    const filepath = path.join(OUT_DIR, filename)
+    const formDir = path.join(OUT_DIR, formId)
+    fs.mkdirSync(formDir, { recursive: true })
+    const filename = `${formId}.schema.ts`
+    const filepath = path.join(formDir, filename)
     fs.writeFileSync(filepath, toJsSource(form), 'utf8')
-    console.log('Created', filename)
+    console.log('Created', path.join(formId, filename))
   }
 }
 

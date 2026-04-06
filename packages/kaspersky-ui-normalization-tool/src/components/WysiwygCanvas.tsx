@@ -28,6 +28,7 @@ export interface WysiwygCanvasProps {
   onSelect: (id: string | null) => void
   formDirectoryHandle: FileSystemDirectoryHandle | null
   formKey: string
+  formConfigHook?: string | null
 }
 
 const CONTROL_ID_ATTR = 'data-control-id'
@@ -239,16 +240,19 @@ const WysiwygFormLayer = memo(function WysiwygFormLayer({
   elements,
   formDirectoryHandle,
   formKey,
+  formConfigHook,
 }: {
   elements: FormControl[]
   formDirectoryHandle: FileSystemDirectoryHandle | null
   formKey: string
+  formConfigHook?: string | null
 }): React.ReactElement {
   return (
     <FormRenderer
       elements={elements}
       formDirectoryHandle={formDirectoryHandle}
       formKey={formKey}
+      formConfigHook={formConfigHook ?? null}
       gap={16}
     />
   )
@@ -352,6 +356,7 @@ export function WysiwygCanvas({
   onSelect,
   formDirectoryHandle,
   formKey,
+  formConfigHook = null,
 }: WysiwygCanvasProps): React.ReactElement {
   const containerRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLDivElement>(null)
@@ -604,6 +609,7 @@ export function WysiwygCanvas({
           elements={controls}
           formDirectoryHandle={formDirectoryHandle}
           formKey={formKey}
+          formConfigHook={formConfigHook}
         />
       </div>
 

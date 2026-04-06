@@ -10,7 +10,7 @@ import {
 import { Add, Table as TableIcon } from '@kaspersky/hexa-ui-icons/16'
 import type { ControlDescriptor } from '../types'
 import type { FormControl, TableControl } from '../../types/form-dsl'
-import { ConfigHookIdentityPropsEditor } from '../../components/ConfigHookIdentityPropsEditor'
+import { ControlIdPropsEditor } from '../../components/ControlIdPropsEditor'
 import { GridRowsColsPropsEditor } from '../../components/GridRowsColsPropsEditor'
 import { SelectWithOptionWidth } from '../../components/SelectWithOptionWidth'
 import { buildTableMatrixColumnsAndDataSource } from '../../utils/tableControlHexa'
@@ -63,7 +63,7 @@ export const tableDescriptor: ControlDescriptor<TableControl> = {
     )
   },
 
-  PropsEditor: ({ control, onUpdate, panelContext, selectCloseKey, onSelectClose }) => {
+  PropsEditor: ({ control, onUpdate, selectCloseKey, onSelectClose }) => {
     const t = control as TableControl
     return (
       <Space size={12} direction="vertical" style={{ width: '100%' }}>
@@ -247,13 +247,7 @@ export const tableDescriptor: ControlDescriptor<TableControl> = {
             </Space>
           )}
         </div>
-        <ConfigHookIdentityPropsEditor
-          id={t.id}
-          configHook={t.configHook}
-          onUpdate={onUpdate}
-          configHookPlaceholder="handlers/table.config-hook.ts"
-          formDirectoryHandle={panelContext?.formDirectoryHandle ?? null}
-        />
+        <ControlIdPropsEditor id={t.id} />
       </Space>
     )
   },

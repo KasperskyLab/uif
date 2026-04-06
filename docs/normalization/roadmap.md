@@ -70,7 +70,24 @@
 - `src/utils/dnd.ts`: shared-константы (`DATA_ID_KEY`, `DATA_TYPE_KEY`), `getDropTypeAndOptions`, tree mutation helpers (applyRootReorder/Insert, applyGridCell/TableCell Move/Insert).
 - Режим Editor (FormCanvas) сохраняется как fallback; кнопка переключения остаётся.
 
-3.4 Сделать split-screen: слева код с конфиг хуками, справа визивиг
+<a id="normalization-roadmap-p34"></a>
+
+### ✅ 3.4.1. Один модуль `configHook` на форму
+
+<a id="normalization-roadmap-p341"></a>
+
+**Готово.** Динамическая конфигурация — один TS-модуль на форму (каталог **`dsl/{id}/`**: **`{id}.schema.ts`**, **`{id}.config-hook.ts`**), диспатч по **`control.id`**, без хука на контролах в DSL. План: [plan-form-config-hook-341.md](./plans/plan-form-config-hook-341.md), фича: [feat-form-config-hook-unified.md](./features/feat-form-config-hook-unified.md).
+
+### 3.4. Один `configHook` на форму — дальше
+
+2. Открытие файла `configHook` в редакторе по ссылке из браузера
+3. WYSIWYG vs Editor
+    - Нужно видеть итоговый результат рендеринга на Hexa UI
+    - Нужно понимать в точности, куда элемент встанет в DnD области
+4. При создании `configHook` создавать файл со значениями по-умолчанию для настроек компонента
+5. Встройка в dev-сценарии
+    - Открывать Normalization tool во Viewer в dev режиме как открывающиеся панели
+    - Попробовать встроить в Chrome DevTools
 
 ---
 

@@ -187,7 +187,7 @@ function App() {
               lineHeight: 1.45,
             }}
           >
-            Выберите каталог с файлами форм (.ts). В дереве ниже — файлы;
+            Выберите каталог с DSL форм (`*.schema.ts`). В дереве ниже — файлы;
             заголовок формы — свойство name.
           </Text>
           <Button
@@ -237,7 +237,7 @@ function App() {
                 </div>
               ) : (
                 <SectionMessage mode="info" title="Нет файлов форм">
-                  В выбранном каталоге нет файлов форм (.ts)
+                  В выбранном каталоге нет файлов *.schema.ts
                 </SectionMessage>
               )}
             </div>
@@ -282,6 +282,7 @@ function App() {
                 elements={formData.elements}
                 formKey={selectedFile?.path ?? ''}
                 formDirectoryHandle={formDirectoryHandle}
+                formConfigHook={formData.configHook ?? null}
               />
             </Card>
           ) : (

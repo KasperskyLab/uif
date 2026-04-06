@@ -1,8 +1,8 @@
-import { Button, Text } from '@kaspersky/hexa-ui'
+import { Text } from '@kaspersky/hexa-ui'
 import { Text as TextIcon } from '@kaspersky/hexa-ui-icons/16'
 import type { ControlDescriptor } from '../types'
 import type { TextControl } from '../../types/form-dsl'
-import { ConfigHookIdentityPropsEditor } from '../../components/ConfigHookIdentityPropsEditor'
+import { ControlIdPropsEditor } from '../../components/ControlIdPropsEditor'
 
 export const textDescriptor: ControlDescriptor<TextControl> = {
   type: 'text',
@@ -20,13 +20,5 @@ export const textDescriptor: ControlDescriptor<TextControl> = {
     </Text>
   ),
 
-  PropsEditor: ({ control, onUpdate, panelContext }) => (
-    <ConfigHookIdentityPropsEditor
-      id={control.id}
-      configHook={control.configHook}
-      onUpdate={onUpdate}
-      configHookPlaceholder="handlers/text.config-hook.ts"
-      formDirectoryHandle={panelContext?.formDirectoryHandle ?? null}
-    />
-  ),
+  PropsEditor: ({ control }) => <ControlIdPropsEditor id={control.id} />,
 }
