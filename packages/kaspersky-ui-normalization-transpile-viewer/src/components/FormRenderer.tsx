@@ -259,45 +259,49 @@ function GridRenderer({
   const { registry, loading, path } = useContext(FormConfigHookContext)
   const hookFn = (registry?.[g.id] ?? null) as GridConfigHookFn | null
 
-  const defaultGrid = (
-    <Grid
-      cols={g.cols}
-      layout={defaultGridLayoutRows(g.rows)}
-      layoutProperty={DEFAULT_GRID_LAYOUT_PROPERTY}
-    >
-      {g.children.map((ch, i) => (
-        <GridItem key={`${g.id}-c-${i}`} style={{ minHeight: 32 }}>
-          <div data-container-id={g.id} data-grid-cell-index={i} style={{ height: '100%' }}>
-            {ch ? renderControl(ch) : null}
-          </div>
-        </GridItem>
-      ))}
-    </Grid>
+  const loadingBlock = (
+    <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>
+      <Text type="BTR3" style={{ color: 'var(--text--secondary)', marginBottom: 8 }}>
+        …
+      </Text>
+    </div>
+  )
+
+  const missingHookBlock = (
+    <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>
+      <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+        Сетка «{g.id}»: задайте форменный configHook и запись реестра с этим id
+      </Text>
+    </div>
   )
 
   if (!path || !hookFn) {
-    if (path && loading) {
-      return (
-        <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>
-          <Text type="BTR3" style={{ color: 'var(--text--secondary)', marginBottom: 8 }}>
-            …
-          </Text>
-          {defaultGrid}
-        </div>
-      )
-    }
-    return <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>{defaultGrid}</div>
+    if (path && loading) return loadingBlock
+    return missingHookBlock
   }
   const partial = hookFn(formSlice)
   if (partial === null) return null
   const { children: _ch, ...hookRest } = partial
-  const effectiveCols = hookRest.cols ?? g.cols
+  const effectiveCols = hookRest.cols
+  if (
+    effectiveCols == null ||
+    typeof effectiveCols !== 'number' ||
+    effectiveCols < 1
+  ) {
+    return (
+      <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>
+        <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+          Сетка «{g.id}»: хук должен вернуть cols (целое число ≥ 1)
+        </Text>
+      </div>
+    )
+  }
   const hasHookLayout = 'layout' in hookRest && hookRest.layout != null
   const effectiveChildren = padOrTruncateChildren(
     g.children,
     hasHookLayout
       ? g.children.length
-      : Math.ceil(g.children.length / g.cols) * effectiveCols,
+      : Math.ceil(g.children.length / effectiveCols) * effectiveCols,
   )
   const effectiveRows = Math.ceil(effectiveChildren.length / effectiveCols)
   return (
@@ -309,7 +313,7 @@ function GridRenderer({
         cols={effectiveCols}
       >
         {effectiveChildren.map((ch, i) => (
-          <GridItem key={`${g.id}-h-${i}`} style={{ minHeight: 32 }}>
+          <GridItem key={`${g.id}-cell-${String(i)}`} style={{ minHeight: 32 }}>
             <div data-container-id={g.id} data-grid-cell-index={i} style={{ height: '100%' }}>
               {ch ? renderControl(ch) : null}
             </div>

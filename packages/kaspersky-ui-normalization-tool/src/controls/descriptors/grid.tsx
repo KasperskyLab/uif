@@ -1,13 +1,8 @@
-import { Grid, GridItem, Space, Text } from '@kaspersky/hexa-ui'
+import { Space, Text } from '@kaspersky/hexa-ui'
 import { ArrangeGrid } from '@kaspersky/hexa-ui-icons/16'
 import type { ControlDescriptor } from '../types'
 import type { FormControl, GridControl } from '../../types/form-dsl'
 import { ControlIdPropsEditor } from '../../components/ControlIdPropsEditor'
-import { GridRowsColsPropsEditor } from '../../components/GridRowsColsPropsEditor'
-import {
-  defaultGridLayoutRows,
-  DEFAULT_GRID_LAYOUT_PROPERTY,
-} from '../../utils/defaultGridHexaProps'
 
 export const gridDescriptor: ControlDescriptor<GridControl> = {
   type: 'grid',
@@ -17,35 +12,21 @@ export const gridDescriptor: ControlDescriptor<GridControl> = {
   createDefault: () => ({
     type: 'grid',
     id: '',
-    rows: 2,
-    cols: 2,
-    children: Array(4).fill(null) as (FormControl | null)[],
+    children: [] as (FormControl | null)[],
   }),
 
-  CanvasPreview: ({ control }) => {
-    const g = control as GridControl
+  CanvasPreview: () => {
     return (
       <div style={{ padding: 4, border: '1px dashed #ccc', borderRadius: 6, minWidth: 120 }}>
-        <Grid
-          cols={g.cols}
-          layout={defaultGridLayoutRows(g.rows)}
-          layoutProperty={DEFAULT_GRID_LAYOUT_PROPERTY}
-        >
-          {Array.from({ length: g.rows * g.cols }, (_, i) => (
-            <GridItem key={i} style={{ minHeight: 20, fontSize: 10 }}>
-              <Text type="BTR3" style={{ color: '#999' }}>
-                {g.children[i] ? '·' : '○'}
-              </Text>
-            </GridItem>
-          ))}
-        </Grid>
+        <Text type="BTR3" style={{ color: '#999', fontSize: 11 }}>
+          Сетка: число столбцов/строк — только из form configHook
+        </Text>
       </div>
     )
   },
 
-  PropsEditor: ({ control, onUpdate }) => (
+  PropsEditor: ({ control, onUpdate: _onUpdate }) => (
     <Space size={12} direction="vertical" style={{ width: '100%' }}>
-      <GridRowsColsPropsEditor control={control as GridControl} onUpdate={onUpdate} />
       <ControlIdPropsEditor id={control.id} />
     </Space>
   ),

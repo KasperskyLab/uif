@@ -11,6 +11,7 @@ import { useFormFile } from './hooks/useFormFile'
 import { useHistory } from './hooks/useHistory'
 import { ControlsPalette } from './components/ControlsPalette'
 import { FormCanvas } from './components/FormCanvas'
+import { FormEditorConfigHookProvider } from './context/FormEditorConfigHookContext'
 import { WysiwygCanvas } from './components/WysiwygCanvas'
 import { CodeExportDialog } from './components/CodeExportDialog'
 import { PropertiesPanel } from './components/PropertiesPanel'
@@ -722,13 +723,24 @@ function App() {
                           formConfigHook={formData.configHook ?? null}
                         />
                       ) : (
-                        <FormCanvas
-                          controls={formControls}
-                          onControlsChange={historySetControls}
-                          onDropControl={(type) => handleAddControl(type as FormControlType, undefined)}
-                          selectedId={selectedControlId}
-                          onSelect={setSelectedControlId}
-                        />
+                        <FormEditorConfigHookProvider
+                          formKey={selectedFile.path}
+                          formDirectoryHandle={
+                            formFileDirectoryHandle ?? directoryHandle
+                          }
+                          formConfigHook={formData.configHook ?? null}
+                          elements={formControls}
+                        >
+                          <FormCanvas
+                            controls={formControls}
+                            onControlsChange={historySetControls}
+                            onDropControl={(type) =>
+                              handleAddControl(type as FormControlType, undefined)
+                            }
+                            selectedId={selectedControlId}
+                            onSelect={setSelectedControlId}
+                          />
+                        </FormEditorConfigHookProvider>
                       )}
                     </div>
                   </main>

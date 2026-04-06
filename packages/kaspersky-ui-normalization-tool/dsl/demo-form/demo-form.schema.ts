@@ -6,8 +6,6 @@ export default {
     {
       type: 'grid',
       id: 'grid-1774124980818-7sslddg',
-      rows: 2,
-      cols: 2,
       children: [
         {
           type: 'text',

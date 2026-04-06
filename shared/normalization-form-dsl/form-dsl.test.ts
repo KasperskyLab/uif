@@ -197,7 +197,7 @@ describe('form-dsl', () => {
     })
 
     it('preserves binding on grid', () => {
-      const control: GridControl = { type: 'grid', id: 'g1', rows: 1, cols: 1, children: [null], ...bindingProps }
+      const control: GridControl = { type: 'grid', id: 'g1', children: [null], ...bindingProps }
       const json = controlToJson(control) as Record<string, unknown>
       expect(json.fieldName).toBe('testField')
       expect(json.validation).toEqual(validation)
@@ -308,7 +308,7 @@ describe('form-dsl', () => {
     it('removes nested control from grid', () => {
       const tree: FormControl[] = [
         {
-          type: 'grid', id: 'g1', rows: 1, cols: 2,
+          type: 'grid', id: 'g1',
           children: [textControl('inner'), null],
         },
       ]
@@ -329,7 +329,7 @@ describe('form-dsl', () => {
     it('visits all controls including nested', () => {
       const tree: FormControl[] = [
         {
-          type: 'grid', id: 'g1', rows: 1, cols: 1,
+          type: 'grid', id: 'g1',
           children: [textControl('nested')],
         },
       ]
@@ -352,7 +352,7 @@ describe('form-dsl', () => {
     it('finds control inside grid', () => {
       const tree: FormControl[] = [
         {
-          type: 'grid', id: 'g1', rows: 2, cols: 2,
+          type: 'grid', id: 'g1',
           children: [null, textControl('inner'), null, null],
         },
       ]
@@ -379,7 +379,7 @@ describe('form-dsl', () => {
     it('updates nested control in grid', () => {
       const tree: FormControl[] = [
         {
-          type: 'grid', id: 'g1', rows: 1, cols: 2,
+          type: 'grid', id: 'g1',
           children: [textControl('nested'), null],
         },
       ]
@@ -394,7 +394,7 @@ describe('form-dsl', () => {
     it('replaces children of target grid', () => {
       const gridId = 'g1'
       const tree: (FormControl | null)[] = [
-        { type: 'grid', id: gridId, rows: 2, cols: 2, children: [null, null, null, null] },
+        { type: 'grid', id: gridId, children: [null, null, null, null] },
       ]
       const newChildren: (FormControl | null)[] = [textControl('c1'), null, null, null]
       const result = setGridChildrenInTree(tree, gridId, newChildren)

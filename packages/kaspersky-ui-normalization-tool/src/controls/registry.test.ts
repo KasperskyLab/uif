@@ -58,12 +58,10 @@ describe('registry', () => {
       expect(c.id).toBeTruthy()
     })
 
-    it('creates grid with rows/cols and children', () => {
+    it('creates grid with empty children (geometry from config hook)', () => {
       const c = createControl('grid')
       expect(c.type).toBe('grid')
-      expect((c as { rows: number }).rows).toBe(2)
-      expect((c as { cols: number }).cols).toBe(2)
-      expect((c as { children: unknown[] }).children).toHaveLength(4)
+      expect((c as { children: unknown[] }).children).toEqual([])
     })
 
     it('creates tabs with two default items', () => {

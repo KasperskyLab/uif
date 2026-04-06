@@ -1,12 +1,15 @@
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react'
 import { Button, Space, Text, Grid, GridItem, Tabs, Table } from '@kaspersky/hexa-ui'
 import { Delete, ArrowsVertical } from '@kaspersky/hexa-ui-icons/16'
-import type { FormControl, FormControlBase, FormControlType, GridControl, TableControl, TabsControl, RowControl } from '../types/form-dsl'
+import type { FormControl, FormControlBase, FormControlType, FormSlice, GridControl, TableControl, TabsControl, RowControl } from '../types/form-dsl'
 import { setGridChildrenInTree, setRowChildrenInTree, setTableChildrenInTree, setTabsChildrenInTree } from '../types/form-dsl'
+import type { GridProps } from '@kaspersky/hexa-ui'
 import {
   defaultGridLayoutRows,
   DEFAULT_GRID_LAYOUT_PROPERTY,
 } from '../utils/defaultGridHexaProps'
+import { useFormEditorConfigHook } from '../context/FormEditorConfigHookContext'
+import { padOrTruncateGridChildren } from '../utils/gridHookChildren'
 import { buildTableMatrixColumnsAndDataSource } from '../utils/tableControlHexa'
 import { ToolbarStaticPreview } from '../controls/descriptors/toolbar'
 import { createControl, getDescriptor, ALL_CONTROL_TYPES } from '../controls/registry'
@@ -161,6 +164,8 @@ export interface FormCanvasProps {
   onSelect: (id: string | null) => void
 }
 
+type GridConfigHookFn = (formSlice: FormSlice) => Partial<GridProps> | null
+
 function GridControlBlock({
   control,
   selectedId,
@@ -174,6 +179,9 @@ function GridControlBlock({
   rootSetControls: React.Dispatch<React.SetStateAction<FormControl[]>>
 }) {
   const g = control
+  const { registry, loading, path, formSlice } = useFormEditorConfigHook()
+  const hookFn = (registry?.[g.id] ?? null) as GridConfigHookFn | null
+
   const setGridChildren = useCallback(
     (next: React.SetStateAction<(FormControl | null)[]>) => {
       rootSetControls((prev) =>
@@ -187,14 +195,60 @@ function GridControlBlock({
     [g.id, g.children, rootSetControls]
   )
 
+  if (!path || !hookFn) {
+    if (path && loading) {
+      return (
+        <div style={gridWrapStyle}>
+          <Text type="BTR3" style={{ color: '#8c8c8c' }}>…</Text>
+        </div>
+      )
+    }
+    return (
+      <div style={gridWrapStyle}>
+        <Text type="BTR3" style={{ color: '#8c8c8c' }}>
+          Сетка «{g.id}»: укажите config hook в форме и запись для этого id
+        </Text>
+      </div>
+    )
+  }
+
+  const partial = hookFn(formSlice)
+  if (partial === null) return null
+
+  const { children: _hookCh, ...hookRest } = partial
+  const effectiveCols = hookRest.cols
+  if (
+    effectiveCols == null ||
+    typeof effectiveCols !== 'number' ||
+    effectiveCols < 1
+  ) {
+    return (
+      <div style={gridWrapStyle}>
+        <Text type="BTR3" style={{ color: '#8c8c8c' }}>
+          Сетка «{g.id}»: хук должен вернуть cols (целое ≥ 1)
+        </Text>
+      </div>
+    )
+  }
+
+  const hasHookLayout = 'layout' in hookRest && hookRest.layout != null
+  const effectiveChildren = padOrTruncateGridChildren(
+    g.children,
+    hasHookLayout
+      ? g.children.length
+      : Math.ceil(g.children.length / effectiveCols) * effectiveCols,
+  )
+  const effectiveRows = Math.ceil(effectiveChildren.length / effectiveCols)
+
   return (
     <div style={gridWrapStyle}>
       <Grid
-        cols={g.cols}
-        layout={defaultGridLayoutRows(g.rows)}
+        layout={defaultGridLayoutRows(effectiveRows)}
         layoutProperty={DEFAULT_GRID_LAYOUT_PROPERTY}
+        {...hookRest}
+        cols={effectiveCols}
       >
-        {Array.from({ length: g.rows * g.cols }, (_, i) => {
+        {effectiveChildren.map((_slot, i) => {
           const handleCellDrop = (e: React.DragEvent) => {
             e.preventDefault()
             e.stopPropagation()
@@ -206,7 +260,8 @@ function GridControlBlock({
               if (idx === i) return
               const movingControl = g.children[idx]
               setGridChildren((prev) => {
-                const next = [...prev]
+                const need = Math.max(prev.length, i + 1, idx + 1)
+                const next = padOrTruncateGridChildren(prev, need)
                 const wasInTarget = next[i]
                 next[idx] = wasInTarget
                 next[i] = movingControl
@@ -214,21 +269,23 @@ function GridControlBlock({
               })
             } else if (dropInfo) {
               setGridChildren((prev) => {
-                const next = [...prev]
+                const need = Math.max(prev.length, i + 1)
+                const next = padOrTruncateGridChildren(prev, need)
                 next[i] = createControl(dropInfo.type, dropInfo.options)
                 return next
               })
             }
           }
-          const slotControl = g.children[i]
+          const slotControl = effectiveChildren[i]
           return (
-            <GridItem key={i} style={gridCellStyle}>
+            <GridItem key={`${g.id}-cell-${i}`} style={gridCellStyle}>
               <div
                 style={gridCellDropStyle}
                 onDragOver={(e) => {
                   e.preventDefault()
                   e.stopPropagation()
-                  e.dataTransfer.dropEffect = e.dataTransfer.types.includes(DATA_ID_KEY) ? 'move' : 'copy'
+                  e.dataTransfer.dropEffect =
+                    e.dataTransfer.types.includes(DATA_ID_KEY) ? 'move' : 'copy'
                 }}
                 onDrop={handleCellDrop}
               >
@@ -239,7 +296,8 @@ function GridControlBlock({
                     onSelect={onSelect}
                     onRemove={(_id) =>
                       setGridChildren((prev) => {
-                        const next = [...prev]
+                        const need = Math.max(prev.length, i + 1)
+                        const next = padOrTruncateGridChildren(prev, need)
                         next[i] = null
                         return next
                       })

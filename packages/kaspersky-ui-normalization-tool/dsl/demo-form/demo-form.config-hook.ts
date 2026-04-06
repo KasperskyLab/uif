@@ -46,7 +46,7 @@ function textConfigHook(formSlice: FormSlice): TextProps | null {
 
 function gridConfigHook(_formSlice: FormSlice): Partial<GridProps> | null {
   return {
-    cols: 3,
+    cols: 2,
     layoutProperty: { gap: 10 },
   }
 }

@@ -149,8 +149,7 @@ export interface FormControlBase extends FormControlIdentity {
 
 export interface GridControl extends FormControlBase {
   type: 'grid'
-  rows: number
-  cols: number
+  /** Ячейки по порядку (строка за строкой); число столбцов и строк задаёт только form configHook. */
   children: (FormControl | null)[]
 }
 
@@ -541,23 +540,12 @@ function normalizeControl(item: unknown): FormControl | null {
     return applyFieldBinding({ type: type as ExtraUiDslType, id, props } as ExtraUiControl)
   }
   if (type === 'grid') {
-    const rows = typeof o.rows === 'number' ? o.rows : 2
-    const cols = typeof o.cols === 'number' ? o.cols : 2
-    const len = rows * cols
-    const c: GridControl = {
-      type: 'grid',
-      id,
-      rows,
-      cols,
-      children: Array.from({ length: len }, () => null),
-    }
-    if (Array.isArray(o.children)) {
-      const list = o.children.map(normalizeControl)
-      for (let i = 0; i < len && i < list.length; i++) {
-        const x = list[i]
-        if (x != null) c.children[i] = x
-      }
-    }
+    const rawChildren = Array.isArray(o.children) ? o.children : []
+    const children: (FormControl | null)[] = rawChildren.map((x: unknown) => {
+      if (x === null) return null
+      return normalizeControl(x)
+    })
+    const c: GridControl = { type: 'grid', id, children }
     return applyFieldBinding(c)
   }
   if (type === 'row') {
@@ -732,8 +720,6 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
     const g = c as GridControl
     return {
       ...base,
-      rows: g.rows,
-      cols: g.cols,
       children: g.children.map((ch) => (ch ? controlToJson(ch) : null)),
     }
   }
