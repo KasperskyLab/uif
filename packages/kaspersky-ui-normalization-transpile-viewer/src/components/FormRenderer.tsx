@@ -6,7 +6,13 @@ import React, {
   createContext,
   useContext,
 } from 'react'
-import type { ButtonProps, GridProps, ITableProps, TextProps } from '@kaspersky/hexa-ui'
+import type {
+  ButtonProps,
+  GridProps,
+  ITableProps,
+  TextProps,
+  TextboxProps,
+} from '@kaspersky/hexa-ui'
 import {
   Button,
   Text,
@@ -91,7 +97,11 @@ function getInitialFormState(elements: FormControl[]): Record<string, unknown> {
         state[c.id] = (c as CheckboxControl).checked ?? false
       }
       if (c.type === 'input') {
-        state[c.id] = (c as InputControl).value ?? ''
+        const ic = c as InputControl
+        state[c.id] =
+          ic.defaultValue !== undefined && ic.defaultValue !== null
+            ? ic.defaultValue
+            : ''
       }
       if (c.type === 'radio') {
         state[c.id] = (c as RadioControl).value ?? ''
@@ -157,6 +167,13 @@ type TableConfigHookFn = (formSlice: FormSlice) => Partial<ITableProps> | null
 
 /** Хук таблицы: только `Partial<ITableProps>`; `children` приходит как у Hexa — не пробрасываем в `<Table />` при сборке матрицы DSL. */
 type TableHookResult = Partial<ITableProps> | null
+
+/** Расширение `TextboxProps`: подпись для обёртки Hexa `Field` (в Hexa у Textbox нет label). */
+type InputHookResult =
+  | (Partial<TextboxProps> & { fieldLabel?: string })
+  | null
+
+type InputConfigHookFn = (formSlice: FormSlice) => InputHookResult
 
 /** Реестр: control.id → хук (результат вызова default export модуля формы). */
 type ConfigHookRegistry = Record<string, (formSlice: FormSlice) => unknown>
@@ -235,6 +252,61 @@ function TextRenderer({
     )
   }
   return <TextWithHook key={control.id} hookFn={hookFn} formSlice={formSlice} />
+}
+
+function InputRenderer({
+  control,
+  formSlice,
+  value,
+  updateValue,
+}: {
+  control: InputControl
+  formSlice: FormSlice
+  value: string
+  updateValue: (id: string, v: unknown) => void
+}): React.ReactElement | null {
+  const { registry, loading, path } = useContext(FormConfigHookContext)
+  const hookFn = (registry?.[control.id] ?? null) as InputConfigHookFn | null
+
+  if (!path || !hookFn) {
+    if (path && loading) {
+      return (
+        <div data-control-id={control.id} style={formRowStyle}>
+          <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+            …
+          </Text>
+        </div>
+      )
+    }
+    return (
+      <div data-control-id={control.id} style={formRowStyle}>
+        <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+          Поле «{control.id}»: задайте form configHook и запись реестра с этим id
+        </Text>
+      </div>
+    )
+  }
+
+  const partial = hookFn(formSlice)
+  if (partial === null) return null
+
+  const { fieldLabel, value: _hv, onChange: _hoc, ...textboxRest } = partial
+  const textbox = (
+    <Textbox
+      {...textboxRest}
+      value={value}
+      onChange={(v) => updateValue(control.id, v ?? '')}
+    />
+  )
+  return (
+    <div data-control-id={control.id} style={formRowStyle}>
+      {fieldLabel ? (
+        <Field label={fieldLabel} labelPosition="top" control={textbox} />
+      ) : (
+        textbox
+      )}
+    </div>
+  )
 }
 
 function GridRenderer({
@@ -527,24 +599,15 @@ export function FormRenderer({
       }
       case 'input': {
         const c = control as InputControl
-        const value = (formState[c.id] as string | undefined) ?? c.value ?? ''
-        const textbox = (
-          <Textbox
-            value={value}
-            placeholder={c.placeholder ?? c.text ?? ''}
-            disabled={c.disabled}
-            readOnly={c.readOnly}
-            onChange={(v) => updateValue(c.id, v ?? '')}
-          />
-        )
+        const value = String(formState[c.id] ?? '')
         return (
-          <div key={c.id} data-control-id={c.id} style={formRowStyle}>
-            {c.text ? (
-              <Field label={c.text} labelPosition="top" control={textbox} />
-            ) : (
-              textbox
-            )}
-          </div>
+          <InputRenderer
+            key={c.id}
+            control={c}
+            formSlice={formSlice}
+            value={value}
+            updateValue={updateValue}
+          />
         )
       }
       case 'grid': {

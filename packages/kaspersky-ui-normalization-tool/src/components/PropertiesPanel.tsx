@@ -37,6 +37,9 @@ function FieldBindingEditor({
   onSelectClose: () => void
 }) {
   if (!isInputControl(control)) return null
+  /** `input`: в панели только id и подсказка configHook; привязка/валидация — в коде схемы при необходимости. */
+  if (control.type === 'input') return null
+
   const bc = control as FormControlBase
   const hasRequired = (bc.validation ?? []).some((r) => r.type === 'required')
   return (
@@ -425,7 +428,7 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
           selectCloseKey={selectCloseKey}
           onSelectClose={() => setSelectCloseKey((k) => k + 1)}
         />
-        {CONTROL_EVENTS[control.type]?.length > 0 && (
+        {control.type !== 'input' && CONTROL_EVENTS[control.type]?.length > 0 && (
           <HandlersEditor
             title="Обработчики событий"
             events={CONTROL_EVENTS[control.type]}

@@ -54,9 +54,6 @@ function elements(count) {
         out.push({
           type: 'input',
           id: cid,
-          text: pick(['Имя', 'Email', 'Телефон', 'Адрес']),
-          value: '',
-          placeholder: pick(['Введите значение', '...', 'Не обязательно']),
         })
         break
       case 'checkbox':

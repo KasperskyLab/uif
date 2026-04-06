@@ -2,7 +2,7 @@
  * Единый configHook формы `demo`: default export — фабрика реестра по control.id.
  */
 import type { ReactNode } from 'react'
-import type { ButtonProps, GridProps, TextProps } from '@kaspersky/hexa-ui'
+import type { ButtonProps, GridProps, TextProps, TextboxProps } from '@kaspersky/hexa-ui'
 import type { ITableProps } from '@kaspersky/hexa-ui'
 import type {
   FormConfigHookFactoryFor,
@@ -58,6 +58,15 @@ function useDemoGrid(_formSlice: FormSlice): Partial<GridProps> | null {
   return {
     cols: 2,
     layoutProperty: { gap: 10 },
+  }
+}
+
+function useDemoGridInput(
+  _formSlice: FormSlice,
+): Partial<TextboxProps> & { fieldLabel?: string } {
+  return {
+    fieldLabel: 'Текст кнопки (state)',
+    placeholder: 'Меняется подпись кнопки',
   }
 }
 
@@ -126,6 +135,7 @@ function useDemoTable(formSlice: FormSlice): Partial<ITableProps> | null {
 const useDemo: FormConfigHookFactoryFor<DemoSchema> = () =>
   ({
     'demo.grid': useDemoGrid,
+    'demo.grid.input': useDemoGridInput,
     'demo.grid.text': useDemoText,
     'demo.grid.button': useDemoButton,
     'demo.table': useDemoTable,

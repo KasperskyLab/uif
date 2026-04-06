@@ -23,7 +23,6 @@ export const FORM_TEMPLATES: FormTemplate[] = [
       {
         type: 'input',
         id: uid('input'),
-        placeholder: 'Email',
         fieldName: 'email',
         dataType: 'string',
         validation: [
@@ -34,7 +33,6 @@ export const FORM_TEMPLATES: FormTemplate[] = [
       {
         type: 'input',
         id: uid('input'),
-        placeholder: 'Пароль',
         fieldName: 'password',
         dataType: 'string',
         validation: [
@@ -69,7 +67,6 @@ export const FORM_TEMPLATES: FormTemplate[] = [
       {
         type: 'input',
         id: uid('input'),
-        placeholder: 'Имя',
         fieldName: 'firstName',
         dataType: 'string',
         validation: [{ type: 'required', message: 'Введите имя' }],
@@ -77,7 +74,6 @@ export const FORM_TEMPLATES: FormTemplate[] = [
       {
         type: 'input',
         id: uid('input'),
-        placeholder: 'Фамилия',
         fieldName: 'lastName',
         dataType: 'string',
         validation: [{ type: 'required', message: 'Введите фамилию' }],
@@ -85,7 +81,6 @@ export const FORM_TEMPLATES: FormTemplate[] = [
       {
         type: 'input',
         id: uid('input'),
-        placeholder: 'Email',
         fieldName: 'email',
         dataType: 'string',
         validation: [
@@ -96,7 +91,6 @@ export const FORM_TEMPLATES: FormTemplate[] = [
       {
         type: 'input',
         id: uid('input'),
-        placeholder: 'Пароль',
         fieldName: 'password',
         dataType: 'string',
         validation: [
@@ -139,7 +133,6 @@ export const FORM_TEMPLATES: FormTemplate[] = [
       {
         type: 'input',
         id: uid('input'),
-        placeholder: 'Отображаемое имя',
         fieldName: 'displayName',
         dataType: 'string',
         validation: [{ type: 'required', message: 'Введите имя' }],
@@ -147,7 +140,6 @@ export const FORM_TEMPLATES: FormTemplate[] = [
       {
         type: 'input',
         id: uid('input'),
-        placeholder: 'Email',
         fieldName: 'email',
         dataType: 'string',
       } as FormControl,
@@ -192,7 +184,6 @@ export const FORM_TEMPLATES: FormTemplate[] = [
       {
         type: 'input',
         id: uid('input'),
-        placeholder: 'Тема обращения',
         fieldName: 'subject',
         dataType: 'string',
         validation: [{ type: 'required', message: 'Укажите тему' }],
@@ -200,7 +191,6 @@ export const FORM_TEMPLATES: FormTemplate[] = [
       {
         type: 'input',
         id: uid('input'),
-        placeholder: 'Опишите вашу проблему или предложение',
         fieldName: 'message',
         dataType: 'string',
         validation: [

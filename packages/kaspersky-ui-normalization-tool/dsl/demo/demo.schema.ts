@@ -16,9 +16,6 @@ export default defineFormSchema({
         {
           type: 'input',
           id: 'demo.grid.input',
-          text: 'Текст кнопки (state)',
-          value: 'Значение из формы',
-          placeholder: 'Меняется подпись кнопки',
         },
         null,
         {

@@ -16,6 +16,7 @@ import {
   type FormData,
   type FormControl,
   type TextControl,
+  type InputControl,
   type ButtonControl,
   type GridControl,
   type TabsControl,
@@ -189,6 +190,16 @@ export default s
       expect(out.type).toBe('button')
       expect(out.configHook).toBeUndefined()
     })
+
+    it('serializes input control without ui-only fields', () => {
+      const c: InputControl = { type: 'input', id: 'in1', fieldName: 'x' }
+      const out = controlToJson(c) as Record<string, unknown>
+      expect(out.type).toBe('input')
+      expect(out.id).toBe('in1')
+      expect(out.fieldName).toBe('x')
+      expect(out.placeholder).toBeUndefined()
+      expect(out.text).toBeUndefined()
+    })
   })
 
   describe('controlToJson preserves field binding for all types', () => {
@@ -198,7 +209,7 @@ export default s
     const bindingProps = { fieldName: 'testField', dataType: 'string' as const, defaultValue: 'abc', validation, visibleWhen, disabledWhen }
 
     const cases: { label: string; control: FormControl }[] = [
-      { label: 'input', control: { type: 'input', id: 'h2', placeholder: '', ...bindingProps } },
+      { label: 'input', control: { type: 'input', id: 'h2', ...bindingProps } },
       { label: 'icon', control: { type: 'icon', id: 'ic1', name: 'Add', size: 16, ...bindingProps } },
       { label: 'toolbar', control: { type: 'toolbar', id: 'tb1', left: [], right: [], ...bindingProps } },
     ]
@@ -246,7 +257,7 @@ export default s
           email: { type: 'string', label: 'Email' },
           age: { type: 'number' },
         },
-        elements: [{ type: 'input', id: 'i1', placeholder: '', fieldName: 'email', dataType: 'string' }],
+        elements: [{ type: 'input', id: 'i1', fieldName: 'email', dataType: 'string' }],
       }
       const js = formToTs(form)
       expect(js).toContain('schema:')
@@ -263,7 +274,7 @@ export default s
         id: 'j1',
         schema: { name: { type: 'string' } },
         elements: [
-          { type: 'input', id: 'i1', placeholder: '', fieldName: 'name', dataType: 'string', defaultValue: 'test' },
+          { type: 'input', id: 'i1', fieldName: 'name', dataType: 'string', defaultValue: 'test' },
         ],
       }
       const json = formToJson(form)
@@ -278,7 +289,8 @@ export default s
   describe('handlers serialization', () => {
     it('controlToJson includes handlers map', () => {
       const c: FormControl = {
-        type: 'input', id: 'i1', placeholder: '',
+        type: 'input',
+        id: 'i1',
         handlers: { onChange: 'handlers/on-change.js', onBlur: 'handlers/blur.js' },
       }
       const json = controlToJson(c) as Record<string, unknown>
@@ -290,7 +302,7 @@ export default s
         name: 'Test',
         id: 'f1',
         elements: [
-          { type: 'input', id: 'i1', placeholder: '', handlers: { onChange: 'handlers/change.js' } },
+          { type: 'input', id: 'i1', handlers: { onChange: 'handlers/change.js' } },
         ],
       }
       const js = formToTs(form)
@@ -385,14 +397,14 @@ export default s
   describe('updateControlInTree', () => {
     it('updates control in flat list', () => {
       const tree: FormControl[] = [
-        { type: 'input', id: 'a', placeholder: '' },
-        { type: 'input', id: 'b', placeholder: '' },
+        { type: 'input', id: 'a' },
+        { type: 'input', id: 'b' },
       ]
       const next = updateControlInTree(tree, 'b', {
-        placeholder: 'x',
+        fieldName: 'userEmail',
       })
-      const updated = next[1] as { placeholder?: string }
-      expect(updated.placeholder).toBe('x')
+      const updated = next[1] as InputControl
+      expect(updated.fieldName).toBe('userEmail')
     })
 
     it('updates nested control in grid', () => {

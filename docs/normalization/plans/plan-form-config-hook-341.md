@@ -18,6 +18,7 @@
 | `form.config-hook.341.tool-ui` | Редактор: пути/пикер для форменного хука; **не** вводить scaffold файла дефолтов на этом этапе (дефолты — вне scope, см. ниже). | ✅ |
 | `form.config-hook.341.demo` | Демо: **`dsl/demo/`** с **`demo.schema.ts`** и **`demo.config-hook.ts`**, один `configHook` на форму. | ✅ |
 | `form.config-hook.341.tests` | Тесты: `normalizeFormData`, сериализация, при необходимости — сценарий рендера с реестром. | ✅ |
+| `form.config-hook.input.dsl-hook-only` | **`input`**: из DSL убраны UI-поля (`placeholder`, `text`, …); Hexa-пропсы и подпись поля только из form **`configHook`**; старый формат без миграции. | ✅ |
 
 ---
 

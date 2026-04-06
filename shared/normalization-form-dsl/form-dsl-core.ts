@@ -225,13 +225,14 @@ export interface TextControl extends FormControlBase {
   type: 'text'
 }
 
+/**
+ * Поле ввода (Hexa `Textbox`). В схеме/DSL — только **`type`**, **`id`** и общие привязки
+ * (**`fieldName`**, **`defaultValue`**, валидация и т.д.). Плейсхолдер, `disabled`,
+ * подпись и прочие пропсы UI задаются в **form `configHook`** для **`input.id`**
+ * (`Partial<TextboxProps>` и опционально **`fieldLabel`** для обёртки `Field`).
+ */
 export interface InputControl extends FormControlBase {
   type: 'input'
-  text?: string
-  value?: string
-  placeholder?: string
-  disabled?: boolean
-  readOnly?: boolean
 }
 
 export interface CheckboxControl extends FormControlBase {
@@ -454,11 +455,6 @@ function normalizeControl(item: unknown): FormControl | null {
   }
   if (type === 'input') {
     const c: InputControl = { type: 'input', id }
-    if (typeof o.text === 'string') c.text = o.text
-    if (typeof o.value === 'string') c.value = o.value
-    if (typeof o.placeholder === 'string') c.placeholder = o.placeholder
-    if (typeof o.disabled === 'boolean') c.disabled = o.disabled
-    if (typeof o.readOnly === 'boolean') c.readOnly = o.readOnly
     return applyFieldBinding(c)
   }
   if (type === 'checkbox') {
@@ -633,8 +629,7 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
     return { ...base }
   }
   if (c.type === 'input') {
-    const i = c as InputControl
-    return { ...base, text: i.text ?? '', value: i.value ?? '', placeholder: i.placeholder, disabled: i.disabled, readOnly: i.readOnly }
+    return { ...base }
   }
   if (c.type === 'checkbox') {
     const x = c as CheckboxControl

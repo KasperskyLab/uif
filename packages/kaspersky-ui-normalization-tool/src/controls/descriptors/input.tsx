@@ -11,26 +11,15 @@ export const inputDescriptor: ControlDescriptor<InputControl> = {
   createDefault: () => ({
     type: 'input',
     id: '',
-    placeholder: 'Поле ввода',
   }),
 
-  CanvasPreview: ({ control }) => (
-    <Textbox
-      value={control.value ?? ''}
-      placeholder={control.placeholder ?? control.text ?? 'Поле ввода'}
-      readOnly
-      style={{ minWidth: 160 }}
-    />
+  CanvasPreview: () => (
+    <Textbox value="" placeholder="configHook → Textbox" readOnly style={{ minWidth: 160 }} />
   ),
 
-  PropsEditor: ({ control, onUpdate }) => (
-    <>
-      <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Placeholder</Text>
-      <Textbox
-        value={control.placeholder ?? ''}
-        onChange={(v) => onUpdate({ placeholder: v || undefined })}
-        placeholder="Подсказка"
-      />
-    </>
+  PropsEditor: () => (
+    <Text type="BTR3" style={{ color: 'var(--text--secondary)', fontSize: 11 }}>
+      Плейсхолдер и прочие пропсы — в form configHook для этого id
+    </Text>
   ),
 }

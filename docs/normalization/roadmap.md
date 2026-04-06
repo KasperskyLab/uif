@@ -76,7 +76,7 @@
 
 <a id="normalization-roadmap-p341"></a>
 
-**Готово.** Динамическая конфигурация — один TS-модуль на форму (каталог **`dsl/{id}/`**: **`{id}.schema.ts`**, **`{id}.config-hook.ts`**), диспатч по **`control.id`**, без хука на контролах в DSL. План: [plan-form-config-hook-341.md](./plans/plan-form-config-hook-341.md), фича: [feat-form-config-hook-unified.md](./features/feat-form-config-hook-unified.md).
+**Готово.** Динамическая конфигурация — один TS-модуль на форму (каталог **`dsl/{id}/`**: **`{id}.schema.ts`**, **`{id}.config-hook.ts`**), диспатч по **`control.id`**, без хука на контролах в DSL. **Конвенция:** UI-пропсы Hexa не дублируются в схеме (например **`input`** — в DSL id + привязки; плейсхолдер и подпись — в хуке). План: [plan-form-config-hook-341.md](./plans/plan-form-config-hook-341.md), фича: [feat-form-config-hook-unified.md](./features/feat-form-config-hook-unified.md).
 
 ### 3.4. Один `configHook` на форму — дальше
 
