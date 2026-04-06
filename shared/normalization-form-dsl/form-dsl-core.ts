@@ -332,6 +332,55 @@ export type FormControl =
 export interface FormSlice {
   state: Record<string, unknown>
   config: { elements: FormControl[] }
+  /**
+   * В **`onInit`** / **`onSubmit`** (если рендерер их поддерживает): записать
+   * значения полей в state формы поверх текущего.
+   */
+  mergeState?: (partial: Record<string, unknown>) => void
+}
+
+/** Начальный `state` по дереву контролов (интерактивные поля). */
+export function getInitialFormStateFromElements(
+  elements: FormControl[],
+): Record<string, unknown> {
+  const state: Record<string, unknown> = {}
+  function walk(controls: FormControl[]) {
+    for (const c of controls) {
+      if (c.type === 'checkbox') {
+        state[c.id] = (c as CheckboxControl).checked ?? false
+      }
+      if (c.type === 'input') {
+        const ic = c as InputControl
+        state[c.id] =
+          ic.defaultValue !== undefined && ic.defaultValue !== null
+            ? ic.defaultValue
+            : ''
+      }
+      if (c.type === 'radio') {
+        state[c.id] = (c as RadioControl).value ?? ''
+      }
+      if (c.type === 'select') {
+        const selectCtrl = c as SelectControl
+        state[c.id] =
+          selectCtrl.value ?? (selectCtrl.mode === 'multiple' ? [] : '')
+      }
+      if (c.type === 'toggle') {
+        state[c.id] = (c as ToggleControl).checked ?? false
+      }
+      if (c.type === 'grid') {
+        walk(
+          (c as GridControl).children.filter((x): x is FormControl => x != null),
+        )
+      }
+      if (c.type === 'table') {
+        walk(
+          (c as TableControl).children.filter((x): x is FormControl => x != null),
+        )
+      }
+    }
+  }
+  walk(elements)
+  return state
 }
 
 /** Описание события для UI редактора */
@@ -714,7 +763,7 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
 
 /** Создаёт пустую форму (используется при закрытии, инициализации, ошибке загрузки) */
 export function createEmptyFormData(): FormData {
-  return { name: '', id: `form-${Date.now()}`, elements: [] }
+  return { id: `form-${Date.now()}`, elements: [] }
 }
 
 const emptyFormData = createEmptyFormData
@@ -729,7 +778,6 @@ export function normalizeFormData(data: unknown): FormData {
   }
   if (data && typeof data === 'object' && Array.isArray((data as { elements?: unknown }).elements)) {
     const obj = data as {
-      name?: unknown
       id?: unknown
       configHook?: unknown
       schema?: unknown
@@ -740,7 +788,6 @@ export function normalizeFormData(data: unknown): FormData {
       .map(normalizeControl)
       .filter((x: FormControl | null): x is FormControl => x != null)
     const result: FormData = {
-      name: typeof obj.name === 'string' ? obj.name : '',
       id: typeof obj.id === 'string' ? obj.id : `form-${Date.now()}`,
       elements,
     }
@@ -782,7 +829,6 @@ export function normalizeFormData(data: unknown): FormData {
 /** Сериализует форму в JSON (новый формат: корень с name, id, schema, handlers, elements). */
 export function formToJson(form: FormData): Record<string, unknown> {
   const result: Record<string, unknown> = {
-    name: form.name,
     id: form.id,
   }
   if (form.configHook) {
@@ -814,7 +860,6 @@ export function formToJsonString(form: FormData): string {
  */
 export function formToTs(form: FormData): string {
   const elementsSource = form.elements.map((c) => controlToJsSource(c)).join(',\n')
-  const nameEsc = JSON.stringify(form.name)
   const idEsc = JSON.stringify(form.id)
   let schemaSource = ''
   if (form.schema && Object.keys(form.schema).length > 0) {
@@ -841,7 +886,6 @@ export function formToTs(form: FormData): string {
     }
   }
   return `export default {
-  name: ${nameEsc},
   id: ${idEsc},${schemaSource}${handlersSource}${configHookSource}
   elements: [
 ${elementsSource}

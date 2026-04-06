@@ -200,3 +200,8 @@ html, body, #root {
 .form-files-tree .ant-tree .ant-tree-treenode .ant-tree-node-content-wrapper {
   border-radius: 4px;
 }
+
+/* Свёрнутое описание config hook: без системного треугольника, вид «ссылки» */
+.form-config-hook-doc-summary::-webkit-details-marker {
+  display: none;
+}

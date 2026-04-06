@@ -276,7 +276,7 @@ function App() {
           ) : formData ? (
             <Card mode="filled" size="medium" style={{ flex: 1, minHeight: 0 }}>
               <H6 style={{ marginTop: 0, marginBottom: 16 }}>
-                {formData.name || formData.id}
+                {formData.id}
               </H6>
               <FormRenderer
                 elements={formData.elements}

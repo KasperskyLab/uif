@@ -24,11 +24,10 @@ describe('loadFormDslBrowserRuntime', () => {
     const { loadFormDslBrowserRuntime } = await import('./load-form-dsl-runtime')
     const m = await loadFormDslBrowserRuntime()
     const data = await m.parseFormTs(`export default {
-      name: "Lazy",
       id: "lazy-1",
       elements: [{ type: "text", id: "t1" }]
     }`)
-    expect(data.name).toBe('Lazy')
+    expect(data.id).toBe('lazy-1')
     expect(data.elements).toHaveLength(1)
   })
 })

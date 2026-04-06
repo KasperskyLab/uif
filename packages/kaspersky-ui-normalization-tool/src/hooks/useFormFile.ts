@@ -36,7 +36,7 @@ declare global {
 }
 
 
-const e2eDemoFormData: FormData = { name: 'E2E Demo', id: 'e2e-demo', elements: [] }
+const e2eDemoFormData: FormData = { id: 'e2e-demo', elements: [] }
 
 const e2eFakeFile: SelectedFormFile = {
   path: `e2e-demo/e2e-demo${FORM_SCHEMA_SUFFIX}`,
@@ -154,7 +154,6 @@ export function useFormFile(
       const initialData: FormData = {
         ...empty,
         id: folderId,
-        name: empty.name || 'Новая форма',
       }
       const writable = await fileHandle.createWritable()
       const { formToTs } = await loadFormDslBrowserRuntime()

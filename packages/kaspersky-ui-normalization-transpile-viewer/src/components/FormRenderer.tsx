@@ -37,9 +37,12 @@ import {
 import {
   EXTRA_UI_DSL_TYPES,
   getComponentIdFromDslType,
+  getInitialFormStateFromElements,
+  splitFormConfigHookFactoryResult,
   type ButtonControl,
   type CheckboxControl,
   type ExtraUiControl,
+  type FormConfigHookLifecycle,
   type FormControl,
   type FormSlice,
   type GridControl,
@@ -86,44 +89,6 @@ function coercePropValue(v: string): string | number | boolean | object {
     if (typeof parsed === 'object' && parsed !== null) return parsed
   } catch (_) {}
   return v
-}
-
-/** Собирает из элементов формы плоский объект id -> начальное значение для интерактивных контролов */
-function getInitialFormState(elements: FormControl[]): Record<string, unknown> {
-  const state: Record<string, unknown> = {}
-  function walk(controls: FormControl[]) {
-    for (const c of controls) {
-      if (c.type === 'checkbox') {
-        state[c.id] = (c as CheckboxControl).checked ?? false
-      }
-      if (c.type === 'input') {
-        const ic = c as InputControl
-        state[c.id] =
-          ic.defaultValue !== undefined && ic.defaultValue !== null
-            ? ic.defaultValue
-            : ''
-      }
-      if (c.type === 'radio') {
-        state[c.id] = (c as RadioControl).value ?? ''
-      }
-      if (c.type === 'select') {
-        const selectCtrl = c as SelectControl
-        // Для mode="multiple" начальное значение — массив
-        state[c.id] = selectCtrl.value ?? (selectCtrl.mode === 'multiple' ? [] : '')
-      }
-      if (c.type === 'toggle') {
-        state[c.id] = (c as ToggleControl).checked ?? false
-      }
-      if (c.type === 'grid') {
-        walk((c as GridControl).children.filter((x): x is FormControl => x != null))
-      }
-      if (c.type === 'table') {
-        walk((c as TableControl).children.filter((x): x is FormControl => x != null))
-      }
-    }
-  }
-  walk(elements)
-  return state
 }
 
 const formRowStyle: React.CSSProperties = {
@@ -513,19 +478,6 @@ export interface FormRendererProps {
   formKey?: string
 }
 
-function buildConfigHookRegistry(
-  factory: unknown,
-): ConfigHookRegistry | null {
-  if (typeof factory !== 'function') return null
-  try {
-    const out = (factory as () => unknown)()
-    if (!out || typeof out !== 'object' || Array.isArray(out)) return null
-    return out as ConfigHookRegistry
-  } catch {
-    return null
-  }
-}
-
 export function FormRenderer({
   elements,
   gap = 16,
@@ -534,40 +486,76 @@ export function FormRenderer({
   formKey = '',
 }: FormRendererProps): React.ReactElement {
   const [formState, setFormState] = useState<Record<string, unknown>>(() =>
-    getInitialFormState(elements)
+    getInitialFormStateFromElements(elements),
   )
   const [registry, setRegistry] = useState<ConfigHookRegistry | null>(null)
+  const [lifecycle, setLifecycle] = useState<FormConfigHookLifecycle>({})
   const [registryLoading, setRegistryLoading] = useState(false)
 
+  const mergeFormState = useCallback((partial: Record<string, unknown>) => {
+    setFormState((prev) => ({ ...prev, ...partial }))
+  }, [])
+
   useEffect(() => {
-    setFormState(getInitialFormState(elements))
+    setFormState(getInitialFormStateFromElements(elements))
   }, [formKey])
 
   useEffect(() => {
     if (!formConfigHook || !formDirectoryHandle) {
       setRegistry(null)
+      setLifecycle({})
       setRegistryLoading(false)
       return
     }
     let cancelled = false
     setRegistryLoading(true)
-    loadConfigHookDefaultExport(formDirectoryHandle, formConfigHook).then((factory) => {
-      if (cancelled) return
-      setRegistry(buildConfigHookRegistry(factory))
-      setRegistryLoading(false)
-    })
+    loadConfigHookDefaultExport(formDirectoryHandle, formConfigHook).then(
+      (factory) => {
+        if (cancelled) return
+        if (!factory) {
+          setRegistry(null)
+          setLifecycle({})
+          setRegistryLoading(false)
+          return
+        }
+        const parsed = splitFormConfigHookFactoryResult(factory)
+        if (!parsed) {
+          setRegistry(null)
+          setLifecycle({})
+          setRegistryLoading(false)
+          return
+        }
+        setRegistry(parsed.registry)
+        setLifecycle(parsed.lifecycle)
+        setRegistryLoading(false)
+        if (parsed.lifecycle.onInit) {
+          const initial = getInitialFormStateFromElements(elements)
+          void Promise.resolve(
+            parsed.lifecycle.onInit({
+              state: initial,
+              config: { elements },
+              mergeState: mergeFormState,
+            }),
+          )
+        }
+      },
+    )
     return () => {
       cancelled = true
     }
-  }, [formKey, formConfigHook, formDirectoryHandle])
+  }, [formKey, formConfigHook, formDirectoryHandle, mergeFormState])
 
   const updateValue = useCallback((id: string, value: unknown) => {
     setFormState((prev) => ({ ...prev, [id]: value }))
   }, [])
 
   const formSlice = useMemo(
-    () => ({ state: formState, config: { elements } }),
-    [formState, elements]
+    () => ({
+      state: formState,
+      config: { elements },
+      mergeState: mergeFormState,
+    }),
+    [formState, elements, mergeFormState],
   )
 
   const hookCtx = useMemo(
@@ -770,11 +758,27 @@ export function FormRenderer({
     }
   }
 
+  const body = (
+    <Space size={gap} direction="vertical" style={{ width: '100%' }}>
+      {elements.map((el) => renderControl(el))}
+    </Space>
+  )
+
   return (
     <FormConfigHookContext.Provider value={hookCtx}>
-      <Space size={gap} direction="vertical" style={{ width: '100%' }}>
-        {elements.map((el) => renderControl(el))}
-      </Space>
+      {lifecycle.onSubmit ? (
+        <form
+          style={{ width: '100%' }}
+          onSubmit={(e) => {
+            e.preventDefault()
+            void Promise.resolve(lifecycle.onSubmit?.(formSlice))
+          }}
+        >
+          {body}
+        </form>
+      ) : (
+        body
+      )}
     </FormConfigHookContext.Provider>
   )
 }

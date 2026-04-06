@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { parseFormTs } from './parse-form-ts'
 import {
   isFormSchemaModuleFile,
+  splitFormConfigHookFactoryResult,
   formToJsonString,
   formToJson,
   formToTs,
@@ -51,12 +52,10 @@ describe('form-dsl', () => {
       'parses module with text type (sucrase + import blob)',
       async () => {
         const content = `export default {
-        name: "Test Form",
         id: "form-1",
         elements: [{ type: "text", id: "t1" }]
       };`
         const data = await parseFormTs(content)
-        expect(data.name).toBe('Test Form')
         expect(data.id).toBe('form-1')
         expect(data.elements).toHaveLength(1)
         expect(data.elements[0].type).toBe('text')
@@ -68,12 +67,10 @@ describe('form-dsl', () => {
       'parses export default with empty elements',
       async () => {
         const content = `export default {
-        name: "Exported",
         id: "f2",
         elements: []
       };`
         const data = await parseFormTs(content)
-        expect(data.name).toBe('Exported')
         expect(data.id).toBe('f2')
         expect(data.elements).toEqual([])
       }
@@ -90,12 +87,10 @@ describe('form-dsl', () => {
       'parses source with TypeScript `as const` on default export',
       async () => {
         const content = `export default {
-          name: "TS Form",
           id: "ts-1",
           elements: [{ type: "text", id: "t1" }]
         } as const`
         const data = await parseFormTs(content)
-        expect(data.name).toBe('TS Form')
         expect(data.id).toBe('ts-1')
         expect(data.elements).toHaveLength(1)
         expect(data.elements[0].type).toBe('text')
@@ -108,14 +103,12 @@ describe('form-dsl', () => {
         const content = `
 import { defineFormSchema } from '@normalization/form-dsl'
 const s = defineFormSchema({
-  name: 'Alias Form',
   id: 'alias-1',
   elements: [{ type: 'text', id: 't1' }],
 })
 export default s
 `
         const data = await parseFormTs(content)
-        expect(data.name).toBe('Alias Form')
         expect(data.id).toBe('alias-1')
         expect(data.elements).toHaveLength(1)
       },
@@ -125,22 +118,20 @@ export default s
   describe('formToJson / formToJsonString', () => {
     it('serializes form to JSON object and string', () => {
       const form: FormData = {
-        name: 'Serial',
         id: 's1',
         elements: [textControl('t1')],
       }
       const obj = formToJson(form)
-      expect(obj.name).toBe('Serial')
       expect(obj.id).toBe('s1')
+      expect(obj.name).toBeUndefined()
       expect(Array.isArray(obj.elements)).toBe(true)
       const str = formToJsonString(form)
-      expect(str).toContain('"name": "Serial"')
+      expect(str).toContain('"id": "s1"')
       expect(JSON.parse(str)).toEqual(obj)
     })
 
     it('includes form-level configHook in JSON', () => {
       const form: FormData = {
-        name: 'F',
         id: 'fid',
         configHook: 'fid.config-hook.ts',
         elements: [],
@@ -151,22 +142,19 @@ export default s
   })
 
   describe('formToTs', () => {
-    it('outputs export default with name, id, elements', () => {
+    it('outputs export default with id, elements', () => {
       const form: FormData = {
-        name: 'JsForm',
         id: 'j1',
         elements: [textControl('t1')],
       }
       const js = formToTs(form)
       expect(js).toContain('export default')
-      expect(js).toContain('name: "JsForm"')
       expect(js).toContain('id: "j1"')
       expect(js).toContain('elements:')
     })
 
     it('outputs form-level configHook as dynamic import', () => {
       const form: FormData = {
-        name: 'Hooked',
         id: 'hf1',
         configHook: 'hf1.config-hook.ts',
         elements: [textControl('t1')],
@@ -251,7 +239,6 @@ export default s
   describe('formToTs preserves schema', () => {
     it('outputs schema block in JS module', () => {
       const form: FormData = {
-        name: 'SchemaTest',
         id: 'sf1',
         schema: {
           email: { type: 'string', label: 'Email' },
@@ -270,7 +257,6 @@ export default s
 
     it('formToJson includes schema and field bindings', () => {
       const form: FormData = {
-        name: 'J',
         id: 'j1',
         schema: { name: { type: 'string' } },
         elements: [
@@ -299,7 +285,6 @@ export default s
 
     it('formToTs outputs handlers as import functions for controls', () => {
       const form: FormData = {
-        name: 'Test',
         id: 'f1',
         elements: [
           { type: 'input', id: 'i1', handlers: { onChange: 'handlers/change.js' } },
@@ -311,7 +296,6 @@ export default s
 
     it('formToTs outputs form-level handlers as import functions', () => {
       const form: FormData = {
-        name: 'Test',
         id: 'f1',
         handlers: { onSubmit: 'handlers/submit.js', onInit: 'handlers/init.js' },
         elements: [],
@@ -324,7 +308,6 @@ export default s
 
     it('formToJson includes form-level handlers as paths', () => {
       const form: FormData = {
-        name: 'Test',
         id: 'f1',
         handlers: { onSubmit: 'handlers/submit.js' },
         elements: [],
@@ -470,6 +453,72 @@ export default s
       expect(tabs.items[0].children).toHaveLength(1)
       const cell = tabs.items[0].children[0] as TextControl
       expect(cell.id).toBe('tab1-text')
+    })
+  })
+
+  describe('splitFormConfigHookFactoryResult', () => {
+    it('returns null for non-function', () => {
+      expect(splitFormConfigHookFactoryResult(null)).toBeNull()
+      expect(splitFormConfigHookFactoryResult({})).toBeNull()
+    })
+
+    it('returns null when factory returns non-object', () => {
+      expect(splitFormConfigHookFactoryResult(() => null)).toBeNull()
+      expect(splitFormConfigHookFactoryResult(() => [])).toBeNull()
+    })
+
+    it('returns null when factory throws', () => {
+      expect(
+        splitFormConfigHookFactoryResult(() => {
+          throw new Error('x')
+        }),
+      ).toBeNull()
+    })
+
+    it('splits lifecycle keys from registry', () => {
+      const onInit = () => {}
+      const onSubmit = async () => {}
+      const hook = () => ({})
+      const parsed = splitFormConfigHookFactoryResult(() => ({
+        field1: hook,
+        onInit,
+        onSubmit,
+      }))
+      expect(parsed).not.toBeNull()
+      expect(parsed!.registry).toEqual({ field1: hook })
+      expect(parsed!.lifecycle.onInit).toBe(onInit)
+      expect(parsed!.lifecycle.onSubmit).toBe(onSubmit)
+    })
+
+    it('ignores non-function lifecycle values', () => {
+      const hook = () => ({})
+      const parsed = splitFormConfigHookFactoryResult(() => ({
+        onInit: 'bad' as unknown as () => void,
+        x: hook,
+      }))
+      expect(parsed).not.toBeNull()
+      expect(parsed!.lifecycle.onInit).toBeUndefined()
+      expect(parsed!.registry.x).toBe(hook)
+    })
+
+    it('reads registry from elements section', () => {
+      const hook = () => ({})
+      const parsed = splitFormConfigHookFactoryResult(() => ({
+        elements: { a: hook, b: hook },
+      }))
+      expect(parsed).not.toBeNull()
+      expect(parsed!.registry).toEqual({ a: hook, b: hook })
+    })
+
+    it('merges elements then top-level hooks (top overrides)', () => {
+      const hookA = () => 'a'
+      const hookB = () => 'b'
+      const parsed = splitFormConfigHookFactoryResult(() => ({
+        elements: { k: hookA },
+        k: hookB,
+      }))
+      expect(parsed).not.toBeNull()
+      expect(parsed!.registry.k).toBe(hookB)
     })
   })
 })

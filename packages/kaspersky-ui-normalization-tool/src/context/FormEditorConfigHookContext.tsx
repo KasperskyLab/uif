@@ -1,11 +1,17 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from 'react'
-import type { FormControl, FormSlice } from '../types/form-dsl'
+import {
+  getInitialFormStateFromElements,
+  splitFormConfigHookFactoryResult,
+  type FormControl,
+  type FormSlice,
+} from '../types/form-dsl'
 import { loadConfigHookDefaultExport } from '../utils/loadConfigHookModule'
 
 type ConfigHookRegistry = Record<string, (formSlice: FormSlice) => unknown>
@@ -22,19 +28,6 @@ const FormEditorConfigHookContext = createContext<{
   formSlice: { state: {}, config: { elements: [] } },
 })
 
-function buildConfigHookRegistry(
-  factory: unknown,
-): ConfigHookRegistry | null {
-  if (typeof factory !== 'function') return null
-  try {
-    const out = (factory as () => unknown)()
-    if (!out || typeof out !== 'object' || Array.isArray(out)) return null
-    return out as ConfigHookRegistry
-  } catch {
-    return null
-  }
-}
-
 export function FormEditorConfigHookProvider({
   children,
   formKey,
@@ -50,6 +43,27 @@ export function FormEditorConfigHookProvider({
 }): React.ReactElement {
   const [registry, setRegistry] = useState<ConfigHookRegistry | null>(null)
   const [registryLoading, setRegistryLoading] = useState(false)
+  const [hookStatePatch, setHookStatePatch] = useState<
+    Record<string, unknown>
+  >({})
+
+  const mergeState = useCallback((partial: Record<string, unknown>) => {
+    setHookStatePatch((prev) => ({ ...prev, ...partial }))
+  }, [])
+
+  useEffect(() => {
+    setHookStatePatch({})
+  }, [formKey])
+
+  const baseFormState = useMemo(
+    () => getInitialFormStateFromElements(elements),
+    [elements],
+  )
+
+  const mergedFormState = useMemo(
+    () => ({ ...baseFormState, ...hookStatePatch }),
+    [baseFormState, hookStatePatch],
+  )
 
   useEffect(() => {
     if (!formConfigHook || !formDirectoryHandle) {
@@ -64,17 +78,42 @@ export function FormEditorConfigHookProvider({
       formConfigHook,
     ).then((factory) => {
       if (cancelled) return
-      setRegistry(buildConfigHookRegistry(factory))
+      if (!factory) {
+        setRegistry(null)
+        setRegistryLoading(false)
+        return
+      }
+      const parsed = splitFormConfigHookFactoryResult(factory)
+      if (!parsed) {
+        setRegistry(null)
+        setRegistryLoading(false)
+        return
+      }
+      setRegistry(parsed.registry)
       setRegistryLoading(false)
+      if (parsed.lifecycle.onInit) {
+        const initial = getInitialFormStateFromElements(elements)
+        void Promise.resolve(
+          parsed.lifecycle.onInit({
+            state: initial,
+            config: { elements },
+            mergeState,
+          }),
+        )
+      }
     })
     return () => {
       cancelled = true
     }
-  }, [formKey, formConfigHook, formDirectoryHandle])
+  }, [formKey, formConfigHook, formDirectoryHandle, mergeState])
 
   const formSlice = useMemo<FormSlice>(
-    () => ({ state: {}, config: { elements } }),
-    [elements],
+    () => ({
+      state: mergedFormState,
+      config: { elements },
+      mergeState,
+    }),
+    [mergedFormState, elements, mergeState],
   )
 
   const value = useMemo(

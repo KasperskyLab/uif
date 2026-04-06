@@ -1,7 +1,6 @@
 import { defineFormSchema } from '@normalization/form-dsl'
 
 export default defineFormSchema({
-  name: 'Демо: сетка и таблица',
   id: 'demo',
   configHook: './demo.config-hook.ts',
   elements: [

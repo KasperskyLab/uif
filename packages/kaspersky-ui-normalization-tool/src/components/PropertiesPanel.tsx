@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { Space, Text, H6, Textbox, Select, Checkbox as HexaCheckbox, Button } from '@kaspersky/hexa-ui'
 import { Add, Delete } from '@kaspersky/hexa-ui-icons/16'
 import { SelectWithOptionWidth } from './SelectWithOptionWidth'
-import type { FormControl, FormControlBase, FormData, FieldSchema, ValidationRule, ValidationRuleType, Condition } from '../types/form-dsl'
+import type { FormControl, FormControlBase, FormData, ValidationRule, ValidationRuleType, Condition } from '../types/form-dsl'
 import { EXTRA_UI_DSL_TYPES } from '../types/form-dsl'
-import { CONTROL_EVENTS, FORM_EVENTS } from '../types/form-dsl'
+import { CONTROL_EVENTS } from '../types/form-dsl'
 import { getDescriptor } from '../controls/registry'
 import { HandlersEditor } from './HandlersEditor'
 import { FormConfigHookPathEditor } from './FormConfigHookPathEditor'
@@ -103,67 +103,6 @@ function FieldBindingEditor({
         </Space>
       </div>
     </>
-  )
-}
-
-function SchemaEditor({
-  schema,
-  onSchemaUpdate,
-}: {
-  schema: Record<string, FieldSchema>
-  onSchemaUpdate: (schema: Record<string, FieldSchema>) => void
-}) {
-  const [newFieldName, setNewFieldName] = useState('')
-
-  const addField = () => {
-    const name = newFieldName.trim()
-    if (!name || schema[name]) return
-    onSchemaUpdate({ ...schema, [name]: { type: 'string' } })
-    setNewFieldName('')
-  }
-
-  return (
-    <div style={{ width: '100%', borderTop: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)', paddingTop: 16 }}>
-      <Text type="BTR3" style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>Схема данных формы</Text>
-      <Space size={8} direction="vertical" style={{ width: '100%' }}>
-        {Object.entries(schema).map(([name, field]) => (
-          <div key={name} style={{ display: 'flex', gap: 6, alignItems: 'center', width: '100%' }}>
-            <Textbox value={name} readOnly style={{ flex: 1 }} />
-            <select
-              value={field.type}
-              onChange={(e) => onSchemaUpdate({ ...schema, [name]: { ...field, type: e.target.value as FieldSchema['type'] } })}
-              style={{ height: 32, borderRadius: 4, border: '1px solid #ccc', padding: '0 4px' }}
-            >
-              <option value="string">string</option>
-              <option value="number">number</option>
-              <option value="boolean">boolean</option>
-              <option value="date">date</option>
-              <option value="array">array</option>
-            </select>
-            <Button
-              mode="tertiary"
-              iconBefore={<Delete />}
-              onClick={() => {
-                const next = { ...schema }
-                delete next[name]
-                onSchemaUpdate(next)
-              }}
-              size="small"
-            />
-          </div>
-        ))}
-        <div style={{ display: 'flex', gap: 6, alignItems: 'center', width: '100%' }}>
-          <Textbox
-            value={newFieldName}
-            onChange={setNewFieldName}
-            placeholder="Имя нового поля"
-            style={{ flex: 1 }}
-            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter') addField() }}
-          />
-          <Button mode="secondary" iconBefore={<Add />} onClick={addField} size="small" />
-        </div>
-      </Space>
-    </div>
   )
 }
 
@@ -359,14 +298,6 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
         {formData ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', marginTop: 12 }}>
             <div style={{ width: '100%' }}>
-              <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Имя</Text>
-              <Textbox
-                value={formData.name}
-                onChange={(v) => onFormUpdate({ name: v })}
-                placeholder="Название формы"
-              />
-            </div>
-            <div style={{ width: '100%' }}>
               <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Идентификатор</Text>
               <Textbox
                 value={formData.id}
@@ -374,17 +305,6 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
                 placeholder="id формы"
               />
             </div>
-            <SchemaEditor
-              schema={formData.schema ?? {}}
-              onSchemaUpdate={(schema) => onFormUpdate({ schema: Object.keys(schema).length > 0 ? schema : undefined })}
-            />
-            <HandlersEditor
-              title="Обработчики формы"
-              events={FORM_EVENTS}
-              handlers={formData.handlers ?? {}}
-              onChange={(h) => onFormUpdate({ handlers: Object.keys(h).length > 0 ? h : undefined })}
-              directoryHandle={formDirectoryHandle}
-            />
             <FormConfigHookPathEditor
               value={formData.configHook}
               onChange={(path) =>

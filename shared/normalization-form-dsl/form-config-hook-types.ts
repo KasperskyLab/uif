@@ -25,15 +25,90 @@ export type FormConfigHookRegistry<ControlId extends string> = Partial<
   Record<ControlId, FormConfigHookFn>
 >
 
+/**
+ * Колбэки жизненного цикла — на верхнем уровне возврата модуля рядом с **`elements`**.
+ * Синхронные или **`async`** (**`Promise<void>`**); рендерер оборачивает вызов в
+ * **`Promise.resolve`**.
+ */
+export type FormConfigHookLifecycleFn = (slice: FormSlice) => void | Promise<void>
+
+export interface FormConfigHookLifecycle {
+  onInit?: FormConfigHookLifecycleFn
+  onSubmit?: FormConfigHookLifecycleFn
+}
+
+const FORM_CONFIG_HOOK_LIFECYCLE_KEYS = new Set<string>(['onInit', 'onSubmit'])
+
+/** Зарезервированы на верхнем уровне возврата хука (не **`control.id`**). */
+const FORM_CONFIG_HOOK_TOP_RESERVED_KEYS = new Set<string>([
+  ...FORM_CONFIG_HOOK_LIFECYCLE_KEYS,
+  'elements',
+])
+
+function mergeRegistryFromElementsObject(
+  registry: Record<string, (slice: FormSlice) => unknown>,
+  elements: unknown,
+): void {
+  if (!elements || typeof elements !== 'object' || Array.isArray(elements)) return
+  for (const [key, val] of Object.entries(elements as Record<string, unknown>)) {
+    if (typeof val === 'function') {
+      registry[key] = val as (slice: FormSlice) => unknown
+    }
+  }
+}
+
+/**
+ * Вызывает фабрику `default export` и отделяет **`onInit`** / **`onSubmit`** от реестра.
+ * Реестр: **`elements`** (`control.id` → хук), при отсутствии — плоские ключи верхнего уровня
+ * (устаревший вид). Ключ **`elements`** на верхнем уровне зарезервирован.
+ */
+export function splitFormConfigHookFactoryResult(
+  factory: unknown,
+): {
+  registry: Record<string, (slice: FormSlice) => unknown>
+  lifecycle: FormConfigHookLifecycle
+} | null {
+  if (typeof factory !== 'function') return null
+  try {
+    const out = (factory as () => unknown)()
+    if (!out || typeof out !== 'object' || Array.isArray(out)) return null
+    const registry: Record<string, (slice: FormSlice) => unknown> = {}
+    const lifecycle: FormConfigHookLifecycle = {}
+    const top = out as Record<string, unknown>
+    mergeRegistryFromElementsObject(registry, top.elements)
+    for (const [key, val] of Object.entries(top)) {
+      if (FORM_CONFIG_HOOK_LIFECYCLE_KEYS.has(key) && typeof val === 'function') {
+        if (key === 'onInit') lifecycle.onInit = val as FormConfigHookLifecycleFn
+        if (key === 'onSubmit') lifecycle.onSubmit = val as FormConfigHookLifecycleFn
+        continue
+      }
+      if (FORM_CONFIG_HOOK_TOP_RESERVED_KEYS.has(key)) continue
+      if (typeof val === 'function') {
+        registry[key] = val as (slice: FormSlice) => unknown
+      }
+    }
+    return { registry, lifecycle }
+  } catch {
+    return null
+  }
+}
+
+/** Возврат модуля `*.config-hook.ts`: lifecycle + реестр в **`elements`**. */
+export type FormConfigHookModuleReturn<ControlId extends string> =
+  FormConfigHookLifecycle & {
+    elements: FormConfigHookRegistry<ControlId>
+  }
+
 /** Тип фабрики `default export` модуля `*.config-hook.ts`. */
-export type FormConfigHookFactory<ControlId extends string> = () => FormConfigHookRegistry<ControlId>
+export type FormConfigHookFactory<ControlId extends string> =
+  () => FormConfigHookModuleReturn<ControlId>
 
 /**
  * Модель модуля `*.schema.ts` с сохранением литералов `elements` (`as const`).
  */
 export type FormSchemaDefinition<Elements extends readonly unknown[]> = Pick<
   FormData,
-  'name' | 'id'
+  'id'
 > & {
   configHook?: FormData['configHook']
   schema?: FormData['schema']
@@ -98,6 +173,6 @@ export type FormControlIdsOf<Schema> = Schema extends DefinedFormData<infer I>
 export type FormConfigHookRegistryFor<Schema extends FormData> =
   FormConfigHookRegistry<FormControlIdsOf<Schema>>
 
-/** Фабрика реестра для той же схемы (`default export` `*.config-hook.ts`). */
+/** Фабрика для той же схемы (`default export` `*.config-hook.ts`). */
 export type FormConfigHookFactoryFor<Schema extends FormData> =
-  () => FormConfigHookRegistryFor<Schema>
+  () => FormConfigHookModuleReturn<FormControlIdsOf<Schema>>

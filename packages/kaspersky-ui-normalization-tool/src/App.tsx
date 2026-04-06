@@ -670,7 +670,7 @@ function App() {
                       }}
                     >
                       <H6 style={{ margin: 0 }}>
-                        {previewMode ? 'WYSIWYG' : 'Форма'}: {formData.name || selectedFile.path}
+                        {previewMode ? 'WYSIWYG' : 'Форма'}: {formData.id || selectedFile.path}
                         {hasUnsavedChanges && (
                           <Text type="BTR3" style={{ color: '#fa8c16', marginLeft: 8 }}>
                             не сохранено

@@ -9,11 +9,6 @@ import { fileURLToPath } from 'url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const OUT_DIR = path.join(__dirname, '..', 'dsl')
 
-const NAMES = [
-  'Регистрация', 'Опрос', 'Настройки', 'Профиль', 'Заказ', 'Обратная связь',
-  'Логин', 'Фильтры', 'Поиск', 'Карточка товара',
-]
-
 const LABEL_POSITIONS = ['after', 'before']
 const META_COMPONENTS = ['Button', 'Text', 'Textbox', 'Badge', 'Tag', 'Link', 'H6']
 
@@ -128,7 +123,6 @@ function toJsSource(form) {
     return `    {\n${inner}\n    }`
   }).join(',\n')
   return `export default {
-  name: ${esc(form.name)},
   id: ${esc(form.id)},
   elements: [
 ${elLines}
@@ -139,14 +133,9 @@ ${elLines}
 
 function generateForms() {
   if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true })
-  const usedNames = new Set()
   for (let n = 1; n <= 10; n++) {
-    let name = pick(NAMES)
-    while (usedNames.has(name)) name = pick(NAMES)
-    usedNames.add(name)
     const formId = `form-random-${Date.now()}-${n}-${Math.random().toString(36).slice(2, 6)}`
     const form = {
-      name,
       id: formId,
       elements: elements(randInt(2, 6)),
     }

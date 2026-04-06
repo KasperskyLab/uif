@@ -10,8 +10,7 @@ export interface FieldSchema {
 }
 
 export interface FormData {
-  name: string
-  /** Идентификатор формы */
+  /** Идентификатор формы (и имя каталога `dsl/{id}/`) */
   id: string
   /**
    * Единый модуль `configHook` на форму (только `.ts`).

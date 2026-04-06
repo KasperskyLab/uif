@@ -24,9 +24,12 @@
 
 ## Контракт модуля
 
-- **Default export:** функция **`(): Record<ControlId, ConfigHookFn>`**.
-- **`ConfigHookFn`:** та же сигнатура, что у контракта [feat-config-hook](./feat-config-hook.md): один аргумент **`FormSlice`**, результат — полный объект пропсов экземпляра компонента ДС **или `null`** (не монтировать).
-- **`ControlId`:** строковый идентификатор контрола в дереве формы (**`control.id`**), совпадающий с ключами возвращаемого объекта.
+- **Default export:** функция **`()`**, возвращающая **`FormConfigHookModuleReturn`** (см. **`form-config-hook-types.ts`**): опционально **`onInit`** / **`onSubmit`** и **`elements`** — **`Partial<Record<control.id, ConfigHookFn>>`** (в типе **`FormConfigHookFactoryFor`** поле **`elements`** обязательно, может быть **`{}`**).
+- **`ConfigHookFn`:** как у [feat-config-hook](./feat-config-hook.md): аргумент **`FormSlice`**, результат — пропсы экземпляра ДС **или `null`**.
+- **`elements`:** объект **`control.id → ConfigHookFn`**. Ключ **`elements`** на **верхнем** уровне возврата зарезервирован (не **`control.id`**). **Устаревший вид:** функции-хуки лежали прямо в корне объекта рядом с **`onInit`** / **`onSubmit`** — **`splitFormConfigHookFactoryResult`** по-прежнему их подхватывает; при одновременном наличии **`elements`** и плоского ключа с тем же **`id`** приоритет у **плоского** (перекрытие).
+- **`onInit?` / `onSubmit?`:** **`FormConfigHookLifecycleFn`** — **`(slice: FormSlice) => void | Promise<void>`** (см. **`form-config-hook-types.ts`**): **`async`** / **`await`** допустимы; рендерер вызывает через **`Promise.resolve(...)`**. **Не используйте** **`onInit`** и **`onSubmit`** как **`control.id`**. Разбор — **`splitFormConfigHookFactoryResult`** (**`@normalization/form-dsl`**).
+  - **`onInit`:** **один раз** после успешной загрузки модуля хука; в **`slice.state`** — начальные значения (как после **`getInitialFormStateFromElements`**). Данные в state — только **`slice.mergeState?.(partial)`** (ключи — **`control.id`**); **возврат** колбэка **`onInit`** в state **не** мержится.
+  - **`onSubmit`:** при нативном **`submit`**; **`FormRenderer`** оборачивает контент в **`<form>`** только если **`onSubmit`** задан. В колбэк — актуальный **`FormSlice`**. К кнопке Hexa — **`type: 'submit'`** (`htmlType="submit"`).
 
 При отсутствии ключа **`control.id`** в реестре: для контролов, у которых в DSL **нет** самодостаточных статических пропсов Hexa (**`button`**, **`text`**, **`input`**, **`grid`**, **`table`** и т.п.), рендерер показывает **заглушку** или сообщение о необходимости хука; для остальных типов по-прежнему возможен рендер только из DSL.
 
@@ -51,13 +54,14 @@
 ## Рантайм
 
 - Модуль загружается **один раз** на экземпляр формы в **`FormRenderer`** (кэш на время жизни формы; общий контур с [feat-lazy-dsl-runtime](./feat-lazy-dsl-runtime.md)).
-- Реестр: результат вызова default export (фабрики). Вызов хука для контрола — **`registry[id](slice)`** при наличии `registry[id]`.
+- Реестр: из **`elements`** и при необходимости с плоских ключей (см. **`splitFormConfigHookFactoryResult`**). Вызов хука для контрола — **`registry[id](slice)`** при наличии **`registry[id]`**.
 
 ---
 
 ## Редактор и демо
 
 - В **normalization-tool** путь к хуку задаётся как **единственный** артефакт динамической конфигурации для формы (без per-control полей в UI модели).
+- **Подсказки в панели «Свойства» (форма выбрана, контрол не выбран):** компонент **`FormConfigHookPathEditor`** — заголовок **«Config Hook»**, кнопка выбора **`.ts`** через скрытый **`input type="file"`** и **`Button`** из Hexa (путь — имя файла или **`webkitRelativePath`** при сценарии с каталогом в браузере), строка текущего пути и сброс; ниже **`<details>`**: строка **«Описание config hook»** оформлена как ссылка (цвет, подчёркивание) и **по клику разворачивает** блок: сверху **короткий сниппет** с **`elements`**, затем краткий **продуктовый** текст (зарезервированные **`onInit`** / **`onSubmit`** / **`elements`**, **`mergeState`**, **`<form>`** и **`type: 'submit'`**), без перехода на внешний URL. При изменении контракта **обновляйте** и этот файл фичи, и **`FormConfigHookPathEditor`**.
 - **Демо:** каталог **`dsl/demo/`** — **`demo.schema.ts`** и **`demo.config-hook.ts`**.
 - Файл **дефолтов настроек** при создании хука и прочие пункты §3.4 (URL, WYSIWYG-спека отдельно, dev) — **не входят** в этот этап; **текущие дефолты в коде на этом этапе не меняются**.
 

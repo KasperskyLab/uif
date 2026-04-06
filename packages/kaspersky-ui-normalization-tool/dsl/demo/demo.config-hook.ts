@@ -1,29 +1,46 @@
 /**
- * Единый configHook формы `demo`: default export — фабрика реестра по control.id.
+ * Единый configHook формы `demo`: default export — lifecycle и секция `elements` (id → хук).
  */
 import type { ReactNode } from 'react'
 import type { ButtonProps, GridProps, TextProps, TextboxProps } from '@kaspersky/hexa-ui'
 import type { ITableProps } from '@kaspersky/hexa-ui'
 import type {
   FormConfigHookFactoryFor,
-  FormConfigHookRegistryFor,
   FormControlIdsOf,
   FormSlice,
 } from '@normalization/form-dsl'
 import demoSchema from './demo.schema'
 
 type DemoSchema = typeof demoSchema
-type DemoRegistry = FormConfigHookRegistryFor<DemoSchema>
 
 const DEMO_GRID_INPUT_ID =
   'demo.grid.input' satisfies FormControlIdsOf<DemoSchema>
+
+const DEMO_FAKE_LOAD_MS = 450
+
+async function loadFakeDemoFormState(): Promise<Record<string, unknown>> {
+  await new Promise((r) => setTimeout(r, DEMO_FAKE_LOAD_MS))
+  return {
+    [DEMO_GRID_INPUT_ID]: 'Текст с фейкового API (onInit)',
+  }
+}
+
+/** Отправка формы: `type: 'submit'` — срабатывает `onSubmit` из того же configHook. */
+function useDemoGridSubmitButton(_formSlice: FormSlice): ButtonProps | null {
+  return {
+    mode: 'primary',
+    size: 'medium',
+    type: 'submit',
+    text: 'Submit button',
+  }
+}
 
 function useDemoButton(formSlice: FormSlice): ButtonProps | null {
   const { state } = formSlice
   const fromState = String(state[DEMO_GRID_INPUT_ID] ?? '').trim()
   const text =
     fromState || 'Введите текст в поле «Текст кнопки» выше'
-  const result: ButtonProps = {
+  return {
     mode: 'dangerFilled',
     size: 'medium',
     text,
@@ -36,7 +53,6 @@ function useDemoButton(formSlice: FormSlice): ButtonProps | null {
       window.alert('Клик из configHook.\n\nformSlice.state:\n' + preview)
     },
   }
-  return result
 }
 
 function useDemoText(formSlice: FormSlice): TextProps | null {
@@ -132,18 +148,27 @@ function useDemoTable(formSlice: FormSlice): Partial<ITableProps> | null {
   }
 }
 
-const useDemo: FormConfigHookFactoryFor<DemoSchema> = () =>
-  ({
+const useDemo: FormConfigHookFactoryFor<DemoSchema> = () => ({
+  onInit: async (slice) => {
+    const fake = await loadFakeDemoFormState()
+    slice.mergeState?.(fake)
+    console.log('[demo.config-hook] onInit: подставлены фейковые данные', fake)
+  },
+  onSubmit: (slice) => {
+    console.log('[demo.config-hook] onSubmit: state формы', slice.state)
+  },
+  elements: {
     'demo.grid': useDemoGrid,
     'demo.grid.input': useDemoGridInput,
     'demo.grid.text': useDemoText,
-    'demo.grid.button': useDemoButton,
+    'demo.grid.button': useDemoGridSubmitButton,
     'demo.table': useDemoTable,
     'demo.table.text1': useDemoText,
     'demo.table.textPlain': useDemoText,
     'demo.table.text2': useDemoText,
     'demo.table.button1': useDemoButton,
     'demo.table.button2': useDemoButton,
-  }) satisfies DemoRegistry
+  },
+})
 
 export default useDemo
