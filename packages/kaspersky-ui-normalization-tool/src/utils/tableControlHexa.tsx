@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import type { TableColumn, TableRecord } from '@kaspersky/hexa-ui'
 import type { TableControl } from '../types/form-dsl'
 
-/** Поле строки в `dataSource` для вычисления индекса ячейки. */
+/** Поле строки в `dataSource` для отладки; индекс ряда берётся из `rowIndex` Ant Table. */
 export const TABLE_MATRIX_ROW_INDEX_KEY = 'dslRowIndex'
 
 export type TableMatrixHookMerge = {
@@ -12,12 +12,21 @@ export type TableMatrixHookMerge = {
   dataSource?: readonly Partial<TableRecord>[] | undefined
 }
 
+/** Контекст рендера одной ячейки матрицы (`шаблон колонки` × строка dataSource). */
+export type TableMatrixRenderContext = {
+  rowIndex: number
+  colIndex: number
+  record: TableRecord
+}
+
 /**
  * Колонки и строки для Hexa `<Table />` по матрице ячеек (`dims.rows` × `dims.cols`).
+ * В DSL задаётся **одна строка шаблона** длины `dims.cols`; `renderCell` вызывается
+ * для каждой строки `dataSource` и каждой колонки.
  */
 export function buildTableMatrixColumnsAndDataSource(
   t: Pick<TableControl, 'id'>,
-  renderCell: (flatIndex: number) => ReactNode,
+  renderCell: (ctx: TableMatrixRenderContext) => ReactNode,
   dims: { rows: number; cols: number },
   mergeFromHook?: TableMatrixHookMerge,
 ): { dataSource: TableRecord[]; columns: TableColumn[] } {
@@ -39,10 +48,15 @@ export function buildTableMatrixColumnsAndDataSource(
     const hookCol = mergeFromHook?.columns?.[c]
     const { render: _ignoreHookRender, ...hookRest } = (hookCol ??
       {}) as Partial<TableColumn> & { render?: unknown }
-    const render: TableColumn['render'] = (_value, record) => {
-      const r = record[TABLE_MATRIX_ROW_INDEX_KEY] as number
-      const i = r * cols + c
-      return renderCell(i)
+    const render: TableColumn['render'] = (_value, record, rowIndex) => {
+      const fromRecord = record?.[TABLE_MATRIX_ROW_INDEX_KEY]
+      const r =
+        typeof rowIndex === 'number' && rowIndex >= 0
+          ? rowIndex
+          : typeof fromRecord === 'number'
+            ? fromRecord
+            : 0
+      return renderCell({ rowIndex: r, colIndex: c, record })
     }
     return {
       key: `${t.id}-col-${c}`,

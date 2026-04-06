@@ -11,9 +11,15 @@ export type TableMatrixHookMerge = {
   dataSource?: readonly Partial<TableRecord>[] | undefined
 }
 
+export type TableMatrixRenderContext = {
+  rowIndex: number
+  colIndex: number
+  record: TableRecord
+}
+
 export function buildTableMatrixColumnsAndDataSource(
   t: Pick<TableControl, 'id'>,
-  renderCell: (flatIndex: number) => ReactNode,
+  renderCell: (ctx: TableMatrixRenderContext) => ReactNode,
   dims: { rows: number; cols: number },
   mergeFromHook?: TableMatrixHookMerge,
 ): { dataSource: TableRecord[]; columns: TableColumn[] } {
@@ -35,10 +41,15 @@ export function buildTableMatrixColumnsAndDataSource(
     const hookCol = mergeFromHook?.columns?.[c]
     const { render: _ignoreHookRender, ...hookRest } = (hookCol ??
       {}) as Partial<TableColumn> & { render?: unknown }
-    const render: TableColumn['render'] = (_value, record) => {
-      const r = record[TABLE_MATRIX_ROW_INDEX_KEY] as number
-      const i = r * cols + c
-      return renderCell(i)
+    const render: TableColumn['render'] = (_value, record, rowIndex) => {
+      const fromRecord = record?.[TABLE_MATRIX_ROW_INDEX_KEY]
+      const r =
+        typeof rowIndex === 'number' && rowIndex >= 0
+          ? rowIndex
+          : typeof fromRecord === 'number'
+            ? fromRecord
+            : 0
+      return renderCell({ rowIndex: r, colIndex: c, record })
     }
     return {
       key: `${t.id}-col-${c}`,

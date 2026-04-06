@@ -63,10 +63,18 @@ function useDemoText(formSlice: FormSlice): TextProps | null {
       : keys.map((id) => `${id}: ${JSON.stringify(formSlice.state[id])}`).join(
           ', ',
         )
+  const rowLabel =
+    formSlice.tableRow &&
+    typeof (formSlice.tableRow as { label?: unknown }).label !== 'undefined'
+      ? String((formSlice.tableRow as { label?: unknown }).label)
+      : ''
+  const rowPart = rowLabel
+    ? `Строка таблицы (dataSource): ${rowLabel}. `
+    : ''
   return {
     type: 'BTR3',
     color: 'primary',
-    children: `Текст из configHook. State: ${preview}`,
+    children: `${rowPart}Текст из configHook. State: ${preview}`,
   }
 }
 
@@ -88,7 +96,7 @@ function useDemoGridInput(
 
 /** Длины массивов задают матрицу DSL (как в контракте Hexa); содержимое строк подменяет рендерер. */
 const DEMO_TABLE_DS_ROWS = 2
-const DEMO_TABLE_DS_COLS = 3
+const DEMO_TABLE_DS_COLS = 6
 
 function useDemoTable(formSlice: FormSlice): Partial<ITableProps> | null {
   const state = formSlice.state ?? {}
@@ -97,6 +105,7 @@ function useDemoTable(formSlice: FormSlice): Partial<ITableProps> | null {
   return {
     dataSource: Array.from({ length: DEMO_TABLE_DS_ROWS }, (_, r) => ({
       key: `demo-table-row-${r}`,
+      label: `Строка ${r + 1}`,
     })),
     columns: Array.from({ length: DEMO_TABLE_DS_COLS }, (_, c) => ({
       key: `demo-table-col-${c}`,

@@ -122,6 +122,17 @@ function padOrTruncateChildren(
   return result
 }
 
+function getTableTemplateRowChildren(
+  children: (FormControl | null)[],
+  cols: number,
+  rows: number,
+): (FormControl | null)[] {
+  const full = rows * cols
+  const slice =
+    children.length >= full ? children.slice(0, cols) : children
+  return padOrTruncateChildren(slice, cols)
+}
+
 type ButtonConfigHookFn = (formSlice: FormSlice) => ButtonProps | null
 
 type TextConfigHookFn = (formSlice: FormSlice) => TextProps | null
@@ -177,7 +188,7 @@ function ButtonRenderer({
     }
     return <Button mode="tertiary" text={`[${control.id}]`} disabled />
   }
-  return <ButtonWithHook key={control.id} hookFn={hookFn} formSlice={formSlice} />
+  return <ButtonWithHook hookFn={hookFn} formSlice={formSlice} />
 }
 
 function TextWithHook({
@@ -216,7 +227,7 @@ function TextRenderer({
       </Text>
     )
   }
-  return <TextWithHook key={control.id} hookFn={hookFn} formSlice={formSlice} />
+  return <TextWithHook hookFn={hookFn} formSlice={formSlice} />
 }
 
 function InputRenderer({
@@ -420,24 +431,33 @@ function TableRenderer({
     )
   }
 
-  const effectiveChildren = padOrTruncateChildren(
+  const templateChildren = getTableTemplateRowChildren(
     t.children,
-    rowCount * columnCount,
+    columnCount,
+    rowCount,
   )
 
   const { dataSource, columns } = useMemo(
     () =>
       buildTableMatrixColumnsAndDataSource(
         t,
-        (i) => {
-          const ch = effectiveChildren[i]
+        ({ rowIndex, colIndex, record }) => {
+          const ch = templateChildren[colIndex]
+          const cellSlice: FormSlice = {
+            ...formSlice,
+            tableRow: record as Record<string, unknown>,
+            tableRowIndex: rowIndex,
+          }
+          const cellKey = `${t.id}-r${rowIndex}-c${colIndex}-${ch?.id ?? 'empty'}`
           return (
             <div
+              key={cellKey}
               data-container-id={t.id}
-              data-table-cell-index={i}
+              data-table-row={rowIndex}
+              data-table-col={colIndex}
               style={{ minHeight: 24, height: '100%' }}
             >
-              {ch ? renderControl(ch) : null}
+              {ch ? renderControl(ch, cellSlice, cellKey) : null}
             </div>
           )
         },
@@ -448,7 +468,8 @@ function TableRenderer({
       t.id,
       rowCount,
       columnCount,
-      effectiveChildren,
+      templateChildren,
+      formSlice,
       renderControl,
       hookColumns,
       hookDataSource,
@@ -567,21 +588,26 @@ export function FormRenderer({
     [registry, registryLoading, formConfigHook],
   )
 
-  function renderControl(control: FormControl): React.ReactNode {
+  function renderControl(
+    control: FormControl,
+    slice: FormSlice = formSlice,
+    instanceKey?: string,
+  ): React.ReactNode {
+    const k = instanceKey ?? control.id
     switch (control.type) {
       case 'button': {
         const c = control as ButtonControl
         return (
-          <div key={c.id} data-control-id={c.id}>
-            <ButtonRenderer control={c} formSlice={formSlice} />
+          <div key={k} data-control-id={c.id}>
+            <ButtonRenderer control={c} formSlice={slice} />
           </div>
         )
       }
       case 'text': {
         const c = control as TextControl
         return (
-          <div key={c.id} data-control-id={c.id}>
-            <TextRenderer control={c} formSlice={formSlice} />
+          <div key={k} data-control-id={c.id}>
+            <TextRenderer control={c} formSlice={slice} />
           </div>
         )
       }
@@ -590,9 +616,9 @@ export function FormRenderer({
         const value = String(formState[c.id] ?? '')
         return (
           <InputRenderer
-            key={c.id}
+            key={k}
             control={c}
-            formSlice={formSlice}
+            formSlice={slice}
             value={value}
             updateValue={updateValue}
           />
@@ -602,9 +628,9 @@ export function FormRenderer({
         const g = control as GridControl
         return (
           <GridRenderer
-            key={g.id}
+            key={k}
             control={g}
-            formSlice={formSlice}
+            formSlice={slice}
             renderControl={renderControl}
           />
         )
@@ -613,9 +639,9 @@ export function FormRenderer({
         const t = control as TableControl
         return (
           <TableRenderer
-            key={t.id}
+            key={k}
             control={t}
-            formSlice={formSlice}
+            formSlice={slice}
             renderControl={renderControl}
           />
         )
@@ -624,7 +650,7 @@ export function FormRenderer({
         const c = control as CheckboxControl
         const checked = (formState[c.id] as boolean | undefined) ?? c.checked ?? false
         return (
-          <div key={c.id} data-control-id={c.id} style={formRowStyle}>
+          <div key={k} data-control-id={c.id} style={formRowStyle}>
             <Checkbox
               checked={checked}
               disabled={c.disabled}
@@ -643,7 +669,7 @@ export function FormRenderer({
         const c = control as RadioControl
         const value = (formState[c.id] as string | undefined) ?? c.value ?? ''
         return (
-          <div key={c.id} data-control-id={c.id} style={formRowStyle}>
+          <div key={k} data-control-id={c.id} style={formRowStyle}>
             <Radio
               options={c.options?.map((o) => ({ label: o.label, value: o.value })) ?? []}
               value={value}
@@ -663,7 +689,7 @@ export function FormRenderer({
         // Hexa UI Select supports both single and multiple values (string | string[])
         const value = (formState[c.id] as string | string[] | undefined) ?? c.value ?? undefined
         return (
-          <div key={c.id} data-control-id={c.id} style={formRowStyle}>
+          <div key={k} data-control-id={c.id} style={formRowStyle}>
             <Select
               options={c.options ?? []}
               value={value}
@@ -685,7 +711,7 @@ export function FormRenderer({
         const c = control as ToggleControl
         const checked = (formState[c.id] as boolean | undefined) ?? c.checked ?? false
         return (
-          <div key={c.id} data-control-id={c.id} style={formRowStyle}>
+          <div key={k} data-control-id={c.id} style={formRowStyle}>
             <Toggle
               text={c.text ?? 'Переключатель'}
               checked={checked}
@@ -705,7 +731,7 @@ export function FormRenderer({
         const Comp = META_COMPONENT_MAP[m.componentId]
         if (!Comp) {
           return (
-            <div key={m.id} data-control-id={m.id}>
+            <div key={k} data-control-id={m.id}>
               <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
                 Компонент «{m.componentId}»
               </Text>
@@ -713,14 +739,14 @@ export function FormRenderer({
           )
         }
         const builtProps: Record<string, unknown> = {}
-        for (const [k, v] of Object.entries(m.props ?? {})) {
-          builtProps[k] = k === 'children' ? v : coercePropValue(v)
+        for (const [propKey, v] of Object.entries(m.props ?? {})) {
+          builtProps[propKey] = propKey === 'children' ? v : coercePropValue(v)
         }
         if (m.componentId === 'Loader' && builtProps.spinning === undefined) {
           builtProps.spinning = true
         }
         return (
-          <div key={m.id} data-control-id={m.id} style={formRowStyle}>
+          <div key={k} data-control-id={m.id} style={formRowStyle}>
             <Comp {...builtProps} disabled={m.props?.disabled === 'true' || undefined} />
           </div>
         )
@@ -735,7 +761,7 @@ export function FormRenderer({
         const Comp = META_COMPONENT_MAP[componentId]
         if (!Comp) {
           return (
-            <div key={u.id} data-control-id={u.id}>
+            <div key={k} data-control-id={u.id}>
               <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
                 Компонент «{u.type}»
               </Text>
@@ -743,14 +769,14 @@ export function FormRenderer({
           )
         }
         const builtProps: Record<string, unknown> = {}
-        for (const [k, v] of Object.entries(u.props ?? {})) {
-          builtProps[k] = k === 'children' ? v : coercePropValue(v)
+        for (const [propKey, v] of Object.entries(u.props ?? {})) {
+          builtProps[propKey] = propKey === 'children' ? v : coercePropValue(v)
         }
         if (componentId === 'Loader' && builtProps.spinning === undefined) {
           builtProps.spinning = true
         }
         return (
-          <div key={u.id} data-control-id={u.id} style={formRowStyle}>
+          <div key={k} data-control-id={u.id} style={formRowStyle}>
             <Comp {...builtProps} disabled={u.props?.disabled === 'true' || undefined} />
           </div>
         )

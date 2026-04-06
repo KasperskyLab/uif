@@ -337,6 +337,13 @@ export interface FormSlice {
    * значения полей в state формы поверх текущего.
    */
   mergeState?: (partial: Record<string, unknown>) => void
+  /**
+   * Запись из **`dataSource`** таблицы (матрица DSL), для хуков контролов в
+   * ячейке; строка та же, что у Hexa `<Table />` для данного ряда.
+   */
+  tableRow?: Record<string, unknown>
+  /** Индекс строки в **`dataSource`** таблицы (0-based). */
+  tableRowIndex?: number
 }
 
 /** Начальный `state` по дереву контролов (интерактивные поля). */

@@ -9,7 +9,10 @@ import {
   DEFAULT_GRID_LAYOUT_PROPERTY,
 } from '../utils/defaultGridHexaProps'
 import { useFormEditorConfigHook } from '../context/FormEditorConfigHookContext'
-import { padOrTruncateGridChildren } from '../utils/gridHookChildren'
+import {
+  getTableTemplateRowChildren,
+  padOrTruncateGridChildren,
+} from '../utils/gridHookChildren'
 import { buildTableMatrixColumnsAndDataSource } from '../utils/tableControlHexa'
 import { createControl, getDescriptor, ALL_CONTROL_TYPES } from '../controls/registry'
 import type { CanvasContext } from '../controls/types'
@@ -448,7 +451,7 @@ function TableMatrixEditor({
   cols,
   hookColumns,
   hookDataSource,
-  effectiveChildren,
+  templateChildren,
   tableExtras,
   selectedId,
   onSelect,
@@ -460,7 +463,8 @@ function TableMatrixEditor({
   cols: number
   hookColumns: NonNullable<Partial<ITableProps>['columns']>
   hookDataSource: NonNullable<Partial<ITableProps>['dataSource']>
-  effectiveChildren: (FormControl | null)[]
+  /** Одна строка шаблона: длина `cols`, повторяется для каждого ряда dataSource. */
+  templateChildren: (FormControl | null)[]
   tableExtras: Partial<ITableProps>
   selectedId: string | null
   onSelect: (id: string | null) => void
@@ -469,7 +473,6 @@ function TableMatrixEditor({
   ) => void
   rootSetControls: React.Dispatch<React.SetStateAction<FormControl[]>>
 }) {
-  const cellLen = rows * cols
   const colAlign = tableExtras.columnVerticalAlign ?? 'inherit'
   const isCompact = tableExtras.rowMode === 'compact'
   const cellStyle: React.CSSProperties = {
@@ -482,35 +485,38 @@ function TableMatrixEditor({
     () =>
       buildTableMatrixColumnsAndDataSource(
         t,
-        (i) => {
+        ({ rowIndex, colIndex }) => {
           const handleCellDrop = (e: React.DragEvent) => {
             e.preventDefault()
             e.stopPropagation()
             const id = e.dataTransfer.getData(DATA_ID_KEY)
             const dropInfo = getDropTypeAndOptions(e)
             if (id) {
-              const idx = effectiveChildren.findIndex((ch) => ch && ch.id === id)
+              const idx = templateChildren.findIndex(
+                (ch) => ch && ch.id === id,
+              )
               if (idx === -1) return
-              if (idx === i) return
-              const movingControl = effectiveChildren[idx]
+              if (idx === colIndex) return
+              const movingControl = templateChildren[idx]
               setTableChildren((prev) => {
-                const next = padOrTruncateGridChildren([...prev], cellLen)
-                const wasInTarget = next[i]
+                const next = padOrTruncateGridChildren([...prev], cols)
+                const wasInTarget = next[colIndex]
                 next[idx] = wasInTarget
-                next[i] = movingControl
+                next[colIndex] = movingControl
                 return next
               })
             } else if (dropInfo) {
               setTableChildren((prev) => {
-                const next = padOrTruncateGridChildren([...prev], cellLen)
-                next[i] = createControl(dropInfo.type, dropInfo.options)
+                const next = padOrTruncateGridChildren([...prev], cols)
+                next[colIndex] = createControl(dropInfo.type, dropInfo.options)
                 return next
               })
             }
           }
-          const slotControl = effectiveChildren[i]
+          const slotControl = templateChildren[colIndex]
           return (
             <div
+              key={`${t.id}-r${rowIndex}-c${colIndex}`}
               style={{
                 ...gridCellDropStyle,
                 ...cellStyle,
@@ -533,8 +539,8 @@ function TableMatrixEditor({
                   onSelect={onSelect}
                   onRemove={(_id) =>
                     setTableChildren((prev) => {
-                      const next = padOrTruncateGridChildren([...prev], cellLen)
-                      next[i] = null
+                      const next = padOrTruncateGridChildren([...prev], cols)
+                      next[colIndex] = null
                       return next
                     })
                   }
@@ -554,13 +560,12 @@ function TableMatrixEditor({
       cols,
       hookColumns,
       hookDataSource,
-      effectiveChildren,
+      templateChildren,
       cellStyle,
       selectedId,
       onSelect,
       setTableChildren,
       rootSetControls,
-      cellLen,
     ]
   )
 
@@ -655,9 +660,10 @@ function TableControlBlock({
     )
   }
 
-  const effectiveChildren = padOrTruncateGridChildren(
+  const templateChildren = getTableTemplateRowChildren(
     t.children,
-    rowCount * columnCount,
+    columnCount,
+    rowCount,
   )
 
   return (
@@ -668,7 +674,7 @@ function TableControlBlock({
         cols={columnCount}
         hookColumns={hookColumns}
         hookDataSource={hookDataSource}
-        effectiveChildren={effectiveChildren}
+        templateChildren={templateChildren}
         tableExtras={tableExtras}
         selectedId={selectedId}
         onSelect={onSelect}
