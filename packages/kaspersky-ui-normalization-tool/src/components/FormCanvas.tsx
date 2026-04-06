@@ -3,7 +3,7 @@ import { Button, Space, Text, Grid, GridItem, Tabs, Table } from '@kaspersky/hex
 import { Delete, ArrowsVertical } from '@kaspersky/hexa-ui-icons/16'
 import type { FormControl, FormControlBase, FormControlType, FormSlice, GridControl, TableControl, TabsControl, RowControl } from '../types/form-dsl'
 import { setGridChildrenInTree, setRowChildrenInTree, setTableChildrenInTree, setTabsChildrenInTree } from '../types/form-dsl'
-import type { GridProps } from '@kaspersky/hexa-ui'
+import type { GridProps, ITableProps } from '@kaspersky/hexa-ui'
 import {
   defaultGridLayoutRows,
   DEFAULT_GRID_LAYOUT_PROPERTY,
@@ -11,7 +11,6 @@ import {
 import { useFormEditorConfigHook } from '../context/FormEditorConfigHookContext'
 import { padOrTruncateGridChildren } from '../utils/gridHookChildren'
 import { buildTableMatrixColumnsAndDataSource } from '../utils/tableControlHexa'
-import { ToolbarStaticPreview } from '../controls/descriptors/toolbar'
 import { createControl, getDescriptor, ALL_CONTROL_TYPES } from '../controls/registry'
 import type { CanvasContext } from '../controls/types'
 import { CanvasPreviewErrorBoundary } from './CanvasPreviewErrorBoundary'
@@ -441,18 +440,28 @@ function RowControlBlock({
   )
 }
 
+type TableConfigHookFn = (formSlice: FormSlice) => Partial<ITableProps> | null
+
 function TableMatrixEditor({
   t,
-  cellStyle,
-  cellAlign,
+  rows,
+  cols,
+  hookColumns,
+  hookDataSource,
+  effectiveChildren,
+  tableExtras,
   selectedId,
   onSelect,
   setTableChildren,
   rootSetControls,
 }: {
   t: TableControl
-  cellStyle: React.CSSProperties
-  cellAlign: TableControl['columnVerticalAlign']
+  rows: number
+  cols: number
+  hookColumns: NonNullable<Partial<ITableProps>['columns']>
+  hookDataSource: NonNullable<Partial<ITableProps>['dataSource']>
+  effectiveChildren: (FormControl | null)[]
+  tableExtras: Partial<ITableProps>
   selectedId: string | null
   onSelect: (id: string | null) => void
   setTableChildren: (
@@ -460,95 +469,107 @@ function TableMatrixEditor({
   ) => void
   rootSetControls: React.Dispatch<React.SetStateAction<FormControl[]>>
 }) {
+  const cellLen = rows * cols
+  const colAlign = tableExtras.columnVerticalAlign ?? 'inherit'
+  const isCompact = tableExtras.rowMode === 'compact'
+  const cellStyle: React.CSSProperties = {
+    ...tableCellStyle,
+    verticalAlign: colAlign !== 'inherit' ? colAlign : undefined,
+    padding: isCompact ? 4 : 8,
+  }
+
   const { dataSource, columns } = useMemo(
     () =>
-      buildTableMatrixColumnsAndDataSource(t, (i) => {
-        const handleCellDrop = (e: React.DragEvent) => {
-          e.preventDefault()
-          e.stopPropagation()
-          const id = e.dataTransfer.getData(DATA_ID_KEY)
-          const dropInfo = getDropTypeAndOptions(e)
-          if (id) {
-            const idx = t.children.findIndex((ch) => ch && ch.id === id)
-            if (idx === -1) return
-            if (idx === i) return
-            const movingControl = t.children[idx]
-            setTableChildren((prev) => {
-              const next = [...prev]
-              const wasInTarget = next[i]
-              next[idx] = wasInTarget
-              next[i] = movingControl
-              return next
-            })
-          } else if (dropInfo) {
-            setTableChildren((prev) => {
-              const next = [...prev]
-              next[i] = createControl(dropInfo.type, dropInfo.options)
-              return next
-            })
+      buildTableMatrixColumnsAndDataSource(
+        t,
+        (i) => {
+          const handleCellDrop = (e: React.DragEvent) => {
+            e.preventDefault()
+            e.stopPropagation()
+            const id = e.dataTransfer.getData(DATA_ID_KEY)
+            const dropInfo = getDropTypeAndOptions(e)
+            if (id) {
+              const idx = effectiveChildren.findIndex((ch) => ch && ch.id === id)
+              if (idx === -1) return
+              if (idx === i) return
+              const movingControl = effectiveChildren[idx]
+              setTableChildren((prev) => {
+                const next = padOrTruncateGridChildren([...prev], cellLen)
+                const wasInTarget = next[i]
+                next[idx] = wasInTarget
+                next[i] = movingControl
+                return next
+              })
+            } else if (dropInfo) {
+              setTableChildren((prev) => {
+                const next = padOrTruncateGridChildren([...prev], cellLen)
+                next[i] = createControl(dropInfo.type, dropInfo.options)
+                return next
+              })
+            }
           }
-        }
-        const slotControl = t.children[i]
-        return (
-          <div
-            style={{
-              ...gridCellDropStyle,
-              ...cellStyle,
-              verticalAlign:
-                cellAlign !== 'inherit' ? cellAlign : undefined,
-            }}
-            onDragOver={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              e.dataTransfer.dropEffect = e.dataTransfer.types.includes(
-                DATA_ID_KEY
-              )
-                ? 'move'
-                : 'copy'
-            }}
-            onDrop={handleCellDrop}
-          >
-            {slotControl ? (
-              <ControlBlock
-                control={slotControl}
-                selectedId={selectedId}
-                onSelect={onSelect}
-                onRemove={(_id) =>
-                  setTableChildren((prev) => {
-                    const next = [...prev]
-                    next[i] = null
-                    return next
-                  })
-                }
-                onControlsChange={setTableChildren}
-                rootSetControls={rootSetControls}
-              />
-            ) : null}
-          </div>
-        )
-      }),
+          const slotControl = effectiveChildren[i]
+          return (
+            <div
+              style={{
+                ...gridCellDropStyle,
+                ...cellStyle,
+              }}
+              onDragOver={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                e.dataTransfer.dropEffect = e.dataTransfer.types.includes(
+                  DATA_ID_KEY
+                )
+                  ? 'move'
+                  : 'copy'
+              }}
+              onDrop={handleCellDrop}
+            >
+              {slotControl ? (
+                <ControlBlock
+                  control={slotControl}
+                  selectedId={selectedId}
+                  onSelect={onSelect}
+                  onRemove={(_id) =>
+                    setTableChildren((prev) => {
+                      const next = padOrTruncateGridChildren([...prev], cellLen)
+                      next[i] = null
+                      return next
+                    })
+                  }
+                  onControlsChange={setTableChildren}
+                  rootSetControls={rootSetControls}
+                />
+              ) : null}
+            </div>
+          )
+        },
+        { rows, cols },
+        { columns: hookColumns, dataSource: hookDataSource },
+      ),
     [
       t,
-      t.rows,
-      t.cols,
-      t.id,
-      t.children,
+      rows,
+      cols,
+      hookColumns,
+      hookDataSource,
+      effectiveChildren,
       cellStyle,
-      cellAlign,
       selectedId,
       onSelect,
       setTableChildren,
       rootSetControls,
+      cellLen,
     ]
   )
 
   return (
     <Table
       pagination={false}
-      rowMode={t.rowMode ?? 'standard'}
-      columnVerticalAlign={t.columnVerticalAlign ?? 'inherit'}
       dataSource={dataSource}
       columns={columns}
+      {...tableExtras}
     />
   )
 }
@@ -566,6 +587,9 @@ function TableControlBlock({
   rootSetControls: React.Dispatch<React.SetStateAction<FormControl[]>>
 }) {
   const t = control
+  const { registry, loading, path, formSlice } = useFormEditorConfigHook()
+  const hookFn = (registry?.[t.id] ?? null) as TableConfigHookFn | null
+
   const setTableChildren = useCallback(
     (next: React.SetStateAction<(FormControl | null)[]>) => {
       rootSetControls((prev) =>
@@ -579,43 +603,78 @@ function TableControlBlock({
     [t.id, t.children, rootSetControls]
   )
 
-  const hasAnyChild = t.children.some((ch) => ch != null)
-  const cellAlign = t.columnVerticalAlign ?? 'inherit'
-  const isCompact = t.rowMode === 'compact'
-  const cellStyle: React.CSSProperties = {
-    ...tableCellStyle,
-    verticalAlign: cellAlign !== 'inherit' ? cellAlign : undefined,
-    padding: isCompact ? 4 : 8,
+  if (!path || !hookFn) {
+    if (path && loading) {
+      return (
+        <div style={tableWrapStyle}>
+          <Text type="BTR3" style={{ color: '#8c8c8c' }}>…</Text>
+        </div>
+      )
+    }
+    return (
+      <div style={tableWrapStyle}>
+        <Text type="BTR3" style={{ color: '#8c8c8c' }}>
+          Таблица «{t.id}»: укажите config hook в форме и запись для этого id
+        </Text>
+      </div>
+    )
   }
 
-  const hasToolbar =
-    t.toolbar &&
-    ((t.toolbar.left?.length ?? 0) > 0 || (t.toolbar.right?.length ?? 0) > 0)
+  const partial = hookFn(formSlice) as Partial<ITableProps> | null
+  if (partial === null) return null
+
+  const {
+    columns: hookColumns,
+    dataSource: hookDataSource,
+    dataSourceFunction: hookDataSourceFunction,
+    children: _tableChildren,
+    ...tableExtras
+  } = partial
+
+  const columnCount = Array.isArray(hookColumns) ? hookColumns.length : 0
+  const rowCount = Array.isArray(hookDataSource) ? hookDataSource.length : 0
+
+  if (hookDataSourceFunction != null) {
+    return (
+      <div style={tableWrapStyle}>
+        <Text type="BTR3" style={{ color: '#8c8c8c' }}>
+          Таблица «{t.id}»: для DSL-матрицы укажите массив dataSource, не
+          dataSourceFunction
+        </Text>
+      </div>
+    )
+  }
+
+  if (columnCount < 1 || rowCount < 1) {
+    return (
+      <div style={tableWrapStyle}>
+        <Text type="BTR3" style={{ color: '#8c8c8c' }}>
+          Таблица «{t.id}»: хук должен вернуть columns и dataSource — массивы длины ≥ 1
+        </Text>
+      </div>
+    )
+  }
+
+  const effectiveChildren = padOrTruncateGridChildren(
+    t.children,
+    rowCount * columnCount,
+  )
+
   return (
-    <div style={{ ...tableWrapStyle, opacity: t.disabled ? 0.6 : 1, pointerEvents: t.disabled ? 'none' : undefined }}>
-      {hasToolbar ? (
-        <div style={{ marginBottom: 8 }}>
-          <ToolbarStaticPreview
-            left={t.toolbar!.left ?? []}
-            right={t.toolbar!.right ?? []}
-          />
-        </div>
-      ) : null}
-      {!hasAnyChild && t.emptyText ? (
-        <div style={{ padding: 16, color: '#999', textAlign: 'center' }}>
-          <Text type="BTR3">{t.emptyText}</Text>
-        </div>
-      ) : (
+    <div style={tableWrapStyle}>
       <TableMatrixEditor
         t={t}
-        cellStyle={cellStyle}
-        cellAlign={cellAlign}
+        rows={rowCount}
+        cols={columnCount}
+        hookColumns={hookColumns}
+        hookDataSource={hookDataSource}
+        effectiveChildren={effectiveChildren}
+        tableExtras={tableExtras}
         selectedId={selectedId}
         onSelect={onSelect}
         setTableChildren={setTableChildren}
         rootSetControls={rootSetControls}
       />
-      )}
     </div>
   )
 }

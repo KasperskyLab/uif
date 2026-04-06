@@ -20,6 +20,6 @@
 ## П.3.2 — Хук управляет структурой Grid/Table (✅)
 
 - ✅ Grid: `configHook` может вернуть `cols`; renderer вычисляет `effectiveCols`, `effectiveRows` и делает pad/truncate children.
-- ✅ Table: хук возвращает `dslCols`/`dslRows`; renderer перестраивает matrix через `buildTableMatrixColumnsAndDataSource(t, renderCell, overrides)`.
+- ✅ Table: хук возвращает **`Partial<ITableProps>`**; длины **`columns`** и **`dataSource`** задают размерность; renderer перестраивает matrix через `buildTableMatrixColumnsAndDataSource(t, renderCell, overrides)`.
 - ✅ Table toolbar: `toolbar` из хука заменяет DSL-превью; `rowSelection` проходит через хук.
 - ⏳ **`editor.preview.scenario-hook`** — остаётся открытым.

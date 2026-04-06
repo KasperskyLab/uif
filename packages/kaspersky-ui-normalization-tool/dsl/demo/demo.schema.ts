@@ -30,8 +30,6 @@ export default defineFormSchema({
     {
       type: 'table',
       id: 'demo.table',
-      rows: 2,
-      cols: 3,
       children: [
         null,
         {
@@ -55,34 +53,6 @@ export default defineFormSchema({
           id: 'demo.table.text2',
         },
       ],
-      emptyText: 'Нет данных в ячейках',
-      rowMode: 'standard',
-      columnVerticalAlign: 'middle',
-      toolbar: {
-        left: [
-          {
-            type: 'button',
-            key: 'add',
-            label: 'Добавить',
-          },
-          {
-            type: 'divider',
-            key: 'd1',
-          },
-          {
-            type: 'button',
-            key: 'refresh',
-            label: 'Обновить',
-          },
-        ],
-        right: [
-          {
-            type: 'button',
-            key: 'export',
-            label: 'Экспорт',
-          },
-        ],
-      },
     },
   ] as const,
 })

@@ -51,7 +51,6 @@ import {
   DEFAULT_GRID_LAYOUT_PROPERTY,
 } from '@/utils/defaultGridHexaProps'
 import { buildTableMatrixColumnsAndDataSource } from '@/utils/tableControlHexa'
-import { ToolbarStaticPreview } from '@/components/ToolbarStaticPreview'
 
 const META_COMPONENT_MAP: Record<string, React.ComponentType<Record<string, unknown>>> = {
   Button,
@@ -135,11 +134,6 @@ const tableWrapStyle: React.CSSProperties = {
   overflow: 'auto',
 }
 
-const emptyTableTextStyle: React.CSSProperties = {
-  padding: 16,
-  textAlign: 'center',
-}
-
 export type { FormSlice } from '@/types/form-dsl'
 
 function padOrTruncateChildren(
@@ -161,12 +155,8 @@ type GridConfigHookFn = (formSlice: FormSlice) => Partial<GridProps> | null
 
 type TableConfigHookFn = (formSlice: FormSlice) => Partial<ITableProps> | null
 
-type TableHookResult = (Partial<ITableProps> & {
-  dslCols?: number
-  dslRows?: number
-  children?: unknown
-  dataSourceFunction?: unknown
-}) | null
+/** Хук таблицы: только `Partial<ITableProps>`; `children` приходит как у Hexa — не пробрасываем в `<Table />` при сборке матрицы DSL. */
+type TableHookResult = Partial<ITableProps> | null
 
 /** Реестр: control.id → хук (результат вызова default export модуля формы). */
 type ConfigHookRegistry = Record<string, (formSlice: FormSlice) => unknown>
@@ -336,144 +326,106 @@ function TableRenderer({
   const { registry, loading, path } = useContext(FormConfigHookContext)
   const hookFn = (registry?.[t.id] ?? null) as TableConfigHookFn | null
 
-  const hasAnyChild = t.children.some((ch) => ch != null)
-  const hasToolbar =
-    t.toolbar &&
-    ((t.toolbar.left?.length ?? 0) > 0 || (t.toolbar.right?.length ?? 0) > 0)
-
-  const wrapStyle: React.CSSProperties = {
-    ...formRowStyle,
-    ...tableWrapStyle,
-    opacity: t.disabled ? 0.6 : 1,
-    pointerEvents: t.disabled ? 'none' : undefined,
-  }
-
-  const { dataSource, columns } = useMemo(
-    () =>
-      buildTableMatrixColumnsAndDataSource(t, (i) => {
-        const ch = t.children[i]
-        return (
-          <div
-            data-container-id={t.id}
-            data-table-cell-index={i}
-            style={{ minHeight: 24, height: '100%' }}
-          >
-            {ch ? renderControl(ch) : null}
-          </div>
-        )
-      }),
-    [t.id, t.rows, t.cols, t.children, renderControl]
-  )
-
-  const toolbarBlock =
-    hasToolbar ? (
-      <div style={{ marginBottom: 8 }}>
-        <ToolbarStaticPreview
-          left={t.toolbar!.left ?? []}
-          right={t.toolbar!.right ?? []}
-        />
-      </div>
-    ) : null
-
-  const defaultTable = (
-    <Table
-      pagination={false}
-      rowMode={t.rowMode ?? 'standard'}
-      columnVerticalAlign={t.columnVerticalAlign ?? 'inherit'}
-      dataSource={dataSource}
-      columns={columns}
-    />
-  )
-
-  const emptyBody = (
-    <div style={emptyTableTextStyle}>
-      <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-        {t.emptyText}
+  const loadingBlock = (
+    <div data-control-id={t.id} style={{ ...formRowStyle, ...tableWrapStyle }}>
+      <Text type="BTR3" style={{ color: 'var(--text--secondary)', marginBottom: 8 }}>
+        …
       </Text>
     </div>
   )
 
-  const bodyNoHook = !hasAnyChild && t.emptyText ? emptyBody : defaultTable
+  const missingHookBlock = (
+    <div data-control-id={t.id} style={{ ...formRowStyle, ...tableWrapStyle }}>
+      <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+        Таблица «{t.id}»: задайте форменный configHook и запись реестра с этим id
+      </Text>
+    </div>
+  )
 
   if (!path || !hookFn) {
-    if (path && loading) {
-      return (
-        <div data-control-id={t.id} style={wrapStyle}>
-          {toolbarBlock}
-          <Text type="BTR3" style={{ color: 'var(--text--secondary)', marginBottom: 8 }}>
-            …
-          </Text>
-          {bodyNoHook}
-        </div>
-      )
-    }
-    return (
-      <div data-control-id={t.id} style={wrapStyle}>
-        {toolbarBlock}
-        {bodyNoHook}
-      </div>
-    )
+    if (path && loading) return loadingBlock
+    return missingHookBlock
   }
 
   const partial = hookFn(formSlice) as TableHookResult
   if (partial === null) return null
+
   const {
-    columns: _cols,
-    dataSource: _ds,
-    dataSourceFunction: _dsf,
-    children: _ch,
-    dslCols: hookDslCols,
-    dslRows: hookDslRows,
-    toolbar: hookToolbar,
+    columns: hookColumns,
+    dataSource: hookDataSource,
+    dataSourceFunction: hookDataSourceFunction,
+    children: _tableChildren,
     ...hookRest
   } = partial
 
-  const effectiveCols = hookDslCols ?? t.cols
-  const effectiveRows = hookDslRows ?? t.rows
+  const columnCount = Array.isArray(hookColumns) ? hookColumns.length : 0
+  const rowCount = Array.isArray(hookDataSource) ? hookDataSource.length : 0
+
+  if (hookDataSourceFunction != null) {
+    return (
+      <div data-control-id={t.id} style={{ ...formRowStyle, ...tableWrapStyle }}>
+        <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+          Таблица «{t.id}»: для DSL-матрицы укажите массив dataSource (число строк), не
+          dataSourceFunction
+        </Text>
+      </div>
+    )
+  }
+
+  if (columnCount < 1 || rowCount < 1) {
+    return (
+      <div data-control-id={t.id} style={{ ...formRowStyle, ...tableWrapStyle }}>
+        <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
+          Таблица «{t.id}»: хук должен вернуть columns и dataSource — массивы длины ≥ 1
+          (размерность матрицы ячеек DSL)
+        </Text>
+      </div>
+    )
+  }
+
   const effectiveChildren = padOrTruncateChildren(
     t.children,
-    effectiveRows * effectiveCols,
+    rowCount * columnCount,
   )
 
-  const { dataSource: hookedDs, columns: hookedCols } =
-    buildTableMatrixColumnsAndDataSource(
-      t,
-      (i) => {
-        const ch = effectiveChildren[i]
-        return (
-          <div
-            data-container-id={t.id}
-            data-table-cell-index={i}
-            style={{ minHeight: 24, height: '100%' }}
-          >
-            {ch ? renderControl(ch) : null}
-          </div>
-        )
-      },
-      { cols: effectiveCols, rows: effectiveRows },
-    )
-
-  const showDslToolbarPreview = hasToolbar && hookToolbar === undefined
-
-  const bodyHooked =
-    !hasAnyChild && t.emptyText ? (
-      emptyBody
-    ) : (
-      <Table
-        pagination={false}
-        rowMode={t.rowMode ?? 'standard'}
-        columnVerticalAlign={t.columnVerticalAlign ?? 'inherit'}
-        dataSource={hookedDs}
-        columns={hookedCols}
-        {...hookRest}
-        {...(hookToolbar !== undefined ? { toolbar: hookToolbar } : {})}
-      />
-    )
+  const { dataSource, columns } = useMemo(
+    () =>
+      buildTableMatrixColumnsAndDataSource(
+        t,
+        (i) => {
+          const ch = effectiveChildren[i]
+          return (
+            <div
+              data-container-id={t.id}
+              data-table-cell-index={i}
+              style={{ minHeight: 24, height: '100%' }}
+            >
+              {ch ? renderControl(ch) : null}
+            </div>
+          )
+        },
+        { rows: rowCount, cols: columnCount },
+        { columns: hookColumns, dataSource: hookDataSource },
+      ),
+    [
+      t.id,
+      rowCount,
+      columnCount,
+      effectiveChildren,
+      renderControl,
+      hookColumns,
+      hookDataSource,
+    ],
+  )
 
   return (
-    <div data-control-id={t.id} style={wrapStyle}>
-      {showDslToolbarPreview ? toolbarBlock : null}
-      {bodyHooked}
+    <div data-control-id={t.id} style={{ ...formRowStyle, ...tableWrapStyle }}>
+      <Table
+        pagination={false}
+        dataSource={dataSource}
+        columns={columns}
+        {...hookRest}
+      />
     </div>
   )
 }

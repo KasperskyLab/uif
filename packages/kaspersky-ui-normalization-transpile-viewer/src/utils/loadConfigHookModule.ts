@@ -8,7 +8,10 @@ async function getFileHandleFromPath(
   dir: FileSystemDirectoryHandle,
   path: string,
 ): Promise<FileSystemFileHandle> {
-  const parts = path.split('/').filter(Boolean)
+  const parts = path
+    .replace(/\\/g, '/')
+    .split('/')
+    .filter((p) => p !== '' && p !== '.')
   if (parts.length === 0) throw new Error('Empty path')
   let current: FileSystemDirectoryHandle = dir
   for (let i = 0; i < parts.length - 1; i++) {

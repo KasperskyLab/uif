@@ -56,7 +56,7 @@
 
 <a id="normalization-roadmap-p32"></a>
 
-**Готово.** `configHook` полностью управляет `cols`/`rows` Grid и `dslCols`/`dslRows`/`toolbar` Table. При смене размерности renderer выполняет **pad/truncate** массива `children`. Утилита `buildTableMatrixColumnsAndDataSource` принимает overrides.
+**Готово.** `configHook` полностью управляет `cols` Grid и **`Partial<ITableProps>`** для Table (`toolbar`, `emptyText` и пр.; размер матрицы ячеек DSL — **`columns.length` × `dataSource.length`**). При смене размерности renderer выполняет **pad/truncate** массива `children`. Утилита `buildTableMatrixColumnsAndDataSource` подставляет ячейки из DSL в построенные `columns`/`dataSource`.
 
 ### ✅ 3.3. WYSIWYG-canvas
 

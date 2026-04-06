@@ -163,7 +163,7 @@ export interface RowControl extends FormControlBase {
   children: FormControl[]
 }
 
-/** Тулбар таблицы (как в Hexa UI Table — над таблицей). */
+/** Тулбар таблицы (как в Hexa UI Table — над таблицей); в DSL не хранится, задаётся в configHook. */
 export interface TableToolbarConfig {
   left?: ToolbarItem[]
   right?: ToolbarItem[]
@@ -171,21 +171,14 @@ export interface TableToolbarConfig {
   sticky?: number
 }
 
-/** Таблица: ячейки — контейнеры для других контролов (как Grid). Свойства по аналогии с Hexa UI Table. */
+/**
+ * Таблица: ячейки по порядку (строка за строкой). Размер матрицы задаётся полями Hexa
+ * **`dataSource.length`** (строки) и **`columns.length`** (столбцы); остальные пропсы —
+ * `Partial<ITableProps>` из configHook (см. фича-док).
+ */
 export interface TableControl extends FormControlBase {
   type: 'table'
-  rows: number
-  cols: number
   children: (FormControl | null)[]
-  /** Текст для пустых ячеек (Hexa: emptyText) */
-  emptyText?: string
-  /** Режим строки: standard | compact (Hexa: rowMode) */
-  rowMode?: 'standard' | 'compact'
-  /** Вертикальное выравнивание в ячейках (Hexa: columnVerticalAlign) */
-  columnVerticalAlign?: 'top' | 'middle' | 'bottom' | 'inherit'
-  disabled?: boolean
-  /** Тулбар над таблицей (как в Hexa UI Table settings) */
-  toolbar?: TableToolbarConfig
 }
 
 /** Один таб: ключ, подпись, дочерние контролы (контейнер). */
@@ -558,57 +551,12 @@ function normalizeControl(item: unknown): FormControl | null {
     return applyFieldBinding(c)
   }
   if (type === 'table') {
-    const rows = typeof o.rows === 'number' ? o.rows : 2
-    const cols = typeof o.cols === 'number' ? o.cols : 2
-    const len = rows * cols
-    const c: TableControl = {
-      type: 'table',
-      id,
-      rows,
-      cols,
-      children: Array.from({ length: len }, () => null),
-    }
-    if (typeof o.emptyText === 'string') c.emptyText = o.emptyText
-    if (o.rowMode === 'standard' || o.rowMode === 'compact') c.rowMode = o.rowMode
-    if (['top', 'middle', 'bottom', 'inherit'].includes(o.columnVerticalAlign as string)) c.columnVerticalAlign = o.columnVerticalAlign as TableControl['columnVerticalAlign']
-    if (typeof o.disabled === 'boolean') c.disabled = o.disabled
-    if (o.toolbar && typeof o.toolbar === 'object' && !Array.isArray(o.toolbar)) {
-      const tb = o.toolbar as Record<string, unknown>
-      const normTbItem = (x: unknown): ToolbarItem | null => {
-        if (!x || typeof x !== 'object' || !('key' in (x as object))) return null
-        const item = x as Record<string, unknown>
-        const key = String(item.key ?? '')
-        const it = item.type === 'divider' ? 'divider' : 'button'
-        if (it === 'divider') return { type: 'divider', key }
-        return { type: 'button', key, label: typeof item.label === 'string' ? item.label : '' }
-      }
-      const left = Array.isArray(tb.left)
-        ? tb.left.map(normTbItem).filter((x): x is ToolbarItem => x != null)
-        : undefined
-      const right = Array.isArray(tb.right)
-        ? tb.right.map(normTbItem).filter((x): x is ToolbarItem => x != null)
-        : undefined
-      if (
-        (left && left.length > 0) ||
-        (right && right.length > 0) ||
-        typeof tb.leftLimit === 'number' ||
-        typeof tb.sticky === 'number'
-      ) {
-        c.toolbar = {
-          left: left ?? [],
-          right: right ?? [],
-          ...(typeof tb.leftLimit === 'number' ? { leftLimit: tb.leftLimit } : {}),
-          ...(typeof tb.sticky === 'number' ? { sticky: tb.sticky } : {}),
-        }
-      }
-    }
-    if (Array.isArray(o.children)) {
-      const list = o.children.map(normalizeControl)
-      for (let i = 0; i < len && i < list.length; i++) {
-        const x = list[i]
-        if (x != null) c.children[i] = x
-      }
-    }
+    const rawChildren = Array.isArray(o.children) ? o.children : []
+    const children: (FormControl | null)[] = rawChildren.map((x: unknown) => {
+      if (x === null) return null
+      return normalizeControl(x)
+    })
+    const c: TableControl = { type: 'table', id, children }
     return applyFieldBinding(c)
   }
   if (type === 'tabs') {
@@ -732,13 +680,10 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
   }
   if (c.type === 'table') {
     const t = c as TableControl
-    const out: Record<string, unknown> = { ...base, rows: t.rows, cols: t.cols, children: t.children.map((ch) => (ch ? controlToJson(ch) : null)) }
-    if (t.emptyText != null) out.emptyText = t.emptyText
-    if (t.rowMode != null) out.rowMode = t.rowMode
-    if (t.columnVerticalAlign != null) out.columnVerticalAlign = t.columnVerticalAlign
-    if (t.disabled != null) out.disabled = t.disabled
-    if (t.toolbar != null) out.toolbar = t.toolbar
-    return out
+    return {
+      ...base,
+      children: t.children.map((ch) => (ch ? controlToJson(ch) : null)),
+    }
   }
   if (c.type === 'tabs') {
     const t = c as TabsControl

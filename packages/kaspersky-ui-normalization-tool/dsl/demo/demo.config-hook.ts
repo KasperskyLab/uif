@@ -61,14 +61,25 @@ function useDemoGrid(_formSlice: FormSlice): Partial<GridProps> | null {
   }
 }
 
-function useDemoTable(
-  formSlice: FormSlice,
-): Partial<ITableProps> & { dslCols?: number; dslRows?: number } | null {
+/** Длины массивов задают матрицу DSL (как в контракте Hexa); содержимое строк подменяет рендерер. */
+const DEMO_TABLE_DS_ROWS = 2
+const DEMO_TABLE_DS_COLS = 3
+
+function useDemoTable(formSlice: FormSlice): Partial<ITableProps> | null {
   const state = formSlice.state ?? {}
   const keys = Object.keys(state)
   const hasValues = keys.length > 0
   return {
-    dslCols: 4,
+    dataSource: Array.from({ length: DEMO_TABLE_DS_ROWS }, (_, r) => ({
+      key: `demo-table-row-${r}`,
+    })),
+    columns: Array.from({ length: DEMO_TABLE_DS_COLS }, (_, c) => ({
+      key: `demo-table-col-${c}`,
+      title: `Колонка ${c + 1}`,
+    })),
+    emptyText: 'Нет данных в ячейках',
+    rowMode: 'standard',
+    columnVerticalAlign: 'middle',
     ...(hasValues ? { stickyHeader: 48 } : {}),
     stickyScrollbarOffset: 0,
     stickyFooter: false,

@@ -223,7 +223,7 @@ export default s
     })
 
     it('preserves binding on table', () => {
-      const control: TableControl = { type: 'table', id: 'tbl1', rows: 1, cols: 1, children: [null], ...bindingProps }
+      const control: TableControl = { type: 'table', id: 'tbl1', children: [null], ...bindingProps }
       const json = controlToJson(control) as Record<string, unknown>
       expect(json.fieldName).toBe('testField')
       expect(json.visibleWhen).toEqual(visibleWhen)
@@ -428,7 +428,7 @@ export default s
     it('replaces children of target table', () => {
       const tableId = 't1'
       const tree: (FormControl | null)[] = [
-        { type: 'table', id: tableId, rows: 1, cols: 2, children: [null, null] },
+        { type: 'table', id: tableId, children: [null, null] },
       ]
       const newChildren: (FormControl | null)[] = [textControl('cell1'), null]
       const result = setTableChildrenInTree(tree, tableId, newChildren)

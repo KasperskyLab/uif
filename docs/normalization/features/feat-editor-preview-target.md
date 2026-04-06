@@ -34,7 +34,7 @@
 | `editor.preview.vite-dedupe` | `resolve.dedupe` react/hexa — единый экземпляр | ✅ |
 | `editor.preview.scenario-hook` | Опциональный модуль моков/патча `state` для превью (черновик) | ⏳ |
 | `editor.preview.grid-hook-cols` | `configHook` может вернуть `cols` для Grid; renderer — pad/truncate children | ✅ (п.3.2) |
-| `editor.preview.table-hook-dims` | `configHook` может вернуть `dslCols`/`dslRows` для Table; rebuild matrix | ✅ (п.3.2) |
+| `editor.preview.table-hook-dims` | `configHook` для Table — `Partial<ITableProps>`; размер матрицы по длине `columns`/`dataSource`; rebuild matrix | ✅ (п.3.2) |
 | `editor.preview.table-toolbar` | `toolbar` из хука — нативный Hexa; при отсутствии — статический превью DSL | ✅ (п.3.2) |
 | `editor.wysiwyg.data-control-id` | Каждый контрол в `FormRenderer` обёрнут в `div[data-control-id]` — DOM-якорь для overlay | ✅ (п.3.3) |
 | `editor.wysiwyg.overlay-selection` | `WysiwygCanvas`: transparent overlay, `elementFromPoint` → click-to-select, highlight с `ResizeObserver` | ✅ (п.3.3) |
@@ -47,7 +47,7 @@
 
 ## Решённые вопросы (п.3.2 ✅)
 
-- ~~Синхронизация **`rows`/`cols`** у Grid/Table~~ → хук возвращает нужные размерности, renderer делает pad/truncate.
+- ~~Синхронизация размерности Grid/Table~~ → Grid: `cols` из хука; Table: число строк/столбцов по длине `dataSource`/`columns` в хуке; renderer делает pad/truncate `children`.
 - ~~Единый контракт **тулбара**~~ → `toolbar` из хука заменяет DSL-превью; `rowSelection` — пропс Hexa Table, проходит через хук.
 - **`editor.preview.scenario-hook`** — остаётся открытым, не привязан к п.3.2.
 
