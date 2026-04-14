@@ -5,13 +5,19 @@ import type { ReactNode } from 'react'
 import type { ButtonProps, GridProps, TextProps, TextboxProps } from '@kaspersky/hexa-ui'
 import type { ITableProps } from '@kaspersky/hexa-ui'
 import type {
+  FormConfigHookElementEntry,
   FormConfigHookFactoryFor,
   FormControlIdsOf,
   FormSlice,
 } from '@normalization/form-dsl'
+import {
+  buildFormConfigHookRegistryFor,
+  defineFormConfigHookElement,
+} from '@normalization/form-dsl'
 import demoSchema from './demo.schema'
 
 type DemoSchema = typeof demoSchema
+type DemoElementHookEntry = FormConfigHookElementEntry<FormControlIdsOf<DemoSchema>>
 
 const DEMO_GRID_INPUT_ID =
   'demo.grid.input' satisfies FormControlIdsOf<DemoSchema>
@@ -166,18 +172,23 @@ const useDemo: FormConfigHookFactoryFor<DemoSchema> = () => ({
   onSubmit: (slice) => {
     console.log('[demo.config-hook] onSubmit: state формы', slice.state)
   },
-  elements: {
-    'demo.grid': useDemoGrid,
-    'demo.grid.input': useDemoGridInput,
-    'demo.grid.text': useDemoText,
-    'demo.grid.button': useDemoGridSubmitButton,
-    'demo.table': useDemoTable,
-    'demo.table.text1': useDemoText,
-    'demo.table.textPlain': useDemoText,
-    'demo.table.text2': useDemoText,
-    'demo.table.button1': useDemoButton,
-    'demo.table.button2': useDemoButton,
-  },
+  elements: buildFormConfigHookRegistryFor<FormControlIdsOf<DemoSchema>>(
+    [
+      defineFormConfigHookElement('demo.grid', useDemoGrid),
+      defineFormConfigHookElement('demo.grid.input', useDemoGridInput),
+      defineFormConfigHookElement('demo.grid.text', useDemoText),
+      defineFormConfigHookElement(
+        'demo.grid.button',
+        useDemoGridSubmitButton,
+      ),
+      defineFormConfigHookElement('demo.table', useDemoTable),
+      defineFormConfigHookElement('demo.table.text1', useDemoText),
+      defineFormConfigHookElement('demo.table.textPlain', useDemoText),
+      defineFormConfigHookElement('demo.table.text2', useDemoText),
+      defineFormConfigHookElement('demo.table.button1', useDemoButton),
+      defineFormConfigHookElement('demo.table.button2', useDemoButton),
+    ] satisfies readonly DemoElementHookEntry[],
+  ),
 })
 
 export default useDemo

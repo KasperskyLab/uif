@@ -176,3 +176,41 @@ export type FormConfigHookRegistryFor<Schema extends FormData> =
 /** Фабрика для той же схемы (`default export` `*.config-hook.ts`). */
 export type FormConfigHookFactoryFor<Schema extends FormData> =
   () => FormConfigHookModuleReturn<FormControlIdsOf<Schema>>
+
+/**
+ * Типизированная запись хука для элемента формы.
+ * Нужна для сценариев, где реестр собирается не литералом объекта,
+ * чтобы не потерять проверку `elementId`.
+ */
+export interface FormConfigHookElementEntry<ControlId extends string> {
+  elementId: ControlId
+  hook: FormConfigHookFn
+}
+
+/**
+ * Создаёт типизированную запись `elementId -> hook` для конкретной схемы.
+ * Пример: `defineFormConfigHookElement<DemoSchema>('demo.grid', useGrid)`.
+ */
+export function defineFormConfigHookElement<
+  ControlId extends string,
+>(
+  elementId: ControlId,
+  hook: FormConfigHookFn,
+): FormConfigHookElementEntry<ControlId> {
+  return { elementId, hook }
+}
+
+/**
+ * Собирает реестр `elements` из массива типизированных записей.
+ * Это сохраняет строгую проверку `elementId`, даже если реестр строится
+ * программно (через map/reduce/fromEntries).
+ */
+export function buildFormConfigHookRegistryFor<ControlId extends string>(
+  entries: readonly FormConfigHookElementEntry<ControlId>[],
+): FormConfigHookRegistry<ControlId> {
+  const registry: FormConfigHookRegistry<ControlId> = {}
+  for (const entry of entries) {
+    registry[entry.elementId] = entry.hook
+  }
+  return registry
+}
