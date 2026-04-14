@@ -30,4 +30,33 @@ describe('loadFormDslBrowserRuntime', () => {
     expect(data.id).toBe('lazy-1')
     expect(data.elements).toHaveLength(1)
   })
+
+  it('parseFormTs rewrites relative imports with dotted names to lazy fns with .ts extension', async () => {
+    const hasBlobURL =
+      typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function'
+    if (!hasBlobURL) return
+
+    const { loadFormDslBrowserRuntime } = await import('./load-form-dsl-runtime')
+    const m = await loadFormDslBrowserRuntime()
+    // demo.data has a dot in filename but no .ts extension in import
+    const data = await m.parseFormTs(`
+import { defineFormSchema } from '@normalization/form-dsl'
+import { onInit, onSubmit } from './demo.data'
+import { configHook } from './demo.config-hook'
+export default defineFormSchema({
+  id: 'demo',
+  configHook,
+  handlers: { onInit, onSubmit },
+  elements: [],
+})`)
+    // Handlers should be stored as lazy functions (not null/undefined)
+    expect(typeof data.handlers?.onInit).toBe('function')
+    expect(typeof data.handlers?.onSubmit).toBe('function')
+    expect(typeof data.configHook).toBe('function')
+    // Path must end with .ts (not just ./demo.data)
+    const onInitStr = String(data.handlers!.onInit)
+    expect(onInitStr).toContain('./demo.data.ts')
+    const configHookStr = String(data.configHook)
+    expect(configHookStr).toContain('./demo.config-hook.ts')
+  })
 })

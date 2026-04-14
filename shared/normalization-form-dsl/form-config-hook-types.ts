@@ -58,7 +58,7 @@ function mergeRegistryFromElementsObject(
 }
 
 /**
- * Вызывает фабрику `default export` и отделяет **`onInit`** / **`onSubmit`** от реестра.
+ * Вызывает фабрику `configHook` и отделяет **`onInit`** / **`onSubmit`** от реестра.
  * Реестр: **`elements`** (`control.id` → хук), при отсутствии — плоские ключи верхнего уровня
  * (устаревший вид). Ключ **`elements`** на верхнем уровне зарезервирован.
  */
@@ -93,13 +93,19 @@ export function splitFormConfigHookFactoryResult(
   }
 }
 
-/** Возврат модуля `*.config-hook.ts`: lifecycle + реестр в **`elements`**. */
+/**
+ * Возврат модуля `*.config-hook.ts`.
+ * Поддерживаем оба формата:
+ * - новый/явный: lifecycle + секция `elements`
+ * - плоский: lifecycle и ключи `control.id` на верхнем уровне
+ */
 export type FormConfigHookModuleReturn<ControlId extends string> =
-  FormConfigHookLifecycle & {
-    elements: FormConfigHookRegistry<ControlId>
-  }
+  | (FormConfigHookLifecycle & {
+      elements: FormConfigHookRegistry<ControlId>
+    })
+  | (FormConfigHookLifecycle & FormConfigHookRegistry<ControlId>)
 
-/** Тип фабрики `default export` модуля `*.config-hook.ts`. */
+/** Тип фабрики именованного экспорта `configHook` модуля `*.config-hook.ts`. */
 export type FormConfigHookFactory<ControlId extends string> =
   () => FormConfigHookModuleReturn<ControlId>
 
@@ -110,9 +116,14 @@ export type FormSchemaDefinition<Elements extends readonly unknown[]> = Pick<
   FormData,
   'id'
 > & {
-  configHook?: FormData['configHook']
+  configHook?:
+    | FormData['configHook']
+    | FormConfigHookFactory<ExtractFormControlIdsFromElements<Elements>>
   schema?: FormData['schema']
-  handlers?: FormData['handlers']
+  handlers?: Record<
+    string,
+    string | (() => Promise<unknown>) | FormConfigHookLifecycleFn
+  >
   elements: Elements
 }
 

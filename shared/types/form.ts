@@ -19,7 +19,14 @@ export interface FormData {
   configHook?: string | (() => Promise<unknown>)
   /** Схема данных формы: имя поля -> тип и описание */
   schema?: Record<string, FieldSchema>
-  /** Обработчики событий формы: имя события → путь к файлу-обработчику */
-  handlers?: Record<string, string>
+  /**
+   * Обработчики событий формы:
+   * - функция lifecycle (`onInit`/`onSubmit`) из schema,
+   * - либо путь/ленивый импорт модуля (runtime-resolve).
+   */
+  handlers?: Record<
+    string,
+    string | (() => Promise<unknown>) | ((...args: unknown[]) => unknown)
+  >
   elements: import('../normalization-form-dsl/form-dsl-core').FormControl[]
 }

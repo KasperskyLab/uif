@@ -283,6 +283,7 @@ function App() {
                 formKey={selectedFile?.path ?? ''}
                 formDirectoryHandle={formDirectoryHandle}
                 formConfigHook={formData.configHook ?? null}
+                formHandlers={formData.handlers ?? null}
               />
             </Card>
           ) : (

@@ -24,7 +24,7 @@
 
 ## Контракт модуля
 
-- **Default export:** функция **`()`**, возвращающая **`FormConfigHookModuleReturn`** (см. **`form-config-hook-types.ts`**): опционально **`onInit`** / **`onSubmit`** и **`elements`** — **`Partial<Record<control.id, ConfigHookFn>>`** (в типе **`FormConfigHookFactoryFor`** поле **`elements`** обязательно, может быть **`{}`**).
+- **Именованный export `configHook`:** функция **`()`**, возвращающая **`FormConfigHookModuleReturn`** (см. **`form-config-hook-types.ts`**): опционально **`onInit`** / **`onSubmit`** и **`elements`** — **`Partial<Record<control.id, ConfigHookFn>>`** (в типе **`FormConfigHookFactoryFor`** поле **`elements`** обязательно, может быть **`{}`**).
 - **`ConfigHookFn`:** как у [feat-config-hook](./feat-config-hook.md): аргумент **`FormSlice`**, результат — пропсы экземпляра ДС **или `null`**.
 - **`elements`:** объект **`control.id → ConfigHookFn`**. Ключ **`elements`** на **верхнем** уровне возврата зарезервирован (не **`control.id`**). **Устаревший вид:** функции-хуки лежали прямо в корне объекта рядом с **`onInit`** / **`onSubmit`** — **`splitFormConfigHookFactoryResult`** по-прежнему их подхватывает; при одновременном наличии **`elements`** и плоского ключа с тем же **`id`** приоритет у **плоского** (перекрытие).
 - **`onInit?` / `onSubmit?`:** **`FormConfigHookLifecycleFn`** — **`(slice: FormSlice) => void | Promise<void>`** (см. **`form-config-hook-types.ts`**): **`async`** / **`await`** допустимы; рендерер вызывает через **`Promise.resolve(...)`**. **Не используйте** **`onInit`** и **`onSubmit`** как **`control.id`**. Разбор — **`splitFormConfigHookFactoryResult`** (**`@normalization/form-dsl`**).
@@ -61,6 +61,7 @@
 ## Редактор и демо
 
 - В **normalization-tool** путь к хуку задаётся как **единственный** артефакт динамической конфигурации для формы (без per-control полей в UI модели).
+- Для модулей динамики действует конвенция **named exports only**: в `*.config-hook.ts` экспортируется `configHook`, в `*.data.ts` — `onInit` / `onSubmit`; `default export` не используется.
 - **Подсказки в панели «Свойства» (форма выбрана, контрол не выбран):** компонент **`FormConfigHookPathEditor`** — заголовок **«Config Hook»**, кнопка выбора **`.ts`** через скрытый **`input type="file"`** и **`Button`** из Hexa (путь — имя файла или **`webkitRelativePath`** при сценарии с каталогом в браузере), строка текущего пути и сброс; ниже **`<details>`**: строка **«Описание config hook»** оформлена как ссылка (цвет, подчёркивание) и **по клику разворачивает** блок: сверху **короткий сниппет** с **`elements`**, затем краткий **продуктовый** текст (зарезервированные **`onInit`** / **`onSubmit`** / **`elements`**, **`mergeState`**, **`<form>`** и **`type: 'submit'`**), без перехода на внешний URL. При изменении контракта **обновляйте** и этот файл фичи, и **`FormConfigHookPathEditor`**.
 - **Демо:** каталог **`dsl/demo/`** — **`demo.schema.ts`** и **`demo.config-hook.ts`**.
 - Файл **дефолтов настроек** при создании хука и прочие пункты §3.4 (URL, WYSIWYG-спека отдельно, dev) — **не входят** в этот этап; **текущие дефолты в коде на этом этапе не меняются**.

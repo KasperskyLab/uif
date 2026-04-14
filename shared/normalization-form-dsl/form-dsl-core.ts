@@ -812,12 +812,12 @@ export function normalizeFormData(data: unknown): FormData {
       if (Object.keys(schema).length > 0) result.schema = schema
     }
     if (obj.handlers && typeof obj.handlers === 'object' && !Array.isArray(obj.handlers)) {
-      const formHandlers: Record<string, string> = {}
+      const formHandlers: FormData['handlers'] = {}
       for (const [key, val] of Object.entries(obj.handlers as Record<string, unknown>)) {
         if (typeof val === 'string' && val) formHandlers[key] = val
         else if (typeof val === 'function') {
-          const path = getImportPathFromHandler(val)
-          if (path) formHandlers[key] = path
+          // Предпочитаем переданную в schema функцию как есть
+          formHandlers[key] = val as (...args: unknown[]) => unknown
         }
       }
       if (Object.keys(formHandlers).length > 0) result.handlers = formHandlers
@@ -825,8 +825,8 @@ export function normalizeFormData(data: unknown): FormData {
     if (typeof obj.configHook === 'string' && obj.configHook) {
       result.configHook = obj.configHook
     } else if (typeof obj.configHook === 'function') {
-      const path = getImportPathFromHandler(obj.configHook)
-      if (path) result.configHook = path
+      // Предпочитаем переданную в schema фабрику как есть.
+      result.configHook = obj.configHook as () => Promise<unknown>
     }
     return result
   }

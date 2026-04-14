@@ -7,3 +7,4 @@
 export type { FieldSchema, FormData } from '../types/form'
 export * from './form-config-hook-types'
 export * from './form-dsl-core'
+export * from './lifecycle-resolve'

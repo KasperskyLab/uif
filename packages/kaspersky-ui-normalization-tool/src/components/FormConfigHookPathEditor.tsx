@@ -70,18 +70,20 @@ export function FormConfigHookPathEditor({
     boxSizing: 'border-box',
   }
 
-  const hookSnippet = `export default () => ({
-  onInit: async (s) => {
-    await new Promise((r) => setTimeout(r, 0)) // загрузка
-    s.mergeState?.({ foo: 'bar' })
-  },
-  onSubmit: async (s) => {
-    console.log(s.state)
-  },
+  const hookSnippet = `export const configHook = () => ({
   elements: {
     'control.id': (s) => ({ /* Hexa props */ }),
   },
-})`
+})
+
+export const onInit = async (s) => {
+  await new Promise((r) => setTimeout(r, 0)) // загрузка
+  s.mergeState?.({ foo: 'bar' })
+}
+
+export const onSubmit = async (s) => {
+  console.log(s.state)
+}`
 
   const summaryStyle: CSSProperties = {
     cursor: 'pointer',
@@ -191,13 +193,12 @@ export function FormConfigHookPathEditor({
             type="BTR4"
             style={{ color: 'var(--text--secondary)', lineHeight: 1.45 }}
           >
-            Один файл .ts: default export — функция без аргументов; в объекте —
-            опционально <span style={{ fontWeight: 600 }}>onInit</span> /{' '}
-            <span style={{ fontWeight: 600 }}>onSubmit</span> и секция{' '}
-            <span style={{ fontWeight: 600 }}>elements</span>: «control.id →
-            хук». Имена onInit, onSubmit и elements на верхнем уровне
-            зарезервированы (не как id контрола). Плоские ключи хуков на верхнем
-            уровне — устаревший вид, поддерживается для совместимости.
+            Модули динамики используют только именованные экспорты: в{' '}
+            <span style={{ fontWeight: 600 }}>.config-hook.ts</span> —{' '}
+            <span style={{ fontWeight: 600 }}>configHook</span>, в data-модуле —{' '}
+            <span style={{ fontWeight: 600 }}>onInit</span> /{' '}
+            <span style={{ fontWeight: 600 }}>onSubmit</span>. Default export не
+            используется.
           </Text>
           <Text
             type="BTR4"

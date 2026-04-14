@@ -1,8 +1,14 @@
 import { defineFormSchema } from '@normalization/form-dsl'
+import { configHook } from './demo.config-hook'
+import { onInit, onSubmit } from './demo.data'
 
 export default defineFormSchema({
   id: 'demo',
-  configHook: './demo.config-hook.ts',
+  configHook,
+  handlers: {
+    onInit,
+    onSubmit,
+  },
   elements: [
     {
       type: 'grid',

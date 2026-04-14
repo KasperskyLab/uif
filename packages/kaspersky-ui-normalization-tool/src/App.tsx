@@ -744,6 +744,7 @@ function App() {
                           }
                           formKey={selectedFile.path}
                           formConfigHook={formData.configHook ?? null}
+                          formHandlers={formData.handlers ?? null}
                         />
                       ) : (
                         <FormEditorConfigHookProvider
@@ -752,6 +753,7 @@ function App() {
                             formFileDirectoryHandle ?? directoryHandle
                           }
                           formConfigHook={formData.configHook ?? null}
+                          formHandlers={formData.handlers ?? null}
                           elements={formControls}
                         >
                           <FormCanvas

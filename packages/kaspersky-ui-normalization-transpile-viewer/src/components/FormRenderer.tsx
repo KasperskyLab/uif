@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   createContext,
   useContext,
 } from 'react'
@@ -38,6 +39,9 @@ import {
   EXTRA_UI_DSL_TYPES,
   getComponentIdFromDslType,
   getInitialFormStateFromElements,
+  resolveLifecycleHandler,
+  resolveConfigHookFactory,
+  resolveTsModulePathFromValue,
   splitFormConfigHookFactoryResult,
   type ButtonControl,
   type CheckboxControl,
@@ -55,6 +59,7 @@ import {
   type ToggleControl,
 } from '@/types/form-dsl'
 import { loadConfigHookDefaultExport } from '@/utils/loadConfigHookModule'
+import { loadTsModule } from '@/utils/loadConfigHookModule'
 import {
   defaultGridLayoutRows,
   DEFAULT_GRID_LAYOUT_PROPERTY,
@@ -494,7 +499,9 @@ export interface FormRendererProps {
   /** Директория, в которой лежит файл формы (для разрешения configHook) */
   formDirectoryHandle?: FileSystemDirectoryHandle | null
   /** Относительный путь к единому `.ts` модулю configHook формы */
-  formConfigHook?: string | null
+  formConfigHook?: string | (() => unknown) | null
+  /** Форменные обработчики (например onInit/onSubmit) из DSL `handlers` */
+  formHandlers?: Record<string, string | ((...args: unknown[]) => unknown)> | null
   /** Ключ формы (например путь к файлу) — при смене сбрасывается состояние */
   formKey?: string
 }
@@ -504,6 +511,7 @@ export function FormRenderer({
   gap = 16,
   formDirectoryHandle = null,
   formConfigHook = null,
+  formHandlers = null,
   formKey = '',
 }: FormRendererProps): React.ReactElement {
   const [formState, setFormState] = useState<Record<string, unknown>>(() =>
@@ -517,54 +525,90 @@ export function FormRenderer({
     setFormState((prev) => ({ ...prev, ...partial }))
   }, [])
 
-  useEffect(() => {
-    setFormState(getInitialFormStateFromElements(elements))
-  }, [formKey])
+  const prevFormKeyRef = useRef<string | undefined>(undefined)
+  const lifecycleRunIdRef = useRef(0)
 
   useEffect(() => {
-    if (!formConfigHook || !formDirectoryHandle) {
-      setRegistry(null)
-      setLifecycle({})
-      setRegistryLoading(false)
-      return
-    }
+    const runId = ++lifecycleRunIdRef.current
     let cancelled = false
-    setRegistryLoading(true)
-    loadConfigHookDefaultExport(formDirectoryHandle, formConfigHook).then(
-      (factory) => {
-        if (cancelled) return
-        if (!factory) {
-          setRegistry(null)
-          setLifecycle({})
-          setRegistryLoading(false)
-          return
-        }
+    const formKeyChanged = prevFormKeyRef.current !== formKey
+    prevFormKeyRef.current = formKey
+
+    function mergeStateForLifecycle(partial: Record<string, unknown>): void {
+      if (cancelled || runId !== lifecycleRunIdRef.current) return
+      setFormState((prev) => ({ ...prev, ...partial }))
+    }
+
+    async function loadRuntimeBindings() {
+      if (formKeyChanged) {
+        setFormState(getInitialFormStateFromElements(elements))
+      }
+      const nextLifecycle: FormConfigHookLifecycle = {}
+      let nextRegistry: ConfigHookRegistry | null = null
+      const needsAsync =
+        (formConfigHook != null && formConfigHook !== '') ||
+        (formHandlers != null && Object.keys(formHandlers).length > 0)
+      setRegistryLoading(Boolean(formDirectoryHandle && needsAsync))
+
+      const factory = await resolveConfigHookFactory(
+        formConfigHook,
+        formDirectoryHandle,
+        loadConfigHookDefaultExport,
+      )
+      if (cancelled) return
+      if (factory) {
         const parsed = splitFormConfigHookFactoryResult(factory)
-        if (!parsed) {
-          setRegistry(null)
-          setLifecycle({})
-          setRegistryLoading(false)
-          return
+        if (parsed) {
+          nextRegistry = parsed.registry
+          if (parsed.lifecycle.onInit) nextLifecycle.onInit = parsed.lifecycle.onInit
+          if (parsed.lifecycle.onSubmit) nextLifecycle.onSubmit = parsed.lifecycle.onSubmit
         }
-        setRegistry(parsed.registry)
-        setLifecycle(parsed.lifecycle)
-        setRegistryLoading(false)
-        if (parsed.lifecycle.onInit) {
-          const initial = getInitialFormStateFromElements(elements)
-          void Promise.resolve(
-            parsed.lifecycle.onInit({
-              state: initial,
-              config: { elements },
-              mergeState: mergeFormState,
-            }),
-          )
-        }
-      },
-    )
+      }
+
+      if (formHandlers) {
+        const dataOnInit = await resolveLifecycleHandler(
+          formHandlers.onInit,
+          'onInit',
+          formDirectoryHandle,
+          loadTsModule,
+        )
+        if (dataOnInit) nextLifecycle.onInit = dataOnInit
+        const dataOnSubmit = await resolveLifecycleHandler(
+          formHandlers.onSubmit,
+          'onSubmit',
+          formDirectoryHandle,
+          loadTsModule,
+        )
+        if (dataOnSubmit) nextLifecycle.onSubmit = dataOnSubmit
+      }
+
+      if (cancelled) return
+      setRegistry(nextRegistry)
+      setLifecycle(nextLifecycle)
+      setRegistryLoading(false)
+      if (nextLifecycle.onInit) {
+        const initial = getInitialFormStateFromElements(elements)
+        void Promise.resolve(
+          nextLifecycle.onInit({
+            state: initial,
+            config: { elements },
+            mergeState: mergeStateForLifecycle,
+          }),
+        )
+      }
+    }
+
+    void loadRuntimeBindings()
     return () => {
       cancelled = true
     }
-  }, [formKey, formConfigHook, formDirectoryHandle, mergeFormState])
+  }, [
+    formKey,
+    formConfigHook,
+    formDirectoryHandle,
+    formHandlers,
+    elements,
+  ])
 
   const updateValue = useCallback((id: string, value: unknown) => {
     setFormState((prev) => ({ ...prev, [id]: value }))
@@ -583,7 +627,7 @@ export function FormRenderer({
     () => ({
       registry,
       loading: registryLoading,
-      path: formConfigHook && formConfigHook.length > 0 ? formConfigHook : null,
+      path: resolveTsModulePathFromValue(formConfigHook),
     }),
     [registry, registryLoading, formConfigHook],
   )

@@ -113,6 +113,50 @@ export default s
         expect(data.elements).toHaveLength(1)
       },
     )
+
+    it.skipIf(!hasBlobURL)(
+      'parses schema with relative static imports for configHook and handlers',
+      async () => {
+        const content = `
+import { defineFormSchema } from '@normalization/form-dsl'
+import { configHook } from './demo.config-hook'
+import { onInit, onSubmit } from './demo.data'
+
+export default defineFormSchema({
+  id: 'alias-relative-1',
+  configHook,
+  handlers: { onInit, onSubmit },
+  elements: [{ type: 'text', id: 't1' }],
+})
+`
+        const data = await parseFormTs(content)
+        expect(data.id).toBe('alias-relative-1')
+        expect(typeof data.configHook).toBe('function')
+        expect(typeof data.handlers?.onInit).toBe('function')
+        expect(typeof data.handlers?.onSubmit).toBe('function')
+      },
+    )
+
+    it.skipIf(!hasBlobURL)(
+      'keeps direct schema functions for configHook and handlers',
+      async () => {
+        const content = `
+export default {
+  id: 'fn-1',
+  configHook: () => ({ 't1': () => ({ text: 'ok' }) }),
+  handlers: {
+    onInit: (slice) => { slice?.mergeState?.({ t1: 'init' }) },
+    onSubmit: async (slice) => { void slice?.state },
+  },
+  elements: [{ type: 'text', id: 't1' }],
+}
+`
+        const data = await parseFormTs(content)
+        expect(typeof data.configHook).toBe('function')
+        expect(typeof data.handlers?.onInit).toBe('function')
+        expect(typeof data.handlers?.onSubmit).toBe('function')
+      },
+    )
   })
 
   describe('formToJson / formToJsonString', () => {

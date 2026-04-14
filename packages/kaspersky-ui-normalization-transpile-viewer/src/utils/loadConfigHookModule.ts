@@ -1,8 +1,12 @@
 import type { FormSlice } from '@/types/form-dsl'
+import { resolveTsModulePathFromValue } from '@/types/form-dsl'
 import { loadFormDslBrowserRuntime } from '@normalization/load-form-dsl-runtime'
 
-/** Default export формы: `() => Record<controlId, (formSlice: FormSlice) => unknown>`. */
+/** Именованный export `configHook`: `() => Record<controlId, (formSlice: FormSlice) => unknown>`. */
 export type FormConfigHookFactory = () => Record<string, (formSlice: FormSlice) => unknown>
+
+/** Приводит string/`() => import('...')` к строке пути. */
+export const resolveTsModulePath = resolveTsModulePathFromValue
 
 async function getFileHandleFromPath(
   dir: FileSystemDirectoryHandle,
@@ -20,16 +24,47 @@ async function getFileHandleFromPath(
   return current.getFileHandle(parts[parts.length - 1])
 }
 
-/** Загружает default export модуля (транспиляция + dynamic import). */
+/** Загружает named export `configHook` модуля (транспиляция + dynamic import). */
 export async function loadConfigHookDefaultExport(
   dir: FileSystemDirectoryHandle,
-  path: string,
+  path: string | (() => Promise<unknown>),
 ): Promise<FormConfigHookFactory | null> {
+  try {
+    const resolvedPath = resolveTsModulePath(path)
+    if (!resolvedPath) return null
+    const { transpileConfigHookSource, isConfigHookPathTs } =
+      await loadFormDslBrowserRuntime()
+    if (!isConfigHookPathTs(resolvedPath)) {
+      console.error(
+        'configHook: требуется файл TypeScript (.ts), получено:',
+        resolvedPath,
+      )
+      return null
+    }
+    const fh = await getFileHandleFromPath(dir, resolvedPath)
+    const file = await fh.getFile()
+    const raw = await file.text()
+    const js = transpileConfigHookSource(raw)
+    const url = URL.createObjectURL(new Blob([js], { type: 'application/javascript' }))
+    const mod = await import(/* @vite-ignore */ url)
+    URL.revokeObjectURL(url)
+    return typeof mod?.configHook === 'function' ? mod.configHook : null
+  } catch (err) {
+    console.error('configHook load error:', err)
+    return null
+  }
+}
+
+/** Загружает TS-модуль и возвращает namespace (`import(url)`). */
+export async function loadTsModule(
+  dir: FileSystemDirectoryHandle,
+  path: string,
+): Promise<Record<string, unknown> | null> {
   try {
     const { transpileConfigHookSource, isConfigHookPathTs } =
       await loadFormDslBrowserRuntime()
     if (!isConfigHookPathTs(path)) {
-      console.error('configHook: требуется файл TypeScript (.ts), получено:', path)
+      console.error('module: требуется файл TypeScript (.ts), получено:', path)
       return null
     }
     const fh = await getFileHandleFromPath(dir, path)
@@ -39,9 +74,9 @@ export async function loadConfigHookDefaultExport(
     const url = URL.createObjectURL(new Blob([js], { type: 'application/javascript' }))
     const mod = await import(/* @vite-ignore */ url)
     URL.revokeObjectURL(url)
-    return typeof mod?.default === 'function' ? mod.default : null
+    return (mod ?? null) as Record<string, unknown> | null
   } catch (err) {
-    console.error('configHook load error:', err)
+    console.error('module load error:', err)
     return null
   }
 }
