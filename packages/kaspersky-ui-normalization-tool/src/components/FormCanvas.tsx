@@ -181,8 +181,8 @@ function GridControlBlock({
   rootSetControls: React.Dispatch<React.SetStateAction<FormControl[]>>
 }) {
   const g = control
-  const { registry, loading, path, formSlice } = useFormEditorConfigHook()
-  const hookFn = (registry?.[g.id] ?? null) as GridConfigHookFn | null
+  const { hookById, loading, formSlice } = useFormEditorConfigHook()
+  const hookFn = (hookById[g.id] ?? null) as GridConfigHookFn | null
 
   const setGridChildren = useCallback(
     (next: React.SetStateAction<(FormControl | null)[]>) => {
@@ -197,8 +197,8 @@ function GridControlBlock({
     [g.id, g.children, rootSetControls]
   )
 
-  if (!path || !hookFn) {
-    if (path && loading) {
+  if (!hookFn) {
+    if (loading) {
       return (
         <div style={gridWrapStyle}>
           <Text type="BTR3" style={{ color: '#8c8c8c' }}>…</Text>
@@ -208,7 +208,7 @@ function GridControlBlock({
     return (
       <div style={gridWrapStyle}>
         <Text type="BTR3" style={{ color: '#8c8c8c' }}>
-          Сетка «{g.id}»: укажите config hook в форме и запись для этого id
+          {`Сетка «${g.id}»: нет хука useConfig (useConfigs['${g.id}'] в модуле или каталог формы не открыт).`}
         </Text>
       </div>
     )
@@ -592,8 +592,8 @@ function TableControlBlock({
   rootSetControls: React.Dispatch<React.SetStateAction<FormControl[]>>
 }) {
   const t = control
-  const { registry, loading, path, formSlice } = useFormEditorConfigHook()
-  const hookFn = (registry?.[t.id] ?? null) as TableConfigHookFn | null
+  const { hookById, loading, formSlice } = useFormEditorConfigHook()
+  const hookFn = (hookById[t.id] ?? null) as TableConfigHookFn | null
 
   const setTableChildren = useCallback(
     (next: React.SetStateAction<(FormControl | null)[]>) => {
@@ -608,8 +608,8 @@ function TableControlBlock({
     [t.id, t.children, rootSetControls]
   )
 
-  if (!path || !hookFn) {
-    if (path && loading) {
+  if (!hookFn) {
+    if (loading) {
       return (
         <div style={tableWrapStyle}>
           <Text type="BTR3" style={{ color: '#8c8c8c' }}>…</Text>
@@ -619,7 +619,7 @@ function TableControlBlock({
     return (
       <div style={tableWrapStyle}>
         <Text type="BTR3" style={{ color: '#8c8c8c' }}>
-          Таблица «{t.id}»: укажите config hook в форме и запись для этого id
+          {`Таблица «${t.id}»: нет хука useConfig (useConfigs['${t.id}'] или каталог формы не открыт).`}
         </Text>
       </div>
     )

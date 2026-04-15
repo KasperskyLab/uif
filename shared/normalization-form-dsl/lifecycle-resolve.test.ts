@@ -3,6 +3,7 @@ import {
   resolveTsModulePathFromValue,
   isLazyDynamicImportFn,
   resolveLifecycleHandler,
+  resolveControlUseConfig,
   resolveConfigHookFactory,
 } from './lifecycle-resolve'
 
@@ -18,28 +19,71 @@ describe('lifecycle-resolve', () => {
   })
 
   it('direct lifecycle fn has arity >= 1', async () => {
-    const onInit = (slice: { mergeState?: (p: Record<string, unknown>) => void }) => {
+    const onFormInit = (slice: { mergeState?: (p: Record<string, unknown>) => void }) => {
       slice.mergeState?.({ a: 1 })
     }
     const dir = {} as FileSystemDirectoryHandle
     const loadTs = vi.fn()
-    const out = await resolveLifecycleHandler(onInit, 'onInit', dir, loadTs)
-    expect(out).toBe(onInit)
+    const out = await resolveLifecycleHandler(onFormInit, 'onFormInit', dir, loadTs)
+    expect(out).toBe(onFormInit)
     expect(loadTs).not.toHaveBeenCalled()
   })
 
-  it('resolves onInit from lazy import via loadTsModule', async () => {
-    const lazy = () => undefined
+  it('resolves onFormInit from lazy import (dynamic import)', async () => {
+    const onFormInit = vi.fn()
+    const lazy = () => Promise.resolve({ onFormInit })
     Object.defineProperty(lazy, 'length', { value: 0 })
     Object.defineProperty(lazy, 'toString', {
       value: () => "() => import('./m.ts')",
     })
-    const onInit = vi.fn()
-    const loadTs = vi.fn().mockResolvedValue({ onInit })
+    const loadTs = vi.fn()
     const dir = {} as FileSystemDirectoryHandle
-    const out = await resolveLifecycleHandler(lazy, 'onInit', dir, loadTs)
-    expect(loadTs).toHaveBeenCalledWith(dir, './m.ts')
-    expect(out).toBe(onInit)
+    const out = await resolveLifecycleHandler(lazy, 'onFormInit', dir, loadTs)
+    expect(loadTs).not.toHaveBeenCalled()
+    expect(out).toBe(onFormInit)
+  })
+
+  it('resolveControlUseConfig returns direct hook when arity >= 1', async () => {
+    const hook = (slice: { state: Record<string, unknown> }) => slice.state
+    const loadTs = vi.fn()
+    const dir = {} as FileSystemDirectoryHandle
+    const out = await resolveControlUseConfig(hook, 'any-id', dir, loadTs)
+    expect(out).toBe(hook)
+    expect(loadTs).not.toHaveBeenCalled()
+  })
+
+  it('resolveControlUseConfig falls back to loadTsModule when lazy import fails', async () => {
+    const gridHook = (_s: { state: Record<string, unknown> }) => ({ cols: 2 })
+    const lazy = (): Promise<unknown> => {
+      throw new Error('blob base')
+    }
+    Object.defineProperty(lazy, 'length', { value: 0 })
+    Object.defineProperty(lazy, 'toString', {
+      value: () => "() => import('./demo.config-hook.ts')",
+    })
+    const loadTs = vi.fn().mockResolvedValue({
+      useConfigs: { 'demo.grid': gridHook },
+    })
+    const dir = {} as FileSystemDirectoryHandle
+    const out = await resolveControlUseConfig(lazy, 'demo.grid', dir, loadTs)
+    expect(loadTs).toHaveBeenCalledWith(dir, './demo.config-hook.ts')
+    expect(out).toBe(gridHook)
+  })
+
+  it('resolveLifecycleHandler falls back to loadTsModule when lazy import fails', async () => {
+    const onFormInit = vi.fn()
+    const lazy = (): Promise<unknown> => {
+      throw new Error('blob base')
+    }
+    Object.defineProperty(lazy, 'length', { value: 0 })
+    Object.defineProperty(lazy, 'toString', {
+      value: () => "() => import('./demo.data.ts')",
+    })
+    const loadTs = vi.fn().mockResolvedValue({ onFormInit })
+    const dir = {} as FileSystemDirectoryHandle
+    const out = await resolveLifecycleHandler(lazy, 'onFormInit', dir, loadTs)
+    expect(loadTs).toHaveBeenCalledWith(dir, './demo.data.ts')
+    expect(out).toBe(onFormInit)
   })
 
   it('resolveConfigHookFactory loads by path', async () => {

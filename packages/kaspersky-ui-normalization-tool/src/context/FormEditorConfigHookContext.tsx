@@ -7,29 +7,25 @@ import React, {
   useState,
 } from 'react'
 import {
+  collectControlsWithUseConfig,
   getInitialFormStateFromElements,
-  resolveConfigHookFactory,
+  resolveControlUseConfig,
   resolveLifecycleHandler,
-  resolveTsModulePathFromValue,
-  splitFormConfigHookFactoryResult,
   type FormControl,
   type FormSlice,
   type FormConfigHookLifecycleFn,
 } from '../types/form-dsl'
-import { loadConfigHookDefaultExport } from '../utils/loadConfigHookModule'
 import { loadTsModule } from '../utils/loadConfigHookModule'
 
-type ConfigHookRegistry = Record<string, (formSlice: FormSlice) => unknown>
+type ControlHexaHookFn = (formSlice: FormSlice) => unknown
 
 const FormEditorConfigHookContext = createContext<{
-  registry: ConfigHookRegistry | null
+  hookById: Record<string, ControlHexaHookFn | null>
   loading: boolean
-  path: string | null
   formSlice: FormSlice
 }>({
-  registry: null,
+  hookById: {},
   loading: false,
-  path: null,
   formSlice: { state: {}, config: { elements: [] } },
 })
 
@@ -37,21 +33,21 @@ export function FormEditorConfigHookProvider({
   children,
   formKey,
   formDirectoryHandle,
-  formConfigHook,
   formHandlers,
   elements,
 }: {
   children: React.ReactNode
   formKey: string
   formDirectoryHandle: FileSystemDirectoryHandle | null
-  formConfigHook: string | (() => unknown) | null | undefined
   formHandlers:
     | Record<string, string | ((...args: unknown[]) => unknown)>
     | null
     | undefined
   elements: FormControl[]
 }): React.ReactElement {
-  const [registry, setRegistry] = useState<ConfigHookRegistry | null>(null)
+  const [hookById, setHookById] = useState<
+    Record<string, ControlHexaHookFn | null>
+  >({})
   const [registryLoading, setRegistryLoading] = useState(false)
   const [hookStatePatch, setHookStatePatch] = useState<
     Record<string, unknown>
@@ -76,45 +72,36 @@ export function FormEditorConfigHookProvider({
   )
 
   useEffect(() => {
-    if (!formDirectoryHandle) {
-      setRegistry(null)
-      setRegistryLoading(false)
-      return
-    }
     let cancelled = false
     async function loadBindings() {
+      const useConfigRows = collectControlsWithUseConfig(elements)
+      const onFormInitRaw =
+        formHandlers?.onFormInit ?? formHandlers?.onInit
       const needsAsync =
-        (formConfigHook != null && formConfigHook !== '') ||
-        (formHandlers != null && Object.keys(formHandlers).length > 0)
-      setRegistryLoading(Boolean(needsAsync))
-      let onInitFn: FormConfigHookLifecycleFn | null = null
-
-      const factory = await resolveConfigHookFactory(
-        formConfigHook,
-        formDirectoryHandle,
-        loadConfigHookDefaultExport,
-      )
-      if (cancelled) return
-      if (factory) {
-        const parsed = splitFormConfigHookFactoryResult(factory)
-        if (parsed) {
-          setRegistry(parsed.registry)
-          if (parsed.lifecycle.onInit) onInitFn = parsed.lifecycle.onInit
-        } else {
-          setRegistry(null)
-        }
-      } else {
-        setRegistry(null)
+        useConfigRows.length > 0 || onFormInitRaw != null
+      setRegistryLoading(needsAsync)
+      const nextHookById: Record<string, ControlHexaHookFn | null> = {}
+      for (const { id, useConfigRaw } of useConfigRows) {
+        if (cancelled) return
+        const fn = await resolveControlUseConfig(
+          useConfigRaw,
+          id,
+          formDirectoryHandle,
+          loadTsModule,
+        )
+        nextHookById[id] = fn
       }
-
-      const fromHandlers = await resolveLifecycleHandler(
-        formHandlers?.onInit,
-        'onInit',
-        formDirectoryHandle,
-        loadTsModule,
-      )
-      if (fromHandlers) onInitFn = fromHandlers
-
+      let onInitFn: FormConfigHookLifecycleFn | null = null
+      if (onFormInitRaw != null) {
+        onInitFn = await resolveLifecycleHandler(
+          onFormInitRaw,
+          'onFormInit',
+          formDirectoryHandle,
+          loadTsModule,
+        )
+      }
+      if (cancelled) return
+      setHookById(nextHookById)
       setRegistryLoading(false)
       if (onInitFn) {
         const initial = getInitialFormStateFromElements(elements)
@@ -131,7 +118,7 @@ export function FormEditorConfigHookProvider({
     return () => {
       cancelled = true
     }
-  }, [formKey, formConfigHook, formDirectoryHandle, formHandlers, mergeState, elements])
+  }, [formKey, formDirectoryHandle, formHandlers, mergeState, elements])
 
   const formSlice = useMemo<FormSlice>(
     () => ({
@@ -144,12 +131,11 @@ export function FormEditorConfigHookProvider({
 
   const value = useMemo(
     () => ({
-      registry,
+      hookById,
       loading: registryLoading,
-      path: resolveTsModulePathFromValue(formConfigHook),
       formSlice,
     }),
-    [registry, registryLoading, formConfigHook, formSlice],
+    [hookById, registryLoading, formSlice],
   )
 
   return (
@@ -160,9 +146,8 @@ export function FormEditorConfigHookProvider({
 }
 
 export function useFormEditorConfigHook(): {
-  registry: ConfigHookRegistry | null
+  hookById: Record<string, ControlHexaHookFn | null>
   loading: boolean
-  path: string | null
   formSlice: FormSlice
 } {
   return useContext(FormEditorConfigHookContext)

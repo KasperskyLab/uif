@@ -28,7 +28,6 @@ export interface WysiwygCanvasProps {
   onSelect: (id: string | null) => void
   formDirectoryHandle: FileSystemDirectoryHandle | null
   formKey: string
-  formConfigHook?: string | null
   formHandlers?: Record<string, string | ((...args: unknown[]) => unknown)> | null
 }
 
@@ -241,13 +240,11 @@ const WysiwygFormLayer = memo(function WysiwygFormLayer({
   elements,
   formDirectoryHandle,
   formKey,
-  formConfigHook,
   formHandlers,
 }: {
   elements: FormControl[]
   formDirectoryHandle: FileSystemDirectoryHandle | null
   formKey: string
-  formConfigHook?: string | null
   formHandlers?: Record<string, string | ((...args: unknown[]) => unknown)> | null
 }): React.ReactElement {
   return (
@@ -255,7 +252,6 @@ const WysiwygFormLayer = memo(function WysiwygFormLayer({
       elements={elements}
       formDirectoryHandle={formDirectoryHandle}
       formKey={formKey}
-      formConfigHook={formConfigHook ?? null}
       formHandlers={formHandlers ?? null}
       gap={16}
     />
@@ -360,7 +356,6 @@ export function WysiwygCanvas({
   onSelect,
   formDirectoryHandle,
   formKey,
-  formConfigHook = null,
   formHandlers = null,
 }: WysiwygCanvasProps): React.ReactElement {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -614,7 +609,6 @@ export function WysiwygCanvas({
           elements={controls}
           formDirectoryHandle={formDirectoryHandle}
           formKey={formKey}
-          formConfigHook={formConfigHook}
           formHandlers={formHandlers}
         />
       </div>

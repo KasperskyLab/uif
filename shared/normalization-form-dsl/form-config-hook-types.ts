@@ -33,11 +33,16 @@ export type FormConfigHookRegistry<ControlId extends string> = Partial<
 export type FormConfigHookLifecycleFn = (slice: FormSlice) => void | Promise<void>
 
 export interface FormConfigHookLifecycle {
-  onInit?: FormConfigHookLifecycleFn
-  onSubmit?: FormConfigHookLifecycleFn
+  onFormInit?: FormConfigHookLifecycleFn
+  onFormSubmit?: FormConfigHookLifecycleFn
 }
 
-const FORM_CONFIG_HOOK_LIFECYCLE_KEYS = new Set<string>(['onInit', 'onSubmit'])
+const FORM_CONFIG_HOOK_LIFECYCLE_KEYS = new Set<string>([
+  'onFormInit',
+  'onFormSubmit',
+  'onInit',
+  'onSubmit',
+])
 
 /** Зарезервированы на верхнем уровне возврата хука (не **`control.id`**). */
 const FORM_CONFIG_HOOK_TOP_RESERVED_KEYS = new Set<string>([
@@ -78,8 +83,12 @@ export function splitFormConfigHookFactoryResult(
     mergeRegistryFromElementsObject(registry, top.elements)
     for (const [key, val] of Object.entries(top)) {
       if (FORM_CONFIG_HOOK_LIFECYCLE_KEYS.has(key) && typeof val === 'function') {
-        if (key === 'onInit') lifecycle.onInit = val as FormConfigHookLifecycleFn
-        if (key === 'onSubmit') lifecycle.onSubmit = val as FormConfigHookLifecycleFn
+        if (key === 'onFormInit' || key === 'onInit') {
+          lifecycle.onFormInit = val as FormConfigHookLifecycleFn
+        }
+        if (key === 'onFormSubmit' || key === 'onSubmit') {
+          lifecycle.onFormSubmit = val as FormConfigHookLifecycleFn
+        }
         continue
       }
       if (FORM_CONFIG_HOOK_TOP_RESERVED_KEYS.has(key)) continue
@@ -116,9 +125,6 @@ export type FormSchemaDefinition<Elements extends readonly unknown[]> = Pick<
   FormData,
   'id'
 > & {
-  configHook?:
-    | FormData['configHook']
-    | FormConfigHookFactory<ExtractFormControlIdsFromElements<Elements>>
   schema?: FormData['schema']
   handlers?: Record<
     string,

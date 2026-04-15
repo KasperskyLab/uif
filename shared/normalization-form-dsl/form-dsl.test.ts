@@ -115,46 +115,46 @@ export default s
     )
 
     it.skipIf(!hasBlobURL)(
-      'parses schema with relative static imports for configHook and handlers',
+      'parses schema with lazy handlers (onFormInit / useConfig)',
       async () => {
         const content = `
 import { defineFormSchema } from '@normalization/form-dsl'
-import { configHook } from './demo.config-hook'
-import { onInit, onSubmit } from './demo.data'
+const lazyData = () => import('./demo.data.ts')
+const lazyHook = () => import('./demo.config-hook.ts')
 
 export default defineFormSchema({
   id: 'alias-relative-1',
-  configHook,
-  handlers: { onInit, onSubmit },
-  elements: [{ type: 'text', id: 't1' }],
+  handlers: { onFormInit: lazyData },
+  elements: [{ type: 'text', id: 't1', handlers: { useConfig: lazyHook } }],
 })
 `
         const data = await parseFormTs(content)
         expect(data.id).toBe('alias-relative-1')
-        expect(typeof data.configHook).toBe('function')
-        expect(typeof data.handlers?.onInit).toBe('function')
-        expect(typeof data.handlers?.onSubmit).toBe('function')
+        expect(data.configHook).toBeUndefined()
+        expect(typeof data.handlers?.onFormInit).toBe('function')
+        const el = data.elements[0] as { handlers?: { useConfig?: unknown } }
+        expect(typeof el.handlers?.useConfig).toBe('function')
       },
     )
 
     it.skipIf(!hasBlobURL)(
-      'keeps direct schema functions for configHook and handlers',
+      'parses default export with lazy onFormInit and useConfig',
       async () => {
         const content = `
 export default {
   id: 'fn-1',
-  configHook: () => ({ 't1': () => ({ text: 'ok' }) }),
   handlers: {
-    onInit: (slice) => { slice?.mergeState?.({ t1: 'init' }) },
-    onSubmit: async (slice) => { void slice?.state },
+    onFormInit: () => import('./demo.data.ts'),
+    onFormSubmit: () => import('./demo.data.ts'),
   },
-  elements: [{ type: 'text', id: 't1' }],
+  elements: [{ type: 'text', id: 't1', handlers: { useConfig: () => import('./demo.config-hook.ts') } }],
 }
 `
         const data = await parseFormTs(content)
-        expect(typeof data.configHook).toBe('function')
-        expect(typeof data.handlers?.onInit).toBe('function')
-        expect(typeof data.handlers?.onSubmit).toBe('function')
+        expect(typeof data.handlers?.onFormInit).toBe('function')
+        expect(typeof data.handlers?.onFormSubmit).toBe('function')
+        const el = data.elements[0] as { handlers?: { useConfig?: unknown } }
+        expect(typeof el.handlers?.useConfig).toBe('function')
       },
     )
   })
@@ -174,15 +174,6 @@ export default {
       expect(JSON.parse(str)).toEqual(obj)
     })
 
-    it('includes form-level configHook in JSON', () => {
-      const form: FormData = {
-        id: 'fid',
-        configHook: 'fid.config-hook.ts',
-        elements: [],
-      }
-      const obj = formToJson(form)
-      expect(obj.configHook).toBe('fid.config-hook.ts')
-    })
   })
 
   describe('formToTs', () => {
@@ -197,30 +188,21 @@ export default {
       expect(js).toContain('elements:')
     })
 
-    it('outputs form-level configHook as dynamic import', () => {
-      const form: FormData = {
-        id: 'hf1',
-        configHook: 'hf1.config-hook.ts',
-        elements: [textControl('t1')],
-      }
-      const js = formToTs(form)
-      expect(js).toContain('() => import("./hf1.config-hook.ts")')
-    })
   })
 
   describe('controlToJson', () => {
-    it('serializes text control without per-control configHook', () => {
+    it('serializes text control without handlers by default', () => {
       const c = textControl('t1')
       const json = controlToJson(c) as Record<string, unknown>
       expect(json.type).toBe('text')
-      expect(json.configHook).toBeUndefined()
+      expect(json.handlers).toBeUndefined()
     })
 
     it('serializes button control', () => {
       const c: ButtonControl = { type: 'button', id: 'b1' }
       const out = controlToJson(c) as Record<string, unknown>
       expect(out.type).toBe('button')
-      expect(out.configHook).toBeUndefined()
+      expect(out.handlers).toBeUndefined()
     })
 
     it('serializes input control without ui-only fields', () => {
@@ -341,7 +323,10 @@ export default {
     it('formToTs outputs form-level handlers as import functions', () => {
       const form: FormData = {
         id: 'f1',
-        handlers: { onSubmit: 'handlers/submit.js', onInit: 'handlers/init.js' },
+        handlers: {
+          onFormSubmit: 'handlers/submit.js',
+          onFormInit: 'handlers/init.js',
+        },
         elements: [],
       }
       const js = formToTs(form)
@@ -353,11 +338,11 @@ export default {
     it('formToJson includes form-level handlers as paths', () => {
       const form: FormData = {
         id: 'f1',
-        handlers: { onSubmit: 'handlers/submit.js' },
+        handlers: { onFormSubmit: 'handlers/submit.js' },
         elements: [],
       }
       const json = formToJson(form)
-      expect(json.handlers).toEqual({ onSubmit: 'handlers/submit.js' })
+      expect(json.handlers).toEqual({ onFormSubmit: 'handlers/submit.js' })
     })
 
   })
@@ -530,8 +515,8 @@ export default {
       }))
       expect(parsed).not.toBeNull()
       expect(parsed!.registry).toEqual({ field1: hook })
-      expect(parsed!.lifecycle.onInit).toBe(onInit)
-      expect(parsed!.lifecycle.onSubmit).toBe(onSubmit)
+      expect(parsed!.lifecycle.onFormInit).toBe(onInit)
+      expect(parsed!.lifecycle.onFormSubmit).toBe(onSubmit)
     })
 
     it('ignores non-function lifecycle values', () => {
@@ -541,7 +526,7 @@ export default {
         x: hook,
       }))
       expect(parsed).not.toBeNull()
-      expect(parsed!.lifecycle.onInit).toBeUndefined()
+      expect(parsed!.lifecycle.onFormInit).toBeUndefined()
       expect(parsed!.registry.x).toBe(hook)
     })
 

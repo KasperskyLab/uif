@@ -1,18 +1,13 @@
 /**
- * Единый configHook формы `demo`: именованный `configHook`, реестр по `control.id`.
- * `DemoFormControlIds` выводится из ключей `demoFormConfigHookRegistry`.
+ * Именованные хуки конфигурации Hexa по узлам; в схеме — **`handlers.useConfig: useDemoGrid`** и т.д.
+ * Карта **`useConfigs`** — для вывода типа **`DemoFormControlIds`**.
  */
 import type { ReactNode } from 'react'
 import type { ButtonProps, GridProps, TextProps, TextboxProps } from '@kaspersky/hexa-ui'
 import type { ITableProps } from '@kaspersky/hexa-ui'
-import type {
-  FormConfigHookFactory,
-  FormConfigHookRegistry,
-  FormSlice,
-} from '@normalization/form-dsl'
+import type { FormConfigHookFn, FormSlice } from '@normalization/form-dsl'
 
-/** Отправка формы: `type: 'submit'` — срабатывает `onSubmit` из того же configHook. */
-function useDemoGridSubmitButton(_formSlice: FormSlice): ButtonProps | null {
+export function useDemoGridSubmitButton(_formSlice: FormSlice): ButtonProps | null {
   return {
     mode: 'primary',
     size: 'medium',
@@ -21,7 +16,7 @@ function useDemoGridSubmitButton(_formSlice: FormSlice): ButtonProps | null {
   }
 }
 
-function useDemoButton(formSlice: FormSlice): ButtonProps | null {
+export function useDemoButton(formSlice: FormSlice): ButtonProps | null {
   const { state } = formSlice
   const fromState = String(state['demo.grid.input'] ?? '').trim()
   const text =
@@ -36,12 +31,12 @@ function useDemoButton(formSlice: FormSlice): ButtonProps | null {
         keys.length === 0
           ? '(state пуст)'
           : keys.map((id) => `${id}: ${JSON.stringify(state[id])}`).join('\n')
-      window.alert('Клик из configHook.\n\nformSlice.state:\n' + preview)
+      window.alert('Клик из config-hook.\n\nformSlice.state:\n' + preview)
     },
   }
 }
 
-function useDemoText(formSlice: FormSlice): TextProps | null {
+export function useDemoText(formSlice: FormSlice): TextProps | null {
   const keys = Object.keys(formSlice.state)
   const preview =
     keys.length === 0
@@ -60,18 +55,18 @@ function useDemoText(formSlice: FormSlice): TextProps | null {
   return {
     type: 'BTR3',
     color: 'primary',
-    children: `${rowPart}Текст из configHook. State: ${preview}`,
+    children: `${rowPart}Текст из config-hook. State: ${preview}`,
   }
 }
 
-function useDemoGrid(_formSlice: FormSlice): Partial<GridProps> | null {
+export function useDemoGrid(_formSlice: FormSlice): Partial<GridProps> | null {
   return {
     cols: 2,
     layoutProperty: { gap: 10 },
   }
 }
 
-function useDemoGridInput(
+export function useDemoGridInput(
   _formSlice: FormSlice,
 ): Partial<TextboxProps> & { fieldLabel?: string } {
   return {
@@ -80,11 +75,10 @@ function useDemoGridInput(
   }
 }
 
-/** Длины массивов задают матрицу DSL (как в контракте Hexa); содержимое строк подменяет рендерер. */
 const DEMO_TABLE_DS_ROWS = 2
 const DEMO_TABLE_DS_COLS = 6
 
-function useDemoTable(formSlice: FormSlice): Partial<ITableProps> | null {
+export function useDemoTable(formSlice: FormSlice): Partial<ITableProps> | null {
   const state = formSlice.state ?? {}
   const keys = Object.keys(state)
   const hasValues = keys.length > 0
@@ -118,7 +112,7 @@ function useDemoTable(formSlice: FormSlice): Partial<ITableProps> | null {
       type: 'checkbox',
       builtInRowSelection: true,
       processSelection: (data) => {
-        console.debug('[form.config-hook] rowSelection', data)
+        console.debug('[demo.config-hook] rowSelection', data)
       },
     },
     toolbar: {
@@ -143,8 +137,7 @@ function useDemoTable(formSlice: FormSlice): Partial<ITableProps> | null {
   }
 }
 
-/** Union `control.id` из ключей реестра (без дублирования схемы в отдельном алиасе). */
-const demoFormConfigHookRegistry = {
+export const useConfigs = {
   'demo.grid': useDemoGrid,
   'demo.grid.input': useDemoGridInput,
   'demo.grid.text': useDemoText,
@@ -155,9 +148,6 @@ const demoFormConfigHookRegistry = {
   'demo.table.text2': useDemoText,
   'demo.table.button1': useDemoButton,
   'demo.table.button2': useDemoButton,
-}
+} as const satisfies Record<string, FormConfigHookFn>
 
-export type DemoFormControlIds = keyof typeof demoFormConfigHookRegistry & string
-
-export const configHook: FormConfigHookFactory<DemoFormControlIds> = () =>
-  demoFormConfigHookRegistry satisfies FormConfigHookRegistry<DemoFormControlIds>
+export type DemoFormControlIds = keyof typeof useConfigs & string

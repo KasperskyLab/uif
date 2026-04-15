@@ -1,8 +1,8 @@
 /**
- * Резолв lifecycle и configHook из значений schema: прямые функции,
- * строки путей или обёртки `() => import('./file.ts')` после parseFormTs.
+ * Резолв lifecycle формы и `handlers.useConfig`: прямые функции или ленивые `import()`.
  */
 import type { FormConfigHookLifecycleFn } from './form-config-hook-types'
+import type { FormSlice } from './form-dsl-core'
 
 /** Строка пути или `() => import('...')` из нормализованной формы. */
 export function resolveTsModulePathFromValue(
@@ -27,9 +27,29 @@ export function isLazyDynamicImportFn(fn: unknown): boolean {
   return /import\s*\(/.test(String(fn))
 }
 
+async function load_module_from_lazy(
+  raw: unknown,
+): Promise<Record<string, unknown> | null> {
+  if (!isLazyDynamicImportFn(raw)) return null
+  try {
+    const result = (raw as () => Promise<unknown>)()
+    if (result == null || typeof (result as Promise<unknown>).then !== 'function') {
+      return null
+    }
+    const mod = (await result) as Record<string, unknown>
+    return mod && typeof mod === 'object' ? mod : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Резолв **`onFormInit`** / **`onFormSubmit`**:
+ * прямая функция **`(slice) => …`**, ленивый **`() => import('…')`**, или строка пути + **`loadTsModule`**.
+ */
 export async function resolveLifecycleHandler(
   raw: unknown,
-  eventName: 'onInit' | 'onSubmit',
+  exportName: 'onFormInit' | 'onFormSubmit',
   formDirectoryHandle: FileSystemDirectoryHandle | null,
   loadTsModule: (
     dir: FileSystemDirectoryHandle,
@@ -39,48 +59,69 @@ export async function resolveLifecycleHandler(
   if (raw == null) return null
   if (typeof raw === 'function') {
     const fn = raw as (...args: unknown[]) => unknown
-    if (fn.length >= 1) {
-      return fn as FormConfigHookLifecycleFn
-    }
-    const path = resolveTsModulePathFromValue(fn)
-    if (path && formDirectoryHandle) {
-      const mod = await loadTsModule(formDirectoryHandle, path)
-      if (!mod) return null
-      const named = mod[eventName]
-      if (typeof named === 'function') {
-        return named as FormConfigHookLifecycleFn
-      }
-      return null
-    }
-    if (isLazyDynamicImportFn(fn)) {
-      try {
-        const result = fn()
-        if (result != null && typeof (result as Promise<unknown>).then === 'function') {
-          const mod = (await result) as Record<string, unknown>
-          const named = mod[eventName]
-          if (typeof named === 'function') {
-            return named as FormConfigHookLifecycleFn
-          }
-        }
-      } catch {
-        return null
-      }
-    }
-    return null
+    if (fn.length >= 1) return fn as FormConfigHookLifecycleFn
   }
-  if (typeof raw === 'string' && formDirectoryHandle) {
-    const mod = await loadTsModule(formDirectoryHandle, raw)
-    if (!mod) return null
-    const named = mod[eventName]
-    if (typeof named === 'function') {
-      return named as FormConfigHookLifecycleFn
+  const modFromLazy = await load_module_from_lazy(raw)
+  let mod: Record<string, unknown> | null = modFromLazy
+  if (!mod && formDirectoryHandle) {
+    const path =
+      typeof raw === 'string'
+        ? (raw.trim() || null)
+        : typeof raw === 'function'
+          ? resolveTsModulePathFromValue(raw)
+          : null
+    if (path) mod = await loadTsModule(formDirectoryHandle, path)
+  }
+  if (mod) {
+    const named = mod[exportName] as unknown
+    if (typeof named === 'function') return named as FormConfigHookLifecycleFn
+    const legacy =
+      exportName === 'onFormInit' ? mod.onInit : mod.onSubmit
+    if (typeof legacy === 'function') {
+      return legacy as FormConfigHookLifecycleFn
     }
   }
   return null
 }
 
 /**
- * Возвращает фабрику configHook: из пути, из ленивого import() или саму функцию.
+ * Резолв **`handlers.useConfig`**: прямая функция **`(slice) => …`**, ленивый **`import()`**
+ * (карта **`useConfigs[id]`** в модуле), строка пути, либо после неудачного **`import()`** из
+ * blob — путь из тела функции + **`loadTsModule(dir, path)`** при заданном **`dir`**.
+ */
+export async function resolveControlUseConfig(
+  raw: unknown,
+  controlId: string,
+  formDirectoryHandle: FileSystemDirectoryHandle | null,
+  loadTsModule: (
+    dir: FileSystemDirectoryHandle,
+    path: string,
+  ) => Promise<Record<string, unknown> | null>,
+): Promise<((slice: FormSlice) => unknown) | null> {
+  if (raw == null) return null
+  if (typeof raw === 'function') {
+    const fn = raw as (...args: unknown[]) => unknown
+    if (fn.length >= 1) return fn as (slice: FormSlice) => unknown
+  }
+  let mod: Record<string, unknown> | null = await load_module_from_lazy(raw)
+  if (!mod && formDirectoryHandle) {
+    const path =
+      typeof raw === 'string'
+        ? (raw.trim() || null)
+        : typeof raw === 'function'
+          ? resolveTsModulePathFromValue(raw)
+          : null
+    if (path) mod = await loadTsModule(formDirectoryHandle, path)
+  }
+  if (!mod) return null
+  const map = mod.useConfigs as Record<string, unknown> | undefined
+  const fn = map?.[controlId]
+  if (typeof fn === 'function') return fn as (slice: FormSlice) => unknown
+  return null
+}
+
+/**
+ * @deprecated Форменный реестр через `configHook()` снят; оставлено для старых тестов.
  */
 export async function resolveConfigHookFactory(
   raw: unknown,

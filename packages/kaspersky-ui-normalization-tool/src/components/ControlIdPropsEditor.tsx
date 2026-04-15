@@ -30,7 +30,7 @@ export function ControlIdPropsEditor({
             fontSize: 11,
           }}
         >
-          Должен совпадать с ключом в форменном configHook, если хук есть.
+          Должен совпадать с ключом в useConfigs модуля, если задан handlers.useConfig.
         </Text>
       </div>
     </Space>

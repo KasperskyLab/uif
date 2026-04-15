@@ -12,17 +12,12 @@ export interface FieldSchema {
 export interface FormData {
   /** Идентификатор формы (и имя каталога `dsl/{id}/`) */
   id: string
-  /**
-   * Единый модуль `configHook` на форму (только `.ts`).
-   * В исходнике — строка пути или `() => import('...')`; после нормализации — строка.
-   */
-  configHook?: string | (() => Promise<unknown>)
   /** Схема данных формы: имя поля -> тип и описание */
   schema?: Record<string, FieldSchema>
   /**
-   * Обработчики событий формы:
-   * - функция lifecycle (`onInit`/`onSubmit`) из schema,
-   * - либо путь/ленивый импорт модуля (runtime-resolve).
+   * Форма: жизненный цикл и прочие обработчики.
+   * **`onFormInit`** / **`onFormSubmit`** — прямые функции **`(slice) => …`** или ленивый
+   * **`() => import('./module.ts')`** (из модуля читаются экспорты с теми же именами).
    */
   handlers?: Record<
     string,

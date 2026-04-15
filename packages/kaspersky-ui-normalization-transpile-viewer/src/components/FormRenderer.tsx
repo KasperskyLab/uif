@@ -37,12 +37,11 @@ import {
 } from '@kaspersky/hexa-ui'
 import {
   EXTRA_UI_DSL_TYPES,
+  collectControlsWithUseConfig,
   getComponentIdFromDslType,
   getInitialFormStateFromElements,
   resolveLifecycleHandler,
-  resolveConfigHookFactory,
-  resolveTsModulePathFromValue,
-  splitFormConfigHookFactoryResult,
+  resolveControlUseConfig,
   type ButtonControl,
   type CheckboxControl,
   type ExtraUiControl,
@@ -58,7 +57,6 @@ import {
   type TextControl,
   type ToggleControl,
 } from '@/types/form-dsl'
-import { loadConfigHookDefaultExport } from '@/utils/loadConfigHookModule'
 import { loadTsModule } from '@/utils/loadConfigHookModule'
 import {
   defaultGridLayoutRows,
@@ -156,14 +154,12 @@ type InputHookResult =
 
 type InputConfigHookFn = (formSlice: FormSlice) => InputHookResult
 
-/** Реестр: control.id → хук (результат вызова default export модуля формы). */
-type ConfigHookRegistry = Record<string, (formSlice: FormSlice) => unknown>
+type ControlHexaHookFn = (formSlice: FormSlice) => unknown
 
 const FormConfigHookContext = createContext<{
-  registry: ConfigHookRegistry | null
+  hookById: Record<string, ControlHexaHookFn | null>
   loading: boolean
-  path: string | null
-}>({ registry: null, loading: false, path: null })
+}>({ hookById: {}, loading: false })
 
 function ButtonWithHook({
   hookFn,
@@ -184,11 +180,11 @@ function ButtonRenderer({
   control: ButtonControl
   formSlice: FormSlice
 }): React.ReactElement | null {
-  const { registry, loading, path } = useContext(FormConfigHookContext)
-  const hookFn = (registry?.[control.id] ?? null) as ButtonConfigHookFn | null
+  const { hookById, loading } = useContext(FormConfigHookContext)
+  const hookFn = (hookById[control.id] ?? null) as ButtonConfigHookFn | null
 
-  if (!path || !hookFn) {
-    if (path && loading) {
+  if (!hookFn) {
+    if (loading) {
       return <Button mode="tertiary" text={`[${control.id}]`} disabled loading />
     }
     return <Button mode="tertiary" text={`[${control.id}]`} disabled />
@@ -215,11 +211,11 @@ function TextRenderer({
   control: TextControl
   formSlice: FormSlice
 }): React.ReactElement | null {
-  const { registry, loading, path } = useContext(FormConfigHookContext)
-  const hookFn = (registry?.[control.id] ?? null) as TextConfigHookFn | null
+  const { hookById, loading } = useContext(FormConfigHookContext)
+  const hookFn = (hookById[control.id] ?? null) as TextConfigHookFn | null
 
-  if (!path || !hookFn) {
-    if (path && loading) {
+  if (!hookFn) {
+    if (loading) {
       return (
         <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
           …
@@ -246,11 +242,11 @@ function InputRenderer({
   value: string
   updateValue: (id: string, v: unknown) => void
 }): React.ReactElement | null {
-  const { registry, loading, path } = useContext(FormConfigHookContext)
-  const hookFn = (registry?.[control.id] ?? null) as InputConfigHookFn | null
+  const { hookById, loading } = useContext(FormConfigHookContext)
+  const hookFn = (hookById[control.id] ?? null) as InputConfigHookFn | null
 
-  if (!path || !hookFn) {
-    if (path && loading) {
+  if (!hookFn) {
+    if (loading) {
       return (
         <div data-control-id={control.id} style={formRowStyle}>
           <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
@@ -262,7 +258,8 @@ function InputRenderer({
     return (
       <div data-control-id={control.id} style={formRowStyle}>
         <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-          Поле «{control.id}»: задайте form configHook и запись реестра с этим id
+          Поле «{control.id}»: нет хука useConfig (useConfigs в модуле или нет
+          formDirectoryHandle)
         </Text>
       </div>
     )
@@ -299,8 +296,8 @@ function GridRenderer({
   formSlice: FormSlice
   renderControl: (c: FormControl) => React.ReactNode
 }): React.ReactElement | null {
-  const { registry, loading, path } = useContext(FormConfigHookContext)
-  const hookFn = (registry?.[g.id] ?? null) as GridConfigHookFn | null
+  const { hookById, loading } = useContext(FormConfigHookContext)
+  const hookFn = (hookById[g.id] ?? null) as GridConfigHookFn | null
 
   const loadingBlock = (
     <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>
@@ -313,13 +310,13 @@ function GridRenderer({
   const missingHookBlock = (
     <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>
       <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-        Сетка «{g.id}»: задайте форменный configHook и запись реестра с этим id
+        {`Сетка «${g.id}»: нет хука useConfig (useConfigs['${g.id}'] или не передан formDirectoryHandle каталога формы).`}
       </Text>
     </div>
   )
 
-  if (!path || !hookFn) {
-    if (path && loading) return loadingBlock
+  if (!hookFn) {
+    if (loading) return loadingBlock
     return missingHookBlock
   }
   const partial = hookFn(formSlice)
@@ -376,8 +373,8 @@ function TableRenderer({
   formSlice: FormSlice
   renderControl: (c: FormControl) => React.ReactNode
 }): React.ReactElement | null {
-  const { registry, loading, path } = useContext(FormConfigHookContext)
-  const hookFn = (registry?.[t.id] ?? null) as TableConfigHookFn | null
+  const { hookById, loading } = useContext(FormConfigHookContext)
+  const hookFn = (hookById[t.id] ?? null) as TableConfigHookFn | null
 
   const loadingBlock = (
     <div data-control-id={t.id} style={{ ...formRowStyle, ...tableWrapStyle }}>
@@ -390,13 +387,13 @@ function TableRenderer({
   const missingHookBlock = (
     <div data-control-id={t.id} style={{ ...formRowStyle, ...tableWrapStyle }}>
       <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-        Таблица «{t.id}»: задайте форменный configHook и запись реестра с этим id
+        {`Таблица «${t.id}»: нет хука useConfig (useConfigs['${t.id}'] или нет formDirectoryHandle).`}
       </Text>
     </div>
   )
 
-  if (!path || !hookFn) {
-    if (path && loading) return loadingBlock
+  if (!hookFn) {
+    if (loading) return loadingBlock
     return missingHookBlock
   }
 
@@ -496,11 +493,9 @@ function TableRenderer({
 export interface FormRendererProps {
   elements: FormControl[]
   gap?: number
-  /** Директория, в которой лежит файл формы (для разрешения configHook) */
+  /** Директория схемы (для `loadTsModule` по строковым путям в handlers). */
   formDirectoryHandle?: FileSystemDirectoryHandle | null
-  /** Относительный путь к единому `.ts` модулю configHook формы */
-  formConfigHook?: string | (() => unknown) | null
-  /** Форменные обработчики (например onInit/onSubmit) из DSL `handlers` */
+  /** Форма: `onFormInit` / `onFormSubmit` — ленивые `import()` в `handlers`. */
   formHandlers?: Record<string, string | ((...args: unknown[]) => unknown)> | null
   /** Ключ формы (например путь к файлу) — при смене сбрасывается состояние */
   formKey?: string
@@ -510,16 +505,17 @@ export function FormRenderer({
   elements,
   gap = 16,
   formDirectoryHandle = null,
-  formConfigHook = null,
   formHandlers = null,
   formKey = '',
 }: FormRendererProps): React.ReactElement {
   const [formState, setFormState] = useState<Record<string, unknown>>(() =>
     getInitialFormStateFromElements(elements),
   )
-  const [registry, setRegistry] = useState<ConfigHookRegistry | null>(null)
+  const [hookById, setHookById] = useState<
+    Record<string, ControlHexaHookFn | null>
+  >({})
   const [lifecycle, setLifecycle] = useState<FormConfigHookLifecycle>({})
-  const [registryLoading, setRegistryLoading] = useState(false)
+  const [hooksLoading, setHooksLoading] = useState(false)
 
   const mergeFormState = useCallback((partial: Record<string, unknown>) => {
     setFormState((prev) => ({ ...prev, ...partial }))
@@ -544,52 +540,54 @@ export function FormRenderer({
         setFormState(getInitialFormStateFromElements(elements))
       }
       const nextLifecycle: FormConfigHookLifecycle = {}
-      let nextRegistry: ConfigHookRegistry | null = null
+      const nextHookById: Record<string, ControlHexaHookFn | null> = {}
+      const useConfigRows = collectControlsWithUseConfig(elements)
+      const onFormInitRaw =
+        formHandlers?.onFormInit ?? formHandlers?.onInit
+      const onFormSubmitRaw =
+        formHandlers?.onFormSubmit ?? formHandlers?.onSubmit
       const needsAsync =
-        (formConfigHook != null && formConfigHook !== '') ||
-        (formHandlers != null && Object.keys(formHandlers).length > 0)
-      setRegistryLoading(Boolean(formDirectoryHandle && needsAsync))
+        useConfigRows.length > 0 ||
+        onFormInitRaw != null ||
+        onFormSubmitRaw != null
+      setHooksLoading(needsAsync)
 
-      const factory = await resolveConfigHookFactory(
-        formConfigHook,
-        formDirectoryHandle,
-        loadConfigHookDefaultExport,
-      )
-      if (cancelled) return
-      if (factory) {
-        const parsed = splitFormConfigHookFactoryResult(factory)
-        if (parsed) {
-          nextRegistry = parsed.registry
-          if (parsed.lifecycle.onInit) nextLifecycle.onInit = parsed.lifecycle.onInit
-          if (parsed.lifecycle.onSubmit) nextLifecycle.onSubmit = parsed.lifecycle.onSubmit
-        }
+      for (const { id, useConfigRaw } of useConfigRows) {
+        if (cancelled) return
+        const fn = await resolveControlUseConfig(
+          useConfigRaw,
+          id,
+          formDirectoryHandle,
+          loadTsModule,
+        )
+        nextHookById[id] = fn
       }
 
       if (formHandlers) {
         const dataOnInit = await resolveLifecycleHandler(
-          formHandlers.onInit,
-          'onInit',
+          onFormInitRaw,
+          'onFormInit',
           formDirectoryHandle,
           loadTsModule,
         )
-        if (dataOnInit) nextLifecycle.onInit = dataOnInit
+        if (dataOnInit) nextLifecycle.onFormInit = dataOnInit
         const dataOnSubmit = await resolveLifecycleHandler(
-          formHandlers.onSubmit,
-          'onSubmit',
+          onFormSubmitRaw,
+          'onFormSubmit',
           formDirectoryHandle,
           loadTsModule,
         )
-        if (dataOnSubmit) nextLifecycle.onSubmit = dataOnSubmit
+        if (dataOnSubmit) nextLifecycle.onFormSubmit = dataOnSubmit
       }
 
       if (cancelled) return
-      setRegistry(nextRegistry)
+      setHookById(nextHookById)
       setLifecycle(nextLifecycle)
-      setRegistryLoading(false)
-      if (nextLifecycle.onInit) {
+      setHooksLoading(false)
+      if (nextLifecycle.onFormInit) {
         const initial = getInitialFormStateFromElements(elements)
         void Promise.resolve(
-          nextLifecycle.onInit({
+          nextLifecycle.onFormInit({
             state: initial,
             config: { elements },
             mergeState: mergeStateForLifecycle,
@@ -602,13 +600,7 @@ export function FormRenderer({
     return () => {
       cancelled = true
     }
-  }, [
-    formKey,
-    formConfigHook,
-    formDirectoryHandle,
-    formHandlers,
-    elements,
-  ])
+  }, [formKey, formDirectoryHandle, formHandlers, elements])
 
   const updateValue = useCallback((id: string, value: unknown) => {
     setFormState((prev) => ({ ...prev, [id]: value }))
@@ -625,11 +617,10 @@ export function FormRenderer({
 
   const hookCtx = useMemo(
     () => ({
-      registry,
-      loading: registryLoading,
-      path: resolveTsModulePathFromValue(formConfigHook),
+      hookById,
+      loading: hooksLoading,
     }),
-    [registry, registryLoading, formConfigHook],
+    [hookById, hooksLoading],
   )
 
   function renderControl(
@@ -836,12 +827,12 @@ export function FormRenderer({
 
   return (
     <FormConfigHookContext.Provider value={hookCtx}>
-      {lifecycle.onSubmit ? (
+      {lifecycle.onFormSubmit ? (
         <form
           style={{ width: '100%' }}
           onSubmit={(e) => {
             e.preventDefault()
-            void Promise.resolve(lifecycle.onSubmit?.(formSlice))
+            void Promise.resolve(lifecycle.onFormSubmit?.(formSlice))
           }}
         >
           {body}

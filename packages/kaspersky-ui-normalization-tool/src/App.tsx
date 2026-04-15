@@ -743,7 +743,6 @@ function App() {
                             formFileDirectoryHandle ?? directoryHandle
                           }
                           formKey={selectedFile.path}
-                          formConfigHook={formData.configHook ?? null}
                           formHandlers={formData.handlers ?? null}
                         />
                       ) : (
@@ -752,7 +751,6 @@ function App() {
                           formDirectoryHandle={
                             formFileDirectoryHandle ?? directoryHandle
                           }
-                          formConfigHook={formData.configHook ?? null}
                           formHandlers={formData.handlers ?? null}
                           elements={formControls}
                         >

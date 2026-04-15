@@ -38,25 +38,23 @@ describe('loadFormDslBrowserRuntime', () => {
 
     const { loadFormDslBrowserRuntime } = await import('./load-form-dsl-runtime')
     const m = await loadFormDslBrowserRuntime()
-    // demo.data has a dot in filename but no .ts extension in import
     const data = await m.parseFormTs(`
 import { defineFormSchema } from '@normalization/form-dsl'
-import { onInit, onSubmit } from './demo.data'
-import { configHook } from './demo.config-hook'
+import { onFormInit, onFormSubmit } from './demo.data'
+const lazyHook = () => import('./demo.config-hook')
 export default defineFormSchema({
   id: 'demo',
-  configHook,
-  handlers: { onInit, onSubmit },
-  elements: [],
+  handlers: { onFormInit, onFormSubmit },
+  elements: [{ type: 'text', id: 't1', handlers: { useConfig: lazyHook } }],
 })`)
-    // Handlers should be stored as lazy functions (not null/undefined)
-    expect(typeof data.handlers?.onInit).toBe('function')
-    expect(typeof data.handlers?.onSubmit).toBe('function')
-    expect(typeof data.configHook).toBe('function')
-    // Path must end with .ts (not just ./demo.data)
-    const onInitStr = String(data.handlers!.onInit)
-    expect(onInitStr).toContain('./demo.data.ts')
-    const configHookStr = String(data.configHook)
-    expect(configHookStr).toContain('./demo.config-hook.ts')
+    expect(typeof data.handlers?.onFormInit).toBe('function')
+    expect(typeof data.handlers?.onFormSubmit).toBe('function')
+    expect(data.configHook).toBeUndefined()
+    const el = data.elements[0] as { handlers?: { useConfig?: unknown } }
+    expect(typeof el.handlers?.useConfig).toBe('function')
+    const onFormInitStr = String(data.handlers!.onFormInit)
+    expect(onFormInitStr).toContain('./demo.data.ts')
+    const useConfigStr = String(el.handlers!.useConfig)
+    expect(useConfigStr).toContain('./demo.config-hook.ts')
   })
 })

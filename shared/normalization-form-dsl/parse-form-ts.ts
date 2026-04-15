@@ -24,6 +24,8 @@ function rewriteFormDslImportsForBlob(code: string): string {
  * напрямую резолвить в `blob:`-модуле. Для нужд нормализации формы нам
  * достаточно сохранить путь к модулю, поэтому заменяем такие импорты на
  * ленивые функции `() => import('./...')` с теми же локальными именами.
+ * `import()` из blob часто падает; **`resolveControlUseConfig`** / **`resolveLifecycleHandler`**
+ * тогда подгружают `.ts` через **`loadTsModule`**, если передан каталог формы (File System Access).
  */
 function rewriteRelativeStaticImportsToLazyFns(source: string): string {
   const importRe =

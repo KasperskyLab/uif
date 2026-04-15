@@ -126,8 +126,15 @@ export interface Condition {
   value?: string
 }
 
+/** Обработчики узла: события UI — строка пути; **`useConfig`** — ленивый `import()` или путь. */
+export type ControlHandlersMap = Record<
+  string,
+  string | (() => Promise<unknown>) | ((...args: unknown[]) => unknown)
+>
+
 export interface FormControlIdentity {
   id: string
+  handlers?: ControlHandlersMap
 }
 
 export interface FormControlBase extends FormControlIdentity {
@@ -143,13 +150,11 @@ export interface FormControlBase extends FormControlIdentity {
   visibleWhen?: Condition
   /** Условие блокировки: контрол недоступен когда условие истинно */
   disabledWhen?: Condition
-  /** Обработчики событий контрола: имя события → путь к файлу-обработчику */
-  handlers?: Record<string, string>
 }
 
 export interface GridControl extends FormControlBase {
   type: 'grid'
-  /** Ячейки по порядку (строка за строкой); число столбцов и строк задаёт только form configHook. */
+  /** Ячейки по порядку (строка за строкой); геометрия Hexa — через **`handlers.useConfig`**. */
   children: (FormControl | null)[]
 }
 
@@ -163,7 +168,7 @@ export interface RowControl extends FormControlBase {
   children: FormControl[]
 }
 
-/** Тулбар таблицы (как в Hexa UI Table — над таблицей); в DSL не хранится, задаётся в configHook. */
+/** Тулбар таблицы (как в Hexa UI Table — над таблицей); в DSL не хранится, задаётся в **`useConfig`**. */
 export interface TableToolbarConfig {
   left?: ToolbarItem[]
   right?: ToolbarItem[]
@@ -174,7 +179,7 @@ export interface TableToolbarConfig {
 /**
  * Таблица: ячейки по порядку (строка за строкой). Размер матрицы задаётся полями Hexa
  * **`dataSource.length`** (строки) и **`columns.length`** (столбцы); остальные пропсы —
- * `Partial<ITableProps>` из configHook (см. фича-док).
+ * `Partial<ITableProps>` из **`handlers.useConfig`** (см. фича-док).
  */
 export interface TableControl extends FormControlBase {
   type: 'table'
@@ -228,7 +233,7 @@ export interface TextControl extends FormControlBase {
 /**
  * Поле ввода (Hexa `Textbox`). В схеме/DSL — только **`type`**, **`id`** и общие привязки
  * (**`fieldName`**, **`defaultValue`**, валидация и т.д.). Плейсхолдер, `disabled`,
- * подпись и прочие пропсы UI задаются в **form `configHook`** для **`input.id`**
+ * подпись и прочие пропсы UI — в **`handlers.useConfig`** для **`input.id`**
  * (`Partial<TextboxProps>` и опционально **`fieldLabel`** для обёртки `Field`).
  */
 export interface InputControl extends FormControlBase {
@@ -445,6 +450,12 @@ function getImportPathFromHandler(fn: (() => Promise<unknown>) | unknown): strin
   }
 }
 
+function is_lazy_dynamic_import_fn(fn: unknown): boolean {
+  if (typeof fn !== 'function') return false
+  if ((fn as (...args: unknown[]) => unknown).length !== 0) return false
+  return /import\s*\(/.test(String(fn))
+}
+
 /** Нормализует один контрол из загруженных данных (JSON/JS). Принимаются только семантические типы (button, text, tabs, alert и т.д.). */
 function normalizeControl(item: unknown): FormControl | null {
   if (!item || typeof item !== 'object' || !('id' in item)) return null
@@ -479,13 +490,22 @@ function normalizeControl(item: unknown): FormControl | null {
   }
   const visibleWhen = parseCondition(o.visibleWhen)
   const disabledWhen = parseCondition(o.disabledWhen)
-  const handlers: Record<string, string> = {}
+  const handlers: ControlHandlersMap = {}
   if (o.handlers && typeof o.handlers === 'object' && !Array.isArray(o.handlers)) {
     for (const [key, val] of Object.entries(o.handlers as Record<string, unknown>)) {
       if (typeof val === 'string' && val) handlers[key] = val
       else if (typeof val === 'function') {
-        const path = getImportPathFromHandler(val)
-        if (path) handlers[key] = path
+        if (is_lazy_dynamic_import_fn(val)) {
+          handlers[key] = val as () => Promise<unknown>
+        } else {
+          const path = getImportPathFromHandler(val)
+          if (path) {
+            handlers[key] = path
+          } else {
+            const fn = val as (...args: unknown[]) => unknown
+            if (fn.length >= 1) handlers[key] = fn
+          }
+        }
       }
     }
   }
@@ -503,7 +523,9 @@ function normalizeControl(item: unknown): FormControl | null {
   const kind = o.kind as string | undefined
 
   if (kind === 'button' || type === 'button') {
-    return { type: 'button', id }
+    const b: ButtonControl = { type: 'button', id }
+    if (Object.keys(handlers).length > 0) b.handlers = handlers
+    return b
   }
   if (type === 'text') {
     const c: TextControl = { type: 'text', id }
@@ -667,10 +689,28 @@ function normalizeControl(item: unknown): FormControl | null {
   return null
 }
 
+function serialize_handlers_for_json(
+  h: ControlHandlersMap,
+): Record<string, string> {
+  const o: Record<string, string> = {}
+  for (const [k, v] of Object.entries(h)) {
+    if (typeof v === 'string' && v) o[k] = v
+    else if (typeof v === 'function') {
+      const p = getImportPathFromHandler(v as () => Promise<unknown>)
+      if (p) o[k] = p
+    }
+  }
+  return o
+}
+
 export function controlToJson(c: FormControl): Record<string, unknown> {
   if (c.type === 'button') {
     const b = c as ButtonControl
-    return { type: 'button', id: b.id }
+    const o: Record<string, unknown> = { type: 'button', id: b.id }
+    if (b.handlers && Object.keys(b.handlers).length > 0) {
+      o.handlers = serialize_handlers_for_json(b.handlers)
+    }
+    return o
   }
   const bc = c as FormControlBase
   const base: Record<string, unknown> = { type: c.type, id: c.id }
@@ -680,7 +720,9 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
   if (bc.validation && bc.validation.length > 0) base.validation = bc.validation
   if (bc.visibleWhen) base.visibleWhen = bc.visibleWhen
   if (bc.disabledWhen) base.disabledWhen = bc.disabledWhen
-  if (bc.handlers && Object.keys(bc.handlers).length > 0) base.handlers = { ...bc.handlers }
+  if (bc.handlers && Object.keys(bc.handlers).length > 0) {
+    base.handlers = serialize_handlers_for_json(bc.handlers)
+  }
   if (c.type === 'text') {
     return { ...base }
   }
@@ -781,12 +823,11 @@ export function normalizeFormData(data: unknown): FormData {
     const elements = data
       .map(normalizeControl)
       .filter((x: FormControl | null): x is FormControl => x != null)
-    return { name: '', id: `form-${Date.now()}`, elements }
+    return { id: `form-${Date.now()}`, elements }
   }
   if (data && typeof data === 'object' && Array.isArray((data as { elements?: unknown }).elements)) {
     const obj = data as {
       id?: unknown
-      configHook?: unknown
       schema?: unknown
       handlers?: unknown
       elements: unknown[]
@@ -822,12 +863,6 @@ export function normalizeFormData(data: unknown): FormData {
       }
       if (Object.keys(formHandlers).length > 0) result.handlers = formHandlers
     }
-    if (typeof obj.configHook === 'string' && obj.configHook) {
-      result.configHook = obj.configHook
-    } else if (typeof obj.configHook === 'function') {
-      // Предпочитаем переданную в schema фабрику как есть.
-      result.configHook = obj.configHook as () => Promise<unknown>
-    }
     return result
   }
   return emptyFormData()
@@ -838,19 +873,19 @@ export function formToJson(form: FormData): Record<string, unknown> {
   const result: Record<string, unknown> = {
     id: form.id,
   }
-  if (form.configHook) {
-    if (typeof form.configHook === 'string') {
-      result.configHook = form.configHook
-    } else {
-      const p = getImportPathFromHandler(form.configHook)
-      if (p) result.configHook = p
-    }
-  }
   if (form.schema && Object.keys(form.schema).length > 0) {
     result.schema = form.schema
   }
   if (form.handlers && Object.keys(form.handlers).length > 0) {
-    result.handlers = { ...form.handlers }
+    const serialized: Record<string, string> = {}
+    for (const [k, v] of Object.entries(form.handlers)) {
+      if (typeof v === 'string' && v) serialized[k] = v
+      else if (typeof v === 'function') {
+        const p = getImportPathFromHandler(v as () => Promise<unknown>)
+        if (p) serialized[k] = p
+      }
+    }
+    if (Object.keys(serialized).length > 0) result.handlers = serialized
   }
   result.elements = form.elements.map(controlToJson)
   return result
@@ -876,24 +911,23 @@ export function formToTs(form: FormData): string {
   if (form.handlers && Object.keys(form.handlers).length > 0) {
     const converted: Record<string, string> = {}
     for (const [key, val] of Object.entries(form.handlers)) {
-      const pathEsc = val.replace(/\\/g, '/')
-      converted[key] = `() => import(${JSON.stringify('./' + pathEsc)})`
+      if (typeof val === 'string' && val) {
+        const pathEsc = val.replace(/\\/g, '/')
+        converted[key] = `() => import(${JSON.stringify('./' + pathEsc)})`
+      } else if (typeof val === 'function') {
+        const p = getImportPathFromHandler(val as () => Promise<unknown>)
+        if (p) {
+          const pathEsc = p.replace(/\\/g, '/')
+          converted[key] = `() => import(${JSON.stringify('./' + pathEsc)})`
+        }
+      }
     }
-    handlersSource = `\n  handlers: ${formatJsValue(converted, '  ')},`
-  }
-  let configHookSource = ''
-  if (form.configHook) {
-    const path =
-      typeof form.configHook === 'string'
-        ? form.configHook
-        : getImportPathFromHandler(form.configHook)
-    if (path) {
-      const pathEsc = path.replace(/\\/g, '/')
-      configHookSource = `\n  configHook: () => import(${JSON.stringify('./' + pathEsc)}),`
+    if (Object.keys(converted).length > 0) {
+      handlersSource = `\n  handlers: ${formatJsValue(converted, '  ')},`
     }
   }
   return `export default {
-  id: ${idEsc},${schemaSource}${handlersSource}${configHookSource}
+  id: ${idEsc},${schemaSource}${handlersSource}
   elements: [
 ${elementsSource}
   ]
@@ -1018,6 +1052,28 @@ export function forEachControlInTree(controls: FormControl[], fn: (c: FormContro
       }
     }
   }
+}
+
+const CONTROL_TYPES_WITH_USE_CONFIG = new Set<FormControlType>([
+  'button',
+  'text',
+  'input',
+  'grid',
+  'table',
+])
+
+/** Узлы с Hexa-конфигом и заданным **`handlers.useConfig`** (для загрузки в рантайме). */
+export function collectControlsWithUseConfig(
+  elements: FormControl[],
+): { id: string; useConfigRaw: unknown }[] {
+  const rows: { id: string; useConfigRaw: unknown }[] = []
+  forEachControlInTree(elements, (c) => {
+    if (!CONTROL_TYPES_WITH_USE_CONFIG.has(c.type)) return
+    const h = (c as FormControlBase | ButtonControl).handlers
+    const raw = h?.useConfig
+    if (raw != null) rows.push({ id: c.id, useConfigRaw: raw })
+  })
+  return rows
 }
 
 /** Находит контрол в дереве по id (включая вложенные в grid/table/tabs) */

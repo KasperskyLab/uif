@@ -2,12 +2,19 @@ import React, { useState } from 'react'
 import { Space, Text, H6, Textbox, Select, Checkbox as HexaCheckbox, Button } from '@kaspersky/hexa-ui'
 import { Add, Delete } from '@kaspersky/hexa-ui-icons/16'
 import { SelectWithOptionWidth } from './SelectWithOptionWidth'
-import type { FormControl, FormControlBase, FormData, ValidationRule, ValidationRuleType, Condition } from '../types/form-dsl'
+import type {
+  ControlHandlersMap,
+  FormControl,
+  FormControlBase,
+  FormData,
+  ValidationRule,
+  ValidationRuleType,
+  Condition,
+} from '../types/form-dsl'
 import { EXTRA_UI_DSL_TYPES } from '../types/form-dsl'
 import { CONTROL_EVENTS } from '../types/form-dsl'
 import { getDescriptor } from '../controls/registry'
 import { HandlersEditor } from './HandlersEditor'
-import { FormConfigHookPathEditor } from './FormConfigHookPathEditor'
 import { ControlIdPropsEditor } from './ControlIdPropsEditor'
 
 /** Поля ввода и прочие контролы с привязкой данных; `button`/`text`/`grid`/`table` — только id */
@@ -305,14 +312,6 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
                 placeholder="id формы"
               />
             </div>
-            <FormConfigHookPathEditor
-              value={formData.configHook}
-              onChange={(path) =>
-                onFormUpdate({ configHook: path || undefined })
-              }
-              formDirectoryHandle={formDirectoryHandle}
-              placeholder={`${formData.id}.config-hook.ts`}
-            />
           </div>
         ) : (
           <Text type="BTR3" style={{ color: '#999', marginTop: 8 }}>
@@ -352,8 +351,26 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
           <HandlersEditor
             title="Обработчики событий"
             events={CONTROL_EVENTS[control.type]}
-            handlers={(control as FormControlBase).handlers ?? {}}
-            onChange={(h) => update({ handlers: Object.keys(h).length > 0 ? h : undefined } as Partial<FormControl>)}
+            handlers={
+              Object.fromEntries(
+                Object.entries(
+                  (control as FormControlBase).handlers ?? {},
+                ).filter((e): e is [string, string] => typeof e[1] === 'string'),
+              ) as Record<string, string>
+            }
+            onChange={(h) => {
+              const prev: ControlHandlersMap = {
+                ...((control as FormControlBase).handlers ?? {}),
+              }
+              for (const [k, v] of Object.entries(h)) {
+                if (v) prev[k] = v
+                else delete prev[k]
+              }
+              update({
+                handlers:
+                  Object.keys(prev).length > 0 ? prev : undefined,
+              } as Partial<FormControl>)
+            }}
             directoryHandle={formDirectoryHandle}
           />
         )}
