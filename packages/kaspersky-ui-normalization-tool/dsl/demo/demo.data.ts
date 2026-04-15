@@ -1,18 +1,8 @@
 import type { FormSlice } from '@normalization/form-dsl'
-type DemoElementId =
-  | 'demo.grid'
-  | 'demo.grid.text'
-  | 'demo.grid.input'
-  | 'demo.grid.button'
-  | 'demo.table'
-  | 'demo.table.text1'
-  | 'demo.table.button1'
-  | 'demo.table.textPlain'
-  | 'demo.table.button2'
-  | 'demo.table.text2'
+import type { DemoFormControlIds } from './demo.config-hook'
 
 const DEMO_GRID_INPUT_ID =
-  'demo.grid.input' satisfies DemoElementId
+  'demo.grid.input' satisfies DemoFormControlIds
 const DEMO_FAKE_LOAD_MS = 450
 
 async function loadFakeDemoFormState(): Promise<Record<string, unknown>> {

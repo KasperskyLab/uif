@@ -1,5 +1,6 @@
 /**
- * Единый configHook формы `demo`: default export — lifecycle и секция `elements` (id → хук).
+ * Единый configHook формы `demo`: именованный `configHook`, реестр по `control.id`.
+ * `DemoFormControlIds` выводится из ключей `demoFormConfigHookRegistry`.
  */
 import type { ReactNode } from 'react'
 import type { ButtonProps, GridProps, TextProps, TextboxProps } from '@kaspersky/hexa-ui'
@@ -9,20 +10,6 @@ import type {
   FormConfigHookRegistry,
   FormSlice,
 } from '@normalization/form-dsl'
-type DemoElementId =
-  | 'demo.grid'
-  | 'demo.grid.text'
-  | 'demo.grid.input'
-  | 'demo.grid.button'
-  | 'demo.table'
-  | 'demo.table.text1'
-  | 'demo.table.button1'
-  | 'demo.table.textPlain'
-  | 'demo.table.button2'
-  | 'demo.table.text2'
-
-const DEMO_GRID_INPUT_ID =
-  'demo.grid.input' satisfies DemoElementId
 
 /** Отправка формы: `type: 'submit'` — срабатывает `onSubmit` из того же configHook. */
 function useDemoGridSubmitButton(_formSlice: FormSlice): ButtonProps | null {
@@ -36,7 +23,7 @@ function useDemoGridSubmitButton(_formSlice: FormSlice): ButtonProps | null {
 
 function useDemoButton(formSlice: FormSlice): ButtonProps | null {
   const { state } = formSlice
-  const fromState = String(state[DEMO_GRID_INPUT_ID] ?? '').trim()
+  const fromState = String(state['demo.grid.input'] ?? '').trim()
   const text =
     fromState || 'Введите текст в поле «Текст кнопки» выше'
   return {
@@ -156,16 +143,21 @@ function useDemoTable(formSlice: FormSlice): Partial<ITableProps> | null {
   }
 }
 
-export const configHook: FormConfigHookFactory<DemoElementId> = () =>
-  ({
-    'demo.grid': useDemoGrid,
-    'demo.grid.input': useDemoGridInput,
-    'demo.grid.text': useDemoText,
-    'demo.grid.button': useDemoGridSubmitButton,
-    'demo.table': useDemoTable,
-    'demo.table.text1': useDemoText,
-    'demo.table.textPlain': useDemoText,
-    'demo.table.text2': useDemoText,
-    'demo.table.button1': useDemoButton,
-    'demo.table.button2': useDemoButton,
-  }) satisfies FormConfigHookRegistry<DemoElementId>
+/** Union `control.id` из ключей реестра (без дублирования схемы в отдельном алиасе). */
+const demoFormConfigHookRegistry = {
+  'demo.grid': useDemoGrid,
+  'demo.grid.input': useDemoGridInput,
+  'demo.grid.text': useDemoText,
+  'demo.grid.button': useDemoGridSubmitButton,
+  'demo.table': useDemoTable,
+  'demo.table.text1': useDemoText,
+  'demo.table.textPlain': useDemoText,
+  'demo.table.text2': useDemoText,
+  'demo.table.button1': useDemoButton,
+  'demo.table.button2': useDemoButton,
+}
+
+export type DemoFormControlIds = keyof typeof demoFormConfigHookRegistry & string
+
+export const configHook: FormConfigHookFactory<DemoFormControlIds> = () =>
+  demoFormConfigHookRegistry satisfies FormConfigHookRegistry<DemoFormControlIds>
