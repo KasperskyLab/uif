@@ -25,7 +25,7 @@ export default defineFormSchema({
         {
           type: 'text',
           id: 'demo.grid.text',
-          dataBindPath: 'model.headline',
+          dataSource: { modelPath: 'model.headline' },
           handlers: { useConfig: useDemoText },
         },
         {

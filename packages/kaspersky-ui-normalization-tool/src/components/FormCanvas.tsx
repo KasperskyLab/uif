@@ -3,6 +3,7 @@ import { Button, Space, Text, Grid, GridItem, Tabs, Table } from '@kaspersky/hex
 import { Delete, ArrowsVertical } from '@kaspersky/hexa-ui-icons/16'
 import {
   formSliceWithDataBind,
+  controlModelBindPath,
   type FormControl,
   type FormControlBase,
   type FormControlType,
@@ -224,7 +225,9 @@ function GridControlBlock({
     )
   }
 
-  const partial = hookFn(formSliceWithDataBind(formSlice, g.dataBindPath))
+  const partial = hookFn(
+    formSliceWithDataBind(formSlice, controlModelBindPath(g)),
+  )
   if (partial === null) return null
 
   const { children: _hookCh, ...hookRest } = partial
@@ -636,7 +639,7 @@ function TableControlBlock({
   }
 
   const partial = hookFn(
-    formSliceWithDataBind(formSlice, t.dataBindPath),
+    formSliceWithDataBind(formSlice, controlModelBindPath(t)),
   ) as Partial<ITableProps> | null
   if (partial === null) return null
 

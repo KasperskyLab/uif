@@ -21,6 +21,7 @@ import {
   normalizeFormData,
   getValueAtPath,
   formSliceWithDataBind,
+  controlModelBindPath,
   evaluateCondition,
   type FormData,
   type FormControl,
@@ -658,7 +659,7 @@ export default {
     })
   })
 
-  describe('normalizeFormData modelContract and dataBindPath', () => {
+  describe('normalizeFormData modelContract and dataSource', () => {
     it('preserves modelContract string', () => {
       const d = normalizeFormData({
         id: 'f1',
@@ -667,13 +668,56 @@ export default {
       })
       expect(d.modelContract).toBe('./x.contract.ts')
     })
-    it('parses dataBindPath on control', () => {
+    it('parses dataSource.modelPath on control', () => {
+      const d = normalizeFormData({
+        id: 'f1',
+        elements: [
+          {
+            type: 'text',
+            id: 't1',
+            dataSource: { modelPath: '  a.b  ' },
+          },
+        ],
+      })
+      const t = d.elements[0] as TextControl
+      expect(t.dataSource?.modelPath).toBe('a.b')
+      expect(controlModelBindPath(t)).toBe('a.b')
+    })
+    it('maps legacy dataBindPath to dataSource', () => {
       const d = normalizeFormData({
         id: 'f1',
         elements: [{ type: 'text', id: 't1', dataBindPath: '  a.b  ' }],
       })
       const t = d.elements[0] as TextControl
-      expect(t.dataBindPath).toBe('a.b')
+      expect(t.dataSource?.modelPath).toBe('a.b')
+    })
+    it('maps legacy dataSource string bindToModelProperty', () => {
+      const d = normalizeFormData({
+        id: 'f1',
+        elements: [
+          { type: 'text', id: 't1', dataSource: { bindToModelProperty: 'x.y' } },
+        ],
+      })
+      const t = d.elements[0] as TextControl
+      expect(t.dataSource?.modelPath).toBe('x.y')
+    })
+    it('maps legacy dataSource.mapTo', () => {
+      const d = normalizeFormData({
+        id: 'f1',
+        elements: [{ type: 'text', id: 't1', dataSource: { mapTo: 'x.y' } }],
+      })
+      const t = d.elements[0] as TextControl
+      expect(t.dataSource?.modelPath).toBe('x.y')
+    })
+    it('maps legacy bindToModelProperty root', () => {
+      const d = normalizeFormData({
+        id: 'f1',
+        elements: [
+          { type: 'text', id: 't1', bindToModelProperty: { modelPath: 'z.w' } },
+        ],
+      })
+      const t = d.elements[0] as TextControl
+      expect(t.dataSource?.modelPath).toBe('z.w')
     })
   })
 })

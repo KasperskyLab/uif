@@ -11,7 +11,10 @@ import type {
   ValidationRuleType,
   Condition,
 } from '../types/form-dsl'
-import { deriveModelPathsFromInitialShape } from '@normalization/form-dsl'
+import {
+  deriveModelPathsFromInitialShape,
+  controlModelBindPath,
+} from '@normalization/form-dsl'
 import {
   CONTROL_EVENTS,
   EXTRA_UI_DSL_TYPES,
@@ -139,7 +142,7 @@ function useContractModelPaths(
   return { modelPaths, contractHint }
 }
 
-/** Поле dataBindPath: один лейбл как у id, без отдельной секции с border. */
+/** Поле dataSource.modelPath: один лейбл как у id, без отдельной секции с border. */
 function DataBindPathFields({
   control,
   formData,
@@ -160,7 +163,7 @@ function DataBindPathFields({
     formDirectoryHandle,
   )
 
-  const path = control.dataBindPath ?? ''
+  const path = controlModelBindPath(control) ?? ''
   const pathOrphan = Boolean(
     path && modelPaths.length > 0 && !modelPaths.includes(path),
   )
@@ -194,8 +197,10 @@ function DataBindPathFields({
           onChange={(v: string | undefined) => {
             const raw = v ?? MODEL_PATH_SELECT_NONE
             onUpdate({
-              dataBindPath:
-                raw === MODEL_PATH_SELECT_NONE ? undefined : raw,
+              dataSource:
+                raw === MODEL_PATH_SELECT_NONE
+                  ? undefined
+                  : { modelPath: raw },
             } as Partial<FormControl>)
             onSelectClose()
           }}

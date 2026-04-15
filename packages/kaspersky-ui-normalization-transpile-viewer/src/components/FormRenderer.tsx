@@ -43,6 +43,7 @@ import {
   resolveLifecycleHandler,
   resolveControlUseConfig,
   formSliceWithDataBind,
+  controlModelBindPath,
   evaluateCondition,
   type ButtonControl,
   type CheckboxControl,
@@ -329,7 +330,9 @@ function GridRenderer({
     if (loading) return loadingBlock
     return missingHookBlock
   }
-  const partial = hookFn(formSliceWithDataBind(formSlice, g.dataBindPath))
+  const partial = hookFn(
+    formSliceWithDataBind(formSlice, controlModelBindPath(g)),
+  )
   if (partial === null) return null
   const { children: _ch, ...hookRest } = partial
   const effectiveCols = hookRest.cols
@@ -408,7 +411,7 @@ function TableRenderer({
   }
 
   const partial = hookFn(
-    formSliceWithDataBind(formSlice, t.dataBindPath),
+    formSliceWithDataBind(formSlice, controlModelBindPath(t)),
   ) as TableHookResult
   if (partial === null) return null
 
@@ -650,7 +653,10 @@ export function FormRenderer({
       return null
     }
     const exprDisabled = controlExpressionDisabled(control, state)
-    const sliceForHooks = formSliceWithDataBind(slice, control.dataBindPath)
+    const sliceForHooks = formSliceWithDataBind(
+      slice,
+      controlModelBindPath(control),
+    )
     const exprBlockStyle: React.CSSProperties | undefined = exprDisabled
       ? { opacity: 0.55, pointerEvents: 'none' }
       : undefined

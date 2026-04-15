@@ -121,7 +121,7 @@ export interface ValidationRule {
 
 /** Условие видимости/блокировки: только путь в данных (**`getValueAtPath(state, modelPath)`**). */
 export interface Condition {
-  /** Путь в **`state`** формы (нотация точек), как у **`dataBindPath`**. */
+  /** Путь в **`state`** формы (нотация точек), как у **`dataSource.modelPath`**. */
   modelPath: string
   operator: 'eq' | 'neq' | 'gt' | 'lt' | 'contains' | 'empty' | 'notEmpty'
   value?: string
@@ -133,14 +133,20 @@ export type ControlHandlersMap = Record<
   string | (() => Promise<unknown>) | ((...args: unknown[]) => unknown)
 >
 
+/** Привязка контрола к полю модели в **`state`**: путь с точками в **`modelPath`**. */
+export interface ControlDataSourceBind {
+  modelPath: string
+}
+
 export interface FormControlIdentity {
   id: string
   handlers?: ControlHandlersMap
   /**
-   * Путь к данным в нотации точек (`user.email`, **`items.0.title`**); без
-   * привязки поле не задают.
+   * Привязка к фрагменту модели в **`state`** (`model.headline`, **`items.0.title`**).
+   * Раньше: **`dataBindPath`**, **`dataSource.mapTo`**, **`dataSource.bindToModelProperty`**,
+   * **`bindToModelProperty`** — при разборе JSON устаревшие варианты нормализуются в **`dataSource`**.
    */
-  dataBindPath?: string
+  dataSource?: ControlDataSourceBind
 }
 
 export interface FormControlBase extends FormControlIdentity {
@@ -343,7 +349,7 @@ export type FormControl =
   | IconControl
   | MetaComponentControl
 
-/** Значение привязки контрола к данным (см. **`dataBindPath`**) в **`FormSlice`**. */
+/** Значение привязки контрола к данным (см. **`dataSource.modelPath`**) в **`FormSlice`**. */
 export type FormSliceDataBind = { path: string; value: unknown } | null
 
 /** Аргумент configHook (П.2): стейт формы и дерево контролов. */
@@ -363,7 +369,7 @@ export interface FormSlice {
   /** Индекс строки в **`dataSource`** таблицы (0-based). */
   tableRowIndex?: number
   /**
-   * Перед вызовом **`useConfig`** для контрола: путь из **`dataBindPath`** и
+   * Перед вызовом **`useConfig`** для контрола: путь из **`dataSource.modelPath`** и
    * значение из **`getValueAtPath(state, path)`**; без биндинга — **`null`**.
    */
   dataBind?: FormSliceDataBind
@@ -394,12 +400,20 @@ export function getValueAtPath(root: unknown, path: string): unknown {
   return cur
 }
 
+/** Путь привязки к модели для контрола (из **`dataSource.modelPath`**). */
+export function controlModelBindPath(
+  c: Pick<FormControlIdentity, 'dataSource'>,
+): string | undefined {
+  const m = c.dataSource?.modelPath?.trim()
+  return m || undefined
+}
+
 /** Дополняет слайс полем **`dataBind`** для вызова хука данного контрола. */
 export function formSliceWithDataBind(
   slice: FormSlice,
-  dataBindPath: string | undefined,
+  mapToPath: string | undefined,
 ): FormSlice {
-  const p = dataBindPath?.trim()
+  const p = mapToPath?.trim()
   if (!p) return { ...slice, dataBind: null }
   return {
     ...slice,
@@ -611,10 +625,42 @@ function normalizeControl(item: unknown): FormControl | null {
   }
   const visibleWhen = parseCondition(o.visibleWhen)
   const disabledWhen = parseCondition(o.disabledWhen)
-  const dataBindPath =
-    typeof o.dataBindPath === 'string' && o.dataBindPath.trim()
-      ? o.dataBindPath.trim()
-      : undefined
+  const parseModelBindPath = (raw: Record<string, unknown>): string | undefined => {
+    const ds = raw.dataSource
+    if (ds && typeof ds === 'object' && !Array.isArray(ds)) {
+      const d = ds as Record<string, unknown>
+      if (typeof d.modelPath === 'string' && d.modelPath.trim()) {
+        return d.modelPath.trim()
+      }
+      const bindStr =
+        typeof d.bindToModelProperty === 'string' && d.bindToModelProperty.trim()
+          ? d.bindToModelProperty.trim()
+          : undefined
+      if (bindStr) return bindStr
+      const nestedBmp = d.bindToModelProperty
+      if (
+        nestedBmp &&
+        typeof nestedBmp === 'object' &&
+        !Array.isArray(nestedBmp)
+      ) {
+        const mp = (nestedBmp as Record<string, unknown>).modelPath
+        if (typeof mp === 'string' && mp.trim()) return mp.trim()
+      }
+      const legacyMapTo =
+        typeof d.mapTo === 'string' && d.mapTo.trim() ? d.mapTo.trim() : undefined
+      if (legacyMapTo) return legacyMapTo
+    }
+    const legacyBmp = raw.bindToModelProperty
+    if (legacyBmp && typeof legacyBmp === 'object' && !Array.isArray(legacyBmp)) {
+      const mp = (legacyBmp as Record<string, unknown>).modelPath
+      if (typeof mp === 'string' && mp.trim()) return mp.trim()
+    }
+    if (typeof raw.dataBindPath === 'string' && raw.dataBindPath.trim()) {
+      return raw.dataBindPath.trim()
+    }
+    return undefined
+  }
+  const modelBindPath = parseModelBindPath(o)
   const handlers: ControlHandlersMap = {}
   if (o.handlers && typeof o.handlers === 'object' && !Array.isArray(o.handlers)) {
     for (const [key, val] of Object.entries(o.handlers as Record<string, unknown>)) {
@@ -641,7 +687,7 @@ function normalizeControl(item: unknown): FormControl | null {
     if (validation && validation.length > 0) c.validation = validation
     if (visibleWhen) c.visibleWhen = visibleWhen
     if (disabledWhen) c.disabledWhen = disabledWhen
-    if (dataBindPath) c.dataBindPath = dataBindPath
+    if (modelBindPath) c.dataSource = { modelPath: modelBindPath }
     if (Object.keys(handlers).length > 0) c.handlers = handlers
     return c
   }
@@ -651,7 +697,7 @@ function normalizeControl(item: unknown): FormControl | null {
   if (kind === 'button' || type === 'button') {
     const b: ButtonControl = { type: 'button', id }
     if (Object.keys(handlers).length > 0) b.handlers = handlers
-    if (dataBindPath) b.dataBindPath = dataBindPath
+    if (modelBindPath) b.dataSource = { modelPath: modelBindPath }
     if (visibleWhen) b.visibleWhen = visibleWhen
     if (disabledWhen) b.disabledWhen = disabledWhen
     return b
@@ -807,7 +853,7 @@ function normalizeControl(item: unknown): FormControl | null {
     if (typeof o.leftLimit === 'number') c.leftLimit = o.leftLimit
     if (typeof o.sticky === 'number') c.sticky = o.sticky
     if (typeof o.autoDropdown === 'boolean') c.autoDropdown = o.autoDropdown
-    if (dataBindPath) c.dataBindPath = dataBindPath
+    if (modelBindPath) c.dataSource = { modelPath: modelBindPath }
     if (visibleWhen) c.visibleWhen = visibleWhen
     if (disabledWhen) c.disabledWhen = disabledWhen
     if (Object.keys(handlers).length > 0) c.handlers = handlers
@@ -843,7 +889,9 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
     if (b.handlers && Object.keys(b.handlers).length > 0) {
       o.handlers = serialize_handlers_for_json(b.handlers)
     }
-    if (b.dataBindPath) o.dataBindPath = b.dataBindPath
+    if (b.dataSource?.modelPath) {
+      o.dataSource = { modelPath: b.dataSource.modelPath }
+    }
     if (b.visibleWhen) o.visibleWhen = b.visibleWhen
     if (b.disabledWhen) o.disabledWhen = b.disabledWhen
     return o
@@ -851,7 +899,9 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
   const bc = c as FormControlBase
   const base: Record<string, unknown> = { type: c.type, id: c.id }
   if (bc.fieldName) base.fieldName = bc.fieldName
-  if (bc.dataBindPath) base.dataBindPath = bc.dataBindPath
+  if (bc.dataSource?.modelPath) {
+    base.dataSource = { modelPath: bc.dataSource.modelPath }
+  }
   if (bc.defaultValue !== undefined) base.defaultValue = bc.defaultValue
   if (bc.dataType) base.dataType = bc.dataType
   if (bc.validation && bc.validation.length > 0) base.validation = bc.validation

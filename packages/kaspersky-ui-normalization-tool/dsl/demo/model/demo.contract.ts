@@ -1,7 +1,7 @@
 /**
  * Контракт модели демо-формы: **тип** фрагмента **`state`** для **data.ts**;
  * **`MODEL_INITIAL`** — тот же контур данных с начальными значениями, по нему
- * **normalization-tool** строит списки путей (**dataBindPath**, **modelPath**).
+ * **normalization-tool** строит списки путей (**dataSource.modelPath**, **modelPath** в условиях).
  * В схеме — **`modelContract`** → этот файл.
  */
 export type DemoFormModelState = {
