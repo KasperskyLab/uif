@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import { parseFormTs } from './parse-form-ts'
+import {
+  parseFormTs,
+  resolveRelativeImportPath,
+  sourceHasRelativeValueImports,
+} from './parse-form-ts'
 import {
   isFormSchemaModuleFile,
   splitFormConfigHookFactoryResult,
@@ -32,6 +36,31 @@ const textControl = (id: string): TextControl => ({
 })
 
 describe('form-dsl', () => {
+  describe('parse-form-ts path helpers', () => {
+    it('resolveRelativeImportPath resolves sibling', () => {
+      expect(resolveRelativeImportPath('demo.schema.ts', './demo.data.ts')).toBe(
+        'demo.data.ts',
+      )
+    })
+    it('resolveRelativeImportPath resolves nested', () => {
+      expect(resolveRelativeImportPath('lib/a.ts', './b.ts')).toBe('lib/b.ts')
+    })
+    it('sourceHasRelativeValueImports ignores import type', () => {
+      expect(
+        sourceHasRelativeValueImports(
+          "import type { X } from './m.ts'\nexport default {}",
+        ),
+      ).toBe(false)
+    })
+    it('sourceHasRelativeValueImports detects value import', () => {
+      expect(
+        sourceHasRelativeValueImports(
+          "import { x } from './m.ts'\nexport default {}",
+        ),
+      ).toBe(true)
+    })
+  })
+
   describe('isFormSchemaModuleFile', () => {
     it('accepts *.schema.ts', () => {
       expect(isFormSchemaModuleFile('demo.schema.ts')).toBe(true)
@@ -115,7 +144,7 @@ export default s
     )
 
     it.skipIf(!hasBlobURL)(
-      'parses schema with lazy handlers (onFormInit / useConfig)',
+      'parses schema with lazy handlers (onFormInit / useConfig) without static relative import',
       async () => {
         const content = `
 import { defineFormSchema } from '@normalization/form-dsl'
@@ -134,6 +163,18 @@ export default defineFormSchema({
         expect(typeof data.handlers?.onFormInit).toBe('function')
         const el = data.elements[0] as { handlers?: { useConfig?: unknown } }
         expect(typeof el.handlers?.useConfig).toBe('function')
+      },
+    )
+
+    it.skipIf(!hasBlobURL)(
+      'parseFormTs rejects static relative import without options',
+      async () => {
+        const content = `
+import { defineFormSchema } from '@normalization/form-dsl'
+import { x } from './foo.ts'
+export default defineFormSchema({ id: 'x', elements: [] })
+`
+        await expect(parseFormTs(content)).rejects.toThrow(/formDirectoryHandle/)
       },
     )
 

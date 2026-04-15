@@ -31,30 +31,22 @@ describe('loadFormDslBrowserRuntime', () => {
     expect(data.elements).toHaveLength(1)
   })
 
-  it('parseFormTs rewrites relative imports with dotted names to lazy fns with .ts extension', async () => {
+  it('parseFormTs rejects relative value imports without formDirectoryHandle', async () => {
     const hasBlobURL =
       typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function'
     if (!hasBlobURL) return
 
     const { loadFormDslBrowserRuntime } = await import('./load-form-dsl-runtime')
     const m = await loadFormDslBrowserRuntime()
-    const data = await m.parseFormTs(`
+    await expect(
+      m.parseFormTs(`
 import { defineFormSchema } from '@normalization/form-dsl'
-import { onFormInit, onFormSubmit } from './demo.data'
-const lazyHook = () => import('./demo.config-hook')
+import { onFormInit } from './demo.data.ts'
 export default defineFormSchema({
   id: 'demo',
-  handlers: { onFormInit, onFormSubmit },
-  elements: [{ type: 'text', id: 't1', handlers: { useConfig: lazyHook } }],
-})`)
-    expect(typeof data.handlers?.onFormInit).toBe('function')
-    expect(typeof data.handlers?.onFormSubmit).toBe('function')
-    expect(data.configHook).toBeUndefined()
-    const el = data.elements[0] as { handlers?: { useConfig?: unknown } }
-    expect(typeof el.handlers?.useConfig).toBe('function')
-    const onFormInitStr = String(data.handlers!.onFormInit)
-    expect(onFormInitStr).toContain('./demo.data.ts')
-    const useConfigStr = String(el.handlers!.useConfig)
-    expect(useConfigStr).toContain('./demo.config-hook.ts')
+  handlers: { onFormInit },
+  elements: [],
+})`),
+    ).rejects.toThrow(/formDirectoryHandle/)
   })
 })

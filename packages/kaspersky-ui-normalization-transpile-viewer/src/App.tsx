@@ -93,7 +93,7 @@ function App() {
     loading: fileLoading,
     loadError,
     loadFile,
-  } = useFormLoader()
+  } = useFormLoader(directoryHandle)
 
   const urlFormPrevRef = useRef<string | null>(null)
   useEffect(() => {

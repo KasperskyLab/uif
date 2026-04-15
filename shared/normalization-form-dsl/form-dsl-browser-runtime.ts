@@ -5,6 +5,7 @@
  * парсинга формы или загрузки хука.
  */
 export { parseFormTs } from './parse-form-ts'
+export type { ParseFormTsOptions } from './parse-form-ts'
 export { formToTs, formToJsonString } from './form-dsl-core'
 export {
   transpileConfigHookSource,

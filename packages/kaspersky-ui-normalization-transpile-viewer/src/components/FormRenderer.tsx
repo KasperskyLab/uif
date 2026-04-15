@@ -258,8 +258,7 @@ function InputRenderer({
     return (
       <div data-control-id={control.id} style={formRowStyle}>
         <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-          Поле «{control.id}»: нет хука useConfig (useConfigs в модуле или нет
-          formDirectoryHandle)
+          Поле «{control.id}»: нет хука useConfig (handlers или formDirectoryHandle)
         </Text>
       </div>
     )
@@ -310,7 +309,7 @@ function GridRenderer({
   const missingHookBlock = (
     <div data-control-id={g.id} style={{ ...formRowStyle, ...gridWrapStyle }}>
       <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-        {`Сетка «${g.id}»: нет хука useConfig (useConfigs['${g.id}'] или не передан formDirectoryHandle каталога формы).`}
+        {`Сетка «${g.id}»: нет хука useConfig (handlers или formDirectoryHandle).`}
       </Text>
     </div>
   )
@@ -387,7 +386,7 @@ function TableRenderer({
   const missingHookBlock = (
     <div data-control-id={t.id} style={{ ...formRowStyle, ...tableWrapStyle }}>
       <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
-        {`Таблица «${t.id}»: нет хука useConfig (useConfigs['${t.id}'] или нет formDirectoryHandle).`}
+        {`Таблица «${t.id}»: нет хука useConfig (handlers или formDirectoryHandle).`}
       </Text>
     </div>
   )

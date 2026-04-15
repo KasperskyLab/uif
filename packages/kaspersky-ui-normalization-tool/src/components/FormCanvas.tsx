@@ -208,7 +208,7 @@ function GridControlBlock({
     return (
       <div style={gridWrapStyle}>
         <Text type="BTR3" style={{ color: '#8c8c8c' }}>
-          {`Сетка «${g.id}»: нет хука useConfig (useConfigs['${g.id}'] в модуле или каталог формы не открыт).`}
+          {`Сетка «${g.id}»: нет хука useConfig (проверьте handlers и каталог формы).`}
         </Text>
       </div>
     )
@@ -619,7 +619,7 @@ function TableControlBlock({
     return (
       <div style={tableWrapStyle}>
         <Text type="BTR3" style={{ color: '#8c8c8c' }}>
-          {`Таблица «${t.id}»: нет хука useConfig (useConfigs['${t.id}'] или каталог формы не открыт).`}
+          {`Таблица «${t.id}»: нет хука useConfig (проверьте handlers и каталог формы).`}
         </Text>
       </div>
     )

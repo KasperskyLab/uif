@@ -68,7 +68,7 @@ export async function resolveLifecycleHandler(
       typeof raw === 'string'
         ? (raw.trim() || null)
         : typeof raw === 'function'
-          ? resolveTsModulePathFromValue(raw)
+          ? resolveTsModulePathFromValue(raw as () => unknown)
           : null
     if (path) mod = await loadTsModule(formDirectoryHandle, path)
   }
@@ -85,9 +85,9 @@ export async function resolveLifecycleHandler(
 }
 
 /**
- * Резолв **`handlers.useConfig`**: прямая функция **`(slice) => …`**, ленивый **`import()`**
- * (карта **`useConfigs[id]`** в модуле), строка пути, либо после неудачного **`import()`** из
- * blob — путь из тела функции + **`loadTsModule(dir, path)`** при заданном **`dir`**.
+ * Резолв **`handlers.useConfig`**: прямая функция **`(slice) => …`**, ленивый
+ * **`import()`** / строка пути (модуль с **`useConfigs[id]`** или **`default[id]`**),
+ * либо после неудачного **`import()`** из blob — **`loadTsModule(dir, path)`**.
  */
 export async function resolveControlUseConfig(
   raw: unknown,
@@ -109,12 +109,18 @@ export async function resolveControlUseConfig(
       typeof raw === 'string'
         ? (raw.trim() || null)
         : typeof raw === 'function'
-          ? resolveTsModulePathFromValue(raw)
+          ? resolveTsModulePathFromValue(raw as () => unknown)
           : null
     if (path) mod = await loadTsModule(formDirectoryHandle, path)
   }
   if (!mod) return null
-  const map = mod.useConfigs as Record<string, unknown> | undefined
+  const map =
+    (mod.useConfigs as Record<string, unknown> | undefined) ??
+    (typeof mod.default === 'object' &&
+    mod.default != null &&
+    !Array.isArray(mod.default)
+      ? (mod.default as Record<string, unknown>)
+      : undefined)
   const fn = map?.[controlId]
   if (typeof fn === 'function') return fn as (slice: FormSlice) => unknown
   return null

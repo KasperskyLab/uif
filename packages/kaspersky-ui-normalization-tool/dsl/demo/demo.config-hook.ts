@@ -1,11 +1,10 @@
 /**
  * Именованные хуки конфигурации Hexa по узлам; в схеме — **`handlers.useConfig: useDemoGrid`** и т.д.
- * Карта **`useConfigs`** — для вывода типа **`DemoFormControlIds`**.
  */
 import type { ReactNode } from 'react'
 import type { ButtonProps, GridProps, TextProps, TextboxProps } from '@kaspersky/hexa-ui'
 import type { ITableProps } from '@kaspersky/hexa-ui'
-import type { FormConfigHookFn, FormSlice } from '@normalization/form-dsl'
+import type { FormSlice } from '@normalization/form-dsl'
 
 export function useDemoGridSubmitButton(_formSlice: FormSlice): ButtonProps | null {
   return {
@@ -137,17 +136,17 @@ export function useDemoTable(formSlice: FormSlice): Partial<ITableProps> | null 
   }
 }
 
-export const useConfigs = {
-  'demo.grid': useDemoGrid,
-  'demo.grid.input': useDemoGridInput,
-  'demo.grid.text': useDemoText,
-  'demo.grid.button': useDemoGridSubmitButton,
-  'demo.table': useDemoTable,
-  'demo.table.text1': useDemoText,
-  'demo.table.textPlain': useDemoText,
-  'demo.table.text2': useDemoText,
-  'demo.table.button1': useDemoButton,
-  'demo.table.button2': useDemoButton,
-} as const satisfies Record<string, FormConfigHookFn>
+export const DEMO_FORM_CONTROL_IDS = [
+  'demo.grid',
+  'demo.grid.input',
+  'demo.grid.text',
+  'demo.grid.button',
+  'demo.table',
+  'demo.table.text1',
+  'demo.table.textPlain',
+  'demo.table.text2',
+  'demo.table.button1',
+  'demo.table.button2',
+] as const
 
-export type DemoFormControlIds = keyof typeof useConfigs & string
+export type DemoFormControlIds = (typeof DEMO_FORM_CONTROL_IDS)[number]

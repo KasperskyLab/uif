@@ -1,6 +1,10 @@
 import { useState, useCallback, useRef } from 'react'
 import type { FormControl, FormData } from '../types/form-dsl'
-import { createEmptyFormData } from '../types/form-dsl'
+import {
+  createEmptyFormData,
+  getFormDirectoryForSchemaPath,
+  schemaFileNameFromPath,
+} from '../types/form-dsl'
 import { loadFormDslBrowserRuntime } from '@normalization/load-form-dsl-runtime'
 import { FORM_SCHEMA_SUFFIX } from '../constants'
 import { getErrorMessage } from '../utils/getErrorMessage'
@@ -89,7 +93,17 @@ export function useFormFile(
       const f = await file.handle.getFile()
       const content = await f.text()
       const { parseFormTs } = await loadFormDslBrowserRuntime()
-      const data = await parseFormTs(content)
+      const parseOpts =
+        directoryHandle != null
+          ? {
+              formDirectoryHandle: await getFormDirectoryForSchemaPath(
+                directoryHandle,
+                file.path,
+              ),
+              schemaFileName: schemaFileNameFromPath(file.path),
+            }
+          : null
+      const data = await parseFormTs(content, parseOpts)
       if (requestId !== selectFileRequestRef.current) return
       setSelectedFile(file)
       setFormDataState(data)
@@ -103,7 +117,7 @@ export function useFormFile(
         setLoading(false)
       }
     }
-  }, [])
+  }, [directoryHandle])
 
   const closeFile = useCallback(() => {
     if (hasUnsavedChanges) {

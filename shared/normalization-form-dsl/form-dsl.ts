@@ -8,3 +8,7 @@ export type { FieldSchema, FormData } from '../types/form'
 export * from './form-config-hook-types'
 export * from './form-dsl-core'
 export * from './lifecycle-resolve'
+export {
+  getFormDirectoryForSchemaPath,
+  schemaFileNameFromPath,
+} from './form-directory-handle'
