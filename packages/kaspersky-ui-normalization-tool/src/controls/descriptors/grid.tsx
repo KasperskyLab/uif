@@ -23,6 +23,4 @@ export const gridDescriptor: ControlDescriptor<GridControl> = {
       </div>
     )
   },
-
-  PropsEditor: () => null,
 }

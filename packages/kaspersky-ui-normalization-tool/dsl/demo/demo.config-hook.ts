@@ -5,13 +5,17 @@ import type { ReactNode } from 'react'
 import type { ButtonProps, GridProps, TextProps, TextboxProps } from '@kaspersky/hexa-ui'
 import type { ITableProps } from '@kaspersky/hexa-ui'
 import type { FormSlice } from '@normalization/form-dsl'
+import type { DemoFormModelState } from './model/demo.contract'
 
-export function useDemoGridSubmitButton(_formSlice: FormSlice): ButtonProps | null {
+export function useDemoGridSubmitButton(formSlice: FormSlice): ButtonProps | null {
+  const { state } = formSlice
+  const demo = state as DemoFormModelState & Record<string, unknown>
   return {
     mode: 'primary',
     size: 'medium',
     type: 'submit',
     text: 'Submit button',
+    disabled: String(demo['demo.grid.input'] ?? '').trim() === '123',
   }
 }
 

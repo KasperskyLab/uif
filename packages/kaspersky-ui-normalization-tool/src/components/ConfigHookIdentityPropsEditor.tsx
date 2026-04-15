@@ -33,7 +33,7 @@ export function ConfigHookIdentityPropsEditor({
     <Space size={12} direction="vertical" style={{ width: '100%' }}>
       <div style={{ width: '100%' }}>
         <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
-          Идентификатор (id)
+          ID элемента
         </Text>
         <Textbox value={id} readOnly style={{ width: '100%' }} />
       </div>

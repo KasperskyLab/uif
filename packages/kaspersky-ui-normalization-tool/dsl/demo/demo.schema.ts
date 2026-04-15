@@ -31,12 +31,24 @@ export default defineFormSchema({
         {
           type: 'input',
           id: 'demo.grid.input',
+          /** Недоступно, пока в модели нет подписи первого пункта списка */
+          disabledWhen: { modelPath: 'items.0.caption', operator: 'empty' },
           handlers: { useConfig: useDemoGridInput },
         },
         null,
         {
           type: 'button',
           id: 'demo.grid.button',
+          disabledWhen: {
+            modelPath: 'isButtonDisabled',
+            operator: 'eq',
+            value: 'true',
+          },
+          visibleWhen: {
+            modelPath: 'isButtonVisible',
+            operator: 'eq',
+            value: 'true',
+          },
           handlers: { useConfig: useDemoGridSubmitButton },
         },
       ],
@@ -60,6 +72,7 @@ export default defineFormSchema({
         {
           type: 'text',
           id: 'demo.table.textPlain',
+          visibleWhen: { modelPath: 'model.headline', operator: 'notEmpty' },
           handlers: { useConfig: useDemoText },
         },
         {

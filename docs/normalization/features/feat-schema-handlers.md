@@ -75,7 +75,7 @@
 | Сбор **`useConfig`** | `form-dsl-core.ts` (**`collectControlsWithUseConfig`**) |
 | Редактор | `FormEditorConfigHookContext.tsx` |
 | **`loadTsModule`** | `loadConfigHookModule.ts` (tool / viewer) |
-| Пример | `dsl/demo/demo.schema.ts`, **`demo.config-hook.ts`**, **`model/demo.data.ts`**, **`model/demo.contract.ts`** |
+| Пример | `dsl/demo/demo.schema.ts`, **`demo.config-hook.ts`**, **`model/demo.data.ts`**, **`model/demo.contract.ts`** (тип + **`MODEL_INITIAL`** для **tool**) |
 
 ---
 

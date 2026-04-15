@@ -791,7 +791,9 @@ function App() {
                       onFormUpdate={(patch) => setFormData((prev) => ({ ...prev, ...patch }))}
                       control={selectedControl}
                       onUpdate={handleUpdateControl}
-                      formDirectoryHandle={directoryHandle}
+                      formDirectoryHandle={
+                        formFileDirectoryHandle ?? directoryHandle
+                      }
                     />
                     </div>
                   </div>

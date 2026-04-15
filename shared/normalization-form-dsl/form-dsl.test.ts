@@ -21,6 +21,7 @@ import {
   normalizeFormData,
   getValueAtPath,
   formSliceWithDataBind,
+  evaluateCondition,
   type FormData,
   type FormControl,
   type TextControl,
@@ -249,6 +250,20 @@ export default {
       expect(out.handlers).toBeUndefined()
     })
 
+    it('serializes button with visibleWhen and disabledWhen', () => {
+      const visibleWhen: Condition = { modelPath: 'role', operator: 'eq', value: 'admin' }
+      const disabledWhen: Condition = { modelPath: 'locked', operator: 'empty' }
+      const c: ButtonControl = {
+        type: 'button',
+        id: 'b2',
+        visibleWhen,
+        disabledWhen,
+      }
+      const out = controlToJson(c) as Record<string, unknown>
+      expect(out.visibleWhen).toEqual(visibleWhen)
+      expect(out.disabledWhen).toEqual(disabledWhen)
+    })
+
     it('serializes input control without ui-only fields', () => {
       const c: InputControl = { type: 'input', id: 'in1', fieldName: 'x' }
       const out = controlToJson(c) as Record<string, unknown>
@@ -262,8 +277,8 @@ export default {
 
   describe('controlToJson preserves field binding for all types', () => {
     const validation: ValidationRule[] = [{ type: 'required', message: 'Required' }]
-    const visibleWhen: Condition = { fieldName: 'role', operator: 'eq', value: 'admin' }
-    const disabledWhen: Condition = { fieldName: 'locked', operator: 'eq', value: 'true' }
+    const visibleWhen: Condition = { modelPath: 'role', operator: 'eq', value: 'admin' }
+    const disabledWhen: Condition = { modelPath: 'locked', operator: 'eq', value: 'true' }
     const bindingProps = { fieldName: 'testField', dataType: 'string' as const, defaultValue: 'abc', validation, visibleWhen, disabledWhen }
 
     const cases: { label: string; control: FormControl }[] = [
@@ -592,6 +607,29 @@ export default {
       }))
       expect(parsed).not.toBeNull()
       expect(parsed!.registry.k).toBe(hookB)
+    })
+  })
+
+  describe('evaluateCondition', () => {
+    it('eq matches nested model path', () => {
+      const state = { model: { headline: 'Hi' } }
+      expect(
+        evaluateCondition(state, {
+          modelPath: 'model.headline',
+          operator: 'eq',
+          value: 'Hi',
+        }),
+      ).toBe(true)
+    })
+    it('empty detects undefined path', () => {
+      expect(
+        evaluateCondition({}, { modelPath: 'x.y', operator: 'empty' }),
+      ).toBe(true)
+    })
+    it('notEmpty', () => {
+      expect(
+        evaluateCondition({ a: 1 }, { modelPath: 'a', operator: 'notEmpty' }),
+      ).toBe(true)
     })
   })
 

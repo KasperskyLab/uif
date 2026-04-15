@@ -7,6 +7,7 @@
 export type { FieldSchema, FormData } from '../types/form'
 export * from './form-config-hook-types'
 export * from './form-dsl-core'
+export { deriveModelPathsFromInitialShape } from './derive-contract-model-paths'
 export * from './lifecycle-resolve'
 export {
   getFormDirectoryForSchemaPath,

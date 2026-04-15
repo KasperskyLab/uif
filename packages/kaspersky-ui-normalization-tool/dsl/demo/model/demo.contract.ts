@@ -1,7 +1,19 @@
 /**
- * Контракт путей данных демо-формы; в схеме — **`modelContract`**.
+ * Контракт модели демо-формы: **тип** фрагмента **`state`** для **data.ts**;
+ * **`MODEL_INITIAL`** — тот же контур данных с начальными значениями, по нему
+ * **normalization-tool** строит списки путей (**dataBindPath**, **modelPath**).
+ * В схеме — **`modelContract`** → этот файл.
  */
-export const MODEL_PATHS = [
-  'model.headline',
-  'items.0.caption',
-] as const
+export type DemoFormModelState = {
+  model: { headline: string }
+  items: Array<{ caption: string }>
+  isButtonVisible: boolean
+  isButtonDisabled: boolean
+}
+
+export const MODEL_INITIAL = {
+  model: { headline: '' },
+  items: [{ caption: '' }],
+  isButtonVisible: true,
+  isButtonDisabled: false,
+} satisfies DemoFormModelState

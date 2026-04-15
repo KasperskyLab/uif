@@ -31,6 +31,4 @@ export const tableDescriptor: ControlDescriptor<TableControl> = {
       </div>
     )
   },
-
-  PropsEditor: () => null,
 }

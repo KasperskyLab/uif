@@ -119,9 +119,10 @@ export interface ValidationRule {
   message: string
 }
 
-/** Условие для управления видимостью/доступностью контрола */
+/** Условие видимости/блокировки: только путь в данных (**`getValueAtPath(state, modelPath)`**). */
 export interface Condition {
-  fieldName: string
+  /** Путь в **`state`** формы (нотация точек), как у **`dataBindPath`**. */
+  modelPath: string
   operator: 'eq' | 'neq' | 'gt' | 'lt' | 'contains' | 'empty' | 'notEmpty'
   value?: string
 }
@@ -229,6 +230,10 @@ export interface ToolbarControl extends FormControlBase {
 
 export interface ButtonControl extends FormControlIdentity {
   type: 'button'
+  /** Условие видимости (как у остальных контролов на форме). */
+  visibleWhen?: Condition
+  /** Условие блокировки (как у остальных контролов на форме). */
+  disabledWhen?: Condition
 }
 
 export interface TextControl extends FormControlBase {
@@ -402,6 +407,68 @@ export function formSliceWithDataBind(
   }
 }
 
+function conditionValueEmpty(v: unknown): boolean {
+  if (v == null) return true
+  if (v === '') return true
+  if (Array.isArray(v) && v.length === 0) return true
+  return false
+}
+
+function conditionLooseEq(a: unknown, b: string | undefined): boolean {
+  if (b == null || b === '') return conditionValueEmpty(a)
+  if (a === b) return true
+  const bn = Number(b)
+  if (!Number.isNaN(bn) && typeof a === 'number') return a === bn
+  if (!Number.isNaN(bn) && a != null && !Number.isNaN(Number(a))) {
+    return Number(a) === bn
+  }
+  if (b === 'true' || b === 'false') return Boolean(a) === (b === 'true')
+  return String(a ?? '') === b
+}
+
+function conditionCompareOrder(a: unknown, b: string | undefined): number {
+  const an = Number(a)
+  const bn = Number(b)
+  if (!Number.isNaN(an) && !Number.isNaN(bn)) return an - bn
+  return String(a ?? '').localeCompare(String(b ?? ''), undefined, {
+    numeric: true,
+  })
+}
+
+/**
+ * Истинно ли условие относительно **`state`** (левый операнд —
+ * **`getValueAtPath(state, condition.modelPath)`**).
+ */
+export function evaluateCondition(
+  state: Record<string, unknown>,
+  condition: Condition,
+): boolean {
+  const path = condition.modelPath?.trim() ?? ''
+  if (!path) return false
+  const v = getValueAtPath(state, path)
+  const op = condition.operator
+  const rhs = condition.value
+
+  switch (op) {
+    case 'empty':
+      return conditionValueEmpty(v)
+    case 'notEmpty':
+      return !conditionValueEmpty(v)
+    case 'contains':
+      return String(v ?? '').includes(rhs ?? '')
+    case 'eq':
+      return conditionLooseEq(v, rhs)
+    case 'neq':
+      return !conditionLooseEq(v, rhs)
+    case 'gt':
+      return conditionCompareOrder(v, rhs) > 0
+    case 'lt':
+      return conditionCompareOrder(v, rhs) < 0
+    default:
+      return false
+  }
+}
+
 /** Начальный `state` по дереву контролов (интерактивные поля). */
 export function getInitialFormStateFromElements(
   elements: FormControl[],
@@ -532,9 +599,12 @@ function normalizeControl(item: unknown): FormControl | null {
   const parseCondition = (raw: unknown): Condition | undefined => {
     if (!raw || typeof raw !== 'object') return undefined
     const r = raw as Record<string, unknown>
-    if (typeof r.fieldName !== 'string' || !VALID_CONDITION_OPS.includes(r.operator as Condition['operator'])) return undefined
+    const modelPathRaw = typeof r.modelPath === 'string' ? r.modelPath.trim() : ''
+    if (!modelPathRaw || !VALID_CONDITION_OPS.includes(r.operator as Condition['operator'])) {
+      return undefined
+    }
     return {
-      fieldName: r.fieldName,
+      modelPath: modelPathRaw,
       operator: r.operator as Condition['operator'],
       value: typeof r.value === 'string' ? r.value : undefined,
     }
@@ -582,6 +652,8 @@ function normalizeControl(item: unknown): FormControl | null {
     const b: ButtonControl = { type: 'button', id }
     if (Object.keys(handlers).length > 0) b.handlers = handlers
     if (dataBindPath) b.dataBindPath = dataBindPath
+    if (visibleWhen) b.visibleWhen = visibleWhen
+    if (disabledWhen) b.disabledWhen = disabledWhen
     return b
   }
   if (type === 'text') {
@@ -736,6 +808,8 @@ function normalizeControl(item: unknown): FormControl | null {
     if (typeof o.sticky === 'number') c.sticky = o.sticky
     if (typeof o.autoDropdown === 'boolean') c.autoDropdown = o.autoDropdown
     if (dataBindPath) c.dataBindPath = dataBindPath
+    if (visibleWhen) c.visibleWhen = visibleWhen
+    if (disabledWhen) c.disabledWhen = disabledWhen
     if (Object.keys(handlers).length > 0) c.handlers = handlers
     return c
   }
@@ -770,6 +844,8 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
       o.handlers = serialize_handlers_for_json(b.handlers)
     }
     if (b.dataBindPath) o.dataBindPath = b.dataBindPath
+    if (b.visibleWhen) o.visibleWhen = b.visibleWhen
+    if (b.disabledWhen) o.disabledWhen = b.disabledWhen
     return o
   }
   const bc = c as FormControlBase

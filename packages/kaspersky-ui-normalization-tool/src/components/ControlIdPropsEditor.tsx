@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react'
-import { Text, Textbox, Space } from '@kaspersky/hexa-ui'
+import { Text, Textbox } from '@kaspersky/hexa-ui'
 import type { FormControl } from '../types/form-dsl'
 
 export function ControlIdPropsEditor({
@@ -10,30 +10,15 @@ export function ControlIdPropsEditor({
   onUpdate: (patch: Partial<FormControl>) => void
 }): ReactElement {
   return (
-    <Space size={12} direction="vertical" style={{ width: '100%' }}>
-      <div style={{ width: '100%' }}>
-        <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
-          Идентификатор (id)
-        </Text>
-        <Textbox
-          value={id}
-          onChange={(v) => onUpdate({ id: v })}
-          placeholder="уникальный id"
-          style={{ width: '100%' }}
-        />
-        <Text
-          type="BTR3"
-          style={{
-            display: 'block',
-            marginTop: 6,
-            color: 'var(--text--secondary, #666)',
-            fontSize: 11,
-          }}
-        >
-          Должен совпадать с ключом в реестре хуков модуля (useConfigs / default), если
-          useConfig задаётся через ленивый import пути к файлу.
-        </Text>
-      </div>
-    </Space>
+    <div style={{ width: '100%' }}>
+      <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
+        ID элемента
+      </Text>
+      <Textbox
+        value={id}
+        onChange={(v) => onUpdate({ id: v })}
+        style={{ width: '100%' }}
+      />
+    </div>
   )
 }

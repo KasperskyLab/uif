@@ -21,7 +21,8 @@ export function SelectWithOptionWidth({
     spans.forEach((s) => {
       max = Math.max(max, (s as HTMLSpanElement).offsetWidth)
     })
-    setMinWidth(max + 48) // отступы под стрелку и padding селектора
+    // +48 — отступы под стрелку и padding; не шире родителя (длинные пути модели)
+    setMinWidth(Math.max(100, max + 48))
   }, [options])
 
   return (
@@ -39,13 +40,24 @@ export function SelectWithOptionWidth({
           fontFamily: 'inherit',
         }}
       >
-        {options.map((o) => (
-          <span key={o.value} style={{ display: 'block' }}>
+        {options.map((o, i) => (
+          <span key={`opt-${i}-${String(o.value)}`} style={{ display: 'block' }}>
             {String(o.label)}
           </span>
         ))}
       </div>
-      <div style={{ minWidth }}>{children}</div>
+      <div
+        style={{
+          width: '100%',
+          maxWidth: '100%',
+          boxSizing: 'border-box',
+          overflow: 'hidden',
+          /** Не раздувать карточку: по контенту, но не шире родителя */
+          minWidth: `min(100%, ${minWidth}px)`,
+        }}
+      >
+        {children}
+      </div>
     </>
   )
 }

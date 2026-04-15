@@ -69,6 +69,7 @@ React при этом **используется внутри приложени
 | Контракт `configHook` | [feat-config-hook.md](./features/feat-config-hook.md) | Вход `FormSlice`, выход пропсов / `null` |
 | **`handlers`**, **`useConfig`**, отдельные хуки | [feat-schema-handlers.md](./features/feat-schema-handlers.md) | Форма / узел, резолв, **parseFormTs** + **FSA** |
 | Привязка к модели | [feat-form-model-binding.md](./features/feat-form-model-binding.md) | **`modelContract`**, **`dataBindPath`**, **`FormSlice.dataBind`** |
+| Видимость / блокировка по модели | [feat-form-visible-disabled.md](./features/feat-form-visible-disabled.md) | **`visibleWhen`**, **`disabledWhen`**, **`evaluateCondition`** |
 | Ленивый рантайм DSL | [feat-lazy-dsl-runtime.md](./features/feat-lazy-dsl-runtime.md) | `loadFormDslBrowserRuntime`, Sucrase, чанки |
 | Типизация и импорты | [feat-typing-and-imports.md](./features/feat-typing-and-imports.md) | Автор формы, потребитель библиотеки |
 | Рабочее пространство | [feat-workspace-browser.md](./features/feat-workspace-browser.md) | FSA, IndexedDB, `?form=`, сценарии |

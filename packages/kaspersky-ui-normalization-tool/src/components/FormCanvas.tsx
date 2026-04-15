@@ -1080,8 +1080,12 @@ function ControlBlock({
               lineHeight: '14px',
             }} title={
               [
-                bc.visibleWhen ? `Видим: ${bc.visibleWhen.fieldName} ${bc.visibleWhen.operator} ${bc.visibleWhen.value ?? ''}` : '',
-                bc.disabledWhen ? `Блок: ${bc.disabledWhen.fieldName} ${bc.disabledWhen.operator} ${bc.disabledWhen.value ?? ''}` : '',
+                bc.visibleWhen
+                  ? `Видим: ${bc.visibleWhen.modelPath} ${bc.visibleWhen.operator} ${bc.visibleWhen.value ?? ''}`
+                  : '',
+                bc.disabledWhen
+                  ? `Блок: ${bc.disabledWhen.modelPath} ${bc.disabledWhen.operator} ${bc.disabledWhen.value ?? ''}`
+                  : '',
               ].filter(Boolean).join('; ')
             }>
               ⚡

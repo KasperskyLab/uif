@@ -33,8 +33,11 @@ export interface ControlDescriptor<C extends FormControl = FormControl> {
   createDefault: () => Omit<C, 'id'> & { id?: string }
   /** Превью на холсте (внутри обёртки с ручкой и кнопкой удаления) */
   CanvasPreview: React.FC<{ control: C; context: CanvasContext }>
-  /** Редактор свойств в панели справа. selectCloseKey + onSelectClose — чтобы Select закрывался после выбора. */
-  PropsEditor: React.FC<{
+  /**
+   * Редактор свойств в панели справа. selectCloseKey + onSelectClose — чтобы Select
+   * закрывался после выбора. Если не задан, карточка типа в панели не показывается.
+   */
+  PropsEditor?: React.FC<{
     control: C
     onUpdate: (patch: Partial<C>) => void
     selectCloseKey?: number

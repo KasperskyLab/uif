@@ -24,8 +24,11 @@ export interface FormData {
     string | (() => Promise<unknown>) | ((...args: unknown[]) => unknown)
   >
   /**
-   * Контракт данных формы: модуль **`{formId}.contract.ts`** (строка пути от
-   * каталога формы, ленивый **`import()``** или функция — как у **`handlers`**).
+   * Контракт модели: модуль **`{formId}.contract.ts`** (строка пути от каталога
+   * формы, ленивый **`import()`** или функция — как у **`handlers`**). Тип(ы)
+   * **`state`** для **data.ts** и **`MODEL_INITIAL`** (объект начальных значений)
+   * для списков
+   * путей в **tool**.
    */
   modelContract?:
     | string

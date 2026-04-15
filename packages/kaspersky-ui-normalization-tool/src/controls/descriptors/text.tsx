@@ -18,6 +18,4 @@ export const textDescriptor: ControlDescriptor<TextControl> = {
       [{control.id || 'text'}]
     </Text>
   ),
-
-  PropsEditor: () => null,
 }

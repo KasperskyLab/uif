@@ -29,11 +29,7 @@ export function HandlersEditor({
   }
 
   return (
-    <div style={{
-      width: '100%',
-      borderTop: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)',
-      paddingTop: 16,
-    }}>
+    <div style={{ width: '100%' }}>
       <Text type="BTR3" style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>
         {title}
       </Text>

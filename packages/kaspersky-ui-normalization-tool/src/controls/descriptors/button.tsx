@@ -21,6 +21,4 @@ export const buttonDescriptor: ControlDescriptor<ButtonControl> = {
       disabled
     />
   ),
-
-  PropsEditor: () => null,
 }

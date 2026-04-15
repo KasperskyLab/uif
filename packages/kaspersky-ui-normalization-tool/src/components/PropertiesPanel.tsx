@@ -11,6 +11,7 @@ import type {
   ValidationRuleType,
   Condition,
 } from '../types/form-dsl'
+import { deriveModelPathsFromInitialShape } from '@normalization/form-dsl'
 import {
   CONTROL_EVENTS,
   EXTRA_UI_DSL_TYPES,
@@ -32,26 +33,35 @@ const DATA_TYPE_OPTIONS = [
   { value: 'array', label: 'array' },
 ]
 
+/**
+ * Значение опции «без свойства модели» в Select: не `''` — у rc-select/Hexa Option
+ * `key` = `value`; пустая строка среди путей или здесь даёт одну опцию вместо
+ * нескольких.
+ */
+const MODEL_PATH_SELECT_NONE = '__model_path_none__'
+
+function normalize_contract_model_paths(paths: string[]): string[] {
+  const seen = new Set<string>()
+  const out: string[] = []
+  for (const p of paths) {
+    const t = String(p).trim()
+    if (!t || t === MODEL_PATH_SELECT_NONE) continue
+    if (seen.has(t)) continue
+    seen.add(t)
+    out.push(t)
+  }
+  return out
+}
+
 function isInputControl(control: FormControl): boolean {
   if (INPUT_CONTROL_TYPES.includes(control.type)) return true
   return false
 }
 
-function DataBindPathSection({
-  control,
-  formData,
-  formDirectoryHandle,
-  onUpdate,
-  selectCloseKey,
-  onSelectClose,
-}: {
-  control: FormControl
-  formData: FormData | null
-  formDirectoryHandle?: FileSystemDirectoryHandle | null
-  onUpdate: (patch: Partial<FormControl>) => void
-  selectCloseKey: number
-  onSelectClose: () => void
-}) {
+function useContractModelPaths(
+  formData: FormData | null,
+  formDirectoryHandle?: FileSystemDirectoryHandle | null,
+): { modelPaths: string[]; contractHint: string | null } {
   const [modelPaths, setModelPaths] = useState<string[]>([])
   const [contractHint, setContractHint] = useState<string | null>(null)
 
@@ -70,7 +80,9 @@ function DataBindPathSection({
     const resolved = resolveTsModulePathFromValue(raw)
     if (!resolved) {
       setModelPaths([])
-      setContractHint('Укажите путь к модулю *.contract.ts')
+      setContractHint(
+        'Укажите в схеме путь к *.contract.ts — оттуда список свойств модели',
+      )
       return
     }
     const loadPath = resolved.replace(/^\.\//, '')
@@ -81,19 +93,41 @@ function DataBindPathSection({
         if (cancelled) return
         if (!mod) {
           setModelPaths([])
-          setContractHint('Не удалось загрузить контракт')
+          setContractHint('Не удалось загрузить описание модели')
           return
         }
-        const mp = mod.MODEL_PATHS
-        const list = Array.isArray(mp)
-          ? mp.map((x) => String(x)).filter(Boolean)
-          : []
+        const raw_initial = mod.MODEL_INITIAL
+        if (raw_initial === undefined) {
+          setModelPaths([])
+          setContractHint(
+            'Для списка свойств модели экспортируйте const MODEL_INITIAL = { … } satisfies …',
+          )
+          return
+        }
+        if (
+          raw_initial === null ||
+          typeof raw_initial !== 'object' ||
+          Array.isArray(raw_initial)
+        ) {
+          setModelPaths([])
+          setContractHint(
+            'MODEL_INITIAL — объект со свойствами модели (не массив)',
+          )
+          return
+        }
+        const list = normalize_contract_model_paths(
+          deriveModelPathsFromInitialShape(raw_initial),
+        )
         setModelPaths(list)
-        setContractHint(list.length === 0 ? 'В модуле нет MODEL_PATHS[]' : null)
+        setContractHint(
+          list.length === 0
+            ? 'В MODEL_INITIAL нет свойств модели (пустой объект или пустые массивы)'
+            : null,
+        )
       } catch {
         if (!cancelled) {
           setModelPaths([])
-          setContractHint('Ошибка загрузки контракта')
+          setContractHint('Ошибка загрузки описания модели')
         }
       }
     })()
@@ -102,53 +136,86 @@ function DataBindPathSection({
     }
   }, [formData?.modelContract, formDirectoryHandle])
 
+  return { modelPaths, contractHint }
+}
+
+/** Поле dataBindPath: один лейбл как у id, без отдельной секции с border. */
+function DataBindPathFields({
+  control,
+  formData,
+  formDirectoryHandle,
+  onUpdate,
+  selectCloseKey,
+  onSelectClose,
+}: {
+  control: FormControl
+  formData: FormData | null
+  formDirectoryHandle?: FileSystemDirectoryHandle | null
+  onUpdate: (patch: Partial<FormControl>) => void
+  selectCloseKey: number
+  onSelectClose: () => void
+}) {
+  const { modelPaths, contractHint } = useContractModelPaths(
+    formData,
+    formDirectoryHandle,
+  )
+
   const path = control.dataBindPath ?? ''
-  const pathInContract = Boolean(path && modelPaths.includes(path))
-  const pathOrphan = Boolean(path && modelPaths.length > 0 && !pathInContract)
+  const pathOrphan = Boolean(
+    path && modelPaths.length > 0 && !modelPaths.includes(path),
+  )
 
   const selectOptions = [
-    { value: '', label: '(нет привязки)' },
+    { value: MODEL_PATH_SELECT_NONE, label: '(без свойства модели)' },
     ...modelPaths.map((p) => ({ value: p, label: p })),
+    ...(pathOrphan
+      ? [{ value: path, label: `${path} (вне списка свойств)` }]
+      : []),
   ]
 
+  const dataBindSelectValue = !path ? MODEL_PATH_SELECT_NONE : path
+
   return (
-    <div style={{
-      width: '100%',
-      borderTop: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)',
-      paddingTop: 16,
-    }}>
-      <Text type="BTR3" style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>
-        Привязка к модели (dataBindPath)
+    <div style={{ width: '100%', minWidth: 0 }}>
+      <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
+        Свойство модели
       </Text>
       {contractHint && (
         <Text type="BTR3" style={{ display: 'block', marginBottom: 8, color: '#999', fontSize: 11 }}>
           {contractHint}
         </Text>
       )}
-      <Space size={8} direction="vertical" style={{ width: '100%' }}>
-        <div>
-          <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
-            Путь из контракта (MODEL_PATHS)
-          </Text>
-          <SelectWithOptionWidth options={selectOptions}>
-            <Select
-              key={`dbind-${selectCloseKey}`}
-              options={selectOptions}
-              value={pathInContract ? path : ''}
-              onChange={(v: string | undefined) => {
-                onUpdate({ dataBindPath: v || undefined } as Partial<FormControl>)
-                onSelectClose()
-              }}
-              getPopupContainer={() => document.body}
-            />
-          </SelectWithOptionWidth>
-        </div>
-        {pathOrphan && (
-          <Text type="BTR3" style={{ color: 'var(--warning--main, #d48806)', fontSize: 11 }}>
-            В схеме указан путь «{path}», которого нет в текущем контракте — выберите значение из списка
-          </Text>
-        )}
-      </Space>
+      <SelectWithOptionWidth options={selectOptions}>
+        <Select
+          key={`dbind-${selectCloseKey}`}
+          options={selectOptions}
+          value={dataBindSelectValue}
+          style={{ width: '100%' }}
+          onChange={(v: string | undefined) => {
+            const raw = v ?? MODEL_PATH_SELECT_NONE
+            onUpdate({
+              dataBindPath:
+                raw === MODEL_PATH_SELECT_NONE ? undefined : raw,
+            } as Partial<FormControl>)
+            onSelectClose()
+          }}
+          getPopupContainer={() => document.body}
+        />
+      </SelectWithOptionWidth>
+      {pathOrphan && (
+        <Text
+          type="BTR3"
+          style={{
+            display: 'block',
+            marginTop: 8,
+            color: 'var(--warning--main, #d48806)',
+            fontSize: 11,
+          }}
+        >
+          Указано свойство модели «{path}», которого нет в текущем описании —
+          выберите свойство из списка
+        </Text>
+      )}
     </div>
   )
 }
@@ -172,27 +239,29 @@ function FieldBindingEditor({
   const hasRequired = (bc.validation ?? []).some((r) => r.type === 'required')
   return (
     <>
-      <div style={{ width: '100%', borderTop: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)', paddingTop: 16 }}>
+      <div style={{ ...settingsCardStyle }}>
         <Text type="BTR3" style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>
           Привязка данных
           {hasRequired && <span style={{ color: 'var(--danger--main, #e00)', marginLeft: 4 }}>*</span>}
         </Text>
-        <Space size={12} direction="vertical" style={{ width: '100%' }}>
-          <div>
+        <Space size={12} direction="vertical" style={{ width: '100%', alignItems: 'stretch' }}>
+          <div style={{ width: '100%', minWidth: 0 }}>
             <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Имя поля (fieldName)</Text>
             <Textbox
               value={bc.fieldName ?? ''}
               onChange={(v) => onUpdate({ fieldName: v || undefined } as Partial<FormControl>)}
               placeholder="например: email"
+              style={{ width: '100%' }}
             />
           </div>
-          <div>
+          <div style={{ width: '100%', minWidth: 0 }}>
             <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Тип данных</Text>
             <SelectWithOptionWidth options={DATA_TYPE_OPTIONS}>
               <Select
                 key={`datatype-${selectCloseKey}`}
                 options={DATA_TYPE_OPTIONS}
                 value={bc.dataType ?? 'string'}
+                style={{ width: '100%' }}
                 onChange={(v: string | undefined) => {
                   onUpdate({ dataType: (v as FormControlBase['dataType']) || 'string' } as Partial<FormControl>)
                   onSelectClose()
@@ -201,12 +270,13 @@ function FieldBindingEditor({
               />
             </SelectWithOptionWidth>
           </div>
-          <div>
+          <div style={{ width: '100%', minWidth: 0 }}>
             <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Значение по умолчанию</Text>
             <Textbox
               value={bc.defaultValue != null ? String(bc.defaultValue) : ''}
               onChange={(v) => onUpdate({ defaultValue: v || undefined } as Partial<FormControl>)}
               placeholder="начальное значение"
+              style={{ width: '100%' }}
             />
           </div>
         </Space>
@@ -215,20 +285,57 @@ function FieldBindingEditor({
         rules={bc.validation ?? []}
         onChange={(rules) => onUpdate({ validation: rules.length > 0 ? rules : undefined } as Partial<FormControl>)}
       />
-      <div style={{ width: '100%', borderTop: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)', paddingTop: 16 }}>
-        <Text type="BTR3" style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>Условная логика</Text>
-        <Space size={8} direction="vertical" style={{ width: '100%' }}>
-          <ConditionEditor
-            label="Показывать когда..."
-            condition={bc.visibleWhen}
-            onChange={(c) => onUpdate({ visibleWhen: c } as Partial<FormControl>)}
-          />
-          <ConditionEditor
-            label="Блокировать когда..."
-            condition={bc.disabledWhen}
-            onChange={(c) => onUpdate({ disabledWhen: c } as Partial<FormControl>)}
-          />
-        </Space>
+    </>
+  )
+}
+
+function ModelVisibilitySection({
+  control,
+  formData,
+  formDirectoryHandle,
+  onUpdate,
+  selectCloseKey,
+  onSelectClose,
+}: {
+  control: FormControl
+  formData: FormData | null
+  formDirectoryHandle?: FileSystemDirectoryHandle | null
+  onUpdate: (patch: Partial<FormControl>) => void
+  selectCloseKey: number
+  onSelectClose: () => void
+}) {
+  const { modelPaths, contractHint } = useContractModelPaths(
+    formData,
+    formDirectoryHandle,
+  )
+  const bc = control as FormControlBase
+
+  return (
+    <>
+      <div style={{ ...settingsCardStyle }}>
+        {contractHint && (
+          <Text type="BTR3" style={{ display: 'block', marginBottom: 8, color: '#666', fontSize: 11 }}>
+            {contractHint}
+          </Text>
+        )}
+        <ConditionEditor
+          label="Показывать при условии"
+          condition={bc.visibleWhen}
+          modelPaths={modelPaths}
+          selectCloseKey={selectCloseKey}
+          onSelectClose={onSelectClose}
+          onChange={(c) => onUpdate({ visibleWhen: c } as Partial<FormControl>)}
+        />
+      </div>
+      <div style={{ ...settingsCardStyle }}>
+        <ConditionEditor
+          label="Блокировать при условии"
+          condition={bc.disabledWhen}
+          modelPaths={modelPaths}
+          selectCloseKey={selectCloseKey}
+          onSelectClose={onSelectClose}
+          onChange={(c) => onUpdate({ disabledWhen: c } as Partial<FormControl>)}
+        />
       </div>
     </>
   )
@@ -256,7 +363,7 @@ function ValidationEditor({
   }
 
   return (
-    <div style={{ width: '100%', borderTop: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)', paddingTop: 16 }}>
+    <div style={{ ...settingsCardStyle }}>
       <Text type="BTR3" style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>Валидация</Text>
       <Space size={8} direction="vertical" style={{ width: '100%' }}>
         {rules.map((rule, i) => (
@@ -337,20 +444,54 @@ const CONDITION_OPERATORS: { value: Condition['operator']; label: string }[] = [
 function ConditionEditor({
   label,
   condition,
+  modelPaths,
+  selectCloseKey,
+  onSelectClose,
   onChange,
 }: {
   label: string
   condition?: Condition
+  modelPaths: string[]
+  selectCloseKey: number
+  onSelectClose: () => void
   onChange: (c: Condition | undefined) => void
 }) {
   const enabled = !!condition
+  const orphanCondPath =
+    condition?.modelPath && !modelPaths.includes(condition.modelPath)
+      ? condition.modelPath
+      : ''
+  const pathOptions = [
+    { value: MODEL_PATH_SELECT_NONE, label: '(не выбрано свойство модели)' },
+    ...modelPaths.map((p) => ({ value: p, label: p })),
+    ...(orphanCondPath
+      ? [
+          {
+            value: orphanCondPath,
+            label: `${orphanCondPath} (вне списка свойств)`,
+          },
+        ]
+      : []),
+  ]
+  const defaultPath = modelPaths[0] ?? ''
+  const condPathStored = condition?.modelPath ?? ''
+  const condPathSelectValue =
+    !condPathStored || condPathStored === MODEL_PATH_SELECT_NONE
+      ? MODEL_PATH_SELECT_NONE
+      : modelPaths.includes(condPathStored) || condPathStored === orphanCondPath
+        ? condPathStored
+        : MODEL_PATH_SELECT_NONE
   return (
     <div style={{ width: '100%' }}>
       <HexaCheckbox
         checked={enabled}
         onChange={(e) => {
           if (e.target.checked) {
-            onChange({ fieldName: '', operator: 'eq', value: '' })
+            onChange({
+              modelPath: defaultPath,
+              operator: 'eq',
+              value: '',
+            })
           } else {
             onChange(undefined)
           }
@@ -359,30 +500,58 @@ function ConditionEditor({
         {label}
       </HexaCheckbox>
       {enabled && condition && (
-        <div style={{ display: 'flex', gap: 4, marginTop: 4, flexWrap: 'wrap' }}>
-          <Textbox
-            value={condition.fieldName}
-            onChange={(v) => onChange({ ...condition, fieldName: v })}
-            placeholder="поле"
-            style={{ flex: 1, minWidth: 60 }}
-          />
-          <select
-            value={condition.operator}
-            onChange={(e) => onChange({ ...condition, operator: e.target.value as Condition['operator'] })}
-            style={{ height: 32, borderRadius: 4, border: '1px solid #ccc', padding: '0 4px', fontSize: 12 }}
-          >
-            {CONDITION_OPERATORS.map((o) => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
-          {condition.operator !== 'empty' && condition.operator !== 'notEmpty' && (
-            <Textbox
-              value={condition.value ?? ''}
-              onChange={(v) => onChange({ ...condition, value: v })}
-              placeholder="значение"
-              style={{ flex: 1, minWidth: 60 }}
-            />
-          )}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8,
+            marginTop: 4,
+            width: '100%',
+            alignItems: 'stretch',
+          }}
+        >
+          <div style={{ width: '100%', minWidth: 0 }}>
+            <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
+              Свойство модели
+            </Text>
+            <SelectWithOptionWidth options={pathOptions}>
+              <Select
+                key={`cond-path-${selectCloseKey}-${label}`}
+                options={pathOptions}
+                value={condPathSelectValue}
+                style={{ width: '100%', minWidth: 0, maxWidth: '100%' }}
+                onChange={(v: string | undefined) => {
+                  const raw = v ?? MODEL_PATH_SELECT_NONE
+                  onChange({
+                    ...condition,
+                    modelPath:
+                      raw === MODEL_PATH_SELECT_NONE ? defaultPath : raw,
+                  })
+                  onSelectClose()
+                }}
+                getPopupContainer={() => document.body}
+              />
+            </SelectWithOptionWidth>
+          </div>
+          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', width: '100%', alignItems: 'center' }}>
+            <select
+              value={condition.operator}
+              onChange={(e) => onChange({ ...condition, operator: e.target.value as Condition['operator'] })}
+              style={{ height: 32, borderRadius: 4, border: '1px solid #ccc', padding: '0 4px', fontSize: 12 }}
+            >
+              {CONDITION_OPERATORS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+            {condition.operator !== 'empty' && condition.operator !== 'notEmpty' && (
+              <Textbox
+                value={condition.value ?? ''}
+                onChange={(v) => onChange({ ...condition, value: v })}
+                placeholder="значение"
+                style={{ flex: 1, minWidth: 60 }}
+              />
+            )}
+          </div>
         </div>
       )}
     </div>
@@ -402,6 +571,17 @@ const panelStyle: React.CSSProperties = {
   flexDirection: 'column',
   alignItems: 'stretch',
   textAlign: 'left',
+}
+
+/** Нежно-голубая подложка для группы настроек в панели */
+const settingsCardStyle: React.CSSProperties = {
+  width: '100%',
+  minWidth: 0,
+  boxSizing: 'border-box',
+  padding: 12,
+  borderRadius: 8,
+  background: '#f3f9fc',
+  border: '1px solid #e3eef5',
 }
 
 export interface PropertiesPanelProps {
@@ -428,20 +608,23 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
         <H6 style={{ margin: 0, textAlign: 'left' }}>Свойства</H6>
         {formData ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', marginTop: 12 }}>
-            <div style={{ width: '100%' }}>
-              <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>Идентификатор</Text>
+            <div style={{ ...settingsCardStyle }}>
+              <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
+                Идентификатор
+              </Text>
               <Textbox
                 value={formData.id}
                 onChange={(v) => onFormUpdate({ id: v })}
-                placeholder="id формы"
+                style={{ width: '100%' }}
               />
             </div>
-            <div style={{ width: '100%' }}>
+            <div style={{ ...settingsCardStyle }}>
               <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
-                Контракт модели (modelContract)
+                Описание модели (modelContract)
               </Text>
               <Text type="BTR3" style={{ display: 'block', marginBottom: 6, color: '#666', fontSize: 11 }}>
-                Файл TypeScript с экспортом MODEL_PATHS — выберите из каталога формы
+                Тип модели и MODEL_INITIAL — список свойств модели в панели; файл из
+                каталога формы
               </Text>
               <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
                 <Textbox
@@ -501,8 +684,20 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
     <aside className="properties-panel editor-sidebar editor-sidebar--right" style={panelStyle}>
       <H6 style={{ margin: 0, textAlign: 'left' }}>Свойства</H6>
       <div className="props-section" style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', marginTop: 12 }}>
-        <ControlIdPropsEditor id={control.id} onUpdate={update} />
-        <DataBindPathSection
+        <div style={{ ...settingsCardStyle }}>
+          <ControlIdPropsEditor id={control.id} onUpdate={update} />
+        </div>
+        <div style={{ ...settingsCardStyle }}>
+          <DataBindPathFields
+            control={control}
+            formData={formData ?? null}
+            formDirectoryHandle={formDirectoryHandle}
+            onUpdate={update}
+            selectCloseKey={selectCloseKey}
+            onSelectClose={() => setSelectCloseKey((k) => k + 1)}
+          />
+        </div>
+        <ModelVisibilitySection
           control={control}
           formData={formData ?? null}
           formDirectoryHandle={formDirectoryHandle}
@@ -512,15 +707,19 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
         />
         {(() => {
           const descriptor = getDescriptor(control.type)
-          return descriptor ? (
-            <descriptor.PropsEditor
-              control={control}
-              onUpdate={update}
-              selectCloseKey={selectCloseKey}
-              onSelectClose={() => setSelectCloseKey((k) => k + 1)}
-              panelContext={{ formDirectoryHandle }}
-            />
-          ) : null
+          const PropsEditor = descriptor?.PropsEditor
+          if (!PropsEditor) return null
+          return (
+            <div style={{ ...settingsCardStyle }}>
+              <PropsEditor
+                control={control}
+                onUpdate={update}
+                selectCloseKey={selectCloseKey}
+                onSelectClose={() => setSelectCloseKey((k) => k + 1)}
+                panelContext={{ formDirectoryHandle }}
+              />
+            </div>
+          )
         })()}
         <FieldBindingEditor
           control={control}
@@ -529,31 +728,33 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
           onSelectClose={() => setSelectCloseKey((k) => k + 1)}
         />
         {control.type !== 'input' && CONTROL_EVENTS[control.type]?.length > 0 && (
-          <HandlersEditor
-            title="Обработчики событий"
-            events={CONTROL_EVENTS[control.type]}
-            handlers={
-              Object.fromEntries(
-                Object.entries(
-                  (control as FormControlBase).handlers ?? {},
-                ).filter((e): e is [string, string] => typeof e[1] === 'string'),
-              ) as Record<string, string>
-            }
-            onChange={(h) => {
-              const prev: ControlHandlersMap = {
-                ...((control as FormControlBase).handlers ?? {}),
+          <div style={{ ...settingsCardStyle }}>
+            <HandlersEditor
+              title="Обработчики событий"
+              events={CONTROL_EVENTS[control.type]}
+              handlers={
+                Object.fromEntries(
+                  Object.entries(
+                    (control as FormControlBase).handlers ?? {},
+                  ).filter((e): e is [string, string] => typeof e[1] === 'string'),
+                ) as Record<string, string>
               }
-              for (const [k, v] of Object.entries(h)) {
-                if (v) prev[k] = v
-                else delete prev[k]
-              }
-              update({
-                handlers:
-                  Object.keys(prev).length > 0 ? prev : undefined,
-              } as Partial<FormControl>)
-            }}
-            directoryHandle={formDirectoryHandle}
-          />
+              onChange={(h) => {
+                const prev: ControlHandlersMap = {
+                  ...((control as FormControlBase).handlers ?? {}),
+                }
+                for (const [k, v] of Object.entries(h)) {
+                  if (v) prev[k] = v
+                  else delete prev[k]
+                }
+                update({
+                  handlers:
+                    Object.keys(prev).length > 0 ? prev : undefined,
+                } as Partial<FormControl>)
+              }}
+              directoryHandle={formDirectoryHandle}
+            />
+          </div>
         )}
       </div>
     </aside>

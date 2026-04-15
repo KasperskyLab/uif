@@ -43,11 +43,13 @@ import {
   resolveLifecycleHandler,
   resolveControlUseConfig,
   formSliceWithDataBind,
+  evaluateCondition,
   type ButtonControl,
   type CheckboxControl,
   type ExtraUiControl,
   type FormConfigHookLifecycle,
   type FormControl,
+  type FormControlBase,
   type FormSlice,
   type GridControl,
   type InputControl,
@@ -114,6 +116,14 @@ const tableWrapStyle: React.CSSProperties = {
 }
 
 export type { FormSlice } from '@/types/form-dsl'
+
+function controlExpressionDisabled(
+  control: FormControl,
+  state: Record<string, unknown>,
+): boolean {
+  const bc = control as FormControlBase
+  return !!(bc.disabledWhen && evaluateCondition(state, bc.disabledWhen))
+}
 
 function padOrTruncateChildren(
   children: (FormControl | null)[],
@@ -631,12 +641,29 @@ export function FormRenderer({
     instanceKey?: string,
   ): React.ReactNode {
     const k = instanceKey ?? control.id
+    const state = slice.state
+    const bc = control as FormControlBase
+    if (
+      bc.visibleWhen &&
+      !evaluateCondition(state, bc.visibleWhen)
+    ) {
+      return null
+    }
+    const exprDisabled = controlExpressionDisabled(control, state)
     const sliceForHooks = formSliceWithDataBind(slice, control.dataBindPath)
+    const exprBlockStyle: React.CSSProperties | undefined = exprDisabled
+      ? { opacity: 0.55, pointerEvents: 'none' }
+      : undefined
     switch (control.type) {
       case 'button': {
         const c = control as ButtonControl
         return (
-          <div key={k} data-control-id={c.id}>
+          <div
+            key={k}
+            data-control-id={c.id}
+            style={exprBlockStyle}
+            aria-disabled={exprDisabled || undefined}
+          >
             <ButtonRenderer control={c} formSlice={sliceForHooks} />
           </div>
         )
@@ -644,7 +671,12 @@ export function FormRenderer({
       case 'text': {
         const c = control as TextControl
         return (
-          <div key={k} data-control-id={c.id}>
+          <div
+            key={k}
+            data-control-id={c.id}
+            style={exprBlockStyle}
+            aria-disabled={exprDisabled || undefined}
+          >
             <TextRenderer control={c} formSlice={sliceForHooks} />
           </div>
         )
@@ -653,45 +685,60 @@ export function FormRenderer({
         const c = control as InputControl
         const value = String(formState[c.id] ?? '')
         return (
-          <InputRenderer
+          <div
             key={k}
-            control={c}
-            formSlice={sliceForHooks}
-            value={value}
-            updateValue={updateValue}
-          />
+            style={exprBlockStyle}
+            aria-disabled={exprDisabled || undefined}
+          >
+            <InputRenderer
+              control={c}
+              formSlice={sliceForHooks}
+              value={value}
+              updateValue={updateValue}
+            />
+          </div>
         )
       }
       case 'grid': {
         const g = control as GridControl
         return (
-          <GridRenderer
-            key={k}
-            control={g}
-            formSlice={slice}
-            renderControl={renderControl}
-          />
+          <div key={k} style={exprBlockStyle} aria-disabled={exprDisabled || undefined}>
+            <GridRenderer
+              control={g}
+              formSlice={slice}
+              renderControl={renderControl}
+            />
+          </div>
         )
       }
       case 'table': {
         const t = control as TableControl
         return (
-          <TableRenderer
-            key={k}
-            control={t}
-            formSlice={slice}
-            renderControl={renderControl}
-          />
+          <div key={k} style={exprBlockStyle} aria-disabled={exprDisabled || undefined}>
+            <TableRenderer
+              control={t}
+              formSlice={slice}
+              renderControl={renderControl}
+            />
+          </div>
         )
       }
       case 'checkbox': {
         const c = control as CheckboxControl
         const checked = (formState[c.id] as boolean | undefined) ?? c.checked ?? false
         return (
-          <div key={k} data-control-id={c.id} style={formRowStyle}>
+          <div
+            key={k}
+            data-control-id={c.id}
+            style={{
+              ...formRowStyle,
+              ...(exprDisabled ? { opacity: 0.55, pointerEvents: 'none' } : {}),
+            }}
+            aria-disabled={exprDisabled || undefined}
+          >
             <Checkbox
               checked={checked}
-              disabled={c.disabled}
+              disabled={c.disabled || exprDisabled}
               readonly={c.readonly}
               onChange={(e) => {
                 // Antd CheckboxChangeEvent: e.target.checked
@@ -707,11 +754,19 @@ export function FormRenderer({
         const c = control as RadioControl
         const value = (formState[c.id] as string | undefined) ?? c.value ?? ''
         return (
-          <div key={k} data-control-id={c.id} style={formRowStyle}>
+          <div
+            key={k}
+            data-control-id={c.id}
+            style={{
+              ...formRowStyle,
+              ...(exprDisabled ? { opacity: 0.55, pointerEvents: 'none' } : {}),
+            }}
+            aria-disabled={exprDisabled || undefined}
+          >
             <Radio
               options={c.options?.map((o) => ({ label: o.label, value: o.value })) ?? []}
               value={value}
-              disabled={c.disabled}
+              disabled={c.disabled || exprDisabled}
               readonly={c.readonly}
               vertical={c.vertical}
               onChange={(e) => {
@@ -727,12 +782,20 @@ export function FormRenderer({
         // Hexa UI Select supports both single and multiple values (string | string[])
         const value = (formState[c.id] as string | string[] | undefined) ?? c.value ?? undefined
         return (
-          <div key={k} data-control-id={c.id} style={formRowStyle}>
+          <div
+            key={k}
+            data-control-id={c.id}
+            style={{
+              ...formRowStyle,
+              ...(exprDisabled ? { opacity: 0.55, pointerEvents: 'none' } : {}),
+            }}
+            aria-disabled={exprDisabled || undefined}
+          >
             <Select
               options={c.options ?? []}
               value={value}
               placeholder={c.placeholder ?? 'Выберите...'}
-              disabled={c.disabled}
+              disabled={c.disabled || exprDisabled}
               readOnly={c.readOnly}
               mode={c.mode}
               allowClear={c.allowClear}
@@ -749,11 +812,19 @@ export function FormRenderer({
         const c = control as ToggleControl
         const checked = (formState[c.id] as boolean | undefined) ?? c.checked ?? false
         return (
-          <div key={k} data-control-id={c.id} style={formRowStyle}>
+          <div
+            key={k}
+            data-control-id={c.id}
+            style={{
+              ...formRowStyle,
+              ...(exprDisabled ? { opacity: 0.55, pointerEvents: 'none' } : {}),
+            }}
+            aria-disabled={exprDisabled || undefined}
+          >
             <Toggle
               text={c.text ?? 'Переключатель'}
               checked={checked}
-              disabled={c.disabled}
+              disabled={c.disabled || exprDisabled}
               readonly={c.readonly}
               labelPosition={c.labelPosition ?? 'after'}
               onChange={(checkedValue: boolean) => {
@@ -784,7 +855,15 @@ export function FormRenderer({
           builtProps.spinning = true
         }
         return (
-          <div key={k} data-control-id={m.id} style={formRowStyle}>
+          <div
+            key={k}
+            data-control-id={m.id}
+            style={{
+              ...formRowStyle,
+              ...(exprDisabled ? { opacity: 0.55, pointerEvents: 'none' } : {}),
+            }}
+            aria-disabled={exprDisabled || undefined}
+          >
             <Comp {...builtProps} disabled={m.props?.disabled === 'true' || undefined} />
           </div>
         )
@@ -814,7 +893,15 @@ export function FormRenderer({
           builtProps.spinning = true
         }
         return (
-          <div key={k} data-control-id={u.id} style={formRowStyle}>
+          <div
+            key={k}
+            data-control-id={u.id}
+            style={{
+              ...formRowStyle,
+              ...(exprDisabled ? { opacity: 0.55, pointerEvents: 'none' } : {}),
+            }}
+            aria-disabled={exprDisabled || undefined}
+          >
             <Comp {...builtProps} disabled={u.props?.disabled === 'true' || undefined} />
           </div>
         )

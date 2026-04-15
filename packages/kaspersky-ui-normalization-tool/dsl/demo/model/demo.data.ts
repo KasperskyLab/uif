@@ -1,16 +1,24 @@
 import type { FormSlice } from '@normalization/form-dsl'
 import type { DemoFormControlIds } from '../demo.config-hook'
+import type { DemoFormModelState } from './demo.contract'
 
 const DEMO_GRID_INPUT_ID =
   'demo.grid.input' satisfies DemoFormControlIds
 const DEMO_FAKE_LOAD_MS = 450
 
-async function loadFakeDemoFormState(): Promise<Record<string, unknown>> {
+async function loadFakeDemoFormState(): Promise<
+  DemoFormModelState & Record<string, unknown>
+> {
   await new Promise((r) => setTimeout(r, DEMO_FAKE_LOAD_MS))
-  return {
-    [DEMO_GRID_INPUT_ID]: 'Текст с фейкового API (onFormInit)',
+  const modelSlice: DemoFormModelState = {
     model: { headline: 'Заголовок модели (onFormInit)' },
     items: [{ caption: 'Пункт списка (items.0)' }],
+    isButtonVisible: true,
+    isButtonDisabled: false,
+  }
+  return {
+    [DEMO_GRID_INPUT_ID]: 'Текст с фейкового API (onFormInit)',
+    ...modelSlice,
   }
 }
 
