@@ -14,7 +14,7 @@
 
 - **`dsl.root.fields`:** корень содержит **`id`** формы.
 - **`dsl.root.schema`:** опционально — описание полей данных формы в модуле/JSON; **в normalization-tool не редактируется** (нет смысла в UI: превью и **`FormRenderer`** на это поле не опираются).
-- **`dsl.root.handlers`:** опционально — события уровня формы → пути к файлам-скриптам; **в normalization-tool не настраиваются** (**`FormRenderer`** их не вызывает; при необходимости — в коде модуля / JSON).
+- **`dsl.root.handlers`:** опционально — жизненный цикл формы (**`onFormInit`**, **`onFormSubmit`**) и др.; значения — путь к **`.ts`**, ленивый **`import()`**, либо функция после нормализации. Семантика и резолв — [feat-schema-handlers](./feat-schema-handlers.md). Редактор вызывает lifecycle при загрузке хуков (**`FormEditorConfigHookProvider`**).
 - **`dsl.root.elements`:** дерево контролов: семантический **`type`**, **`id`**, привязки к данным, валидация, условия видимости/доступности, обработчики на контроле.
 - **`dsl.mapping.semantics-to-hexa`:** маппинг «семантика контрола → компонент ДС» живёт в **реестрах / рендерерах** приложений, не как отдельный дублирующий метатип в DSL.
 
@@ -24,3 +24,4 @@
 
 - Типы: `shared/types/form.ts`
 - Логика контролов: `shared/normalization-form-dsl/form-dsl-core.ts`, entry `form-dsl.ts`
+- **`handlers` / `useConfig`:** [feat-schema-handlers](./feat-schema-handlers.md)

@@ -8,6 +8,8 @@
 
 В динамическом режиме пропсы экземпляра компонента ДС задаёт логика **`configHook`**. Для **нормализованной** формы модуль **один на всю форму** — см. [feat-form-config-hook-unified](./feat-form-config-hook-unified.md): default export возвращает объект **`control.id` → хук контрола**. Колбэки (`onClick`, `onChange`, …) объявляются **внутри** объекта пропсов, который возвращает функция для конкретного контрола.
 
+**Исполнение в tool / viewer:** вместо фабричного реестра **`configHook`** на корне формы используется **`handlers.useConfig`** на каждом узле; сигнатура хука на контрол **та же** (**`FormSlice` → пропсы ДС \| `null`**). Форма и загрузка модулей — [feat-schema-handlers](./feat-schema-handlers.md).
+
 ---
 
 ## Требования
@@ -38,4 +40,4 @@
 ## Ссылки
 
 - Пример стиля: `packages/kaspersky-ui-normalization-tool/dsl/demo/demo.config-hook.ts`
-- Код: `loadConfigHookDefaultExport` в tool и viewer
+- Код: `loadConfigHookDefaultExport` в tool и viewer (legacy); резолв **`useConfig`** — **`lifecycle-resolve.ts`**, см. [feat-schema-handlers](./feat-schema-handlers.md)

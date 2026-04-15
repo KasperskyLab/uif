@@ -16,6 +16,7 @@
 - **`runtime.chunk.exports`:** чанк предоставляет **`parseFormTs`**, **`formToTs`**, **`formToJsonString`**, **`transpileConfigHookSource`**, **`isConfigHookPathTs`**.
 - **`runtime.parse.split`:** **`parseFormTs`** в **`parse-form-ts.ts`**; **`form-dsl-core.ts`** не импортирует Sucrase.
 - **`runtime.serialize.dynamic-imports`:** **`formToTs`** записывает **`configHook`** и **`handlers`** как **`() => import('./относительный-путь')`** для ленивой подгрузки при исполнении модуля формы из blob.
+- **`runtime.parse.rewrite-relative-imports`:** **`parseFormTs`** (**`parse-form-ts.ts`**) заменяет статические **`import … from './…'`** в тексте схемы на ленивые **`const name = () => import('./….ts')`**, чтобы модуль после Sucrase грузился из **blob** без bare specifier. Динамический **`import()`** от **blob** к соседнему файлу обычно не работает; резолв **`handlers`** (**`resolveControlUseConfig`**, **`resolveLifecycleHandler`**) при наличии каталога формы (FSA) повторно подгружает **`.ts`** через **`loadTsModule`** — см. [feat-schema-handlers](./feat-schema-handlers.md).
 - **`runtime.call-sites`:** tool — **`useFormFile`**, **`CodeExportDialog`**, **`loadConfigHookModule`**; viewer — **`useFormLoader`**, **`loadConfigHookModule`**.
 - **`runtime.public-api`:** типы и операции дерева без парсинга — из **`@normalization/form-dsl`**; **`parseFormTs`** для скриптов/тестов — прямой импорт **`parse-form-ts.ts`**.
 
@@ -30,3 +31,4 @@
 ## Ссылки
 
 - [plan-dsl-typing.md](../plans/plan-dsl-typing.md) (требования эпика п.2)
+- [feat-schema-handlers.md](./feat-schema-handlers.md) — **`handlers`**, **`useConfig`**, fallback **`loadTsModule`**

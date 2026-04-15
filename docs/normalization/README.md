@@ -49,6 +49,7 @@ flowchart TB
 | Два приложения, паритет, границы продукта | [feat-product-and-parity.md](./features/feat-product-and-parity.md) |
 | `FormData`, дерево контролов | [feat-dsl-root-model.md](./features/feat-dsl-root-model.md) |
 | `configHook` | [feat-config-hook.md](./features/feat-config-hook.md) |
+| `handlers`, `useConfig`, хуки по узлам | [feat-schema-handlers.md](./features/feat-schema-handlers.md) |
 | Sucrase, чанки, `loadFormDslBrowserRuntime` | [feat-lazy-dsl-runtime.md](./features/feat-lazy-dsl-runtime.md) |
 | FSA, IndexedDB, `?form=` | [feat-workspace-browser.md](./features/feat-workspace-browser.md) |
 | Button / Text / Grid / Table / DSL п.2 | [plans/](./plans/) |

@@ -4,6 +4,8 @@
 
 **Родитель:** DSL и исполнение, превью. Зависит от [feat-config-hook](./feat-config-hook.md), [feat-lazy-dsl-runtime](./feat-lazy-dsl-runtime.md), [feat-dsl-root-model](./feat-dsl-root-model.md). План: [plan-form-config-hook-341](../plans/plan-form-config-hook-341.md).
 
+**Исполнение в коде сегодня:** tool / viewer поднимают Hexa-пропсы через **`handlers.useConfig`** и **`useConfigs[id]`** (или именованные хуки), а не через default export **`configHook`** на корне; см. [feat-schema-handlers](./feat-schema-handlers.md). Этот файл сохраняет контракт эпика **3.4.1** и структуру каталога **`dsl/{id}/`**.
+
 ---
 
 ## Цель
