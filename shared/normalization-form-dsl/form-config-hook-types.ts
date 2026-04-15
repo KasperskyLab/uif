@@ -126,6 +126,7 @@ export type FormSchemaDefinition<Elements extends readonly unknown[]> = Pick<
   'id'
 > & {
   schema?: FormData['schema']
+  modelContract?: FormData['modelContract']
   handlers?: Record<
     string,
     string | (() => Promise<unknown>) | FormConfigHookLifecycleFn

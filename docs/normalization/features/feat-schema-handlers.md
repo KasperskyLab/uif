@@ -19,6 +19,11 @@
   импорты** из модуля хуков: **`import { useDemoGrid } from './demo.config-hook'`**
   и **`handlers: { useConfig: useDemoGrid }`**.
 
+- **Привязка к модели:** если у узла задан **`dataBindPath`**, перед вызовом
+  **`useConfig`** в **`FormSlice`** выставляется **`dataBind`** (путь и значение
+  из **`state`**). Контракт путей — **`FormData.modelContract`**. Подробно:
+  [feat-form-model-binding](./feat-form-model-binding.md).
+
 ---
 
 ## Парсинг **`.schema.ts`** (`parseFormTs`)
@@ -70,7 +75,7 @@
 | Сбор **`useConfig`** | `form-dsl-core.ts` (**`collectControlsWithUseConfig`**) |
 | Редактор | `FormEditorConfigHookContext.tsx` |
 | **`loadTsModule`** | `loadConfigHookModule.ts` (tool / viewer) |
-| Пример | `dsl/demo/demo.schema.ts`, **`demo.config-hook.ts`**, **`demo.data.ts`** |
+| Пример | `dsl/demo/demo.schema.ts`, **`demo.config-hook.ts`**, **`model/demo.data.ts`**, **`model/demo.contract.ts`** |
 
 ---
 
@@ -84,3 +89,4 @@
 
 - [tooling.md](../tooling.md)
 - [feat-config-hook.md](./feat-config-hook.md) — **`FormSlice`**, **`null`**.
+- [feat-form-model-binding.md](./feat-form-model-binding.md) — **`modelContract`**, **`dataBind`**.

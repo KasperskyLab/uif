@@ -1,5 +1,5 @@
 import { defineFormSchema } from '@normalization/form-dsl'
-import { onFormInit, onFormSubmit } from './demo.data'
+import { onFormInit, onFormSubmit } from './model/demo.data'
 import {
   useDemoButton,
   useDemoGrid,
@@ -11,6 +11,7 @@ import {
 
 export default defineFormSchema({
   id: 'demo',
+  modelContract: './model/demo.contract.ts',
   handlers: {
     onFormInit,
     onFormSubmit,
@@ -24,6 +25,7 @@ export default defineFormSchema({
         {
           type: 'text',
           id: 'demo.grid.text',
+          dataBindPath: 'model.headline',
           handlers: { useConfig: useDemoText },
         },
         {

@@ -51,10 +51,15 @@ export function useDemoText(formSlice: FormSlice): TextProps | null {
   const rowPart = rowLabel
     ? `Строка таблицы (dataSource): ${rowLabel}. `
     : ''
+  const bind = formSlice.dataBind
+  const bindPart =
+    bind && bind.path
+      ? `dataBind [${bind.path}]: ${JSON.stringify(bind.value)}. `
+      : ''
   return {
     type: 'BTR3',
     color: 'primary',
-    children: `${rowPart}Текст из config-hook. State: ${preview}`,
+    children: `${rowPart}${bindPart}Текст из config-hook. State: ${preview}`,
   }
 }
 

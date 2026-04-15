@@ -17,6 +17,7 @@
 │   ├── [Принцип «одна настройка — один способ»](./feat-dsl-one-setting.md)
 │   ├── [Контракт configHook](./feat-config-hook.md)
 │   ├── [handlers формы и useConfig (отдельные хуки)](./feat-schema-handlers.md)
+│   ├── [Привязка к модели (modelContract, dataBindPath)](./feat-form-model-binding.md)
 │   ├── [Ленивый рантайм: parseFormTs, Sucrase, чанки](./feat-lazy-dsl-runtime.md)
 │   └── [Типизация автором и импорты потребителя](./feat-typing-and-imports.md)
 │

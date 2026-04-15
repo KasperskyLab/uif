@@ -1,7 +1,17 @@
 import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react'
 import { Button, Space, Text, Grid, GridItem, Tabs, Table } from '@kaspersky/hexa-ui'
 import { Delete, ArrowsVertical } from '@kaspersky/hexa-ui-icons/16'
-import type { FormControl, FormControlBase, FormControlType, FormSlice, GridControl, TableControl, TabsControl, RowControl } from '../types/form-dsl'
+import {
+  formSliceWithDataBind,
+  type FormControl,
+  type FormControlBase,
+  type FormControlType,
+  type FormSlice,
+  type GridControl,
+  type TableControl,
+  type TabsControl,
+  type RowControl,
+} from '../types/form-dsl'
 import { setGridChildrenInTree, setRowChildrenInTree, setTableChildrenInTree, setTabsChildrenInTree } from '../types/form-dsl'
 import type { GridProps, ITableProps } from '@kaspersky/hexa-ui'
 import {
@@ -214,7 +224,7 @@ function GridControlBlock({
     )
   }
 
-  const partial = hookFn(formSlice)
+  const partial = hookFn(formSliceWithDataBind(formSlice, g.dataBindPath))
   if (partial === null) return null
 
   const { children: _hookCh, ...hookRest } = partial
@@ -625,7 +635,9 @@ function TableControlBlock({
     )
   }
 
-  const partial = hookFn(formSlice) as Partial<ITableProps> | null
+  const partial = hookFn(
+    formSliceWithDataBind(formSlice, t.dataBindPath),
+  ) as Partial<ITableProps> | null
   if (partial === null) return null
 
   const {

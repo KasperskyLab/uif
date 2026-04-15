@@ -41,7 +41,7 @@ describe('loadFormDslBrowserRuntime', () => {
     await expect(
       m.parseFormTs(`
 import { defineFormSchema } from '@normalization/form-dsl'
-import { onFormInit } from './demo.data.ts'
+import { onFormInit } from './model/demo.data.ts'
 export default defineFormSchema({
   id: 'demo',
   handlers: { onFormInit },

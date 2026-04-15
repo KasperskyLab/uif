@@ -12,9 +12,9 @@ describe('lifecycle-resolve', () => {
     const fn = () => undefined
     Object.defineProperty(fn, 'length', { value: 0 })
     Object.defineProperty(fn, 'toString', {
-      value: () => "() => import('./demo.data.ts')",
+      value: () => "() => import('./model/demo.data.ts')",
     })
-    expect(resolveTsModulePathFromValue(fn)).toBe('./demo.data.ts')
+    expect(resolveTsModulePathFromValue(fn)).toBe('./model/demo.data.ts')
     expect(isLazyDynamicImportFn(fn)).toBe(true)
   })
 
@@ -77,12 +77,12 @@ describe('lifecycle-resolve', () => {
     }
     Object.defineProperty(lazy, 'length', { value: 0 })
     Object.defineProperty(lazy, 'toString', {
-      value: () => "() => import('./demo.data.ts')",
+      value: () => "() => import('./model/demo.data.ts')",
     })
     const loadTs = vi.fn().mockResolvedValue({ onFormInit })
     const dir = {} as FileSystemDirectoryHandle
     const out = await resolveLifecycleHandler(lazy, 'onFormInit', dir, loadTs)
-    expect(loadTs).toHaveBeenCalledWith(dir, './demo.data.ts')
+    expect(loadTs).toHaveBeenCalledWith(dir, './model/demo.data.ts')
     expect(out).toBe(onFormInit)
   })
 

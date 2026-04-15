@@ -135,6 +135,11 @@ export type ControlHandlersMap = Record<
 export interface FormControlIdentity {
   id: string
   handlers?: ControlHandlersMap
+  /**
+   * Путь к данным в нотации точек (`user.email`, **`items.0.title`**); без
+   * привязки поле не задают.
+   */
+  dataBindPath?: string
 }
 
 export interface FormControlBase extends FormControlIdentity {
@@ -333,6 +338,9 @@ export type FormControl =
   | IconControl
   | MetaComponentControl
 
+/** Значение привязки контрола к данным (см. **`dataBindPath`**) в **`FormSlice`**. */
+export type FormSliceDataBind = { path: string; value: unknown } | null
+
 /** Аргумент configHook (П.2): стейт формы и дерево контролов. */
 export interface FormSlice {
   state: Record<string, unknown>
@@ -349,6 +357,49 @@ export interface FormSlice {
   tableRow?: Record<string, unknown>
   /** Индекс строки в **`dataSource`** таблицы (0-based). */
   tableRowIndex?: number
+  /**
+   * Перед вызовом **`useConfig`** для контрола: путь из **`dataBindPath`** и
+   * значение из **`getValueAtPath(state, path)`**; без биндинга — **`null`**.
+   */
+  dataBind?: FormSliceDataBind
+}
+
+/**
+ * Читает значение по пути с сегментами **`a.b.c`**; числовые сегменты —
+ * индексы массива.
+ */
+export function getValueAtPath(root: unknown, path: string): unknown {
+  const trimmed = path.trim()
+  if (!trimmed) return undefined
+  const segments = trimmed.split('.').filter((s) => s.length > 0)
+  let cur: unknown = root
+  for (const seg of segments) {
+    if (cur === null || cur === undefined) return undefined
+    if (typeof cur !== 'object') return undefined
+    if (Array.isArray(cur)) {
+      if (!/^\d+$/.test(seg)) return undefined
+      const i = Number(seg)
+      if (i < 0 || i >= cur.length) return undefined
+      cur = cur[i]
+      continue
+    }
+    if (!Object.prototype.hasOwnProperty.call(cur, seg)) return undefined
+    cur = (cur as Record<string, unknown>)[seg]
+  }
+  return cur
+}
+
+/** Дополняет слайс полем **`dataBind`** для вызова хука данного контрола. */
+export function formSliceWithDataBind(
+  slice: FormSlice,
+  dataBindPath: string | undefined,
+): FormSlice {
+  const p = dataBindPath?.trim()
+  if (!p) return { ...slice, dataBind: null }
+  return {
+    ...slice,
+    dataBind: { path: p, value: getValueAtPath(slice.state, p) },
+  }
 }
 
 /** Начальный `state` по дереву контролов (интерактивные поля). */
@@ -490,6 +541,10 @@ function normalizeControl(item: unknown): FormControl | null {
   }
   const visibleWhen = parseCondition(o.visibleWhen)
   const disabledWhen = parseCondition(o.disabledWhen)
+  const dataBindPath =
+    typeof o.dataBindPath === 'string' && o.dataBindPath.trim()
+      ? o.dataBindPath.trim()
+      : undefined
   const handlers: ControlHandlersMap = {}
   if (o.handlers && typeof o.handlers === 'object' && !Array.isArray(o.handlers)) {
     for (const [key, val] of Object.entries(o.handlers as Record<string, unknown>)) {
@@ -516,6 +571,7 @@ function normalizeControl(item: unknown): FormControl | null {
     if (validation && validation.length > 0) c.validation = validation
     if (visibleWhen) c.visibleWhen = visibleWhen
     if (disabledWhen) c.disabledWhen = disabledWhen
+    if (dataBindPath) c.dataBindPath = dataBindPath
     if (Object.keys(handlers).length > 0) c.handlers = handlers
     return c
   }
@@ -525,6 +581,7 @@ function normalizeControl(item: unknown): FormControl | null {
   if (kind === 'button' || type === 'button') {
     const b: ButtonControl = { type: 'button', id }
     if (Object.keys(handlers).length > 0) b.handlers = handlers
+    if (dataBindPath) b.dataBindPath = dataBindPath
     return b
   }
   if (type === 'text') {
@@ -678,6 +735,8 @@ function normalizeControl(item: unknown): FormControl | null {
     if (typeof o.leftLimit === 'number') c.leftLimit = o.leftLimit
     if (typeof o.sticky === 'number') c.sticky = o.sticky
     if (typeof o.autoDropdown === 'boolean') c.autoDropdown = o.autoDropdown
+    if (dataBindPath) c.dataBindPath = dataBindPath
+    if (Object.keys(handlers).length > 0) c.handlers = handlers
     return c
   }
   if (type === 'icon') {
@@ -710,11 +769,13 @@ export function controlToJson(c: FormControl): Record<string, unknown> {
     if (b.handlers && Object.keys(b.handlers).length > 0) {
       o.handlers = serialize_handlers_for_json(b.handlers)
     }
+    if (b.dataBindPath) o.dataBindPath = b.dataBindPath
     return o
   }
   const bc = c as FormControlBase
   const base: Record<string, unknown> = { type: c.type, id: c.id }
   if (bc.fieldName) base.fieldName = bc.fieldName
+  if (bc.dataBindPath) base.dataBindPath = bc.dataBindPath
   if (bc.defaultValue !== undefined) base.defaultValue = bc.defaultValue
   if (bc.dataType) base.dataType = bc.dataType
   if (bc.validation && bc.validation.length > 0) base.validation = bc.validation
@@ -829,6 +890,7 @@ export function normalizeFormData(data: unknown): FormData {
     const obj = data as {
       id?: unknown
       schema?: unknown
+      modelContract?: unknown
       handlers?: unknown
       elements: unknown[]
     }
@@ -863,6 +925,15 @@ export function normalizeFormData(data: unknown): FormData {
       }
       if (Object.keys(formHandlers).length > 0) result.handlers = formHandlers
     }
+    if (obj.modelContract != null) {
+      if (typeof obj.modelContract === 'string' && obj.modelContract) {
+        result.modelContract = obj.modelContract
+      } else if (typeof obj.modelContract === 'function') {
+        result.modelContract = obj.modelContract as NonNullable<
+          FormData['modelContract']
+        >
+      }
+    }
     return result
   }
   return emptyFormData()
@@ -886,6 +957,14 @@ export function formToJson(form: FormData): Record<string, unknown> {
       }
     }
     if (Object.keys(serialized).length > 0) result.handlers = serialized
+  }
+  if (form.modelContract != null) {
+    if (typeof form.modelContract === 'string' && form.modelContract) {
+      result.modelContract = form.modelContract
+    } else if (typeof form.modelContract === 'function') {
+      const p = getImportPathFromHandler(form.modelContract as () => Promise<unknown>)
+      if (p) result.modelContract = p
+    }
   }
   result.elements = form.elements.map(controlToJson)
   return result
@@ -926,8 +1005,23 @@ export function formToTs(form: FormData): string {
       handlersSource = `\n  handlers: ${formatJsValue(converted, '  ')},`
     }
   }
+  let modelContractSource = ''
+  const mc = form.modelContract
+  if (mc != null) {
+    if (typeof mc === 'string' && mc) {
+      const pathEsc = mc.replace(/\\/g, '/').replace(/^\.\//, '')
+      modelContractSource = `\n  modelContract: ${JSON.stringify('./' + pathEsc)},`
+    } else if (typeof mc === 'function') {
+      const p = getImportPathFromHandler(mc as () => Promise<unknown>)
+      if (p) {
+        const pathEsc = p.replace(/\\/g, '/')
+        modelContractSource =
+          `\n  modelContract: () => import(${JSON.stringify('./' + pathEsc)}),`
+      }
+    }
+  }
   return `export default {
-  id: ${idEsc},${schemaSource}${handlersSource}
+  id: ${idEsc},${schemaSource}${handlersSource}${modelContractSource}
   elements: [
 ${elementsSource}
   ]

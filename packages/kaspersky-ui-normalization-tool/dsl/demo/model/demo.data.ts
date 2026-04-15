@@ -1,5 +1,5 @@
 import type { FormSlice } from '@normalization/form-dsl'
-import type { DemoFormControlIds } from './demo.config-hook'
+import type { DemoFormControlIds } from '../demo.config-hook'
 
 const DEMO_GRID_INPUT_ID =
   'demo.grid.input' satisfies DemoFormControlIds
@@ -9,15 +9,17 @@ async function loadFakeDemoFormState(): Promise<Record<string, unknown>> {
   await new Promise((r) => setTimeout(r, DEMO_FAKE_LOAD_MS))
   return {
     [DEMO_GRID_INPUT_ID]: 'Текст с фейкового API (onFormInit)',
+    model: { headline: 'Заголовок модели (onFormInit)' },
+    items: [{ caption: 'Пункт списка (items.0)' }],
   }
 }
 
 export async function onFormInit(slice: FormSlice): Promise<void> {
   const fake = await loadFakeDemoFormState()
   slice.mergeState?.(fake)
-  console.log('[demo.data] onFormInit: подставлены фейковые данные', fake)
+  console.log('[model/demo.data] onFormInit: подставлены фейковые данные', fake)
 }
 
 export async function onFormSubmit(slice: FormSlice): Promise<void> {
-  console.log('[demo.data] onFormSubmit: state формы', slice.state)
+  console.log('[model/demo.data] onFormSubmit: state формы', slice.state)
 }

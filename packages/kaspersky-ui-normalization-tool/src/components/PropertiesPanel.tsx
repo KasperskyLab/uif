@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Space, Text, H6, Textbox, Select, Checkbox as HexaCheckbox, Button } from '@kaspersky/hexa-ui'
-import { Add, Delete } from '@kaspersky/hexa-ui-icons/16'
+import { Add, Cross, Delete, Folder } from '@kaspersky/hexa-ui-icons/16'
 import { SelectWithOptionWidth } from './SelectWithOptionWidth'
 import type {
   ControlHandlersMap,
@@ -11,10 +11,15 @@ import type {
   ValidationRuleType,
   Condition,
 } from '../types/form-dsl'
-import { EXTRA_UI_DSL_TYPES } from '../types/form-dsl'
-import { CONTROL_EVENTS } from '../types/form-dsl'
+import {
+  CONTROL_EVENTS,
+  EXTRA_UI_DSL_TYPES,
+  resolveTsModulePathFromValue,
+} from '../types/form-dsl'
+import { loadTsModule } from '../utils/loadConfigHookModule'
 import { getDescriptor } from '../controls/registry'
 import { HandlersEditor } from './HandlersEditor'
+import { HandlerFilePicker } from './HandlerFilePicker'
 import { ControlIdPropsEditor } from './ControlIdPropsEditor'
 
 /** Поля ввода и прочие контролы с привязкой данных; `button`/`text`/`grid`/`table` — только id */
@@ -30,6 +35,122 @@ const DATA_TYPE_OPTIONS = [
 function isInputControl(control: FormControl): boolean {
   if (INPUT_CONTROL_TYPES.includes(control.type)) return true
   return false
+}
+
+function DataBindPathSection({
+  control,
+  formData,
+  formDirectoryHandle,
+  onUpdate,
+  selectCloseKey,
+  onSelectClose,
+}: {
+  control: FormControl
+  formData: FormData | null
+  formDirectoryHandle?: FileSystemDirectoryHandle | null
+  onUpdate: (patch: Partial<FormControl>) => void
+  selectCloseKey: number
+  onSelectClose: () => void
+}) {
+  const [modelPaths, setModelPaths] = useState<string[]>([])
+  const [contractHint, setContractHint] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!formDirectoryHandle || !formData?.modelContract) {
+      setModelPaths([])
+      setContractHint(null)
+      return
+    }
+    const raw = formData.modelContract
+    if (typeof raw !== 'string') {
+      setModelPaths([])
+      setContractHint(null)
+      return
+    }
+    const resolved = resolveTsModulePathFromValue(raw)
+    if (!resolved) {
+      setModelPaths([])
+      setContractHint('Укажите путь к модулю *.contract.ts')
+      return
+    }
+    const loadPath = resolved.replace(/^\.\//, '')
+    let cancelled = false
+    void (async () => {
+      try {
+        const mod = await loadTsModule(formDirectoryHandle, loadPath)
+        if (cancelled) return
+        if (!mod) {
+          setModelPaths([])
+          setContractHint('Не удалось загрузить контракт')
+          return
+        }
+        const mp = mod.MODEL_PATHS
+        const list = Array.isArray(mp)
+          ? mp.map((x) => String(x)).filter(Boolean)
+          : []
+        setModelPaths(list)
+        setContractHint(list.length === 0 ? 'В модуле нет MODEL_PATHS[]' : null)
+      } catch {
+        if (!cancelled) {
+          setModelPaths([])
+          setContractHint('Ошибка загрузки контракта')
+        }
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [formData?.modelContract, formDirectoryHandle])
+
+  const path = control.dataBindPath ?? ''
+  const pathInContract = Boolean(path && modelPaths.includes(path))
+  const pathOrphan = Boolean(path && modelPaths.length > 0 && !pathInContract)
+
+  const selectOptions = [
+    { value: '', label: '(нет привязки)' },
+    ...modelPaths.map((p) => ({ value: p, label: p })),
+  ]
+
+  return (
+    <div style={{
+      width: '100%',
+      borderTop: '1px solid var(--tagsoutlined--neutral-border, #E7E7E9)',
+      paddingTop: 16,
+    }}>
+      <Text type="BTR3" style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>
+        Привязка к модели (dataBindPath)
+      </Text>
+      {contractHint && (
+        <Text type="BTR3" style={{ display: 'block', marginBottom: 8, color: '#999', fontSize: 11 }}>
+          {contractHint}
+        </Text>
+      )}
+      <Space size={8} direction="vertical" style={{ width: '100%' }}>
+        <div>
+          <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
+            Путь из контракта (MODEL_PATHS)
+          </Text>
+          <SelectWithOptionWidth options={selectOptions}>
+            <Select
+              key={`dbind-${selectCloseKey}`}
+              options={selectOptions}
+              value={pathInContract ? path : ''}
+              onChange={(v: string | undefined) => {
+                onUpdate({ dataBindPath: v || undefined } as Partial<FormControl>)
+                onSelectClose()
+              }}
+              getPopupContainer={() => document.body}
+            />
+          </SelectWithOptionWidth>
+        </div>
+        {pathOrphan && (
+          <Text type="BTR3" style={{ color: 'var(--warning--main, #d48806)', fontSize: 11 }}>
+            В схеме указан путь «{path}», которого нет в текущем контракте — выберите значение из списка
+          </Text>
+        )}
+      </Space>
+    </div>
+  )
 }
 
 function FieldBindingEditor({
@@ -297,8 +418,11 @@ export interface PropertiesPanelProps {
 export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, formDirectoryHandle }: PropertiesPanelProps) {
   /** Смена key после выбора пересоздаёт Select и закрывает выпадающий список */
   const [selectCloseKey, setSelectCloseKey] = useState(0)
+  const [modelContractPickerOpen, setModelContractPickerOpen] = useState(false)
 
   if (!control) {
+    const modelContractStr =
+      typeof formData?.modelContract === 'string' ? formData.modelContract : ''
     return (
       <aside className="properties-panel editor-sidebar editor-sidebar--right" style={panelStyle}>
         <H6 style={{ margin: 0, textAlign: 'left' }}>Свойства</H6>
@@ -311,6 +435,55 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
                 onChange={(v) => onFormUpdate({ id: v })}
                 placeholder="id формы"
               />
+            </div>
+            <div style={{ width: '100%' }}>
+              <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
+                Контракт модели (modelContract)
+              </Text>
+              <Text type="BTR3" style={{ display: 'block', marginBottom: 6, color: '#666', fontSize: 11 }}>
+                Файл TypeScript с экспортом MODEL_PATHS — выберите из каталога формы
+              </Text>
+              <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+                <Textbox
+                  value={modelContractStr}
+                  readOnly
+                  placeholder="не выбран"
+                  style={{ flex: 1 }}
+                />
+                {modelContractStr && (
+                  <Button
+                    mode="tertiary"
+                    size="small"
+                    iconBefore={<Cross />}
+                    onClick={() => onFormUpdate({ modelContract: undefined })}
+                  />
+                )}
+                {formDirectoryHandle && (
+                  <Button
+                    mode="tertiary"
+                    size="small"
+                    iconBefore={<Folder />}
+                    onClick={() =>
+                      setModelContractPickerOpen((o) => !o)}
+                  />
+                )}
+              </div>
+              {modelContractPickerOpen && formDirectoryHandle && (
+                <HandlerFilePicker
+                  directoryHandle={formDirectoryHandle}
+                  fileExtensions={['.ts']}
+                  onSelect={(path) => {
+                    onFormUpdate({ modelContract: path })
+                    setModelContractPickerOpen(false)
+                  }}
+                  onClose={() => setModelContractPickerOpen(false)}
+                />
+              )}
+              {!formDirectoryHandle && (
+                <Text type="BTR3" style={{ marginTop: 6, color: '#999', fontSize: 11 }}>
+                  Откройте каталог формы в приложении, чтобы выбрать файл
+                </Text>
+              )}
             </div>
           </div>
         ) : (
@@ -329,6 +502,14 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
       <H6 style={{ margin: 0, textAlign: 'left' }}>Свойства</H6>
       <div className="props-section" style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', marginTop: 12 }}>
         <ControlIdPropsEditor id={control.id} onUpdate={update} />
+        <DataBindPathSection
+          control={control}
+          formData={formData ?? null}
+          formDirectoryHandle={formDirectoryHandle}
+          onUpdate={update}
+          selectCloseKey={selectCloseKey}
+          onSelectClose={() => setSelectCloseKey((k) => k + 1)}
+        />
         {(() => {
           const descriptor = getDescriptor(control.type)
           return descriptor ? (

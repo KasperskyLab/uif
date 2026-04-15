@@ -23,5 +23,13 @@ export interface FormData {
     string,
     string | (() => Promise<unknown>) | ((...args: unknown[]) => unknown)
   >
+  /**
+   * Контракт данных формы: модуль **`{formId}.contract.ts`** (строка пути от
+   * каталога формы, ленивый **`import()``** или функция — как у **`handlers`**).
+   */
+  modelContract?:
+    | string
+    | (() => Promise<unknown>)
+    | ((...args: unknown[]) => unknown)
   elements: import('../normalization-form-dsl/form-dsl-core').FormControl[]
 }

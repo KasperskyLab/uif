@@ -18,6 +18,9 @@ import {
   setGridChildrenInTree,
   setTableChildrenInTree,
   setTabsChildrenInTree,
+  normalizeFormData,
+  getValueAtPath,
+  formSliceWithDataBind,
   type FormData,
   type FormControl,
   type TextControl,
@@ -38,9 +41,9 @@ const textControl = (id: string): TextControl => ({
 describe('form-dsl', () => {
   describe('parse-form-ts path helpers', () => {
     it('resolveRelativeImportPath resolves sibling', () => {
-      expect(resolveRelativeImportPath('demo.schema.ts', './demo.data.ts')).toBe(
-        'demo.data.ts',
-      )
+      expect(
+        resolveRelativeImportPath('demo.schema.ts', './model/demo.data.ts'),
+      ).toBe('model/demo.data.ts')
     })
     it('resolveRelativeImportPath resolves nested', () => {
       expect(resolveRelativeImportPath('lib/a.ts', './b.ts')).toBe('lib/b.ts')
@@ -148,7 +151,7 @@ export default s
       async () => {
         const content = `
 import { defineFormSchema } from '@normalization/form-dsl'
-const lazyData = () => import('./demo.data.ts')
+const lazyData = () => import('./model/demo.data.ts')
 const lazyHook = () => import('./demo.config-hook.ts')
 
 export default defineFormSchema({
@@ -185,8 +188,8 @@ export default defineFormSchema({ id: 'x', elements: [] })
 export default {
   id: 'fn-1',
   handlers: {
-    onFormInit: () => import('./demo.data.ts'),
-    onFormSubmit: () => import('./demo.data.ts'),
+    onFormInit: () => import('./model/demo.data.ts'),
+    onFormSubmit: () => import('./model/demo.data.ts'),
   },
   elements: [{ type: 'text', id: 't1', handlers: { useConfig: () => import('./demo.config-hook.ts') } }],
 }
@@ -589,6 +592,50 @@ export default {
       }))
       expect(parsed).not.toBeNull()
       expect(parsed!.registry.k).toBe(hookB)
+    })
+  })
+
+  describe('model binding helpers', () => {
+    it('getValueAtPath reads nested object', () => {
+      expect(getValueAtPath({ a: { b: 2 } }, 'a.b')).toBe(2)
+    })
+    it('getValueAtPath reads array index', () => {
+      expect(getValueAtPath({ items: [{ x: 1 }] }, 'items.0.x')).toBe(1)
+    })
+    it('getValueAtPath returns undefined for missing', () => {
+      expect(getValueAtPath({ a: 1 }, 'a.b')).toBeUndefined()
+    })
+    it('formSliceWithDataBind sets null without path', () => {
+      const slice = { state: { z: 9 }, config: { elements: [] } }
+      const next = formSliceWithDataBind(slice, undefined)
+      expect(next.dataBind).toBeNull()
+    })
+    it('formSliceWithDataBind resolves value from state', () => {
+      const slice = {
+        state: { model: { title: 'Hi' } },
+        config: { elements: [] },
+      }
+      const next = formSliceWithDataBind(slice, 'model.title')
+      expect(next.dataBind).toEqual({ path: 'model.title', value: 'Hi' })
+    })
+  })
+
+  describe('normalizeFormData modelContract and dataBindPath', () => {
+    it('preserves modelContract string', () => {
+      const d = normalizeFormData({
+        id: 'f1',
+        modelContract: './x.contract.ts',
+        elements: [],
+      })
+      expect(d.modelContract).toBe('./x.contract.ts')
+    })
+    it('parses dataBindPath on control', () => {
+      const d = normalizeFormData({
+        id: 'f1',
+        elements: [{ type: 'text', id: 't1', dataBindPath: '  a.b  ' }],
+      })
+      const t = d.elements[0] as TextControl
+      expect(t.dataBindPath).toBe('a.b')
     })
   })
 })

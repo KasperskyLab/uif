@@ -33,11 +33,11 @@
 
 Это осознанное разделение ответственности, а не техническое дробление.
 
-- **`schema`** (**`{formId}.schema.ts`**, корень **`FormData`** и дерево **`elements`**): **что** на форме и **в какой последовательности/иерархии** — типы узлов, **`id`**, вложенность (**`children`**, **`items`** и т.д.), при необходимости поля привязки данных (**`fieldName`**, **`defaultValue`**, условия, **`handlers`**). Такой слой **легче стыковать с внешними системами задания структуры**: макеты в **Figma**, **Pixso** и аналогах, внутренние каталоги макетов, экспорт/импорт из тулов дизайна или из оркестратора экранов. Семантика DSL намеренно **ближе к «каркасу» и порядку**, чем к коду приложения.
+- **`schema`** (**`{formId}.schema.ts`**, корень **`FormData`** и дерево **`elements`**): **что** на форме и **в какой последовательности/иерархии** — типы узлов, **`id`**, вложенность (**`children`**, **`items`** и т.д.), при необходимости поля привязки данных (**`fieldName`**, **`defaultValue`**, условия, **`handlers`**), опционально **`modelContract`** и на узле **`dataBindPath`** (см. **[feat-form-model-binding](./features/feat-form-model-binding.md)**). Такой слой **легче стыковать с внешними системами задания структуры**: макеты в **Figma**, **Pixso** и аналогах, внутренние каталоги макетов, экспорт/импорт из тулов дизайна или из оркестратора экранов. Семантика DSL намеренно **ближе к «каркасу» и порядку**, чем к коду приложения.
 
 - **Модуль хуков** (часто **`{formId}.config-hook.ts`**): именованные функции **`use…`**
   (и при необходимости **`useConfigs`** / **`default`** для ленивых сценариев),
-  плюс **`*.data.ts`** с lifecycle (см. **[feat-schema-handlers](./features/feat-schema-handlers.md)**).
+  плюс модули данных (**lifecycle**, часто **`model/{formId}.data.ts`** или рядом со схемой; см. **[feat-schema-handlers](./features/feat-schema-handlers.md)**).
 
 Итог: **схема** — переносимый **скелет**; **модуль хуков** — **поведение и оформление**, привязанные к стеку и коду.
 
@@ -64,10 +64,11 @@ React при этом **используется внутри приложени
 | Фича | Файл | Кратко |
 |------|------|--------|
 | Продукт, паритет, два приложения | [feat-product-and-parity.md](./features/feat-product-and-parity.md) | Границы, таблица ролей пакетов |
-| Корень DSL | [feat-dsl-root-model.md](./features/feat-dsl-root-model.md) | `FormData`, `elements`, schema, handlers |
+| Корень DSL | [feat-dsl-root-model.md](./features/feat-dsl-root-model.md) | `FormData`, `elements`, schema, handlers, **`modelContract`** |
 | Одна настройка — один способ | [feat-dsl-one-setting.md](./features/feat-dsl-one-setting.md) | Статика vs `configHook` |
 | Контракт `configHook` | [feat-config-hook.md](./features/feat-config-hook.md) | Вход `FormSlice`, выход пропсов / `null` |
 | **`handlers`**, **`useConfig`**, отдельные хуки | [feat-schema-handlers.md](./features/feat-schema-handlers.md) | Форма / узел, резолв, **parseFormTs** + **FSA** |
+| Привязка к модели | [feat-form-model-binding.md](./features/feat-form-model-binding.md) | **`modelContract`**, **`dataBindPath`**, **`FormSlice.dataBind`** |
 | Ленивый рантайм DSL | [feat-lazy-dsl-runtime.md](./features/feat-lazy-dsl-runtime.md) | `loadFormDslBrowserRuntime`, Sucrase, чанки |
 | Типизация и импорты | [feat-typing-and-imports.md](./features/feat-typing-and-imports.md) | Автор формы, потребитель библиотеки |
 | Рабочее пространство | [feat-workspace-browser.md](./features/feat-workspace-browser.md) | FSA, IndexedDB, `?form=`, сценарии |

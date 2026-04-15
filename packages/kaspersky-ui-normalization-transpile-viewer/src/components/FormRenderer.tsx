@@ -42,6 +42,7 @@ import {
   getInitialFormStateFromElements,
   resolveLifecycleHandler,
   resolveControlUseConfig,
+  formSliceWithDataBind,
   type ButtonControl,
   type CheckboxControl,
   type ExtraUiControl,
@@ -318,7 +319,7 @@ function GridRenderer({
     if (loading) return loadingBlock
     return missingHookBlock
   }
-  const partial = hookFn(formSlice)
+  const partial = hookFn(formSliceWithDataBind(formSlice, g.dataBindPath))
   if (partial === null) return null
   const { children: _ch, ...hookRest } = partial
   const effectiveCols = hookRest.cols
@@ -396,7 +397,9 @@ function TableRenderer({
     return missingHookBlock
   }
 
-  const partial = hookFn(formSlice) as TableHookResult
+  const partial = hookFn(
+    formSliceWithDataBind(formSlice, t.dataBindPath),
+  ) as TableHookResult
   if (partial === null) return null
 
   const {
@@ -628,12 +631,13 @@ export function FormRenderer({
     instanceKey?: string,
   ): React.ReactNode {
     const k = instanceKey ?? control.id
+    const sliceForHooks = formSliceWithDataBind(slice, control.dataBindPath)
     switch (control.type) {
       case 'button': {
         const c = control as ButtonControl
         return (
           <div key={k} data-control-id={c.id}>
-            <ButtonRenderer control={c} formSlice={slice} />
+            <ButtonRenderer control={c} formSlice={sliceForHooks} />
           </div>
         )
       }
@@ -641,7 +645,7 @@ export function FormRenderer({
         const c = control as TextControl
         return (
           <div key={k} data-control-id={c.id}>
-            <TextRenderer control={c} formSlice={slice} />
+            <TextRenderer control={c} formSlice={sliceForHooks} />
           </div>
         )
       }
@@ -652,7 +656,7 @@ export function FormRenderer({
           <InputRenderer
             key={k}
             control={c}
-            formSlice={slice}
+            formSlice={sliceForHooks}
             value={value}
             updateValue={updateValue}
           />
