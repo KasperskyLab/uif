@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@normalization/form-dsl": ["../../shared/normalization-form-dsl/form-dsl.ts"],
+      "@normalization/load-form-dsl-runtime": ["../../shared/normalization-form-dsl/load-form-dsl-runtime.ts"],
+      "sucrase": ["./node_modules/sucrase"],
+      "@kaspersky/hexa-ui": ["./node_modules/@kaspersky/hexa-ui"],
+      "@kaspersky/hexa-ui/*": ["./node_modules/@kaspersky/hexa-ui/*"],
+      "@kaspersky/hexa-ui-icons": ["./node_modules/@kaspersky/hexa-ui-icons"],
+      "@kaspersky/hexa-ui-icons/*": ["./node_modules/@kaspersky/hexa-ui-icons/*"]
+    }
+  },
+  "include": [
+    "src",
+    "dsl/**/*.ts",
+    "../../shared/types/form.ts",
+    "../../shared/normalization-form-dsl/transpile-form-module.ts",
+    "../../shared/normalization-form-dsl/parse-form-ts.ts",
+    "../../shared/normalization-form-dsl/load-form-dsl-runtime.ts",
+    "../../shared/normalization-form-dsl/form-dsl-browser-runtime.ts",
+    "../../shared/normalization-form-dsl/transpile-config-hook-module.ts",
+    "../../shared/normalization-form-dsl/form-dsl.ts"
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
