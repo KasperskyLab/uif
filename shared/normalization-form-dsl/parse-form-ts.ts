@@ -1,6 +1,7 @@
 import type { FormData } from '../types/form'
 import { transpileFormModuleSource } from './transpile-form-module'
 import { normalizeFormData } from './form-dsl-core'
+import { attachInferredHandlerBindingsFromSchemaSource } from './infer-handler-bindings-from-source'
 
 /**
  * После Sucrase импорт вида `from '@normalization/form-dsl'` остаётся в коде.
@@ -156,7 +157,9 @@ export function parseFormTs(
   return import(/* @vite-ignore */ url)
     .then((mod) => {
       const data = mod?.default
-      return normalizeFormData(data)
+      const normalized = normalizeFormData(data)
+      attachInferredHandlerBindingsFromSchemaSource(normalized, content)
+      return normalized
     })
     .finally(() => {
       URL.revokeObjectURL(url)
@@ -247,7 +250,9 @@ async function parseFormTsWithLinkedModules(
     }
     const mod = await import(/* @vite-ignore */ entryUrl)
     const data = mod?.default
-    return normalizeFormData(data)
+    const normalized = normalizeFormData(data)
+    attachInferredHandlerBindingsFromSchemaSource(normalized, schemaSource)
+    return normalized
   } finally {
     for (const u of urlsToRevoke) URL.revokeObjectURL(u)
   }

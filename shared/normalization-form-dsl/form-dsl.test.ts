@@ -4,6 +4,7 @@ import {
   resolveRelativeImportPath,
   sourceHasRelativeValueImports,
 } from './parse-form-ts'
+import { parseNamedValueImportsFromSource } from './infer-handler-bindings-from-source'
 import {
   isFormSchemaModuleFile,
   splitFormConfigHookFactoryResult,
@@ -28,6 +29,8 @@ import {
   type TextControl,
   type InputControl,
   type ButtonControl,
+  attachHandlerBinding,
+  getHandlerBinding,
   type GridControl,
   type TabsControl,
   type TableControl,
@@ -369,40 +372,75 @@ export default {
       expect(json.handlers).toEqual({ onChange: 'handlers/on-change.js', onBlur: 'handlers/blur.js' })
     })
 
-    it('formToTs outputs handlers as import functions for controls', () => {
+    it('formToTs outputs static imports and handler identifiers for controls', () => {
+      const onChange = attachHandlerBinding(
+        ((_x: unknown) => {}) as (...args: unknown[]) => unknown,
+        { module: './handlers/change', export: 'handleChange' },
+      )
       const form: FormData = {
         id: 'f1',
         elements: [
-          { type: 'input', id: 'i1', handlers: { onChange: 'handlers/change.js' } },
+          { type: 'input', id: 'i1', handlers: { onChange } },
         ],
       }
       const js = formToTs(form)
-      expect(js).toContain('() => import("./handlers/change.js")')
+      expect(js).toContain('import { handleChange } from "./handlers/change"')
+      expect(js).toMatch(/"onChange":\s*handleChange/)
     })
 
-    it('formToTs outputs form-level handlers as import functions', () => {
+    it('formToTs outputs form-level handlers as static imports', () => {
+      const onFormSubmit = attachHandlerBinding(
+        ((_s: unknown) => {}) as (...args: unknown[]) => unknown,
+        { module: './handlers/submit', export: 'submitFn' },
+      )
+      const onFormInit = attachHandlerBinding(
+        ((_s: unknown) => {}) as (...args: unknown[]) => unknown,
+        { module: './handlers/init', export: 'initFn' },
+      )
       const form: FormData = {
         id: 'f1',
         handlers: {
-          onFormSubmit: 'handlers/submit.js',
-          onFormInit: 'handlers/init.js',
+          onFormSubmit,
+          onFormInit,
         },
         elements: [],
       }
       const js = formToTs(form)
-      expect(js).toContain('handlers:')
-      expect(js).toContain('() => import("./handlers/submit.js")')
-      expect(js).toContain('() => import("./handlers/init.js")')
+      expect(js).toContain('import { initFn } from "./handlers/init"')
+      expect(js).toContain('import { submitFn } from "./handlers/submit"')
+      expect(js).toMatch(/"onFormInit":\s*initFn/)
+      expect(js).toMatch(/"onFormSubmit":\s*submitFn/)
     })
 
-    it('formToJson includes form-level handlers as paths', () => {
+    it('formToJson includes form-level handlers with module/export when bound', () => {
+      const onFormSubmit = attachHandlerBinding(
+        ((_x: unknown) => {}) as (...args: unknown[]) => unknown,
+        { module: './handlers/submit', export: 'submitFn' },
+      )
       const form: FormData = {
         id: 'f1',
-        handlers: { onFormSubmit: 'handlers/submit.js' },
+        handlers: { onFormSubmit },
         elements: [],
       }
       const json = formToJson(form)
-      expect(json.handlers).toEqual({ onFormSubmit: 'handlers/submit.js' })
+      expect(json.handlers).toEqual({
+        onFormSubmit: { module: './handlers/submit', export: 'submitFn' },
+      })
+    })
+
+    it('getHandlerBinding returns metadata set by attachHandlerBinding', () => {
+      const fn = attachHandlerBinding(
+        ((_a: unknown) => {}) as (...args: unknown[]) => unknown,
+        { module: './m', export: 'foo' },
+      )
+      expect(getHandlerBinding(fn)).toEqual({ module: './m', export: 'foo' })
+    })
+
+    it('parseNamedValueImportsFromSource maps local names to specifier', () => {
+      const src = `import { a, b as c } from './lib/foo'`
+      const m = parseNamedValueImportsFromSource(src)
+      expect(m.get('a')).toBe('./lib/foo')
+      expect(m.get('c')).toBe('./lib/foo')
     })
 
   })

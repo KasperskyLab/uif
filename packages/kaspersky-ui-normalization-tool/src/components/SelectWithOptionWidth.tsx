@@ -1,5 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react'
 
+function options_signature(options: { label: string; value: string }[]): string {
+  return options.map((o) => `${o.value}\t${o.label}`).join('\n')
+}
+
 /** Обёртка: ширина селекта = макс. ширина опций (измерение по тексту опций) */
 export function SelectWithOptionWidth({
   options,
@@ -10,9 +14,10 @@ export function SelectWithOptionWidth({
 }) {
   const [minWidth, setMinWidth] = useState(100)
   const rulerRef = useRef<HTMLDivElement>(null)
+  const options_sig = options_signature(options)
 
   useEffect(() => {
-    if (!rulerRef.current || !options.length) {
+    if (!rulerRef.current || !options_sig) {
       setMinWidth(100)
       return
     }
@@ -22,8 +27,9 @@ export function SelectWithOptionWidth({
       max = Math.max(max, (s as HTMLSpanElement).offsetWidth)
     })
     // +48 — отступы под стрелку и padding; не шире родителя (длинные пути модели)
-    setMinWidth(Math.max(100, max + 48))
-  }, [options])
+    const next = Math.max(100, max + 48)
+    setMinWidth((prev) => (prev === next ? prev : next))
+  }, [options_sig])
 
   return (
     <>

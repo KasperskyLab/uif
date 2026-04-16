@@ -25,9 +25,20 @@ import { getDescriptor } from '../controls/registry'
 import { HandlersEditor } from './HandlersEditor'
 import { HandlerFilePicker } from './HandlerFilePicker'
 import { ControlIdPropsEditor } from './ControlIdPropsEditor'
+import { ModuleExportHandlerCompact } from './ModuleExportHandlerCompact'
+import { UseConfigHexaCompact } from './UseConfigHexaCompact'
 
 /** Поля ввода и прочие контролы с привязкой данных; `button`/`text`/`grid`/`table` — только id */
 const INPUT_CONTROL_TYPES: string[] = ['input', 'checkbox', 'radio', 'select', 'toggle', ...EXTRA_UI_DSL_TYPES]
+
+/** Типы с **`handlers.useConfig`** для пропсов Hexa (см. demo.schema). */
+const CONTROL_TYPES_WITH_HEXA_USE_CONFIG = new Set<string>([
+  'grid',
+  'table',
+  'text',
+  'input',
+  'button',
+])
 const DATA_TYPE_OPTIONS = [
   { value: 'string', label: 'string' },
   { value: 'number', label: 'number' },
@@ -625,6 +636,43 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
             </div>
             <div style={{ ...settingsCardStyle }}>
               <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
+                Хендлеры
+              </Text>
+              <Space size={10} direction="vertical" style={{ width: '100%' }}>
+                <ModuleExportHandlerCompact
+                  label="onFormInit"
+                  handler={formData.handlers?.onFormInit}
+                  onHandlerChange={(fn) => {
+                    const prev: ControlHandlersMap = { ...(formData.handlers ?? {}) }
+                    if (fn !== undefined) prev.onFormInit = fn
+                    else delete prev.onFormInit
+                    onFormUpdate({
+                      handlers:
+                        Object.keys(prev).length > 0 ? prev : undefined,
+                    })
+                  }}
+                  directoryHandle={formDirectoryHandle}
+                  selectKeyPrefix="form-onFormInit"
+                />
+                <ModuleExportHandlerCompact
+                  label="onFormSubmit"
+                  handler={formData.handlers?.onFormSubmit}
+                  onHandlerChange={(fn) => {
+                    const prev: ControlHandlersMap = { ...(formData.handlers ?? {}) }
+                    if (fn !== undefined) prev.onFormSubmit = fn
+                    else delete prev.onFormSubmit
+                    onFormUpdate({
+                      handlers:
+                        Object.keys(prev).length > 0 ? prev : undefined,
+                    })
+                  }}
+                  directoryHandle={formDirectoryHandle}
+                  selectKeyPrefix="form-onFormSubmit"
+                />
+              </Space>
+            </div>
+            <div style={{ ...settingsCardStyle }}>
+              <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
                 Описание модели (modelContract)
               </Text>
               <Text type="BTR3" style={{ display: 'block', marginBottom: 6, color: '#666', fontSize: 11 }}>
@@ -685,6 +733,10 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
 
   const update = (patch: Partial<FormControl>) => onUpdate(control.id, patch)
 
+  const has_hexa_use_config = CONTROL_TYPES_WITH_HEXA_USE_CONFIG.has(control.type)
+  const has_event_handlers =
+    control.type !== 'input' && CONTROL_EVENTS[control.type]?.length > 0
+
   return (
     <aside className="properties-panel editor-sidebar editor-sidebar--right" style={panelStyle}>
       <H6 style={{ margin: 0, textAlign: 'left' }}>Свойства</H6>
@@ -692,6 +744,58 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
         <div style={{ ...settingsCardStyle }}>
           <ControlIdPropsEditor id={control.id} onUpdate={update} />
         </div>
+        {(has_hexa_use_config || has_event_handlers) && (
+          <div style={{ ...settingsCardStyle }}>
+            <Text type="BTR3" style={{ display: 'block', marginBottom: 4 }}>
+              Хендлеры
+            </Text>
+            {has_hexa_use_config && (
+              <div style={{ marginBottom: has_event_handlers ? 12 : 0 }}>
+                <UseConfigHexaCompact
+                  useConfig={(control as FormControlBase).handlers?.useConfig}
+                  onUseConfigChange={(fn) => {
+                    const prev: ControlHandlersMap = {
+                      ...((control as FormControlBase).handlers ?? {}),
+                    }
+                    if (fn !== undefined) prev.useConfig = fn
+                    else delete prev.useConfig
+                    update({
+                      handlers:
+                        Object.keys(prev).length > 0 ? prev : undefined,
+                    } as Partial<FormControl>)
+                  }}
+                  directoryHandle={formDirectoryHandle}
+                />
+              </div>
+            )}
+            {has_event_handlers && (
+              <HandlersEditor
+                title="Обработчики событий"
+                events={CONTROL_EVENTS[control.type]}
+                handlers={Object.fromEntries(
+                  CONTROL_EVENTS[control.type].map((ev) => [
+                    ev.name,
+                    (control as FormControlBase).handlers?.[ev.name],
+                  ]),
+                )}
+                onChange={(partial) => {
+                  const prev: ControlHandlersMap = {
+                    ...((control as FormControlBase).handlers ?? {}),
+                  }
+                  for (const [k, v] of Object.entries(partial)) {
+                    if (v !== undefined) prev[k] = v
+                    else delete prev[k]
+                  }
+                  update({
+                    handlers:
+                      Object.keys(prev).length > 0 ? prev : undefined,
+                  } as Partial<FormControl>)
+                }}
+                directoryHandle={formDirectoryHandle}
+              />
+            )}
+          </div>
+        )}
         <div style={{ ...settingsCardStyle }}>
           <DataBindPathFields
             control={control}
@@ -732,35 +836,6 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
           selectCloseKey={selectCloseKey}
           onSelectClose={() => setSelectCloseKey((k) => k + 1)}
         />
-        {control.type !== 'input' && CONTROL_EVENTS[control.type]?.length > 0 && (
-          <div style={{ ...settingsCardStyle }}>
-            <HandlersEditor
-              title="Обработчики событий"
-              events={CONTROL_EVENTS[control.type]}
-              handlers={
-                Object.fromEntries(
-                  Object.entries(
-                    (control as FormControlBase).handlers ?? {},
-                  ).filter((e): e is [string, string] => typeof e[1] === 'string'),
-                ) as Record<string, string>
-              }
-              onChange={(h) => {
-                const prev: ControlHandlersMap = {
-                  ...((control as FormControlBase).handlers ?? {}),
-                }
-                for (const [k, v] of Object.entries(h)) {
-                  if (v) prev[k] = v
-                  else delete prev[k]
-                }
-                update({
-                  handlers:
-                    Object.keys(prev).length > 0 ? prev : undefined,
-                } as Partial<FormControl>)
-              }}
-              directoryHandle={formDirectoryHandle}
-            />
-          </div>
-        )}
       </div>
     </aside>
   )

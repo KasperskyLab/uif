@@ -2,6 +2,7 @@
  * Контролы и функции DSL. Модель корня формы (`FormData`) — в `../types/form`.
  */
 import type { FieldSchema, FormData } from '../types/form'
+import { getHandlerBinding } from './handler-binding'
 
 /** Расширение файла формы (только TypeScript). */
 export const FORM_MODULE_FILE_EXT = '.ts' as const
@@ -127,7 +128,10 @@ export interface Condition {
   value?: string
 }
 
-/** Обработчики узла: события UI — строка пути; **`useConfig`** — ленивый `import()` или путь. */
+/**
+ * Обработчики узла: **`useConfig`** и события — функция (в т.ч. с **`getHandlerBinding`**)
+ * или устаревшие строка пути / ленивый **`import()`** (только для чтения чужих артефактов).
+ */
 export type ControlHandlersMap = Record<
   string,
   string | (() => Promise<unknown>) | ((...args: unknown[]) => unknown)
@@ -588,6 +592,150 @@ function is_lazy_dynamic_import_fn(fn: unknown): boolean {
   return /import\s*\(/.test(String(fn))
 }
 
+const HANDLER_IDENT_RE = /^[$A-Z_a-z][\w$]*$/u
+
+function handlerValueToTsIdentifier(
+  val: unknown,
+  context: string,
+): string {
+  if (typeof val === 'string' && val.trim()) {
+    throw new Error(
+      `formToTs: ${context} — строковый путь к модулю в handlers не поддерживается`,
+    )
+  }
+  if (typeof val !== 'function') {
+    throw new Error(`formToTs: ${context} — ожидалась функция-обработчик`)
+  }
+  if (is_lazy_dynamic_import_fn(val)) {
+    throw new Error(
+      `formToTs: ${context} — ленивый import() в handlers не поддерживается`,
+    )
+  }
+  const b = getHandlerBinding(val)
+  if (!b) {
+    throw new Error(
+      `formToTs: ${context} — нет привязки к named import (откройте .schema.ts из ` +
+        `каталога или выберите функцию в UI)`,
+    )
+  }
+  if (!HANDLER_IDENT_RE.test(b.export)) {
+    throw new Error(`formToTs: ${context} — недопустимое имя export «${b.export}»`)
+  }
+  return b.export
+}
+
+function handlersFromLiveControl(c: FormControl): ControlHandlersMap | undefined {
+  if (c.type === 'button') return (c as ButtonControl).handlers
+  return (c as FormControlBase).handlers
+}
+
+function mergeHandlersOnJsonNode(live: FormControl, obj: Record<string, unknown>): void {
+  const handlers = handlersFromLiveControl(live)
+  if (!handlers || Object.keys(handlers).length === 0) {
+    delete obj.handlers
+    return
+  }
+  const idents: Record<string, string> = {}
+  const id = (live as FormControlBase).id
+  for (const [k, v] of Object.entries(handlers)) {
+    idents[k] = handlerValueToTsIdentifier(v, `элемент «${id}» · handlers.${k}`)
+  }
+  obj.handlers = idents
+}
+
+/** Подставляет в JSON-дерево контрола идентификаторы handlers для `formToTs`. */
+function injectExplicitHandlersIntoControlJson(
+  obj: Record<string, unknown>,
+  live: FormControl | null,
+): void {
+  if (!live) return
+  mergeHandlersOnJsonNode(live, obj)
+  if (Array.isArray(obj.children)) {
+    const kids =
+      live.type === 'grid'
+        ? (live as GridControl).children
+        : live.type === 'row'
+          ? (live as RowControl).children
+          : live.type === 'table'
+            ? (live as TableControl).children
+            : null
+    if (kids) {
+      ;(obj.children as unknown[]).forEach((chObj, i) => {
+        if (!chObj || typeof chObj !== 'object' || Array.isArray(chObj)) return
+        injectExplicitHandlersIntoControlJson(
+          chObj as Record<string, unknown>,
+          kids[i],
+        )
+      })
+    }
+  }
+  if (live.type === 'tabs' && Array.isArray(obj.items)) {
+    const items = (live as TabsControl).items
+    ;(obj.items as { children: unknown[] }[]).forEach((itemObj, mi) => {
+      const liveItem = items[mi]
+      if (!liveItem || !Array.isArray(itemObj.children)) return
+      itemObj.children.forEach((chObj: unknown, ci: number) => {
+        if (!chObj || typeof chObj !== 'object' || Array.isArray(chObj)) return
+        injectExplicitHandlersIntoControlJson(
+          chObj as Record<string, unknown>,
+          liveItem.children[ci],
+        )
+      })
+    })
+  }
+}
+
+function collectHandlerBindingsForImports(form: FormData): Map<string, Set<string>> {
+  const byMod = new Map<string, Set<string>>()
+  const addFn = (fn: unknown) => {
+    const b = getHandlerBinding(fn)
+    if (!b) return
+    if (!byMod.has(b.module)) byMod.set(b.module, new Set())
+    byMod.get(b.module)!.add(b.export)
+  }
+  if (form.handlers) {
+    for (const v of Object.values(form.handlers)) {
+      if (typeof v === 'function') addFn(v)
+    }
+  }
+  forEachControlInTree(form.elements, (c) => {
+    const h = handlersFromLiveControl(c)
+    if (!h) return
+    for (const v of Object.values(h)) {
+      if (typeof v === 'function') addFn(v)
+    }
+  })
+  return byMod
+}
+
+function formatHandlerImportHeader(form: FormData): string {
+  const m = collectHandlerBindingsForImports(form)
+  if (m.size === 0) return ''
+  const lines: string[] = []
+  for (const spec of [...m.keys()].sort()) {
+    const names = [...m.get(spec)!].sort()
+    lines.push(`import { ${names.join(', ')} } from ${JSON.stringify(spec)}`)
+  }
+  return lines.join('\n')
+}
+
+function formatHandlersBlock(val: unknown, indent: string): string {
+  if (!val || typeof val !== 'object' || Array.isArray(val)) return '{}'
+  const o = val as Record<string, unknown>
+  const nextIndent = indent + '  '
+  const entries = Object.entries(o).filter(([, v]) => v !== undefined)
+  if (entries.length === 0) return '{}'
+  const lines = entries.map(([hk, hv]) => {
+    if (typeof hv !== 'string' || !HANDLER_IDENT_RE.test(hv)) {
+      throw new Error(
+        `formToTs: handlers.${String(hk)} — ожидался идентификатор named export`,
+      )
+    }
+    return nextIndent + JSON.stringify(hk) + ': ' + hv
+  })
+  return '{\n' + lines.join(',\n') + '\n' + indent + '}'
+}
+
 /** Нормализует один контрол из загруженных данных (JSON/JS). Принимаются только семантические типы (button, text, tabs, alert и т.д.). */
 function normalizeControl(item: unknown): FormControl | null {
   if (!item || typeof item !== 'object' || !('id' in item)) return null
@@ -870,13 +1018,17 @@ function normalizeControl(item: unknown): FormControl | null {
 
 function serialize_handlers_for_json(
   h: ControlHandlersMap,
-): Record<string, string> {
-  const o: Record<string, string> = {}
+): Record<string, string | { module: string; export: string }> {
+  const o: Record<string, string | { module: string; export: string }> = {}
   for (const [k, v] of Object.entries(h)) {
     if (typeof v === 'string' && v) o[k] = v
     else if (typeof v === 'function') {
-      const p = getImportPathFromHandler(v as () => Promise<unknown>)
-      if (p) o[k] = p
+      const b = getHandlerBinding(v)
+      if (b) o[k] = { module: b.module, export: b.export }
+      else {
+        const p = getImportPathFromHandler(v as () => Promise<unknown>)
+        if (p) o[k] = p
+      }
     }
   }
   return o
@@ -1074,12 +1226,16 @@ export function formToJson(form: FormData): Record<string, unknown> {
     result.schema = form.schema
   }
   if (form.handlers && Object.keys(form.handlers).length > 0) {
-    const serialized: Record<string, string> = {}
+    const serialized: Record<string, string | { module: string; export: string }> = {}
     for (const [k, v] of Object.entries(form.handlers)) {
       if (typeof v === 'string' && v) serialized[k] = v
       else if (typeof v === 'function') {
-        const p = getImportPathFromHandler(v as () => Promise<unknown>)
-        if (p) serialized[k] = p
+        const b = getHandlerBinding(v)
+        if (b) serialized[k] = { module: b.module, export: b.export }
+        else {
+          const p = getImportPathFromHandler(v as () => Promise<unknown>)
+          if (p) serialized[k] = p
+        }
       }
     }
     if (Object.keys(serialized).length > 0) result.handlers = serialized
@@ -1103,9 +1259,12 @@ export function formToJsonString(form: FormData): string {
 
 /**
  * Сериализует форму в исходник TS-модуля (валидный подмножеством TypeScript).
- * Обработчики — `() => import("./path")`.
+ * Обработчики **`handlers`**: статические **`import { … } from './…'`** и ссылки на
+ * идентификаторы (метаданные **`getHandlerBinding`** / инференс при **`parseFormTs`**).
  */
 export function formToTs(form: FormData): string {
+  const importHeader = formatHandlerImportHeader(form)
+  const headerBlock = importHeader ? `${importHeader}\n\n` : ''
   const elementsSource = form.elements.map((c) => controlToJsSource(c)).join(',\n')
   const idEsc = JSON.stringify(form.id)
   let schemaSource = ''
@@ -1114,22 +1273,14 @@ export function formToTs(form: FormData): string {
   }
   let handlersSource = ''
   if (form.handlers && Object.keys(form.handlers).length > 0) {
-    const converted: Record<string, string> = {}
+    const idents: Record<string, string> = {}
     for (const [key, val] of Object.entries(form.handlers)) {
-      if (typeof val === 'string' && val) {
-        const pathEsc = val.replace(/\\/g, '/')
-        converted[key] = `() => import(${JSON.stringify('./' + pathEsc)})`
-      } else if (typeof val === 'function') {
-        const p = getImportPathFromHandler(val as () => Promise<unknown>)
-        if (p) {
-          const pathEsc = p.replace(/\\/g, '/')
-          converted[key] = `() => import(${JSON.stringify('./' + pathEsc)})`
-        }
-      }
+      idents[key] = handlerValueToTsIdentifier(
+        val,
+        `корень формы · handlers.${key}`,
+      )
     }
-    if (Object.keys(converted).length > 0) {
-      handlersSource = `\n  handlers: ${formatJsValue(converted, '  ')},`
-    }
+    handlersSource = `\n  handlers: ${formatHandlersBlock(idents, '  ')},`
   }
   let modelContractSource = ''
   const mc = form.modelContract
@@ -1146,7 +1297,7 @@ export function formToTs(form: FormData): string {
       }
     }
   }
-  return `export default {
+  return `${headerBlock}export default {
   id: ${idEsc},${schemaSource}${handlersSource}${modelContractSource}
   elements: [
 ${elementsSource}
@@ -1174,49 +1325,29 @@ function formatJsValue(val: unknown, indent: string): string {
     const entries = Object.entries(val as Record<string, unknown>).filter(([, v]) => v !== undefined)
     if (entries.length === 0) return '{}'
     const nextIndent = indent + '  '
-    const lines = entries.map(([k, v]) => nextIndent + JSON.stringify(k) + ': ' + formatJsValue(v, nextIndent))
+    const lines = entries.map(([k, v]) => {
+      const rhs =
+        k === 'handlers'
+          ? formatHandlersBlock(v, nextIndent)
+          : formatJsValue(v, nextIndent)
+      return nextIndent + JSON.stringify(k) + ': ' + rhs
+    })
     return '{\n' + lines.join(',\n') + '\n' + indent + '}'
   }
   return 'null'
 }
 
-/** Рекурсивно заменяет в объекте (результат controlToJson) строковые handlers на строки-импорты. */
-function convertHandlersToImportInObj(obj: Record<string, unknown>): void {
-  const handlerEntries: [string, string][] = obj.handlers && typeof obj.handlers === 'object'
-    ? Object.entries(obj.handlers as Record<string, string>)
-    : []
-  if (handlerEntries.length > 0) {
-    const converted: Record<string, unknown> = {}
-    for (const [key, val] of handlerEntries) {
-      if (typeof val === 'string' && val) {
-        const pathEsc = val.replace(/\\/g, '/')
-        converted[key] = `() => import(${JSON.stringify('./' + pathEsc)})`
-      }
-    }
-    if (Object.keys(converted).length > 0) {
-      obj.handlers = converted
-    }
-  } else {
-    delete obj.handlers
-  }
-  // Рекурсия: вложенные контролы (row, grid, table, tabs)
-  if (Array.isArray(obj.children)) {
-    obj.children.forEach((ch) => ch && typeof ch === 'object' && !Array.isArray(ch) && convertHandlersToImportInObj(ch as Record<string, unknown>))
-  }
-  if (Array.isArray(obj.items) && obj.items.every((i: unknown) => i && typeof i === 'object' && Array.isArray((i as { children?: unknown[] }).children))) {
-    (obj.items as { children: unknown[] }[]).forEach((item) => {
-      item.children.forEach((ch) => ch && typeof ch === 'object' && !Array.isArray(ch) && convertHandlersToImportInObj(ch as Record<string, unknown>))
-    })
-  }
-}
-
-/** Сериализует один контрол в фрагмент JS-исходника. Обработчики → динамический импорт: () => import("./path"). */
+/** Сериализует один контрол в фрагмент JS-исходника. Обработчики — идентификаторы named export. */
 function controlToJsSource(c: FormControl): string {
   const obj = controlToJson(c) as Record<string, unknown>
-  convertHandlersToImportInObj(obj)
+  injectExplicitHandlersIntoControlJson(obj, c)
   const indent = '      '
   const entries = Object.entries(obj).filter(([, v]) => v !== undefined)
-  const lines = entries.map(([k, v]) => indent + JSON.stringify(k) + ': ' + formatJsValue(v, indent))
+  const lines = entries.map(([k, v]) => {
+    const rhs =
+      k === 'handlers' ? formatHandlersBlock(v, indent) : formatJsValue(v, indent)
+    return indent + JSON.stringify(k) + ': ' + rhs
+  })
   return '    {\n' + lines.join(',\n') + '\n    }'
 }
 
