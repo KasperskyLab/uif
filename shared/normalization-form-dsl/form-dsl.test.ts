@@ -31,6 +31,7 @@ import {
   type ButtonControl,
   attachHandlerBinding,
   getHandlerBinding,
+  coerceFormValidationResult,
   type GridControl,
   type TabsControl,
   type TableControl,
@@ -412,6 +413,21 @@ export default {
       expect(js).toMatch(/"onFormSubmit":\s*submitFn/)
     })
 
+    it('formToTs outputs onFormValidate as static import', () => {
+      const onFormValidate = attachHandlerBinding(
+        ((_s: unknown) => ({ valid: true })) as (...args: unknown[]) => unknown,
+        { module: './handlers/validate', export: 'validateFn' },
+      )
+      const form: FormData = {
+        id: 'f1',
+        handlers: { onFormValidate },
+        elements: [],
+      }
+      const js = formToTs(form)
+      expect(js).toContain('import { validateFn } from "./handlers/validate"')
+      expect(js).toMatch(/"onFormValidate":\s*validateFn/)
+    })
+
     it('formToJson includes form-level handlers with module/export when bound', () => {
       const onFormSubmit = attachHandlerBinding(
         ((_x: unknown) => {}) as (...args: unknown[]) => unknown,
@@ -646,6 +662,41 @@ export default {
       }))
       expect(parsed).not.toBeNull()
       expect(parsed!.registry.k).toBe(hookB)
+    })
+
+    it('extracts onFormValidate into lifecycle', () => {
+      const onFormValidate = () => ({ valid: true as const })
+      const hook = () => null
+      const parsed = splitFormConfigHookFactoryResult(() => ({
+        onFormValidate,
+        elements: { x: hook },
+      }))
+      expect(parsed).not.toBeNull()
+      expect(parsed!.lifecycle.onFormValidate).toBe(onFormValidate)
+      expect(parsed!.registry.x).toBe(hook)
+    })
+  })
+
+  describe('coerceFormValidationResult', () => {
+    it('treats null and non-objects as valid', () => {
+      expect(coerceFormValidationResult(null)).toEqual({ valid: true })
+      expect(coerceFormValidationResult(undefined)).toEqual({ valid: true })
+      expect(coerceFormValidationResult(1)).toEqual({ valid: true })
+    })
+
+    it('reads valid flag and normalizes errorsByControlId', () => {
+      expect(
+        coerceFormValidationResult({
+          valid: false,
+          errorsByControlId: {
+            a: { message: 'x' },
+            b: { wrong: 1 },
+          },
+        }),
+      ).toEqual({
+        valid: false,
+        errorsByControlId: { a: { message: 'x' } },
+      })
     })
   })
 

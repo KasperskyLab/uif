@@ -1,5 +1,5 @@
 import { defineFormSchema } from '@normalization/form-dsl'
-import { onFormInit, onFormSubmit } from './model/demo.data'
+import { onFormInit, onFormSubmit, onFormValidate } from './model/demo.data'
 import {
   useDemoButton,
   useDemoGrid,
@@ -15,6 +15,7 @@ export default defineFormSchema({
   handlers: {
     onFormInit,
     onFormSubmit,
+    onFormValidate,
   },
   elements: [
     {

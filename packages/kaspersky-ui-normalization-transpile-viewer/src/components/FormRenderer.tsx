@@ -41,7 +41,9 @@ import {
   getComponentIdFromDslType,
   getInitialFormStateFromElements,
   resolveLifecycleHandler,
+  resolveFormValidateHandler,
   resolveControlUseConfig,
+  coerceFormValidationResult,
   formSliceWithDataBind,
   controlModelBindPath,
   evaluateCondition,
@@ -49,6 +51,7 @@ import {
   type CheckboxControl,
   type ExtraUiControl,
   type FormConfigHookLifecycle,
+  type FormValidationResult,
   type FormControl,
   type FormControlBase,
   type FormSlice,
@@ -114,6 +117,25 @@ const gridWrapStyle: React.CSSProperties = {
 const tableWrapStyle: React.CSSProperties = {
   ...gridWrapStyle,
   overflow: 'auto',
+}
+
+const FORM_VALIDATE_DEBOUNCE_MS = 300
+
+function ControlValidationMessage({
+  controlId,
+  message,
+}: {
+  controlId: string
+  message?: string
+}): React.ReactElement | null {
+  if (!message) return null
+  return (
+    <div id={`${controlId}-validation`} role="alert" style={{ marginTop: 4 }}>
+      <Text type="BTR3" style={{ color: 'var(--text--negative, #d32f2f)' }}>
+        {message}
+      </Text>
+    </div>
+  )
 }
 
 export type { FormSlice } from '@/types/form-dsl'
@@ -510,7 +532,7 @@ export interface FormRendererProps {
   gap?: number
   /** Директория схемы (для `loadTsModule` по строковым путям в handlers). */
   formDirectoryHandle?: FileSystemDirectoryHandle | null
-  /** Форма: `onFormInit` / `onFormSubmit` — ленивые `import()` в `handlers`. */
+  /** Форма: `onFormInit` / `onFormSubmit` / `onFormValidate` — ленивые `import()` в `handlers`. */
   formHandlers?: Record<string, string | ((...args: unknown[]) => unknown)> | null
   /** Ключ формы (например путь к файлу) — при смене сбрасывается состояние */
   formKey?: string
@@ -531,6 +553,9 @@ export function FormRenderer({
   >({})
   const [lifecycle, setLifecycle] = useState<FormConfigHookLifecycle>({})
   const [hooksLoading, setHooksLoading] = useState(false)
+  const [validation, setValidation] = useState<FormValidationResult>({
+    valid: true,
+  })
 
   const mergeFormState = useCallback((partial: Record<string, unknown>) => {
     setFormState((prev) => ({ ...prev, ...partial }))
@@ -553,6 +578,7 @@ export function FormRenderer({
     async function loadRuntimeBindings() {
       if (formKeyChanged) {
         setFormState(getInitialFormStateFromElements(elements))
+        setValidation({ valid: true })
       }
       const nextLifecycle: FormConfigHookLifecycle = {}
       const nextHookById: Record<string, ControlHexaHookFn | null> = {}
@@ -561,10 +587,12 @@ export function FormRenderer({
         formHandlers?.onFormInit ?? formHandlers?.onInit
       const onFormSubmitRaw =
         formHandlers?.onFormSubmit ?? formHandlers?.onSubmit
+      const onFormValidateRaw = formHandlers?.onFormValidate
       const needsAsync =
         useConfigRows.length > 0 ||
         onFormInitRaw != null ||
-        onFormSubmitRaw != null
+        onFormSubmitRaw != null ||
+        onFormValidateRaw != null
       setHooksLoading(needsAsync)
 
       for (const { id, useConfigRaw } of useConfigRows) {
@@ -593,15 +621,18 @@ export function FormRenderer({
           loadTsModule,
         )
         if (dataOnSubmit) nextLifecycle.onFormSubmit = dataOnSubmit
+        const dataOnValidate = await resolveFormValidateHandler(
+          onFormValidateRaw,
+          formDirectoryHandle,
+          loadTsModule,
+        )
+        if (dataOnValidate) nextLifecycle.onFormValidate = dataOnValidate
       }
 
       if (cancelled) return
-      setHookById(nextHookById)
-      setLifecycle(nextLifecycle)
-      setHooksLoading(false)
       if (nextLifecycle.onFormInit) {
         const initial = getInitialFormStateFromElements(elements)
-        void Promise.resolve(
+        await Promise.resolve(
           nextLifecycle.onFormInit({
             state: initial,
             config: { elements },
@@ -609,6 +640,10 @@ export function FormRenderer({
           }),
         )
       }
+      if (cancelled) return
+      setHookById(nextHookById)
+      setLifecycle(nextLifecycle)
+      setHooksLoading(false)
     }
 
     void loadRuntimeBindings()
@@ -629,6 +664,24 @@ export function FormRenderer({
     }),
     [formState, elements, mergeFormState],
   )
+
+  const formSliceRef = useRef(formSlice)
+  formSliceRef.current = formSlice
+
+  useEffect(() => {
+    if (hooksLoading) return
+    const fn = lifecycle.onFormValidate
+    if (!fn) {
+      setValidation({ valid: true })
+      return
+    }
+    const timer = window.setTimeout(() => {
+      void Promise.resolve(fn(formSliceRef.current)).then((raw) => {
+        setValidation(coerceFormValidationResult(raw))
+      })
+    }, FORM_VALIDATE_DEBOUNCE_MS)
+    return () => clearTimeout(timer)
+  }, [hooksLoading, formState, lifecycle.onFormValidate, elements, mergeFormState])
 
   const hookCtx = useMemo(
     () => ({
@@ -660,6 +713,7 @@ export function FormRenderer({
     const exprBlockStyle: React.CSSProperties | undefined = exprDisabled
       ? { opacity: 0.55, pointerEvents: 'none' }
       : undefined
+    const vMsg = validation.errorsByControlId?.[control.id]?.message
     switch (control.type) {
       case 'button': {
         const c = control as ButtonControl
@@ -669,8 +723,10 @@ export function FormRenderer({
             data-control-id={c.id}
             style={exprBlockStyle}
             aria-disabled={exprDisabled || undefined}
+            aria-invalid={vMsg ? true : undefined}
           >
             <ButtonRenderer control={c} formSlice={sliceForHooks} />
+            <ControlValidationMessage controlId={c.id} message={vMsg} />
           </div>
         )
       }
@@ -682,8 +738,10 @@ export function FormRenderer({
             data-control-id={c.id}
             style={exprBlockStyle}
             aria-disabled={exprDisabled || undefined}
+            aria-invalid={vMsg ? true : undefined}
           >
             <TextRenderer control={c} formSlice={sliceForHooks} />
+            <ControlValidationMessage controlId={c.id} message={vMsg} />
           </div>
         )
       }
@@ -695,6 +753,7 @@ export function FormRenderer({
             key={k}
             style={exprBlockStyle}
             aria-disabled={exprDisabled || undefined}
+            aria-invalid={vMsg ? true : undefined}
           >
             <InputRenderer
               control={c}
@@ -702,30 +761,43 @@ export function FormRenderer({
               value={value}
               updateValue={updateValue}
             />
+            <ControlValidationMessage controlId={c.id} message={vMsg} />
           </div>
         )
       }
       case 'grid': {
         const g = control as GridControl
         return (
-          <div key={k} style={exprBlockStyle} aria-disabled={exprDisabled || undefined}>
+          <div
+            key={k}
+            style={exprBlockStyle}
+            aria-disabled={exprDisabled || undefined}
+            aria-invalid={vMsg ? true : undefined}
+          >
             <GridRenderer
               control={g}
               formSlice={slice}
               renderControl={renderControl}
             />
+            <ControlValidationMessage controlId={g.id} message={vMsg} />
           </div>
         )
       }
       case 'table': {
         const t = control as TableControl
         return (
-          <div key={k} style={exprBlockStyle} aria-disabled={exprDisabled || undefined}>
+          <div
+            key={k}
+            style={exprBlockStyle}
+            aria-disabled={exprDisabled || undefined}
+            aria-invalid={vMsg ? true : undefined}
+          >
             <TableRenderer
               control={t}
               formSlice={slice}
               renderControl={renderControl}
             />
+            <ControlValidationMessage controlId={t.id} message={vMsg} />
           </div>
         )
       }
@@ -741,6 +813,7 @@ export function FormRenderer({
               ...(exprDisabled ? { opacity: 0.55, pointerEvents: 'none' } : {}),
             }}
             aria-disabled={exprDisabled || undefined}
+            aria-invalid={vMsg ? true : undefined}
           >
             <Checkbox
               checked={checked}
@@ -753,6 +826,7 @@ export function FormRenderer({
             >
               {c.text ?? 'Чекбокс'}
             </Checkbox>
+            <ControlValidationMessage controlId={c.id} message={vMsg} />
           </div>
         )
       }
@@ -768,6 +842,7 @@ export function FormRenderer({
               ...(exprDisabled ? { opacity: 0.55, pointerEvents: 'none' } : {}),
             }}
             aria-disabled={exprDisabled || undefined}
+            aria-invalid={vMsg ? true : undefined}
           >
             <Radio
               options={c.options?.map((o) => ({ label: o.label, value: o.value })) ?? []}
@@ -780,6 +855,7 @@ export function FormRenderer({
                 updateValue(c.id, e.target.value)
               }}
             />
+            <ControlValidationMessage controlId={c.id} message={vMsg} />
           </div>
         )
       }
@@ -796,6 +872,7 @@ export function FormRenderer({
               ...(exprDisabled ? { opacity: 0.55, pointerEvents: 'none' } : {}),
             }}
             aria-disabled={exprDisabled || undefined}
+            aria-invalid={vMsg ? true : undefined}
           >
             <Select
               options={c.options ?? []}
@@ -811,6 +888,7 @@ export function FormRenderer({
                 updateValue(c.id, v ?? (c.mode === 'multiple' ? [] : ''))
               }}
             />
+            <ControlValidationMessage controlId={c.id} message={vMsg} />
           </div>
         )
       }
@@ -826,6 +904,7 @@ export function FormRenderer({
               ...(exprDisabled ? { opacity: 0.55, pointerEvents: 'none' } : {}),
             }}
             aria-disabled={exprDisabled || undefined}
+            aria-invalid={vMsg ? true : undefined}
           >
             <Toggle
               text={c.text ?? 'Переключатель'}
@@ -838,6 +917,7 @@ export function FormRenderer({
                 updateValue(c.id, checkedValue)
               }}
             />
+            <ControlValidationMessage controlId={c.id} message={vMsg} />
           </div>
         )
       }
@@ -846,10 +926,11 @@ export function FormRenderer({
         const Comp = META_COMPONENT_MAP[m.componentId]
         if (!Comp) {
           return (
-            <div key={k} data-control-id={m.id}>
+            <div key={k} data-control-id={m.id} aria-invalid={vMsg ? true : undefined}>
               <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
                 Компонент «{m.componentId}»
               </Text>
+              <ControlValidationMessage controlId={m.id} message={vMsg} />
             </div>
           )
         }
@@ -869,8 +950,10 @@ export function FormRenderer({
               ...(exprDisabled ? { opacity: 0.55, pointerEvents: 'none' } : {}),
             }}
             aria-disabled={exprDisabled || undefined}
+            aria-invalid={vMsg ? true : undefined}
           >
             <Comp {...builtProps} disabled={m.props?.disabled === 'true' || undefined} />
+            <ControlValidationMessage controlId={m.id} message={vMsg} />
           </div>
         )
       }
@@ -884,10 +967,11 @@ export function FormRenderer({
         const Comp = META_COMPONENT_MAP[componentId]
         if (!Comp) {
           return (
-            <div key={k} data-control-id={u.id}>
+            <div key={k} data-control-id={u.id} aria-invalid={vMsg ? true : undefined}>
               <Text type="BTR3" style={{ color: 'var(--text--secondary)' }}>
                 Компонент «{u.type}»
               </Text>
+              <ControlValidationMessage controlId={u.id} message={vMsg} />
             </div>
           )
         }
@@ -907,8 +991,10 @@ export function FormRenderer({
               ...(exprDisabled ? { opacity: 0.55, pointerEvents: 'none' } : {}),
             }}
             aria-disabled={exprDisabled || undefined}
+            aria-invalid={vMsg ? true : undefined}
           >
             <Comp {...builtProps} disabled={u.props?.disabled === 'true' || undefined} />
+            <ControlValidationMessage controlId={u.id} message={vMsg} />
           </div>
         )
       }
@@ -928,7 +1014,17 @@ export function FormRenderer({
           style={{ width: '100%' }}
           onSubmit={(e) => {
             e.preventDefault()
-            void Promise.resolve(lifecycle.onFormSubmit?.(formSlice))
+            void (async () => {
+              const vFn = lifecycle.onFormValidate
+              if (vFn) {
+                const r = coerceFormValidationResult(
+                  await Promise.resolve(vFn(formSlice)),
+                )
+                setValidation(r)
+                if (!r.valid) return
+              }
+              await Promise.resolve(lifecycle.onFormSubmit?.(formSlice))
+            })()
           }}
         >
           {body}

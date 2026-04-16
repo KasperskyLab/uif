@@ -3,6 +3,7 @@ import {
   resolveTsModulePathFromValue,
   isLazyDynamicImportFn,
   resolveLifecycleHandler,
+  resolveFormValidateHandler,
   resolveControlUseConfig,
   resolveConfigHookFactory,
 } from './lifecycle-resolve'
@@ -68,6 +69,28 @@ describe('lifecycle-resolve', () => {
     const out = await resolveControlUseConfig(lazy, 'demo.grid', dir, loadTs)
     expect(loadTs).toHaveBeenCalledWith(dir, './demo.config-hook.ts')
     expect(out).toBe(gridHook)
+  })
+
+  it('resolveFormValidateHandler returns direct fn when arity >= 1', async () => {
+    const onFormValidate = () => ({ valid: true as const })
+    const dir = {} as FileSystemDirectoryHandle
+    const loadTs = vi.fn()
+    const out = await resolveFormValidateHandler(onFormValidate, dir, loadTs)
+    expect(out).toBe(onFormValidate)
+    expect(loadTs).not.toHaveBeenCalled()
+  })
+
+  it('resolveFormValidateHandler resolves named export from lazy import', async () => {
+    const onFormValidate = vi.fn()
+    const lazy = () => Promise.resolve({ onFormValidate })
+    Object.defineProperty(lazy, 'length', { value: 0 })
+    Object.defineProperty(lazy, 'toString', {
+      value: () => "() => import('./v.ts')",
+    })
+    const loadTs = vi.fn()
+    const dir = {} as FileSystemDirectoryHandle
+    const out = await resolveFormValidateHandler(lazy, dir, loadTs)
+    expect(out).toBe(onFormValidate)
   })
 
   it('resolveLifecycleHandler falls back to loadTsModule when lazy import fails', async () => {

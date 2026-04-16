@@ -1,7 +1,10 @@
 /**
  * Резолв lifecycle формы и `handlers.useConfig`: прямые функции или ленивые `import()`.
  */
-import type { FormConfigHookLifecycleFn } from './form-config-hook-types'
+import type {
+  FormConfigHookLifecycleFn,
+  FormValidateFn,
+} from './form-config-hook-types'
 import type { FormSlice } from './form-dsl-core'
 
 /** Строка пути или `() => import('...')` из нормализованной формы. */
@@ -80,6 +83,42 @@ export async function resolveLifecycleHandler(
     if (typeof legacy === 'function') {
       return legacy as FormConfigHookLifecycleFn
     }
+  }
+  return null
+}
+
+/**
+ * Резолв **`onFormValidate`**: как **`resolveLifecycleHandler`**, но без legacy-алиасов.
+ */
+export async function resolveFormValidateHandler(
+  raw: unknown,
+  formDirectoryHandle: FileSystemDirectoryHandle | null,
+  loadTsModule: (
+    dir: FileSystemDirectoryHandle,
+    path: string,
+  ) => Promise<Record<string, unknown> | null>,
+): Promise<FormValidateFn | null> {
+  if (raw == null) return null
+  if (typeof raw === 'function') {
+    const fn = raw as (...args: unknown[]) => unknown
+    if (fn.length >= 1) return fn as FormValidateFn
+    /** Частый случай: **`() => ({ valid: true })`** — **`length` === 0**, это не lazy **`import()`**. */
+    if (!isLazyDynamicImportFn(raw)) return fn as FormValidateFn
+  }
+  const modFromLazy = await load_module_from_lazy(raw)
+  let mod: Record<string, unknown> | null = modFromLazy
+  if (!mod && formDirectoryHandle) {
+    const path =
+      typeof raw === 'string'
+        ? (raw.trim() || null)
+        : typeof raw === 'function'
+          ? resolveTsModulePathFromValue(raw as () => unknown)
+          : null
+    if (path) mod = await loadTsModule(formDirectoryHandle, path)
+  }
+  if (mod) {
+    const named = mod.onFormValidate as unknown
+    if (typeof named === 'function') return named as FormValidateFn
   }
   return null
 }

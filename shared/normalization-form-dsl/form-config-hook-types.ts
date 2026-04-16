@@ -32,14 +32,30 @@ export type FormConfigHookRegistry<ControlId extends string> = Partial<
  */
 export type FormConfigHookLifecycleFn = (slice: FormSlice) => void | Promise<void>
 
+/** Результат **`onFormValidate`**: общий флаг и ошибки по **`control.id`**. */
+export interface FormValidationResult {
+  valid: boolean
+  errorsByControlId?: Record<string, { message: string }>
+}
+
+/**
+ * Валидация формы: синхронно или **`Promise`**; **`undefined`** / **`null`** трактуются
+ * как валидно (**`coerceFormValidationResult`**).
+ */
+export type FormValidateFn = (
+  slice: FormSlice,
+) => FormValidationResult | Promise<FormValidationResult> | undefined | null
+
 export interface FormConfigHookLifecycle {
   onFormInit?: FormConfigHookLifecycleFn
   onFormSubmit?: FormConfigHookLifecycleFn
+  onFormValidate?: FormValidateFn
 }
 
 const FORM_CONFIG_HOOK_LIFECYCLE_KEYS = new Set<string>([
   'onFormInit',
   'onFormSubmit',
+  'onFormValidate',
   'onInit',
   'onSubmit',
 ])
@@ -89,6 +105,9 @@ export function splitFormConfigHookFactoryResult(
         if (key === 'onFormSubmit' || key === 'onSubmit') {
           lifecycle.onFormSubmit = val as FormConfigHookLifecycleFn
         }
+        if (key === 'onFormValidate') {
+          lifecycle.onFormValidate = val as FormValidateFn
+        }
         continue
       }
       if (FORM_CONFIG_HOOK_TOP_RESERVED_KEYS.has(key)) continue
@@ -129,7 +148,10 @@ export type FormSchemaDefinition<Elements extends readonly unknown[]> = Pick<
   modelContract?: FormData['modelContract']
   handlers?: Record<
     string,
-    string | (() => Promise<unknown>) | FormConfigHookLifecycleFn
+    | string
+    | (() => Promise<unknown>)
+    | FormConfigHookLifecycleFn
+    | FormValidateFn
   >
   elements: Elements
 }
@@ -231,4 +253,40 @@ export function buildFormConfigHookRegistryFor<ControlId extends string>(
     registry[entry.elementId] = entry.hook
   }
   return registry
+}
+
+/** Нормализует возврат **`onFormValidate`** для рендерера. */
+export function coerceFormValidationResult(raw: unknown): FormValidationResult {
+  if (raw == null || typeof raw !== 'object') {
+    return { valid: true }
+  }
+  const o = raw as Record<string, unknown>
+  const valid = typeof o.valid === 'boolean' ? o.valid : true
+  const errorsRaw = o.errorsByControlId
+  const errorsByControlId: Record<string, { message: string }> = {}
+  if (
+    errorsRaw != null &&
+    typeof errorsRaw === 'object' &&
+    !Array.isArray(errorsRaw)
+  ) {
+    for (const [id, err] of Object.entries(
+      errorsRaw as Record<string, unknown>,
+    )) {
+      if (
+        err != null &&
+        typeof err === 'object' &&
+        !Array.isArray(err) &&
+        typeof (err as { message?: unknown }).message === 'string'
+      ) {
+        errorsByControlId[id] = {
+          message: (err as { message: string }).message,
+        }
+      }
+    }
+  }
+  const keys = Object.keys(errorsByControlId)
+  return {
+    valid,
+    errorsByControlId: keys.length > 0 ? errorsByControlId : undefined,
+  }
 }

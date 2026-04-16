@@ -1,4 +1,4 @@
-import type { FormSlice } from '@normalization/form-dsl'
+import type { FormSlice, FormValidationResult } from '@normalization/form-dsl'
 import type { DemoFormControlIds } from '../demo.config-hook'
 import type { DemoFormModelState } from './demo.contract'
 
@@ -30,4 +30,21 @@ export async function onFormInit(slice: FormSlice): Promise<void> {
 
 export async function onFormSubmit(slice: FormSlice): Promise<void> {
   console.log('[model/demo.data] onFormSubmit: state формы', slice.state)
+}
+
+/** Демо: поле сетки не должно быть пустым (ошибка под контролом в превью). */
+export function onFormValidate(slice: FormSlice): FormValidationResult {
+  const raw = slice.state[DEMO_GRID_INPUT_ID]
+  const v = typeof raw === 'string' ? raw.trim() : ''
+  if (v.length === 0) {
+    return {
+      valid: false,
+      errorsByControlId: {
+        [DEMO_GRID_INPUT_ID]: {
+          message: 'Заполните поле (onFormValidate)',
+        },
+      },
+    }
+  }
+  return { valid: true }
 }

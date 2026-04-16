@@ -16,8 +16,9 @@ export interface FormData {
   schema?: Record<string, FieldSchema>
   /**
    * Форма: жизненный цикл и прочие обработчики.
-   * **`onFormInit`** / **`onFormSubmit`** — прямые функции **`(slice) => …`** или ленивый
-   * **`() => import('./module.ts')`** (из модуля читаются экспорты с теми же именами).
+   * **`onFormInit`** / **`onFormSubmit`** / **`onFormValidate`** — прямые функции или ленивый
+   * **`() => import('./module.ts')`** (из модуля читаются экспорты с теми же именами; для валидации —
+   * **`onFormValidate`**).
    */
   handlers?: Record<
     string,

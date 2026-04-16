@@ -669,6 +669,21 @@ export function PropertiesPanel({ formData, onFormUpdate, control, onUpdate, for
                   directoryHandle={formDirectoryHandle}
                   selectKeyPrefix="form-onFormSubmit"
                 />
+                <ModuleExportHandlerCompact
+                  label="onFormValidate"
+                  handler={formData.handlers?.onFormValidate}
+                  onHandlerChange={(fn) => {
+                    const prev: ControlHandlersMap = { ...(formData.handlers ?? {}) }
+                    if (fn !== undefined) prev.onFormValidate = fn
+                    else delete prev.onFormValidate
+                    onFormUpdate({
+                      handlers:
+                        Object.keys(prev).length > 0 ? prev : undefined,
+                    })
+                  }}
+                  directoryHandle={formDirectoryHandle}
+                  selectKeyPrefix="form-onFormValidate"
+                />
               </Space>
             </div>
             <div style={{ ...settingsCardStyle }}>
