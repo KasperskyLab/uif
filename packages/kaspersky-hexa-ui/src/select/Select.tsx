@@ -7,7 +7,6 @@ import { Divider } from '@src/divider'
 import { Loader } from '@src/loader'
 import { Tag, TagProps } from '@src/tag'
 import cn from 'classnames'
-import once from 'lodash/once'
 import RcSelect, { BaseSelectRef, OptGroup as RcOptGroup, Option as RcOption } from 'rc-select'
 import React, {
   forwardRef,
@@ -55,10 +54,12 @@ export const Select = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
   const [selectOffsetWidth, setSelectOffsetWidth] = useState<number>()
 
-  // once - to prevent next trigger after user scrolls out and in
-  const handleLoadMore = useMemo(() => once(() => {
-    onLoadMore?.()
-  }), [onLoadMore])
+  const onLoadMoreRef = useRef(onLoadMore)
+  onLoadMoreRef.current = onLoadMore
+
+  const handleLoadMore = useCallback(() => {
+    onLoadMoreRef.current?.()
+  }, [])
   const isMultiSelect = props.mode === 'multiple' || props.mode === 'tags'
 
   function renderOption (option: OptionType) {
