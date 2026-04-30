@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+*.local
+
+# IDE and OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs and env
+*.log
+.env
+.env.local
+.env.*.local
+
+# Optional: uncomment if using npm pack / archive from repo
+# package-lock.json

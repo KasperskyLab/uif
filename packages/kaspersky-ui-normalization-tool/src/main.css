@@ -1,0 +1,207 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+/* Зелёная рамка только у выбранного; у невыбранных — без видимой рамки и фокуса */
+.control-wrap:not(.control-wrap--selected) {
+  border-color: transparent !important;
+}
+.control-wrap:not(.control-wrap--selected),
+.control-wrap:not(.control-wrap--selected) * {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.control-wrap:not(.control-wrap--selected):focus,
+.control-wrap:not(.control-wrap--selected) *:focus,
+.control-wrap:not(.control-wrap--selected):focus-within,
+.control-wrap:not(.control-wrap--selected) *:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.control-wrap.control-wrap--selected * {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Радио на холсте: один круг. Убиваем все ::after (кольцо и точку) максимально жёстко */
+.control-wrap .ant-radio-group .ant-radio::after,
+.control-wrap .ant-radio-group .ant-radio-checked .ant-radio-inner::after,
+.control-wrap .ant-radio-group .ant-radio-inner::after {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  content: none !important;
+  background: none !important;
+  border: none !important;
+  pointer-events: none !important;
+}
+.control-wrap .ant-radio-group .ant-radio-inner {
+  border-radius: 50% !important;
+  width: 14px !important;
+  height: 14px !important;
+  box-sizing: border-box !important;
+}
+
+/* Select: корень — контейнер, стрелка и clear поверх поля (не под ним), ровная высота и текст по центру */
+.canvas-select-wrap .ant-select,
+.properties-panel .ant-select {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.canvas-select-wrap .ant-select > *:first-child,
+.properties-panel .ant-select > *:first-child {
+  flex: 1;
+  min-width: 0;
+}
+.canvas-select-wrap .ant-select-single .ant-select-selector,
+.properties-panel .ant-select-single .ant-select-selector {
+  min-height: 32px;
+  padding: 6px 36px 6px 12px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+}
+/* В закрытом виде обёртка поиска не занимает ширину — значение остаётся слева */
+.canvas-select-wrap .ant-select-single:not(.ant-select-open) .ant-select-selection-search,
+.properties-panel .ant-select-single:not(.ant-select-open) .ant-select-selection-search {
+  flex: 0 0 auto;
+  width: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+/* При открытии обёртка поиска поверх поля слева — не участвует в flex, контент не уезжает вправо */
+.canvas-select-wrap .ant-select-open .ant-select-selector,
+.properties-panel .ant-select-open .ant-select-selector {
+  position: relative;
+}
+.canvas-select-wrap .ant-select-open .ant-select-selection-search,
+.properties-panel .ant-select-open .ant-select-selection-search {
+  position: absolute !important;
+  left: 12px;
+  right: 36px;
+  top: 0;
+  bottom: 0;
+  width: auto !important;
+  flex: none !important;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.canvas-select-wrap .ant-select-open .ant-select-selection-search .ant-select-selection-search-input,
+.properties-panel .ant-select-open .ant-select-selection-search .ant-select-selection-search-input {
+  width: 100% !important;
+  text-align: left !important;
+}
+.canvas-select-wrap .ant-select-single .ant-select-selection-placeholder,
+.canvas-select-wrap .ant-select-single .ant-select-selection-item,
+.properties-panel .ant-select-single .ant-select-selection-placeholder,
+.properties-panel .ant-select-single .ant-select-selection-item {
+  line-height: 20px;
+}
+.canvas-select-wrap .ant-select-arrow,
+.properties-panel .ant-select-arrow,
+.canvas-select-wrap .ant-select-clear,
+.properties-panel .ant-select-clear {
+  position: absolute !important;
+  top: 50%;
+  margin-top: -8px;
+  transform: none;
+}
+.canvas-select-wrap .ant-select-arrow,
+.properties-panel .ant-select-arrow {
+  right: 12px;
+  /* Клик по стрелке проходит к селектору и открывает выпадающий список */
+  pointer-events: none;
+}
+.canvas-select-wrap .ant-select-clear,
+.properties-panel .ant-select-clear {
+  right: 32px;
+}
+.canvas-select-wrap .ant-select-open .ant-select-arrow,
+.properties-panel .ant-select-open .ant-select-arrow {
+  transform: rotate(180deg);
+}
+
+/* Тултип для обрезанного значения в селекте: ширина по контенту, не у левого края страницы */
+.ant-tooltip-content {
+  width: max-content;
+  max-width: min(360px, 90vw);
+}
+.ant-tooltip-inner {
+  width: max-content;
+  max-width: min(360px, 90vw);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Боковые панели редактора: выравнивание по левому краю, стили Hexa UI */
+.editor-sidebar {
+  box-sizing: border-box;
+}
+.editor-sidebar > * {
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+}
+/* Панель свойств: все Space-компоненты и их items растягиваются на полную ширину */
+.properties-panel .ant-space.ant-space-vertical {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  align-items: stretch !important;
+}
+.properties-panel .ant-space-item {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.properties-panel .ant-space-item > * {
+  width: 100%;
+}
+.editor-sidebar .controls-palette-item {
+  justify-content: flex-start;
+  text-align: left;
+}
+/* Палитра контролов: hover по Hexa UI */
+.controls-palette-item:hover {
+  background: var(--tagsoutlined--neutral-bg-hover, #F7F7F8);
+  border-color: var(--tagsoutlined--neutral-border, #E7E7E9);
+}
+.controls-palette-item:focus-visible {
+  outline: 2px solid var(--main-interact--focus, #394DBF);
+  outline-offset: 2px;
+}
+
+/* Дерево выбора файла формы: отступы по уровням (чтобы вложенные узлы были сдвинуты) */
+.form-files-tree .ant-tree-indent {
+  display: inline-block;
+}
+.form-files-tree .ant-tree-indent-unit {
+  width: 20px !important;
+  min-width: 20px !important;
+  display: inline-block !important;
+}
+.form-files-tree .ant-tree-treenode {
+  padding: 2px 0;
+}
+.form-files-tree .ant-tree .ant-tree-treenode .ant-tree-node-content-wrapper {
+  border-radius: 4px;
+}
+
+/* Свёрнутое описание config hook: без системного треугольника, вид «ссылки» */
+.form-config-hook-doc-summary::-webkit-details-marker {
+  display: none;
+}
