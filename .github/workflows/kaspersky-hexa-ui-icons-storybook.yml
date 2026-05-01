@@ -1,3 +1,5 @@
+# Build and deploy Storybook for @kaspersky/hexa-ui-icons to GitHub Pages (monorepo).
+
 name: "[storybook] @kaspersky/hexa-ui-icons"
 
 on:
@@ -5,8 +7,8 @@ on:
     branches:
       - "master"
     paths:
-      - 'packages/kaspersky-hexa-ui-icons/**'
-      - '.github/workflows/kaspersky-hexa-ui-icons-storybook.yml'
+      - "packages/kaspersky-hexa-ui-icons/**"
+      - ".github/workflows/kaspersky-hexa-ui-icons-storybook.yml"
   workflow_dispatch:
 
 jobs:
@@ -19,23 +21,24 @@ jobs:
       contents: write
       pages: write
       id-token: write
-    defaults:
-      run:
-        working-directory: ./packages/kaspersky-hexa-ui-icons
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: Install dependencies
-        shell: bash
-        run: |
-          npm ci
+        run: npm ci
+
       - name: Build Storybook
-        shell: bash
-        run: |
-          npm run build-storybook
+        run: npm run build-storybook --workspace=@kaspersky/hexa-ui-icons
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages/kaspersky-hexa-ui-icons/storybook/hexa-ui-icons
-          destination_dir: icons
+          destination_dir: hexa-ui-icons
