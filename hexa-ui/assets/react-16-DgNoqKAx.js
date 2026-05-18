@@ -1,1 +1,0 @@
-import{D as n}from"./iframe-WWmuoJVo.js";import"./preload-helper-C1FmrZbK.js";var p=async(e,o)=>new Promise(r=>{n.render(e,o,()=>r(null))}),u=e=>{n.unmountComponentAtNode(e)};export{p as renderElement,u as unmountElement};
