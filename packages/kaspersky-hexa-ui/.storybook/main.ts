@@ -39,6 +39,15 @@ const config: StorybookConfig = {
   framework: '@storybook/react-vite',
   viteFinal: async (config) => {
     config.resolve = config.resolve || {}
+    config.resolve.dedupe = [
+      ...(config.resolve.dedupe ?? []),
+      '@codemirror/autocomplete',
+      '@codemirror/commands',
+      '@codemirror/language',
+      '@codemirror/lint',
+      '@codemirror/state',
+      '@codemirror/view'
+    ]
     config.resolve.alias = {
       ...config.resolve.alias,
       '@src': path.resolve(__dirname, '../src/'),

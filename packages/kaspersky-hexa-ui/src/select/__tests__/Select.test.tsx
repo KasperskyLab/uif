@@ -79,6 +79,36 @@ describe('Select', () => {
     expect(screen.getByTestId(klId)).toBeInTheDocument()
   })
 
+  test('should vertically center multiselect option label relative to checkbox', async () => {
+    const options = [
+      { label: 'Moscow', value: '1' },
+      { label: 'Kazan', value: '2', description: 'description text' }
+    ]
+    const { container } = render(
+      <DefaultSelect options={options} defaultValue={undefined} />
+    )
+
+    await waitForDropdown()
+
+    const checkbox = container.querySelector('.dropdown-v6-multi-checkbox')
+    expect(checkbox).toBeInTheDocument()
+
+    const checkboxCell = checkbox?.parentElement
+    expect(checkboxCell).not.toBeNull()
+    expect(window.getComputedStyle(checkboxCell as Element).display).toBe('flex')
+    expect(window.getComputedStyle(checkboxCell as Element).alignItems).toBe('center')
+
+    const optionContent = checkboxCell?.parentElement
+    expect(optionContent).not.toBeNull()
+    expect(window.getComputedStyle(optionContent as Element).display).toBe('grid')
+
+    const checkboxInput = container.querySelector(
+      '.dropdown-v6-multi-checkbox .ant-checkbox'
+    )
+    expect(checkboxInput).not.toBeNull()
+    expect(window.getComputedStyle(checkboxInput as Element).top).toBe('0px')
+  })
+
   test('should not auto clear search value with autoClearSearchValue false', async () => {
     const inputValue = defaultProps.options[0].label.substring(0, 4)
     const { container } = render(<DefaultSelect defaultValue={undefined} autoClearSearchValue={false} showSearch />)
