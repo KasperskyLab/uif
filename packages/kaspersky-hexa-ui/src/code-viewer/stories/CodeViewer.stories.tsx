@@ -140,7 +140,26 @@ export const ExampleHTML: Story = {
 export const ExampleJSON: Story = {
   args: {
     initialValue: jsonExample,
-    language: 'json'
+    language: 'json',
+    width: 600,
+    height: 400,
+    resizeAxis: 'y'
+  },
+  render: (args: CodeViewerPropsStory) => {
+    const [currentValue, setCurrentValue] = useState(args.initialValue ?? jsonExample)
+    const theme = useTheme()
+
+    return (
+      <StoryColumn>
+        <CodeViewer
+          {...args}
+          onChange={setCurrentValue}
+        />
+        <ValueContainer theme={theme.key}>
+          Current value:<br/>{currentValue}
+        </ValueContainer>
+      </StoryColumn>
+    )
   }
 }
 

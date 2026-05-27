@@ -62,6 +62,16 @@
     "helpers/localization/i18next.js"
   ],
   "overrides": {
+    "@codemirror/autocomplete": "6.18.4",
+    "@codemirror/commands": "6.7.1",
+    "@codemirror/lang-html": "6.4.9",
+    "@codemirror/lang-javascript": "6.2.2",
+    "@codemirror/lang-json": "6.0.1",
+    "@codemirror/lang-xml": "6.1.0",
+    "@codemirror/language": "6.10.8",
+    "@codemirror/lint": "6.8.4",
+    "@codemirror/state": "6.5.0",
+    "@codemirror/view": "6.36.1",
     "chokidar": "3.5.3",
     "es5-ext": "0.10.53",
     "fsevents": "2.3.2",
@@ -72,12 +82,14 @@
     "style-inject"
   ],
   "dependencies": {
+    "@codemirror/autocomplete": "6.18.4",
     "@codemirror/commands": "6.7.1",
     "@codemirror/lang-html": "6.4.9",
     "@codemirror/lang-javascript": "6.2.2",
     "@codemirror/lang-json": "6.0.1",
     "@codemirror/lang-xml": "6.1.0",
     "@codemirror/language": "6.10.8",
+    "@codemirror/lint": "6.8.4",
     "@codemirror/state": "6.5.0",
     "@codemirror/view": "6.36.1",
     "@kaspersky/hexa-ui-core": "0.17.2",
