@@ -1,0 +1,73 @@
+import{b4 as Ke,b5 as We,b6 as Me,b7 as Ve,b8 as _e,a$ as He,aV as Ne,H as f,a0 as Le,u as Pe,r as u,R as r,aa as $e,T as G,aR as U,b as J,S as je}from"./iframe-DijVn6lr.js";import{w as Oe}from"./withMeta-Cvuu-gnO.js";import{s as Re}from"./helpers-BytZKRkB.js";import{d as ze}from"./index-Coa4z_GS.js";import{r as Ge,a as Ue}from"./_getTag-CMElrX3b.js";import{B as Je}from"./Button-PwdEuxbx.js";import{S as Qe}from"./Search-DkhbVFt5.js";import{T as Xe}from"./Tree-DqIiOEy9.js";import{T as Ye}from"./Toggle-B1iun58-.js";import"./preload-helper-C1FmrZbK.js";import"./Grid-CCWRtDLv.js";import"./StatusOkOutline-rTkgZuSC.js";import"./type-DN7uEUoT.js";import"./Dropdown-D0EIrFH4.js";import"./KeyCode-Dc0kQrxh.js";import"./Overflow-DkuW95mG.js";import"./focus-C71cxy8r.js";import"./Loader-D2XHvBNY.js";import"./Divider-D-bCk8Cb.js";import"./ArrowRight-DFM_iKWt.js";import"./v4-BoP187Zn.js";import"./button-ncLxIWef.js";import"./wave-B_Kd_ldv.js";import"./useLocalization-BLHqRTJE.js";import"./Textbox-Do8w9FQx.js";import"./useGlobalStyles-Clp_neqU.js";import"./useThemedTextbox-COIqB-gx.js";import"./typesHelpers-tpz7Of7L.js";import"./input-D3RvnOrl.js";import"./index-Chjiymov.js";import"./index-BlqrnOjt.js";import"./Advertisement-CowrdAHm.js";import"./ArrowRightMini-lc0ilx02.js";import"./ArrowDown-CaIhkLjp.js";import"./ArrowLeft-dAY6nCFc.js";import"./Calendar-BvhRRbo-.js";import"./ArrowUp1-CqJo2_zZ.js";import"./ExpandUp-B9q_IBTm.js";import"./Server-DfqXxNFK.js";import"./ArrowForward-D__KWItR.js";import"./Upload-NDYqyV2F.js";import"./StatusDangerOutlineSquare-DdQ-_SWm.js";import"./Help-cif6JGJv.js";import"./Kira-CEp6IDBz.js";import"./Menu2-CG_lP8tl.js";import"./Menu3-DfU3vcXs.js";import"./Unpin-CaVgr-PT.js";import"./Placeholder-XNkSpDe-.js";import"./Plus-CtMZBh9J.js";import"./Search1-DOO2nP8F.js";import"./Settings-Ca7K_Yj0.js";import"./SettingsGear-IKcNoBkw.js";import"./StatusDangerSolid1-BFRjkrKA.js";import"./StatusOkSolid-kU5hDl8y.js";import"./ArrowRight-kFv3GeJ2.js";import"./StatusWarningOutline-C1xanFFW.js";import"./StatusDangerSolid1-BoAfxRDS.js";import"./ShieldOkSolid-D5hPyBFW.js";import"./StatusWarningSolid-BjUfrWFZ.js";import"./ArrowDownSolid-B6lDi2Ko.js";import"./ArrowRightSolid-x1c4h6Py.js";import"./AccountSearch-LE1oTn1X.js";import"./Connection-oQdKLqfx.js";import"./SearchOutlined-CIJue4Bq.js";import"./useTranslation-BLQw3CeK.js";import"./IconResolver-DYLYAoT6.js";import"./index-D4RAOcs8.js";import"./ResizeInput-Dyuwuz2a.js";import"./index-DIVbb-zv.js";import"./Popover-CTNslkPb.js";import"./IconSearch-DdHPmvVx.js";import"./Indicator-C31YGlvy.js";import"./shouldForwardProp-Cdy-RLhZ.js";import"./Checkbox-zEfJeMcN.js";import"./AdditionalContent-BcbE0Uii.js";import"./HelpMessage-BdtHkJwS.js";import"./useId-D3viLu0F.js";import"./generateId-BXJELych.js";import"./FormLabel-671wf7jJ.js";import"./Markdown-DOYaVGrQ.js";import"./Tag-UgBikWKe.js";import"./TextReducer-BIfgSXBQ.js";import"./Group-CAP3cdvx.js";import"./index-tjmVxM9w.js";import"./colors-CLXBBt7C.js";import"./index-DeNKdsoP.js";import"./index-C7yFYuvE.js";import"./Radio-DWQHGPhV.js";import"./index-QI3BhgDY.js";import"./Tree-vPvK-vvM.js";import"./pickAttrs-7oyop8I4.js";import"./List-5CiQLL9E.js";var _,Q;function Ze(){if(Q)return _;Q=1;var s=Ge(),e=Ue(),l=Ke(),h=_e(),T=We(),d=Me(),m=He(),g=Ve(),p="[object Map]",k="[object Set]",w=Object.prototype,S=w.hasOwnProperty;function E(a){if(a==null)return!0;if(T(a)&&(h(a)||typeof a=="string"||typeof a.splice=="function"||d(a)||g(a)||l(a)))return!a.length;var y=e(a);if(y==p||y==k)return!a.size;if(m(a))return!s(a).length;for(var M in a)if(S.call(a,M))return!1;return!0}return _=E,_}var et=Ze();const tt=Ne(et),ye="selectedTenantsIds",be=s=>{const e=[];return{mappedTenants:s.map(({id:h,name:T,subtenants:d})=>{e.push(h);const m={key:h,title:T};if(d&&d.length>0){const{mappedTenants:g,tenantsIds:p}=be(d);m.children=g,e.push(...p)}return m}),tenantsIds:e}},rt=()=>{var e;const s=(e=document.cookie.match("(^|;)\\s*"+ye+"\\s*=\\s*([^;]+)"))==null?void 0:e.pop();return s?s.split(":"):[]},nt=s=>{const e=new Map,l=(h,T)=>{var d;for(const m of T){const g=(d=m.children)==null?void 0:d.map(p=>p.key);e.set(m.key,{children:g,parent:h,title:m.title}),m.children&&m.children.length>0&&l(m.key,m.children)}};return l("",s),e},at=s=>{document.cookie=`${ye}=${s.join(":")}; domain=.${document.location.hostname}; path=/;`},st=Le`
+  && {
+    overflow-y: hidden;
+  }
+`,ot=f.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`,it=f.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+`,ct=f.div`
+  margin-top: 15px;
+  text-align: center;
+`,mt=f.div`
+`,lt=f.div`
+  position: relative;
+  right: 20px;
+`,dt=f.div``,pt=f.div`
+  margin-bottom: 35px;
+`,ut=f.div`
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+`,ht=f.span`
+  background: var(--input-code-viewer--bg--highlight);
+`,ft=f(Xe)`${st}`,H=({className:s,theme:e,titleText:l="",counterText:h="",buttonText:T="",withButton:d=!1,withSearch:m=!0,withIcon:g=!1,data:p=[],defaultSelectedKeys:k,allTenantsKeys:w,applyHandler:S=()=>{},...E})=>{const{testAttributes:a}=Pe(E),y=u.useMemo(()=>nt(p),[p]),M=u.useMemo(()=>tt(k)?w:k,[k,w]),[v,N]=u.useState(k),[Se,L]=u.useState(M),[x,Ee]=u.useState(""),[xe,P]=u.useState(!0);u.useEffect(()=>{const n=()=>{const i=rt();N(i),S(i)};return window.addEventListener("focus",n),()=>window.removeEventListener("focus",n)},[S]);const $=(n,i,t)=>{n.forEach(o=>{var b;i[t](o);const c=(b=y.get(o))==null?void 0:b.children;c&&c.length>0&&$(c,i,t)})},V=u.useCallback(n=>{at(n),S(n)},[S]),we=u.useMemo(()=>ze(V,2e3),[V]),ve=(n,i)=>{var I;const t=new Set(v),o=i.node,c=(I=y.get(o.key))==null?void 0:I.children,b=o.checked?"delete":"add";t[b](o.key),c&&(c==null?void 0:c.length)>0&&$(c,t,b);const C=Array.from(t.keys());N(C),d||we(C)},j=(n,i)=>{const t=n.parent;if(t){i.add(t);const o=y.get(t);j(o,i)}},O=n=>{const i=new Set,t=y.values();for(const o of t)o.title.toLowerCase().includes(n.toLowerCase())&&j(o,i);Ee(n),n&&(L(Array.from(i)),P(!0))},Ce=n=>{L(n),P(!1)},Ie=u.useMemo(()=>{const n=i=>i.map(t=>{const o=t.title,c=o.toLowerCase().indexOf(x.toLowerCase()),b=o.substring(0,c),C=o.slice(c+x.length),I=o.substring(c,c+x.length),z=c>-1?r.createElement("span",null,b,r.createElement(ht,null,I),C):r.createElement("span",null,t.title);return t.children?{...t,title:z,key:t.key,children:n(t.children)}:{...t,title:z,key:t.key}});return n(p)},[x,p]),Ae=()=>r.createElement(mt,null,r.createElement(G,{color:"primary",type:"BTM2",theme:e?U[e]:void 0},l)),R=()=>r.createElement(G,{testId:`${E.testId}-counter`,color:"primary",type:"BTR3",theme:e?U[e]:void 0},h,": ",v.length),qe=()=>r.createElement(it,null,l&&Ae(),h&&g&&r.createElement(lt,null,R()),h&&!g&&r.createElement(dt,null,R())),Be=()=>r.createElement(pt,null,r.createElement(Qe,{testId:"tenant-filter-search",klId:"kl-tenant-filter-search",value:x,onChange:O,onClearClick:()=>O("")})),Fe=()=>r.createElement(ut,null,r.createElement(ft,{checkable:!0,treeData:Ie,onCheck:ve,checkedKeys:v,onExpand:Ce,expandedKeys:Se,autoExpandParent:xe,testId:`${E.testId}-tree`,checkStrictly:!0})),De=()=>r.createElement(ct,null,r.createElement(Je,{onClick:()=>V(v),testId:`${E.testId}-apply-filter`,text:T}));return r.createElement(ot,{className:$e(s,e),...a},qe(),m&&Be(),p&&Fe(),d&&De())};H.__docgenInfo={description:"",methods:[],displayName:"TenantFilter",props:{theme:{required:!1,tsType:{name:"Theme"},description:"Custom theme"},data:{required:!1,tsType:{name:"Array",elements:[{name:"signature",type:"object",raw:`{
+  title: string,
+  key: string,
+  disabled?: boolean,
+  children?: TenantFilterTreeDataItem[]
+}`,signature:{properties:[{key:"title",value:{name:"string",required:!0}},{key:"key",value:{name:"string",required:!0}},{key:"disabled",value:{name:"boolean",required:!1}},{key:"children",value:{name:"Array",elements:[{name:"TenantFilterTreeDataItem"}],raw:"TenantFilterTreeDataItem[]",required:!1}}]}}],raw:"TenantFilterTreeDataItem[]"},description:"Tree data",defaultValue:{value:"[]",computed:!1}},defaultSelectedKeys:{required:!0,tsType:{name:"Array",elements:[{name:"string"}],raw:"string[]"},description:"Keys of the default selected items"},allTenantsKeys:{required:!0,tsType:{name:"Array",elements:[{name:"string"}],raw:"string[]"},description:"All tenant keys"},applyHandler:{required:!1,tsType:{name:"signature",type:"function",raw:"(keys: string[]) => void",signature:{arguments:[{type:{name:"Array",elements:[{name:"string"}],raw:"string[]"},name:"keys"}],return:{name:"void"}}},description:"Called when the apply button is clicked",defaultValue:{value:"() => undefined",computed:!1}},className:{required:!1,tsType:{name:"string"},description:"Custom class name"},titleText:{required:!1,tsType:{name:"string"},description:"Title",defaultValue:{value:"''",computed:!1}},counterText:{required:!1,tsType:{name:"string"},description:"Text displayed next to the counter of selected items in the tree",defaultValue:{value:"''",computed:!1}},buttonText:{required:!1,tsType:{name:"string"},description:"Text of the apply button",defaultValue:{value:"''",computed:!1}},withButton:{required:!1,tsType:{name:"boolean"},description:"Whether to show button",defaultValue:{value:"false",computed:!1}},withSearch:{required:!1,tsType:{name:"boolean"},description:"Whether to show search",defaultValue:{value:"true",computed:!1}},withIcon:{required:!1,tsType:{name:"boolean"},description:"Whether to show icon",defaultValue:{value:"false",computed:!1}}}};const gt={designTokens:!1,useThemedHook:!1,unitTests:!1,screenshotTests:!1,migration:!0,apiTable:!0,storybook:!0},Tt="TenantFilter",yt="Составной компонент. Включает в себя Label, Search, Tree, Button",bt="Компонент TenantFilter предназначен для фильтрации данных по тенантам. `runtime.trigger('interface.tenant-filter.toggle', params)` - вызов из кодов NWC. `runtime.app.features.tenantFilter.openTenantFilter(params)` - вызов из плагинов. `params: {treeData, defaultCheckedKeys, handler}`",kt={dod:gt,component:Tt,description:yt,usage:bt},St=[{name:"0-0",id:"0-0",subtenants:[{name:"0-0-1",id:"0-0-1",subtenants:[{name:"0-0-1-1",id:"0-0-1-1",subtenants:[]},{name:"0-0-1-2",id:"0-0-1-2",subtenants:[]}]},{name:"0-0-2",id:"0-0-2",subtenants:[{name:"0-0-2-1",id:"0-0-2-1",subtenants:[]},{name:"0-0-2-2",id:"0-0-2-2",subtenants:[]}]}]},{name:"0-1",id:"0-1",subtenants:[]},{name:"0-2",id:"0-2",subtenants:[{name:"0-2-1",id:"0-2-1",subtenants:[{name:"0-2-1-1",id:"0-2-1-1",subtenants:[]},{name:"0-2-1-2",id:"0-2-1-2",subtenants:[]}]}]},{name:"0-3",id:"0-3",subtenants:[{name:"0-3-1",id:"0-3-1",subtenants:[{name:"0-3-1-1",id:"0-3-1-1",subtenants:[]},{name:"0-3-1-2",id:"0-3-1-2",subtenants:[]}]},{name:"0-3-2",id:"0-3-2",subtenants:[{name:"0-3-2-1",id:"0-3-2-1",subtenants:[]},{name:"0-3-2-2",id:"0-3-2-2",subtenants:[]}]}]},{name:"0-4",id:"0-4",subtenants:[{name:"0-4-1",id:"0-4-1",subtenants:[{name:"0-4-1-1",id:"0-4-1-1",subtenants:[]},{name:"0-4-1-2",id:"0-4-1-2",subtenants:[]}]},{name:"0-4-2",id:"0-4-2",subtenants:[{name:"0-4-2-1",id:"0-4-2-1",subtenants:[]},{name:"0-4-2-2",id:"0-4-2-2",subtenants:[]}]}]}],{mappedTenants:Et,tenantsIds:ke}=be(St),xt=["0-0-2-1"],wt=s=>{const e=s.map(l=>`
+ `+l);console.log(`${e.length} keys checked: ${e}`)},ln={title:"Hexa UI Components/TenantFilter",component:H,argTypes:{...Re(["theme","allTenantsKeys"])},args:{titleText:"Tenant filter",counterText:"Selected",withButton:!1,withSearch:!0,withIcon:!1,defaultSelectedKeys:[],data:Et,allTenantsKeys:ke,applyHandler:wt,testId:"tenant-filter-test-id",klId:"tenant-filter-kl-id"},parameters:{badges:[J.stable,J.missingDesign],docs:{page:Oe(kt)}}},A={},q={args:{defaultSelectedKeys:ke}},B={args:{defaultSelectedKeys:xt}},F={args:{withSearch:!1}},D={args:{titleText:void 0,counterText:void 0}},K={args:{buttonText:"Apply filter",withButton:!0}},W={render:s=>{const[e,l]=u.useState(!0);return r.createElement(je,{size:24,direction:"vertical",align:"start"},r.createElement(Ye,{checked:e,onChange:l},"Dark theme"),r.createElement("div",{className:e?"theme-dark":"theme-light",style:{background:"var(--bg--global)"}},r.createElement(H,{theme:e?"dark":"light",...s})))},args:{buttonText:"Apply filter",withButton:!0}};var X,Y,Z;A.parameters={...A.parameters,docs:{...(X=A.parameters)==null?void 0:X.docs,source:{originalSource:"{}",...(Z=(Y=A.parameters)==null?void 0:Y.docs)==null?void 0:Z.source}}};var ee,te,re;q.parameters={...q.parameters,docs:{...(ee=q.parameters)==null?void 0:ee.docs,source:{originalSource:`{
+  args: {
+    defaultSelectedKeys: tenantsIds
+  }
+}`,...(re=(te=q.parameters)==null?void 0:te.docs)==null?void 0:re.source}}};var ne,ae,se;B.parameters={...B.parameters,docs:{...(ne=B.parameters)==null?void 0:ne.docs,source:{originalSource:`{
+  args: {
+    defaultSelectedKeys: defaultSelectedKeys
+  }
+}`,...(se=(ae=B.parameters)==null?void 0:ae.docs)==null?void 0:se.source}}};var oe,ie,ce;F.parameters={...F.parameters,docs:{...(oe=F.parameters)==null?void 0:oe.docs,source:{originalSource:`{
+  args: {
+    withSearch: false
+  }
+}`,...(ce=(ie=F.parameters)==null?void 0:ie.docs)==null?void 0:ce.source}}};var me,le,de;D.parameters={...D.parameters,docs:{...(me=D.parameters)==null?void 0:me.docs,source:{originalSource:`{
+  args: {
+    titleText: undefined,
+    counterText: undefined
+  }
+}`,...(de=(le=D.parameters)==null?void 0:le.docs)==null?void 0:de.source}}};var pe,ue,he;K.parameters={...K.parameters,docs:{...(pe=K.parameters)==null?void 0:pe.docs,source:{originalSource:`{
+  args: {
+    buttonText: 'Apply filter',
+    withButton: true
+  }
+}`,...(he=(ue=K.parameters)==null?void 0:ue.docs)==null?void 0:he.source}}};var fe,ge,Te;W.parameters={...W.parameters,docs:{...(fe=W.parameters)==null?void 0:fe.docs,source:{originalSource:`{
+  render: args => {
+    const [darkTheme, setDarkTheme] = useState(true);
+    return <Space size={24} direction="vertical" align="start">
+        <Toggle checked={darkTheme} onChange={setDarkTheme}>Dark theme</Toggle>
+        <div className={darkTheme ? 'theme-dark' : 'theme-light'} style={{
+        background: 'var(--bg--global)'
+      }}>
+          <TenantFilter theme={darkTheme ? 'dark' : 'light'} {...args} />
+        </div>
+      </Space>;
+  },
+  args: {
+    buttonText: 'Apply filter',
+    withButton: true
+  }
+}`,...(Te=(ge=W.parameters)==null?void 0:ge.docs)==null?void 0:Te.source}}};const dn=["Basic","WithAllSelectedTenants","WithAllSomeTenants","WithoutSearch","WithoutHeader","WithButton","ChangeComponentTheme"];export{A as Basic,W as ChangeComponentTheme,q as WithAllSelectedTenants,B as WithAllSomeTenants,K as WithButton,D as WithoutHeader,F as WithoutSearch,dn as __namedExportsOrder,ln as default};

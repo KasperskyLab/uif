@@ -1,0 +1,3 @@
+import{n as a,N as n}from"./Menu-DOFrB_kk.js";import{o as i}from"./Notification-4g3d8XlB.js";import{H as s,R as e,j as m}from"./iframe-DijVn6lr.js";const r=({className:t})=>e.createElement(e.Fragment,null,e.createElement("div",{className:m(t,"uif-nav-item")},e.createElement("div",{className:"uif-nav-item-entry"},e.createElement("div",{className:"uif-nav-item-entry-icon"}),e.createElement("div",{className:"uif-nav-item-entry-title"},e.createElement("span",{className:"title-ellipsis"},"Server")),e.createElement("div",{className:"uif-nav-item-entry-props"}))),e.createElement(n,null));s(r)`
+  ${a}
+`;const v=t=>{t&&i.success({description:t,duration:1})};export{v as c};
