@@ -10,6 +10,8 @@ import { SelectCssConfig } from './types'
 const fromProps = getFromProps<SelectCssConfig>()
 
 const selectTextSizes = getTextSizes(textLevels.BTR3)
+const optionLineHeight = selectTextSizes.lineHeight
+const optionCheckboxColumnWidth = '18px'
 
 function encodeForCSS (content: string) {
   return content.replace(/"/g, '\\"').replace(/\n/g, '\\A')
@@ -274,7 +276,7 @@ const dropdownCss = css<DropdownStylesProps>`
       align-items: center;
 
       .dropdown-v6-multi-checkbox {
-        margin-right: 5px;
+        margin-right: 0;
       }
     }
 
@@ -423,10 +425,22 @@ export const OptionDescription = styled.span<{ cssConfig: SelectCssConfig }>`
 `
 
 export const OptionContent = styled.div`
+  display: grid;
+  grid-template-columns: ${optionCheckboxColumnWidth} 1fr;
+  column-gap: 5px;
+  align-items: start;
+`
+
+export const OptionCheckboxCell = styled.div`
+  width: ${optionCheckboxColumnWidth};
+  height: ${optionLineHeight};
   display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 export const OptionTextContent = styled.div`
   display: flex;
   flex-direction: column;
+  min-width: 0;
 `
