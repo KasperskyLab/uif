@@ -93,12 +93,12 @@ describe('Select', () => {
     const checkbox = container.querySelector('.dropdown-v6-multi-checkbox')
     expect(checkbox).toBeInTheDocument()
 
-    const checkboxCell = checkbox?.parentElement
+    const checkboxCell = checkbox?.closest('.kl6-select-option-checkbox-cell')
     expect(checkboxCell).not.toBeNull()
     expect(window.getComputedStyle(checkboxCell as Element).display).toBe('flex')
     expect(window.getComputedStyle(checkboxCell as Element).alignItems).toBe('center')
 
-    const optionContent = checkboxCell?.parentElement
+    const optionContent = checkbox?.closest('.kl6-select-option-content')
     expect(optionContent).not.toBeNull()
     expect(window.getComputedStyle(optionContent as Element).display).toBe('grid')
 
@@ -107,6 +107,19 @@ describe('Select', () => {
     )
     expect(checkboxInput).not.toBeNull()
     expect(window.getComputedStyle(checkboxInput as Element).top).toBe('0px')
+  })
+
+  test('should not apply multiselect grid layout in single select mode', async () => {
+    const { container } = render(
+      <DefaultSelect mode={undefined} defaultValue={undefined} />
+    )
+
+    await waitForDropdown()
+
+    const optionContent = container.querySelector('.kl6-select-option-content')
+    expect(optionContent).toBeInTheDocument()
+    expect(window.getComputedStyle(optionContent as Element).display).toBe('flex')
+    expect(getFirstOption(container)).toHaveTextContent(defaultProps.options[0].label)
   })
 
   test('should not auto clear search value with autoClearSearchValue false', async () => {

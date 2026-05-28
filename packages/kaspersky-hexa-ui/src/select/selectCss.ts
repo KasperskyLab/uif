@@ -280,6 +280,19 @@ const dropdownCss = css<DropdownStylesProps>`
       }
     }
 
+    .kl6-select-option-content {
+      display: flex;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .kl6-select-option-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+    }
+
     .ant-select-item-option-content > span {
       max-width: 100%;
       overflow: hidden;
@@ -359,6 +372,50 @@ const dropdownCss = css<DropdownStylesProps>`
     .ant-select-item-option-state {
       display: none;
     }
+
+    .kl6-select-option-content {
+      display: grid;
+      grid-template-columns: ${optionCheckboxColumnWidth} 1fr;
+      column-gap: 5px;
+      align-items: start;
+    }
+
+    .kl6-select-option-checkbox-cell {
+      width: ${optionCheckboxColumnWidth};
+      height: ${optionLineHeight};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .dropdown-v6-multi-checkbox {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dropdown-v6-multi-checkbox .kl6-checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+
+    .dropdown-v6-multi-checkbox-unchecked.ant-checkbox-wrapper,
+    .dropdown-v6-multi-checkbox-checked.ant-checkbox-wrapper {
+      align-items: center;
+      line-height: 1;
+
+      .ant-checkbox {
+        top: 0;
+      }
+    }
+
+    .dropdown-v6-multi-checkbox .ant-checkbox-wrapper + .ant-checkbox-wrapper {
+      margin-left: 0;
+    }
     
     .ant-select-item:not([label]) {
       &:not(.ant-select-item-option-selected) {
@@ -422,25 +479,4 @@ export const StyledErrorWrapper = styled.div<{ cssConfig: SelectCssConfig }>`
 
 export const OptionDescription = styled.span<{ cssConfig: SelectCssConfig }>`
   color: ${fromProps('enabled.option.description')};
-`
-
-export const OptionContent = styled.div`
-  display: grid;
-  grid-template-columns: ${optionCheckboxColumnWidth} 1fr;
-  column-gap: 5px;
-  align-items: start;
-`
-
-export const OptionCheckboxCell = styled.div`
-  width: ${optionCheckboxColumnWidth};
-  height: ${optionLineHeight};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
-
-export const OptionTextContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
 `
