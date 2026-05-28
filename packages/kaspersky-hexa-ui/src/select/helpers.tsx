@@ -237,32 +237,6 @@ export const MultiSelectCheckBox = styled(({ className }) => (
     <Checkbox className="dropdown-v6-multi-checkbox-checked" checked />
   </div>
 ))`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .kl6-checkbox-wrapper {
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
-
-  .dropdown-v6-multi-checkbox-unchecked.ant-checkbox-wrapper,
-  .dropdown-v6-multi-checkbox-checked.ant-checkbox-wrapper {
-    align-items: center;
-    line-height: 1;
-
-    .ant-checkbox {
-      top: 0;
-    }
-  }
-
-  .ant-checkbox-wrapper + .ant-checkbox-wrapper {
-    margin-left: 0;
-  }
-
   .ant-select-item-option.ant-select-item-option-selected & .dropdown-v6-multi-checkbox-unchecked,
   .ant-select-item-option:not(.ant-select-item-option-selected) & .dropdown-v6-multi-checkbox-checked {
     display: none;

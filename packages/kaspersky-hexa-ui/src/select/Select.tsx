@@ -32,7 +32,7 @@ import {
   prepareValues,
   removeValue
 } from './helpers'
-import { DropdownContent, getSelectGlobalStyles, OptionCheckboxCell, OptionContent, OptionDescription, OptionTextContent, selectCss, SelectInnerWrapper, SelectWrapper } from './selectCss'
+import { DropdownContent, getSelectGlobalStyles, OptionDescription, selectCss, SelectInnerWrapper, SelectWrapper } from './selectCss'
 import { OptionType, SelectProps, SelectViewProps } from './types'
 import { useThemedSelect } from './useThemedSelect'
 
@@ -80,13 +80,13 @@ export const Select = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         label={typeof option.label === 'string' ? option.label.trim() : option.label}
         role="option"
       >
-        <OptionContent>
+        <div className="kl6-select-option-content">
           {isMultiSelect && (
-            <OptionCheckboxCell>
+            <div className="kl6-select-option-checkbox-cell">
               <MultiSelectCheckBox />
-            </OptionCheckboxCell>
+            </div>
           )}
-          <OptionTextContent>
+          <div className="kl6-select-option-text">
             <TextReducer truncationWidth={selectOffsetWidth}>
               {option.label}
             </TextReducer>
@@ -95,8 +95,8 @@ export const Select = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                 {option.description}
               </OptionDescription>
             )}
-          </OptionTextContent>
-        </OptionContent>
+          </div>
+        </div>
       </RcOption>
     )
   }
