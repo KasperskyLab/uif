@@ -1,1 +1,0 @@
-import{R as a,j as e}from"./iframe-DGvJ380d.js";const r="_separator_6spf1_2",s={separator:r},t=()=>a.createElement("div",{className:e(s.separator,"hexa-ui-range-separator")});t.__docgenInfo={description:"",methods:[],displayName:"RangeSeparator"};export{t as R};

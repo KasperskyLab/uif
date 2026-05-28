@@ -1,0 +1,1 @@
+import{t as e}from"./type-C6K9kL-Y.js";var a=e("success","processing","error","default","warning"),o=e("pink","red","yellow","orange","cyan","green","blue","purple","geekblue","magenta","volcano","gold","lime");export{o as P,a};
