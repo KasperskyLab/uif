@@ -1,0 +1,27 @@
+import{T as b}from"./Palette-CpDmDXeM.js";import{v as h}from"./typesHelpers-tpz7Of7L.js";import{R as t,b as n,c as o,H as T}from"./iframe-CBNIXqWm.js";import{w as k}from"./withMeta-BiY54Lnt.js";import{s as w}from"./helpers-BytZKRkB.js";import{T as r}from"./TimeInput-CfxcxOti.js";import{t as I}from"./types-c4IFTsjS.js";import"./preload-helper-C1FmrZbK.js";import"./Grid-DRLKWrxC.js";import"./StatusOkOutline-BhzwBS5E.js";import"./imaskDateOptionsGenerator-BP63XpEr.js";import"./input-CukqmKZ0.js";import"./index-Chjiymov.js";import"./Textbox-DJ1nJyzm.js";import"./useGlobalStyles-BU6K1Vs_.js";import"./useThemedTextbox-CKIx7skj.js";import"./index-B8rTZcNz.js";import"./Advertisement-0tgBvn-H.js";import"./ArrowRightMini-WAtwWm-P.js";import"./ArrowDown-Y8nc6LUr.js";import"./ArrowLeft-Ct0ZpXbg.js";import"./Calendar-Dr--19yW.js";import"./ArrowRight-DOMqH-A2.js";import"./ArrowUp1-CiQgixFk.js";import"./ExpandUp-B4_yhjTn.js";import"./Server-DX3jIhsG.js";import"./ArrowForward-CTLn1brD.js";import"./Upload-C9JWoNnF.js";import"./StatusDangerOutlineSquare-9vd3YrA5.js";import"./Help-vj8qnM9G.js";import"./Kira-7wgZk1IP.js";import"./Menu2-o6ywPqTf.js";import"./Menu3-Befv1-Ms.js";import"./Unpin-BAFNNKvJ.js";import"./Placeholder-BtGpZ1tA.js";import"./Plus-Wofgsm6R.js";import"./Search1-jsfaA-w0.js";import"./Settings-ZkN9nItr.js";import"./SettingsGear-CXOzO7a9.js";import"./StatusDangerSolid1-P4rj2y0n.js";import"./StatusOkSolid-BSyFKt93.js";import"./ArrowRight-mEF8foZ-.js";import"./StatusWarningOutline-C1ojQKjI.js";import"./StatusDangerSolid1-CxusGOyX.js";import"./ShieldOkSolid-CKeyel1N.js";import"./StatusWarningSolid-DLIiIj72.js";import"./ArrowDownSolid-Dnc_Zu37.js";import"./ArrowRightSolid-Y7yti10s.js";import"./AccountSearch-CNrOa8Ml.js";import"./Connection-CYP3xHSa.js";import"./KeyCode-BRZB9_MH.js";import"./type-YzYuwFG9.js";import"./SearchOutlined-BLcNcmGc.js";import"./Button-DejaZzBC.js";import"./Dropdown-ees5VvWC.js";import"./Overflow-CmFo4jk3.js";import"./focus-BxWsNqjj.js";import"./Loader-vJbmmTbY.js";import"./index-Cxj_l2qe.js";import"./Divider-ja1HbPIW.js";import"./v4-BoP187Zn.js";import"./button-DLIzkXNO.js";import"./wave-C4_7brB4.js";import"./Popover-BHGhJBJm.js";import"./useTranslation-rAGXttfk.js";import"./IconResolver-CW0gFSHw.js";import"./index-DN3gpxtf.js";import"./ResizeInput-CdMqYzZs.js";import"./index-DJ6yuvO4.js";const E={designTokens:!1,useThemedHook:!1,unitTests:!1,screenshotTests:!1,migration:!1,apiTable:!1,storybook:!0,designLink:!0,pixsoView:!0},x="TimeInput",C="Компонент для выбора времени. В качестве основы используется TimePicker из библиотеки Antd.",y="Используется для выбора времени",S="https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=3828%3A16437",V="https://pixso.net/app/design/M7_B6xFkVmGWzArYruGkGA",v={dod:E,component:x,description:C,usage:y,designLink:S,pixsoView:V},Qt={title:"Hexa UI Components/Inputs/TimeInput",component:r,argTypes:{validationStatus:{control:{type:"radio"},options:h},format:{control:{type:"radio"},options:I},...w(["theme"])},args:{disabled:!1,testId:"time-input-test-id",klId:"time-input-kl-id"},parameters:{badges:[n.stable,n.needsDesignReview],docs:{page:k(v)}},decorators:[(e,f)=>t.createElement(A,null,t.createElement(e,{...f}))]},A=T.div`
+  width: 300px;
+`,m={args:{klId:"time-input"}},a={render:e=>t.createElement(t.Fragment,null,"HH:mm ",t.createElement(r,{...e,format:"HH:mm",placeholder:"__:__"}),t.createElement("br",null),"HH:mm:ss ",t.createElement(r,{...e,format:"HH:mm:ss",placeholder:"__:__:__"}),t.createElement("br",null),"HH:mm:ss.ms ",t.createElement(r,{...e,format:"HH:mm:ss.ms",placeholder:"__:__:__.___"}),t.createElement("br",null),"h:mm: am/pm ",t.createElement(r,{...e,format:"h:mm aaa",placeholder:"__:__ am"}))},p={args:{source:{input_datetime_picker:o.input_datetime_picker,calendar_dropdown:o.calendar_dropdown,calendar_dropdown_button:o.calendar_dropdown_button,calendar_preset_button:o.calendar_preset_button}},render:e=>t.createElement(b,{...e})};var s,i,d;m.parameters={...m.parameters,docs:{...(s=m.parameters)==null?void 0:s.docs,source:{originalSource:`{
+  args: {
+    klId: 'time-input'
+  }
+}`,...(d=(i=m.parameters)==null?void 0:i.docs)==null?void 0:d.source}}};var c,l,_;a.parameters={...a.parameters,docs:{...(c=a.parameters)==null?void 0:c.docs,source:{originalSource:`{
+  render: args => <>
+    HH:mm <TimeInput {...args} format="HH:mm" placeholder="__:__" />
+    <br />
+    HH:mm:ss <TimeInput {...args} format="HH:mm:ss" placeholder="__:__:__" />
+    <br />
+    HH:mm:ss.ms <TimeInput {...args} format="HH:mm:ss.ms" placeholder="__:__:__.___" />
+    <br />
+    h:mm: am/pm <TimeInput {...args} format="h:mm aaa" placeholder="__:__ am" />
+  </>
+}`,...(_=(l=a.parameters)==null?void 0:l.docs)==null?void 0:_.source}}};var u,H,g;p.parameters={...p.parameters,docs:{...(u=p.parameters)==null?void 0:u.docs,source:{originalSource:`{
+  args: {
+    source: {
+      input_datetime_picker: componentColors.input_datetime_picker,
+      calendar_dropdown: componentColors.calendar_dropdown,
+      calendar_dropdown_button: componentColors.calendar_dropdown_button,
+      calendar_preset_button: componentColors.calendar_preset_button
+    }
+  },
+  render: args => <ThemedPalette {...args} />
+}`,...(g=(H=p.parameters)==null?void 0:H.docs)==null?void 0:g.source}}};const Zt=["Basic","Variants","ColorTokens"];export{m as Basic,p as ColorTokens,a as Variants,Zt as __namedExportsOrder,Qt as default};

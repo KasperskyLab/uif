@@ -1,1 +1,0 @@
-import{u as a}from"./useLocalization-B-iPFUIn.js";import{R as e}from"./iframe-DWiAMwiJ.js";const i=({localizationKey:o})=>{const t=a(o);return e.createElement(e.Fragment,null,t)};i.__docgenInfo={description:"",methods:[],displayName:"Locale",props:{localizationKey:{required:!0,tsType:{name:"string"},description:"Localization key"}}};export{i as L};
