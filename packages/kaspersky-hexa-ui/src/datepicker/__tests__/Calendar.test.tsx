@@ -125,6 +125,30 @@ describe('Calendar', () => {
     expect(baseDom.queryAllByText('59')).toHaveLength(2)
   })
 
+  it('should render time controls without seconds when showTime format is HH:mm', () => {
+    const placeholder = `${locales.en.placeholder} __:__`
+    const baseDom = render(
+      <DefaultCalender
+        showTime={{ format: 'HH:mm' }}
+        placeholder={placeholder}
+      />
+    )
+    const input = baseDom.getByPlaceholderText(placeholder)
+    fireEvent.click(input)
+
+    expect(baseDom.queryAllByText('00')).toHaveLength(2)
+    expect(baseDom.queryAllByText('59')).toHaveLength(1)
+  })
+
+  it('should use locale placeholder without seconds when showTime format is HH:mm', () => {
+    const expectedPlaceholder = `${locales.en.placeholder} __:__`
+    const { getByPlaceholderText } = render(
+      <DefaultCalender showTime={{ format: 'HH:mm' }} />
+    )
+
+    expect(getByPlaceholderText(expectedPlaceholder)).toBeInTheDocument()
+  })
+
   it('should use the start of the day as a default time', async () => {
     const baseDom = render(<DefaultCalender format="YYYY-MM-DD HH:mm" placeholder="showTime" showTime />)
     const input = baseDom.getByPlaceholderText('showTime') as HTMLInputElement

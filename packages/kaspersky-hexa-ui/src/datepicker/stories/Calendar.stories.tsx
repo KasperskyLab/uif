@@ -16,7 +16,7 @@ import { RangePicker } from '../RangePicker'
 import { CalendarProps, RangePickerProps } from '../types'
 
 const meta: Meta<CalendarProps> = {
-  title: 'Hexa UI Components/Inputs/DatePicker',
+  title: 'Hexa UI Components/Inputs/Calendar (DatePicker)',
   component: Calendar,
   argTypes: {
     validationStatus: {
@@ -92,6 +92,12 @@ export const RangeWithTime: StoryRangePicker = {
 
 export const WithTime: StoryCalendar = {
   render: (args: CalendarProps) => <Calendar {...args} showTime />
+}
+
+export const WithTimeNoSeconds: StoryCalendar = {
+  args: {
+    showTime: { format: 'HH:mm' }
+  }
 }
 
 export const WithPreset: StoryCalendar = {
