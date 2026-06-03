@@ -44,9 +44,11 @@ type PropsToOmitFromAntDatepicker = 'value'
 
 export type DateInputValue = Date | null
 
+export type ShowTimeConfig = boolean | { format?: string }
+
 export type CalendarProps = Omit<ComponentProps<typeof DatePicker>, PropsToOmitFromAntDatepicker> & {
-  /** Show time selection */
-  showTime?: boolean,
+  /** Show time selection. Pass `{ format: 'HH:mm' }` to hide seconds. */
+  showTime?: ShowTimeConfig,
   /** Presets for quick selection */
   presets?: Array<{ title: ReactNode, value: NonNullable<CalendarProps['value']> }>,
   /** Value */
@@ -92,8 +94,8 @@ export type RangePickerProps = Omit<ComponentProps<typeof DatePicker['RangePicke
   presets?: Array<{ title: ReactNode, value: NonNullable<RangePickerProps['value']> }>,
   /** Flag to indicate if reset button should be present */
   hasResetButton?: boolean,
-  /** To provide an additional time selection */
-  showTime?: boolean,
+  /** To provide an additional time selection. Pass `{ format: 'HH:mm' }` to hide seconds. */
+  showTime?: ShowTimeConfig,
   /** Date format in input */
   format?: string
 } & PickerThemeProps & TestingProps
