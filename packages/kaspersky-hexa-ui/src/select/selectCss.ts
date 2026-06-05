@@ -416,6 +416,16 @@ const dropdownCss = css<DropdownStylesProps>`
     .dropdown-v6-multi-checkbox .ant-checkbox-wrapper + .ant-checkbox-wrapper {
       margin-left: 0;
     }
+
+    .ant-select-item-option.ant-select-item-option-selected
+      .dropdown-v6-multi-checkbox > .kl6-checkbox-wrapper:first-child {
+      display: none;
+    }
+
+    .ant-select-item-option:not(.ant-select-item-option-selected)
+      .dropdown-v6-multi-checkbox > .kl6-checkbox-wrapper:last-child {
+      display: none;
+    }
     
     .ant-select-item:not([label]) {
       &:not(.ant-select-item-option-selected) {

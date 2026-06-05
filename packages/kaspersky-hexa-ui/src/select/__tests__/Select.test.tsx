@@ -109,6 +109,30 @@ describe('Select', () => {
     expect(window.getComputedStyle(checkboxInput as Element).top).toBe('0px')
   })
 
+  test('should show only one checkbox state per tags option', async () => {
+    const options = [
+      { label: 'Test 1', value: 'test_1' },
+      { label: 'Test 2', value: 'test_2' }
+    ]
+    const { container } = render(
+      <DefaultSelect
+        mode="tags"
+        options={options}
+        defaultValue={undefined}
+      />
+    )
+
+    await waitForDropdown()
+
+    const checkboxWrappers = container.querySelectorAll(
+      '.dropdown-v6-multi-checkbox > .kl6-checkbox-wrapper'
+    )
+    expect(checkboxWrappers.length).toBeGreaterThanOrEqual(2)
+
+    expect(window.getComputedStyle(checkboxWrappers[0]).display).not.toBe('none')
+    expect(window.getComputedStyle(checkboxWrappers[1]).display).toBe('none')
+  })
+
   test('should not apply multiselect grid layout in single select mode', async () => {
     const { container } = render(
       <DefaultSelect mode={undefined} defaultValue={undefined} />
