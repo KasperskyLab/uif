@@ -228,7 +228,7 @@ export function LoadingErrorContent ({ cssConfig, children }: LoadingErrorConten
   )
 }
 
-export const MultiSelectCheckBox = styled(({ className }) => (
+export const MultiSelectCheckBox = ({ className }: { className?: string }) => (
   <div className={cn('dropdown-v6-multi-checkbox', className)}>
     <Checkbox
       className="dropdown-v6-multi-checkbox-unchecked"
@@ -236,9 +236,4 @@ export const MultiSelectCheckBox = styled(({ className }) => (
     />
     <Checkbox className="dropdown-v6-multi-checkbox-checked" checked />
   </div>
-))`
-  .ant-select-item-option.ant-select-item-option-selected & .dropdown-v6-multi-checkbox-unchecked,
-  .ant-select-item-option:not(.ant-select-item-option-selected) & .dropdown-v6-multi-checkbox-checked {
-    display: none;
-  }
-`
+)

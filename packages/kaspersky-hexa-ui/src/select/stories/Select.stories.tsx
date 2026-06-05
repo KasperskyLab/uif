@@ -269,6 +269,28 @@ export const Multiselect: Story = {
   }
 }
 
+export const TagsWithOptions: Story = {
+  render: () => (
+    <Select
+      mode="tags"
+      options={[
+        { label: 'Test 1', value: 'test_1' },
+        { label: 'Test 2', value: 'test_2' },
+        { label: 'Test 3', value: 'test_3' },
+        { label: 'Test 4', value: 'test_4' }
+      ]}
+    />
+  ),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Repro for tags mode with options prop — each option should show a single checkbox.'
+      }
+    }
+  }
+}
+
 export const MultiselectWithSearch: Story = {
   render: (args) => (
     <FieldSet
