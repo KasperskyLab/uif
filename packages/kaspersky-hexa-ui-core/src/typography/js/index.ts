@@ -5,15 +5,13 @@ export const typographyCssVarString = cssVarString
 export enum FontFamily {
   Primary = '"Kaspersky Sans", Arial, sans-serif',
   Text = '"Kaspersky Sans Text", "Kaspersky Sans", Arial, sans-serif',
-  Mono = '"Kaspersky Sans Mono", "Kaspersky Sans", Arial, sans-serif',
-  Display = '"Kaspersky Sans Display", "Kaspersky Sans", Arial, sans-serif'
+  Mono = '"Kaspersky Sans Mono", "Kaspersky Sans", Arial, sans-serif'
 }
 
 export enum FontFamilySingle {
   Primary = 'Kaspersky Sans',
   Text = 'Kaspersky Sans Text',
-  Mono = 'Kaspersky Sans Mono',
-  Display = 'Kaspersky Sans Display'
+  Mono = 'Kaspersky Sans Mono'
 }
 
 export enum FontWeight {
