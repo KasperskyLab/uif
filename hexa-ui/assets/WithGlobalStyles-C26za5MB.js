@@ -1,0 +1,1 @@
+import{R as l}from"./iframe-DVE_7kq9.js";import{u as s}from"./useGlobalStyles-DHuBRWl5.js";function n(t){const e=a=>(s(),l.createElement(t,{...a}));return e.displayName=`WithGlobalStyles(${r(t)})`,Object.assign(e,t)}function r(t){return t.displayName||t.name||"Component"}export{n as W};
