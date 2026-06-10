@@ -23,7 +23,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { Add, Cancel1, Delete, Edit, Placeholder } from '@kaspersky/hexa-ui-icons/16'
+import { Add, Cancel1, Delete, Edit, Placeholder, Web } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
 import { MultiSelectCheckBox } from '../helpers'
@@ -264,8 +264,35 @@ export const SelectWithSearch: Story = {
 }
 
 export const Multiselect: Story = {
-  args: {
-    mode: 'multiple'
+  render: () => (
+    <Select
+      defaultValue={['web', 'local']}
+      mode="multiple"
+      options={[
+        {
+          label: (
+            <Space direction="horizontal" wrap="nowrap">
+              <Web />
+              Web
+            </Space>
+          ),
+          value: 'web'
+        },
+        {
+          label: 'Local',
+          value: 'local'
+        }
+      ]}
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Multiselect with pre-selected tags, including a rich label (icon + text). ' +
+          'Selected tags should be vertically centered in the trigger.'
+      }
+    }
   }
 }
 

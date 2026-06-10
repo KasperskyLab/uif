@@ -85,6 +85,16 @@ export const selectCss = css<SelectCssProps>`
       padding: 0 64px 0 12px;
     }
 
+    .kl-components-tag-text:has(svg) {
+      padding-left: 18px;
+      position: relative;
+
+      svg {
+        position: absolute;
+        left: 0px;        
+      }
+    }
+
     .ant-select-selection-search {
       margin-inline-start: 0;
       line-height: 20px;
