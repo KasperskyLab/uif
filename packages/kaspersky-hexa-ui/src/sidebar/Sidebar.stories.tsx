@@ -588,6 +588,8 @@ export const WithToolbarAndTabs: StoryWithButton = {
   }
 }
 
+export { SelectInSidebar, SelectInSidebarWithField } from './stories/SelectInSidebar'
+
 type PaletteStory = StoryObj<ThemedPaletteProps>
 export const ColorTokens: PaletteStory = {
   args: { source: componentColors.sidebar },
