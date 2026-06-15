@@ -685,15 +685,24 @@ const VTable: React.ForwardRefRenderFunction<RefObject, VTableProps> = (props, r
 
 
   useEffect(() => {
-    const el = wrap_inst.current.parentElement
+    const el = wrap_inst.current?.parentElement
+    if (!el) return
+
+    const options = { passive: true } as AddEventListenerOptions
     try {
-      el.addEventListener('scroll', scroll_hook as any, {
-        passive: true,
-      })
+      el.addEventListener('scroll', scroll_hook as any, options)
     } catch {
       el.addEventListener('scroll', scroll_hook as any, false)
     }
-  }, [wrap_inst.current])
+
+    return () => {
+      try {
+        el.removeEventListener('scroll', scroll_hook as any, options)
+      } catch {
+        el.removeEventListener('scroll', scroll_hook as any, false)
+      }
+    }
+  }, [scroll_hook])
 
 
 

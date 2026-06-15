@@ -99,6 +99,7 @@ export const useRowSelection = ({
 
   useEffect(() => {
     const updateSelectedRows = async () => {
+      const currentKeys = new Set(dataSource.map(row => row.key))
       let preselectedKeys: string[] = []
 
       if (getPreselectedRows) {
@@ -111,11 +112,29 @@ export const useRowSelection = ({
         })
       }
 
-      setSelectedRowKeys(prev => Array.from(new Set([...prev, ...preselectedKeys])))
+      setSelectedRowKeys(prev => {
+        const pruned = useDataSourceFunction
+          ? prev
+          : prev.filter(key => currentKeys.has(key))
+        const merged = Array.from(new Set([
+          ...pruned,
+          ...preselectedKeys.filter(key => currentKeys.has(key))
+        ]))
+
+        if (merged.length === prev.length && merged.every((key, index) => key === prev[index])) {
+          return prev
+        }
+
+        return merged
+      })
     }
 
-    dataSource.length && updateSelectedRows()
-  }, [dataSource, getPreselectedRows])
+    if (dataSource.length) {
+      updateSelectedRows()
+    } else if (!useDataSourceFunction) {
+      setSelectedRowKeys(prev => prev.length ? [] : prev)
+    }
+  }, [dataSource, getPreselectedRows, useDataSourceFunction])
 
   const resetSelection = useCallback(() => {
     setSelectedRowKeys([])

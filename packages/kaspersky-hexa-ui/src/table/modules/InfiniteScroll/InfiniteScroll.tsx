@@ -79,13 +79,17 @@ export const InfiniteScroll: TableModule = Component => props => {
       io.unobserve(element)
       io.disconnect()
     }
-  }, [pageGetter, rows])
+  }, [pageGetter, error])
 
   useEffect(() => {
     if (!pageGetter) return
     if (!error && loading) {
+      let cancelled = false
+
       Promise.resolve(pageGetter(page))
         .then(newRows => {
+          if (cancelled) return
+
           if (!newRows || !newRows.length) {
             setFinished(true)
             return
@@ -94,11 +98,13 @@ export const InfiniteScroll: TableModule = Component => props => {
           setRows((prevRows) => ([...prevRows, ...newRows]))
         })
         .catch(() => {
-          setError(true)
+          if (!cancelled) setError(true)
         })
         .finally(() => {
-          setLoading(false)
+          if (!cancelled) setLoading(false)
         })
+
+      return () => { cancelled = true }
     }
   }, [pageGetter, error, loading, page])
 

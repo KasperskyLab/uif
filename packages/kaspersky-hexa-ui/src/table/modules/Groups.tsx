@@ -2,7 +2,7 @@ import { useLocalization } from '@helpers/localization/useLocalization'
 import { Text } from '@src/typography'
 import classnames from 'classnames'
 import get from 'lodash/get'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { isColumnReadonly } from '../helpers/common'
 import { ITableProps, TableCustomGroupSorter, TableRecord } from '../types'
@@ -50,50 +50,70 @@ export const Groups: TableModule = Component => function GroupsModule ({
   ...props
 }: ITableProps) {
   const { dataSource, columns, groupTitleRender, rowSelection, disabled } = props
+  const defaultGroupTitle = useLocalization('table.groupingEmpty')
+  const comparer = customGroupSorter || defaultSorter
+  const isGroupingEnabled = Boolean(groupBy && Array.isArray(dataSource))
+  const groupColumnTitleRender = isGroupingEnabled
+    ? columns?.find((column) => column.dataIndex === groupBy)?.renderGroupTitle
+    : undefined
 
-  if (!(groupBy && Array.isArray(dataSource))) {
+  const resultDataSource = useMemo(() => {
+    if (!isGroupingEnabled || !groupBy || !Array.isArray(dataSource)) {
+      return dataSource
+    }
+
+    const sortedDataSource = props.isClientGroupSortingDisabled
+      ? dataSource
+      : [...dataSource].sort((a, b) => comparer(get(a, groupBy, ''), get(b, groupBy, '')))
+
+    return sortedDataSource.reduce<TableRecord[]>((result, item, index) => {
+      const key = dataSource.length + index
+      const titleText = get(item, groupBy, '') || defaultGroupTitle
+
+      const groupTitleItem = {
+        accordeon: null,
+        getGroupTitleText: () => titleText ?? titleText.toString(),
+        groupTitleRender: groupColumnTitleRender,
+        key
+      }
+
+      if (index === 0) {
+        return [...result, groupTitleItem, item]
+      }
+
+      const isGroupAdded = get(item, groupBy) === get(result[result.length - 1], groupBy)
+
+      if (isGroupAdded) {
+        return [...result, item]
+      }
+
+      return [...result, groupTitleItem, item]
+    }, [])
+  }, [
+    comparer,
+    dataSource,
+    defaultGroupTitle,
+    groupBy,
+    groupColumnTitleRender,
+    isGroupingEnabled,
+    props.isClientGroupSortingDisabled
+  ])
+
+  const resultColumns = useMemo(() => {
+    if (!isGroupingEnabled || !columns) {
+      return columns
+    }
+
+    return columns.map((column: any, index: number) => {
+      return isColumnReadonly(column)
+        ? column
+        : { ...column, render: groupTitleRenderer(index, columns.length, column.render, groupTitleRender) }
+    })
+  }, [columns, groupTitleRender, isGroupingEnabled])
+
+  if (!isGroupingEnabled) {
     return <Component {...props} />
   }
-
-  const comparer = customGroupSorter || defaultSorter
-
-  const sortedDataSource = props.isClientGroupSortingDisabled
-    ? dataSource
-    : [...dataSource].sort((a, b) => comparer(get(a, groupBy, ''), get(b, groupBy, '')))
-
-  const defaultGroupTitle = useLocalization('table.groupingEmpty')
-
-  const resultDataSource = sortedDataSource.reduce<TableRecord[]>((result, item, index) => {
-    const key = dataSource.length + index
-    const titleText = get(item, groupBy, '') || defaultGroupTitle
-
-    const groupTitleRender = (columns?.find((column) => column.dataIndex === groupBy))?.renderGroupTitle
-
-    const groupTitleItem = {
-      accordeon: null,
-      getGroupTitleText: () => titleText ?? titleText.toString(),
-      groupTitleRender,
-      key
-    }
-
-    if (index === 0) {
-      return [...result, groupTitleItem, item]
-    }
-
-    const isGroupAdded = get(item, groupBy) === get(result[result.length - 1], groupBy)
-
-    if (isGroupAdded) {
-      return [...result, item]
-    }
-
-    return [...result, groupTitleItem, item]
-  }, [])
-
-  const resultColumns = columns?.map((column: any, index: number) => {
-    return isColumnReadonly(column)
-      ? column
-      : { ...column, render: groupTitleRenderer(index, columns.length, column.render, groupTitleRender) }
-  })
 
   const resultRowSelection = rowSelection && {
     ...rowSelection,

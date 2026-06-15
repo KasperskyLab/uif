@@ -82,6 +82,29 @@ function FiltersModule ({
   })
 
   const mutableDataSource = useRef<TableRecord[] | undefined>(dataSource)
+  const lastFilteredRowsRef = useRef<TableRecord[] | undefined>(dataSource)
+
+  const setFilteredRowsCallback = () => {
+    if (!filterApi || !allInit) return
+
+    const sourceRows = mutableDataSource.current || []
+    const rows = isServerFiltering
+      ? sourceRows
+      : filterApi.filterRows(sourceRows)
+
+    const prevRows = lastFilteredRowsRef.current
+    if (
+      prevRows === rows ||
+      (prevRows &&
+        rows.length === prevRows.length &&
+        rows.every((row, index) => row === prevRows[index]))
+    ) {
+      return
+    }
+
+    lastFilteredRowsRef.current = rows
+    dispatch({ type: SET_FILTERED_ROWS, rows })
+  }
 
   useEffect(() => {
     const defaultFilters = predefinedFilters || defaultSidebarFilters || defaultFiltersConfig || []
@@ -154,20 +177,9 @@ function FiltersModule ({
     dispatch({ type: INIT_ALL })
   }, [filterApi, activeFiltersInit, externalFiltersInit, savedFiltersInit])
 
-  const setFilteredRowsCallback = () => {
-    if (!filterApi || !allInit) return
-
-    if (isServerFiltering) {
-      dispatch({ type: SET_FILTERED_ROWS, rows: mutableDataSource.current! })
-    } else {
-      const rows = filterApi.filterRows(mutableDataSource.current!)
-      dispatch({ type: SET_FILTERED_ROWS, rows })
-    }
-  }
-
   useEffect(() => {
     if (!filterApi || !allInit) return
-    
+
     setFilteredRowsCallback()
     if (!isServerFiltering) {
       return filterApi.subscribe(setFilteredRowsCallback)
@@ -176,6 +188,7 @@ function FiltersModule ({
 
   useEffect(() => {
     mutableDataSource.current = dataSource || []
+    lastFilteredRowsRef.current = undefined
     setFilteredRowsCallback()
   }, [dataSource])
 

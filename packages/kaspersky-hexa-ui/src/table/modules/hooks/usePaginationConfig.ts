@@ -104,20 +104,20 @@ const useExistingPagination: UseExistingPagination = ({
     propsTotalRoot !== undefined
   )
 
-  useEffect(() => {
-    if (isServerPagination) {
-      setCurrent(FIRST_PAGE)
-    }
-  }, [total, isServerPagination])
-
-  const isCurrentPageOutOfRage = Math.ceil((total || 0) / pageSize) < current
+  const maxPage = Math.max(FIRST_PAGE, Math.ceil((total || 0) / pageSize))
+  const isCurrentPageOutOfRage = current > maxPage
 
   useEffect(() => {
-    if (propsOnChange && isServerPagination) {
+    if (isServerPagination && isCurrentPageOutOfRage) {
       setCurrent(FIRST_PAGE)
-      propsOnChange(current, pageSize)
     }
-  }, [isCurrentPageOutOfRage, isServerPagination])
+  }, [total, pageSize, isServerPagination, isCurrentPageOutOfRage])
+
+  useEffect(() => {
+    if (propsOnChange && isServerPagination && isCurrentPageOutOfRage) {
+      propsOnChange(FIRST_PAGE, pageSize)
+    }
+  }, [isCurrentPageOutOfRage, isServerPagination, propsOnChange, pageSize])
   
   useEffect(() => {
     if (restoreCurrentWhenDataChange && isCurrentPageOutOfRage) {
