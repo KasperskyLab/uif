@@ -1,12 +1,14 @@
-name: "Examples: Quick Start"
+# Build and deploy docs/hexa-ui to GitHub Pages (monorepo).
+
+name: "Docs: hexa-ui"
 
 on:
   push:
     branches:
-      - 'master'
+      - "master"
     paths:
-      - 'docs/hexa-ui/**'
-      - '.github/workflows/docs-hexa-ui.yml'
+      - "docs/hexa-ui/**"
+      - ".github/workflows/docs-hexa-ui.yml"
   workflow_dispatch:
 
 jobs:
@@ -19,20 +21,21 @@ jobs:
       contents: write
       pages: write
       id-token: write
-    defaults:
-      run:
-        working-directory: ./docs/hexa-ui
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: Install dependencies
-        shell: bash
-        run: |
-          npm ci
+        run: npm ci
+
       - name: Build
-        shell: bash
-        run: |
-          npm run build
+        run: npm run build --workspace=hexa-ui-docs
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
