@@ -199,8 +199,12 @@ const createReplaceCssClassesWithOffsets = (customClassFunction) => {
   return replaceCssClassesWithOffsetsFunc
 }
 
-const replaceCssClassesWithOffsets = createReplaceCssClassesWithOffsets((customCssClasses, filterFunction) => customCssClasses && filterFunction(customCssClasses))
-const replaceCssClassesWithOffsetsAndSaveCssClasses = createReplaceCssClassesWithOffsets((customCssClasses, filterFunction) => customCssClasses && customCssClasses)
+const replaceCssClassesWithOffsets = createReplaceCssClassesWithOffsets(
+  (customCssClasses, filterFunction) => customCssClasses && filterFunction(customCssClasses)
+)
+const replaceCssClassesWithOffsetsAndSaveCssClasses = createReplaceCssClassesWithOffsets(
+  (customCssClasses, filterFunction) => customCssClasses && customCssClasses
+)
 
 module.exports = {
   replaceCssClassesWithOffsets,

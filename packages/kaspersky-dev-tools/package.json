@@ -1,6 +1,6 @@
 {
   "name": "@kaspersky/dev-tools",
-  "version": "3.4.4",
+  "version": "3.9.2",
   "description": "Development tools and configs for Babel, ESLint and TypeScript",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -26,6 +26,11 @@
       "require": {
         "types": "./lib/index.d.ts",
         "default": "./lib/index.js"
+      }
+    },
+    "./lib/utils/json-patchers/*": {
+      "require": {
+        "default": "./lib/utils/json-patchers/*.js"
       }
     }
   },
