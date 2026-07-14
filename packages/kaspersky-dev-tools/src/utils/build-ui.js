@@ -116,6 +116,12 @@ function applyHelpTopics ({ element, helpData: { topicId = null, elements = {}, 
   if (topicId !== null) {
     element.topicId = topicId
   }
+  if (rest.productId) {
+    element.helpProductId = rest.productId
+  }
+  if (rest.version) {
+    element.helpVersion = rest.version
+  }
   if (rest.windows && rest.linux) {
     element.topicId = {
       windows: rest.windows.topicId,

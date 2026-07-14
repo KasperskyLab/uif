@@ -142,8 +142,6 @@ export default eslint.defineConfig([
         ].join('|')
       }],
 
-      '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
-
       // ---------------- non-formatting rules ----------------
 
       camelcase: 'warn', // Warn if identifiers are not camelCase
