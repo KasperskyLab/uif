@@ -150,10 +150,10 @@ npm i
 4. Выполнить команду
 
 ```shell
-npm run check-tokens-change:swapped
+npm run check-tokens-change:noswapped
 ```
 
-Команда `check-tokens-change:swapped` проверяет, изменилась ли структура токенов, и выводит об этом информацию.
+Команда `check-tokens-change:noswapped` проверяет, изменилась ли структура токенов, и выводит об этом информацию.
 
 5. 
 
@@ -167,7 +167,7 @@ npm run check-tokens-change:swapped
 npm run storybook-hexa-ui
 ```
 
-Команда `storybook-hexa-ui` собирает пакет с новыми токенами, копирует обновленный пакет в директорию с компонентами и запускает сторибук.
+Команда `storybook-hexa-ui` делает swap между `./src/colors/tokens-pixso/` и `./src/colors/tokens-pixso/_`, собирает пакет с новыми токенами, копирует обновленный пакет в директорию с компонентами и запускает сторибук.
 
 ### Ресурсы
 #### Hexa UI Core в Pixso
@@ -176,5 +176,3 @@ npm run storybook-hexa-ui
 [Semantic tokens](https://pixso.net/app/design/RvvSBi5i7wxnG0_Pg9tzdw)  
 [Static tokens](https://pixso.net/app/design/Caz0XNIOHLHIG7SGkUZ53g)  
 [Widget tokens](https://pixso.net/app/design/Nm37XP3kqM_HJPFAXaciuw)  
-
-[How to create Pull Request](https://confluence.kaspersky.com/spaces/UIF/pages/992869783/How+to)

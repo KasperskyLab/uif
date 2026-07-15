@@ -6,14 +6,13 @@ const fs = require('fs')
 const {
   checkTokensChange: check,
   showLog,
-  getStaticTokens,
   getProductTokens,
   getComponentTokens,
-  getWidgetTokens,
   getProductTokensShortcuts,
   getComponentTokensShortcuts,
   getWidgetTokensShortcuts,
   getEffectsTokens,
+  getStaticTokens,
   getStaticCSSVarsString,
   getProductCSSVarsString,
   getComponentCSSVarsString,
@@ -23,7 +22,11 @@ const {
 const {
   checkPixsoTokensChange: checkPixso,
   getPixsoTokensCSSVarsString,
-  mergeCssBodies
+  mergeCssBodies,
+  getProductTokensPixso,
+  getSemanticTokensPixso,
+  getWidgetTokensPixso,
+  getPixsoStaticPalette
 } = require('./src/colors/palette-pixso-build')
 
 const {
@@ -66,6 +69,14 @@ ${content}`,
   }
 }
 
+function writeCSSVarsToTSFile ({ fileName, vars }) {
+  const content = Object.entries(vars)
+    .map(([key, value]) => `export const ${key} = \`${value}\`\n`)
+    .join('\n')
+
+  writeCSSVarsToFile({ fileName, content })
+}
+
 function writeColorsCSSVarsSectionToFile ({ key, content }) {
   writeCSSVarsToFile({ fileName: `./src/colors/tokens/components/${key}.ts`, content, isTSFile: true })
   fs.writeFile(`./src/colors/css/${key}.ts`,
@@ -94,21 +105,23 @@ function writeAllColorsToFile () {
 /* eslint-disable */\n
 import { cssVarString } from '../tokens/tokens'\n
 export const colorsCssVarString = cssVarString\n
-const palette = ${JSON.stringify({ ...getStaticPalette(), ...getStaticTokens('static-tokens', 'staticColors') }, null, '  ')}\n
+const palette = ${JSON.stringify({ ...getStaticPalette(), ...getStaticTokens('static-tokens', 'staticColors'), ...getPixsoStaticPalette() }, null, '  ')}\n
 export const colors = palette
 export type colorType = keyof typeof colors\n
 export const themeColors = ${JSON.stringify(getGroupedSections(), null, '  ')}
 export type themeColorsType = keyof typeof themeColors;\n
-export const productColors = ${JSON.stringify(getProductTokens(), null, '  ')}
+export const productColors = ${JSON.stringify({ ...getProductTokens(), ...getProductTokensPixso() }, null, '  ')}
 export type productColorsType = keyof typeof productColors\n
 export const componentColors = ${JSON.stringify(getComponentTokens(), null, '  ')}
 export type componentColorsType = keyof typeof componentColors\n
-export const widgetColors = ${JSON.stringify(getWidgetTokens(), null, '  ')}
+export const widgetColors = ${JSON.stringify(getWidgetTokensPixso(), null, '  ')}
 export type widgetColorsType = keyof typeof widgetColors\n
 export const productColorsShortcuts = ${JSON.stringify(getProductTokensShortcuts(), null, '  ')}
 export type productColorsShortcutsType = keyof typeof productColorsShortcuts\n
 export const componentColorsShortcuts = ${JSON.stringify(getComponentTokensShortcuts(), null, '  ')}
 export type componentColorsShortcutsType = keyof typeof componentColorsShortcuts\n
+export const semanticColors = ${JSON.stringify(getSemanticTokensPixso(), null, '  ')}
+export type semanticColorsType = keyof typeof semanticColors\n
 export const widgetColorsShortcuts = ${JSON.stringify(getWidgetTokensShortcuts(), null, '  ')}
 export type widgetColorsShortcutsType = keyof typeof widgetColorsShortcuts\n
 export const shortcutsV6 = ${JSON.stringify(getGroupedThemes(), null, '  ')}
@@ -249,12 +262,14 @@ ${getPixsoTokensCSSVarsString()}`
 
 function checkPixsoTokensChange (cb, dataSwapped) {
   const hasChanges = checkPixso({ dataSwapped })
-
+  
   if (hasChanges) {
-    cb(new Error('Pixso tokens structure has been changed (swapped mode)'))
+    console.log('\x1b[31;1m', '\nPixso tokens structure has been changed (swapped mode)\n')
   } else {
-    cb()
+    console.log('\x1b[32;1m', '\nPixso tokens structure has not changed\n')
   }
+  
+  cb()
 }
 
 function mergePixsoTokens (cb) {
@@ -266,30 +281,43 @@ function mergePixsoTokens (cb) {
     const baseCssContent = fs.readFileSync(baseCssPath, 'utf8')
     const pixsoCssContent = fs.readFileSync(pixsoCssPath, 'utf8')
 
-    const mergedCssBody = mergeCssBodies(baseCssContent, pixsoCssContent)
+    const [mergedCssBody] = mergeCssBodies(baseCssContent, pixsoCssContent)
 
     fs.writeFileSync(
       baseCssPath,
       mergedCssBody
-        .replace('/*! This file was created automatically. */\n', '')
-        .replace('/*! Use updateColors gulp task if you need to update colors. */\n', ''),
-      'utf8'
     )
-
 
     const baseTsContent = fs.readFileSync(baseTsPath, 'utf8')
     const tsMatch = baseTsContent.match(/cssVarString\s*=\s*`([\s\S]*?)`/)
+    const deprecatedTsMatch = baseTsContent.match(/cssVarDeprecatedString\s*=\s*`([\s\S]*?)`/)
 
     const baseTsCssBody = tsMatch ? tsMatch[1] : ''
-    const mergedTsBody = mergeCssBodies(baseTsCssBody, pixsoCssContent)
+    const baseTsDeprecatedBody = deprecatedTsMatch ? deprecatedTsMatch[1] : ''
 
-    writeCSSVarsToFile({
-      fileName: baseTsPath,
-      content: mergedTsBody
-        .replace('/*! This file was created automatically. */\n', '')
-        .replace('/*! Use updateColors gulp task if you need to update colors. */\n', ''),
-      isTSFile: true
-    })
+    const [, mergedTsBody] = mergeCssBodies(baseTsCssBody, pixsoCssContent)
+
+    const [, , mergedTsBodyDeprecatedDelta] = mergeCssBodies(
+      baseTsCssBody,
+      pixsoCssContent
+    )
+
+    const mergedTsBodyDeprecated = mergedTsBodyDeprecatedDelta.trim()
+      ? `${baseTsDeprecatedBody.trim()}\n\n${mergedTsBodyDeprecatedDelta.trim()}\n`
+      : baseTsDeprecatedBody
+
+    const vars = {
+      cssVarString: mergedTsBody,
+      cssVarDeprecatedString: mergedTsBodyDeprecated
+    }
+
+    for (const key in vars) {
+      const str = vars[key].replace(WARNING, '').replace(WARNING_COLORS, '')
+    
+      vars[key] = str.startsWith('\n') ? str : `\n${str}`
+    }
+
+    writeCSSVarsToTSFile ({ fileName: baseTsPath, vars })
 
     console.log('\x1b[32;1m', '\nPixso tokens successfully merged into tokens.css and tokens.ts\n')
   } catch (error) {

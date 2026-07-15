@@ -154,11 +154,14 @@ export const cssVarString = `:root {
   --color--neutral_0: #FFFFFF;
 
   --spacing--padding_xl: 24px;
+  --spacing--padding_lg: 20px;
   --spacing--padding_l: 16px;
   --spacing--padding_ml: 12px;
   --spacing--padding_m: 8px;
   --spacing--padding_sm: 6px;
   --spacing--padding_s: 4px;
+  --spacing--padding_xs: 2px;
+  --spacing--padding_none: 0px;
   --spacing--gap_separated: 32px;
   --spacing--gap_section: 24px;
   --spacing--gap_grouped: 16px;
