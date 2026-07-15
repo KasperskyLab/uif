@@ -1,0 +1,18 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "designLink": true,
+    "pixsoView": true
+  },
+  "component": "Input Number",
+  "description": "Поле числового ввода со стрелками увеличения и уменьшения. Основано на InputNumber из библиотеки Ant Design.",
+  "usage": "Предполагается использование внутри Field для ввода количественных значений.",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=39947:148539",
+  "pixsoView": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=39947:148539"
+}

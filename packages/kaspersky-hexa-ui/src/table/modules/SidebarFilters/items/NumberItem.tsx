@@ -3,7 +3,7 @@ import React from 'react'
 
 import { NumberItemProps } from './types'
 
-export const NumberItem: React.FC<NumberItemProps> = ({ filter, onChange, validationStatus }) => {
+export const NumberItem: React.FC<NumberItemProps> = ({ filter, onChange, min, validationStatus }) => {
   const handleChange = (value: number | null) => {
     onChange({ ...filter, value })
   }
@@ -11,6 +11,7 @@ export const NumberItem: React.FC<NumberItemProps> = ({ filter, onChange, valida
   return (
     <Textbox.Number
       value={filter.value as number | undefined}
+      min={min}
       onChange={handleChange as (value?: number | string) => void}
       validationStatus={validationStatus}
     />

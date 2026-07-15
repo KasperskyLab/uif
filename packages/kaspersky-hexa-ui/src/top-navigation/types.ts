@@ -21,7 +21,7 @@ export type TopNavigationProps = {
     buttonConfig?: CenterButtonProps,
     horizontalNavigationConfig?: HorizontalNavProps
   },
-  contentRight?: ReactNode, 
+  contentRight?: ReactNode,
   /** Props for notification button on right part */
   notificationButtonProps?: NotificationButtonConfigProps,
   /** Whether to show red indicator on notification button */

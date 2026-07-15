@@ -3,4 +3,15 @@
   html {
     font-family: "Kaspersky Sans Text", "Kaspersky Sans", Arial, sans-serif;
   }
+
+  /* Storybook Docs: .sbdocs-content задаёт 16px на все div/pre; sb-unstyled + явный размер MTR3. */
+  .sbdocs.sbdocs-content .hexa-docs-editor.sb-unstyled,
+  .sbdocs.sbdocs-content .hexa-docs-editor.sb-unstyled pre,
+  .sbdocs.sbdocs-content .hexa-docs-editor.sb-unstyled pre.prism-code,
+  .sbdocs.sbdocs-content .hexa-docs-editor.sb-unstyled .token-line,
+  .sbdocs.sbdocs-content .hexa-docs-editor.sb-unstyled textarea {
+    font-family: "Kaspersky Sans Mono", "Kaspersky Sans", ui-monospace, Menlo, Consolas, monospace !important;
+    font-size: 14px !important;
+    line-height: 20px !important;
+  }
 </style>

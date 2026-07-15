@@ -69,20 +69,22 @@ export const HeaderCheckbox: FC<HeaderCheckboxProps> = ({
   ]
 
   return checkboxState !== 'all'
-    ? <Dropdown
-        overlay={overlay}
-        trigger={['click']}
-        disabled={disableSelectAll}
-        klId={dropdownId}
-        testId={dropdownId}
-      >
-        <Checkbox
-          checked={false}
-          indeterminate={checkboxState === 'some'}
-          testId={checkboxId}
-          klId={checkboxId}
+    ? (
+        <Dropdown
+          overlay={overlay}
+          trigger={['click']}
           disabled={disableSelectAll}
-        />
-      </Dropdown>
+          klId={dropdownId}
+          testId={dropdownId}
+        >
+          <Checkbox
+            checked={false}
+            indeterminate={checkboxState === 'some'}
+            testId={checkboxId}
+            klId={checkboxId}
+            disabled={disableSelectAll}
+          />
+        </Dropdown>
+      )
     : <Checkbox checked onChange={resetSelection} testId={checkboxId} klId={checkboxId} disabled={disableSelectAll} />
 }

@@ -59,8 +59,7 @@ const NavComponent = ({
   const resolveNavStateArr = () => {
     return [
       Boolean(navFavItems.length) && processingFavSection(favSection),
-      ...navItems
-        .filter((el:NavItemData) => el.state !== FAVORITES_ITEM_STATE)
+      ...navItems.filter((el: NavItemData) => el.state !== FAVORITES_ITEM_STATE)
     ].filter(Boolean)
   }
 
@@ -166,33 +165,35 @@ const NavComponent = ({
     updateFavState
   }
 
-  return (<nav className={cn(
-    className,
-    'uif-nav',
-    {
-      'nav-minimized': minimized,
-      'nav-child-pop': childPop
-    }
-  )}>
-    {
-      [...beforeItems, ...navState].map((item: NavItemProps) => {
-        const ItemCustomComponent = item.component
-        if (ItemCustomComponent) return <ItemCustomComponent key={item.key} />
-        if (item.userProps) return <NavUserItem key={item.key} data={item} menuState={menuState} />
-        if (item.isCaption) return <NavCaptionItem key={item.key} data={item} />
-        return (
-          <NavItem 
-            key={item.key} 
-            data={item} 
-            testId={item.klId} 
-            menuState={menuState} 
-            pinIcon={pinIcon}
-            unpinIcon={unpinIcon}
-          />
-        )
-      })
-    }
-  </nav>)
+  return (
+    <nav className={cn(
+      className,
+      'uif-nav',
+      {
+        'nav-minimized': minimized,
+        'nav-child-pop': childPop
+      }
+    )}>
+      {
+        [...beforeItems, ...navState].map((item: NavItemProps) => {
+          const ItemCustomComponent = item.component
+          if (ItemCustomComponent) return <ItemCustomComponent key={item.key} />
+          if (item.userProps) return <NavUserItem key={item.key} data={item} menuState={menuState} />
+          if (item.isCaption) return <NavCaptionItem key={item.key} data={item} />
+          return (
+            <NavItem
+              key={item.key}
+              data={item}
+              testId={item.klId}
+              menuState={menuState}
+              pinIcon={pinIcon}
+              unpinIcon={unpinIcon}
+            />
+          )
+        })
+      }
+    </nav>
+  )
 }
 
 export const Nav = styled(NavComponent)`

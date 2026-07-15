@@ -1,17 +1,16 @@
 import cloneDeepWith from 'lodash/cloneDeepWith'
 
-import { ITableProps, TableColumn } from '../..'
 import { isColumnReadonly, isReactServiceParam } from '../../helpers/common'
 import { getPersistentStorageValue } from '../../helpers/persistentStorage'
-import { TableResizingMode } from '../../types'
+import { ITableProps, TableColumn, TableRecord, TableResizingMode } from '../../types'
 
-const cloneColumns = (columns: TableColumn[]): TableColumn[] =>
+const cloneColumns = <T extends TableRecord = TableRecord>(columns: TableColumn<T>[]): TableColumn<T>[] =>
   cloneDeepWith(columns, (value, key) => {
     const shouldSkip = isColumnReadonly(value) || isReactServiceParam(key as string)
     return shouldSkip ? value : undefined
   })
 
-function removeWidthFromLastColumn (columns: TableColumn[]): TableColumn[] {
+function removeWidthFromLastColumn <T extends TableRecord = TableRecord> (columns: TableColumn<T>[]): TableColumn<T>[] {
   const columnsCopy = cloneColumns(columns)
 
   if (columns.length >= 1) {
@@ -49,7 +48,7 @@ function removeWidthFromLastColumn (columns: TableColumn[]): TableColumn[] {
   return columnsCopy
 }
 
-function removeWidthFromMaxColumn (columns: TableColumn[]): TableColumn[] {
+function removeWidthFromMaxColumn <T extends TableRecord = TableRecord> (columns: TableColumn<T>[]): TableColumn<T>[] {
   const columnsCopy = cloneColumns(columns)
 
   let maxColumnIndex = 0
@@ -85,11 +84,11 @@ function removeWidthFromMaxColumn (columns: TableColumn[]): TableColumn[] {
   return columnsCopy
 }
 
-export function applyResizingMode (
-  columns: TableColumn[],
+export function applyResizingMode <T extends TableRecord = TableRecord> (
+  columns: TableColumn<T>[],
   resizingMode: TableResizingMode,
   defaultWidth?: number
-): TableColumn[] {
+): TableColumn<T>[] {
   const applyDefaultWidth = (columns: any[]) => {
     return columns.map((column) => {
       return isColumnReadonly(column) ? column : { ...column, width: column.width ? column.width : defaultWidth }
@@ -100,7 +99,6 @@ export function applyResizingMode (
     case 'max':
       return removeWidthFromMaxColumn(columns)
     case 'last':
-    case 'scroll':
       return removeWidthFromLastColumn(
         applyDefaultWidth(columns)
       )
@@ -109,8 +107,8 @@ export function applyResizingMode (
   }
 }
 
-export const selectAutoResizingMode = function (
-  columns: TableColumn[],
+export const selectAutoResizingMode = function <T extends TableRecord = TableRecord>(
+  columns: TableColumn<T>[],
   resizingMode: TableResizingMode,
   maxColumnsForAutoResizing: number,
   overflow: boolean
@@ -128,7 +126,10 @@ export const selectAutoResizingMode = function (
   return 'last'
 }
 
-export const addWidthFromStorage = ({ columns, storageKey }: Pick<ITableProps, 'columns' | 'storageKey'>): TableColumn[] => {
+export const addWidthFromStorage = <T extends TableRecord = TableRecord> ({
+  columns,
+  storageKey
+}: Pick<ITableProps<T>, 'columns' | 'storageKey'>): TableColumn<T>[] => {
   if (!columns) return []
   if (!storageKey) return columns
 
@@ -137,9 +138,7 @@ export const addWidthFromStorage = ({ columns, storageKey }: Pick<ITableProps, '
   if (!savedColumns) return columns
 
   return columns.map(column => {
-    if (!column.dataIndex) return column
-
-    const columnFromStorage = savedColumns[column.dataIndex]
+    const columnFromStorage = savedColumns[column.key]
 
     if (!columnFromStorage) return column
 

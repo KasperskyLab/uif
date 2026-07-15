@@ -45,8 +45,8 @@ const PlaceholderView: FC<PlaceholderViewProps> = ({
     <Space gap={cssConfig.gap} align="center" justify="center">
       <PlaceholderImage cssConfig={cssConfig} size={size} imageVariant={image} testAttributes={testAttributes} />
       <Space gap={cssConfig.titleGap} direction="vertical" justify="center">
-        <Title type={size === 'medium' ? 'H4' : 'H6'}>{title}</Title>
-        {description && (
+        {title && <Title type={size === 'medium' ? 'H4' : 'H6'}>{title}</Title>}
+        {typeof description === 'string' ? (
           <Description
             withoutTextStyle
             $cssConfig={cssConfig}
@@ -54,13 +54,17 @@ const PlaceholderView: FC<PlaceholderViewProps> = ({
             value={description}
             breaks
           />
-        )}
+        ) : description}
       </Space>
       {(actionButtons || actionLinks) && (
-        <Space gap={16} justify="center">
-          {actionButtons && <Space gap={8} width="unset">
-            {actionButtons.map((actionButtonProps, index) => <Button key={index} mode="secondary" {...actionButtonProps} />)}
-          </Space>}
+        <Space gap="grouped" justify="center">
+          {actionButtons && (
+            <Space gap="related" width="unset">
+              {Array.isArray(actionButtons)
+                ? actionButtons.map((actionButtonProps, index) => <Button key={index} mode="secondary" {...actionButtonProps} />)
+                : actionButtons}
+            </Space>
+          )}
           {actionLinks && actionLinks.map((actionLinkProps, index) => <Link key={index} {...actionLinkProps} />)}
         </Space>
       )}

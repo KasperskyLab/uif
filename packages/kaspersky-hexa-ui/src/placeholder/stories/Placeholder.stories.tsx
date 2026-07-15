@@ -2,10 +2,15 @@ import { badges } from '@sb/badges'
 import { withDesignControls } from '@sb/components/designControls'
 import { withMeta } from '@sb/components/Meta'
 import { renderVariants } from '@sb/StoryComponents'
+import { Button } from '@src/button'
+import { Dropdown, DropdownItemProps } from '@src/dropdown'
 import { SectionMessage } from '@src/section-message'
+import { Tag } from '@src/tag'
 import { P } from '@src/typography'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
+
+import { ArrowDown1 } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
 import { Placeholder as PlaceholderComponent } from '../Placeholder'
@@ -132,17 +137,39 @@ export const Image: Story = {
   )
 }
 
+const overlay: DropdownItemProps[] = [
+  { children: 'Variant 1' },
+  { children: 'Variant 2' },
+  { children: 'Variant 3' }
+]
+
+const button = (
+  <Button iconAfter={<ArrowDown1 />}>Button</Button>
+)
+
+const dropdown = (
+  <Dropdown overlay={overlay} trigger={['click']}>
+    {button}
+  </Dropdown>
+)
+
 export const Actions: Story = {
   render: (args) =>
     renderVariants(
-      [{
-        label: 'actionButtons',
-        content: <PlaceholderComponent {...processArgs({ ...args, actionButtons: true })} />
-      },
-      {
-        label: 'actionLinks',
-        content: <PlaceholderComponent {...processArgs({ ...args, actionLinks: true })} />
-      }],
+      [
+        {
+          label: 'actionButtons',
+          content: <PlaceholderComponent {...processArgs({ ...args, actionButtons: true })} />
+        },
+        {
+          label: 'actionLinks',
+          content: <PlaceholderComponent {...processArgs({ ...args, actionLinks: true })} />
+        },
+        {
+          label: 'dropdown',
+          content: <PlaceholderComponent {...processArgs({ ...args, actionButtons: true })} actionButtons={dropdown} />
+        }
+      ],
       true,
       'medium'
     ),
@@ -151,20 +178,47 @@ export const Actions: Story = {
   }
 }
 
-export const Description: Story = {
+export const DescriptionFormatting: Story = {
+  args: {
+    title: 'Description Formatting',
+    description: '**bold**\n  _italic_\n  ~~strike~~\n  `inline code`\n  [link](https://example.com/)'
+  },
   render: (args) => (
-    <div style={{width: '100%'}}>
-      <h2>Для отображение отступов для description используйте:</h2>
-      <SectionMessage mode="info" closable={true}>
+    <>
+      <SectionMessage mode="info" title="DescriptionFormatting" closable={false}>
+        <P>Для отображение отступов для description используйте \n</P>
         <P>
           <code>const description = `Text1\nText2`</code> (1 отступ) <br />
           <code>const description = `Text1\n\nText2`</code> (2 отступа) <br />
         </P>
+        <P>Для выделения текста и добавления ссылок - Markdown</P>
       </SectionMessage>
-      <PlaceholderComponent {...processArgs(args)} description={'Text1\nText2'}/>
-    </div>
+      <div style={{ width: 420, minHeight: 280 }}>
+        <PlaceholderComponent {...processArgs(args)} textAlign="left" />
+      </div>
+    </>
   ),
   argTypes: {
-    description: { control: false }
+    description: { control: 'text' },
+    textAlign: { control: false },
+    title: { control: false }
+  }
+}
+
+export const DescriptionReactNode: Story = {
+  args: {
+    title: 'Description React Node',
+    description: (
+      <div>
+        <Tag>Tag</Tag>
+        Несколько строк <br />ReactNode
+      </div>
+    )
+  },
+  render: (args) => <PlaceholderComponent {...processArgs(args)} textAlign="left" />,
+  argTypes: {
+    description: { control: false },
+    textAlign: { control: false },
+    title: { control: false }
   }
 }

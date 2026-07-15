@@ -58,7 +58,8 @@ const meta: Meta<AnchorProps> = {
         href: '#anchor-5',
         title: 'Anchor 5',
         counter: 20
-      }, {
+      },
+      {
         href: '#anchor-6',
         title: 'Anchor 6',
         hasNotification: true

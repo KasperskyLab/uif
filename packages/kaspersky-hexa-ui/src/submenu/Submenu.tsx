@@ -32,7 +32,7 @@ export const Submenu: FC<SubmenuProps> = (rawProps) => {
 
   const itemsWithLevels = useMemo(() =>
     addLevelsToRows(items, pathToActiveRowFromProps?.map((item) => item.key).slice(0, -1))
-  , [pathToActiveRowFromProps])
+  , [pathToActiveRowFromProps, items])
 
   const [activeRow, setActiveRow] = useState(pathToActiveRowFromProps ? activeRowFromProps : findFirstRow(itemsWithLevels))
 
@@ -47,7 +47,7 @@ export const Submenu: FC<SubmenuProps> = (rawProps) => {
 
   return (
     <div className={styles.wrapper}>
-      <div 
+      <div
         {...rest}
         {...testAttributes}
         className={cn(styles.submenu, getClassNameWithTheme(rawProps))}
@@ -93,17 +93,19 @@ const findPathToActiveRow = (items: SubmenuItemProps[], activeKey?: string): Row
   }
 }
 
-const addLevelsToRows = <T extends SubmenuItemProps>(items: T[], openedRowsKeys: string[] = [], level = 0): T[] =>
-  items.map((item) => {
+const addLevelsToRows = (items: SubmenuItemProps[], openedRowsKeys: string[] = [], level = 0): LeveledSubmenuItemProps[] => {
+  return items.map((item) => {
     if (item.type === 'row') {
-      return {
+      const leveledRow = {
         ...item,
         level,
         opened: openedRowsKeys.includes(item.key),
         extraLeftPadding: !item.children ? 20 : 0,
         children: item.children && addLevelsToRows(item.children, openedRowsKeys, level + 1)
-      }
+      } as LeveledRowProps
+      return leveledRow
     }
 
     return item
   })
+}

@@ -11,7 +11,7 @@ import { Locale } from './Locale'
 import { LocaleProps } from './types'
 
 const meta: Meta<LocaleProps> = {
-  title: 'Hexa UI Components/Locale',
+  title: 'Other/Locale',
   component: Locale,
   parameters: {
     badges: [badges.dev, badges.missingDesign],

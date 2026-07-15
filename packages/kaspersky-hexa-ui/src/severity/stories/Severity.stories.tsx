@@ -13,7 +13,7 @@ import { SeverityProps } from '../types'
 import { SeverityDocs } from './SeverityDocs'
 
 const meta: Meta<SeverityProps> = {
-  title: 'Hexa UI Components/Severity',
+  title: 'Other/Severity',
   component: Severity,
   argTypes: {
     ...sbHideControls(['theme', 'icon'])

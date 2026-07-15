@@ -1,27 +1,16 @@
-import { Theme } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingProps } from '@helpers/typesHelpers'
 import { ReactNode } from 'react'
 
 export type HelpMessageMode = 'error' | 'warning' | 'success' | 'common'
-
-export type HelpMessageStateProps = {
-  color?: string
-}
-
-export type HelpMessageCssConfig = HelpMessageStateProps
-
-export type HelpMessageThemeProps = {
-  /** Color mode */
-  mode?: HelpMessageMode,
-  /** Custom theme */
-  theme?: Theme
-}
+export type HelpMessageSize = 'small' | 'medium'
 
 export type HelpMessageProps = {
   /** Displayed text (instead of count) */
   text?: string | ReactNode,
   /** Custom class name */
-  className?: string
-} & HelpMessageThemeProps & TestingProps
-
-export type HelpMessageViewProps = ToViewProps<HelpMessageProps, HelpMessageCssConfig, HelpMessageThemeProps>
+  className?: string,
+  /** Color mode */
+  mode?: HelpMessageMode,
+  /** Size mode */
+  size?: HelpMessageSize
+} & TestingProps

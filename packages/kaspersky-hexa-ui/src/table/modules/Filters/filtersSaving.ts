@@ -1,9 +1,16 @@
 import { MakeRequired } from '@helpers/typesHelpers'
 
 import { TablePersistentStorageProps } from '../../helpers/persistentStorage'
-import { TableColumn  } from '../../types'
+import { TableColumn, TableRecord } from '../../types'
 
-import { getFiltersForColumn, getPredicate, isFilterConfig, isFilterFromColumn, isGroup, prefix } from './helpers'
+import {
+  getFiltersForColumn,
+  getPredicate,
+  isFilterConfig,
+  isFilterFromColumn,
+  isGroup,
+  prefix
+} from './helpers'
 import { FilterGroup, UnitedFilter } from './types'
 
 /** @deprecated Use storageKey instead */
@@ -11,11 +18,11 @@ export interface IFiltersSavingSettings {
   storageKey: string
 }
 
-const restorePredicates = (
-  savedFilters: UnitedFilter[], 
-  allColumns: TableColumn[],
+const restorePredicates = <T extends TableRecord = TableRecord>(
+  savedFilters: UnitedFilter[],
+  allColumns: TableColumn<T>[],
   onlyUserDefined: boolean
-): UnitedFilter[] => {
+): UnitedFilter<T>[] => {
   return savedFilters.map(savedFilter => {
     if (isGroup(savedFilter)) {
       return {
@@ -30,8 +37,8 @@ const restorePredicates = (
     }
 
     if (isFilterFromColumn(savedFilter, false)) {
-      const dataIndex = savedFilter.name
-      const columnFilters = getFiltersForColumn(dataIndex, allColumns)
+      const key = savedFilter.name
+      const columnFilters = getFiltersForColumn(key, allColumns)
       const predicate = getPredicate(savedFilter.filterName, columnFilters)
       return predicate
         ? {
@@ -40,7 +47,7 @@ const restorePredicates = (
           }
         : null
     }
-    
+
     if (isFilterConfig(savedFilter)) {
       return savedFilter
     }
@@ -63,7 +70,7 @@ const convertOldStateToNew = (savedState: SavedState): TablePersistentStoragePro
     filters,
     ...rest
   } = savedState
-  const otherFields: Record<string, Record<string, ''>> = rest 
+  const otherFields: Record<string, Record<string, ''>> = rest
 
   const newFilters: UnitedFilter[] = Array.isArray(filters) ? filters : []
 
@@ -95,8 +102,11 @@ const convertOldStateToNew = (savedState: SavedState): TablePersistentStoragePro
   } as MakeRequired<TablePersistentStorageProps, 'filters'>
 }
 
-
-export const loadFiltersFromStorage = (storageKey: string, allColumns: TableColumn[], onlyUsersDefined: boolean): UnitedFilter[] => {
+export const loadFiltersFromStorage = <T extends TableRecord = TableRecord> (
+  storageKey: string,
+  allColumns: TableColumn<T>[],
+  onlyUsersDefined: boolean
+): UnitedFilter<T>[] => {
   try {
     const savedState = convertOldStateToNew(
       JSON.parse(localStorage.getItem(storageKey) || '{filters:[]}')

@@ -30,7 +30,7 @@
         "deleteAll": "Eliminar todos los archivos",
         "deleteErrors": "Eliminar todos los archivos con error ({{count}})",
         "downloadAll": "Descargar todos los archivos",
-        "reloadErrors": "Recargar todos los archivos con error ({{count}} )",
+        "reloadErrors": "Recargar todos los archivos con error ({{count}})",
         "upload": "Cargar"
       },
       "dropText": {
@@ -87,7 +87,7 @@
       "total": "Total: {{count}}",
       "selected": "Seleccionados: {{count}}",
       "page": "página",
-      "goto": "Ir a"
+      "goto": "Ir a la página"
     },
     "search": {
       "raw": "Buscar",
@@ -100,6 +100,14 @@
         "sorting": "Ordenar",
         "filters": "Filtro",
         "resetFilters": "Restablecer filtro"
+      },
+      "contextMenu": {
+        "selected": "Seleccionados: {{count}}"
+      },
+      "selectAll": {
+        "selectAll": "Seleccionar todo",
+        "selectCurrentPage": "Seleccionar todo en la página actual",
+        "deselectAll": "Restablecer todo"
       },
       "columnsSettings": {
         "header": "Configuración de tabla",
@@ -124,18 +132,24 @@
           "add": "Agregar",
           "clearAll": "Quitar selección a todo",
           "property": "Propiedad",
+          "attribute": "Atributo",
           "condition": "Condición",
           "from": "desde",
           "to": "hasta",
-          "value": "Valor"
+          "value": "Valor",
+          "validation": {
+            "emptyValue": "Especifique el valor de filtrado",
+            "duplicateFilters": "Duplique los filtros. Asegúrese de que cada filtro sea único."
+          }
         },
-        "columnHideIsUnavailable": "No es posible ocultar columnas"
+        "columnHideIsUnavailable": "No es posible ocultar columnas",
+        "onlyForFiltering": "Esta columna es solo para el filtrado"
       },
       "filterOperation": {
         "⊆": "Contiene",
         "⊄": "No contiene",
         "cont_and": "Contiene (AND)",
-        "cont_or": "Contiene (OR)",
+        "cont_or": "Is one of",
         "ncont_or": "No contiene",
         "*=": "Regexp",
         "empty": "Vacío",
@@ -207,7 +221,11 @@
       "term": "Término",
       "dayLeft": "{{count}} día restante",
       "daysLeft": "{{count}} días restantes",
-      "termDays": "{{count}} días"
+      "termDays": "{{count}} días",
+      "statuses": {
+        "valid": "Activa",
+        "expired": "Caducada"
+      }
     },
     "input": {
       "password": {

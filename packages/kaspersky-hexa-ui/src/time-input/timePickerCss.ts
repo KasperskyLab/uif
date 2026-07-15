@@ -10,6 +10,18 @@ export const timePickerCss = css`
   padding: 6px 12px;
   border: 1px solid var(--input_datetime_picker--border--enabled);
 
+  &.error:not(:has(.kl6-textbox-readonly)):not(:has(.kl6-textbox-disabled)) {
+    border-color: var(--input_datetime_picker--border--error)
+  }
+
+  &.success:not(:has(.kl6-textbox-readonly)):not(:has(.kl6-textbox-disabled)) {
+    border-color: var(--input_datetime_picker--border--success)
+  }
+
+  &:has(.kl6-textbox-readonly, .kl6-textbox-disabled) {
+    border-color: var(--input_datetime_picker--border--disabled)
+  }
+
   &:hover {
     border-color: var(--input_datetime_picker--border--hover);
   }

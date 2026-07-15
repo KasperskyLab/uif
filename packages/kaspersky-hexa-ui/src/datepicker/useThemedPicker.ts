@@ -11,7 +11,9 @@ import {
   RangePickerViewProps
 } from './types'
 
-export const useThemedPicker = <T extends CalendarProps | Omit<RangePickerProps, 'mode'>>(props: T): T extends CalendarProps ? CalendarViewProps : RangePickerViewProps => {
+export const useThemedPicker = <T extends CalendarProps | Omit<RangePickerProps, 'mode'>>(
+  props: T
+): T extends CalendarProps ? CalendarViewProps : RangePickerViewProps => {
   const { cssConfig: pickerCssConfig, ...rest } = useComponentCssConfig<
     T,
     PickerCssConfig,

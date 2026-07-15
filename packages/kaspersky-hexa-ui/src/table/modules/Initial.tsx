@@ -1,38 +1,45 @@
 import { useStateProps } from '@helpers/hooks/useStateProps'
 import React, { useEffect } from 'react'
 
-import { ITableProps, useTableContext } from '..'
+import { ITableProps, TableRecord, TableRef, useTableContext } from '..'
+import { checkExpandableGrouping, checkExpandableRows } from '../helpers/common'
 
-import { checkExpandableRows } from './ExpandableRows'
 import { useRowSelection } from './hooks/rowSelection/useRowSelection'
 import { useDataSource } from './hooks/useDataSource'
 import { usePaginationConfig } from './hooks/usePaginationConfig'
+import { useTableColumns } from './hooks/useTableColumns'
 
-import { TableModule } from './index'
+import { TableComponent } from './index'
 
 const shouldCountClientTotal = (pagination: ITableProps['pagination'], isServerPagination: boolean): boolean => {
   if (pagination === false) return false
   return pagination?.total === undefined && pagination?.totalRoot === undefined && !isServerPagination
 }
 
-export const Initial: TableModule = Component => function InitialModule ({
+export const Initial = <T extends TableRecord = TableRecord> (
+  Component: TableComponent<T>
+) => function InitialModule ({
+  columns: columnsProps,
   dataSource: dataSourceClient,
   dataSourceFunction,
   patchDataSource,
   onDataSourceChange,
-  loading: loadingProps,
+  loading,
+  isInited: isInitedProps,
   isDefaultSortDisabled: isDefaultSortDisabledProps,
   isClientGroupSortingDisabled: isClientGroupSortingDisabledProps,
   pagination: paginationProps,
   rowSelection: rowSelectionProps,
   ...props
-}) {
+}: ITableProps<T> & React.RefAttributes<TableRef>) {
   const { updateContext } = useTableContext()
   const [isDefaultSortDisabled, setIsDefaultSortDisabled] = useStateProps(isDefaultSortDisabledProps)
   const [isClientGroupSortingDisabled, setIsClientGroupSortingDisabled] = useStateProps(isClientGroupSortingDisabledProps)
-  const [loading, setLoading] = useStateProps(loadingProps)
+  const [isInited, setIsInited] = useStateProps(isInitedProps)
 
-  const { pagination, additional } = usePaginationConfig({
+  const columns = useTableColumns({ columns: columnsProps })
+
+  const { pagination, additional } = usePaginationConfig<T>({
     pagination: paginationProps,
     serverPagination: !!dataSourceFunction,
     storageKey: props.storageKey
@@ -46,14 +53,15 @@ export const Initial: TableModule = Component => function InitialModule ({
     } })
   }, [dataSourceFunction])
 
-  const dataSource = useDataSource({
+  const dataSource = useDataSource<T>({
     additional,
     dataSourceClient,
     dataSourceFunction,
     patchDataSource,
     onDataSourceChange,
     pagination,
-    setLoading,
+    loading,
+    setIsInited,
     setIsClientGroupSortingDisabled,
     setIsDefaultSortDisabled
   })
@@ -63,16 +71,21 @@ export const Initial: TableModule = Component => function InitialModule ({
     current: pagination.current,
     dataSource,
     disabled: props.disabled || false,
+    setSelected: additional?.setSelected,
     tableId: props.testId || props.klId || undefined,
+    total: pagination.total,
     pageSize: pagination.pageSize,
-    withSelection: checkExpandableRows(dataSourceClient || []),
-    useDataSourceFunction: !!dataSourceFunction
+    withSelection: checkExpandableRows(dataSourceClient || []) || checkExpandableGrouping(columns),
+    useDataSourceFunction: !!dataSourceFunction,
+    __EXPERIMENTAL__GROUP__SELECTION: props.__EXPERIMENTAL__GROUP__SELECTION
   })
 
   return (
     <Component
       {...props}
       loading={loading}
+      columns={columns}
+      isInited={isInited}
       dataSource={dataSource}
       pagination={pagination}
       rowSelection={rowSelection}

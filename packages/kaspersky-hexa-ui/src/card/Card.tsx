@@ -2,10 +2,13 @@ import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { ActionButton } from '@src/action-button'
 import { Dropdown } from '@src/dropdown'
 import { Heading } from '@src/typography'
+import cn from 'classnames'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { Delete, DragDrop, Menu2 } from '@kaspersky/hexa-ui-icons/16'
+
+import { useThemedScrollbar } from '../scrollbar/useThemedScrollbar'
 
 import {
   CardActions,
@@ -15,7 +18,8 @@ import {
   CardTitleElement,
   CardTitleWrapper,
   CloseActionButton,
-  DnDActionButton
+  DnDActionButton,
+  ScrollableContent
 } from './cardCss'
 import { getMappedElement } from './getMappedElement'
 import { CardProps, CardViewProps } from './types'
@@ -42,9 +46,10 @@ const CardView: FC<CardViewProps> = ({
   draggable,
   closable,
   onCloseButtonClick,
-  size,
+  size = 'medium',
   title,
   actions,
+  maxHeight,
   testAttributes,
   klId,
   testId,
@@ -80,10 +85,22 @@ const CardView: FC<CardViewProps> = ({
     </CardActions>
   )
 
+  const isScrollable = !!maxHeight && size !== 'small'
+
+  const { cssConfig } = useThemedScrollbar({})
+
   return (
     <StyledCard
-      className={className}
-      style={style}
+      className={cn(
+        className,
+        'hexa-ui-card',
+        { 'hexa-ui-card-scrollable': isScrollable }
+      )}
+
+      style={{
+        ...style,
+        ...(isScrollable && { '--max-height': maxHeight })
+      }}
       draggable={draggable}
       {...testAttributes}
       {...rest}
@@ -115,7 +132,13 @@ const CardView: FC<CardViewProps> = ({
           {cardActions}
         </CardActionsWrapper>
       )}
-      {children}
+      <ScrollableContent
+        $isScrollable={isScrollable}
+        cssConfig={cssConfig}
+        $size={size}
+      >
+        {children}
+      </ScrollableContent>
     </StyledCard>
   )
 }

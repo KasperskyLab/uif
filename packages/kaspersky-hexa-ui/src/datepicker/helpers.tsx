@@ -92,4 +92,6 @@ export const isUserClickOnDate = (datePickerRef: Element, clickTarget: HTMLEleme
 
 export const prepareDateValue = (date: Date | string | number): DateInputValue => isNaN(new Date(date).getTime()) ? null : new Date(date)
 
-export const prepareRangeDateValue = ([startDate, endDate]: (Date | string | number)[]): RangeDateInputValue => [prepareDateValue(startDate), prepareDateValue(endDate)]
+export const prepareRangeDateValue = ([startDate, endDate]: (Date | string | number)[]): RangeDateInputValue => (
+  [prepareDateValue(startDate), prepareDateValue(endDate)]
+)

@@ -1,116 +1,78 @@
-import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { badges } from '@sb/badges'
-import { withMeta } from '@sb/components/Meta'
-import { sbHideControls } from '@sb/helpers'
+import { buildStoryArgTypes, getControlsInclude } from '@sb/components/Documentation'
 import { Button } from '@src/button'
-import { notificationDestroy, openNotification } from '@src/notification'
+import { Space } from '@src/space'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
-import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-
 import MetaData from '../__meta__/meta.json'
 import { Notification } from '../Notification'
+import { notificationDestroy, openNotification } from '../NotificationService'
 import { NotificationApiParams, NotificationContainerProps } from '../types'
 
-const meta: Meta<NotificationContainerProps & NotificationApiParams> = {
-  title: 'Hexa UI Components/Notification',
-  component: Notification,
-  argTypes: {
-    noIcon: { control: 'boolean' },
-    ...sbHideControls(['theme', 'place'])
-  },
+import { defaultArgs, notificationPropPresentation } from './Notification.controls'
+
+type StoryNotificationProps = NotificationContainerProps &
+  Pick<NotificationApiParams, 'description' | 'duration'> & {
+    withActionButton: boolean
+  }
+
+export const notificationStorySettings: Meta<StoryNotificationProps> = {
+  argTypes: buildStoryArgTypes(notificationPropPresentation),
   args: {
-    description: 'Body text',
-    duration: 5,
-    klId: 'notification-kl-id',
-    noIcon: false,
-    testId: 'notification-test-id'
+    ...defaultArgs,
+    testId: 'notification-test-id',
+    klId: 'notification-kl-id'
   },
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
-    docs: {
-      page: withMeta(MetaData)
-    }
+    design: MetaData.pixsoView
   }
 }
+
+const meta = {
+  title: 'Hexa UI Components/Notification',
+  component: Notification,
+  tags: ['!autodocs'],
+  includeStories: ['Playground'],
+  excludeStories: ['notificationStorySettings'],
+  ...notificationStorySettings
+} satisfies Meta<StoryNotificationProps>
+
 export default meta
 
-type Story = StoryObj<NotificationContainerProps & NotificationApiParams>
+type Story = StoryObj<StoryNotificationProps>
 
-export const Basic: Story = {
-  render: ({
-    noIcon,
-    testId,
-    ...args
-  }) => {
+export const Playground: Story = {
+  name: 'Playground',
+  render: ({ noIcon, description, duration, withActionButton }) => {
     React.useEffect(() => notificationDestroy(), [])
+
+    const commonArgs: NotificationApiParams = {
+      description,
+      duration,
+      actionButton: withActionButton
+        ? { title: 'Go To', onClick: () => alert('Действие') }
+        : undefined
+    }
 
     return (
       <>
-        <Notification noIcon={noIcon} testId={testId} />
-        <Button onClick={() => openNotification({ ...args, mode: 'success' })}>
-          Success
-        </Button>
-        <Button onClick={() => openNotification.error(args)}>
-          Error
-        </Button>
-        <Button onClick={() => openNotification.warning(args)}>
-          Warning
-        </Button>
-        <Button onClick={() => openNotification.info(args)}>
-          Info
-        </Button>
-        <Button onClick={() => openNotification.ai(args)}>
-          AI
-        </Button>
+        <Notification noIcon={noIcon} />
+        <Space gap={8}>
+          <Button onClick={() => openNotification({ ...commonArgs, mode: 'success' })}>success</Button>
+          <Button onClick={() => openNotification.error(commonArgs)}>error</Button>
+          <Button onClick={() => openNotification.warning(commonArgs)}>warning</Button>
+          <Button onClick={() => openNotification.info(commonArgs)}>info</Button>
+          <Button onClick={() => openNotification.ai(commonArgs)}>ai</Button>
+        </Space>
       </>
     )
   },
-  args: {
-    actionButton: { title: 'Go To', onClick: console.log }
+  parameters: {
+    controls: {
+      include: getControlsInclude(notificationPropPresentation),
+      sort: 'none'
+    }
   }
-}
-
-export const WithActionButton: Story = {
-  render: ({
-    id,
-    noIcon,
-    testId,
-    theme,
-    ...args
-  }) => {
-    React.useEffect(() => notificationDestroy(), [])
-
-    return (
-      <>
-        <Notification id={id} noIcon={noIcon} testId={testId} theme={theme} />
-        <Button
-          onClick={() => openNotification.success({ id, ...args })}
-        >
-          Open the notification box
-        </Button>
-        <Button
-          onClick={() => openNotification.error('Some error')}
-        >
-          Open the notification box by api with text
-        </Button>
-        <Button
-          onClick={() => openNotification.error({ id, ...args })}
-        >
-          Open the notification box by api with args
-        </Button>
-      </>
-    )
-  },
-  args: {
-    id: 'notification2',
-    actionButton: { title: 'Go To', onClick: console.log }
-  }
-}
-
-type PaletteStory = StoryObj<ThemedPaletteProps>
-export const ColorTokens: PaletteStory = {
-  args: { source: componentColors.toast },
-  render: args => <ThemedPalette {...args} />
 }

@@ -1,0 +1,125 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+import { ArrowDownMicro, ArrowUpMicro } from '@kaspersky/hexa-ui-icons/16'
+
+import { InputNumber } from '../InputNumber'
+import { inputNumberDesignPropPresentation } from './InputNumber.design.properties'
+import * as InputNumberStories from './InputNumber.stories'
+
+<Meta of={InputNumberStories} name="InputNumber Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="InputNumber"
+  description="**InputNumber** — поле числового ввода со стрелками увеличения и уменьшения значения"
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**InputNumber** предназначен для ввода количественных значений: количество, сумма, процент, лимит. Реализован на Ant Design InputNumber с темизацией Hexa UI. Доступен также как **Textbox.Number**. Настраиваются **value**, **placeholder**, **min**, **integerOnly**, **allowEmpty**, **controls**, состояния **disabled** и **readOnly**, а также **validationStatus**."
+    />
+
+    <DocExampleBlock
+      title="value"
+      description="Контролируемое значение поля — число или строка. Изменения передаются через **onChange**."
+      code={`<InputNumber value={150} />
+<InputNumber value="" allowEmpty />`}
+      scope={{ InputNumber }}
+    />
+
+    <DocExampleBlock
+      title="onChange"
+      description="Вызывается при изменении значения в поле. Передаёт новое значение или `null`, если поле очищено."
+      code={`<InputNumber onChange={(value) => alert(String(value))} />`}
+      scope={{ InputNumber }}
+    />
+
+    <DocExampleBlock
+      title="placeholder"
+      description="Подсказка в пустом поле, когда значение не задано."
+      code={`<InputNumber placeholder="Введите число" />`}
+      scope={{ InputNumber }}
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключает поле: ввод и кнопки изменения значения недоступны. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<InputNumber disabled value={150} />`}
+      scope={{ InputNumber }}
+    />
+
+    <DocExampleBlock
+      title="readOnly"
+      description="Режим только для чтения: значение видно, но не редактируется. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<InputNumber readOnly value={150} />`}
+      scope={{ InputNumber }}
+    />
+
+    <DocExampleBlock
+      title="validationStatus"
+      description="Визуальный статус валидации поля ввода. Доступные значения: `default`, `error`, `success`. По умолчанию — `default`."
+      code={`<InputNumber validationStatus="default" />
+<InputNumber validationStatus="error" />
+<InputNumber validationStatus="success" />`}
+      scope={{ InputNumber }}
+    />
+
+    <DocExampleBlock
+      title="integerOnly"
+      description="Ограничивает ввод с клавиатуры только целыми числами: десятичная точка блокируется. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<InputNumber integerOnly />`}
+      scope={{ InputNumber }}
+    />
+
+    <DocExampleBlock
+      title="allowEmpty"
+      description="Разрешает пустое значение в поле: при `null` отображается пустая строка вместо `0`. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<InputNumber allowEmpty value="" />`}
+      scope={{ InputNumber }}
+    />
+
+    <DocExampleBlock
+      title="min"
+      description="Минимально допустимое значение. Кнопка уменьшения и ввод значений ниже **min** ограничиваются этим порогом."
+      code={`<InputNumber min={0} value={10} />`}
+      scope={{ InputNumber }}
+    />
+
+    <DocExampleBlock
+      title="controls"
+      description="Управляет кнопками увеличения и уменьшения значения. По умолчанию отображаются стрелки **ArrowUpMicro** и **ArrowDownMicro**. Можно передать `false`, чтобы скрыть кнопки, или объект `{ upIcon, downIcon }` с кастомными иконками."
+      code={`<InputNumber controls={false} value={150} />
+<InputNumber controls={{ upIcon: <ArrowUpMicro />, downIcon: <ArrowDownMicro /> }} value={150} />`}
+      scope={{ InputNumber, ArrowUpMicro, ArrowDownMicro }}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**InputNumber** применяют в формах и панелях настроек, когда пользователю нужно указать количество, лимит, процент или другую числовую величину с возможностью точной корректировки стрелками. Компонент удобен там, где важен шаг изменения и нижняя граница значения.
+
+Для произвольного текстового ввода без числовых ограничений используйте **Textbox**. Для выбора из фиксированного набора значений — **Select** или **SegmentedButton**. Для ввода времени — **TimeInput**, для даты — **DatePicker**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(inputNumberDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={InputNumberStories} />
+    <AutodocArgsTable components={InputNumber} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

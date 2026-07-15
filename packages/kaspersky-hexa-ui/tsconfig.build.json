@@ -11,6 +11,8 @@
     "**/*.test.ts*",
     ".storybook",
     "docs",
-    "screenshots"
+    "screenshots",
+    "**/__mocks__",
+    "**/test-utils"
   ]
 }

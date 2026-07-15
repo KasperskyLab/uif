@@ -9,7 +9,6 @@ import { ArrowDown1, UserAccount } from '@kaspersky/hexa-ui-icons/16'
 
 import styles from '../TopNavigation.module.scss'
 
-
 export type AccountMenuProps = {
   /** Title for dropdown button (e.g. username or email) */
   title?: string,
@@ -26,7 +25,7 @@ export const AccountMenu = ({
   ...props
 }: AccountMenuProps): JSX.Element => {
   const { testAttributes } = useTestAttribute(props)
-  
+
   return (
     <Dropdown
       {...getChildTestProps('account-dropdown', testAttributes)}

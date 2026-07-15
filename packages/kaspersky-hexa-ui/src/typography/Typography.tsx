@@ -34,5 +34,5 @@ export const Text: FC<TextProps> = forwardRef<HTMLParagraphElement, TextProps>((
 ))
 
 export const P: FC<TextProps> = forwardRef<HTMLParagraphElement, TextProps>((props, ref) => (
-  <TextComponent {...props} ref={ref} htmlTag={textTags.P}/>
+  <TextComponent {...props} ref={ref} htmlTag={textTags.P} />
 ))

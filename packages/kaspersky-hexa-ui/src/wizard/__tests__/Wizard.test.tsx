@@ -5,10 +5,11 @@ import React from 'react'
 import { WizardProps } from '../types'
 import { Wizard } from '../Wizard'
 
-const DefaultWizard = (props: WizardProps) =>
+const DefaultWizard = (props: WizardProps) => (
   <ConfigProvider>
     <Wizard {...props} />
   </ConfigProvider>
+)
 
 describe('WizardModal', () => {
   const steps = [

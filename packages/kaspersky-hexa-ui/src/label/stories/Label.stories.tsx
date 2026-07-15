@@ -41,9 +41,9 @@ export const Basic: Story = {}
 export const Position: Story = {
   render: (args: LabelProps) => (
     <>
-      <Label {...args} text="Default label text style"/>
+      <Label {...args} text="Default label text style" />
       <Label {...args} text="Default label text style position none" position="none">
-        <Textbox value="Label position none"/>
+        <Textbox value="Label position none" />
       </Label>
       <Label {...args} text="Default label text style position top" position="top" />
       <Label {...args} text="Default label text style position aside" position="aside" />
@@ -55,10 +55,10 @@ export const Position: Story = {
 export const Type: Story = {
   render: (args: LabelProps) => (
     <>
-      <Label {...args} text="Default label text style"/>
-      <Label {...args} text="Default label text style type default" type="default"/>
-      <Label {...args} text="Default label text style type top" type="full"/>
-      <Label {...args} text="Default label text style type stretch" type="stretch"/>
+      <Label {...args} text="Default label text style" />
+      <Label {...args} text="Default label text style type default" type="default" />
+      <Label {...args} text="Default label text style type top" type="full" />
+      <Label {...args} text="Default label text style type stretch" type="stretch" />
     </>
   )
 }
@@ -66,9 +66,9 @@ export const Type: Story = {
 export const Other = {
   render: (args: LabelProps) => (
     <>
-      <Label {...args} text="Default label text style with error text" errorText="Error text"/>
-      <Label {...args} text="Default label text with tooltip" tooltip="Tooltip text ..."/>
-      <Label {...args} text="Required label text" required={true}/>
+      <Label {...args} text="Default label text style with error text" errorText="Error text" />
+      <Label {...args} text="Default label text with tooltip" tooltip="Tooltip text ..." />
+      <Label {...args} text="Required label text" required={true} />
       <Label
         {...args}
         text="Label with all props above, position right, type stretch"

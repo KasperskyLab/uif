@@ -1,19 +1,19 @@
 import { createContext, useContext } from 'react'
 
-import { TableColumn, TableRowSelection } from '../../types'
+import { TableColumn, TableRecord } from '../../types'
 
-export type ResizableColumnsContextValue = {
-  columns: TableColumn[],
-  rowSelection?: TableRowSelection,
+export type ResizableColumnsContextValue<T extends TableRecord = TableRecord> = {
+  columns: TableColumn<T>[],
+  hasRowSelection?: boolean,
   setOverflow: (overflow: boolean) => void
 }
 
-export const ResizableColumnsContext = createContext<ResizableColumnsContextValue>({
+// Вынуждены использовать any, т.к. при <TableRecord> нельзя нормально типизировать пропы при использовании контекста
+export const ResizableColumnsContext = createContext<ResizableColumnsContextValue<any>>({
   columns: [],
-  setOverflow: () => { /* Do nothing if the provider isn't connected */ }
+  setOverflow: () => {}
 })
 
-export function useResizableColumnsContext () {
-  return useContext(ResizableColumnsContext)
+export function useResizableColumnsContext<T extends TableRecord = TableRecord> () {
+  return useContext<ResizableColumnsContextValue<T>>(ResizableColumnsContext)
 }
-

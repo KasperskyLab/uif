@@ -7,7 +7,7 @@ type ColumnSelectionActionsProps = {
   onSave: () => void,
   onClose: () => void,
   isSaveDisabled?: boolean
-};
+}
 
 const Buttons = styled.div`
   display: flex;

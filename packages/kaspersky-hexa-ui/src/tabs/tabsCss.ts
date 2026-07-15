@@ -180,16 +180,16 @@ export const tabsCss = css<{
   }
 
   ${props => props.hiddenTabsLength
-    ? `& > .ant-tabs-nav .ant-tabs-tab:nth-last-child(-n + ${props.hiddenTabsLength}) {
-        visibility: hidden;
+      ? `& > .ant-tabs-nav .ant-tabs-tab:nth-last-child(-n + ${props.hiddenTabsLength}) {
+            visibility: hidden;
 
-        .ant-tabs-tab-btn {
-          transition: none;
-        }
-      }
-    `
-    : ''
-}
+            .ant-tabs-tab-btn {
+              transition: none;
+            }
+          }
+        `
+      : ''
+  }
 
   .ant-tabs-tab {
     padding: 0;
@@ -262,9 +262,17 @@ export const tabPaneHeadCss = css<{ cssConfig: TabsCssConfig }>`
   display: flex;
   gap: 4px;
   align-items: center;
+  position: relative;
 
   .ant-badge-count {
     min-width: 0;
+  }
+
+  .hexa-ui-indicator {
+    position: absolute;
+    top: 0px;
+    right: -6px;
+    z-index: 1;
   }
 
   ${StyledTabPaneIcon} {
@@ -344,9 +352,9 @@ export const tabsWrapperCss = css<{
       color: ${fromProps('selected.enabled.color')(props)};
     `}
     ${props => props.shouldShowMoreButton
-    ? ''
-    : 'visibility: hidden;'
-}
+        ? ''
+        : 'visibility: hidden;'
+    }
     ${textSizesCss}; 
 
     padding: ${tabsSizes.topTab.padding};

@@ -135,5 +135,5 @@ export const modifyNodes = (nodes: DataNode[]): DataNode[] =>
     }
     return newNode
   })
-  
+
 export const treeDataMockWithIcons = modifyNodes(treeDataMock)

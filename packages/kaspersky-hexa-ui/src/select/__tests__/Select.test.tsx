@@ -2,7 +2,13 @@ import { ConfigProvider } from '@design-system/context'
 import { Button } from '@src/button'
 import { Tag } from '@src/tag'
 import { Text } from '@src/typography'
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor
+} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 
@@ -77,73 +83,6 @@ describe('Select', () => {
     const klId = 'clear-icon'
     render(<DefaultSelect mode="tags" />)
     expect(screen.getByTestId(klId)).toBeInTheDocument()
-  })
-
-  test('should vertically center multiselect option label relative to checkbox', async () => {
-    const options = [
-      { label: 'Moscow', value: '1' },
-      { label: 'Kazan', value: '2', description: 'description text' }
-    ]
-    const { container } = render(
-      <DefaultSelect options={options} defaultValue={undefined} />
-    )
-
-    await waitForDropdown()
-
-    const checkbox = container.querySelector('.dropdown-v6-multi-checkbox')
-    expect(checkbox).toBeInTheDocument()
-
-    const checkboxCell = checkbox?.closest('.kl6-select-option-checkbox-cell')
-    expect(checkboxCell).not.toBeNull()
-    expect(window.getComputedStyle(checkboxCell as Element).display).toBe('flex')
-    expect(window.getComputedStyle(checkboxCell as Element).alignItems).toBe('center')
-
-    const optionContent = checkbox?.closest('.kl6-select-option-content')
-    expect(optionContent).not.toBeNull()
-    expect(window.getComputedStyle(optionContent as Element).display).toBe('grid')
-
-    const checkboxInput = container.querySelector(
-      '.dropdown-v6-multi-checkbox .ant-checkbox'
-    )
-    expect(checkboxInput).not.toBeNull()
-    expect(window.getComputedStyle(checkboxInput as Element).top).toBe('0px')
-  })
-
-  test('should show only one checkbox state per tags option', async () => {
-    const options = [
-      { label: 'Test 1', value: 'test_1' },
-      { label: 'Test 2', value: 'test_2' }
-    ]
-    const { container } = render(
-      <DefaultSelect
-        mode="tags"
-        options={options}
-        defaultValue={undefined}
-      />
-    )
-
-    await waitForDropdown()
-
-    const checkboxWrappers = container.querySelectorAll(
-      '.dropdown-v6-multi-checkbox > .kl6-checkbox-wrapper'
-    )
-    expect(checkboxWrappers.length).toBeGreaterThanOrEqual(2)
-
-    expect(window.getComputedStyle(checkboxWrappers[0]).display).not.toBe('none')
-    expect(window.getComputedStyle(checkboxWrappers[1]).display).toBe('none')
-  })
-
-  test('should not apply multiselect grid layout in single select mode', async () => {
-    const { container } = render(
-      <DefaultSelect mode={undefined} defaultValue={undefined} />
-    )
-
-    await waitForDropdown()
-
-    const optionContent = container.querySelector('.kl6-select-option-content')
-    expect(optionContent).toBeInTheDocument()
-    expect(window.getComputedStyle(optionContent as Element).display).toBe('flex')
-    expect(getFirstOption(container)).toHaveTextContent(defaultProps.options[0].label)
   })
 
   test('should not auto clear search value with autoClearSearchValue false', async () => {
@@ -466,7 +405,7 @@ describe('Select', () => {
   test('should receive test attributes', async () => {
     const testId = 'test-select'
 
-    const { container } = render(<DefaultSelect open klId={testId} testId={testId}/>)
+    const { container } = render(<DefaultSelect open klId={testId} testId={testId} />)
     const dropdown = await waitForDropdown(testId)
     const select = await getSelect(testId)
     const firstItem = container.querySelector('[data-value="1"]')

@@ -11,7 +11,7 @@ export function getNotificationsIcon (hasNotifications: boolean): React.ReactNod
       role="button"
       onClick={() => clickHandler('Notifications')}
     >
-      <AlarmIcon/>
+      <AlarmIcon />
     </NotificationButton>
   )
 }

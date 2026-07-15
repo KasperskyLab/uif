@@ -17,7 +17,7 @@ const DefaultToolbar = (props: ToolbarProps) => (
 
 describe('Toolbar ', () => {
   function queryByTestId (testId: string) {
-    return document.body.querySelector(`[data-testid="${testId}"]`) || 
+    return document.body.querySelector(`[data-testid="${testId}"]`) ||
       document.body.querySelector(`[kl-id="${testId}"]`)!
   }
 
@@ -139,7 +139,7 @@ describe('Toolbar ', () => {
 
   test('should render toolbar items in left part', () => {
     render(
-      <Toolbar testId={testId} left={itemsLeft}/>
+      <Toolbar testId={testId} left={itemsLeft} />
     )
 
     const buttonTool = screen.getByText('Tool 1')
@@ -148,7 +148,7 @@ describe('Toolbar ', () => {
 
   test('should correctly render toolbar items with maxLeftItemsCount', () => {
     render(
-      <Toolbar testId={testId} left={itemsLeft} leftLimit={2}/>
+      <Toolbar testId={testId} left={itemsLeft} leftLimit={2} />
     )
 
     const buttonTool2 = screen.queryByText('Tool 2')
@@ -160,7 +160,7 @@ describe('Toolbar ', () => {
 
   test('should correctly render items in dropdown with maxLeftItemsCount', async () => {
     const { container } = render(
-      <Toolbar testId={testId} left={itemsLeft} leftLimit={2}/>
+      <Toolbar testId={testId} left={itemsLeft} leftLimit={2} />
     )
 
     const dropdown = container.querySelector('[kl-id="toolbar-dropdown-button"]')!
@@ -181,7 +181,7 @@ describe('Toolbar ', () => {
 
   test('should correctly render items without dropdown', async () => {
     const { container } = render(
-      <Toolbar testId={testId} left={itemsLeft}/>
+      <Toolbar testId={testId} left={itemsLeft} />
     )
     const dropdown = container.querySelector('[kl-id="toolbar-dropdown-button"]')!
     expect(dropdown).not.toBeInTheDocument()
@@ -193,7 +193,7 @@ describe('Toolbar ', () => {
 
   test('should render toolbar items in right part', () => {
     const { container } = render(
-      <DefaultToolbar testId={testId} left={itemsLeft} right={itemsRight}/>
+      <DefaultToolbar testId={testId} left={itemsLeft} right={itemsRight} />
     )
 
     const collapsibleSearch = container.querySelector('[kl-id="kl-collapsible-search-item"]')
@@ -213,7 +213,7 @@ describe('Toolbar ', () => {
 
   test('should not mark items in "rest items dropdown" as selected', async () => {
     async function waitForDropdownToBeOpened () {
-      return waitFor(() => {
+      return await waitFor(() => {
         expect(
           document.body.querySelector('.ant-dropdown:not(.ant-dropdown-hidden)')
         ).toBeInTheDocument()
@@ -221,7 +221,7 @@ describe('Toolbar ', () => {
     }
 
     async function waitForDropdownToBeClosed () {
-      return waitFor(() => {
+      return await waitFor(() => {
         expect(
           document.body.querySelector('.ant-dropdown.ant-dropdown-hidden')
         ).toBeInTheDocument()
@@ -229,9 +229,9 @@ describe('Toolbar ', () => {
     }
 
     render(
-      <Toolbar testId={testId} left={itemsLeft} leftLimit={2}/>
+      <Toolbar testId={testId} left={itemsLeft} leftLimit={2} />
     )
-    
+
     act(() => userEvent.click(queryByTestId('toolbar-show-rest-items')))
     await waitForDropdownToBeOpened()
     act(() => userEvent.click(queryByTestId('item-4')))

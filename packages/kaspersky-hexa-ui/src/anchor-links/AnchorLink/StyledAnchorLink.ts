@@ -1,7 +1,7 @@
 import { BORDER_RADIUS, SPACES } from '@design-system/theme'
 import { getTextSizes } from '@design-system/tokens'
 import { getFromProps } from '@helpers/getFromProps'
-import { Anchor as AnchorAntd } from 'antd'
+import AnchorAntd from 'antd/es/anchor'
 import styled, { css } from 'styled-components'
 
 import { TextTypes } from '@kaspersky/hexa-ui-core/typography/js'

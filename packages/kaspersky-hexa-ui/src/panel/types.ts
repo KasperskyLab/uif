@@ -32,7 +32,9 @@ export type PanelProps = {
   /** Initial padding size */
   padding?: 'large' | 'medium',
   /** Panel layout for children panels */
-  parentLayout?: boolean
+  parentLayout?: boolean,
+  /** A callback when resizing the panel */
+  onResize?: (panelSize: number) => void
 } & TestingProps
 
 export type PanelTitleProps = {

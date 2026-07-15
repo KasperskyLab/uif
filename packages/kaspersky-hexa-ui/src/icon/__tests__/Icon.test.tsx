@@ -11,7 +11,8 @@ describe('Icon', () => {
         name="Account"
         size="large"
         testId="test-id"
-      />)
+      />
+    )
 
     expect(container.querySelector('[kl-id="kl-id"]')).toBeInTheDocument()
     expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()

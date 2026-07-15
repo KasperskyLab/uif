@@ -1,12 +1,12 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import ResizeObserver from 'resize-observer-polyfill'
 
-const useDimension = <T extends HTMLElement | null>(ref: React.MutableRefObject<T>, deps?: any[]) => {
+const useDimension = <T extends HTMLElement | null>(element: T | null, deps?: any[]) => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
   const resizeRef = useRef<any>(null)
 
   useLayoutEffect(() => {
-    if (!ref.current) {
+    if (!element) {
       return
     }
 
@@ -17,12 +17,12 @@ const useDimension = <T extends HTMLElement | null>(ref: React.MutableRefObject<
       })
     })
 
-    resizeRef.current.observe(ref.current)
-    setDimensions({ width: ref.current.clientWidth, height: ref.current.clientHeight })
+    resizeRef.current.observe(element)
+    setDimensions({ width: element.clientWidth, height: element.clientHeight })
     return () => {
       if (resizeRef.current) resizeRef.current.disconnect()
     }
-  }, [ref, JSON.stringify(deps)])
+  }, [element, JSON.stringify(deps)])
   return dimensions
 }
 

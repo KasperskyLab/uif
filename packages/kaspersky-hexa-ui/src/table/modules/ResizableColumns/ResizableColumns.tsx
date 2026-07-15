@@ -1,17 +1,15 @@
+import { SetState } from '@helpers/hooks/useStateProps'
 import { useUpdateEffect } from '@helpers/useUpdateEffect'
 import React, {
-  Dispatch,
   MouseEventHandler,
   ReactNode,
-  SetStateAction,
   useCallback,
   useEffect,
   useRef,
   useState
 } from 'react'
-import styled from 'styled-components'
 
-import { TableModule } from '..'
+import { TableComponent } from '..'
 import { ITableProps, TableColumn, TableRecord } from '../..'
 import { isColumnReadonly } from '../../helpers/common'
 import { getPersistentStorageValue, updatePersistentStorage } from '../../helpers/persistentStorage'
@@ -20,26 +18,23 @@ import { ResizableColumnsContext, STICKY_HEADER_CLASS, StickyHeaderWrapper } fro
 import { addWidthFromStorage, applyResizingMode, selectAutoResizingMode } from './helpers'
 
 const DEFAULT_COLUMN_WIDTH = 220
-const COLUMN_MIN_WIDTH = 100
+const COLUMN_DEFAULT_MIN_WIDTH = 100
+const COLUMN_MANUAL_MIN_WIDTH = 40
 
-type SetColumns = Dispatch<SetStateAction<TableColumn[]>>
+type SetColumns<T extends TableRecord = TableRecord> = SetState<TableColumn<T>[]>
 
 type ResizableHeaderCellProps = {
   children: ReactNode
   width: number
+  minWidth?: number
   onResize: (width: number) => void
   disabled?: boolean
 }
 
-const HeaderCell = styled.th<{ $width: number }>`
-  position: relative;
-  width: ${props => props.$width}px;
-  overflow: visible;
-`
-
 const ResizableHeaderCell: React.FC<ResizableHeaderCellProps> = ({
   children,
   width,
+  minWidth = 0,
   onResize,
   disabled
 }) => {
@@ -64,7 +59,7 @@ const ResizableHeaderCell: React.FC<ResizableHeaderCellProps> = ({
     if (!isResizing) return
 
     const deltaX = e.clientX - startX
-    const newWidth = Math.max(COLUMN_MIN_WIDTH, startWidth + deltaX)
+    const newWidth = Math.max(COLUMN_MANUAL_MIN_WIDTH, startWidth + deltaX, minWidth || COLUMN_DEFAULT_MIN_WIDTH)
 
     setPreviewWidth(newWidth)
 
@@ -97,7 +92,7 @@ const ResizableHeaderCell: React.FC<ResizableHeaderCellProps> = ({
   }, [isResizing, handleMouseMove, handleMouseUp])
 
   return (
-    <HeaderCell $width={width}>
+    <th>
       {children}
       {!disabled && (
         <div
@@ -108,7 +103,7 @@ const ResizableHeaderCell: React.FC<ResizableHeaderCellProps> = ({
           <div className="resizing-handle" />
         </div>
       )}
-    </HeaderCell>
+    </th>
   )
 }
 
@@ -116,6 +111,7 @@ const ResizableTitle = (props: any) => {
   const {
     onResize,
     width,
+    minWidth,
     resizing,
     children,
     ...restProps
@@ -134,6 +130,7 @@ const ResizableTitle = (props: any) => {
   return (
     <ResizableHeaderCell
       width={width}
+      minWidth={minWidth}
       onResize={onResize}
       disabled={resizing?.disabled}
     >
@@ -142,16 +139,18 @@ const ResizableTitle = (props: any) => {
   )
 }
 
-const resizeColumns = (
+const resizeColumns = <T extends TableRecord = TableRecord>(
   index: number,
   columnWidth: number,
-  columns: TableColumn[],
-  onManualColumnResize?: ITableProps['onManualColumnResize']
+  columns: TableColumn<T>[],
+  onManualColumnResize?: ITableProps<T>['onManualColumnResize'],
+  columnMinWidth?: number
 ) => {
   const nextColumns = [...columns]
   nextColumns[index] = {
     ...nextColumns[index],
     width: columnWidth,
+    minWidth: columnMinWidth,
     isUserDefinedWidth: true
   }
 
@@ -160,11 +159,11 @@ const resizeColumns = (
   return nextColumns
 }
 
-const mapColumns = (
-  tableColumns: TableColumn[],
-  setTableColumns: SetColumns,
-  resizeColumnCallback: ITableProps['onColumnResize'],
-  onManualColumnResize?: (column: TableRecord) => void
+const mapColumns = <T extends TableRecord = TableRecord>(
+  tableColumns: TableColumn<T>[],
+  setTableColumns: SetColumns<T>,
+  resizeColumnCallback: ITableProps<T>['onColumnResize'],
+  onManualColumnResize?: (column: TableColumn<T>) => void
 ) => {
   return tableColumns.map((col, index) => isColumnReadonly(col)
     ? col
@@ -175,13 +174,16 @@ const mapColumns = (
           return ({
             resizing: column.resizing,
             width: column.width,
-            onResize: (newWidth: number) => setTableColumns(resizeColumns(index, newWidth, tableColumns, onManualColumnResize))
+            minWidth: column.minWidth,
+            onResize: (newWidth: number) => setTableColumns(resizeColumns(index, newWidth, tableColumns, onManualColumnResize, column.minWidth))
           })
         }
       }))
 }
 
-export const ResizableColumns: TableModule = Component => function ResizableColumnsModule (props) {
+export const ResizableColumns = <T extends TableRecord = TableRecord> (
+  Component: TableComponent<T>
+): TableComponent<T> => function ReductionsModule (props) {
   const {
     resizingMode: resizingModeFromProps = 'last',
     maxColumnsForAutoResizing = 1,
@@ -196,7 +198,7 @@ export const ResizableColumns: TableModule = Component => function ResizableColu
   }
 
   const [columnsFromStorage, setColumnsFromStorage] = useState(
-    addWidthFromStorage({ columns: props.columns, storageKey: props.storageKey })
+    addWidthFromStorage<T>({ columns: props.columns, storageKey: props.storageKey })
   )
 
   const [resizingMode, setResizingMode] = useState(
@@ -220,23 +222,27 @@ export const ResizableColumns: TableModule = Component => function ResizableColu
   /** Изначально, когда таблица не отрендерена, overflow у нас false, и потом единожды (если ничего экстраординарного с
    * компонентом не случалось) встанет в true, и нам нужно заново пересчитать resizing mode и применить его
    * TODO: сделать пересчет resizingMode обособленным в отдельном useEffect, вынести отсюда лишнюю логику, тут
-   * оставить только "переприменение" resizingMode. понять почему именно к resizableColumns нужно применять resizingMode
+   * оставить только "переприменение" resizingMode.
    */
   useEffect(() => {
+    const actualColumnsFromStorage = addWidthFromStorage({ columns: props.columns, storageKey: props.storageKey })
+
     if (isTableVisible && hasDataSource) {
       const newResizingMode = selectAutoResizingMode(
-        columnsFromStorage,
+        actualColumnsFromStorage,
         resizingModeFromProps,
         maxColumnsForAutoResizing,
         overflow
       )
       setResizingMode(newResizingMode)
-      setColumns(applyResizingMode(resizableColumns, newResizingMode, defaultColumnWidth))
+      setColumns(applyResizingMode(actualColumnsFromStorage, newResizingMode, defaultColumnWidth))
     }
+    setColumnsFromStorage(actualColumnsFromStorage)
   }, [
     overflow,
     isTableVisible,
-    columnsFromStorage,
+    props.columns,
+    props.storageKey,
     resizingModeFromProps,
     maxColumnsForAutoResizing,
     hasDataSource
@@ -264,11 +270,13 @@ export const ResizableColumns: TableModule = Component => function ResizableColu
    */
   useEffect(() => {
     const columnsWithSyncedWidth = columnsFromStorage.map(column => {
-      const processedColumn = columns.find(col => col.dataIndex === column.dataIndex)
+      const processedColumn = columns.find(col => col.key === column.key)
       return { ...column, width: processedColumn?.width ?? column?.width }
     })
     setColumns(applyResizingMode(columnsWithSyncedWidth, resizingMode, defaultColumnWidth))
   }, [props.columns])
+
+  const hasRowSelection = !!props.rowSelection
 
   /**
    * StickyHeader реализован через вынос thead в отдельную таблицу, потому что браузеры не умеют держать общий
@@ -296,7 +304,7 @@ export const ResizableColumns: TableModule = Component => function ResizableColu
             stickyHeaderColumns.forEach(stickyHeaderColumn => {
               if (!stickyHeaderColumn.classList.contains('ant-table-selection-column')) {
                 const width = stickyHeaderColumn.getBoundingClientRect().width
-                const key = props.rowSelection ? index + 1 : index
+                const key = hasRowSelection ? index + 1 : index
                 if (colgroupColumns[key]?.clientWidth !== width) {
                   columns[index] = { ...columns[index], width }
                 }
@@ -310,13 +318,7 @@ export const ResizableColumns: TableModule = Component => function ResizableColu
       }, 150)
     }
     return () => interval && clearInterval(interval)
-  }, [props.stickyHeader, props.dataSource, props.rowSelection, isTableVisible])
-
-  useEffect(() => {
-    setColumnsFromStorage(
-      addWidthFromStorage({ columns: props.columns, storageKey: props.storageKey })
-    )
-  }, [props.columns])
+  }, [props.stickyHeader, props.dataSource, hasRowSelection, isTableVisible, props.columns])
 
   useEffect(() => {
     setColumns((prevState) => {
@@ -349,10 +351,8 @@ export const ResizableColumns: TableModule = Component => function ResizableColu
       }) || {}
 
       const newColumnsWidths = resizableColumns.reduce((acc, item) => {
-        if (!item.dataIndex) return acc
-
-        acc[item.dataIndex] = {
-          ...acc[item.dataIndex],
+        acc[item.key] = {
+          ...acc[item.key],
           width: item.width,
           isUserDefinedWidth: item.isUserDefinedWidth
         }
@@ -365,7 +365,7 @@ export const ResizableColumns: TableModule = Component => function ResizableColu
         updatedValue: newColumnsWidths
       })
     }
-  }, [resizableColumns])
+  }, [resizableColumns, props.storageKey])
 
   useUpdateEffect(() => {
     setResizableColumns(
@@ -376,7 +376,7 @@ export const ResizableColumns: TableModule = Component => function ResizableColu
   return (
     <ResizableColumnsContext.Provider value={{
       columns: resizableColumns,
-      rowSelection: props.rowSelection,
+      hasRowSelection,
       setOverflow
     }}>
       <div ref={siblingRef} hidden />

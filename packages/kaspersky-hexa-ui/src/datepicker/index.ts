@@ -4,6 +4,5 @@ export type {
   CalendarProps,
   DateInputValue,
   RangeDateInputValue,
-  RangePickerProps,
-  ShowTimeConfig
+  RangePickerProps
 } from './types'

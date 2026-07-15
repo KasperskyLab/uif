@@ -1,5 +1,13 @@
 import { Space } from '@src/space'
-import { H1, H2, H3, H4, H5, H6, Text } from '@src/typography'
+import {
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  Text
+} from '@src/typography'
 import React from 'react'
 
 export const HeaderDocs = (): JSX.Element => {

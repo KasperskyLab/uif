@@ -10,6 +10,8 @@ import MetaData from '../__meta__/meta.json'
 import { WizardModalProps, WizardPageProps, WizardProps, WizardSidebarProps } from '../types'
 import { Wizard } from '../Wizard'
 
+const FOOTER_TEXT = <div style={{ textAlign: 'right' }}>Footer Text Element</div>
+
 const meta: Meta<WizardProps> = {
   title: 'Hexa UI Components/Wizard',
   component: Wizard,
@@ -27,6 +29,7 @@ const meta: Meta<WizardProps> = {
         lastItem: true
       },
       parameters: {
+        controls: { exclude: '^(on.*|action)' },
         actions: { argTypesRegex: '^(on.*|action)' },
         badges: [badges.stable, badges.reviewedByDesign],
         docs: {
@@ -35,7 +38,10 @@ const meta: Meta<WizardProps> = {
         design: MetaData.pixsoView
       }
     }
-  })
+  }),
+  decorators: [
+    (Story, context) => <div style={{ width: '100%', height: '100%' }}><Story {...context} /></div>
+  ]
 }
 export default meta
 
@@ -59,9 +65,9 @@ const useStepsWithValidation = () => {
     {
       name: 'Step 1',
       onNext: () => isValid,
-      Component: () => (
+      render: () => (
         <div>
-            Step 1 content
+          Step 1 content
           <FieldSet
             labelPosition="before"
             items={[
@@ -89,27 +95,27 @@ const useStepsWithValidation = () => {
     },
     {
       name: 'Step 2',
-      Component: () => (
+      render: () => (
         <div>
-            Step 2 content
+          Step 2 content
         </div>
       )
     },
     {
       name: 'Step 3',
       description: 'Long long long long long long long long description',
-      Component: () => (
+      render: () => (
         <div>
-            Step 3 content
+          Step 3 content
         </div>
       )
     },
     {
       name: 'Step 4',
       description: 'Description',
-      Component: () => (
+      render: () => (
         <div>
-            Step 4 content
+          Step 4 content
         </div>
       )
     }
@@ -131,20 +137,47 @@ export const Page: StoryObj<WizardPageProps> = {
     }
 
     return (
-      <div style={{ width: '1000px' }}>
-        <Wizard
-          view="page"
-          {...args}
-          steps={steps}
-          onFinish={handleFinish}
-          onCancel={handleCancel}
-        />
-      </div>
+      <Wizard
+        view="page"
+        {...args}
+        steps={steps}
+        onFinish={handleFinish}
+        onCancel={handleCancel}
+        footerAdditionalElement={FOOTER_TEXT}
+      />
     )
   }
 }
 
-export const Sidebar: StoryObj<WizardSidebarProps> = {
+export const PageVertical: StoryObj<WizardPageProps> = {
+  render: (args) => {
+    const steps = useStepsWithValidation()
+
+    const handleFinish = () => {
+      args.onFinish?.()
+      alert('Finished')
+    }
+
+    const handleCancel = () => {
+      args.onCancel?.()
+      alert('Cancelled')
+    }
+
+    return (
+      <Wizard
+        view="page"
+        {...args}
+        steps={steps}
+        isVertical={true}
+        onFinish={handleFinish}
+        onCancel={handleCancel}
+        footerAdditionalElement={FOOTER_TEXT}
+      />
+    )
+  }
+}
+
+export const Sidebar: StoryObj<WizardSidebarProps & { 'sidebar.zIndex'?: number }> = {
   render: (args) => {
     const [visible, setVisible] = useState(false)
     const steps = useStepsWithValidation()
@@ -166,12 +199,18 @@ export const Sidebar: StoryObj<WizardSidebarProps> = {
           view="sidebar"
           {...args}
           steps={steps}
-          sidebar={{ title: 'Wizard in sidebar', onClose: () => setVisible(false), visible }}
+          sidebar={{ title: 'Wizard in sidebar', onClose: () => setVisible(false), visible, zIndex: args['sidebar.zIndex'] }}
           onFinish={handleFinish}
           onCancel={handleCancel}
+          footerAdditionalElement={FOOTER_TEXT}
         />
       </>
     )
+  },
+  argTypes: {
+    'sidebar.zIndex': {
+      control: { type: 'number' }
+    }
   }
 }
 
@@ -200,6 +239,7 @@ export const Modal: StoryObj<WizardModalProps> = {
           modal={{ title: 'My title', visible }}
           onFinish={handleFinish}
           onCancel={handleCancel}
+          footerAdditionalElement={FOOTER_TEXT}
         />
       </>
     )

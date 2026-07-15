@@ -1,4 +1,10 @@
-import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, {
+  FC,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState
+} from 'react'
 import styled from 'styled-components'
 
 import { ScheduleHeader } from './components/ScheduleHeader'
@@ -128,25 +134,26 @@ const WeeklyScheduleView: FC<WeeklyScheduleViewProps> = ({
       data-testid={testId}
       {...props}
     >
-      <ScheduleTimeColumn/>
+      <ScheduleTimeColumn />
       <Container>
-        <ScheduleHeader daysOfWeek={daysOfWeek}/>
+        <ScheduleHeader daysOfWeek={daysOfWeek} />
         <SchedulerMatrix>
           {
             defaultItems.map((_, i) => {
-              return (<Cell
-                cssConfig={cssConfig}
-                onMouseDown={ (e) => mouseDownHandler(e, i) }
-                ref={(el: HTMLDivElement) => (cellRefs.current[i] = el)}
-                key={`${i}`}
-                selected={isStartSelected ? draftCellState[i] : cellState[i]}
-                data-testid={`cell-id-${i}`}
-              />
+              return (
+                <Cell
+                  cssConfig={cssConfig}
+                  onMouseDown={(e) => mouseDownHandler(e, i)}
+                  ref={(el: HTMLDivElement) => (cellRefs.current[i] = el)}
+                  key={`${i}`}
+                  selected={isStartSelected ? draftCellState[i] : cellState[i]}
+                  data-testid={`cell-id-${i}`}
+                />
               )
             })
           }
         </SchedulerMatrix>
-        <ScheduleLegend legend={legend} cssConfig={cssConfig}/>
+        <ScheduleLegend legend={legend} cssConfig={cssConfig} />
       </Container>
     </Board>
   )

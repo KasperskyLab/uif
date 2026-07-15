@@ -11,13 +11,12 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
     "outDir": "esm",
     "paths": {
-      "@src/*": ["src/*"],
-      "@design-system/*": ["design-system/*"],
-      "@helpers/*": ["helpers/*"],
-      "@sb/*": [".storybook/*"]
+      "@src/*": ["./src/*"],
+      "@design-system/*": ["./design-system/*"],
+      "@helpers/*": ["./helpers/*"],
+      "@sb/*": ["./.storybook/*"]
     }
   },
   "tsc-alias": {
@@ -32,7 +31,8 @@
     "./docs",
     "./.storybook/**/*",
     "./screenshots/**/*",
-    "/.changelog/scripts/*"
+    "./.changelog/scripts/*",
+    "./setupTests.ts"
   ],
   "exclude": [
     "node_modules",

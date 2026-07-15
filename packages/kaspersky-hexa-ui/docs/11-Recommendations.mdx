@@ -1,0 +1,127 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Docs/Рекомендации" />
+
+## Icon и IconResolver
+
+Использование `Icon` и `IconResolver` не рекомендуется. Эти компоненты сохранены для обратной совместимости, но использовать их как основной способ работы с иконками не стоит, так как это может сказаться на размере бандла.
+
+Во внутренней реализации иконки переведены на получение паков через глобальный объект `window`. Для плагинов, работающих в NWC, обратная совместимость сохранена, и это уже позволило уменьшить размер бандла. Это решение сделано именно для поддержки обратной совместимости, а не как рекомендуемый способ использования в новом коде.
+
+Рекомендуется по возможности постепенно отказаться от использования `Icon` и `IconResolver` в продуктовом коде.
+
+### Не рекомендуется
+
+```
+import { Icon } from '@src/icon'
+
+<Icon name="Placeholder" size={16} />
+````
+
+```
+import { IconResolver } from '@src/icon'
+
+<IconResolver name="Placeholder" size={16} />
+```
+
+### Рекомендуемый вариант
+
+```
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
+
+<Placeholder />
+```
+
+## Импорт иконок
+
+Импорт пака целиком или через namespace-объект также не рекомендуется, так как tree shaking в этом случае работает хуже или становится менее предсказуемым, и в бандл может попадать существенно больше иконок, чем одна фактически используемая.
+
+### Не рекомендуется
+
+```
+import Icons16 from '@kaspersky/hexa-ui-icons/16'
+
+<Icons16.Placeholder />
+```
+
+```
+import * as Icons16 from '@kaspersky/hexa-ui-icons/16'
+
+<Icons16.Placeholder />
+```
+
+### Рекомендуемый вариант
+
+Следует использовать direct named import конкретной иконки из нужного пака.
+
+```
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
+
+<Placeholder />
+```
+
+## Изменения в API компонентов
+
+### Card и Input.Password
+
+Ранее в `Card` и `Input.Password` использовался формат `icon: string`, где иконка далее подставлялась через `IconResolver`. Этот подход сохранен для обратной совместимости, но теперь API расширен до `ReactNode` начиная с версии 6.347.3.
+
+Рекомендуется заменить строковое описание иконки на передачу конкретной иконки напрямую.
+
+#### Card
+
+**Было**
+
+```
+<Card icon="Placeholder" />
+```
+
+**Рекомендуемый вариант**
+
+```
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
+
+<Card icon={<Placeholder />} />
+```
+
+#### Input.Password
+
+**Было**
+
+```
+<Input.Password icon="Placeholder" />
+```
+
+**Рекомендуемый вариант**
+
+```
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
+
+<Input.Password icon={<Placeholder />} />
+```
+
+## Toolbar
+
+В `Toolbar` у пропов `left` и `right` использование `type: 'icon'` помечено как deprecated.
+
+### Было
+
+```
+<Toolbar
+  left={[
+    { type: 'icon', icon: 'Placeholder' },
+  ]}
+/>
+```
+
+### Рекомендуемый вариант
+
+```
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
+
+<Toolbar
+  left={[
+    { type: 'button', iconBefore: <Placeholder /> },
+  ]}
+/>
+```

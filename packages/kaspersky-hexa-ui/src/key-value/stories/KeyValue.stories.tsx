@@ -40,11 +40,14 @@ const data: KeyValuePair[] = [
     pairKey: 'Checkbox Group',
     pairValue: (
       <CheckboxGroup options={[{
-        label: 'One', value: '1'
+        label: 'One',
+        value: '1'
       }, {
-        label: 'Two', value: '2'
+        label: 'Two',
+        value: '2'
       }, {
-        label: 'Three', value: '3'
+        label: 'Three',
+        value: '3'
       }]} direction="vertical" />
     )
   },
@@ -52,11 +55,14 @@ const data: KeyValuePair[] = [
     pairKey: 'Radio',
     pairValue: (
       <Radio options={[{
-        label: 'One', value: '1'
+        label: 'One',
+        value: '1'
       }, {
-        label: 'Two', value: '2'
+        label: 'Two',
+        value: '2'
       }, {
-        label: 'Three', value: '3'
+        label: 'Three',
+        value: '3'
       }]} vertical />
     )
   },

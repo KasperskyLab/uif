@@ -4,12 +4,17 @@ import { useTranslation } from 'react-i18next'
 
 import { BooleanItemProps } from './types'
 
-export const BooleanItem: React.FC<BooleanItemProps> = ({ filter, onChange }) => {
+export const BooleanItem: React.FC<BooleanItemProps> = ({
+  filter,
+  onStateName,
+  offStateName,
+  onChange
+}) => {
   const { t } = useTranslation()
   const items = useMemo(() => [
-    { value: 'true', text: t('common.yes') },
-    { value: 'false', text: t('common.no') }
-  ], [t])
+    { value: 'true', text: onStateName ?? t('table.columnsSettings.filtering.booleanFilter.on') },
+    { value: 'false', text: offStateName ?? t('table.columnsSettings.filtering.booleanFilter.off') }
+  ], [t, onStateName, offStateName])
 
   const handleChange = (value: string[]) => {
     onChange({ ...filter, value: value[0] === 'true' })

@@ -35,8 +35,7 @@ Object.assign(dateFnsGenerateConfig.locale, {
     if (!loc || !loc.localize) return []
 
     return Array.from(Array(12).keys()).map(i =>
-      loc.localize?.month(i, { width: 'abbreviated' })
-    )
+      loc.localize?.month(i, { width: 'abbreviated' }))
   },
 
   getShortWeekDays: (locale: string) => {
@@ -44,8 +43,7 @@ Object.assign(dateFnsGenerateConfig.locale, {
     if (!loc || !loc.localize) return []
 
     return Array.from(Array(7).keys()).map(i =>
-      loc.localize?.day(i, { width: 'short' })
-    )
+      loc.localize?.day(i, { width: 'short' }))
   },
 
   getWeekFirstDay: (locale: string) => {

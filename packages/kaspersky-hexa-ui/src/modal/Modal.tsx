@@ -3,8 +3,14 @@ import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { ActionButton } from '@src/action-button'
 import { Button } from '@src/button'
 import { Space } from '@src/space'
-import { Modal as AntdModal } from 'antd'
-import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
+import AntdModal from 'antd/es/modal'
+import React, {
+  FC,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import styled from 'styled-components'
 
 import {
@@ -59,25 +65,25 @@ const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
 
   const IconComponent = useMemo(() => mode !== 'default' && iconMap[mode], [iconMap, mode])
 
-  const titleRef = useRef<HTMLDivElement>(null)
-  const footerRef = useRef<HTMLDivElement>(null)
+  const [titleElement, setTitleElement] = useState<HTMLDivElement | null>(null)
+  const [footerElement, setFooterElement] = useState<HTMLDivElement | null>(null)
 
-  const { height: titleHeight } = useDimension(titleRef, [visible])
-  const { height: footerHeight } = useDimension(footerRef, [visible])
+  const { height: titleHeight } = useDimension(titleElement, [visible])
+  const { height: footerHeight } = useDimension(footerElement, [visible])
 
   useEffect(() => {
-    if (visible && footerRef.current) {
-      const firstFooterButton: HTMLButtonElement | null = footerRef.current.querySelector('button')
+    if (visible && footerElement) {
+      const firstFooterButton: HTMLButtonElement | null = footerElement.querySelector('button')
 
       setTimeout(() => {
         firstFooterButton?.focus()
       })
     }
-  }, [visible])
+  }, [visible, footerElement])
 
   const titleMemoized = useMemo(() => {
     return (
-      <div ref={titleRef}>
+      <div ref={setTitleElement}>
         {IconComponent && (
           <StyledIcon cssConfig={cssConfig}>
             <IconComponent />
@@ -92,11 +98,16 @@ const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
     if (!actions && !customButtons) {
       return null
     }
+
     return (
-      <div ref={footerRef}>
+      <div ref={setFooterElement}>
         <Space direction="horizontal" gap={8}>
           {actions?.FIRST_ACTION && (
-            <Button size="medium" {...actions.FIRST_ACTION}>
+            <Button
+              size="medium"
+              {...actions.FIRST_ACTION}
+              mode={mode === 'error' && !actions.FIRST_ACTION.mode ? 'dangerFilled' : actions.FIRST_ACTION.mode}
+            >
               {actions.FIRST_ACTION.text}
             </Button>
           )}
@@ -123,10 +134,17 @@ const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
         </Space>
       </div>
     )
-  }, [actions, customButtons])
+  }, [actions, customButtons, mode])
 
   const [showTopBorder, setShowTopBorder] = useState(false)
   const [showBottomBorder, setShowBottomBorder] = useState(false)
+
+  useEffect(() => {
+    if (!visible) {
+      setShowTopBorder(false)
+      setShowBottomBorder(false)
+    }
+  }, [visible])
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement
@@ -160,6 +178,7 @@ const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
         closeIcon={<ActionButton _wrapInSpan size="large" />}
         {...testAttributes}
         {...props}
+        width="none"
         cssConfig={cssConfig}
         titleHeight={titleHeight}
         footerHeight={footerHeight}

@@ -9,5 +9,5 @@ export type ITabsContext = {
 }
 
 export const TabsContext = createContext<ITabsContext>(
-  {} as ITabsContext 
+  {} as ITabsContext
 )

@@ -1,5 +1,5 @@
-import { showDeprecationWarn } from '@helpers/showDeprecationWarn'
 import { usePopupConfig } from '@helpers/components/PopupConfigProvider'
+import { showDeprecationWarn } from '@helpers/showDeprecationWarn'
 import cn from 'classnames'
 import isObject from 'lodash/isObject'
 import RcDropdown, { DropdownProps as RcDropdownProps } from 'rc-dropdown'
@@ -11,7 +11,14 @@ import { DropdownItem } from './DropdownItem'
 import styles from './styles/Dropdown.module.scss'
 import { DropdownProps, DropdownVariants, Placement } from './types'
 import { useMappedContent } from './useMappedContent'
-import { DropdownDivider, DropdownGroup, DropdownMenu, DropdownSubmenu, DropdownInnerActions } from './wrappers'
+import {
+  DropdownDivider,
+  DropdownGroup,
+  DropdownInnerActions,
+  DropdownMenu,
+  DropdownSubmenu,
+  DropdownToggle
+} from './wrappers'
 
 const getPopupMaxHeight = (popupMaxHeight: number | undefined) => popupMaxHeight && (popupMaxHeight > 100 ? popupMaxHeight : 100)
 
@@ -44,12 +51,12 @@ export const Dropdown: FC<DropdownProps> & DropdownVariants = (rawProps: Dropdow
   const config = usePopupConfig({ usePortal: true })
 
   const dropdownMaxHeight = useMemo(() => getPopupMaxHeight(popupMaxHeight), [popupMaxHeight])
-  
+
   const handleOverlaySelect: RcMenuProps['onSelect'] = (info) => {
     setVisible(false)
     rawOnOverlaySelect?.(info)
   }
-  
+
   const overlayClassName = cn(
     rawOverlayClassName,
     dropdownMaxHeight && styles.dropdownMaxHeight
@@ -64,13 +71,21 @@ export const Dropdown: FC<DropdownProps> & DropdownVariants = (rawProps: Dropdow
   const props = useMappedContent({ ...rest, overlayClassName, onOverlaySelect: handleOverlaySelect })
 
   useEffect(() => {
-    setDropdownMaxHeight()
+    setDropdownAttributes()
   }, [dropdownMaxHeight])
 
-  const setDropdownMaxHeight = useCallback(() => {
+  const setDropdownAttributes = useCallback(() => {
     setTimeout(() => {
-      const dropdown = document.querySelector('.ant-dropdown') as HTMLElement
-      dropdown?.style?.setProperty('--dropdown-max-height', `${dropdownMaxHeight}px`)
+      const dropdowns: NodeListOf<HTMLElement> = document.querySelectorAll('.ant-dropdown')
+      dropdowns.forEach(d => {
+        const currentMinWidth = Number(d.style.getPropertyValue('min-width').split('px')[0])
+        if (currentMinWidth > 600) {
+          d.style.setProperty('min-width', '600px')
+        }
+        if (dropdownMaxHeight) {
+          d.style.setProperty('--dropdown-max-height', `${dropdownMaxHeight}px`)
+        }
+      })
     }, 0)
   }, [dropdownMaxHeight])
 
@@ -83,10 +98,10 @@ export const Dropdown: FC<DropdownProps> & DropdownVariants = (rawProps: Dropdow
 
   const handleVisibleChange = useCallback((opened: boolean) => {
     focusOnFirstItem()
-    opened && setDropdownMaxHeight()
+    opened && setDropdownAttributes()
     setVisible(opened)
     rawOnVisibleChange?.(opened)
-  }, [rawOnVisibleChange, focusOnFirstItem, setDropdownMaxHeight])
+  }, [focusOnFirstItem, setDropdownAttributes, setVisible, rawOnVisibleChange])
 
   const child = React.Children.only(
     !isObject(children) ? <span className={styles.dropdownChildren}>{children}</span> : children
@@ -126,6 +141,7 @@ Dropdown.MenuItem = DropdownItem
 Dropdown.MenuDivider = DropdownDivider
 Dropdown.GroupTitle = DropdownGroup
 Dropdown.InnerActions = DropdownInnerActions
+Dropdown.Toggle = DropdownToggle
 
 Dropdown.displayName = 'Dropdown'
 Dropdown.Menu.displayName = 'Dropdown.Menu'
@@ -134,3 +150,4 @@ Dropdown.MenuItem.displayName = 'Dropdown.MenuItem'
 Dropdown.MenuDivider.displayName = 'Dropdown.MenuDivider'
 Dropdown.GroupTitle.displayName = 'Dropdown.GroupTitle'
 Dropdown.InnerActions.displayName = 'Dropdown.InnerActions'
+Dropdown.Toggle.displayName = 'Dropdown.Toggle'

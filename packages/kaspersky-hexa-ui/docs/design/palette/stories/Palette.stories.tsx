@@ -8,9 +8,11 @@ import { withMeta } from '@sb/components/Meta'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
-import { colors, componentColors, productColors } from '@kaspersky/hexa-ui-core/colors/js'
+import { colors, componentColors, productColors, semanticColors } from '@kaspersky/hexa-ui-core/colors/js'
 
 import MetaData from '../__meta__/meta.json'
+import { SectionMessage } from '@src/section-message'
+import { P } from '@src/typography'
 
 const meta: Meta = {
   title: 'Design/Colors',
@@ -34,7 +36,21 @@ export const ProductColors: StoryObj<ThemedPaletteProps> = {
   render: args => <ThemedPalette {...args} />
 }
 
+export const SemanticColors: StoryObj<ThemedPaletteProps> = {
+  args: { source: semanticColors },
+  render: args => <ThemedPalette {...args} />
+}
+
 export const ComponentColors: StoryObj<ThemedPaletteProps> = {
   args: { source: componentColors },
-  render: args => <ThemedPalette {...args} />
+  render: args => (
+    <>
+      <SectionMessage mode={'info'} closable={false}>
+        <P>
+          Component tokens is deprecated. Use semantic tokens
+        </P>
+      </SectionMessage>
+      <ThemedPalette {...args} />
+    </>
+  )
 }

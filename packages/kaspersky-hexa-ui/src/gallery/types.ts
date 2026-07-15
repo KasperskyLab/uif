@@ -1,6 +1,6 @@
 export type ImageWithPreviewType =
-  | { preview: string, full: string }
-  | { readonly preview: string, readonly full: string }
+  { preview: string, full: string } |
+  { readonly preview: string, readonly full: string }
 
 export type ImageSingleType = string
 

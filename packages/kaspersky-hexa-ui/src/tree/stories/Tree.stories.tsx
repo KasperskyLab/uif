@@ -3,9 +3,16 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbFixArrayArgs, sbMergeActions } from '@sb/helpers'
 import { Panel } from '@src/panel'
-import { applyDropToTreeData, DataNode, TreeList, TreeListProps, TreeNav, TreeNavProps } from '@src/tree'
+import {
+  applyDropToTreeData,
+  DataNode,
+  TreeList,
+  TreeListProps,
+  TreeNav,
+  TreeNavProps
+} from '@src/tree'
 import { Meta, StoryObj as Story } from '@storybook/react'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
@@ -14,6 +21,16 @@ import MetaData from '../__meta__/meta.json'
 
 import { treeDataMock, treeDataMockWithIcons } from './mocks'
 import { generateTreeData, getKeys } from './utils'
+import { Dropdown } from '@src/dropdown'
+import { CheckPoint, Menu2 } from '@kaspersky/hexa-ui-icons/16'
+
+type ActionIconType = 'DEFAULT' | 'THREE_DOTS' | 'CHECK'
+
+const ACTION_ICON_MAPPING: Record<ActionIconType, ReactNode> = {
+  DEFAULT: undefined,
+  THREE_DOTS: <Menu2 />,
+  CHECK: <CheckPoint />
+}
 
 const meta: Meta<typeof TreeList> = {
   title: 'Hexa UI Components/Tree',
@@ -34,7 +51,8 @@ const meta: Meta<typeof TreeList> = {
     loadData: {},
     loadedKeys: { control: 'object' },
     treeData: { control: 'object' },
-    showLine: { control: 'boolean' }
+    showLine: { control: 'boolean' },
+    actionIcon: { control: 'select', options: Array<ActionIconType>('DEFAULT', 'THREE_DOTS', 'CHECK') }
   },
   args: {
     klId: 'tree-kl-id',
@@ -51,7 +69,9 @@ const meta: Meta<typeof TreeList> = {
 
 export default meta
 
-function TreeWrapper ({ Component, ...props }: { Component: typeof TreeList } & Partial<TreeListProps> | { Component: typeof TreeNav } & Partial<TreeNavProps>) {
+type WrapperArgs = { Component: typeof TreeList } & Partial<TreeListProps> | { Component: typeof TreeNav } & Partial<TreeNavProps>
+
+function TreeWrapper ({ Component, ...props }: WrapperArgs) {
   const [checkedKeys, setCheckedKeys] = React.useState(props.checkedKeys!)
 
   React.useEffect(
@@ -86,7 +106,7 @@ export const TreeListWithLines: Story<typeof TreeList> = {
   }
 }
 
-function LoadDataAsynchronously ({ Component, ...props }: { Component: typeof TreeList } & Partial<TreeListProps> | { Component: typeof TreeNav } & Partial<TreeNavProps>) {
+function LoadDataAsynchronously ({ Component, ...props }: WrapperArgs) {
   const [treeData, setTreeData] = React.useState<DataNode[]>([
     { key: '0-0', title: '0-0', checkable: false }
   ])
@@ -253,12 +273,27 @@ const StyledPanel = styled(Panel)`
 export const TreeNavWithIconsInPanel: Story<typeof TreeNav> = {
   render: (args) => (
     <StyledPanel resizable resizeHandle="right" padding="medium">
-      <TreeWrapper {...args} Component={TreeNav} />
+      <TreeWrapper {...args} Component={TreeNav} actionIcon={ACTION_ICON_MAPPING[args.actionIcon as ActionIconType]} />
     </StyledPanel>
   ),
   args: {
     multiple: true,
-    treeData: treeDataMockWithIcons
+    treeData: treeDataMockWithIcons,
+    onActionClick: (nodeData) => alert('simple click to action. Returned node data.'),
+    renderAction: ({ children, node }) => {
+      if (node.key === '0-0') return <>{children}</>
+
+      return (
+        <div onClick={e => e.stopPropagation()} style={{ position: 'sticky', right: -8 }}>
+          <Dropdown
+            trigger={['click']}
+            selectedItemsKeys={[]}
+            overlay={[{ key:'edit', children: 'Edit', onClick: () => alert(`EDIT node with name ${node.title}`) }, { key:'delete', children: 'Delete', onClick: () => alert(`DELETE node with name ${node.title}`) }]}>
+            {children}
+          </Dropdown>
+        </div>
+      )
+    }
   },
   parameters: {
     actions: { argTypesRegex: '^(on.*)' },

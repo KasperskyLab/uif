@@ -2,15 +2,15 @@ import { ThemeKey } from '@design-system/types'
 import { TestingProps } from '@helpers/typesHelpers'
 import { DropdownItemInnerProps, DropdownItemProps } from '@src/dropdown/types'
 import { ExpandIconPosition } from 'antd/lib/collapse/Collapse'
-import * as React from 'react'
+import React from 'react'
 
-export const accordionTitleSizes = ['small', 'medium', 'large'] as const
+export const accordionTitleSizes = ['extraSmall', 'small', 'medium', 'large'] as const
 
 export type AccordionTitleSize = typeof accordionTitleSizes[number]
 
-type AccordionAction = Pick<DropdownItemProps, 'onClick'>
-  & Pick<DropdownItemInnerProps, 'description' | 'componentsBefore' | 'componentsAfter'>
-  & { value?: string }
+type AccordionAction = Pick<DropdownItemProps, 'onClick'> &
+  Pick<DropdownItemInnerProps, 'description' | 'componentsBefore' | 'componentsAfter'> &
+  { value?: string }
 
 export type AccordionPanelThemeProps = {
   /** Custom theme */
@@ -23,10 +23,12 @@ export type AccordionPanelProps = {
   children?: React.ReactNode,
   /** Title */
   title?: React.ReactNode,
-  /** Tag before the title */
+  /** @deprecated use elementBefore instead */
   tagBefore?: React.ReactElement,
-  /** Indicator */
+  /** @deprecated use elementBefore instead */
   indicator?: React.ReactElement,
+  /** Element before the title */
+  elementBefore?: React.ReactNode,
   /** Tag after the title */
   tagAfter?: React.ReactElement,
   /** Additional text */

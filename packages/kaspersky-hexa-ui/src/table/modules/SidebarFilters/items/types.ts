@@ -1,12 +1,12 @@
 import { ValidationStatus } from '@helpers/index'
+import { TextboxNumberProps } from '@src/input/types'
+import { BooleanFilterType, EnumFilterType } from '@src/table/types'
 
 import {
   BooleanFilter,
   DateRangeFilter,
   DateTimeFilter,
   EnumFilter,
-  EnumOption,
-  LegacyEnumOption,
   NumberFilter,
   TextFilter
 } from '../../../modules/Filters'
@@ -25,19 +25,9 @@ interface BaseItemProps<Filter> {
   validationStatus?: ValidationStatus
 }
 
-export interface EnumItemProps extends BaseItemProps<EnumFilter> {
-  /**
-   * `getAvailableValues` is deprecated, use getAvailableOptions instead.
-   * If `getAvailableOptions` is provided, `getAvailableValues` will be ignored.
-   *
-   * @deprecated Use getAvailableOptions instead
-   */
-  getAvailableValues?: () => Promise<LegacyEnumOption[]>,
+export type EnumItemProps = BaseItemProps<EnumFilter> & Pick<EnumFilterType, 'getAvailableOptions' | 'getAvailableValues'>
 
-  getAvailableOptions?: () => Promise<EnumOption[]>
-}
-
-export type BooleanItemProps = BaseItemProps<BooleanFilter>
+export type BooleanItemProps = BaseItemProps<BooleanFilter> & Pick<BooleanFilterType, 'onStateName' | 'offStateName'>
 
 export type DateItemProps = BaseItemProps<DateRangeFilter>
 
@@ -46,6 +36,6 @@ export type DateTimeItemProps = BaseItemProps<DateTimeFilter> & {
   dateOnly?: boolean,
 }
 
-export type NumberItemProps = BaseItemProps<NumberFilter>
+export type NumberItemProps = BaseItemProps<NumberFilter> & Pick<TextboxNumberProps, 'min'>
 
 export type StringItemProps = BaseItemProps<TextFilter>

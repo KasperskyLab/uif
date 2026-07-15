@@ -1,2 +1,2 @@
 export * from './HelpMessage'
-export type { HelpMessageMode, HelpMessageProps } from './types'
+export type { HelpMessageMode, HelpMessageProps, HelpMessageSize } from './types'

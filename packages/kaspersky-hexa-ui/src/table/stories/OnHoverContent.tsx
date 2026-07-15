@@ -1,7 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { basicArgTypes, basicDataSource, BasicTableStory, basicTwoColumns, Story } from './_commonConstants'
+import {
+  basicArgTypes,
+  basicDataSource,
+  BasicTableStory,
+  basicTwoColumns,
+  Story
+} from './_commonConstants'
 
 const ActionCell = styled.a`
   visibility: hidden;

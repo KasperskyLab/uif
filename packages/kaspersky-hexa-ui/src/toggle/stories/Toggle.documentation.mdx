@@ -1,0 +1,117 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Toggle } from '../Toggle'
+import * as ToggleStories from './Toggle.stories'
+import { toggleDesignPropPresentation } from './Toggle.design.properties'
+
+<Meta of={ToggleStories} name="Toggle Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Toggle"
+  description='**Toggle** — элемент управления для переключения булевого состояния'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Toggle** переключает булевое состояние при клике. Реализован на основе AntD Switch с темизацией Hexa UI. Поддерживает подпись через **children**, дополнительное описание через **description** и зависимый элемент через **dependentElement**. Настраиваются **disabled**, **readonly**, **loading**, **labelPosition**, **required** и **tooltip** для подписи."
+    />
+
+    <DocExampleBlock
+      title="children"
+      description="Подпись переключателя. Принимает строку или ReactNode. При передаче строки рендерится **FormLabel** с поддержкой **required** и **tooltip**. Если **children** не переданы, отображается только переключатель без подписи."
+      code='
+    <Toggle>Label</Toggle>
+    <Toggle />'
+    />
+
+    <DocExampleBlock
+      title="labelPosition"
+      description="Расположение подписи относительно переключателя. Доступные значения: `after`, `before`. По умолчанию — `after`. Если **children** не переданы, проп не влияет на отображение."
+      code='
+    <Toggle labelPosition="after">After</Toggle>
+    <Toggle labelPosition="before">Before</Toggle>'
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Недоступное состояние: переключатель не реагирует на действия пользователя. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='
+    <Toggle disabled>Label</Toggle>
+    <Toggle disabled checked>Label</Toggle>
+    <Toggle disabled />'
+    />
+
+    <DocExampleBlock
+      title="readonly"
+      description="Только для чтения: состояние видно, но изменить его нельзя. При `readonly` переключатель визуально отображается как `disabled`, но семантически остаётся доступным для чтения. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='
+    <Toggle readonly>Label</Toggle>
+    <Toggle readonly checked>Label</Toggle>
+    <Toggle readonly />'
+    />
+
+    <DocExampleBlock
+      title="loading"
+      description="Состояние загрузки. Отображает индикатор загрузки внутри переключателя. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='
+    <Toggle loading>Label</Toggle>
+    <Toggle loading checked>Label</Toggle>
+    <Toggle loading />'
+    />
+
+    <DocExampleBlock
+      title="required"
+      description="Добавляет маркер обязательного поля к подписи **FormLabel**. Работает только при передаче строки в **children**. По умолчанию — `false`."
+      code='<Toggle required>Label</Toggle>'
+    />
+
+    <DocExampleBlock
+      title="tooltip"
+      description="Всплывающая подсказка для подписи **FormLabel**. Принимает ReactNode. Работает только при передаче строки в **children**. Для обёртки всего компонента в тултип используйте композицию с **Tooltip**."
+      code='<Toggle tooltip="Подсказка к полю">Label</Toggle>'
+    />
+
+    <DocExampleBlock
+      title="description"
+      description="Дополнительный текст под переключателем через **AdditionalContent**. Отображается с отступом, выровненным по тумблеру."
+      code='<Toggle description="Дополнительное описание">Label</Toggle>'
+    />
+
+    <DocExampleBlock
+      title="dependentElement"
+      description="Зависимый элемент, отображаемый под переключателем через **AdditionalContent**. Позволяет показывать дополнительный контент, связанный с текущим состоянием переключателя."
+      code='<Toggle dependentElement={<div>Зависимый элемент</div>}>Label</Toggle>'
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Toggle** применяется для немедленного переключения настройки или функции без дополнительного подтверждения — когда изменение вступает в силу сразу. Используйте для бинарных параметров: включить/выключить функцию, активировать/деактивировать режим, показать/скрыть элемент интерфейса.
+
+Не используйте Toggle для выбора из более чем двух вариантов — в таком случае подойдёт RadioGroup или Select. Если действие требует дополнительного подтверждения перед применением, выбирайте Checkbox вместо Toggle."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(toggleDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={ToggleStories} />
+    <AutodocArgsTable components={Toggle} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

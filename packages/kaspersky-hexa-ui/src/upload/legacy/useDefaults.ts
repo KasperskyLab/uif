@@ -2,15 +2,16 @@ import { Size } from '@design-system/types'
 
 import { BasicUploadProps } from './types'
 
-type Defaults = Required<Pick<BasicUploadProps,
-'buttons'
-| 'errorButtons'
-| 'height'
-| 'icon'
-| 'iconFile'
-| 'loadingButtons'
-| 'status'
-| 'successButtons'
+type Defaults = Required<Pick<
+  BasicUploadProps,
+  'buttons' |
+  'errorButtons' |
+  'height' |
+  'icon' |
+  'iconFile' |
+  'loadingButtons' |
+  'status' |
+  'successButtons'
 >>
 
 export const defaults: Defaults = {

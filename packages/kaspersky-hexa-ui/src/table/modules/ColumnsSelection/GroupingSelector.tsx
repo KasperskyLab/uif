@@ -21,9 +21,7 @@ export const GroupingSelector = ({
   const filteredOptions = useMemo(() => {
     if (!searchValue) return options
 
-    return options.filter((group) =>
-      group.value.toLowerCase().includes(searchValue.toLowerCase())
-    )
+    return options.filter((group) => group.value.toLowerCase().includes(searchValue.toLowerCase()))
   }, [options, searchValue])
 
   return (

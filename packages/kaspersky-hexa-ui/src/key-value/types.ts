@@ -61,4 +61,4 @@ export type KeyValueProps = {
 export type KeyValueViewProps = KeyValueToViewProps<KeyValueProps>
 
 /** @deprecated Not present in design system */
-export type KeyWithIconProps = PropsWithChildren< { icon?: IconProps['name'] } > & KeyValueThemeProps
+export type KeyWithIconProps = PropsWithChildren<{ icon?: IconProps['name'] }> & KeyValueThemeProps

@@ -7,11 +7,15 @@ export type StepConfig = {
   name: string,
   description?: string,
   icon?: ReactNode,
-  Component: ComponentType<WizardStepContentProps>,
-  onNext?: () => boolean | Promise<boolean> | void
+  /** @deprecated use `render` instead */
+  Component?: ComponentType<WizardStepContentProps>,
+  render?: (props: WizardStepContentProps) => ReactNode,
+  onNext?: () => boolean | Promise<boolean> | void,
+  onBack?: () => void
 }
 
 export type WizardCommonProps = {
+  className?: string,
   steps: StepConfig[],
   lastItem?: boolean,
   activeStep?: number,
@@ -23,7 +27,9 @@ export type WizardCommonProps = {
   backButtonText?: string,
   nextButtonText?: string,
   finishButtonText?: string,
-  testId?: string
+  testId?: string,
+  isVertical?: boolean,
+  footerAdditionalElement?: ReactNode
 } & TestingProps
 
 export type WizardStepContentProps = {
@@ -44,17 +50,38 @@ export type WizardModalProps = WizardCommonProps & {
 }
 
 export type WizardSidebarProps = WizardCommonProps & {
-  sidebar?: Pick<SidebarProps,
-    'visible' | 'size' | 'mask' | 'title' | 'zIndex' | 'flex' | 'headerActions' | 'subtitle' | 'titlePostfix' | 'titlePrefix' | 'onClose' | 'destroyOnClose' | 'subHeader'
+  sidebar?: Pick<
+    SidebarProps,
+    'visible' |
+    'size' |
+    'mask' |
+    'title' |
+    'zIndex' |
+    'flex' |
+    'headerActions' |
+    'subtitle' |
+    'titlePostfix' |
+    'titlePrefix' |
+    'onClose' |
+    'destroyOnClose' |
+    'subHeader'
   >
 }
 
 export type WizardProps =
-  ({ view: 'page' } & WizardPageProps)
-  | ({ view: 'modal' } & WizardModalProps)
-  | ({ view: 'sidebar' } & WizardSidebarProps)
+  ({ view: 'page' } & WizardPageProps) |
+  ({ view: 'modal' } & WizardModalProps) |
+  ({ view: 'sidebar' } & WizardSidebarProps)
 
-export type WizardFooterProps = Pick<WizardCommonProps, 'onCancel' | 'cancelButtonText' | 'backButtonText' | 'nextButtonText' | 'finishButtonText'>
+export type WizardFooterProps = Pick<
+  WizardCommonProps,
+  'onCancel' |
+  'cancelButtonText' |
+  'backButtonText' |
+  'nextButtonText' |
+  'finishButtonText' |
+  'footerAdditionalElement'
+>
 
 export type StepProps = {
   stepNumber: number,

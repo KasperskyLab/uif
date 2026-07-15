@@ -34,20 +34,22 @@ export const KesTable: Story = {
         key: 'status',
         dataIndex: 'status',
         render: (value: boolean, record: { [key: string]: unknown }) => {
-          return <Toggle checked={value} onChange={(value) => {
-            setData((prevData) => {
-              return prevData.map(item => {
-                if (item.key !== record.key) {
-                  return item
-                }
+          return (
+            <Toggle checked={value} onChange={(value) => {
+              setData((prevData) => {
+                return prevData.map(item => {
+                  if (item.key !== record.key) {
+                    return item
+                  }
 
-                return {
-                  ...item,
-                  status: value
-                }
+                  return {
+                    ...item,
+                    status: value
+                  }
+                })
               })
-            })
-          }}/>
+            }} />
+          )
         }
       },
       {
@@ -55,7 +57,7 @@ export const KesTable: Story = {
         key: 'status',
         dataIndex: 'status',
         render: (value: boolean, record: { [key: string]: unknown }) => {
-          return <Textbox/>
+          return <Textbox />
         }
       },
       {
@@ -93,17 +95,19 @@ export const KesTable: Story = {
       }
     ]), [])
 
-    return <Wrapper>
-      <Table
-        {...args}
-        rowSelection={{
-          selectedRowKeys,
-          onChange: onSelectionChange
-        }}
-        columns={columns}
-        dataSource={data}
-      />
-    </Wrapper>
+    return (
+      <Wrapper>
+        <Table
+          {...args}
+          rowSelection={{
+            selectedRowKeys,
+            onChange: onSelectionChange
+          }}
+          columns={columns}
+          dataSource={data}
+        />
+      </Wrapper>
+    )
   },
   args: {}
 }

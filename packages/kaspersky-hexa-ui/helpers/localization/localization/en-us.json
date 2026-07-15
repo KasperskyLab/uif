@@ -101,6 +101,9 @@
         "filters": "Filter",
         "resetFilters": "Reset filter"
       },
+      "contextMenu": {
+        "selected": "Selected: {{count}}"
+      },
       "selectAll": {
         "selectAll": "Select all",
         "selectCurrentPage": "Select all on current page",
@@ -127,6 +130,7 @@
         },
         "filtering": {
           "add": "Add",
+          "addCondition": "Add condition",
           "clearAll": "Clear all",
           "property": "Property",
           "attribute": "Attribute",
@@ -134,18 +138,33 @@
           "from": "from",
           "to": "to",
           "value": "Value",
+          "operators": {
+            "or": "OR",
+            "and": "AND"
+          },
+          "booleanFilter": {
+            "on": "On",
+            "off": "Off"
+          },
           "validation": {
             "emptyValue": "Specify the filtering value",
-            "duplicateFilters": "Duplicate filters. Ensure each filter is unique"
+            "duplicateFilters": "Duplicate filters. Ensure each filter is unique."
           }
         },
-        "columnHideIsUnavailable": "Column hiding is not available"
+        "resetSettingsModal": {
+          "content": "All tasks will be reset to the default settings",
+          "header": "Reset columns settings?",
+          "firstButton": "Reset",
+          "secondButton": "Cancel"
+        },
+        "columnHideIsUnavailable": "Column hiding is not available",
+        "onlyForFiltering": "This column is for filtering only"
       },
       "filterOperation": {
         "⊆": "Contains",
         "⊄": "Does not contain",
         "cont_and": "Contains (AND)",
-        "cont_or": "Contains (OR)",
+        "cont_or": "Is one of",
         "ncont_or": "Does not contain",
         "*=": "Regexp",
         "empty": "Empty",
@@ -174,7 +193,8 @@
     "actionBar": {
       "unsavedChanges": "Pending changes",
       "save": "Apply",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "resetSettings": "Reset settings"
     },
     "textarea": {
       "wordsCount": "{{count}} out of {{total}}"
@@ -217,7 +237,11 @@
       "term": "Term",
       "dayLeft": "{{count}} day left",
       "daysLeft": "{{count}} days left",
-      "termDays": "{{count}} days"
+      "termDays": "{{count}} days",
+      "statuses": {
+        "valid": "Active",
+        "expired": "Expired"
+      }
     },
     "input": {
       "password": {

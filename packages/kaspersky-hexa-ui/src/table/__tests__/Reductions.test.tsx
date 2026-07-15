@@ -16,8 +16,8 @@ describe('Table Reductions module', () => {
     try {
       const { unmount } = render(<Table
         columns={[{ title: 'column', key: 'column', dataIndex: 'value', ellipsis: true }]}
-        dataSource={[{key: 1, value: 'Completely arbitrary text'}]}
-      />)    
+        dataSource={[{ key: 1, value: 'Completely arbitrary text' }]}
+      />)
       expect(resizeObserverInstance.observe).toHaveBeenCalled()
       expect(resizeObserverInstance.disconnect).toHaveBeenCalledTimes(0)
 

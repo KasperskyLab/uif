@@ -7,7 +7,13 @@ import React from 'react'
 import { Panel, PanelProps } from '../index'
 import { panelTitleSize } from '../types'
 
-import { mockText, OtherArea, PanelsCol, PanelsLayout, storySettings } from './PanelStoryLayout'
+import {
+  mockText,
+  OtherArea,
+  PanelsCol,
+  PanelsLayout,
+  storySettings
+} from './PanelStoryLayout'
 
 const meta: Meta<PanelProps> = {
   component: Panel,

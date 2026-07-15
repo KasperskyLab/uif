@@ -1,6 +1,7 @@
-import { SPACES } from '@design-system/theme'
+import { useLocalization } from '@helpers/localization/useLocalization'
 import { Checkbox } from '@src/checkbox'
 import { Locale } from '@src/locale'
+import { TableColumn, TableRecord } from '@src/table'
 import { Tooltip } from '@src/tooltip'
 import { Text } from '@src/typography'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -55,8 +56,8 @@ const Item = styled.label`
   }
 
   p {
-    margin-top: ${SPACES[1]}px;
-    margin-left: ${SPACES[4]}px;
+    margin-top: 2px;
+    margin-left: 8px;
   }
 `
 
@@ -69,23 +70,32 @@ const CheckboxRow = styled.div`
 const NoDragIcon = styled.div`
   padding-left: 20px;
 `
-interface SortableItemProps {
-  column: any & { show: boolean, title: string, hideColumnAvailable?: boolean, dataIndex?: number },
-  onChange: (column: any) => void
+interface SortableItemProps <T extends TableRecord = TableRecord> {
+  column: TableColumn<T>,
+  onChange: (column: TableColumn<T>) => void
 }
 
-type BaseItemProps = {
-  value: SortableItemProps
+type BaseItemProps <T extends TableRecord = TableRecord> = {
+  value: SortableItemProps<T>
   prefix?: React.ReactNode
 }
 
-const BaseItem: React.FC<BaseItemProps> = ({ value, prefix }) => {
-  const { column, column: { show, title, dataIndex, hideColumnAvailable } } = value
+const BaseItem = <T extends TableRecord = TableRecord> ({ value, prefix }: BaseItemProps<T>) => {
+  const {
+    column,
+    column: {
+      show,
+      title,
+      key,
+      hideColumnAvailable,
+      onlyForFiltering
+    }
+  } = value
   const CheckboxRowComponent = (
     <CheckboxRow>
       <Checkbox
         checked={show}
-        disabled={!hideColumnAvailable}
+        disabled={!hideColumnAvailable || onlyForFiltering}
         onChange={() => value.onChange(column)}
       />
       <ItemLabel>
@@ -93,14 +103,23 @@ const BaseItem: React.FC<BaseItemProps> = ({ value, prefix }) => {
       </ItemLabel>
     </CheckboxRow>
   )
+
+  let tooltipTextKey = ''
+
+  if (onlyForFiltering) {
+    tooltipTextKey = 'table.columnsSettings.onlyForFiltering'
+  } else if (!hideColumnAvailable) {
+    tooltipTextKey = 'table.columnsSettings.columnHideIsUnavailable'
+  }
+
   return (
-    <Item className="selector-item" data-testid={`selector-item-${dataIndex}`}>
+    <Item className="selector-item" data-testid={`selector-item-${key}`}>
       {prefix}
       {
-        hideColumnAvailable
+        !tooltipTextKey
           ? CheckboxRowComponent
           : (
-              <Tooltip text={<Locale localizationKey="table.columnsSettings.columnHideIsUnavailable" />}>
+              <Tooltip text={useLocalization(tooltipTextKey)}>
                 {CheckboxRowComponent}
               </Tooltip>
             )
@@ -113,16 +132,17 @@ const SortableItem = sortableElement(
   ({ value }: { value: SortableItemProps }) => (
     <BaseItem
       value={value}
-      prefix={
+      prefix={(
         <Dragger>
           <DragHandle />
         </Dragger>
-      }
+      )}
     />
-  ))
+  )
+)
 
-const NormalItem = ({ value }: { value: SortableItemProps }) => (
-  <BaseItem value={value} />
+const NormalItem = <T extends TableRecord = TableRecord,> ({ value }: { value: SortableItemProps<T> }) => (
+  <BaseItem<T> value={value} />
 )
 
 const SortableContainer = sortableContainer(
@@ -157,48 +177,62 @@ const arrayMove = (array: any[], from: number, to: number) => {
   return array
 }
 
-export function hasSelected (columns: any[]): boolean {
+export function hasSelected <T extends TableRecord = TableRecord> (columns: TableColumn<T>[]): boolean {
   return columns.reduce(
     (acc: boolean, current: any) => (acc = acc || current.show),
     false
   )
 }
 
-function areAllSelected (columns: any[]) {
-  const filteredColumns = columns.filter((column) => !isColumnReadonly(column))
+function isColumnSelectable <T extends TableRecord = TableRecord> (column: TableColumn<T>) {
+  return (
+    !isColumnReadonly(column) &&
+    column.hideColumnAvailable &&
+    !column.onlyForFiltering
+  )
+}
+
+function areAllSelected <T extends TableRecord = TableRecord> (columns: TableColumn<T>[]) {
+  const filteredColumns = columns.filter(isColumnSelectable)
   return filteredColumns.every(({ show }) => show)
 }
 
-function isPartiallySelected (columns: any[]) {
-  const filteredColumns = columns.filter((column) => !isColumnReadonly(column) && column.hideColumnAvailable)
+function isPartiallySelected <T extends TableRecord = TableRecord> (columns: TableColumn<T>[]) {
+  const filteredColumns = columns.filter(isColumnSelectable)
   const allSelected = filteredColumns.every(({ show }) => show)
   const hasSelected = filteredColumns.some(({ show }) => show)
   return hasSelected && !allSelected
 }
 
-export interface ColumnsSelectorProps {
-  columns: any[],
+export interface ColumnsSelectorProps <T extends TableRecord = TableRecord> {
+  columns: TableColumn<T>[],
   setColumns: (value: any[]) => void,
   draggingAvailable?: boolean,
   searchValue?: string
 }
 
-export const ColumnsSelector = ({
+export const ColumnsSelector = <T extends TableRecord = TableRecord> ({
   columns,
   setColumns,
   draggingAvailable = true,
   searchValue
-}: ColumnsSelectorProps) => {
+}: ColumnsSelectorProps<T>) => {
   const [selectAll, setAllSelected] = useState(areAllSelected(columns))
   const [indeterminate, setIndeterminate] = useState(isPartiallySelected(columns))
 
-  const updateSelectionStates = (newColumns: any[]) => {
-    const visibleColumns = searchValue
-      ? newColumns.filter((column) =>
-        column.dataIndex.toLowerCase().includes(searchValue.toLowerCase())
-      )
-      : newColumns
+  const filterColumnsBySearch = <T extends TableRecord = TableRecord> (columns: TableColumn<T>[], searchValue: string) => {
+    if (!searchValue.trim()) return columns
 
+    return columns.filter((column) => {
+      if (typeof column.title === 'string') {
+        return column.title.toLowerCase().trim().includes(searchValue.toLowerCase().trim())
+      }
+      return String(column.key)?.toLowerCase().trim().includes(searchValue.toLowerCase().trim())
+    })
+  }
+
+  const updateSelectionStates = (newColumns: any[]) => {
+    const visibleColumns = filterColumnsBySearch(newColumns, searchValue || '')
     setAllSelected(areAllSelected(visibleColumns))
     setIndeterminate(isPartiallySelected(visibleColumns))
   }
@@ -215,18 +249,19 @@ export const ColumnsSelector = ({
 
   const onSelectAll = () => {
     const visibleIndexes = new Set(
-      filteredColumns.map((column) => column.dataIndex)
+      filteredColumns.map((column) => column.key)
     )
 
     const newColumns = columns.map((column) => {
-      if (!visibleIndexes.has(column.dataIndex)) {
+      if (!visibleIndexes.has(column.key)) {
         return column
       }
-      return isColumnReadonly(column)
+
+      return isColumnSelectable(column)
         ? column
         : {
             ...column,
-            show: column.hideColumnAvailable ? !selectAll : true
+            show: !selectAll
           }
     })
 
@@ -237,36 +272,38 @@ export const ColumnsSelector = ({
   const onColumnSelect = (selectedColumn: any) => {
     const columnIndex = columns.findIndex(
       (column) =>
-        column.dataIndex?.localeCompare(selectedColumn.dataIndex) === 0
+        String(column.key).localeCompare(selectedColumn.key) === 0
     )
     const newColumns = columns.map((column, index) => {
       if (index === columnIndex) {
+        let columnShow = !column.show
+
+        if (selectedColumn.onlyForFiltering) {
+          columnShow = false
+        } else if (!selectedColumn.hideColumnAvailable) {
+          columnShow = true
+        }
+
         return {
           ...column,
-          show: selectedColumn.hideColumnAvailable
-            ? !column.show
-            : true
+          show: columnShow
         }
       }
       return column
     })
-
 
     setColumns(newColumns)
     updateSelectionStates(newColumns)
   }
 
   const filteredColumns = useMemo(() => {
-    const columnsFilterd = columns.filter((column) => !isColumnReadonly(column))
-
-    return columnsFilterd.filter((column) =>
-      column.dataIndex.toLowerCase().includes(searchValue?.toLowerCase())
-    )
+    const columnsFiltered = columns.filter((column) => !isColumnReadonly(column))
+    return filterColumnsBySearch(columnsFiltered, searchValue || '')
   }, [columns, searchValue])
 
-  const isAnyColsHideAvailable = useMemo(
-    () => columns.some(({ hideColumnAvailable }) => hideColumnAvailable),
-    [columns]
+  const isAnyColsSelectable = useMemo(
+    () => filteredColumns.some(isColumnSelectable),
+    [filteredColumns]
   )
 
   useEffect(() => {
@@ -277,7 +314,7 @@ export const ColumnsSelector = ({
     <SelectorWrapper>
       <Item className="selector-item select-all-item">
         <CheckboxRow>
-          <Checkbox checked={selectAll} indeterminate={indeterminate} disabled={!isAnyColsHideAvailable} onChange={onSelectAll} />
+          <Checkbox checked={selectAll} indeterminate={indeterminate} disabled={!isAnyColsSelectable} onChange={onSelectAll} />
           <ItemLabel>
             <Text type="BTM3">
               <Locale localizationKey="table.columnsSettings.selectAll" />
@@ -294,17 +331,16 @@ export const ColumnsSelector = ({
         {filteredColumns.map((value, index) =>
           draggingAvailable ? (
             <SortableItem
-              key={`item-${value.dataIndex}-${index}`}
+              key={`item-${value.key}-${index}`}
               index={index}
-              value={{ column: value, onChange: () => onColumnSelect(value) }}
+              value={{ column: value, onChange: () => onColumnSelect(value) } as SortableItemProps}
             />
           ) : (
             <NormalItem
-              key={`item-${value.dataIndex}-${index}`}
-              value={{ column: value, onChange: () => onColumnSelect(value) }}
+              key={`item-${value.key}-${index}`}
+              value={{ column: value, onChange: () => onColumnSelect(value) } as SortableItemProps}
             />
-          )
-        )}
+          ))}
       </SortableContainer>
     </SelectorWrapper>
   )

@@ -29,8 +29,8 @@ type IndicatorNotification = {
 export type RowProps = {
   type: 'row',
   key: string,
-  text: string,
-  description?: string, 
+  text: ReactNode,
+  description?: string,
   content?: ReactNode,
   contentClassName?: string,
   disabled?: boolean,
@@ -41,10 +41,10 @@ export type RowProps = {
   notification?: BadgeNotification | IndicatorNotification,
   action?: ActionProps,
   children?: RowProps[],
-  /** Callback triggered when a submenu row is clicked 
+  /** Callback triggered when a submenu row is clicked
    * Useful when the product wants to fully control click behavior
    * to display custom content.
-   * 
+   *
    * If callback returns false - it prevents the default submenu activation
   */
   onClick?: (key: string, row?: RowProps) => boolean | void | Promise<boolean | void>
@@ -53,7 +53,7 @@ export type RowProps = {
 export type TitleProps = {
   type: 'title',
   key: string,
-  text: string,
+  text: ReactNode,
   action?: ActionProps
 } & TestingProps
 
@@ -85,9 +85,9 @@ export type SubmenuProps = SubmenuThemeProps & TestingProps & {
 }
 
 export type LeveledRowProps = RowProps & {
-  level?: number,
+  level: number,
   opened?: boolean,
-  extraLeftPadding?: number,
+  extraLeftPadding: number,
   testAttributes?: TestingAttributes,
   children?: LeveledRowProps[]
 }

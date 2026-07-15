@@ -1,0 +1,165 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Checkbox } from '../Checkbox'
+import * as CheckboxStories from './Checkbox.stories'
+import { checkboxPropPresentation } from './Checkbox.controls'
+import { checkboxDesignPropPresentation } from './Checkbox.design.properties'
+
+<Meta of={CheckboxStories} name="Checkbox Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Checkbox"
+  description='**Checkbox** — элемент для переключения булева состояния с опциональной подписью'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Checkbox** позволяет включать и выключать одну опцию. Для строковой подписи используется **FormLabel** с поддержкой **mode**, **required** и **tooltip**. Под чекбоксом можно показать пояснение (**description**) и зависимый элемент (**dependentElement**). Состояния: **checked**, **indeterminate**, **disabled**, **readonly**, **invalid**. Несколько связанных чекбоксов объединяют через [**CheckboxGroup**](/?path=/docs/hexa-ui-components-checkboxgroup--checkboxgroup-docs) (`Checkbox.Group`)."
+    />
+
+    <DocExampleBlock
+      title="children"
+      description="Подпись чекбокса. Если **children** — строка, рендерится **FormLabel** с привязкой `htmlFor`. 
+      Для произвольной разметки передайте **ReactNode**."
+      previewDirection="vertical"
+      previewGap={8}
+      code={`
+<Checkbox>Check me</Checkbox>
+
+<Checkbox>
+    <Space gap={2}><HeartSolid /> Custom label with ReactNode<Tag size="small">Tag</Tag></Space>
+</Checkbox>`}
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Вид **FormLabel** для текстовой подписи. 
+      Доступные значения: `primary`, `secondary`, `disabled`. По умолчанию — `primary`."
+      code='
+    <Checkbox mode="primary">primary</Checkbox>
+    <Checkbox mode="secondary">secondary</Checkbox>
+    <Checkbox mode="disabled">disabled</Checkbox>'
+    />
+
+    <DocExampleBlock
+      title="checked"
+      description="Управляет отмеченным состоянием в контролируемом режиме. 
+      Доступные значения: `true`, `false`. Без **checked** и **defaultChecked** состояние неконтролируемое."
+      code='<Checkbox checked>Im checked</Checkbox>'
+    />
+
+    <DocExampleBlock
+      title="indeterminate"
+      description="Промежуточное состояние — частичный выбор в группе (например, «выбрать все»). 
+      Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Checkbox checked={false} indeterminate>Im indeterminate</Checkbox>'
+    />
+
+    <DocExampleBlock
+      title="defaultChecked"
+      description="Начальное отмеченное состояние в неконтролируемом режиме. 
+      Используйте вместо **checked**, если состояние не управляется снаружи."
+      code='<Checkbox defaultChecked>Default checked</Checkbox>'
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключённый чекбокс. 
+      Доступные значения: `true`, `false`. По умолчанию — `false`."
+      previewDirection="vertical"
+      previewGap={8}
+      code='
+      <Checkbox disabled checked>Disabled</Checkbox>
+      <Checkbox disabled>Disabled</Checkbox>
+      '
+    />
+
+    <DocExampleBlock
+      title="readonly"
+      description="В режиме **readonly** состояние видно, но изменить его нельзя. Элемент остаётся визуально активным. 
+      Доступные значения: `true`, `false`. По умолчанию — `false`."
+      previewDirection="vertical"
+      previewGap={8}
+      code='
+      <Checkbox readonly checked>Readonly</Checkbox>
+      <Checkbox readonly>Readonly</Checkbox>'
+    />
+
+    <DocExampleBlock
+      title="invalid"
+      previewDirection="vertical"
+      previewGap={8}
+      description="Состояние ошибки валидации. 
+      Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Checkbox invalid checked>Invalid</Checkbox>
+      <Checkbox invalid>Invalid</Checkbox>'
+    />
+
+    <DocExampleBlock
+      title="required"
+      description="Метка обязательного поля: к подписи **FormLabel** добавляется маркер required. 
+      Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Checkbox required>Required field</Checkbox>'
+    />
+
+    <DocExampleBlock
+      title="tooltip"
+      previewDirection="vertical"
+      previewGap={8}
+      description="Текст подсказки у подписи **FormLabel**. 
+      Для корректного позиционирования всплывающей подсказки оберните чекбокс в **PopupConfigProvider**."
+      code='
+  <PopupConfigProvider getPopupContainer={() => document.body}>
+    <Checkbox tooltip="Подсказка к полю">With tooltip</Checkbox>
+  </PopupConfigProvider>'
+    />
+
+    <DocExampleBlock
+      title="description"
+      description="Дополнительный поясняющий текст под чекбоксом через [**HelpMessage**](/?path=/docs/hexa-ui-components-helpmessage--helpmessage-docs)."
+      code='<Checkbox description="Some description">With description</Checkbox>'
+    />
+
+    <DocExampleBlock
+      title="dependentElement"
+      description="Зависимый элемент под описанием — например поле ввода, которое активируется выбором чекбокса. Можно использовать вместе с **description**."
+      code={`
+<Checkbox
+  description="Some description"
+  dependentElement={<Textbox placeholder="dependentElement" />}
+>
+  With description and dependentElement
+</Checkbox>`}
+    />
+    
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Checkbox** — элемент выбора в формах, фильтрах и настройках: пользователь включает или выключает опцию, подтверждает условие или выбирает несколько значений из набора. Подпись формулируется как утверждение («Запомнить меня», «Показывать скрытые файлы»), а не как название действия.
+
+Для выбора одного значения из взаимоисключающих вариантов используйте **Radio**. Несколько связанных чекбоксов объединяйте в одну группу с общим заголовком поля, а не разрозненными элементами по экрану."
+    />
+</Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(checkboxDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={CheckboxStories} />
+    <AutodocArgsTable components={Checkbox} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

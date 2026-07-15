@@ -20,7 +20,13 @@ import { Placeholder, Plus, Settings } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
 import { Submenu as SubmenuComponent } from '../Submenu'
-import { BadgeNotificationMode, IndicatorNotificationMode, RowProps, SubmenuItemProps, SubmenuProps } from '../types'
+import {
+  BadgeNotificationMode,
+  IndicatorNotificationMode,
+  RowProps,
+  SubmenuItemProps,
+  SubmenuProps
+} from '../types'
 
 import { mockedItems, mockedItemsWithoutContent } from './mocks'
 
@@ -318,6 +324,7 @@ export const SubmenuTitle: TitleStory = {
   },
   parameters: {
     controls: {
+      /* eslint-disable-next-line @stylistic/max-len */
       exclude: /(items|activeKey|defaultActiveKey|onChange|collapseOnTextClick|truncateText|theme|componentType|dataTestId|componentId|elementBefore|elementAfter|testId|klId)/
     }
   }

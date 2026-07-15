@@ -1,2 +1,2 @@
 export * from './AnchorNavigation'
-export type { AnchorNavigationProps } from './types'
+export type { AnchorItem, AnchorNavigationProps } from './types'

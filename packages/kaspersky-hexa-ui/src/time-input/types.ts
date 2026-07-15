@@ -26,4 +26,4 @@ export type RangeTimeInputProps = {
   valueEnd?: string,
   onChangeStart?: TextboxProps['onChange'],
   onChangeEnd?: TextboxProps['onChange']
-} & TestingProps
+} & TextboxClassNamedProps & TestingProps

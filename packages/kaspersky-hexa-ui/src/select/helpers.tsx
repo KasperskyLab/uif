@@ -2,9 +2,9 @@ import { ActionButton } from '@src/action-button'
 import { Checkbox } from '@src/checkbox'
 import { Loader } from '@src/loader'
 import { Text } from '@src/typography'
-import { Empty } from 'antd'
+import Empty from 'antd/es/empty'
 import cn from 'classnames'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { v1 as uuidV1 } from 'uuid'
@@ -74,27 +74,12 @@ export const findScrollableParent = (node: ParentNode | Element | null): Element
   while (node) {
     if (
       node instanceof Element &&
-      (window.getComputedStyle(node).overflow === 'auto' ||
-        window.getComputedStyle(node).overflow === 'scroll')
+      (window.getComputedStyle(node).overflowY === 'auto' ||
+        window.getComputedStyle(node).overflowY === 'scroll' ||
+        window.getComputedStyle(node).overflowX === 'auto' ||
+        window.getComputedStyle(node).overflowX === 'scroll')
     ) {
       return node
-    }
-    node = (node as Node).parentNode
-  }
-  return null
-}
-
-const findVerticalScrollableParent = (node: ParentNode | Element | null): Element | null => {
-  while (node) {
-    if (node instanceof Element) {
-      const style = window.getComputedStyle(node)
-      const { overflowY, overflow } = style
-      if (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') {
-        return node
-      }
-      if (overflow === 'auto' || overflow === 'scroll') {
-        return node
-      }
     }
     node = (node as Node).parentNode
   }
@@ -141,77 +126,11 @@ interface LoadingTriggerProps {
 }
 
 export function LoadingTrigger ({ onLoad }: LoadingTriggerProps): JSX.Element {
-  const targetRef = useRef<HTMLDivElement>(null)
-  const onLoadRef = useRef(onLoad)
-  onLoadRef.current = onLoad
-
   useEffect(() => {
-    const el = targetRef.current
+    onLoad()
+  }, [onLoad])
 
-    if (!el || typeof IntersectionObserver === 'undefined') {
-      return undefined
-    }
-
-    let observer: IntersectionObserver | undefined
-    let wasIntersecting = false
-    let cancelled = false
-    let retryFrameId = 0
-
-    const resolveScrollRoot = (): Element | null =>
-      findVerticalScrollableParent(el) ??
-      findScrollableParent(el)
-
-    const connect = (scrollRoot: Element | null): void => {
-      observer?.disconnect()
-
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          if (cancelled) {
-            return
-          }
-          const isIntersecting = Boolean(entry?.isIntersecting)
-          if (isIntersecting && !wasIntersecting) {
-            onLoadRef.current()
-          }
-          wasIntersecting = isIntersecting
-        },
-        {
-          ...(scrollRoot ? { root: scrollRoot } : {}),
-          rootMargin: '0px',
-          threshold: 0
-        }
-      )
-
-      observer.observe(el)
-    }
-
-    const scrollRootNow = resolveScrollRoot()
-
-    if (scrollRootNow) {
-      connect(scrollRootNow)
-    } else {
-      retryFrameId = requestAnimationFrame(() => {
-        if (cancelled) {
-          return
-        }
-        connect(resolveScrollRoot())
-      })
-    }
-
-    return () => {
-      cancelled = true
-      observer?.disconnect()
-      if (retryFrameId) {
-        cancelAnimationFrame(retryFrameId)
-      }
-    }
-  }, [])
-
-  return (
-    <div ref={targetRef} style={{ width: '100%' }}>
-      <Loader centered testId="select-option-loading-more" />
-    </div>
-  )
+  return <Loader centered testId="select-option-loading-more" />
 }
 
 interface LoadingErrorContentProps {
@@ -222,13 +141,13 @@ interface LoadingErrorContentProps {
 export function LoadingErrorContent ({ cssConfig, children }: LoadingErrorContentProps): JSX.Element {
   return (
     <StyledErrorWrapper cssConfig={cssConfig}>
-      <StatusDangerOutline1/>
+      <StatusDangerOutline1 />
       <div>{children}</div>
     </StyledErrorWrapper>
   )
 }
 
-export const MultiSelectCheckBox = ({ className }: { className?: string }) => (
+export const MultiSelectCheckBox = styled(({ className }) => (
   <div className={cn('dropdown-v6-multi-checkbox', className)}>
     <Checkbox
       className="dropdown-v6-multi-checkbox-unchecked"
@@ -236,4 +155,21 @@ export const MultiSelectCheckBox = ({ className }: { className?: string }) => (
     />
     <Checkbox className="dropdown-v6-multi-checkbox-checked" checked />
   </div>
-)
+))`
+  width: 18px;
+  height: 22px;
+  display: inline-flex;
+
+  .ant-checkbox-wrapper + .ant-checkbox-wrapper {
+    margin-left: 0;
+  }
+
+  .ant-checkbox {
+    top: 4px;
+  }
+
+  .ant-select-item-option.ant-select-item-option-selected & .dropdown-v6-multi-checkbox-unchecked,
+  .ant-select-item-option:not(.ant-select-item-option-selected) & .dropdown-v6-multi-checkbox-checked {
+    display: none;
+  }
+`

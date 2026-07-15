@@ -4,7 +4,7 @@ import { ActionButton } from '@src/action-button'
 import { ActionButtonProps } from '@src/action-button/types'
 import { Tooltip } from '@src/tooltip'
 import { Text } from '@src/typography'
-import { Tag as AntdTag } from 'antd'
+import AntdTag from 'antd/es/tag'
 import cn from 'classnames'
 import React, { FC } from 'react'
 import styled from 'styled-components'
@@ -122,15 +122,19 @@ const TagView: FC<TagViewProps> = ({
   )
 
   if (isBeyondMaxChars) {
-    return <Tooltip text={content} placement={tooltipPosition}>
-      {Component}
-    </Tooltip>
+    return (
+      <Tooltip text={content} placement={tooltipPosition}>
+        {Component}
+      </Tooltip>
+    )
   }
 
   if (isResponsive) {
-    return <TextReducer tooltip={content}>
-      {Component}
-    </TextReducer>
+    return (
+      <TextReducer tooltip={content}>
+        {Component}
+      </TextReducer>
+    )
   }
 
   return Component

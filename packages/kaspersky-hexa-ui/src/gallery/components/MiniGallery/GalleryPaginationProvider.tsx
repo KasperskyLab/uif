@@ -1,6 +1,6 @@
 import { Pagination } from '@src/pagination'
 import { Text } from '@src/typography'
-import { Empty } from 'antd'
+import Empty from 'antd/es/empty'
 import React, {
   useCallback,
   useEffect,
@@ -62,27 +62,31 @@ export function GalleryPaginationProvider<T> ({
   return (
     <ListContainer>
       {children(screensOnPage)}
-      {isEmpty && <Empty
-        image={Empty.PRESENTED_IMAGE_SIMPLE}
-        description={(
-          <Text
-            type="BTR4"
-            themedColor="primary"
-          >
-            {noDataText}
-          </Text>
-        )}
-      />}
-
-      {!isPaginationHidden && <PaginationWrapper>
-        <Pagination
-          current={page}
-          pageSize={perPage}
-          total={screensList.length}
-          simple
-          onChange={handlePageChange}
+      {isEmpty && (
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description={(
+            <Text
+              type="BTR4"
+              themedColor="primary"
+            >
+              {noDataText}
+            </Text>
+          )}
         />
-      </PaginationWrapper>}
+      )}
+
+      {!isPaginationHidden && (
+        <PaginationWrapper>
+          <Pagination
+            current={page}
+            pageSize={perPage}
+            total={screensList.length}
+            simple
+            onChange={handlePageChange}
+          />
+        </PaginationWrapper>
+      )}
     </ListContainer>
   )
 }

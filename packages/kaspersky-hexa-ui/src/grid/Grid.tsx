@@ -12,8 +12,8 @@ const DEFAULT_COLS = 12
 const DEFAULT_GAP = 16
 
 export const Grid: FC<GridProps> & GridVariants = (props: GridProps) => {
-  const { 
-    children, 
+  const {
+    children,
     cols,
     layout,
     layoutProperty,
@@ -38,12 +38,14 @@ export const Grid: FC<GridProps> & GridVariants = (props: GridProps) => {
     return <GridContainer {...gridProps}>{children}</GridContainer>
   }
 
-  return <StyledGrid
-    {...gridProps}
-    areas={layout?.areas}
-    direction={layout?.direction}
-    rows={layout?.rows}
-  >{children}</StyledGrid>
+  return (
+    <StyledGrid
+      {...gridProps}
+      areas={layout?.areas}
+      direction={layout?.direction}
+      rows={layout?.rows}
+    >{children}</StyledGrid>
+  )
 }
 
 Grid.defaultProps = {

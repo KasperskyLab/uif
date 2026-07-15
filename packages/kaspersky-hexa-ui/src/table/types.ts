@@ -1,15 +1,16 @@
 import { ThemeKey } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
-import { CheckboxColorConfig } from '@src/checkbox/types'
+import { SetState } from '@helpers/hooks/useStateProps'
+import { TestingProps } from '@helpers/typesHelpers'
+import { ButtonProps } from '@src/button'
 import { ChipProps } from '@src/chip'
 import { PaginationProps } from '@src/pagination'
-import { RadioColorConfig } from '@src/radio/types'
+import { ToolbarItems } from '@src/toolbar'
 import { TooltipProps } from '@src/tooltip/types'
-import { TableProps } from 'antd'
+import type { TableProps } from 'antd'
 import { SpinProps } from 'antd/es/spin'
 import { ColumnType } from 'antd/lib/table'
 import { TableRowSelection as RowSelectionAntd } from 'antd/lib/table/interface'
-import { ReactElement, ReactNode } from 'react'
+import { ReactElement, ReactNode, RefAttributes } from 'react'
 
 import {
   ActiveFilter,
@@ -19,70 +20,19 @@ import {
   FilterConfig,
   FilterFunction,
   FilterGroup,
+  FilterLogicOperation,
   FilterType,
   LegacyEnumOption,
+  SidebarFilter,
   TableCustomFilterFunction,
   UnitedFilter
 } from './modules/Filters'
+import { GroupTitleItem } from './modules/Groups/types'
 import {
   ActiveSorting,
   IFiltersSavingSettings
 } from './modules/SortingAndFilters'
-import { ToolbarProps } from './modules/ToolbarIntegration'
-
-type ColorConfig<StateProps> = {
-  enabled?: StateProps,
-  hover?: StateProps,
-  active?: StateProps,
-  selected?: StateProps,
-  disabled?: StateProps
-}
-
-type TableCellStateProps = {
-  border?: string,
-  background?: string
-}
-
-export type TableFiltersColorConfig = {
-  toolbar: {
-    background: string
-  },
-  item: {
-    icon: string,
-    background: string,
-    title: {
-      color: string
-    }
-  }
-}
-
-export type TableColorConfig = {
-  headCell: ColorConfig<TableCellStateProps>,
-  cell: ColorConfig<TableCellStateProps>,
-  root: {
-    background: string,
-    color: string
-  },
-  resize: {
-    hover: string,
-    active: string
-  },
-  expandable: {
-    icon: string
-  },
-  checkbox: CheckboxColorConfig,
-  radio: RadioColorConfig,
-  filters: TableFiltersColorConfig,
-  pagination: {
-    background: string,
-    boxShadow: string
-  },
-  validation: {
-    outline: string
-  }
-}
-
-export type TableCssConfig = TableColorConfig
+import { GetLeftItemsProps, ToolbarProps } from './modules/ToolbarIntegration'
 
 export type TableThemeProps = {
   theme?: ThemeKey
@@ -99,27 +49,41 @@ export type TableRecord = {
   children?: TableRecord[]
 }
 
-export type DefaultSorter = <T extends TableRecord>(rows: T[], propName: keyof T, isAsc: boolean, attribute: string) => T[]
+export type DefaultSorter<T extends TableRecord> = (rows: T[], propName: keyof T, isAsc: boolean, attribute: string) => T[]
 
-export type TablePaginationProps = PaginationProps & {
+export type TablePaginationProps<T extends TableRecord = TableRecord> = PaginationProps & {
   paginationDisabled?: boolean,
   showOnlyTotalSummary?: boolean,
-  infiniteScrollPageGetter?: (page: number) => null | TableRecord[] | Promise<null>,
+  /** Page getter function when infinite scrolling is enabled */
+  infiniteScrollPageGetter?: (page: number) => null | T[] | Promise<null | T[]>,
+  /** Experimental flag to enable infinite scrolling with virtualization */
+  virtualInfiniteScroll?: boolean,
+  /** Row height in pixels. Has effect when virtualInfiniteScroll flag is enabled */
+  rowHeight?: number,
+  /** Table body height in pixels. Has effect when virtualInfiniteScroll flag is enabled */
+  tableBodyHeight?: number,
   restoreCurrentWhenDataChange?: boolean,
   isServerPagination?: boolean
 }
 
+export const DEFAULT_TABLE_PAGE_SIZE = 50
+export const DEFAULT_TABLE_PAGE_SIZE_OPTIONS = ['20', '50', '100']
+
 export type TableToolbarProps = ToolbarProps
 
-export type TableRowSelectionData = {
+export type TableRowSelectionData<T extends TableRecord = TableRecord> = {
   selectedRowKeys: string[],
+  selectedRows?: T[],
   deselectedRowKeys?: string[],
+  deselectedRows?: T[],
   isSelectedAll?: boolean
 }
 
-export type TableRowSelectionAdditionalProps = {
+export type TableRowSelectionAdditionalProps<T extends TableRecord = TableRecord> = {
+  /** @deprecated Use 'hasSelectAll' and 'builtInRowSelection' instead */
+  selections?: RowSelectionAntd<T>['selections'],
   /** Async function returns keys of the rows should be selected. Works only with builtInRowSelection: true */
-  getPreselectedRows?: (rows: TableRecord[]) => Promise<string[]>,
+  getPreselectedRows?: (rows: T[]) => Promise<string[]>,
   /** Should render "Select all" checkbox and dropdown. Works only with builtInRowSelection: true */
   hasSelectAll?: boolean,
   /** Callback executes on every change of selection. Works only with builtInRowSelection: true */
@@ -128,21 +92,23 @@ export type TableRowSelectionAdditionalProps = {
   builtInRowSelection?: boolean
 }
 
-export type TableRowSelection = RowSelectionAntd<TableRecord> & TableRowSelectionAdditionalProps
+export type TableRowSelection<T extends TableRecord = TableRecord> = Omit<RowSelectionAntd<T>, 'selections'> & TableRowSelectionAdditionalProps<T>
+export type TableRowSelectionInternal<T extends TableRecord = TableRecord> = Omit<RowSelectionAntd<T>, 'selectedRowKeys'> & TableRowSelectionData<T>
 
-export type CustomSorter = (a: TableRecord, b: TableRecord, isAsc: boolean) => number
+export type CustomSorter<T extends TableRecord = TableRecord> = (a: T, b: T, isAsc: boolean) => number
 
-export type TableCustomGroupSorter = (a: any, b: any) => number
+type SortGroupArg = string | number | { text?: string }
+export type TableCustomGroupSorter = (a: SortGroupArg, b: SortGroupArg) => number
 
-export type ColumnFilter = {
+export type ColumnFilter<T extends TableRecord = TableRecord> = {
   localizationKey?: string,
   name: string,
   elementBefore?: ReactNode,
-  filter: FilterFunction
+  filter: FilterFunction<T>
 }
 
 // TODO: adjust dropdown and sidebar filter more correctly
-export type DropdownOrSidebarFilter = ColumnFilter | FilterConfig
+export type DropdownOrSidebarFilter<T extends TableRecord = TableRecord> = ColumnFilter<T> | FilterConfig
 
 export type EnumFilterType = {
   type: FilterType.Enum,
@@ -164,20 +130,30 @@ export type EnumFilterType = {
   getAvailableOptions?: () => Promise<EnumOption[]>
 } & SharedFilterType<FilterType.Enum>
 
+export type BooleanFilterType = {
+  type: FilterType.Boolean,
+  onStateName?: string,
+  offStateName?: string
+} & SharedFilterType<FilterType.Boolean>
+
 type TableFilterType =
   {
     type: FilterType.DateTime,
     /** Show only dates without time */
-    dateOnly?: boolean,
-  } & SharedFilterType<FilterType.DateTime>
-  | EnumFilterType
-  | { type: FilterType.Text } & SharedFilterType<FilterType.Text>
-  | { type: FilterType.Number } & SharedFilterType<FilterType.Number>
-  | { type: FilterType.Boolean } & SharedFilterType<FilterType.Boolean>
-  | { type: FilterType.DateRange } & SharedFilterType<FilterType.DateRange>
-  | { type: FilterType.DaysBefore } & SharedFilterType<FilterType.DaysBefore>
-  | { type: FilterType.Radio } & SharedFilterType<FilterType.Radio>
-  | { type: FilterType.IP } & SharedFilterType<FilterType.IP>
+    dateOnly?: boolean
+  } & SharedFilterType<FilterType.DateTime> |
+  EnumFilterType |
+  BooleanFilterType |
+  { type: FilterType.Text } & SharedFilterType<FilterType.Text> |
+  {
+    type: FilterType.Number,
+    /** The min value */
+    min?: number
+  } & SharedFilterType<FilterType.Number> |
+  { type: FilterType.DateRange } & SharedFilterType<FilterType.DateRange> |
+  { type: FilterType.DaysBefore } & SharedFilterType<FilterType.DaysBefore> |
+  { type: FilterType.Radio } & SharedFilterType<FilterType.Radio> |
+  { type: FilterType.IP } & SharedFilterType<FilterType.IP>
 
 type SharedFilterType<TFilterType extends FilterType = FilterType> = {
   /**
@@ -193,44 +169,86 @@ type SharedFilterType<TFilterType extends FilterType = FilterType> = {
    */
   operations?: ExtractFilterConditions<TFilterType>,
   /** Logic operation for multiple filters */
-  logicOperation?: 'AND' | 'OR',
+  logicOperation?: FilterLogicOperation,
 }
 
-export type TableColumn = Omit<
-  ColumnType<TableRecord>,
-  'key' | 'sorter' | 'filters' | 'dataIndex'
+export type TableColumn<T extends TableRecord = TableRecord> = Omit<
+  ColumnType<T>,
+  'key' | 'sorter' | 'filters' | 'dataIndex' | 'onFilter'
 > & {
+  /** Field is used to uniquely identify the column. */
   key: React.Key,
   title?: string | ReactElement,
   /* Show Dash in empty cell for column */
   hasEmptyCellDash?: boolean,
+  /** Field is used to display the data record property that will be rendered in the cell. */
   dataIndex?: string,
+  /** Field is used only for adapter in NWC. For component-driven development use only `key` */
   columnId?: string,
+  /** Field is used only for adapter in NWC. For component-driven development use only `key` */
+  columnServerField?: string,
+  /** If non-empty, a filter is created with prop name = `column.filterName` instead of `column.key`. Only for server filtering */
+  filterName?: string,
   /* When the content exceeds the width of the cell, an arrow is drawn, and when clicked, the full content is displayed. It works with custom
    * render also and is not compatible with ellipsis: true. If ellipsis: false it disables expandableText also
    */
   expandableText?: boolean,
+  /** Function to render tooltip for truncated text */
+  ellipsisTooltip?: (value: any, record: TableRecord, index: number) => string
   isSortable?: boolean,
   allowMultipleFilters?: boolean,
   sorter?: CustomSorter,
   /** @deprecated Use **sorter** for custom column sorting */
-  customSorter?: DefaultSorter,
+  customSorter?: DefaultSorter<T>,
   filteringAvailable?: boolean,
+
+  // Grouping props
+  /** Grouping by this column is available */
   groupingAvailable?: boolean,
+  /** Grouping by this column is available when it is hidden */
+  forceGroupingAvailable?: boolean,
+  /** Grouping by this column enables expanding groups */
+  expandableGrouping?: boolean,
+  /** Function for sorting grouped data, enabled by expandableGrouping */
+  sortGroupsFunction?: (a: T | GroupTitleItem<T>, b: T | GroupTitleItem<T>) => number,
+  /**
+   * Getter function to get grouping **string** value from complex row structures.
+   *
+   * **When you DON'T need this function:** the grouping field value is a string.
+   * Example: `groupBy = 'status'` and `row = { a: 1, status: 'active', c: 2 }`
+   *
+   * **When you DO need this function:** the grouping field value is NOT a string (e.g., an object).
+   * Example: `groupBy = 'status'` and `row = { a: 1, status: { value: 1, text: 'active' }, c: 2 }`
+   */
+  resolveGroupingValue?: (row: T, groupBy: string) => string,
+  /** Custom group title renderer */
+  renderGroupTitle?: (text: string, row: T) => ReactNode,
+  /** Group title icon renderer */
+  renderGroupTitleIcon?: (text: string, row: T) => ReactNode,
+  /** Show groups counter */
+  showGroupsCounter?: boolean,
+
   hideColumnAvailable?: boolean,
+  /** Determines the order of displayed columns */
+  sortIndex?: number,
   show?: boolean,
   closeDropdownOnSelect?: boolean,
-  filters?: ColumnFilter[],
+  filters?: ColumnFilter<T>[],
   filterType?: TableFilterType,
-  /** 
-   * It's used for manually setting the display of filtering icon in column title. 
+  /** When true, renders sidebar enum options in column dropdown. Synced with sidebar enum filters  */
+  showEnumFiltersInColumn?: boolean,
+  /**
+   * It's used for manually setting the display of filtering icon in column title.
    * By default, filter icon is displayed when at least one filter is applied to the column,
-   * but this option overrides default behaivour 
+   * but this option overrides default behavior
   */
   showFilterIcon?: boolean,
+  /** Is the column for filtering only. If true, it ignores the 'show' prop and this column is always hidden. */
+  onlyForFiltering?: boolean,
   width?: number | string,
+  /** column minimum width */
+  minWidth?: number,
   isUserDefinedWidth?: boolean,
-  renderGroupTitle?: (data: string) => ReactNode,
   resizing?: {
     disabled: boolean
   },
@@ -265,11 +283,11 @@ export type TableBgPatterns = 'diagonal'
 
 export type TableFilterVersion = 1 | 2
 
-type TableDataSourceFunctionArgs = {
+export type TableDataSourceFunctionArgs<T extends TableRecord = TableRecord> = {
   page: number,
   pageSize: number,
   params?: {
-    filters: FilterConfig[],
+    filters: SidebarFilter<T>[],
     searchString?: string,
     groupBy?: string
   },
@@ -287,31 +305,75 @@ type TableDataSourceFunctionReturn<T> = {
   paginationDisabled?: boolean
 }
 
-export type TableDataSourceFunction<T = TableRecord> = (config: TableDataSourceFunctionArgs) => Promise<TableDataSourceFunctionReturn<T>>
+export type TableDataSourceFunction<T extends TableRecord = TableRecord> =
+  (config: TableDataSourceFunctionArgs) => Promise<TableDataSourceFunctionReturn<T>>
 
-export type ITableProps<T = TableRecord> = Omit<
+export type TableRef = {
+  /** Resets selection. Works only if rowSelection.builtInRowSelection = true */
+  resetSelection?: () => void,
+  /** Resets FilterApi to its initial state. Only works when storageMergeFiltersMode = 'merge'.
+   * In 'predefined-overrides' mode it doesn't make sense — filters are immediately saved to localStorage
+   * and will be restored from there during reinit, so the state won't change.
+   */
+  reinitFilterApi?: () => void,
+  /** Re-fetches dataSourceFunction without params changes. Only works when dataSourceFunction is provided. */
+  triggerDataSourceFunction?: () => void,
+  /** Re-applies preselected rows from rowSelection.getPreselectedRows.
+   * Works only if rowSelection.builtInRowSelection = true and getPreselectedRows is provided.
+   */
+  setPreselectedRows?: () => void
+}
+
+export type ITableProps<T extends TableRecord = TableRecord> = Omit<
   TableProps<T>,
   'columns' | 'dataSource' | 'pagination' | 'rowSelection'
-> & TableThemeProps & {
+> & TableThemeProps & RefAttributes<TableRef> & {
   dataSource?: T[],
   dataSourceFunction?: TableDataSourceFunction<T>,
   patchDataSource?: (rows: T[]) => T[],
   onDataSourceChange?: (rows: T[]) => void,
-  columns?: TableColumn[],
+  columns?: TableColumn<T>[],
+  /**
+   * Show context menu for table rows
+   *
+   * @param rows - Rows for which the context menu is invoked.
+   *               If some of the rows are selected and the right-clicked row is one of them, contains all selected rows.
+   *               Otherwise, contains the single row that was right-clicked
+   * @params context
+   * @returns Items to display in the context menu
+   */
+  contextMenu?: (rows: T[], context: GetLeftItemsProps<T>) => ToolbarItems[] | Promise<ToolbarItems[]>,
   /** This prop should be memoized */
-  onColumnResize?: (column: any) => void,
+  onColumnResize?: (column: TableColumn<T>) => void,
   /** This prop should be memoized */
-  onManualColumnResize?: (column: TableRecord) => void,
-  onGroupByChange?: (dataIndex: string) => void,
+  onManualColumnResize?: (column: TableColumn<T>) => void,
+
+  // Grouping props
+  /** Default column key to group data by */
+  defaultGroupBy?: string,
+  /** Column key to group data by */
+  groupBy?: string,
+  /** Callback executed when groupBy changes */
+  onGroupByChange?: (key: string) => void,
+  /** Expanded group keys */
+  expandedGroupKeys?: readonly React.Key[],
+  /** Callback executed when expanded group keys change */
+  onExpandedGroupKeysChange?: (keys: readonly React.Key[]) => void,
+  /** Callback executed when group keys change. The callback is necessary to get the group keys initially */
+  onGroupKeysUpdate?: (keys: React.Key[]) => void,
+  /** Function for sorting initial data by groupBy column - compares group titles */
+  customGroupSorter?: TableCustomGroupSorter,
+
   search?: boolean,
   header?: string,
-  pagination?: false | TablePaginationProps,
+  pagination?: false | TablePaginationProps<T>,
   showColumnsSelector?: boolean,
+  onResetColumnsSettings?: () => void,
   onCloseColumnsSelector?: () => void,
-  onColumnsChange?: (columns: any[]) => void,
-  groupBy?: string,
-  /** Compares group titles */
-  customGroupSorter?: TableCustomGroupSorter,
+  /** Called only when columns has changed via Table setting ('gear' icon) */
+  onColumnsChange?: (columns: TableColumn<T>[]) => void,
+  /** Called on every column change. Returns the final columns after all modifications */
+  onPatchedColumnsChange?: (columns: TableColumn<T>[]) => void,
   useAccordion?: boolean,
   stickyHeader?: number,
   stickyScrollbarOffset?: number,
@@ -320,13 +382,17 @@ export type ITableProps<T = TableRecord> = Omit<
   /** Search is done from the product side. For example, when using server-side filtering */
   onSearch?: (searchString: string) => void,
   /** Custom search using internal state of the component for filtered data */
-  onClientSearch?: (searchString: string, row: TableRecord, index: number) => boolean,
+  onClientSearch?: (searchString: string, row: T, index: number) => boolean,
   groupTitleRender?: (data: string) => ReactNode,
   resizingMode?: TableResizingMode,
+  /** render :after as last column to compensate width in case table-width < screen-width */
+  afterColumn?: boolean
   /** Config for controllable row selection */
-  rowSelection?: TableRowSelection,
+  rowSelection?: TableRowSelection<T>,
   /** Background pattern that will be visible on rows with _blendedBackground */
   backgroundPattern?: TableBgPatterns,
+  /** Table styled with vertical and horizontal borders */
+  borderedStyle?: boolean,
   enableSearchHighlighting?: boolean,
   maxColumnsForAutoResizing?: number,
   defaultColumnWidth?: number,
@@ -335,6 +401,8 @@ export type ITableProps<T = TableRecord> = Omit<
   infiniteScrollEndTableText?: ReactNode,
   infiniteScrollErrorText?: ReactNode,
   infiniteScrollRetryText?: ReactNode,
+  /** Indicates that the table is ready to render data */
+  isInited?: boolean,
   /** Config object for spinner while loading */
   loaderProps?: SpinProps,
   useV3TestId?: boolean,
@@ -349,11 +417,11 @@ export type ITableProps<T = TableRecord> = Omit<
   isValid?: boolean,
   // Sorting props
   /** Call back when sort changed */
-  onSortChange?: (val: ActiveSorting) => void,
+  onSortChange?: (val: ActiveSorting<T>) => void,
   showSorterTooltip?: boolean | TooltipProps,
-  initialSorting?: ActiveSorting,
-  externalSorting?: ActiveSorting,
-  setExternalSorting?: (arg0: ActiveSorting) => void,
+  initialSorting?: ActiveSorting<T>,
+  externalSorting?: ActiveSorting<T>,
+  setExternalSorting?: SetState<ActiveSorting<T>>,
   fullHeight?: boolean,
   /** Date format for filters */
   dateFormat?: string,
@@ -364,9 +432,9 @@ export type ITableProps<T = TableRecord> = Omit<
   /** Filters to set by default. Prop is applied only once, further changes won't change the filters. If you want to
    * dynamically change filters, use externalFilters.
    */
-  predefinedFilters?: UnitedFilter[],
+  defaultFilters?: UnitedFilter<T>[],
   /** Replaces existing filters. Sidebar filters should be in the root, but columns filters should be in the group
-   * with id: `column.${dataIndex}`.
+   * with id: `column.${key}`.
    * @example
    * ```ts
    * [
@@ -379,7 +447,7 @@ export type ITableProps<T = TableRecord> = Omit<
    * ]
    * ```
    */
-  externalFilters?: FilterGroup['items'],
+  externalFilters?: FilterGroup<T>['items'],
   /**
    * 1 - default
    * 2 - add the following operations to v1 filters:
@@ -388,14 +456,14 @@ export type ITableProps<T = TableRecord> = Omit<
    *   enum filter: Contains (AND), Contains (OR), Doesn't contain, Regexp
    */
   filterVersion?: TableFilterVersion,
+  /** Enable nested OR filtering */
+  enableNestedFilters?: boolean,
   /** Function for custom filtering */
-  customFilterFunction?: TableCustomFilterFunction,
+  customFilterFunction?: TableCustomFilterFunction<T>,
   /** Callback for any filters change */
-  onFiltersChange?: (val: UnitedFilter[]) => void,
+  onFiltersChange?: (val: UnitedFilter<T>[]) => void,
   /** Activate sidebar filters */
   useFiltersSidebar?: boolean,
-  /** @deprecated Use externalFilters instead. Prop was used as setter of controlled sidebar filters */
-  sidebarFilters?: FilterConfig[],
   /** Flag indicates that server filtering is used, client filtering is disabled */
   isServerFiltering?: boolean,
   /** Call back when sidebar close */
@@ -404,24 +472,40 @@ export type ITableProps<T = TableRecord> = Omit<
   showFilterSidebar?: boolean,
   /**
    * Defines which source of filters is the priority.
-   * -merge: merge of localStorage and predefinedFilters
-   * -predefined-overrides: predefinedFilters overrides localStorage filters
+   * -merge: merge of localStorage and defaultFilters
+   * -predefined-overrides: defaultFilters overrides localStorage filters
    */
   storageMergeFiltersMode?: 'merge' | 'predefined-overrides',
-
+  getFiltersSidebarToolbarButtons?: (params: {
+    sorting: ActiveSorting<T>,
+    sidebarFilters: SidebarFilter<T>[],
+    applyFilters: () => void,
+    setSorting: (newSorting: ActiveSorting<T>) => void,
+    setSidebarFilters: (newFilters: SidebarFilter<T>[]) => void,
+    columns: TableColumn<T>[]
+  }) => Promise<ButtonProps[]>,
   // deprecated Filters props
-  /** @deprecated Use predefinedFilters instead. Prop was used as setter of default sidebar filters */
+  /**
+   * @deprecated Use defaultFilters instead. The old name doesn't clearly show that the value is only for the initial render.
+   *
+   * Filters to set by default. Prop is applied only once, further changes won't change the filters. If you want to
+   * dynamically change filters, use externalFilters.
+   */
+  predefinedFilters?: UnitedFilter<T>[],
+  /** @deprecated Use defaultFilters instead. Prop was used as setter of default sidebar filters */
   defaultFiltersConfig?: FilterConfig[],
-  /** @deprecated Use predefinedFilters instead. Prop was used as setter of default sidebar filters */
+  /** @deprecated Use defaultFilters instead. Prop was used as setter of default sidebar filters */
   defaultSidebarFilters?: FilterConfig[],
   /** @deprecated Use externalFilters instead. Prop was used as setter of external column filters. */
   appliedFilters?: ActiveFilter,
-  /** @deprecated Use predefinedFilters instead. Prop was used as setter of default column filters */
+  /** @deprecated Use defaultFilters instead. Prop was used as setter of default column filters */
   initialFilters?: ActiveFilter,
+  /** @deprecated Use externalFilters instead. Prop was used as setter of controlled sidebar filters */
+  sidebarFilters?: FilterConfig[],
   /** @deprecated Use onFiltersChange instead. Callback when sidebar filters are applied */
   onSidebarFiltersChange?: (filters: FilterConfig[]) => void,
   /** @deprecated Use onFiltersChange instead. Call back when dropdown filters changed */
-  onDropdownFiltersChange?: (filters: DropdownOrSidebarFilter[]) => void,
+  onDropdownFiltersChange?: (filters: DropdownOrSidebarFilter<T>[]) => void,
   /** @deprecated Use onFiltersChange instead. Call back when filters from dropdown or from sidebar changed */
   onFilterChange?: (val: ActiveFilter) => void,
   /** @deprecated FilterItems set by FilterApi inside table. An array of filters to show */
@@ -429,8 +513,8 @@ export type ITableProps<T = TableRecord> = Omit<
   /** @deprecated Use storageKey instead. Object with key name of saved filters: saveFilters.storageKey */
   saveFilters?: IFiltersSavingSettings,
 
+  /** Experimental flag to enable group selection. Not ready to use in production. Group selection works only if builtInRowSelection is set to true */
+  __EXPERIMENTAL__GROUP__SELECTION?: boolean
   /** Experimental flag to enable virtualization. Not ready to use in production */
   __EXPERIMENTAL__VIRTUAL?: boolean
 } & TestingProps
-
-export type TableViewProps = ToViewProps<ITableProps, TableCssConfig, TableThemeProps> & Required<TableThemeProps>

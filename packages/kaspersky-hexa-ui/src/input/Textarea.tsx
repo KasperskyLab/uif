@@ -1,7 +1,7 @@
 import { useGlobalStyles } from '@helpers/hooks/useGlobalStyles'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { P } from '@src/typography'
-import { Input } from 'antd'
+import Input from 'antd/es/input'
 import cn from 'classnames'
 import React, { FC, forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -22,7 +22,7 @@ const StyledTextArea = styled(Input.TextArea).withConfig({
   }
 `
 
-const StyledTextareaContainer = styled.div.withConfig<{disabled?: boolean}>({
+const StyledTextareaContainer = styled.div.withConfig<{ disabled?: boolean }>({
   shouldForwardProp: prop => !['cssConfig'].includes(prop)
 })`
   ${inputTextareaContainerStyles}
@@ -66,9 +66,11 @@ export const Textarea: FC<TextboxTextareaProps> = forwardRef((props, ref) => {
         {...testAttributes}
         {...rest}
       />
-      {showCount && <P type="BTR4" themedColor="baseicon" className="kl6-textbox-textarea-counter">
-        {t('textarea.wordsCount', { count: value?.length || 0, total: maxLength })}
-      </P>}
+      {showCount && (
+        <P type="BTR4" themedColor="baseicon" className="kl6-textbox-textarea-counter">
+          {t('textarea.wordsCount', { count: value?.length || 0, total: maxLength })}
+        </P>
+      )}
     </StyledTextareaContainer>
   )
 })

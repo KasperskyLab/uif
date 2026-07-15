@@ -1,11 +1,11 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { useLocalization } from '@helpers/localization/useLocalization'
-import { SearchProps } from '@src/search'
+import { Search, SearchProps } from '@src/search'
 import { IconSearch } from '@src/search/IconSearch'
 import { useTableContext } from '@src/table'
+import { ToggleButton } from '@src/toggle-button'
+import cn from 'classnames'
 import React, { FC, useState } from 'react'
-
-import { StyledSearch, StyledTextbox } from './toolbarCss'
 
 export const ToolbarSearch: FC<SearchProps> = (props: SearchProps) => {
   const {
@@ -15,56 +15,74 @@ export const ToolbarSearch: FC<SearchProps> = (props: SearchProps) => {
     children,
     onClearClick,
     prefix,
-    suffix,
     onPressEnter,
     onChange,
     searchIconTestId = 'toolbar-search-icon',
+    className,
     ...rest
   } = useTestAttribute(props)
 
   const [visible, setVisible] = useState(false)
-  const [filled, setFilled] = useState(false)
-  const [changedQuery, setChangedQuery] = useState(false)
+  const [isFilterApplied, setIsFilterApplied] = useState(false)
 
   const { useV3TestId } = useTableContext()
 
-  const toggleSlider = (event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLInputElement>) => {
-    event.stopPropagation()
-    if (changedQuery) {
-      setChangedQuery(false)
-      onPressEnter?.(event as React.KeyboardEvent<HTMLInputElement>)
-    } else {
-      setVisible(!visible)
-    }
-  }
-
   const localizedPlaceholder = useLocalization(placeholder)
+  const backgroundIndicator = 'var(--toolbar--bg)'
+
+  const toggleButton = (
+    <ToggleButton
+      value="toggle-search"
+      mode="grey"
+      onChange={() => {
+        setVisible(visible => !visible)
+        if (!value) {
+          onClearClick?.()
+          setIsFilterApplied(false)
+        }
+        onChange?.(value ?? '')
+      }}
+      iconBefore={(
+        <IconSearch
+          className="icon"
+          indicator={isFilterApplied && !visible}
+          borderBackground={backgroundIndicator}
+          modeIndicator="high"
+        />
+      )}
+      className="toolbar-search-toggle-button"
+      {...(!useV3TestId && {
+        testId: 'toolbar-search-icon',
+        klId: 'toolbar-search-icon'
+      })}
+    />
+  )
 
   return (
-    <StyledSearch
-      {...rest.testAttributes}
-      $visible={visible}
-      tabIndex={0}
-    >
-      <StyledTextbox
+    <>
+      <Search
         {...rest}
+        className={cn(
+          visible ? 'hexa-ui-collapsible-search' : 'hexa-ui-collapsible-search-hidden',
+          className
+        )}
         testId="toolbar-search-input"
-        $visible={visible}
         placeholder={localizedPlaceholder}
         value={value}
         prefix={prefix}
-        allowClear={false}
-        suffix={null}
-        onChange={(value: string) => {
-          setFilled(Boolean(value?.length))
-          setChangedQuery(true)
-          onChange?.(value)
-        }}
+        // Non-null suffix overrides default icon;
+        suffix={<span />}
+        onChange={onChange}
         onPressEnter={(event) => {
-          setChangedQuery(false)
+          setIsFilterApplied(Boolean(value?.length))
           onPressEnter?.(event)
         }}
         autoFocus={visible}
+        onClearClick={() => {
+          onChange?.('')
+          setIsFilterApplied(false)
+          onClearClick?.()
+        }}
       />
       {useV3TestId
         ? (
@@ -72,24 +90,11 @@ export const ToolbarSearch: FC<SearchProps> = (props: SearchProps) => {
               data-testid={searchIconTestId}
               kl-id={searchIconTestId}
             >
-              <IconSearch
-                className="icon"
-                indicator={filled}
-                onClick={toggleSlider}
-              />
+              {toggleButton}
             </div>
-          )
-        : (
-            <IconSearch
-              className="icon"
-              indicator={filled}
-              onClick={toggleSlider}
-              testId="toolbar-search-icon"
-              klId="toolbar-search-icon"
-            />
-          )
-      }
-
-    </StyledSearch>
+          ) : (
+            toggleButton
+          )}
+    </>
   )
 }

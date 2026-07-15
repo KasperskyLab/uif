@@ -3,7 +3,7 @@ import { ActionButton } from '@src/action-button'
 import { Link } from '@src/link'
 import { Space } from '@src/space'
 import cn from 'classnames'
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
@@ -26,7 +26,7 @@ const StyledAlert = styled.div.withConfig({
   ${alertCss}
 `
 
-export const Alert: FC<AlertProps> = (props) => {
+export const Alert = (props: AlertProps) => {
   const {
     actions,
     children,
@@ -51,7 +51,7 @@ export const Alert: FC<AlertProps> = (props) => {
   return (
     <StyledAlert cssConfig={cssConfig} {...testAttributes} {...forwardedProps}>
       <IconStyled cssConfig={cssConfig}>
-        <IconComponent/>
+        <IconComponent />
       </IconStyled>
       <SpaceBox
         gap={8}
@@ -79,7 +79,7 @@ export const Alert: FC<AlertProps> = (props) => {
             </Space>
           )}
         </SpaceBox>
-        {closable && <ActionButton size="large" onClick={() => closeNotification()}/>}
+        {closable && <ActionButton size="large" onClick={() => closeNotification()} />}
       </SpaceBox>
     </StyledAlert>
   )

@@ -6,7 +6,7 @@ import { IconResolver } from '@src/icon'
 import { Popover } from '@src/popover'
 import { Space } from '@src/space'
 import { Tooltip } from '@src/tooltip'
-import { Input } from 'antd'
+import Input from 'antd/es/input'
 import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -69,7 +69,7 @@ export const InputPassword: FC<TextboxPasswordProps> = (props: TextboxPasswordPr
           </Tooltip>
         )
       }}
-      onChange={({ target: { value } }: { target: { value: string }}) => {
+      onChange={({ target: { value } }: { target: { value: string } }) => {
         onChange?.(value)
         setChangedOnce(true)
       }}
@@ -89,7 +89,7 @@ export const InputPassword: FC<TextboxPasswordProps> = (props: TextboxPasswordPr
     />
   )
   return (
-    <Space gap="related" wrap="nowrap">
+    <Space gap="related" wrap="nowrap" width="100%">
       {validationRules?.length ? (
         <Popover
           trigger="focus"
@@ -98,16 +98,21 @@ export const InputPassword: FC<TextboxPasswordProps> = (props: TextboxPasswordPr
           {inputElement}
         </Popover>
       ) : (
-        inputElement 
-      )} 
+        inputElement
+      )}
       {actions && actions.map((actionConfig, index) => {
-        return <Tooltip key={`${actionConfig.tooltip} - ${index}`} text={actionConfig.tooltip}>
-          <Button
-            iconBefore={actionConfig.icon ? <IconResolver name={actionConfig.icon} size={16} /> : null}
-            mode={actionConfig.mode || 'secondary'}
-            onClick={actionConfig.onClick}
-          />
-        </Tooltip>
+        return (
+          <Tooltip key={`${actionConfig.tooltip} - ${index}`} text={actionConfig.tooltip}>
+            <Button
+              iconBefore={typeof actionConfig.icon === 'string'
+                ? <IconResolver name={actionConfig.icon} size={16} />
+                : actionConfig.icon
+              }
+              mode={actionConfig.mode || 'secondary'}
+              onClick={actionConfig.onClick}
+            />
+          </Tooltip>
+        )
       })}
     </Space>
   )

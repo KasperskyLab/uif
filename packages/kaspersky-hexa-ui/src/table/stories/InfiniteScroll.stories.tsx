@@ -4,14 +4,15 @@ import { Button } from '@src/button'
 import { Field } from '@src/field'
 import { Textbox } from '@src/input'
 import { Link } from '@src/link'
+import { SectionMessage } from '@src/section-message'
 import { Select } from '@src/select'
 import { Sidebar } from '@src/sidebar'
+import { Table } from '@src/table'
 import { Text } from '@src/typography'
 import { Meta } from '@storybook/react'
 import React, { Key, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { Table } from '../'
 import MetaData from '../__meta__/meta.json'
 import { ITableProps, TablePaginationProps } from '../types'
 
@@ -19,6 +20,7 @@ import {
   basicArgTypes,
   basicDataSource,
   BasicRowType,
+  BasicTableStory,
   basicTwoColumns,
   Story
 } from './_commonConstants'
@@ -27,8 +29,32 @@ const meta: Meta<ITableProps> = {
   title: 'Hexa UI Components/Table/InfiniteScroll',
   component: Table,
   args: {
+    stickyHeader: 40,
+    stickyFooter: true,
+    toolbar: {
+      sticky: 0,
+      left: [
+        {
+          type: 'button',
+          key: '1',
+          label: 'Tool 1',
+          onClick: () => console.log('Tool 1')
+        },
+        {
+          type: 'divider',
+          key: 'divider'
+        },
+        {
+          type: 'button',
+          key: '2',
+          label: 'Tool 2',
+          onClick: () => console.log('Tool 2')
+        }
+      ]
+    },
     columns: basicTwoColumns,
-    dataSource: basicDataSource.slice(0, 60)
+    dataSource: basicDataSource.slice(0, 60),
+    borderedStyle: false
   },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
@@ -47,7 +73,7 @@ const paginationDescription = 'pagination.infiniteScrollPageGetter: (page, pageS
   '- function that returns Promise where you can set new data on resolve() and throw error on reject(); ' +
   'pagination.total: number'
 
-type row = BasicRowType & { index?: number}
+type row = BasicRowType & { index?: number }
 
 const columns = [
   {
@@ -112,11 +138,12 @@ type Row = {
   index: string
 }
 
-const generateData = (size: number) => {
-  return Array.from({ length: size }).map((_, index): Row => ({
+const generateData = (size: number, fullTable?: boolean) => {
+  return Array.from({ length: size }).map((_, index) => ({
     name: `Value ${index + 1}`,
     description: `Description ${index + 1}`,
     index: `Index ${index + 1}`,
+    ...(fullTable ? { group: `Group ${index + 1}`, role: `Role ${index + 1}` } : {}),
     key: index + 1
   }))
 }
@@ -126,13 +153,16 @@ const chunkSizeOptions = [
   {
     label: 20,
     value: 20
-  }, {
+  },
+  {
     label: 50,
     value: 50
-  }, {
+  },
+  {
     label: 100,
     value: 100
-  }, {
+  },
+  {
     label: 500,
     value: 500
   }
@@ -143,8 +173,7 @@ const dataSet = generateData(DATASET_SIZE)
 const getData = (page: number, pageSize: number = DEFAULT_PAGE_SIZE, data: any) => {
   return new Promise(resolve =>
     setTimeout(() =>
-      resolve(data.slice(pageSize * page, pageSize * (page + 1))),
-    500))
+      resolve(data.slice(pageSize * page, pageSize * (page + 1))), 500))
 }
 
 const StyledField = styled(Field)`
@@ -152,7 +181,7 @@ const StyledField = styled(Field)`
 `
 
 export const LazyScrollLoading: Story = {
-  render: () => {
+  render: (args) => {
     const [selected, setSelected] = useState<Key[]>([])
     const [chunkSize, setChunkSize] = useState<number>(20)
     const paginationProps = useMemo(
@@ -170,15 +199,18 @@ export const LazyScrollLoading: Story = {
         <StyledField
           label="Select chunk size"
           labelPosition="before"
-          control={<Select
-            options={chunkSizeOptions}
-            value={chunkSize}
-            onChange={setChunkSize}
-          />}
+          control={(
+            <Select
+              options={chunkSizeOptions}
+              value={chunkSize}
+              onChange={setChunkSize}
+            />
+          )}
           controlWidth={200}
         />
         <Text>Selected: {selected.length}</Text>
         <Table
+          {...args}
           columns={columns}
           rowSelection={{
             selectedRowKeys: selected,
@@ -198,7 +230,7 @@ export const LazyScrollLoading: Story = {
 }
 
 export const LazyScrollLoadingWithTotalSummary: Story = {
-  render: () => {
+  render: (args) => {
     const [selected, setSelected] = useState<Key[]>([])
     const [chunkSize, setChunkSize] = useState<number>(20)
     const paginationProps = useMemo(
@@ -218,15 +250,18 @@ export const LazyScrollLoadingWithTotalSummary: Story = {
         <StyledField
           label="Select chunk size"
           labelPosition="before"
-          control={<Select
-            options={chunkSizeOptions}
-            value={chunkSize}
-            onChange={setChunkSize}
-          />}
+          control={(
+            <Select
+              options={chunkSizeOptions}
+              value={chunkSize}
+              onChange={setChunkSize}
+            />
+          )}
           controlWidth={200}
         />
         <Text>Selected: {selected.length}</Text>
         <Table
+          {...args}
           columns={columns}
           rowSelection={{
             selectedRowKeys: selected,
@@ -276,7 +311,7 @@ export const LazyScrollLoadingError: Story = {
 }
 
 export const LazyScrollLoadingWithEdit: Story = {
-  render: () => {
+  render: (args) => {
     const editableDataSet = generateData(DATASET_SIZE)
     const [mockServerSata, setMockServerData] = useState<any>(editableDataSet)
     const [chunkSize, setChunkSize] = useState<number>(20)
@@ -350,15 +385,18 @@ export const LazyScrollLoadingWithEdit: Story = {
         <StyledField
           label="Select chunk size"
           labelPosition="before"
-          control={<Select
-            options={chunkSizeOptions}
-            value={chunkSize}
-            onChange={setChunkSize}
-          />}
+          control={(
+            <Select
+              options={chunkSizeOptions}
+              value={chunkSize}
+              onChange={setChunkSize}
+            />
+          )}
           controlWidth={200}
         />
         <Text>Selected: {selected.length}</Text>
         <Table
+          {...args}
           columns={columnsWithEditLink}
           rowSelection={{
             selectedRowKeys: selected,
@@ -376,7 +414,7 @@ export const LazyScrollLoadingWithEdit: Story = {
             <Button onClick={handleEditRow}>Apply</Button>
           }
         >
-          <Field label="Row description" control={<Textbox value={editingRow?.description} onChange={handleRowChange} />}/>
+          <Field label="Row description" control={<Textbox value={editingRow?.description} onChange={handleRowChange} />} />
         </Sidebar>
       </div>
     )
@@ -385,5 +423,80 @@ export const LazyScrollLoadingWithEdit: Story = {
   argTypes: {
     infiniteScrollEndTableText: basicArgTypes.infiniteScrollEndTableText,
     pagination: { description: paginationDescription }
+  }
+}
+
+const TABLE_BODY_HEIGHT = 500
+const ROW_HEIGHT = 40
+const PAGE_SIZE = 20
+const TOTAL_ROW_COUNT = 1000
+
+const DATA = generateData(TOTAL_ROW_COUNT, true)
+
+const COLUMNS = [
+  basicTwoColumns[0],
+  {
+    ...basicTwoColumns[1],
+    width: 300
+  },
+  {
+    title: 'table.column3.name',
+    key: 'index',
+    dataIndex: 'index',
+    width: 300
+  },
+  {
+    title: 'Group',
+    key: 'group',
+    dataIndex: 'group',
+    width: 300
+  },
+  {
+    title: 'Role',
+    key: 'role',
+    dataIndex: 'role'
+  }
+]
+
+const infiniteScrollPageGetter = async (page: number) => {
+  await new Promise(resolve => setTimeout(resolve, 500))
+  return DATA.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+}
+
+export const InfiniteScrollWithPagination: Story = {
+  render: (args) => (
+    <>
+      <SectionMessage mode="info">
+        <div>Для правильной работы бесконечного скролла с виртуализацией и пагинацией необходимо:</div>
+        <ul>
+          <li>Включить флаг &quot;pagination.virtualInfiniteScroll&quot;</li>
+          <li>Передать &quot;pagination.infiniteScrollPageGetter&quot; для получения данных постранично</li>
+          <li>Передать &quot;pagination.total&quot; - общее количество данных</li>
+          <li>Передать &quot;pagination.pageSize&quot; - количество данных на одной странице</li>
+          <li>Передать &quot;pagination.rowHeight&quot; - высоту одной строки таблицы в пикселях
+            (необходимо для правильного подсчета текущей страницы)
+          </li>
+          <li>Передать &quot;pagination.tableBodyHeight&quot; - высоту таблицы в пикселях
+            (необходимо для правильной работы виртуализации)
+          </li>
+        </ul>
+      </SectionMessage>
+      <BasicTableStory {...args} />
+    </>
+  ),
+  args: {
+    dataSource: undefined,
+    columns: COLUMNS,
+    pagination: {
+      virtualInfiniteScroll: true,
+      jumper: true,
+      infiniteScrollPageGetter,
+      total: TOTAL_ROW_COUNT,
+      pageSize: PAGE_SIZE,
+      rowHeight: ROW_HEIGHT,
+      tableBodyHeight: TABLE_BODY_HEIGHT
+    },
+    afterColumn: true,
+    resizingMode: 'scroll'
   }
 }

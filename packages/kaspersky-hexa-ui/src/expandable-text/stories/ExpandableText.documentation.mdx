@@ -1,0 +1,131 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { ExpandableText } from '../ExpandableText'
+import * as ExpandableTextStories from '../ExpandableText.stories'
+import { expandableTextLongExampleCode, expandableTextOnExpandExampleSetupCode } from './expandableTextStoryData'
+
+<Meta of={ExpandableTextStories} name="ExpandableText Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="ExpandableText"
+  description='**ExpandableText** — текстовый блок с обрезкой по ширине контейнера и кнопкой разворачивания'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**ExpandableText** обрезает длинный текст в одну строку и показывает кнопку разворачивания, если содержимое не помещается по ширине. Построен на **Text** и наследует его типографику. Настраиваются **children**, **type**, **color**, **altText**, **useGradient**, **onExpand**, **theme** и **className**."
+    />
+
+    <DocExampleBlock
+      title="children"
+      description="Содержимое блока: строка или произвольный React-узел. Кнопка разворачивания появляется только при переполнении по ширине контейнера."
+      setupCode={expandableTextLongExampleCode}
+      code={`
+<div style={expandableTextPreviewStyle}>
+  <ExpandableText>{expandableTextLong}</ExpandableText>
+</div>
+<div style={expandableTextPreviewStyle}>
+  <ExpandableText>
+    <Link decoration="icon" href="https://www.kaspersky.com" target="_blank">
+      {expandableTextLong}
+    </Link>
+  </ExpandableText>
+</div>`}
+    />
+
+    <DocExampleBlock
+      title="type"
+      description="Типографический стиль текста — те же значения, что у **Text**. По умолчанию — `BTR3`."
+      previewDirection="vertical"
+      setupCode={expandableTextLongExampleCode}
+      code={`
+<div style={expandableTextPreviewStyle}>
+  <ExpandableText type="BTR2">{expandableTextLong}</ExpandableText>
+</div>
+<div style={expandableTextPreviewStyle}>
+  <ExpandableText type="BTR3">{expandableTextLong}</ExpandableText>
+</div>
+<div style={expandableTextPreviewStyle}>
+  <ExpandableText type="BTM3">{expandableTextLong}</ExpandableText>
+</div>`}
+    />
+
+    <DocExampleBlock
+      title="color"
+      description="Цвет текста из палитры product text. Если не задан, используется основной цвет темы."
+      previewDirection="vertical"
+      setupCode={expandableTextLongExampleCode}
+      code={`
+<div style={expandableTextPreviewStyle}>
+  <ExpandableText color="primary">{expandableTextLong}</ExpandableText>
+</div>
+<div style={expandableTextPreviewStyle}>
+  <ExpandableText color="secondary">{expandableTextLong}</ExpandableText>
+</div>`}
+    />
+
+    <DocExampleBlock
+      title="altText"
+      description="Альтернативный текст для атрибута `title` при обрезке — полное содержимое показывается во всплывающей подсказке при наведении. Если **altText** не задан, для строкового **children** используется его текст; для нетекстового содержимого подсказка пустая."
+      setupCode={expandableTextLongExampleCode}
+      code={`
+<div style={expandableTextPreviewStyle}>
+  <ExpandableText altText="Полный текст для подсказки при обрезке">
+    {expandableTextLong}
+  </ExpandableText>
+</div>`}
+    />
+
+    <DocExampleBlock
+      title="useGradient"
+      description="Режим обрезки с градиентным затуханием справа вместо многоточия. Доступные значения: `true`, `false`. По умолчанию — `false`. Используется, например, в ячейках **Table**."
+      previewDirection="vertical"
+      setupCode={expandableTextLongExampleCode}
+      code={`
+<div style={expandableTextPreviewStyle}>
+  <ExpandableText useGradient>{expandableTextLong}</ExpandableText>
+</div>
+<div style={expandableTextPreviewStyle}>
+  <ExpandableText>{expandableTextLong}</ExpandableText>
+</div>`}
+    />
+
+    <DocExampleBlock
+      title="onExpand"
+      description="Колбэк при разворачивании и сворачивании текста. Принимает `true` при развороте и `false` при сворачивании. По умолчанию — пустая функция. При монтировании компонент может вызвать `onExpand(false)`, если текст не обрезан."
+      setupCode={expandableTextOnExpandExampleSetupCode}
+      code="<ExpandableTextOnExpandExample />"
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description={'**ExpandableText** сокращает длинный текст в узком контейнере без ухода со страницы: ячейка **Table**, карточка, боковая панель, строка списка. Пользователь видит начало текста и при необходимости разворачивает его на месте — без отдельного модального окна и без наведения, как у **Tooltip**.\n\nДля полноценного раскрытия большого блока контента с заголовком выбирайте **Accordion**. Для короткой подсказки к иконке или метке — **Tooltip**. **ExpandableText** не заменяет основной текст страницы и не используется для ключевых сообщений уровня **Alert**.'}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+      <Text type="H3">Дизайн</Text>
+      <Text color="secondary" type="BTR3">
+        Раздел зарезервирован под дизайн-гайдлайны. Содержимое будет добавлено в следующих релизах.
+      </Text>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={ExpandableTextStories} />
+    <AutodocArgsTable components={ExpandableText} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

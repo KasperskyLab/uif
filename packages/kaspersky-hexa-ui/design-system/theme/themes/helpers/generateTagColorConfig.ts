@@ -10,7 +10,7 @@ function camelToKebabCase (str: string) {
 export function generateTagColorConfig (
   { colors, effects }: ComponentThemeContext,
   variant: TagMode
-) : Record<'filled' | 'outlined', any> {
+): Record<'filled' | 'outlined', any> {
   const actualVariant = camelToKebabCase(variant) as Exclude<TagMode, 'ai'>
 
   const aiColorConfig = {
@@ -30,7 +30,7 @@ export function generateTagColorConfig (
     },
     hover: {
       background: variant === 'ai'
-        ?  aiColorConfig.hover
+        ? aiColorConfig.hover
         : `${colors.tag[actualVariant].bg.hover}`,
       color: `${colors.tag[actualVariant].text}`,
       border: 'none'

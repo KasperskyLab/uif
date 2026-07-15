@@ -4,7 +4,7 @@ import { Space } from '@src/space'
 import cn from 'classnames'
 import RcUpload, { UploadProps as RcUploadProps } from 'rc-upload'
 import useMergedState from 'rc-util/lib/hooks/useMergedState'
-import React from 'react'
+import React, { FC, forwardRef, RefAttributes } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Upload } from '@kaspersky/hexa-ui-icons/16'
@@ -30,7 +30,7 @@ type RcUploadApi = {
   processFile: (file: RcFile, fileList: RcFile[]) => Promise<{ action: string, data: Record<string, unknown>, origin: RcFile, parsedFile: RcFile }>
 }
 
-export const Uploader: React.FC<UploaderProps & React.RefAttributes<{ upload: () => void }>> = React.forwardRef(({ size, ...props }: UploaderProps, ref) => {
+export const Uploader: FC<UploaderProps & RefAttributes<{ upload: () => void }>> = forwardRef(({ size, ...props }: UploaderProps, ref) => {
   const { t } = useTranslation()
   const {
     className,
@@ -49,7 +49,8 @@ export const Uploader: React.FC<UploaderProps & React.RefAttributes<{ upload: ()
     showProgress = true,
     style,
     testAttributes,
-    truncateFileName
+    truncateFileName,
+    validationStatus
   } = useTestAttribute(useThemedUploader(props))
 
   const [fileList, setFileList] = useMergedState<UploadFile[]>([], {
@@ -153,6 +154,17 @@ export const Uploader: React.FC<UploaderProps & React.RefAttributes<{ upload: ()
     setDragState(event.type)
   }
 
+  const onFileDropCapture = (event: React.DragEvent<HTMLDivElement>) => {
+    if (maxCount === 1 && event.dataTransfer.files.length > 1) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      const files = Array.from(event.dataTransfer.files) as RcFile[]
+      beforeUpload(files[0], files)
+      setDragState(event.type)
+    }
+  }
+
   function renderContent () {
     const hasErrors = errors.length > 0 || Object.keys(errorsForNewFiles).length > 0
 
@@ -253,6 +265,7 @@ export const Uploader: React.FC<UploaderProps & React.RefAttributes<{ upload: ()
         {...testAttributes}
         $dragOver={dragState === 'dragover'}
         $invalid={hasCriticalErrors(errors, errorsForNewFiles)}
+        $invalidValidationStatus={validationStatus === 'error'}
         $fullHeight={fullHeight}
         $maxCountReached={maxCountReached}
         $minimize={showListOnly}
@@ -260,6 +273,7 @@ export const Uploader: React.FC<UploaderProps & React.RefAttributes<{ upload: ()
         className={cn(className, 'hexa-upload hexa-upload-drag')}
         disabled={disabled}
         onDrop={onFileDrop}
+        onDropCapture={onFileDropCapture}
         onDragOver={onFileDrop}
         onDragLeave={onFileDrop}
         style={style}

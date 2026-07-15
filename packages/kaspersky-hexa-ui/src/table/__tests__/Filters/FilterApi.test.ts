@@ -1,26 +1,28 @@
 import { createElement } from 'react'
 
 import { generatedData, mockCustomFilterFunction, tableColumns } from '../../__mocks__/filtersMockData'
-import { 
-  BooleanFilter, 
-  BooleanOperations, 
-  DateRangeFilter, 
+import {
+  BooleanFilter,
+  BooleanOperations,
+  DateRangeFilter,
   DateTimeFilter,
   DateTimeFilterValue,
   DateTimeOperations,
-  EnumFilter, 
-  EnumOperations, 
-  FilterApi, 
-  FilterFromColumn, 
-  FilterGroup, 
-  FilterOperation, 
-  FilterType, 
+  EnumFilter,
+  EnumOperations,
+  FilterApi,
+  FilterFromColumn,
+  FilterGroup,
+  FilterOperation,
+  FilterType,
   NumberFilter,
   NumberOperations,
+  TableCustomFilterFunction,
   TextFilter,
   TextOperations
 } from '../../modules/Filters'
 import { isGroup, parseDate } from '../../modules/Filters/helpers'
+import { TableRecord } from '../../types'
 
 type DescribeData<Operations, ValueToFilter> = [
   string, // test name
@@ -58,11 +60,23 @@ describe('FilterApi Integration Tests', () => {
     condition: FilterOperation.eq,
     value: true
   }
+  const numberGreaterFilter: NumberFilter = {
+    name: 'salary',
+    type: FilterType.Number,
+    condition: FilterOperation.gt,
+    value: 100
+  }
+  const numberLowerFilter: NumberFilter = {
+    name: 'salary',
+    type: FilterType.Number,
+    condition: FilterOperation.lt,
+    value: 300
+  }
 
   const fullnameColumnFilter: FilterFromColumn = {
     name: 'fullname',
     filterName: 'fullnameFilter',
-    predicate: record => record.fullname.includes('Evgenija')
+    predicate: row => row.fullname.includes('Evgenija')
   }
   const groupColumnFilter: FilterFromColumn = {
     name: 'details.email',
@@ -160,9 +174,9 @@ describe('FilterApi Integration Tests', () => {
       ]
     ])('%s', (_, condition, data) => {
       it.each(data)('%#', async (fullname, value, expected) => {
-        const api = new FilterApi({ 
-          predefinedFilters: [{ ...textFilter, condition, value }],
-          columns: tableColumns 
+        const api = new FilterApi({
+          defaultFilters: [{ ...textFilter, condition, value }],
+          columns: tableColumns
         })
 
         expect(api.filterRows([{ fullname }]).length === 1).toBe(expected)
@@ -280,8 +294,8 @@ describe('FilterApi Integration Tests', () => {
     ])('%s', (_, condition, data) => {
       it.each(data)('%#', async (salary, value, expected) => {
         const api = new FilterApi({
-          predefinedFilters: [{ ...numberFilter, condition, value }],
-          columns: tableColumns 
+          defaultFilters: [{ ...numberFilter, condition, value }],
+          columns: tableColumns
         })
 
         expect(api.filterRows([{ salary }]).length === 1).toBe(expected)
@@ -314,8 +328,8 @@ describe('FilterApi Integration Tests', () => {
     ])('%s', (_, condition, data) => {
       it.each(data)('%#', async (isTrainee, value, expected) => {
         const api = new FilterApi({
-          predefinedFilters: [{ ...booleanFilter, condition, value }],
-          columns: tableColumns 
+          defaultFilters: [{ ...booleanFilter, condition, value }],
+          columns: tableColumns
         })
 
         expect(api.filterRows([{ isTrainee }]).length === 1).toBe(expected)
@@ -384,8 +398,8 @@ describe('FilterApi Integration Tests', () => {
     ])('%s', (_, condition, data) => {
       it.each(data)('%#', async (group, value, expected) => {
         const api = new FilterApi({
-          predefinedFilters: [{ ...enumFilter, condition, value }],
-          columns: tableColumns 
+          defaultFilters: [{ ...enumFilter, condition, value }],
+          columns: tableColumns
         })
         api.setEnumOptionsMap({
           group: [
@@ -412,14 +426,14 @@ describe('FilterApi Integration Tests', () => {
     }
 
     it('should filter by date filter with "="', () => {
-      const api = new FilterApi({ predefinedFilters: [dateRangeFilter], columns: tableColumns })
+      const api = new FilterApi({ defaultFilters: [dateRangeFilter], columns: tableColumns })
       const filteredRows = api.filterRows(testData)
       expect(filteredRows.length).toBe(12)
     })
 
     it('should filter by date filter with "≠"', () => {
-      const api = new FilterApi({ 
-        predefinedFilters: [{ ...dateRangeFilter, condition: FilterOperation.neq }],
+      const api = new FilterApi({
+        defaultFilters: [{ ...dateRangeFilter, condition: FilterOperation.neq }],
         columns: tableColumns
       })
       const filteredRows = api.filterRows(testData)
@@ -453,9 +467,9 @@ describe('FilterApi Integration Tests', () => {
           ['', parseDate('2025-10-20 12:00:00'), false],
           ['2025-10-19 23:59:59', parseDate('2025-10-20 12:00:00'), false],
           ['2025-10-21 00:00:00', parseDate('2025-10-20 12:00:00'), false],
-          ['2025-10-20 00:00:00', parseDate('2025-10-20 12:00:00'), true],
+          ['2025-10-20 00:00:00', parseDate('2025-10-20 12:00:00'), false],
           ['2025-10-20 12:00:00', parseDate('2025-10-20 12:00:00'), true],
-          ['2025-10-20 23:59:59', parseDate('2025-10-20 12:00:00'), true]
+          ['2025-10-20 23:59:59', parseDate('2025-10-20 12:00:00'), false]
         ]
       ],
       [
@@ -467,9 +481,9 @@ describe('FilterApi Integration Tests', () => {
           ['', parseDate('2025-10-20 12:00:00'), true],
           ['2025-10-19 23:59:59', parseDate('2025-10-20 12:00:00'), true],
           ['2025-10-21 00:00:00', parseDate('2025-10-20 12:00:00'), true],
-          ['2025-10-20 00:00:00', parseDate('2025-10-20 12:00:00'), false],
+          ['2025-10-20 00:00:00', parseDate('2025-10-20 12:00:00'), true],
           ['2025-10-20 12:00:00', parseDate('2025-10-20 12:00:00'), false],
-          ['2025-10-20 23:59:59', parseDate('2025-10-20 12:00:00'), false]
+          ['2025-10-20 23:59:59', parseDate('2025-10-20 12:00:00'), true]
         ]
       ],
       [
@@ -553,11 +567,260 @@ describe('FilterApi Integration Tests', () => {
     ])('%s', (_, condition, data) => {
       it.each(data)('%#', async (datetime, value, expected) => {
         const api = new FilterApi({
-          predefinedFilters: [{ ...datetimeFilter, condition, value }],
-          columns: tableColumns 
+          defaultFilters: [{ ...datetimeFilter, condition, value }],
+          columns: tableColumns
         })
 
         expect(api.filterRows([{ datetime }]).length === 1).toBe(expected)
+      })
+    })
+
+    const dateWithMs = (isoString: string) => new Date(isoString)
+
+    describe('milliseconds are ignored', () => {
+      const baseDate = '2025-10-20T12:00:00.000Z'
+      const sameSecondDifferentMs = [
+        '2025-10-20T12:00:00.001Z',
+        '2025-10-20T12:00:00.524Z',
+        '2025-10-20T12:00:00.999Z'
+      ]
+      const previousSecond = '2025-10-20T11:59:59.999Z'
+      const nextSecond = '2025-10-20T12:00:01.000Z'
+
+      it.each(sameSecondDifferentMs)('eq: should match', (msDate) => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.eq,
+            value: parseDate(baseDate)
+          }],
+          columns: tableColumns
+        })
+        const row = { datetime: dateWithMs(msDate) }
+        expect(api.filterRows([row]).length).toBe(1)
+      })
+
+      it('eq: previous second should not match', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.eq,
+            value: parseDate(baseDate)
+          }],
+          columns: tableColumns
+        })
+        const row = { datetime: dateWithMs(previousSecond) }
+        expect(api.filterRows([row]).length).toBe(0)
+      })
+
+      it('eq: next second should not match', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.eq,
+            value: parseDate(baseDate)
+          }],
+          columns: tableColumns
+        })
+        const row = { datetime: dateWithMs(nextSecond) }
+        expect(api.filterRows([row]).length).toBe(0)
+      })
+
+      it('gt: should treat milliseconds as same second, so 12:00:00.001 > 12:00:00 is false', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.gt,
+            value: parseDate(baseDate)
+          }],
+          columns: tableColumns
+        })
+        const row = { datetime: dateWithMs('2025-10-20T12:00:00.999Z') }
+        expect(api.filterRows([row]).length).toBe(0)
+      })
+
+      it('gte: milliseconds within same second should satisfy >=', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.ge,
+            value: parseDate(baseDate)
+          }],
+          columns: tableColumns
+        })
+        const row = { datetime: dateWithMs('2025-10-20T12:00:00.001Z') }
+        expect(api.filterRows([row]).length).toBe(1)
+      })
+    })
+
+    describe('timezone: user input in local time, data in UTC', () => {
+      const localInput = '20.10.2025 15:00:00'
+      const utcData = '2025-10-20T12:00:00.000Z'
+
+      it('eq: local datetime matches UTC data', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.eq,
+            value: parseDate(localInput)
+          }],
+          columns: tableColumns
+        })
+        const row = { datetime: dateWithMs(utcData) }
+        expect(api.filterRows([row]).length).toBe(1)
+      })
+
+      it('gt: local "15:00:01" should not match UTC 12:00:00', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.gt,
+            value: parseDate('20.10.2025 15:00:01')
+          }],
+          columns: tableColumns
+        })
+        const row = { datetime: dateWithMs(utcData) }
+        expect(api.filterRows([row]).length).toBe(0)
+      })
+
+      it('range: local range covering the moment', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.range,
+            value: {
+              from: parseDate('20.10.2025 14:59:00'),
+              to: parseDate('20.10.2025 15:01:00')
+            }
+          }],
+          columns: tableColumns
+        })
+        const row = { datetime: dateWithMs(utcData) }
+        expect(api.filterRows([row]).length).toBe(1)
+      })
+    })
+
+    describe('eq operator should match exact second, not whole day', () => {
+      const targetDateTime = '2025-10-20 12:00:00'
+      const targetTimestamp = parseDate(targetDateTime)
+
+      it('eq: matches same second (different ms)', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.eq,
+            value: targetTimestamp
+          }],
+          columns: tableColumns
+        })
+        const row = { datetime: parseDate('2025-10-20 12:00:00.500') }
+        expect(api.filterRows([row]).length).toBe(1)
+      })
+
+      it('eq: does not match previous second', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.eq,
+            value: targetTimestamp
+          }],
+          columns: tableColumns
+        })
+        const row = { datetime: parseDate('2025-10-20 11:59:59') }
+        expect(api.filterRows([row]).length).toBe(0)
+      })
+
+      it('eq: does not match next second', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.eq,
+            value: targetTimestamp
+          }],
+          columns: tableColumns
+        })
+        const row = { datetime: parseDate('2025-10-20 12:00:01') }
+        expect(api.filterRows([row]).length).toBe(0)
+      })
+
+      it('eq: does not match same day but different time', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.eq,
+            value: parseDate('2025-10-20 12:00:00')
+          }],
+          columns: tableColumns
+        })
+        const rowMorning = { datetime: parseDate('2025-10-20 09:00:00') }
+        const rowEvening = { datetime: parseDate('2025-10-20 23:59:59') }
+        expect(api.filterRows([rowMorning]).length).toBe(0)
+        expect(api.filterRows([rowEvening]).length).toBe(0)
+      })
+    })
+
+    describe('timezone + milliseconds combined', () => {
+      const localInput = '20.10.2025 15:00:00'
+      const utcDataWithMs = '2025-10-20T12:00:00.123Z'
+
+      it('eq: should match despite milliseconds', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.eq,
+            value: parseDate(localInput)
+          }],
+          columns: tableColumns
+        })
+        const row = { datetime: dateWithMs(utcDataWithMs) }
+        expect(api.filterRows([row]).length).toBe(1)
+      })
+
+      it('gt: should not treat as greater', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.gt,
+            value: parseDate(localInput)
+          }],
+          columns: tableColumns
+        })
+        const row = { datetime: dateWithMs(utcDataWithMs) }
+        expect(api.filterRows([row]).length).toBe(0)
+      })
+    })
+
+    describe('range with from-to should behave like eq', () => {
+      const exactTime = '2025-10-20 12:00:00'
+      const ts = parseDate(exactTime)
+      it('range with same from and to matches exactly', () => {
+        const api = new FilterApi({
+          defaultFilters: [{
+            name: 'datetime',
+            type: FilterType.DateTime,
+            condition: FilterOperation.range,
+            value: { from: ts, to: ts }
+          }],
+          columns: tableColumns
+        })
+        const rowMatch = { datetime: parseDate('2025-10-20 12:00:00.789') }
+        const rowPrev = { datetime: parseDate('2025-10-20 11:59:59') }
+        expect(api.filterRows([rowMatch]).length).toBe(1)
+        expect(api.filterRows([rowPrev]).length).toBe(0)
       })
     })
   })
@@ -565,7 +828,7 @@ describe('FilterApi Integration Tests', () => {
   describe('Attribute filters', () => {
     it('should filter by filter with "="', () => {
       const api = new FilterApi({
-        predefinedFilters: [{
+        defaultFilters: [{
           name: 'details',
           attribute: { name: 'city' },
           type: FilterType.Text,
@@ -581,7 +844,7 @@ describe('FilterApi Integration Tests', () => {
 
   describe('FilterFromColumn filters', () => {
     it('should filter by column-like filter', () => {
-      const api = new FilterApi({ predefinedFilters: [groupColumnFilter], columns: tableColumns })
+      const api = new FilterApi({ defaultFilters: [groupColumnFilter], columns: tableColumns })
       const filteredRows = api.filterRows(testData)
       expect(filteredRows.length).toBe(13)
     })
@@ -589,8 +852,8 @@ describe('FilterApi Integration Tests', () => {
 
   describe('Complex conditions', () => {
     it('should filter with multiple sidebar-like filters', () => {
-      const api = new FilterApi({ 
-        predefinedFilters: [textFilterCont, enumFilter, booleanFilter],
+      const api = new FilterApi({
+        defaultFilters: [textFilterCont, enumFilter, booleanFilter],
         columns: tableColumns
       })
       const filteredRows = api.filterRows(testData)
@@ -599,7 +862,7 @@ describe('FilterApi Integration Tests', () => {
 
     it('should filter with multiple column-like filters', () => {
       const api = new FilterApi({
-        predefinedFilters: [fullnameColumnFilter, groupColumnFilter, isTraineeColumnFilter],
+        defaultFilters: [fullnameColumnFilter, groupColumnFilter, isTraineeColumnFilter],
         columns: tableColumns
       })
       const filteredRows = api.filterRows(testData)
@@ -607,22 +870,93 @@ describe('FilterApi Integration Tests', () => {
     })
 
     it('should combine sidebar-like and column-like filters', () => {
-      const api = new FilterApi({ 
-        predefinedFilters: [textFilterCont, groupColumnFilter, isTraineeColumnFilter],
+      const api = new FilterApi({
+        defaultFilters: [textFilterCont, groupColumnFilter, isTraineeColumnFilter],
         columns: tableColumns
       })
       const filteredRows = api.filterRows(testData)
       expect(filteredRows.length).toBe(1)
+    })
+
+    it('should handle 5-level nested groups with mixed branches', () => {
+      const api = new FilterApi({
+        defaultFilters: [
+          {
+            id: 'level-1-root',
+            logicOperation: 'OR',
+            items: [
+              {
+                id: 'level-2-main',
+                logicOperation: 'OR',
+                items: [
+                  textFilterCont,
+                  {
+                    id: 'level-3-branch',
+                    logicOperation: 'AND',
+                    items: [
+                      numberGreaterFilter,
+                      {
+                        id: 'level-4-branch',
+                        logicOperation: 'OR',
+                        items: [
+                          enumFilter,
+                          {
+                            id: 'level-5-leaf',
+                            logicOperation: 'AND',
+                            items: [numberLowerFilter, booleanFilter]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              textFilter
+            ]
+          }
+        ],
+        columns: tableColumns
+      })
+
+      const filteredRows = api.filterRows(testData)
+      expect(filteredRows.length).toBe(15)
+    })
+
+    it('should filter rows with nested groups of different logic operations', () => {
+      const api = new FilterApi({
+        defaultFilters: [
+          {
+            id: 'nested-root',
+            logicOperation: 'OR',
+            items: [
+              {
+                id: 'name-or-group',
+                logicOperation: 'AND',
+                items: [textFilterCont, numberGreaterFilter, numberLowerFilter]
+              },
+              {
+                id: 'trainee-or-email',
+                logicOperation: 'OR',
+                items: [booleanFilter, enumFilter]
+              }
+            ]
+          }
+        ],
+        columns: tableColumns
+      })
+
+      const filteredRows = api.filterRows(testData)
+      expect(filteredRows.length).toBe(55)
     })
   })
 
   describe('Custom filter function', () => {
     it('should use custom filter function when provided', () => {
       const mockCustomFilter = jest.fn<any, any>(mockCustomFilterFunction)
-      const api = new FilterApi({ 
+      const api = new FilterApi({
         customFilterFunction: mockCustomFilter,
-        predefinedFilters: [textFilter],
-        columns: tableColumns 
+        defaultFilters: [textFilter],
+        columns: tableColumns
       })
 
       const rows1 = [{ fullname: 'Evgenija Shevchenko' }]
@@ -634,6 +968,73 @@ describe('FilterApi Integration Tests', () => {
       expect(result2).toEqual([])
 
       expect(mockCustomFilter).toHaveBeenCalledTimes(2)
+    })
+
+    it('should pass rowMatchesFilter and rowMatchesGroup helpers in params', () => {
+      const customFilterFunction = jest.fn<void, Parameters<TableCustomFilterFunction>>((rows, filters, renderList) => {
+        renderList(rows)
+      })
+      const api = new FilterApi({ customFilterFunction, defaultFilters: [textFilter], columns: tableColumns })
+
+      api.filterRows([{ fullname: 'Evgenija Shevchenko' }])
+
+      const params = customFilterFunction.mock.calls[0][3]
+      expect(typeof params.rowMatchesFilter).toBe('function')
+      expect(typeof params.rowMatchesGroup).toBe('function')
+    })
+  })
+
+  describe('Filtering with translation', () => {
+    const translateFn = (key: string) => (key === 'group.developers' ? 'Developers' : key)
+    const row = { group: 'group.developers' }
+    const groupLabelFilter: TextFilter = {
+      name: 'group',
+      type: FilterType.Text,
+      condition: FilterOperation.eq,
+      value: 'Developers'
+    }
+
+    const countMatches = (
+      apply: (record: TableRecord, params: Parameters<TableCustomFilterFunction>[3]) => boolean
+    ): number => {
+      const api = new FilterApi({
+        customFilterFunction: (rows, filters, renderList, params) => renderList(rows.filter(r => apply(r, params))),
+        columns: tableColumns
+      })
+      return api.filterRows([row]).length
+    }
+
+    it('rowMatchesFilter applies translateFn to the field value', () => {
+      expect(countMatches((r, { rowMatchesFilter }) => rowMatchesFilter(r, groupLabelFilter))).toBe(0)
+      expect(countMatches((r, { rowMatchesFilter }) => rowMatchesFilter(r, groupLabelFilter, translateFn))).toBe(1)
+    })
+
+    it('rowMatchesGroup applies translateFn to nested filters', () => {
+      const group: FilterGroup = {
+        id: 'translated-group',
+        logicOperation: 'AND',
+        items: [groupLabelFilter]
+      }
+
+      expect(countMatches((r, { rowMatchesGroup }) => rowMatchesGroup(r, group))).toBe(0)
+      expect(countMatches((r, { rowMatchesGroup }) => rowMatchesGroup(r, group, translateFn))).toBe(1)
+    })
+
+    it('rowMatchesGroup propagates translateFn into deeply nested groups', () => {
+      const group: FilterGroup = {
+        id: 'outer-group',
+        logicOperation: 'OR',
+        items: [
+          {
+            id: 'inner-group',
+            logicOperation: 'AND',
+            items: [groupLabelFilter]
+          }
+        ]
+      }
+
+      expect(countMatches((r, { rowMatchesGroup }) => rowMatchesGroup(r, group))).toBe(0)
+      expect(countMatches((r, { rowMatchesGroup }) => rowMatchesGroup(r, group, translateFn))).toBe(1)
     })
   })
 
@@ -650,7 +1051,7 @@ describe('FilterApi Integration Tests', () => {
         filterName: 'trueFilter',
         predicate: () => true
       }
-      const api = new FilterApi({ predefinedFilters: [trueFilter], columns: tableColumns })
+      const api = new FilterApi({ defaultFilters: [trueFilter], columns: tableColumns })
       const filteredRows = api.filterRows(testData)
       expect(filteredRows.length).toBe(100)
     })
@@ -661,7 +1062,7 @@ describe('FilterApi Integration Tests', () => {
         filterName: 'falseFilter',
         predicate: () => false
       }
-      const api = new FilterApi({ predefinedFilters: [falseFilter], columns: tableColumns })
+      const api = new FilterApi({ defaultFilters: [falseFilter], columns: tableColumns })
       const filteredRows = api.filterRows(testData)
       expect(filteredRows.length).toBe(0)
     })
@@ -675,12 +1076,38 @@ describe('FilterApi Integration Tests', () => {
           predicate: () => false
         }]
       }
-      const api = new FilterApi({ predefinedFilters: [wrongColumnFilter], columns: tableColumns })
+      const api = new FilterApi({ defaultFilters: [wrongColumnFilter], columns: tableColumns })
 
       expect(api.getRootGroupFilters().find(el => isGroup(el) && el.id === 'column.wrongColumn')).toBeFalsy()
 
       const filteredRows = api.filterRows(testData)
       expect(filteredRows.length).toBe(100)
+    })
+
+    it('should preserve custom nested groups while removing non existing column groups', () => {
+      const api = new FilterApi({
+        defaultFilters: [
+          {
+            name: 'wrongColumn',
+            filterName: 'filterWrongColumn',
+            predicate: () => false
+          },
+          {
+            id: 'root-nested',
+            logicOperation: 'AND',
+            items: [textFilter]
+          }
+        ],
+        columns: tableColumns
+      })
+
+      expect(api.getRootGroupFilters().find(el => isGroup(el) && el.id === 'root-nested')).toEqual(
+        {
+          id: 'root-nested',
+          logicOperation: 'AND',
+          items: [textFilter]
+        }
+      )
     })
   })
 })

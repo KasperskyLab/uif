@@ -92,12 +92,12 @@ type State = {
 }
 
 type Action =
-  | { type: 'selectScreen', payload: string | null }
-  | { type: 'loadScreenStart', payload: string }
-  | { type: 'loadScreenSuccess', payload: { screenName: string, src: string } }
-  | { type: 'loadScreenFailure', payload: string }
-  | { type: 'resetScreensList', payload: ScreensListType }
-  | { type: 'updateValueFromProps', payload: UseCustomLoaderStateParams['valueFromProps'] }
+  { type: 'selectScreen', payload: string | null } |
+  { type: 'loadScreenStart', payload: string } |
+  { type: 'loadScreenSuccess', payload: { screenName: string, src: string } } |
+  { type: 'loadScreenFailure', payload: string } |
+  { type: 'resetScreensList', payload: ScreensListType } |
+  { type: 'updateValueFromProps', payload: UseCustomLoaderStateParams['valueFromProps'] }
 
 function reducer (state: State, action: Action): State {
   switch (action.type) {

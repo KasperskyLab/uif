@@ -8,10 +8,12 @@ export interface IRepeaterProps {
 export const Repeater = ({
   component,
   data
-} : IRepeaterProps): JSX.Element => {
-  return <>
-    {Array.isArray(data) && (typeof component === 'function') &&
+}: IRepeaterProps): JSX.Element => {
+  return (
+    <>
+      {Array.isArray(data) && (typeof component === 'function') &&
       data.map((props, key) => component({ key, ...props }))
-    }
-  </>
+      }
+    </>
+  )
 }

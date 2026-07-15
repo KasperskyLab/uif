@@ -19,9 +19,11 @@ export const PlaceholderImage: React.FC<PlaceholderImageProps> = ({ imageVariant
   const { testAttributes: imageTestAttributes } = useTestAttribute({ rest, ...testingProps })
   return (
     imageVariant
-      ? <StyledPlaceholderImage {...imageTestAttributes} {...rest}>
-          <Image />
-        </StyledPlaceholderImage>
+      ? (
+          <StyledPlaceholderImage {...imageTestAttributes} {...rest}>
+            <Image />
+          </StyledPlaceholderImage>
+        )
       : <></>
   )
 }

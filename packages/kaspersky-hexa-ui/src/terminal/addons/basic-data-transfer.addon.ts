@@ -54,7 +54,10 @@ export abstract class BasicDataTransferAddon implements ITerminalAddon {
   protected abstract onData: (data: string) => void
   protected abstract onSocketMessage: (ev: MessageEvent) => void
 
-  protected addSocketListener = <K extends keyof WebSocketEventMap>(type: K, handler: (this: WebSocket, ev: WebSocketEventMap[K]) => any): IDisposable => {
+  protected addSocketListener = <K extends keyof WebSocketEventMap>(
+    type: K,
+    handler: (this: WebSocket, ev: WebSocketEventMap[K]) => any
+  ): IDisposable => {
     this._socket.addEventListener(type, handler)
     return {
       dispose: () => {

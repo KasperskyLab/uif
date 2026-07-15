@@ -1,0 +1,119 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { LoadingOverlay } from '../LoadingOverlay'
+import * as LoadingOverlayStories from './LoadingOverlay.stories'
+import { loadingOverlayInheritedFromLoaderDesignPropPresentation } from './LoadingOverlay.design.properties'
+
+<Meta of={LoadingOverlayStories} name="LoadingOverlay Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="LoadingOverlay"
+  description='**LoadingOverlay** — полупрозрачный оверлей с индикатором загрузки поверх блокируемого контента'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**LoadingOverlay** накладывается на область с `position: relative` и перекрывает её полупрозрачным фоном с центрированным [**Loader**](/?path=/docs/hexa-ui-components-loader). Пока оверлей активен, пользователь не взаимодействует с содержимым под ним. Настраиваются **size** и **description**."
+    />
+
+    <DocExampleBlock
+      title="size"
+      description="Размер встроенного индикатора загрузки. Доступные значения: `medium`, `large`. По умолчанию — `medium`."
+      code={`
+    <div style={{ position: 'relative', width: '40%', height: 160, border: '1px solid #eee' }}>
+      <LoadingOverlay size="medium" />
+    </div>
+    <div style={{ position: 'relative', width: '40%', height: 160, border: '1px solid #eee' }}>
+      <LoadingOverlay size="large" />
+    </div>`}
+    />
+
+    <DocExampleBlock
+      title="description"
+      description="Текстовая подсказка под индикатором. Необязательная строка; передаётся во внутренний **Loader** как **tip**. Без **description** отображается только спиннер."
+      minHeight={120}
+      code={`<LoadingOverlay description="help text" />`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**LoadingOverlay** блокирует область контента на время загрузки и показывает индикатор по центру перекрытой области. Применяйте для страниц, сайдбаров, таблиц, карточек и виджетов, пока раздел или данные ещё не готовы."
+    />
+
+    <Text type="H4" style={{ marginTop: 24 }}>Как использовать?</Text>
+
+    <DocExampleBlock
+      description="Расположите компонент поверх контента и растяните по высоте и ширине контейнера."
+      code={`
+<div style={{ position: 'relative', width: '40%', height: 160, border: '1px solid #eee' }}>
+  <LoadingOverlay />
+</div>`}
+    />
+
+    <DocExampleBlock
+      description="При необходимости добавьте поясняющий текст."
+      code={`
+<div style={{ position: 'relative', width: '40%', height: 160, border: '1px solid #eee' }}>
+  <LoadingOverlay description="Поясняющий текст" />
+</div>`}
+    />
+
+    <DocExampleBlock
+      description="Не используйте **Loader** отдельно от **LoadingOverlay**, если нужно показать статус загрузки поверх заблокированной области."
+      mode="dont"
+      minHeight={100}
+      code={`
+<div style={{ position: 'relative', width: '40%', height: 48, border: '1px solid #eee' }}>
+  <Loader size="medium" />
+</div>`}
+    />
+
+    <DocExampleBlock
+      title="Размер лоадера"
+      description="Для загрузки целых страниц и сайдбаров выбирайте pазмер `large`."
+      code={`
+<div style={{ position: 'relative', width: '40%', height: 200, border: '1px solid #eee' }}>
+  <LoadingOverlay size="large" />
+</div>`}
+    />
+
+    <DocExampleBlock
+      title=""
+      description="Для загрузки таблиц, карточек и виджетов используйте `medium`."
+      code={`
+<div style={{ position: 'relative', width: '40%', height: 160, border: '1px solid #eee' }}>
+  <LoadingOverlay size="medium" />
+</div>`}
+    />
+
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <Text color="secondary" type="BTR3" style={{ marginTop: 8 }}>
+      **LoadingOverlay** содержит вложенный компонент **Loader**. В панели Component properties доступны свойства Loader — они наследуются без изменения имён и значений.
+    </Text>
+
+    <Text type="H4" style={{ marginTop: 24 }}>Loader (наследуемые свойства)</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(loadingOverlayInheritedFromLoaderDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={LoadingOverlayStories} />
+    <AutodocArgsTable components={LoadingOverlay} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

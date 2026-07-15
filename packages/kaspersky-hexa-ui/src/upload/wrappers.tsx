@@ -1,4 +1,5 @@
 import { upload } from '@design-system/css-configs/components/upload'
+import { onKeyDownActivate } from '@helpers/onKeyDownActivate'
 import { Link } from '@src/link'
 import { Popover } from '@src/popover'
 import { P } from '@src/typography'
@@ -52,7 +53,7 @@ export const DragAndDropMessage = styled(({
 
   return (
     <P {...props} type="BTM3">
-      <Link disabled={disabled} onClick={onOpenFileDialog}>
+      <Link disabled={disabled} onClick={onOpenFileDialog} onKeyDown={onKeyDownActivate(onOpenFileDialog)}>
         {maxCount === 1 ? t('uploader.dropText.beginningSingle') : t('uploader.dropText.beginningMultiple')}
       </Link>
       {' '}
@@ -80,7 +81,7 @@ type ValidationMessageProps = {
   errorsForNewFiles: Record<string, string[]>
 }
 
-// @ts-ignore
+// @ts-expect-error ошибки styled
 export const ValidationMessage = styled(({ disabled, errors, errorsForNewFiles, ...props }: ValidationMessageProps) => {
   const { t } = useTranslation()
 
@@ -130,6 +131,7 @@ export const DragContainerWrapper = styled.div<{
   $dragOver?: boolean,
   $fullHeight?: boolean,
   $invalid?: boolean,
+  $invalidValidationStatus?: boolean,
   $maxCountReached?: boolean,
   $minimize?: boolean,
   $size?: string,
@@ -203,6 +205,10 @@ export const DragContainerWrapper = styled.div<{
     ${UploadIcon} {
       color: ${cssConfig.invalid.header.icon};
     }
+  `}
+
+  ${props => props.$invalidValidationStatus && `
+    border-color: ${cssConfig.invalid.validation};
   `}
 
   ${props => props.disabled && `

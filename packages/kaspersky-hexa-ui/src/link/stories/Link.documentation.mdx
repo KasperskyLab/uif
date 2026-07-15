@@ -1,0 +1,155 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+import { ArrowRight, LinkExternal, Plus, Settings } from '@kaspersky/hexa-ui-icons/16'
+
+import { Link } from '../Link'
+import { Dropdown } from '@src/dropdown'
+import * as LinkStories from './Link.stories'
+import { linkDesignPropPresentation } from './Link.design.properties'
+
+<Meta of={LinkStories} name="Link Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Link"
+  description={'**Link** — компонент ссылки для навигации и перехода по адресу на основе HTML-элемента `<a>`'}
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description={'**Link** обозначает переход на другую страницу или ресурс. Подпись задаётся через **text** или **children**; адрес — через **href**. Настраиваются размер **size**, оформление **decoration** с иконкой **icon** и позицией **iconPosition**, состояния **disabled** и **visited**, а также **target**, **isTooltipVisible**, **theme** и **className**.'}
+    />
+
+    <DocExampleBlock
+      title="text и children"
+      description="Подпись через **text** или произвольное содержимое через **children**. Если заданы оба, рендерится **text**, **children** игнорируются."
+      code='
+    <Link text="From text" href="#" />
+    <Link href="#">From children</Link>
+    <Link text="From text" href="#">From children</Link>'
+    />
+
+    <DocExampleBlock
+      title="href и target"
+      description="**href** задаёт адрес перехода. **target** управляет контекстом открытия ссылки. Доступные значения: `_self`, `_blank`, `_parent`, `_top`. По умолчанию — `_self`."
+      code='
+    <Link text="Same tab" href="#" target="_self" />
+    <Link text="New tab" href="https://www.kaspersky.com" target="_blank" decoration="icon" />'
+    />
+
+    <DocExampleBlock
+      title="decoration"
+      description="Оформление ссылки. Доступные значения: `none`, `icon`. По умолчанию — `none`. Значение `icon` добавляет иконку рядом с текстом; `none` — только текст."
+      code='
+    <Link text="Text link" href="#" decoration="none" />
+    <Link text="External link" href="https://www.kaspersky.com" target="_blank" decoration="icon" />'
+    />
+
+    <DocExampleBlock
+      title="icon"
+      description="Кастомная иконка рядом с текстом. Отображается только при **decoration**=`icon`. По умолчанию — `LinkExternal`."
+      scope={{ ArrowRight, LinkExternal, Plus, Settings }}
+      code='
+    <Link text="External link" href="#" decoration="icon" />
+    <Link text="Arrow" href="#" decoration="icon" icon={<ArrowRight />} />
+    <Link text="Settings" href="#" decoration="icon" icon={<Settings />} />
+    <Link text="Plus" href="#" decoration="icon" icon={<Plus />} />'
+    />
+
+    <DocExampleBlock
+      title="iconPosition"
+      description="Позиция иконки относительно текста. Доступные значения: `before`, `after`. По умолчанию — `after`. Работает только при **decoration**=`icon`."
+      code='
+    <Link text="Icon after" href="#" decoration="icon" iconPosition="after" />
+    <Link text="Icon before" href="#" decoration="icon" iconPosition="before" />'
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключённая ссылка не переходит по **href**: клик блокируется, **tabIndex**=`-1`, **aria-disabled**=`true`. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Link text="Disabled link" href="#" disabled />'
+    />
+
+    <DocExampleBlock
+      title="size"
+      description="Размер типографики ссылки. Доступные значения: `medium`, `large`, `noSize`. По умолчанию — `noSize`. Значение `noSize` — без дополнительного масштабирования, ссылка наследует типографику окружения."
+      code='
+    <Link text="Large" href="#" size="large" />
+    <Link text="Medium" href="#" size="medium" />
+    <Link text="No size" href="#" size="noSize" />'
+    />
+
+    <DocExampleBlock
+      title="Встраивание в текст"
+      description="Ссылку можно встраивать в текстовый абзац — при **size**=`noSize` компонент наследует типографику окружения."
+      code={`
+<div>
+  Lorem Ipsum is simply dummy text of the printing industry.{' '}
+  <Link text="Read more" href="#" /> when an unknown printer took a galley of type.
+</div>`}
+    />
+
+    <DocExampleBlock
+      title="onClick"
+      description={'Обработчик клика по ссылке — стандартный атрибут элемента `<a>`. **Link** можно использовать как триггер [**Dropdown**](/?path=/docs/hexa-ui-components-dropdown--docs): оберните ссылку в **Dropdown** с **trigger** `click` и в **onClick** вызовите **preventDefault**, чтобы не выполнялся переход по **href**.'}
+      scope={{ ArrowRight, Dropdown, Link }}
+      code={`
+<Dropdown
+  trigger={['click']}
+  overlay={[
+    { children: 'Пункт 1' },
+    { children: 'Пункт 2' }
+  ]}
+>
+  <Link
+    text="Меню"
+    href="Вы думаете это ссылка? А это совсем не ссылка!"
+    decoration="icon"
+    icon={<ArrowRight />}
+    onClick={(event) => event.preventDefault()}
+  />
+</Dropdown>`}
+    />
+
+    <DocExampleBlock
+      title="isTooltipVisible"
+      description="Для ссылки с **decoration**=`icon` при **isTooltipVisible**=`true` показывается **Tooltip** с адресом **href**. Не применяется при **disabled**. Доступные значения: `true`, `false`. По умолчанию — `true`."
+      code='
+    <Link text="With tooltip" href="https://www.kaspersky.com" target="_blank" decoration="icon" isTooltipVisible />
+    <Link text="Without tooltip" href="https://www.kaspersky.com" target="_blank" decoration="icon" isTooltipVisible={false} />
+    <Link disabled text="Disabled with tooltip" href="https://www.kaspersky.com" target="_blank" decoration="icon" isTooltipVisible />'
+    />
+    <DocExampleBlock
+      title="visited"
+      description="Принудительно включает визуальное состояние посещённой ссылки. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Link text="Visited link" href="#" visited />'
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Link** — для навигации и переходов без акцента кнопки: ссылка внутри текста или описания, переход на внешний ресурс, дополнительное действие в **Alert** или карточке, пункт в **Toolbar**, справка в **Popover**. Визуально ссылка вторична по отношению к основному контенту и не конкурирует с ключевыми действиями экрана."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(linkDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={LinkStories} />
+    <AutodocArgsTable components={Link} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

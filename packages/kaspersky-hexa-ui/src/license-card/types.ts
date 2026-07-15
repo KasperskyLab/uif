@@ -4,9 +4,9 @@ import { CSSProperties, ReactNode } from 'react'
 
 export const licenseCardModes = [
   'valid',
-  'warning', 
-  'expiresSoon', 
-  'expired', 
+  'warning',
+  'expiresSoon',
+  'expired',
   'finished'
 ] as const
 
@@ -40,7 +40,7 @@ export type LicenseCardProps = LicenseCardThemeProps & {
   elementAfter?: ReactNode;
   /** Compact layout mode */
   compact?: boolean,
-  /**  Left icon className */
+  /** Left icon className */
   leftSideClassName?: string,
   /** Right icon className */
   rightSideClassName?: string,
@@ -52,4 +52,10 @@ export type LicenseCardProps = LicenseCardThemeProps & {
   style?: CSSProperties,
   /** Component className */
   className?: string
+  /** Show / hide status section */
+  statusSection?: boolean,
+  /** Show / hide validity section */
+  validitySection?: boolean,
+  /** Label for license status */
+  licenseKeyStatus?: string
 } & TestingProps

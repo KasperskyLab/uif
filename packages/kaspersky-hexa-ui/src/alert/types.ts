@@ -43,8 +43,8 @@ export type AlertThemeProps = {
 
 export type AlertProps = Omit<
   DetailedHTMLProps<AllHTMLAttributes<HTMLDivElement>, HTMLDivElement>,
-  'title' | 'ref' | 'as' | 'type'
-  > & AlertThemeProps & TestingProps & {
+  'title' | 'ref' | 'as' | 'type' | 'width'
+> & AlertThemeProps & TestingProps & {
   /** If alert can be closed */
   closable?: boolean,
   /**

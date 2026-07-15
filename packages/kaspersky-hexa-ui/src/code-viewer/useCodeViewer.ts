@@ -1,4 +1,10 @@
-import { defaultKeymap, indentLess, insertTab } from '@codemirror/commands'
+import {
+  defaultKeymap,
+  history,
+  historyKeymap,
+  indentLess,
+  insertTab
+} from '@codemirror/commands'
 import { syntaxHighlighting } from '@codemirror/language'
 import { linter, lintGutter } from '@codemirror/lint'
 import { Compartment, EditorState, RangeSetBuilder, StateEffect } from '@codemirror/state'
@@ -22,8 +28,10 @@ import { applyDefaultExtensions } from './extensions'
 import { createTagsColors } from './hightlightingStyles'
 import type { CodeViewerRef, CodeViewerViewProps, CustomLanguages } from './types'
 
-export function useCodeViewer<T extends CustomLanguages>
-(props: CodeViewerViewProps<T>, forwardedRef: ForwardedRef<CodeViewerRef>) : CodeViewerValues {
+export function useCodeViewer<T extends CustomLanguages> (
+  props: CodeViewerViewProps<T>,
+  forwardedRef: ForwardedRef<CodeViewerRef>
+): CodeViewerValues {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const editorStateRef = useRef<EditorState | null>(null)
   const editorViewRef = useRef<EditorView | null>(null)
@@ -56,6 +64,8 @@ export function useCodeViewer<T extends CustomLanguages>
       lineNumbers(),
       highlightActiveLine(),
       highlightActiveLineGutter(),
+      history(),
+      keymap.of(historyKeymap),
       ...props.linter ? [linter(props.linter)] : [],
       ...props.linter ? [lintGutter()] : [],
       ...props.completions ? [props.completions] : [],
@@ -63,7 +73,7 @@ export function useCodeViewer<T extends CustomLanguages>
       ...(props.lineWrapping ? [EditorView.lineWrapping] : [])
     ]
     editorStateRef.current = EditorState.create({
-      doc: '',
+      doc: props.initialValue ?? '',
       extensions
     })
     editorViewRef.current = new EditorView({
@@ -94,14 +104,17 @@ export function useCodeViewer<T extends CustomLanguages>
     if (!editorViewRef.current) return
 
     const currentValue = editorViewRef.current.state.doc.toString()
-    const transaction = editorViewRef.current.state.update({
-      changes: {
-        from: 0,
-        to: currentValue.length,
-        insert: props.initialValue || ''
-      }
-    })
-    editorViewRef.current.dispatch(transaction)
+
+    if (currentValue !== props.initialValue) {
+      const transaction = editorViewRef.current.state.update({
+        changes: {
+          from: 0,
+          to: currentValue.length,
+          insert: props.initialValue || ''
+        }
+      })
+      editorViewRef.current.dispatch(transaction)
+    }
   }, [props.initialValue])
 
   useEffect(() => {

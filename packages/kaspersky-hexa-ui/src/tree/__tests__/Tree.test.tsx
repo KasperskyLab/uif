@@ -17,7 +17,7 @@ function getTreeData (data: Temp[]) {
   const mapItem = (item: Temp): DataNode => ({
     checkable: item.checkable,
     children: item.children ? item.children.map(mapItem) : undefined,
-    // @ts-ignore
+    // @ts-expect-error тип не имеет дата атрибутов
     'data-testid': `test-id-${item.key}`,
     key: item.key,
     title: item.key

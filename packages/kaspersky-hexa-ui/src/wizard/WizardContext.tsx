@@ -8,9 +8,10 @@ type WizardContextProps = {
   next: () => void,
   back: () => void,
   goToStep: (step: number) => void,
-  isFirstStep: boolean,
+  isFirstStep?: boolean,
   isLastStep: boolean,
-  isNextLoading: boolean
+  isNextLoading: boolean,
+  isBackDisabled?: boolean
 }
 
 const WizardContext = createContext<WizardContextProps | undefined>(undefined)
@@ -23,7 +24,8 @@ export const useWizard = () => {
   return context
 }
 
-type WizardProviderProps = Pick<WizardProps,
+type WizardProviderProps = Pick<
+  WizardProps,
   'steps' | 'activeStep' | 'initialStep' | 'onStepChange' | 'onFinish'
 > & {
   children: React.ReactNode
@@ -46,6 +48,7 @@ export const WizardProvider: React.FC<WizardProviderProps> = ({
 
   const totalSteps = steps.length
   const isFirstStep = currentStep === 0
+  const isBackDisabled = isFirstStep && !steps[currentStep]?.onBack
   const isLastStep = currentStep === totalSteps - 1
 
   const goToStep = useCallback((step: number) => {
@@ -94,7 +97,9 @@ export const WizardProvider: React.FC<WizardProviderProps> = ({
     }
   }, [currentStep, isLastStep, isNextLoading, steps, goToStep, onFinish])
 
-  const back = useCallback(() => {
+  const back = useCallback(async () => {
+    const onBack = steps[currentStep]?.onBack
+    if (onBack) onBack()
     if (isFirstStep) return
     goToStep(currentStep - 1)
   }, [currentStep, isFirstStep, goToStep])
@@ -105,9 +110,9 @@ export const WizardProvider: React.FC<WizardProviderProps> = ({
     next,
     back,
     goToStep,
-    isFirstStep,
     isLastStep,
-    isNextLoading
+    isNextLoading,
+    isBackDisabled
   }
 
   return (

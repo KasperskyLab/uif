@@ -94,7 +94,7 @@
 .licenseCardHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
 }
 
@@ -151,5 +151,8 @@
 .licenseCardHeaderBlock {
   display: flex;
   gap: 4px;
-  height: 24px;
+}
+
+.licenseCardHeaderText {
+  word-break: break-word;
 }

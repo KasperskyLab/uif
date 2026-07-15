@@ -1,6 +1,6 @@
 import { useGlobalStyles } from '@helpers/hooks/useGlobalStyles'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { Input as AntdInput } from 'antd'
+import AntdInput from 'antd/es/input'
 import classnames from 'classnames'
 import React, { FC, useEffect, useRef } from 'react'
 import { IMaskInputProps, IMaskMixin } from 'react-imask'
@@ -42,7 +42,11 @@ export const InputMasked: FC<TextboxMaskedProps> = (props: TextboxMaskedProps) =
     maskOptions,
     testAttributes,
     // just props drilling
-    id, value, cssConfig, onBlur, onKeyUp,
+    id,
+    value,
+    cssConfig,
+    onBlur,
+    onKeyUp,
     ...rest
   } = useTestAttribute(useThemedTextbox(useClassNamedTextbox(props)))
 

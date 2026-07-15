@@ -14,8 +14,8 @@ const dataCommon = [
     keyValueProp: 'gridLayout',
     fieldSetProp: 'gridLayout',
     comment: <>
-      gridLayout.cols[0] → gridLayout.firstCol<br/>
-      gridLayout.cols[1] → gridLayout.secondCol <br/>
+      gridLayout.cols[0] → gridLayout.firstCol<br />
+      gridLayout.cols[1] → gridLayout.secondCol <br />
       Остальные поля gridLayout, помимо cols, игнорируются, так как не предусмотрены дизайн системой
     </>
   },
@@ -37,7 +37,7 @@ const dataCommon = [
   {
     keyValueProp: 'labelPosition',
     fieldSetProp: 'labelPosition',
-    comment: <>none → before<br/>aside → before<br/>top → top<br/>right → after</>
+    comment: <>none → before<br />aside → before<br />top → top<br />right → after</>
   },
   {
     keyValueProp: 'data',
@@ -63,7 +63,7 @@ const dataCommon = [
     keyValueProp: 'wrapperClasses',
     fieldSetProp: 'fieldWrapperClassNames',
     comment: <>
-      wrapperClasses.keyClassName → fieldWrapperClassNames.labelClassName<br/>
+      wrapperClasses.keyClassName → fieldWrapperClassNames.labelClassName<br />
       wrapperClasses.valueClassName → fieldWrapperClassNames.controlClassName
     </>
   },

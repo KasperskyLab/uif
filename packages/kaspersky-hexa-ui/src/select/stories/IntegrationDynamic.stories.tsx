@@ -10,7 +10,6 @@ import { SelectProps } from '../types'
 
 import Docs from './IntegrationDynamicDocs'
 
-
 type Option = {
   value: number,
   label: string
@@ -73,7 +72,7 @@ function SelectPaginated ({ virtual = false, placeholder = '' }: { virtual?: boo
 }
 
 const meta: Meta<SelectProps> = {
-  title: 'Hexa UI Components/Inputs/Select/Integration/DynamicSelect',
+  title: 'Hexa UI Components/Select/DynamicSelect',
   component: SelectPaginated,
   argTypes: {
     hasMore: {},
@@ -96,7 +95,7 @@ const meta: Meta<SelectProps> = {
   decorators: [
     (Story, context) => (
       <Wrapper>
-        <Story {...context}/>
+        <Story {...context} />
       </Wrapper>
     )
   ]
@@ -118,4 +117,3 @@ export const WithVirtualization: Story = {
     virtual: true
   }
 }
-

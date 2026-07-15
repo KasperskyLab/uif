@@ -1,16 +1,35 @@
 import { useLocalization } from '@helpers/localization/useLocalization'
-import { Button } from '@src/button'
+import { MakeRequired } from '@helpers/typesHelpers'
+import { Button, ButtonProps } from '@src/button'
 import { Divider } from '@src/divider'
 import { Locale } from '@src/locale'
-import { Sidebar } from '@src/sidebar'
+import { Sidebar, SidebarHandle } from '@src/sidebar'
 import { Space } from '@src/space'
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
+import { Text } from '@src/typography'
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
+import { useTranslation } from 'react-i18next'
+import { v4 as uuid } from 'uuid'
 
-import { TableModule } from '..'
+import { TableComponent } from '..'
 import { useTableContext } from '../../context/TableContext'
-import { ITableProps } from '../../types'
-import { FilterApi, FilterConfig, FilterConfigInternal } from '../Filters'
-import { addId, isFilterConfig, isFilterConfigInternal, removeId, validate } from '../Filters/helpers'
+import { ITableProps, TableRecord } from '../../types'
+import { FilterApi, SidebarFilterGroupInternal, SidebarFilterInternal } from '../Filters'
+import {
+  addId,
+  findColumnByName,
+  isFilterConfig,
+  isFilterConfigInternal,
+  isSidebarFilter,
+  isSidebarGroupInternal,
+  removeId,
+  validate
+} from '../Filters/helpers'
 
 import { FilterItem } from './FilterItem'
 import { getNewFilter } from './filters'
@@ -18,51 +37,72 @@ import FilterToolbar from './FilterToolbar'
 import { addDefaultDates } from './helpers'
 import { InvalidFilter } from './items/types'
 import styles from './SidebarFilters.module.scss'
+import { SidebarFilterHandler } from './types'
 
-export const SidebarFilters: TableModule = (Component) => function SidebarFiltersModuleCallback ({ useFiltersSidebar, ...rest }: ITableProps) {
-  const { filterApi } = useTableContext()
+export const SidebarFilters = <T extends TableRecord = TableRecord> (
+  Component: TableComponent<T>
+): TableComponent<T> => function SidebarFiltersModuleCallback ({
+  useFiltersSidebar,
+  columns,
+  ...rest
+}) {
+  const { filterApi } = useTableContext<T>()
 
-  if (!useFiltersSidebar || !filterApi) {
+  if (!columns) {
     return <Component {...rest} />
   }
 
-  return <SidebarFiltersModule {...rest} Component={Component} filterApi={filterApi} />
+  if (!useFiltersSidebar || !filterApi) {
+    return <Component {...rest} columns={columns} />
+  }
+
+  return <SidebarFiltersModule<T> {...rest} Component={Component} filterApi={filterApi} columns={columns} />
 }
 
-function SidebarFiltersModule ({
+type SidebarFiltersModuleProps<T extends TableRecord = TableRecord> = MakeRequired<Omit<ITableProps<T>, 'useSidebarFilters'>, 'columns'> & {
+  Component: FC<ITableProps<T>>,
+  filterApi: FilterApi<T>
+}
+
+function SidebarFiltersModule<T extends TableRecord = TableRecord> ({
   Component,
   onCloseFilterSidebar,
   showFilterSidebar,
   onSidebarFiltersChange,
   isServerFiltering,
+  getFiltersSidebarToolbarButtons,
   filterApi,
   ...rest
-}: Omit<ITableProps, 'useSidebarFilters'> & { Component: FC<ITableProps>, filterApi: FilterApi }) {
-  const { columns } = rest
+}: SidebarFiltersModuleProps<T>) {
+  const { columns, testId } = rest
+
+  const { t } = useTranslation()
+
+  const { sorting, setSorting, enableNestedFilters } = useTableContext<T>()
 
   const availableColumns = useMemo(() => {
     return (columns || []).filter(column => (
-      column.show && column.filteringAvailable !== false || column.filteringAvailable
+      column.show && column.filteringAvailable !== false || column.filteringAvailable || column.onlyForFiltering
     ))
   }, [columns])
 
-  const [filters, setFilters] = useState<FilterConfigInternal[]>(addId(filterApi.getRootGroupFilters()).filter(isFilterConfigInternal))
+  const [filters, setFilters] = useState(addId(filterApi.getSidebarFilters()))
   const [invalidFilters, setInvalidFilters] = useState<InvalidFilter[]>([])
-  const [filtersForRestore, setFiltersForRestore] = useState<FilterConfigInternal[]>(addId(filterApi.getRootGroupFilters()).filter(isFilterConfigInternal))
+  const [filtersForRestore, setFiltersForRestore] = useState(addId(filterApi.getSidebarFilters()))
 
   useEffect(() => {
-    /** @deprecated Only for support old contract */ 
+    /** @deprecated Only to support old contract */
     onSidebarFiltersChange?.(removeId(filters).filter(isFilterConfig))
 
     return filterApi.subscribe(() => {
-      const newFilters = addId(filterApi.getRootGroupFilters()).filter(isFilterConfigInternal)
+      const newFilters = addId(filterApi.getSidebarFilters())
       setFilters(newFilters)
       setFiltersForRestore(newFilters)
     })
   }, [filterApi])
 
   const handleApply = () => {
-    const filtersWithDefaultDates: FilterConfigInternal[] = addDefaultDates(filters)
+    const filtersWithDefaultDates = addDefaultDates(filters)
 
     const invalidFilterItems = validate(filtersWithDefaultDates)
     setInvalidFilters(invalidFilterItems)
@@ -71,26 +111,45 @@ function SidebarFiltersModule ({
 
     setFiltersForRestore(filtersWithDefaultDates)
 
-    const filterConfigsWithoutId: FilterConfig[] = removeId(filtersWithDefaultDates).filter(isFilterConfig)
+    const filtersWithoutId = removeId(filtersWithDefaultDates).filter(isSidebarFilter)
 
-    onSidebarFiltersChange?.(filterConfigsWithoutId)
-    filterApi.setExternalSidebarFilters(filterConfigsWithoutId)
+    /** @deprecated Only to support old contract */
+    onSidebarFiltersChange?.(filtersWithoutId.filter(isFilterConfig))
+    filterApi.setExternalSidebarFilters(filtersWithoutId)
     onCloseFilterSidebar?.()
   }
 
-  const handleRemove = useCallback((filterToRemove: FilterConfigInternal) => {
+  const handleRemove: SidebarFilterHandler<T>['handleRemove'] = useCallback((filterToRemove) => {
     setFilters(filters => filters.filter(filter => filter.id !== filterToRemove.id))
   }, [])
 
-  const handleFilterChange = useCallback((filterTo: FilterConfigInternal, id?: string) => {
-    const newFilters: FilterConfigInternal[] = filters.map(filter => filter.id === id ? filterTo : filter)
+  const handleFilterChange: SidebarFilterHandler<T>['handleFilterChange'] = useCallback((filterTo, id) => {
+    const updateFilterById = (
+      filters: SidebarFilterInternal<T>[],
+      filterTo: SidebarFilterInternal<T>,
+      id: string
+    ): SidebarFilterInternal<T>[] => (
+      filters.map(filter => {
+        if (isSidebarGroupInternal(filter)) {
+          if (filter.id === id) {
+            return filterTo
+          }
+          return {
+            ...filter,
+            items: updateFilterById(filter.items || [], filterTo, id)
+          }
+        }
 
-    setInvalidFilters(filters => filters && filters.filter(filter => filter.id !== id))
-    setFilters(newFilters)
+        return filter.id === id ? filterTo : filter
+      })
+    )
+
+    setInvalidFilters(filters => filters && filters.filter(invalidFilter => invalidFilter.id !== id))
+    setFilters(updateFilterById(filters, filterTo, id))
   }, [filters, invalidFilters])
 
-  const handlePropertyChange = useCallback(async (colIndex: string, id?: string, attribute?: string) => {
-    const column = availableColumns.find(column => column.dataIndex === colIndex)
+  const handlePropertyChange: SidebarFilterHandler<T>['handlePropertyChange'] = useCallback(async (name, id, attribute) => {
+    const column = findColumnByName(availableColumns, name)
 
     if (column) {
       const newFilter = await getNewFilter(column, attribute)
@@ -98,25 +157,86 @@ function SidebarFiltersModule ({
     }
   }, [availableColumns, handleFilterChange])
 
+  const handleFilterAdd: SidebarFilterHandler<T>['handleFilterAdd'] = useCallback(async (name, id) => {
+    const filterToExtend = filters.find(filter => filter.id === id)
+    const column = findColumnByName(availableColumns, name)
+
+    if (filterToExtend && column) {
+      if (isFilterConfigInternal(filterToExtend)) {
+        const newFilter = await getNewFilter(column, filterToExtend.attribute?.name)
+        const newFilterGroup: SidebarFilterGroupInternal<T> = { id: uuid(), logicOperation: 'OR', items: [filterToExtend, newFilter] }
+        handleFilterChange(newFilterGroup, id)
+      } else if (filterToExtend.items.length && isFilterConfigInternal(filterToExtend.items[0])) {
+        const newFilter = await getNewFilter(column, filterToExtend.items[0].attribute?.name)
+        const newFilterGroup = { ...filterToExtend, items: [...filterToExtend.items, newFilter] }
+        handleFilterChange(newFilterGroup, id)
+      }
+    }
+  }, [availableColumns, filters, handleFilterChange])
+
+  const handleRemoveFilterRow: SidebarFilterHandler<T>['handleRemoveFilterRow'] = useCallback((groupId, id) => {
+    const filterToModify = filters.filter(isSidebarGroupInternal).find(filter => filter.id === groupId)
+
+    if (filterToModify) {
+      const newFilterGroup = {
+        ...filterToModify,
+        items: filterToModify.items.filter(item => isFilterConfigInternal(item) && item.id !== id)
+      }
+
+      if (newFilterGroup.items.length === 1) {
+        handleFilterChange(newFilterGroup.items[0], groupId)
+      } else {
+        handleFilterChange(newFilterGroup, groupId)
+      }
+    }
+  }, [handleFilterChange])
+
+  const sidebarRef = React.useRef<SidebarHandle>(null)
+
   const handleCancel = () => {
     setFilters(filtersForRestore)
     onCloseFilterSidebar?.()
   }
 
+  const handleClose = () => {
+    sidebarRef.current?.reassignTopmostSidebar()
+    handleCancel()
+  }
+
+  const [additionalButtons, setAdditionalButtons] = useState<ButtonProps[] | undefined>()
+
+  useEffect(() => {
+    getFiltersSidebarToolbarButtons?.({
+      sidebarFilters: filters,
+      setSidebarFilters: (filters) => setFilters(addId(filters).filter(isSidebarFilter)),
+      applyFilters: handleApply,
+      sorting,
+      setSorting,
+      columns
+    }).then(setAdditionalButtons)
+  }, [filterApi, filters, sorting, setSorting, columns])
+
   return (
     <>
       <Sidebar
         size="small"
+        ref={sidebarRef}
         onClose={handleCancel}
         visible={showFilterSidebar}
         title={useLocalization('common.filters')}
-        subHeader={
+        testId={testId ? `${testId}-filters-sidebar` : 'filters-sidebar'}
+        subHeader={(
           <Space gap="section" >
-            <FilterToolbar columns={availableColumns} filters={filters} onChange={setFilters} />
-            <Divider/>
+            <FilterToolbar<T>
+              columns={availableColumns}
+              filters={filters}
+              onChange={setFilters}
+              additionalButtons={additionalButtons}
+            />
+            <Divider />
           </Space>
-        }
-        footer={
+        )}
+        footer={(
           <div className={styles.filtersFooter}>
             <Button
               onClick={handleApply}
@@ -126,7 +246,7 @@ function SidebarFiltersModule ({
               <Locale localizationKey="table.columnsSettings.apply" />
             </Button>
             <Button
-              onClick={handleCancel}
+              onClick={handleClose}
               mode="secondary"
               testId="table-filters-cancel-button"
               klId="filters-button_cancel"
@@ -134,20 +254,29 @@ function SidebarFiltersModule ({
               <Locale localizationKey="table.columnsSettings.cancel" />
             </Button>
           </div>
-        }
+        )}
       >
-        <div className={styles.filtersList}>
+        <div className={styles.filtersList} style={{ '--gap': enableNestedFilters ? '0px' : 'var(--spacing--gap_grouped)' }}>
           {filters.map((item, index) => (
-            <FilterItem
-              key={`filter-item-${index}`}
-              index={index}
-              columnsToShow={availableColumns}
-              filter={item}
-              handleRemove={handleRemove}
-              handlePropertyChange={handlePropertyChange}
-              handleFilterChange={handleFilterChange}
-              validationMessage={invalidFilters.find(filter => filter.id === item.id)?.validationMessage}
-            />
+            <div key={item.id}>
+              <FilterItem
+                key={`filter-item-${item.id ?? index}`}
+                index={index}
+                columnsToShow={availableColumns}
+                filter={item}
+                handleRemove={handleRemove}
+                handlePropertyChange={handlePropertyChange}
+                handleFilterChange={handleFilterChange}
+                handleFilterAdd={handleFilterAdd}
+                handleRemoveFilterRow={handleRemoveFilterRow}
+                invalidFilters={invalidFilters}
+              />
+              {enableNestedFilters && index !== filters.length - 1 && (
+                <span className={styles.filtersSeparator}>
+                  <Text color="disabled" type="BTR4">{t('table.columnsSettings.filtering.operators.and')}</Text>
+                </span>
+              )}
+            </div>
           ))}
         </div>
       </Sidebar>

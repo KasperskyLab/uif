@@ -1,0 +1,103 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { TimeInput } from '../TimeInput'
+import { timeInputDesignPropPresentation } from './TimeInput.design.properties'
+import * as TimeInputStories from './TimeInput.stories'
+
+<Meta of={TimeInputStories} name="TimeInput Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="TimeInput"
+  description="**TimeInput** — поле ввода времени с маской на базе **Textbox.Masked**"
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="Публичный API ввода времени в Hexa UI — компонент **TimeInput**. Реализован как обёртка над **Textbox.Masked** с маской по **format**. Поддерживает ввод с маской, **placeholder**, состояния **disabled** и **readOnly**, а также **validationStatus**. Для интервала времени «с — по» используйте **RangeTimeInput**. Для выбора даты и времени с календарём — **DatePicker**."
+    />
+
+    <DocExampleBlock
+      title="value"
+      description="Контролируемое значение поля — строка в формате **format**. Изменения передаются через **onChange**."
+      code={`<TimeInput value="10:30:00" format="HH:mm:ss" />`}
+    />
+
+    <DocExampleBlock
+      title="onChange"
+      description="Вызывается при изменении значения в поле. Передаёт строку в формате **format** и опционально объект опций маски."
+      code={`<TimeInput onChange={(value) => alert(value)} />`}
+    />
+
+    <DocExampleBlock
+      title="onBlur"
+      description="Обработчик события потери фокуса полем ввода."
+      code={`<TimeInput onBlur={() => alert('blur')} />`}
+    />
+
+    <DocExampleBlock
+      title="format"
+      description="Формат отображения и маски ввода времени. Доступные значения: `HH:mm`, `HH:mm:ss`, `HH:mm:ss.ms`, `h:mm aaa`. По умолчанию — `HH:mm:ss`."
+      code={`<TimeInput format="HH:mm" />
+<TimeInput format="HH:mm:ss" />
+<TimeInput format="HH:mm:ss.ms" />
+<TimeInput format="h:mm aaa" />`}
+    />
+
+    <DocExampleBlock
+      title="placeholder"
+      description="Подсказка в пустом поле. Если не задана, формируется автоматически из **format** (например, `__:__` для `HH:mm`, `__:__:__` для `HH:mm:ss`, `__:__:__.___` для `HH:mm:ss.ms`, `__:__ am` для `h:mm aaa`)."
+      code={`<TimeInput format="HH:mm:ss" placeholder="__:__:__" />`}
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключает поле: ввод недоступен. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<TimeInput disabled />`}
+    />
+
+    <DocExampleBlock
+      title="readOnly"
+      description="Режим только для чтения: поле не редактируется. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<TimeInput value="10:30:00" readOnly />`}
+    />
+
+    <DocExampleBlock
+      title="validationStatus"
+      description="Визуальный статус валидации поля ввода. Доступные значения: `default`, `error`, `success`. По умолчанию — `default`."
+      code={`<TimeInput validationStatus="default" />
+<TimeInput validationStatus="error" />
+<TimeInput validationStatus="success" />`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**TimeInput** применяют в формах и фильтрах, когда пользователю нужно указать одно значение времени без привязки к дате: время начала события, длительность, точку в расписании. Маска ввода снижает ошибки формата и ускоряет заполнение по сравнению с обычным текстовым полем.
+
+Для интервала времени «с — по» используйте **RangeTimeInput**. Для выбора даты и времени с календарём — **DatePicker**. Если нужны два независимых поля с кастомным разделителем, соберите пару **TimeInput** вручную."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(timeInputDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={TimeInputStories} />
+    <AutodocArgsTable components={TimeInput} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

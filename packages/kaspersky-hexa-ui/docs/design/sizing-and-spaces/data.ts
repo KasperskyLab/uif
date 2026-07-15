@@ -32,6 +32,18 @@ export const columns = [
 
 export const paddingData: Row[] = [
   {
+    name: 'none',
+    cssVarName: '--spacing--padding_none',
+    baseSpacing: 0,
+    usage: 'От элементов компонента до его краев.'
+  },
+  {
+    name: 'extra_small',
+    cssVarName: '--spacing--padding_xs',
+    baseSpacing: 2,
+    usage: 'От элементов компонента до его краев.'
+  },
+  {
     name: 'small',
     cssVarName: '--spacing--padding_s',
     baseSpacing: 4,
@@ -59,6 +71,12 @@ export const paddingData: Row[] = [
     name: 'large',
     cssVarName: '--spacing--padding_l',
     baseSpacing: 16,
+    usage: 'От элементов компонента до его краев.'
+  },
+  {
+    name: 'semi_extra_large',
+    cssVarName: '--spacing--padding_lg',
+    baseSpacing: 20,
     usage: 'От элементов компонента до его краев.'
   },
   {

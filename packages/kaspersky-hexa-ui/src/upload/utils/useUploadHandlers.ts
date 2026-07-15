@@ -195,7 +195,7 @@ export function useUploadHandlers (
       }
     }
 
-    // @ts-ignore
+    // @ts-expect-error особенности ts
     if (currentFile) {
       onInternalChange(currentFile, newFileList)
     }

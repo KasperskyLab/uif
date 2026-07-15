@@ -1,47 +1,27 @@
 import { badges } from '@sb/badges'
+import {
+  buildStoryArgTypesFromComponents,
+  getControlsInclude
+} from '@sb/components/Documentation'
 import { withMeta } from '@sb/components/Meta'
-import { Text } from '@src/typography'
 import { Meta, StoryObj } from '@storybook/react'
-import React from 'react'
 
 import MetaData from './__meta__/meta.json'
+import { Expand as ExpandComponent } from './Expand'
+import { expandMockText } from './stories/expandStoryData'
+import { defaultArgs, expandPropPresentation } from './stories/Expand.controls'
+import { ExpandProps } from './types'
 
-import { Expand, ExpandProps } from './index'
+export { expandMockText } from './stories/expandStoryData'
 
-const mockText = <Text>Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
-Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
-Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
-Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
-Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
-Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
-Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
-Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
-Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.</Text>
-
-const meta: Meta<ExpandProps> = {
-  component: Expand,
-  title: 'Hexa UI Components/Expand',
+export const expandStorySettings: Meta<ExpandProps> = {
+  argTypes: buildStoryArgTypesFromComponents(
+    ExpandComponent,
+    expandPropPresentation
+  ),
   args: {
-    children: mockText,
-    collapsedHeight: 64,
+    ...defaultArgs,
+    children: expandMockText,
     testId: 'expand-test-id',
     klId: 'expand-kl-id'
   },
@@ -53,8 +33,26 @@ const meta: Meta<ExpandProps> = {
     design: MetaData.pixsoView
   }
 }
+
+const meta = {
+  title: 'Hexa UI Components/Expand',
+  component: ExpandComponent,
+  tags: ['!autodocs'],
+  includeStories: ['Playground'],
+  excludeStories: ['expandStorySettings', 'expandMockText'],
+  ...expandStorySettings
+} satisfies Meta<ExpandProps>
+
 export default meta
 
 type Story = StoryObj<ExpandProps>
 
-export const WithText: Story = {}
+export const Playground: Story = {
+  name: 'Playground',
+  parameters: {
+    controls: {
+      include: getControlsInclude(expandPropPresentation),
+      sort: 'none'
+    }
+  }
+}

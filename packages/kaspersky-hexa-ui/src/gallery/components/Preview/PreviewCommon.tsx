@@ -1,10 +1,10 @@
 import { useThemedColors } from '@design-system/theme'
-import { Icon } from '@src/icon'
 import { Loader } from '@src/loader'
 import React, { forwardRef, memo } from 'react'
 import styled from 'styled-components'
 
 import { colors } from '@kaspersky/hexa-ui-core/colors/js'
+import { FileSad, Search } from '@kaspersky/hexa-ui-icons/24'
 
 type PreviewButtonHoveredParams = {
   backgroundColor: string
@@ -46,8 +46,8 @@ const PreviewButtonStyled = styled.button`
   &:focus,
   &:active {
     outline: ${(params: PreviewButtonParams) => params.isSelected
-    ? `${colors.marina400} solid 4px`
-    : 'none'};
+      ? `${colors.marina400} solid 4px`
+      : 'none'};
   }
 
   &:focus {
@@ -71,7 +71,7 @@ export const PreviewButton = forwardRef<HTMLElement, React.ComponentProps<typeof
     >
       {props.children}
       <PreviewButtonHovered backgroundColor={hoverBackgroundColor}>
-        <Icon size="medium" name="SearchSimplified" color={hoverIconColor}/>
+        <Search color={hoverIconColor} />
       </PreviewButtonHovered>
     </PreviewButtonStyled>
   )
@@ -99,7 +99,7 @@ export const PreviewLoading = memo(() => {
 export const PreviewFailure = memo(() => {
   return (
     <LoaderContainer>
-      <Icon size="medium" name="FileSad" color={colors.cg200} />
+      <FileSad color={colors.cg200} />
     </LoaderContainer>
   )
 })

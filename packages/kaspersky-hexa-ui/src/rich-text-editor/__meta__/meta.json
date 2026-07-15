@@ -1,0 +1,17 @@
+{
+  "dod": {
+    "designTokens": false,
+    "useThemedHook": false,
+    "unitTests": false,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": true,
+    "storybook": true,
+    "pixsoView": false
+  },
+  "component": "RichTextEditor",
+  "description": "",
+  "usage": "Компонент для редактирования форматированного текста на базе Slate. Содержит готовый набор плагинов форматирования.",
+  "designLink": "",
+  "pixsoView": ""
+}

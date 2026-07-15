@@ -70,12 +70,14 @@ const FormLabelView: FC<FormLabelViewProps> = ({
           />
         </Popover>
       )}
-      {tagsAfter.map((label, index) => label && <Tag
-        key={`${label}-${index}`}
-        label={label}
-        className="form-label-tag"
-        outlined={!(disabled || mode === 'disabled') }
-      />)}
+      {tagsAfter.map((label, index) => label && (
+        <Tag
+          key={`${label}-${index}`}
+          label={label}
+          className="form-label-tag"
+          outlined={!(disabled || mode === 'disabled')}
+        />
+      ))}
     </StyledFormLabel>
   )
 }

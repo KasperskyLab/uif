@@ -23,7 +23,8 @@ const meta: Meta<ITableProps> = {
   component: Table,
   args: {
     columns: basicTwoColumns,
-    dataSource: basicDataSource.slice(0, 60)
+    dataSource: basicDataSource.slice(0, 60),
+    borderedStyle: false
   },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
@@ -66,9 +67,9 @@ const createRows = (page: number, pageSize: number) => (
 export const PageLoading: Story = {
   render: (args: ITableProps) => {
     const [currentPage, setCurrentPage] = useState(1)
-    const [pageSize, setPageSize] = useState(10)
+    const [pageSize, setPageSize] = useState(20)
     const [loading, setLoading] = useState(false)
-    const [dataSource, setDataSource] = useState(createRows(0, 10))
+    const [dataSource, setDataSource] = useState(createRows(0, 20))
     return (
       <Wrapper>
         <Table

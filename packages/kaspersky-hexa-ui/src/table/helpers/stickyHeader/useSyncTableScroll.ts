@@ -13,20 +13,20 @@ export const useSyncTableScroll = ({
 }: UseSyncTableScrollProps) => {
   /** так как scroll у нас может происходить как и в самой таблице (через тачпад, например), так и через кастомный
    *  скроллбар, то и выставлять scrollLeft нам нужно при обоих событиях ресайза
-   */ 
+   */
   useEffect(() => {
     const scrollbarContainer = horizontalScrollbarRef.current
     const tableContainer = scrollableContainerRef.current
     const stickyHeaderContainer = stickyHeaderRef.current
 
-    if (!scrollbarContainer || !tableContainer) return 
+    if (!scrollbarContainer || !tableContainer) return
 
     const scrollHandler = (event: Event) => {
       const scrollLeft = (event.target as HTMLDivElement).scrollLeft
-      
+
       tableContainer.scrollLeft = scrollLeft
       scrollbarContainer.scrollLeft = scrollLeft
-      
+
       if (stickyHeaderContainer) {
         stickyHeaderContainer.scrollLeft = scrollLeft
       } else {
@@ -36,7 +36,7 @@ export const useSyncTableScroll = ({
         }
       }
     }
-    
+
     tableContainer.addEventListener('scroll', scrollHandler)
     scrollbarContainer.addEventListener('scroll', scrollHandler)
     return () => {

@@ -33,7 +33,7 @@ export const SchedulerMatrix = styled.div`
 export const cellCss = css<{
   cssConfig: WeeklyScheduleCssConfig,
   selected: boolean
-  }>`
+}>`
   flex-basis: calc((100% - 23px) / 24);
   cursor: pointer;
   background-color: ${props => (
@@ -74,7 +74,7 @@ export const DayCell = styled.div`
 export const dotCss = css<{
   cssConfig: WeeklyScheduleCssConfig,
   selected?: boolean
-  }>`
+}>`
   width: 8px;
   height: 8px;
   border-radius: 50%;

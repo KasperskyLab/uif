@@ -11,7 +11,7 @@ import { GridProps } from './types'
 const meta: Meta<GridProps> = {
   title: 'Hexa UI Components/Layout/Grid',
   component: Grid,
-  argTypes: { 
+  argTypes: {
     cols: { control: { type: 'number', min: 1 } },
     layoutProperty: { control: 'object' }
   },
@@ -45,14 +45,16 @@ const defaultArray = Array(28).fill('empty value')
 
 export const Basic: Story = {
   render: (args: GridProps) => {
-    return <>
-      <Grid {...args}>
-        {defaultArray.map((el, i) => (
-          <Grid.Item key={i} >
-            <Widget>Widget #{i + 1}</Widget>
-          </Grid.Item>
-        ))}
-      </Grid>
-    </>
+    return (
+      <>
+        <Grid {...args}>
+          {defaultArray.map((el, i) => (
+            <Grid.Item key={i} >
+              <Widget>Widget #{i + 1}</Widget>
+            </Grid.Item>
+          ))}
+        </Grid>
+      </>
+    )
   }
 }

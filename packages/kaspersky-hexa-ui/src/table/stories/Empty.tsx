@@ -31,7 +31,7 @@ export const EmptyText: Story = {
       <h2>Default empty message</h2>
       <Table
         {...args}
-        emptyText={
+        emptyText={(
           <Placeholder
             image="noData"
             mode="filled"
@@ -39,7 +39,7 @@ export const EmptyText: Story = {
             textAlign="center"
             title="No data"
           />
-        }
+        )}
       />
       <h2>Custom empty message</h2>
       <Table {...args} emptyText={customEmptyText} />

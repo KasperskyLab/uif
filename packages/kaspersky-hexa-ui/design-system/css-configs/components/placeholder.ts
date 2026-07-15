@@ -17,13 +17,13 @@ export const placeholderSize: Record<PlaceholderSize, PlaceholderSizeConfig> = {
   small: {
     imageSize: 48,
     padding: 24,
-    gap: 12,
-    titleGap: 4
+    gap: 'related',
+    titleGap: 'dependent'
   },
   medium: {
     imageSize: 150,
     padding: 32,
-    gap: 16,
-    titleGap: 8
+    gap: 'grouped',
+    titleGap: 'related'
   }
 }

@@ -14,7 +14,7 @@ import {
   basicTwoColumns,
   Story
 } from './stories/_commonConstants'
-import { TableDocs } from './stories/docs/TableDocs'
+import TableDocs from './stories/docs/TableDocs.md'
 
 import { ITableProps, Table } from './index'
 
@@ -24,7 +24,8 @@ const meta: Meta<ITableProps> = {
   args: {
     columns: basicTwoColumns,
     dataSource: basicDataSource,
-    testId: 'test-123'
+    testId: 'test-123',
+    borderedStyle: false
   },
   parameters: {
     badges: [badges.stable],
@@ -61,6 +62,7 @@ export { EmptyCellDash } from './stories/EmptyCellDash'
 export { EmptyHeightFull } from './stories/EmptyHeightFull'
 export { Disabled } from './stories/Disabled'
 export { Draggable } from './stories/Draggable'
+export { DraggableWithRowSelection } from './stories/DraggableWithRowSelection'
 export { HorizontalScroll } from './stories/HorizontalScroll'
 export { OnHoverContent } from './stories/OnHoverContent'
 export { CellWithTable } from './stories/CellWithTable'
@@ -68,11 +70,11 @@ export { TagGroupCell } from './stories/TagGroupCell'
 export { ColumnsWidthPercent } from './stories/ColumnsWidthPercent'
 export { RowAccordion } from './stories/RowAccordion'
 export { BgPattern } from './stories/BgPattern'
-export { Reductions } from './stories/Reductions'
+export { InSidebar } from './stories/InSidebar'
 export { ExpandableText } from './stories/ExpandableText'
 export { WithFilters } from './stories/WithFilters'
 export { WithIconColumn } from './stories/WithIconColumn'
 export { KesTable } from './stories/KesTable'
-export { WithToolbar } from './stories/WithToolbar'
+export { WithContextMenu } from './stories/WithContextMenu'
 export { TableSettings } from './stories/TableSettings'
-export { RenderWithTextReducer } from './stories/RenderWithTextReducer'
+export { Reduction } from './stories/Reduction'

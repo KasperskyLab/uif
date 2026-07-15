@@ -1,6 +1,6 @@
 import { ThemeKey } from '@design-system/types'
 import { withBadges } from '@sb/decorators/withBadges'
-import type { Preview } from '@storybook/react'
+import { Preview } from '@storybook/react-vite'
 
 import { badgesConfig } from './badges'
 import { withI18n } from './decorators/withI18n'
@@ -15,7 +15,7 @@ export const globalTypes = {
     toolbar: {
       icon: 'globe',
       items: [
-        { value: 'en-us', title: 'English', type: 'reset' },
+        { value: 'en-us', title: 'English' },
         { value: 'ru-ru', title: 'Русский' },
         { value: 'de-de', title: 'Deutsch' },
         { value: 'ja-jp', title: '日本語' },
@@ -41,7 +41,7 @@ export const globalTypes = {
     toolbar: {
       title: 'Theme',
       items: [
-        { value: ThemeKey.Light, title: '𖤓 light', type: 'reset' },
+        { value: ThemeKey.Light, title: '𖤓 light' },
         { value: ThemeKey.Dark, title: '⏾ dark' }
       ],
       dynamicTitle: true
@@ -53,7 +53,7 @@ export const globalTypes = {
     toolbar: {
       icon: 'transfer',
       items: [
-        { value: 'ltr', title: 'LTR', type: 'reset' },
+        { value: 'ltr', title: 'LTR' },
         { value: 'rtl', title: 'RTL' }
       ]
     }
@@ -82,9 +82,51 @@ const preview: Preview = {
     },
     badgesConfig,
     options: {
-      storySort: {
-        method: 'alphabetical',
-        order: ['Intro', 'Changelog']
+      // @ts-expect-error Storybook does not provide contextual typing for inline storySort params here.
+      storySort: (left, right) => {
+        const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' })
+        const topLevelOrder = ['Intro', 'Changelog', 'Design', 'Docs', 'Hexa UI Components']
+        const nameOrder = ['Docs', 'Playground']
+
+        // Storybook evals storySort as raw JS — nested helpers must stay untyped in source.
+        // @ts-expect-error — see comment above
+        const rank = (value, order) => {
+          // @ts-expect-error — see comment above
+          const i = order.findIndex(o => value.includes(o))
+          return i === -1 ? order.length : i
+        }
+
+        const titleSegments = (title = '') => title.split('/')
+
+        // @ts-expect-error — see comment above
+        const compareTitles = (a, b) => {
+          const aSegs = titleSegments(a)
+          const bSegs = titleSegments(b)
+
+          for (let i = 0; i < Math.max(aSegs.length, bSegs.length); i++) {
+            const aSeg = aSegs[i] ?? ''
+            const bSeg = bSegs[i] ?? ''
+
+            if (aSeg === bSeg) continue
+
+            if (i === 0) {
+              const diff = rank(aSeg, topLevelOrder) - rank(bSeg, topLevelOrder)
+              if (diff !== 0) return diff
+            }
+
+            if (aSeg === 'Витрина компонентов') return -1
+            if (bSeg === 'Витрина компонентов') return 1
+
+            return collator.compare(aSeg, bSeg)
+          }
+
+          return 0
+        }
+
+        return (
+          compareTitles(left.title, right.title) ||
+          rank(left.name ?? '', nameOrder) - rank(right.name ?? '', nameOrder)
+        )
       }
     }
   },

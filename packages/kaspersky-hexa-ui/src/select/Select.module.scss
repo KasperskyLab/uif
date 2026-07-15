@@ -1,0 +1,14 @@
+.option:hover .optionAction {
+  opacity: 1;
+}
+
+.optionActions {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+}
+
+.optionAction {
+  opacity: 0;
+  transition: 0.3s;
+}

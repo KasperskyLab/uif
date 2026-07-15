@@ -139,10 +139,20 @@ describe('SectionMessage', () => {
   })
 
   test('should handle expandable prop set to true', () => {
-    const { container } = render(<SectionMessage expandable mode="success" testId={testId} />)
+    const { container } = render(<SectionMessage expandable mode="success" testId={testId}>test</SectionMessage>)
     expect(container
       .querySelector(`[data-testid="${testId}-section-message-expansion-icon"]`))
       .toBeInTheDocument()
+    expect(container
+      .querySelector('[data-testid="alert-content"]'))
+      .toBeInTheDocument()
+  })
+
+  test('should hidden content when defaultExpanded is false', () => {
+    const { container } = render(<SectionMessage defaultExpanded={false} mode="success" testId={testId}>test</SectionMessage>)
+    expect(container
+      .querySelector('[data-testid="alert-content"]'))
+      .not.toBeInTheDocument()
   })
 
   test('should handle closable prop set to true by default', () => {

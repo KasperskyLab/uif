@@ -1,5 +1,5 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { Badge as AntdBadge } from 'antd'
+import AntdBadge from 'antd/es/badge'
 import cn from 'classnames'
 import React, { FC } from 'react'
 import styled from 'styled-components'

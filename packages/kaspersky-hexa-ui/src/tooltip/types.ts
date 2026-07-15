@@ -15,9 +15,23 @@ export type TooltipThemeProps = {
   theme?: Theme
 }
 
+type TooltipPlacement =
+ 'top' |
+  'left' |
+  'right' |
+  'bottom' |
+  'topLeft' |
+  'topRight' |
+  'bottomLeft' |
+  'bottomRight' |
+  'leftTop' |
+  'leftBottom' |
+  'rightTop' |
+  'rightBottom'
+
 export type TooltipProps = Omit<TooltipPropsWithTitle, 'placement' | 'title'> & TooltipThemeProps & {
   /** Placement */
-  placement?: 'top' | 'left' | 'right' | 'bottom' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'leftTop' | 'leftBottom' | 'rightTop' | 'rightBottom',
+  placement?: TooltipPlacement,
   /** Should fall back to default align config */
   defaultAlign?: boolean,
   /** Tooltip content */

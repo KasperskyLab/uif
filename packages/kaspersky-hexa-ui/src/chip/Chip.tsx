@@ -2,7 +2,7 @@ import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { TextReducer } from '@helpers/index'
 import { ActionButton } from '@src/action-button'
 import { Badge } from '@src/badge'
-import { Tag as AntdTag } from 'antd'
+import AntdTag from 'antd/es/tag'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 

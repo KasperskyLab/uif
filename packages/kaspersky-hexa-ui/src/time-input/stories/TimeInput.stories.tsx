@@ -1,42 +1,28 @@
-import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
-import { validationStatuses } from '@helpers/typesHelpers'
 import { badges } from '@sb/badges'
-import { withMeta } from '@sb/components/Meta'
-import { sbHideControls } from '@sb/helpers'
+import { buildStoryArgTypes, getControlsInclude } from '@sb/components/Documentation'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
 
-import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-
 import MetaData from '../meta.json'
 import { TimeInput } from '../TimeInput'
-import { timeFormat, TimeInputProps } from '../types'
+import { TimeInputProps } from '../types'
+import { defaultArgs, timeInputPropPresentation } from './TimeInput.controls'
 
-const meta: Meta<TimeInputProps> = {
-  title: 'Hexa UI Components/Inputs/TimeInput',
-  component: TimeInput,
-  argTypes: {
-    validationStatus: {
-      control: { type: 'radio' },
-      options: validationStatuses
-    },
-    format: {
-      control: { type: 'radio' },
-      options: timeFormat
-    },
-    ...sbHideControls(['theme'])
-  },
+const Wrapper = styled.div`
+  width: 300px;
+`
+
+export const timeInputStorySettings: Meta<TimeInputProps> = {
+  argTypes: buildStoryArgTypes(timeInputPropPresentation),
   args: {
-    disabled: false,
+    ...defaultArgs,
     testId: 'time-input-test-id',
     klId: 'time-input-kl-id'
   },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
-    docs: {
-      page: withMeta(MetaData)
-    }
+    design: MetaData.pixsoView
   },
   decorators: [
     (Story, context) => (
@@ -46,39 +32,50 @@ const meta: Meta<TimeInputProps> = {
     )
   ]
 }
+
+const meta: Meta<typeof TimeInput> = {
+  title: 'Hexa UI Components/DateTime Pickers/TimeInput',
+  component: TimeInput,
+  tags: ['!autodocs'],
+  includeStories: ['Playground'],
+  excludeStories: ['timeInputStorySettings'],
+  ...timeInputStorySettings
+}
+
 export default meta
 
-const Wrapper = styled.div`
-  width: 300px;
-`
+type Story = StoryObj<TimeInputProps>
 
-export const Basic: StoryObj<TimeInputProps> = {
-  args: {
-    klId: 'time-input'
-  }
+const TimeInputPlayground: React.FC<TimeInputProps> = ({
+  value: valueProp,
+  onChange,
+  ...rest
+}) => {
+  const [value, setValue] = React.useState(valueProp)
+
+  React.useEffect(() => {
+    setValue(valueProp)
+  }, [valueProp])
+
+  return (
+    <TimeInput
+      {...rest}
+      value={value}
+      onChange={(newValue, mask) => {
+        setValue(newValue)
+        onChange?.(newValue, mask)
+      }}
+    />
+  )
 }
 
-export const Variants: StoryObj<TimeInputProps> = {
-  render: (args) => <>
-    HH:mm <TimeInput {...args} format="HH:mm" placeholder="__:__" />
-    <br />
-    HH:mm:ss <TimeInput {...args} format="HH:mm:ss" placeholder="__:__:__" />
-    <br />
-    HH:mm:ss.ms <TimeInput {...args} format="HH:mm:ss.ms" placeholder="__:__:__.___" />
-    <br />
-    h:mm: am/pm <TimeInput {...args} format="h:mm aaa" placeholder="__:__ am" />
-  </>
-}
-
-type PaletteStory = StoryObj<ThemedPaletteProps>
-export const ColorTokens: PaletteStory = {
-  args: {
-    source: {
-      input_datetime_picker: componentColors.input_datetime_picker,
-      calendar_dropdown: componentColors.calendar_dropdown,
-      calendar_dropdown_button: componentColors.calendar_dropdown_button,
-      calendar_preset_button: componentColors.calendar_preset_button
+export const Playground: Story = {
+  name: 'Playground',
+  render: (args) => <TimeInputPlayground {...args} />,
+  parameters: {
+    controls: {
+      include: getControlsInclude(timeInputPropPresentation),
+      sort: 'none'
     }
-  },
-  render: args => <ThemedPalette {...args} />
+  }
 }

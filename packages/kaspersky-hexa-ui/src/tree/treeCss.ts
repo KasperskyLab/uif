@@ -165,6 +165,7 @@ export const treeCss = css<{ checkable?: boolean, interactive?: boolean, disable
         &.ant-tree-treenode-disabled {
           background: none;
 
+          .ant-tree-iconEle,
           .ant-tree-title {
             color: var(--tree--text--disabled);
           }
@@ -179,16 +180,16 @@ export const treeCss = css<{ checkable?: boolean, interactive?: boolean, disable
 
         &:hover .ant-tree-title {
           color: ${(props: ITreeProps) =>
-    props.disableNodeBg
-      ? 'var(--tree--text--enabled)'
-      : 'var(--tree--text--hover)'};
+            props.disableNodeBg
+              ? 'var(--tree--text--enabled)'
+              : 'var(--tree--text--hover)'};
         }
 
         &:active .ant-tree-title {
           color: ${(props: ITreeProps) =>
-    props.disableNodeBg
-      ? 'var(--tree--text--enabled)'
-      : 'var(--tree--text--active)'};
+            props.disableNodeBg
+              ? 'var(--tree--text--enabled)'
+              : 'var(--tree--text--active)'};
         }
 
         &.ant-tree-treenode-active {
@@ -208,6 +209,7 @@ export const treeCss = css<{ checkable?: boolean, interactive?: boolean, disable
           &, &:hover, &:active {
             background-color: transparent;
 
+            .ant-tree-iconEle,
             .ant-tree-title {
               color: var(--tree--text--disabled);
             }

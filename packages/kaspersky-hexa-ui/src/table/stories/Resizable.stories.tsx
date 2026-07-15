@@ -1,13 +1,17 @@
 import { ExpandableText } from '@src/expandable-text'
 import { SectionMessage } from '@src/section-message'
-import { Table } from '@src/table'
-import { ITableProps } from '@src/table/types'
+import { ITableProps, Table } from '@src/table'
 import { Meta } from '@storybook/react'
 import React from 'react'
 
-import { TableViewProps } from '../types'
-
-import { basicArgTypes, basicDataSource, basicTwoColumns, genArgType, Story, Wrapper } from './_commonConstants'
+import {
+  basicArgTypes,
+  basicDataSource,
+  basicTwoColumns,
+  genArgType,
+  Story,
+  Wrapper
+} from './_commonConstants'
 
 const columnsManual = [
   basicTwoColumns[0],
@@ -33,7 +37,7 @@ const columnsManual = [
   }
 ]
 
-const columns: TableViewProps['columns'] = [
+const columns: ITableProps['columns'] = [
   {
     title: <>Status</>,
     key: 'status',
@@ -96,7 +100,8 @@ export const Resizable: Story = {
   ),
   args: {
     columns: columnsManual,
-    dataSource: dataSourceManual
+    dataSource: dataSourceManual,
+    borderedStyle: false
   }
 }
 
@@ -110,7 +115,10 @@ export const ResizableLast: Story = {
           <li>если есть хоть одна колонка таблицы без выставленной ширины, то никаких изменений не последует</li>
           <li>если все колонки имеют свою фиксированную ширину, то у последней колонки значение ширины удаляется (width: null)</li>
         </ul>
-        <div>Чаще всего используется в таблицах с малым количеством колонок и шириной меньше чем ширина контейнера (ширина окна браузера), в результате последняя колонка будет занимать оставшееся свободное место контейнера</div>
+        <div>
+          Чаще всего используется в таблицах с малым количеством колонок и шириной меньше чем ширина контейнера (ширина окна браузера),
+          в результате последняя колонка будет занимать оставшееся свободное место контейнера
+        </div>
       </SectionMessage>
       <Table {...args} />
     </Wrapper>
@@ -118,7 +126,8 @@ export const ResizableLast: Story = {
   args: {
     columns,
     dataSource,
-    resizingMode: 'last'
+    resizingMode: 'last',
+    borderedStyle: false
   }
 }
 
@@ -130,10 +139,16 @@ export const ResizableMax: Story = {
         <div>Три ключевых вычисления:</div>
         <ul>
           <li>если есть хоть одна колонка таблицы без выставленной ширины, то никаких изменений не последует</li>
-          <li>если все колонки имеют свою фиксированную ширину, то вычисляется колонка с наибольшей шириной и значение ширины удаляется (width: null)</li>
-          <li>если в таблице с наибольшей шириной несколько колонок (две по 300px), то значение width очистится для первой из них</li> 
+          <li>
+            если все колонки имеют свою фиксированную ширину,
+            то вычисляется колонка с наибольшей шириной и значение ширины удаляется (width: null)
+          </li>
+          <li>если в таблице с наибольшей шириной несколько колонок (две по 300px), то значение width очистится для первой из них</li>
         </ul>
-        <div>Чаще всего используется в таблицах с малым количеством колонок и шириной меньше чем ширина контейнера (ширина окна браузера), в результате определенная колонка будет занимать оставшееся свободное место контейнера</div>
+        <div>
+          Чаще всего используется в таблицах с малым количеством колонок и шириной меньше чем ширина контейнера (ширина окна браузера),
+          в результате определенная колонка будет занимать оставшееся свободное место контейнера
+        </div>
       </SectionMessage>
       <Table {...args} />
     </Wrapper>
@@ -141,7 +156,8 @@ export const ResizableMax: Story = {
   args: {
     columns,
     dataSource,
-    resizingMode: 'max'
+    resizingMode: 'max',
+    borderedStyle: false
   }
 }
 

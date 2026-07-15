@@ -35,9 +35,9 @@ export type SpaceProps = React.ComponentPropsWithoutRef<'div'> & TestingProps & 
   direction?: 'horizontal' | 'vertical',
   /** @deprecated Use gap instead */
   size?: number,
-  /** 
-   * Gap between elements 
-   * 
+  /**
+   * Gap between elements
+   *
    * closest - 2px,
    * dependent - 4px,
    * related - 8px,

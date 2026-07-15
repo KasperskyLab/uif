@@ -1,0 +1,180 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Space } from '@src/space'
+import { Text } from '@src/typography'
+
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
+
+import { Tag } from '../Tag'
+import * as TagStories from './Tag.stories'
+import { tagDesignPropPresentation, tagGroupDesignPropPresentation } from './Tag.design.properties'
+
+<Meta of={TagStories} name="Tag Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Tag"
+  description='**Tag** — компактный маркировочный элемент для категоризации, фильтрации и обозначения свойств контента'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Tag** маркирует контент по измерению или свойству, используется для категоризации и фильтрации. Реализован на Ant Design Tag с темизацией Hexa UI. Доступны подкомпонент **Tag.Group** (группа тегов) и отдельный компонент **TagReductionGroup** (группа с редукцией при переполнении). Настраиваются **mode**, **size**, **outlined**, **disabled**, **readOnly**, **invalid**, **interactive**, **closable**, **icon**, **children** / **label**, **truncation** и **isResponsive**."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Цветовой режим тега. Доступные значения: `neutral`, `purple`, `grey`, `marina`, `red`, `marengo`, `emerald`, `orange`, `yellow`, `violet`, `grass`, `ai`. По умолчанию — `neutral`."
+      previewGap={4}
+      code='
+    <Tag mode="neutral">neutral</Tag>
+    <Tag mode="emerald">emerald</Tag>
+    <Tag mode="marina">marina</Tag>
+    <Tag mode="red">red</Tag>
+    <Tag mode="marengo">marengo</Tag>
+    <Tag mode="orange">orange</Tag>
+    <Tag mode="yellow">yellow</Tag>
+    <Tag mode="violet">violet</Tag>
+    <Tag mode="grass">grass</Tag>
+    <Tag mode="purple">purple</Tag>
+    <Tag mode="grey">grey</Tag>
+    <Tag mode="ai">ai</Tag>'
+    />
+
+    <DocExampleBlock
+      title="size"
+      previewGap={4}
+      description="Размер тега: влияет на высоту, отступы и размер кнопки закрытия. Доступные значения: `small`, `medium`. По умолчанию — `medium`."
+      code='
+    <Tag size="small">small</Tag>
+    <Tag size="medium">medium</Tag>'
+    />
+
+    <DocExampleBlock
+      title="outlined"
+      description="Контурный вариант: прозрачный фон, рамка и текст в цвете режима. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='
+    <Tag mode="emerald">filled</Tag>
+    <Tag mode="emerald" outlined>outlined</Tag>'
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Недоступное состояние: тег отображается приглушённо и не реагирует на клики. Кнопка закрытия также недоступна. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='
+    <Tag mode="emerald">enabled</Tag>
+    <Tag mode="emerald" disabled>disabled</Tag>'
+    />
+
+    <DocExampleBlock
+      title="readOnly"
+      description="Состояние только для чтения: тег не реагирует на клики, кнопка закрытия недоступна, но семантически отличается от `disabled`. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='
+    <Tag mode="emerald">editable</Tag>
+    <Tag mode="emerald" readOnly>readOnly</Tag>'
+    />
+
+    <DocExampleBlock
+      title="invalid"
+      description="Невалидное состояние: рядом с текстом отображается иконка ошибки, тег не становится интерактивным. Доступные значения: `true`, `false`, `null`. По умолчанию состояние не задано (`null`)."
+      code='
+    <Tag mode="emerald">valid</Tag>
+    <Tag mode="emerald" invalid>invalid</Tag>'
+    />
+
+    <DocExampleBlock
+      title="interactive"
+      description="Включает интерактивные стили hover/active и устанавливает `tabIndex=0`. Доступные значения: `true`, `false`. По умолчанию — `false`. Тег также становится интерактивным при передаче **onClick**, даже если **interactive** не задан."
+      code='
+    <Tag mode="emerald">static</Tag>
+    <Tag mode="emerald" interactive onClick={() => alert("clicked")}>interactive</Tag>'
+    />
+
+    <DocExampleBlock
+      title="onClick"
+      description="Обработчик клика по тегу. При наличии **onClick** тег получает интерактивные стили, если не заданы **disabled**, **readOnly** или **invalid**."
+      code='<Tag mode="emerald" onClick={() => alert("clicked")}>clickable tag</Tag>'
+    />
+
+    <DocExampleBlock
+      title="closable и onClose"
+      description="**closable** добавляет кнопку закрытия на базе **ActionButton**. **onClose** вызывается при нажатии на кнопку, если тег не в состоянии **disabled**. Кнопка закрытия недоступна при **disabled** или **readOnly**. Доступные значения **closable**: `true`, `false`. По умолчанию — `false`."
+      code='
+    <Tag mode="emerald" closable onClose={() => alert("closed")}>closable tag</Tag>
+    <Tag mode="emerald" closable disabled>closable disabled</Tag>'
+    />
+
+    <DocExampleBlock
+      title="icon"
+      description="Иконка перед текстом тега. Принимает React-элемент; к нему добавляется класс `kl-components-tag-icon`. По умолчанию не задана."
+      code='<Tag mode="emerald" icon={<Placeholder />}>with icon</Tag>'
+      scope={{ Placeholder }}
+    />
+
+    <DocExampleBlock
+      title="children и label"
+      description="Текстовое содержимое тега через **children** или **label**. Если переданы оба, используется **children**. Принимают `ReactNode`."
+      code='
+    <Tag mode="emerald">children content</Tag>
+    <Tag mode="emerald" label="label content" />'
+    />
+
+    <DocExampleBlock
+      title="truncation"
+      description="Усечение длинного текстового содержимого. Объект с полями: **maxChars** — максимальное количество символов (значение больше 50 ограничивается до 50); **truncationSymbol** — символ усечения, по умолчанию `...`; **tooltipPosition** — позиция **Tooltip** с полным текстом при усечении."
+      code='
+    <Tag
+      mode="emerald"
+      truncation={{ maxChars: 20, truncationSymbol: "...", tooltipPosition: "bottom" }}
+    >
+      This is a very long tag text that will be truncated
+    </Tag>'
+    />
+
+    <DocExampleBlock
+      title="isResponsive"
+      description="Делает тег адаптивным по ширине контейнера через **TextReducer**: длинный текст усекается с тултипом. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='
+    <div style={{ width: 120 }}>
+      <Tag mode="emerald" isResponsive>Responsive long tag</Tag>
+    </div>'
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Tag** применяют для маркировки и категоризации контента: статусы объектов, метки фильтрации, свойства строк таблицы или карточек. Используйте для атрибутов, которые нужно показывать наглядно рядом с объектом — категорию, тип, уровень или состояние.
+
+Для набора меток в одной строке применяйте **Tag.Group**. Если места недостаточно и часть тегов нужно скрыть с индикатором «+N», используйте **TagReductionGroup**. Для компактного числового или статусного индикатора без развёрнутой текстовой метки выбирайте **Badge**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Space direction="vertical" gap={40} align="start">
+      <Space direction="vertical" gap={16} align="start">
+        <Text type="H3">tag</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(tagDesignPropPresentation)} />
+      </Space>
+
+      <Space direction="vertical" gap={16} align="start">
+        <Text type="H3">tag group</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(tagGroupDesignPropPresentation)} />
+      </Space>
+    </Space>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={TagStories} />
+    <AutodocArgsTable components={Tag} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

@@ -38,7 +38,7 @@ const meta: Meta<WithButtonProps> = {
     firstButtonText: { control: { type: 'text' } },
     firstButtonMode: {
       control: { type: 'select' },
-      options: buttonModes
+      options: [undefined, ...buttonModes]
     },
     secondButtonText: { control: { type: 'text' } },
     secondButtonMode: {
@@ -58,7 +58,7 @@ const meta: Meta<WithButtonProps> = {
     mode: 'default',
     size: 'small',
     firstButtonText: 'OK',
-    firstButtonMode: 'primary',
+    firstButtonMode: undefined,
     secondButtonText: 'Cancel',
     secondButtonMode: 'secondary',
     thirdButtonText: 'Cancel',

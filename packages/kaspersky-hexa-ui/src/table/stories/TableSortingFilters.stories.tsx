@@ -8,9 +8,16 @@ import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 import { ITableProps, Table } from '..'
 import MetaData from '../__meta__/meta.json'
 
-import { basicArgTypes, basicDataSource, BasicRowType, BasicTableStory, basicTwoColumns, Story } from './_commonConstants'
+import {
+  basicArgTypes,
+  basicDataSource,
+  BasicRowType,
+  BasicTableStory,
+  basicTwoColumns,
+  Story
+} from './_commonConstants'
 
-type row = BasicRowType & { index?: number}
+type row = BasicRowType & { index?: number }
 
 const columns = [
   {
@@ -67,7 +74,7 @@ const columns = [
   }
 ] as ITableProps['columns']
 
-const dataSource = basicDataSource.slice(0, 30).map((item, index, arr) => ({
+const dataSource = basicDataSource.map((item, index, arr) => ({
   ...item,
   description: `Description ${arr.length - index}`,
   index: index + 1
@@ -78,11 +85,11 @@ const meta: Meta<ITableProps> = {
   component: Table,
   args: {
     pagination: {
-      pageSize: 10,
       restoreCurrentWhenDataChange: true
     },
     columns,
-    dataSource
+    dataSource,
+    borderedStyle: false
   },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
@@ -109,7 +116,8 @@ export const SortingAndFilters: Story = {
     initialSorting: {
       field: 'name',
       direction: 'asc'
-    }
+    },
+    borderedStyle: false
   },
   argTypes: {
     initialFilters: basicArgTypes.initialFilters,
@@ -157,10 +165,12 @@ export const AttributesSorting: Story = {
             field: 'details'
           }
         ],
-        render: ({ email, city}) => <div>
-          <div>{email}</div>
-          <div>{city}</div>
-        </div>
+        render: ({ email, city }) => (
+          <div>
+            <div>{email}</div>
+            <div>{city}</div>
+          </div>
+        )
       },
       {
         title: 'key',
@@ -170,7 +180,8 @@ export const AttributesSorting: Story = {
         isSortable: true,
         render: (key) => key
       }
-    ]
+    ],
+    borderedStyle: false
   },
   argTypes: {
     initialFilters: basicArgTypes.initialFilters,
@@ -180,7 +191,11 @@ export const AttributesSorting: Story = {
 
 export const FiltersSaving: Story = {
   render: BasicTableStory.bind({}),
-  args: { saveFilters: { storageKey: 'storybook-table-saved-filters' }, onFilterChange: (filter) => console.log(filter) },
+  args: {
+    saveFilters: { storageKey: 'storybook-table-saved-filters' },
+    onFilterChange: (filter) => console.log(filter),
+    borderedStyle: false
+  },
   argTypes: { saveFilters: basicArgTypes.saveFilters }
 }
 
@@ -217,7 +232,8 @@ export const FiltersWithORLogicOperation: Story = {
           }
         ]
       }
-    ] as ITableProps['columns']
+    ] as ITableProps['columns'],
+    borderedStyle: false
   },
   argTypes: {
     initialFilters: basicArgTypes.initialFilters

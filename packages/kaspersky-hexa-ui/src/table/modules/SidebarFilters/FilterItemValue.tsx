@@ -1,34 +1,35 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 
-import { TableColumn } from '../../types'
-import { FilterConfigInternal, FilterType } from '../Filters'
+import { TableRecord } from '../../types'
+import { FilterType } from '../Filters'
 
-import { BooleanItem, DateItem, DateTimeItem, EnumItem, NumberItem, StringItem } from './items'
-import { FilterValidation } from './items/types'
+import {
+  BooleanItem,
+  DateItem,
+  DateTimeItem,
+  EnumItem,
+  NumberItem,
+  StringItem
+} from './items'
+import { FilterItemValueProps } from './types'
 
-type FilterItemValueProps = {
-  index?: number,
-  filter: FilterConfigInternal,
-  onChange: (filter: FilterConfigInternal) => void,
-  columns: TableColumn[]
-} & FilterValidation
-
-export function FilterItemValue ({
-  columns: columnsProps,
+export function FilterItemValue <T extends TableRecord = TableRecord> ({
+  column,
   filter,
   validationMessage,
   ...rest
-}: FilterItemValueProps): JSX.Element {
-  const column = useMemo(() => (
-    columnsProps.find((column) => filter.name === column?.dataIndex)
-  ), [columnsProps, filter.name])
-
+}: FilterItemValueProps<T>): JSX.Element {
   const validationStatus = validationMessage ? 'error' : 'default'
 
   switch (filter.type) {
     case FilterType.Boolean:
       return (
-        <BooleanItem filter={filter} {...rest} />
+        <BooleanItem
+          filter={filter}
+          onStateName={column?.filterType?.type === FilterType.Boolean ? column?.filterType?.onStateName : undefined}
+          offStateName={column?.filterType?.type === FilterType.Boolean ? column?.filterType?.offStateName : undefined}
+          {...rest}
+        />
       )
     case FilterType.DateRange:
       return (
@@ -66,7 +67,12 @@ export function FilterItemValue ({
     }
     case FilterType.Number:
       return (
-        <NumberItem filter={filter} validationStatus={validationStatus} {...rest} />
+        <NumberItem
+          filter={filter}
+          min={column?.filterType?.type === FilterType.Number ? column?.filterType?.min : undefined}
+          validationStatus={validationStatus}
+          {...rest}
+        />
       )
     default:
       return <></>

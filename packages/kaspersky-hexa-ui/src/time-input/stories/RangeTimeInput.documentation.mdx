@@ -1,0 +1,91 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { RangeTimeInput } from '../RangeTimeInput'
+import * as RangeTimeInputStories from './RangeTimeInput.stories'
+
+<Meta of={RangeTimeInputStories} name="RangeTimeInput Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="RangeTimeInput"
+  description="**RangeTimeInput** — поле выбора интервала времени «с — по» с маской ввода"
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="Публичный API выбора диапазона времени в Hexa UI — компонент **RangeTimeInput**. Состоит из двух полей **TimeInput** с разделителем «–». Поддерживает ввод с маской, **format**, **placeholder**, состояния **disabled** и **readOnly**, а также **validationStatus**. Для интервала дат с календарём используйте **RangePicker**. Для одного значения времени — **TimeInput**."
+    />
+
+    <DocExampleBlock
+      title="valueStart / valueEnd"
+      description="Контролируемые значения начала и конца интервала — строки в формате **format**. Изменения передаются через **onChangeStart** и **onChangeEnd**."
+      code={`<RangeTimeInput valueStart="09:00" valueEnd="18:00" />`}
+    />
+
+    <DocExampleBlock
+      title="format"
+      description="Формат отображения времени в обоих полях. Доступные значения: `HH:mm`, `HH:mm:ss`, `HH:mm:ss.ms`, `h:mm aaa`. По умолчанию — формат из дизайн-токенов."
+      code={`<RangeTimeInput format="HH:mm" />
+<RangeTimeInput format="HH:mm:ss" />
+<RangeTimeInput format="h:mm aaa" />`}
+    />
+
+    <DocExampleBlock
+      title="placeholder"
+      description="Подсказка в пустых полях. Если не задана, формируется автоматически из **format** (например, `__:__` для `HH:mm`)."
+      code={`<RangeTimeInput format="HH:mm:ss" placeholder="__:__:__" />`}
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключает оба поля: ввод недоступен. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<RangeTimeInput disabled />`}
+    />
+
+    <DocExampleBlock
+      title="readOnly"
+      description="Режим только для чтения: поля не редактируются. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<RangeTimeInput valueStart="09:00" valueEnd="18:00" readOnly />`}
+    />
+
+    <DocExampleBlock
+      title="validationStatus"
+      description="Визуальный статус валидации полей ввода. Доступные значения: `default`, `error`, `success`. По умолчанию — `default`."
+      code={`<RangeTimeInput validationStatus="default" />
+<RangeTimeInput validationStatus="error" />
+<RangeTimeInput validationStatus="success" />`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**RangeTimeInput** применяют в формах и фильтрах, когда пользователю нужно указать интервал времени без привязки к дате: рабочие часы, временное окно, диапазон в расписании. Единый контрол с двумя полями и общим разделителем удобнее двух отдельных **TimeInput**.
+
+Для интервала дат с календарём используйте **RangePicker**. Для одного значения времени — **TimeInput**. Если нужна кастомная композиция с другим разделителем или промежуточными элементами, соберите два **TimeInput** вручную."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+      <Text type="H3">Дизайн</Text>
+      <Text type="BTR3">
+        Раздел зарезервирован под дизайн-гайдлайны. Содержимое будет добавлено в следующих релизах.
+      </Text>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={RangeTimeInputStories} />
+    <AutodocArgsTable components={RangeTimeInput} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

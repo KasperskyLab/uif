@@ -53,9 +53,8 @@ const SegmentedControlItem = ({
   badgeSize,
   ...rest
 }: SegmentedControlItemProps & {
-    badgeSize?: BadgeSize
-  }
-) => {
+  badgeSize?: BadgeSize
+}) => {
   return (
     <button
       className={cn('kl6-segmented-control-button', className)}
@@ -66,11 +65,11 @@ const SegmentedControlItem = ({
       <span className="text">{text}</span>
       {infoTooltip && (
         <Tooltip text={infoTooltip}>
-          <StatusInfoOutline/>
+          <StatusInfoOutline />
         </Tooltip>
       )}
       {counter && <Badge count={counter.number} mode={counter.mode} size={badgeSize} />}
-      {indicator && <Indicator mode={indicator}/>}
+      {indicator && <Indicator mode={indicator} />}
     </button>
   )
 }
@@ -140,17 +139,19 @@ export const SegmentedControlView = ({
           })
         }
         {
-          Boolean(dropdownItems?.length) && <div className="kl6-segmented-control-expander">
-            <Dropdown
-              overlay={dropdownItems || []}
-              disabled={false}
-              loading={false}
-              trigger={['click']}
-              placement="bottomRight"
-            >
-              <ActionButton icon={<Menu3/>} />
-            </Dropdown>
-          </div>
+          Boolean(dropdownItems?.length) && (
+            <div className="kl6-segmented-control-expander">
+              <Dropdown
+                overlay={dropdownItems || []}
+                disabled={false}
+                loading={false}
+                trigger={['click']}
+                placement="bottomRight"
+              >
+                <ActionButton icon={<Menu3 />} />
+              </Dropdown>
+            </div>
+          )
         }
       </StyledSegmentedControlBar>
       <div>{activeContent && contentData[activeContent](properties)}</div>

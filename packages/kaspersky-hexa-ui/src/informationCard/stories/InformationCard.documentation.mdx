@@ -1,0 +1,162 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { InformationCard } from '../InformationCard'
+import * as InformationCardStories from '../InformationCard.stories'
+import { IconWithBadge } from './constants'
+
+<Meta of={InformationCardStories} name="InformationCard Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="InformationCard"
+  description='**InformationCard** — карточка для представления одной сущности, её состояния и связанных действий'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**InformationCard** группирует данные и действия, относящиеся к одной сущности. Карточка поддерживает layout через **type**, размер через **size**, состояния **selected**, **disabled** и **interactive**, обработчик **onClick**, а также слоты **leftSide**, **title**, **description**, **rightCorner**, **children** и **footer**. Ширину можно задать пропом **width**."
+    />
+
+    <DocExampleBlock
+      title="type"
+      description="Расположение элементов внутри карточки. Доступные значения: `vertical`, `horizontal`, `center`. По умолчанию — `vertical`. Значение `horizontal` раскладывает содержимое в строку, а `center` центрирует элементы по горизонтали."
+      scope={{ IconWithBadge }}
+      code={`
+<InformationCard
+  type="vertical"
+  leftSide={<IconWithBadge />}
+  title="Vertical"
+  description="Default layout"
+/>
+<InformationCard
+  type="horizontal"
+  leftSide={<IconWithBadge />}
+  title="Horizontal"
+  description="Content goes in a row"
+/>
+<InformationCard
+  type="center"
+  leftSide={<IconWithBadge />}
+  title="Center"
+  description="Centered content"
+/>`}
+    />
+
+    <DocExampleBlock
+      title="size"
+      description="Размер внутренних отступов и типографики заголовка. Доступные значения: `small`, `medium`. По умолчанию — `medium`. Для `small` используется типографика `H6`, для `medium` — `H5`."
+      code={`
+<InformationCard size="small" title="Small" description="Compact card" />
+<InformationCard size="medium" title="Medium" description="Default card" />`}
+    />
+
+    <DocExampleBlock
+      title="selected"
+      description="Выбранное состояние карточки. Доступные значения: `true`, `false`. По умолчанию — `false`. При изменении пропа внутреннее состояние карточки синхронизируется с новым значением."
+      code={`
+<InformationCard selected title="Selected" description="Selected card" />
+<InformationCard title="Default" description="Unselected card" />`}
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключённое состояние. Доступные значения: `true`, `false`. По умолчанию — `false`. Отключённая карточка использует disabled-цвета для фона, рамки, заголовка и описания."
+      code='<InformationCard disabled title="Disabled" description="Card is unavailable" />'
+    />
+
+    <DocExampleBlock
+      title="interactive"
+      description="Включает интерактивные состояния hover, active и focus-visible. Доступные значения: `true`, `false`. По умолчанию — `false`. При **interactive**=`true` корневой элемент получает `tabIndex={0}`."
+      code='<InformationCard interactive title="Interactive" description="Focusable card" />'
+    />
+
+    <DocExampleBlock
+      title="onClick"
+      description="Обработчик клика по корневому элементу карточки. Часто используется вместе с **selected** и элементом в **rightCorner** для выбора карточки из списка."
+      code='<InformationCard interactive onClick={() => alert("clicked")} title="Clickable" description="Card with handler" />'
+    />
+
+    <DocExampleBlock
+      title="width"
+      description="Ширина карточки в пикселях или любой строке CSS. По умолчанию — `auto`."
+      code={`
+<InformationCard width={320} title="320 px" description="Numeric width" />
+<InformationCard width="100%" title="100%" description="CSS width string" />`}
+    />
+
+    <DocExampleBlock
+      title="leftSide"
+      description="Необязательный слот слева от основного содержимого: иконка, индикатор, badge или любой другой **ReactNode**."
+      code={`
+<InformationCard
+  leftSide={<span>ICON</span>}
+  title="With left side"
+  description="Slot before content"
+/>`}
+    />
+
+    <DocExampleBlock
+      title="title и description"
+      description="Заголовок и описание в шапке карточки. **title** принимает любой **ReactNode**. **description** принимает строку и отображается отдельным блоком под заголовком."
+      code={`
+<InformationCard title="Heading" description="Short description" />
+<InformationCard title={<span>Custom title</span>} description="String description" />`}
+    />
+
+    <DocExampleBlock
+      title="rightCorner"
+      description="Элемент справа в строке заголовка: переключатель, чекбокс, радио-кнопка или другой контрол. Если **title** не передан, **rightCorner** не рендерится."
+      code={`
+<InformationCard
+  title="Selectable card"
+  description="Right corner control"
+  rightCorner={<input type="checkbox" checked readOnly />}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="children и footer"
+      description="**children** размещаются между шапкой и футером карточки. **footer** рендерится внизу и прижимается к нижней границе за счёт `margin-top: auto`."
+      code={`
+<InformationCard
+  title="Card with content"
+  description="Children and footer example"
+  footer={<button type="button">Action</button>}
+>
+  <div>Custom content</div>
+</InformationCard>`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**InformationCard** используйте, когда нужно показать одну сущность вместе с её состоянием, кратким описанием и доступными действиями: объект в списке, тариф, подключение, лицензию, настройку или другой самостоятельный блок данных. Карточка помогает собрать в одной зоне идентификатор объекта, вторичную информацию и локальные действия без перехода в отдельную страницу.
+
+Для простой группировки произвольного контента без акцента на состоянии сущности выбирайте **Card**. Для сообщений на уровне страницы или раздела используйте **Alert** или **Notification**, а не **InformationCard**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Дизайн</Text>
+    <Text color="secondary" type="BTR3">
+      Раздел зарезервирован под дизайн-гайдлайны. Содержимое будет добавлено в следующих релизах.
+    </Text>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={InformationCardStories} />
+    <AutodocArgsTable components={InformationCard} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

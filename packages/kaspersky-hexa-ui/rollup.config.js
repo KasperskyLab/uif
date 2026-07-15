@@ -1,6 +1,7 @@
 import json from '@rollup/plugin-json'
 import replace from '@rollup/plugin-replace'
 import typescript from '@rollup/plugin-typescript'
+import fg from 'fast-glob'
 import less from 'less'
 import { defineConfig } from 'rollup'
 import cleaner from 'rollup-plugin-cleaner'
@@ -41,12 +42,17 @@ const resolveStyles = (options) => {
   }
 }
 
+const componentEntries = fg.sync('src/*/index.ts', {
+  absolute: false
+})
+
 export default defineConfig([
   {
     input: [
       'src/index.ts',
       'helpers/index.ts',
-      'design-system/index.ts'
+      'design-system/index.ts',
+      ...componentEntries
     ],
     output: [
       {
@@ -93,7 +99,9 @@ export default defineConfig([
       json(),
       postcss({
         inject: true,
-        modules: true,
+        modules: {
+          generateScopedName: `[name]__[local]___[hash:base64:5]${pkg.version}`
+        },
         extensions: ['.css']
       }),
       peerDepsExternal(),

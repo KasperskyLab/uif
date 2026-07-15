@@ -22,8 +22,10 @@ type NotificationButtonProps = {
 export const NotificationButton = (props: NotificationButtonProps): JSX.Element => {
   const { indicator, onClick, testAttributes, ...rest } = useTestAttribute(props)
 
-  return <div className={cn(styles.notificationButton)} {...testAttributes} {...rest}>
-    <Button mode="secondary" iconBefore={<Bell />} onClick={onClick} />
-    {indicator && <Indicator mode="critical" /> }
-  </div>
+  return (
+    <div className={cn(styles.notificationButton)} {...testAttributes} {...rest}>
+      <Button mode="secondary" iconBefore={<Bell />} onClick={onClick} />
+      {indicator && <Indicator mode="critical" />}
+    </div>
+  )
 }

@@ -1,4 +1,5 @@
 import { MakePartial } from '@helpers/typesHelpers'
+import { TableRecord } from '@src/table/types'
 import cloneDeep from 'lodash/cloneDeep'
 
 import { mergeFilterStructures } from './filterUtils'
@@ -8,22 +9,31 @@ import {
   isFilterConfig,
   isGroup,
   isSameItem,
+  isSidebarFilter,
   prefix
 } from './helpers'
-import { FilterConfig, FilterFromColumn, FilterGroup, UnitedFilter } from './types'
+import {
+  FilterConfig,
+  FilterFromColumn,
+  FilterGroup,
+  FilterLogicOperation,
+  SidebarFilter,
+  SidebarFilterInternal,
+  UnitedFilter
+} from './types'
 
 export type FiltersStateManagerConstructor = {
-  logicOperation?: 'AND' | 'OR'
+  logicOperation?: FilterLogicOperation
 }
 
-type ResetFilterFunction = (filterItem: UnitedFilter) => boolean 
+type ResetFilterFunction<T extends TableRecord = TableRecord> = (filterItem: UnitedFilter<T>) => boolean
 
-export class FiltersStateManager {
+export class FiltersStateManager<T extends TableRecord = TableRecord> {
   private listeners: Array<() => void> = []
-  protected rootGroup: FilterGroup
+  protected rootGroup: FilterGroup<T>
 
   constructor (props: FiltersStateManagerConstructor = {}) {
-    const rootGroup: FilterGroup = {
+    const rootGroup: FilterGroup<T> = {
       id: 'root',
       items: [],
       logicOperation: props.logicOperation || 'AND'
@@ -38,31 +48,33 @@ export class FiltersStateManager {
       this.listeners = this.listeners.filter(l => l !== listener)
     }
   }
-    
+
   private notifyListeners (): void {
     this.listeners.forEach(listener => listener())
   }
 
-  public initPredefinedFilters (predefinedFilters: UnitedFilter[]) {
+  public initDefaultFilters (defaultFilters: UnitedFilter<T>[]) {
     assertCorrectFilters({
-      filters: predefinedFilters,
+      filters: defaultFilters,
       message: 'Failed to initialize predefined filters. Format is not correct',
       shouldThrowError: true,
       withPredicate: false
     })
 
-    const newRootGroup = Array.isArray(predefinedFilters)
+    const newRootGroup = Array.isArray(defaultFilters)
       ? {
           id: 'root',
           logicOperation: this.rootGroup.logicOperation,
-          items: cloneDeep(predefinedFilters)
+          items: cloneDeep(defaultFilters)
         }
       : cloneDeep(this.rootGroup)
 
     this.rootGroup = mergeFilterStructures(this.rootGroup, newRootGroup)
-  } 
 
-  public setExternalFilters (externalFilters: UnitedFilter[], groupId: string = 'root') {
+    this.notifyListeners()
+  }
+
+  public setExternalFilters (externalFilters: UnitedFilter<T>[], groupId: string = 'root') {
     const targetGroup = this.findGroup(this.rootGroup, groupId)
     if (!targetGroup) {
       console.warn(`${prefix} External filters wasn't set, because group ${groupId} wasn't found.
@@ -73,20 +85,20 @@ export class FiltersStateManager {
     assertCorrectFilters({
       filters: externalFilters,
       message: 'Failed to set external filters. Format is not correct',
-      shouldThrowError: true  
+      shouldThrowError: true
     })
 
     targetGroup.items = cloneDeep(externalFilters)
     this.notifyListeners()
   }
 
-  public setExternalSidebarFilters (externalFilters: FilterConfig[]) {
-    const nonSidebarFilters = this.rootGroup.items.filter(filter => !isFilterConfig(filter))
+  public setExternalSidebarFilters (externalFilters: (SidebarFilter<T> | SidebarFilterInternal<T>)[]) {
+    const nonSidebarFilters = this.rootGroup.items.filter(filter => !isSidebarFilter(filter))
     this.rootGroup.items = [...nonSidebarFilters, ...cloneDeep(externalFilters)]
     this.notifyListeners()
   }
 
-  public addFilter (filter: FilterConfig | FilterFromColumn, groupId: string = 'root'): void {
+  public addFilter (filter: FilterConfig | FilterFromColumn<T>, groupId: string = 'root'): void {
     const targetGroup = this.findGroup(this.rootGroup, groupId)
     if (!targetGroup) {
       console.warn(`${prefix} Filter wasn't added, because group ${groupId} wasn't found. \n Filter: ${filter}`)
@@ -119,18 +131,18 @@ export class FiltersStateManager {
     this.notifyListeners()
   }
 
-  public removeFilter (filter: FilterConfig | FilterFromColumn, groupId: string = 'root'): void {
+  public removeFilter (filter: UnitedFilter<T>, groupId: string = 'root'): void {
     const targetGroup = this.findGroup(this.rootGroup, groupId)
     if (!targetGroup) {
       console.warn(`${prefix} Filter wasn't removed, because group ${groupId} wasn't found. \n Filter: ${filter}`)
       return
     }
 
-    targetGroup.items = targetGroup.items.filter((item) => !(isFilter(item) && isSameItem(item, filter)))
+    targetGroup.items = targetGroup.items.filter(item => !isSameItem(item, filter))
     this.notifyListeners()
   }
 
-  // TODO: добавить как аргумент itemsToGroup, и если они есть, то удалять их из своих групп и добавлять в новую
+  // TODO: добавить как аргумент itemsToGroup, и еѝли они еѝть, то удалѝть их из ѝвоих групп и добавлѝть в новую
   public createGroup (groupProps: MakePartial<FilterGroup, 'items'>, parentGroupId: string = 'root'): void {
     const targetGroup = this.findGroup(this.rootGroup, parentGroupId)
     if (!targetGroup) {
@@ -155,7 +167,39 @@ export class FiltersStateManager {
     this.notifyListeners()
   }
 
-  resetFilters (groupId: string = 'root', filterFunction: ResetFilterFunction = () => false) {
+  public removeGroup (groupId: string): void {
+    if (groupId === 'root') {
+      console.warn(`${prefix} Can't remove root group`)
+      return
+    }
+
+    const parentGroup = this.findParentGroup(groupId)
+    if (!parentGroup) {
+      console.warn(`${prefix} Group ${groupId} wasn't removed. Parent group not found`)
+      return
+    }
+
+    if (!parentGroup.items.find(item => isGroup(item) && item.id === groupId)) {
+      console.warn(`${prefix} Group ${groupId} wasn't removed. It wasn't found in FilterApi structure`)
+      return
+    }
+
+    parentGroup.items = parentGroup.items.filter(item => !(isGroup(item) && item.id === groupId))
+    this.notifyListeners()
+  }
+
+  public setGroupLogicOperation (groupId: string, logicOperation: FilterLogicOperation): void {
+    const targetGroup = this.findGroup(this.rootGroup, groupId)
+    if (!targetGroup) {
+      console.warn(`${prefix} Group logic operation wasn't updated, because group ${groupId} wasn't found`)
+      return
+    }
+
+    targetGroup.logicOperation = logicOperation
+    this.notifyListeners()
+  }
+
+  resetFilters (groupId: string = 'root', filterFunction: ResetFilterFunction<T> = () => false) {
     const targetGroup = this.findGroup(this.rootGroup, groupId)
     if (!targetGroup) {
       console.warn(`${prefix} Filters wasn't reset, because group ${groupId} wasn't found.`)
@@ -164,34 +208,31 @@ export class FiltersStateManager {
     targetGroup.items = targetGroup.items.filter(filterFunction)
     this.notifyListeners()
   }
-    
+
   public ungroupGroup (groupId: string): void {
     if (groupId === 'root') {
       console.warn(`${prefix} Can't ungroup root group`)
       return
     }
-    
-    const parentGroup = this.findParentGroup(this.rootGroup, {
-      id: groupId,
-      items: []
-    })
+
+    const parentGroup = this.findParentGroup(groupId)
     if (!parentGroup) {
       console.warn(`${prefix} Group ${groupId} wasn't ungrouped. Parent group not found`)
       return
     }
-    
+
     const groupIndex = parentGroup.items.findIndex((item) => !isFilter(item) && item.id === groupId)
     if (groupIndex === -1) {
       console.warn(`${prefix} Group ${groupId} wasn't ungrouped. It wasn't found in FilterApi structure.`)
       return
     }
-    
+
     const groupItems = (parentGroup.items[groupIndex] as FilterGroup).items
     parentGroup.items.splice(groupIndex, 1, ...groupItems)
     this.notifyListeners()
   }
 
-  public getGroupItems (groupId: string): UnitedFilter[] {
+  public getGroupItems (groupId: string): UnitedFilter<T>[] {
     const targetGroup = this.findGroup(this.rootGroup, groupId)
 
     if (!targetGroup) {
@@ -206,7 +247,11 @@ export class FiltersStateManager {
     return this.getGroupItems('root')
   }
 
-  private findGroup (group: FilterGroup, groupId: string): FilterGroup | null {
+  public getSidebarFilters () {
+    return this.getRootGroupFilters().filter(isSidebarFilter)
+  }
+
+  private findGroup (group: FilterGroup<T>, groupId: string): FilterGroup<T> | null {
     if (group.id === groupId) return group
     for (const item of group.items) {
       if (isGroup(item)) {
@@ -229,17 +274,23 @@ export class FiltersStateManager {
     return !!this.findGroup(parentGroup, groupToCheckId)
   }
 
-  private findParentGroup (group: FilterGroup, item: UnitedFilter): FilterGroup | null {
-    const itemIndex = group.items.findIndex(i => isSameItem(i, item))
-    if (itemIndex !== -1) return group
+  private findParentGroup (groupId: string): FilterGroup<T> | null {
+    const item = { id: groupId, items: [] }
 
-    for (const groupItem of group.items) {
-      if (isGroup(groupItem)) {
-        const found = this.findParentGroup(groupItem, item)
-        if (found) return found
+    const findParent = (group: FilterGroup<T>): FilterGroup<T> | null => {
+      const itemIndex = group.items.findIndex(i => isSameItem(i, item))
+      if (itemIndex !== -1) return group
+
+      for (const groupItem of group.items) {
+        if (isGroup(groupItem)) {
+          const found = findParent(groupItem)
+          if (found) return found
+        }
       }
+
+      return null
     }
 
-    return null
+    return findParent(this.rootGroup)
   }
 }

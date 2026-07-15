@@ -1,0 +1,119 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Calendar } from '../Calendar'
+import * as DatePickerStories from './DatePicker.stories'
+
+<Meta of={DatePickerStories} name="DatePicker Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="DatePicker"
+  description="**DatePicker** — поле выбора даты с календарём, маской ввода и опциональным выбором времени"
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="Публичный API выбора даты в Hexa UI — компонент **Calendar** (одна дата). Построен на стилизованном DatePicker из Ant Design и rc-picker с темизацией поля ввода Hexa UI. **Calendar** поддерживает ввод с маской, выпадающий календарь, очистку значения, **showTime**, **format**, **placeholder**, пресеты **presets**, ограничение дат **disabledDate**, состояния **disabled** и **readonly**, а также **validationStatus**. Для диапазонов дат используйте **RangePicker** (отдельный раздел в Storybook). Для интервала времени — **RangeTimeInput**."
+    />
+
+    <DocExampleBlock
+      title="value"
+      description="Контролируемое значение — объект `Date` или `null`, если дата не выбрана. По умолчанию — `null`. Изменения передаются через **onChange**."
+      code={`<Calendar value={null} />
+<Calendar value={new Date()} />`}
+    />
+
+    <DocExampleBlock
+      title="showTime"
+      description="Добавляет панель выбора времени в выпадающем календаре. Доступные значения: `true`, `false`. По умолчанию — `false`. Без выбора времени пользователем при закрытии панели время сбрасывается на полночь."
+      code='
+    <Calendar />
+    <Calendar showTime />'
+    />
+
+    <DocExampleBlock
+      title="format"
+      description="Формат отображения даты в поле. Строка преобразуется для `date-fns`. Если не задан, используется формат из текущей локали приложения."
+      code='
+    <Calendar />
+    <Calendar format="DD.MM.YYYY" />'
+    />
+
+    <DocExampleBlock
+      title="placeholder"
+      description="Подсказка в пустом поле. Если не задан, подставляется placeholder из локали (зависит от **showTime**)."
+      code='
+    <Calendar />
+    <Calendar placeholder="Выберите дату" />'
+    />
+
+    <DocExampleBlock
+      title="presets"
+      description="Массив быстрых вариантов в подвале календаря: каждый элемент — **title** (подпись) и **value** (дата). По клику значение применяется и панель закрывается."
+      code={`<Calendar presets={[{ title: 'Сегодня', value: new Date() }]} />
+<Calendar showTime presets={[{ title: 'Сейчас', value: new Date() }]} />`}
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключает поле и календарь: ввод и открытие панели недоступны, иконка очистки не показывается. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='
+    <Calendar />
+    <Calendar disabled />'
+    />
+
+    <DocExampleBlock
+      title="readonly"
+      description="Режим только для чтения: поле ведёт себя как отключённое (**disabled** на уровне picker). Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<Calendar value={new Date()} />
+<Calendar value={new Date()} readonly />`}
+    />
+
+    <DocExampleBlock
+      title="validationStatus"
+      description="Визуальный статус валидации поля ввода. Доступные значения: `default`, `error`, `success`. По умолчанию — `default`."
+      code='
+    <Calendar validationStatus="default" />
+    <Calendar validationStatus="error" />
+    <Calendar validationStatus="success" />'
+    />
+
+    <DocExampleBlock
+      title="disabledDate"
+      description="Функция, возвращающая `true` для дат, недоступных в календаре. Не блокирует ручной ввод в поле — только выбор в панели."
+      code={`<Calendar disabledDate={(current) => current && current < new Date()} />`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**DatePicker** применяют в формах, фильтрах и панелях настроек, когда пользователю нужно указать конкретную дату или момент времени: период отчёта, срок действия, дату события. Поле сочетается с подписями **Field**, группировкой в **Grid** и сообщениями об ошибке рядом с полем.
+
+Для интервала «с — по» в макетах используйте **RangePicker**, а не два отдельных **Calendar**, если нужен единый контрол диапазона и пресеты периода. Для интервала только времени — **RangeTimeInput**. Для простого текстового ввода без календаря подойдёт **Textbox**; для выбора из фиксированного списка — **Select** или **SegmentedButton**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+      <Text type="H3">Дизайн</Text>
+      <Text type="BTR3">
+        Раздел зарезервирован под дизайн-гайдлайны. Содержимое будет добавлено в следующих релизах.
+      </Text>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={DatePickerStories} />
+    <AutodocArgsTable components={Calendar} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

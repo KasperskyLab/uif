@@ -1,0 +1,198 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, DocExampleBlock, DocPageHeader, DocPageLayout, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Scrollbar } from '../Scrollbar'
+import * as ScrollbarStories from '../Scrollbar.stories'
+import { scrollbarPropPresentation } from './Scrollbar.controls'
+
+<Meta of={ScrollbarStories} name="Scrollbar Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Scrollbar"
+  description='**Scrollbar** — прокручиваемый контейнер с кастомными полосами прокрутки в стиле Hexa UI'
+/>
+
+<Tabs defaultActiveKey="description" destroyInactiveTabPane>
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Scrollbar** оборачивает прокручиваемую область и рендерит кастомные вертикальные и горизонтальные треки поверх `react-custom-scrollbars-2`. Компонент принимает содержимое через **children**, поддерживает поведение **autoHide**, **autoHeight**, настройку **thumbMinSize**, SSR-режим **universal**, а также пробрасывает **ref** к экземпляру `Scrollbars`. Внешний вид полосы прокрутки синхронизируется с темой Hexa UI через **theme**."
+    />
+
+    <DocExampleBlock
+      title="children"
+      description="Содержимое прокручиваемой области. Скролл появляется, когда размеры содержимого превышают ограничения контейнера по высоте или ширине."
+      code={`
+<Scrollbar style={{ width: 400, height: 200 }}>
+  <div style={{ minWidth: 560 }}>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisi justo, interdum ut
+      cursus ac, imperdiet non enim. Ut ultrices quis purus in accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisi justo, interdum ut
+      cursus ac, imperdiet non enim. Ut ultrices quis purus in accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisi justo, interdum ut
+      cursus ac, imperdiet non enim. Ut ultrices quis purus in accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisi justo, interdum ut
+      cursus ac, imperdiet non enim. Ut ultrices quis purus in accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisi justo, interdum ut
+      cursus ac, imperdiet non enim. Ut ultrices quis purus in accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisi justo, interdum ut
+      cursus ac, imperdiet non enim. Ut ultrices quis purus in accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisi justo, interdum ut
+      cursus ac, imperdiet non enim. Ut ultrices quis purus in accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisi justo, interdum ut
+      cursus ac, imperdiet non enim. Ut ultrices quis purus in accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisi justo, interdum ut
+      cursus ac, imperdiet non enim. Ut ultrices quis purus in accumsan. 
+    </p>
+  </div>
+</Scrollbar>`}
+    />
+
+    <DocExampleBlock
+      title="autoHide"
+      description="Скрывает треки вне активного взаимодействия. Доступные значения: `true`, `false`. Поведение скрытия можно дополнительно настроить через **autoHideTimeout** и **autoHideDuration**."
+      code={`
+<Scrollbar autoHide style={{ width: 400, height: 200 }}>
+  <div style={{ minWidth: 560 }}>
+    <p>
+      Наведите курсор на контейнер или начните прокрутку, чтобы показать кастомные треки.
+    </p>
+  </div>
+</Scrollbar>`}
+    />
+
+    <DocExampleBlock
+      title="autoHeight, autoHeightMin и autoHeightMax"
+      description="Включает адаптивную высоту контейнера по содержимому. **autoHeightMin** и **autoHeightMax** задают рабочий диапазон, внутри которого контейнер растёт без ручного изменения `style.height`."
+      code={`
+<Scrollbar autoHeight autoHeightMin={120} autoHeightMax={220} style={{ width: 400 }}>
+  <div style={{ minWidth: 560 }}>
+    <p>
+      Контейнер растёт вместе с содержимым до верхней границы и дальше остаётся прокручиваемым.
+    </p>
+  </div>
+</Scrollbar>`}
+    />
+
+    <DocExampleBlock
+      title="thumbMinSize"
+      description="Минимальный размер ползунка в пикселях. Полезен для длинного содержимого, когда вычисленный thumb становится слишком маленьким для взаимодействия."
+      code={`
+<Scrollbar thumbMinSize={24} style={{ width: 400, height: 200 }}>
+  <div style={{ minWidth: 560 }}>
+    <p>Scrollbar с компактным размером ползунка.</p>
+  </div>
+</Scrollbar>
+<Scrollbar thumbMinSize={80} style={{ width: 400, height: 200 }}>
+  <div style={{ minWidth: 560 }}>
+    <p>Scrollbar с увеличенным размером ползунка.</p>
+  </div>
+</Scrollbar>`}
+    />
+
+    <DocExampleBlock
+      title="universal"
+      description="SSR-совместимый режим для сценариев, где компонент сначала рендерится на сервере, а затем гидратируется в браузере. Доступные значения: `true`, `false`."
+      code='<Scrollbar universal style={{ width: 400, height: 200 }}><div style={{ minWidth: 560 }}><p>Scrollbar для SSR-сценария.</p></div></Scrollbar>'
+    />
+
+    <DocExampleBlock
+      title="ref"
+      description="**ref** пробрасывается к экземпляру `Scrollbars`, поэтому доступны императивные методы библиотеки: `scrollToTop`, `scrollToBottom`, `scrollLeft`, `getValues` и другие."
+      code={`
+function Example() {
+  const ref = React.useRef(null)
+
+      return (
+        <>
+      <button onClick={() => ref.current?.scrollToTop()}>Прокрутить вверх</button>
+      <button onClick={() => ref.current?.scrollToBottom()}>Прокрутить вниз</button>
+      <Scrollbar ref={ref} style={{ width: 400, height: 200 }}>
+        <div style={{ minWidth: 560 }}>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisi justo, interdum ut
+            cursus ac, imperdiet non enim. Ut ultrices quis purus in accumsan.
+          </p>
+        </div>
+      </Scrollbar>
+    </>
+  )
+}
+
+<Example />`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Scrollbar** — полоса прокрутки для просмотра содержимого, размеры которого превышают размеры контейнера, в который это содержимое размещено.
+
+Используйте компонент в ограниченных по размеру областях интерфейса, где контент должен оставаться доступным без перестройки всего экрана: в боковых панелях, длинных списках, содержимом модальных окон, карточках и других контейнерах с фиксированной или предсказуемой высотой. Если блок может естественно расти вместе с контентом, отдельный прокручиваемый контейнер обычно не нужен. Не превращайте в **Scrollbar** всю страницу: для общего скролла экрана оставляйте нативное поведение макета."
+    />
+
+    <DocExampleBlock
+      title="vertical"
+      description="Вертикальная ориентация используется, когда содержимое превышает размеры контейнера по высоте."
+      codeBlock="hidden"
+      code={`
+<Scrollbar style={{ width: 400, height: 200 }}>
+  <p style={{ margin: 0 }}>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisi justo, interdum ut
+    cursus ac, imperdiet non enim. Ut ultrices quis purus in accumsan. Duis nec velit eu odio
+    scelerisque gravida nec in velit. Etiam id cursus mi, sed porttitor felis. Proin cursus lacus
+    erat, vel congue arcu viverra ut. Phasellus ornare nisl sodales dui pretium, et sagittis ex
+    feugiat. Vivamus sollicitudin molestie tortor ac pretium. Suspendisse lectus purus, tincidunt
+    congue purus nec, bibendum efficitur odio.
+  </p>
+</Scrollbar>`}
+    />
+
+    <DocExampleBlock
+      title="horizontal"
+      description="Горизонтальная ориентация используется, когда содержимое превышает размеры контейнера по ширине."
+      codeBlock="hidden"
+      code={`
+<Scrollbar style={{ width: 400, height: 80 }}>
+  <p style={{ width: 800, margin: 0 }}>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisi justo, interdum ut
+    cursus ac, imperdiet non enim. Ut ultrices quis purus in accumsan.
+  </p>
+</Scrollbar>`}
+    />
+
+    <DocExampleBlock
+      title="both"
+      description="Если содержимое превышает размеры контейнера по обоим параметрам, используются два скроллбара."
+      codeBlock="hidden"
+      code={`
+<Scrollbar style={{ width: 400, height: 200 }}>
+  <div style={{ width: 600 }}>
+    <p style={{ margin: 0 }}>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisi justo, interdum ut
+      cursus ac, imperdiet non enim. Ut ultrices quis purus in accumsan. Duis nec velit eu odio
+      scelerisque gravida nec in velit. Etiam id cursus mi, sed porttitor felis. Proin cursus lacus
+      erat, vel congue arcu viverra ut. Phasellus ornare nisl sodales dui pretium, et sagittis ex
+      feugiat. Vivamus sollicitudin molestie tortor ac pretium. Suspendisse lectus purus, tincidunt
+      congue purus nec, bibendum efficitur odio.
+    </p>
+  </div>
+</Scrollbar>`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane disabled tab="Дизайнеру" key="design">
+    <Text type="H3">Дизайн</Text>
+    <Text type="BTR3">
+      Раздел зарезервирован под дизайн-гайдлайны. Содержимое будет добавлено в следующих релизах.
+    </Text>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={ScrollbarStories} />
+    <AutodocArgsTable components={Scrollbar} />
+  </Tabs.TabPane>
+
+</Tabs>
+
+</DocPageLayout>

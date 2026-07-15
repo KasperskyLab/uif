@@ -1,0 +1,175 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DocPageHeader, DocPageLayout } from '@sb/components/Documentation'
+
+<Meta title="Hexa UI Components/Витрина компонентов" />
+
+export const buildStoryId = (path) =>
+  path
+    .toLowerCase()
+    .replace(/[^a-z0-9/ ]/g, '')
+    .replace(/[ /]+/g, '-')
+    .replace(/-+/g, '-')
+
+export const buildDocsHref = (path, page = 'docs') => `/?path=/docs/${buildStoryId(path)}`
+
+export const groups = [
+  {
+    title: 'Контролы действий',
+    description: 'Компоненты для явных действий пользователя',
+    items: [
+      { label: 'ActionButton', path: 'Hexa UI Components/ActionButton' },
+      { label: 'Button', path: 'Hexa UI Components/Button', page: 'documentation' },
+      { label: 'SplitButton', path: 'Hexa UI Components/SplitButton', page: 'documentation' },
+      { label: 'Link', path: 'Hexa UI Components/Link' },
+
+      
+    ]
+  },
+    {
+    title: 'Элементы выбора',
+    description: 'Компоненты для выбора опций.',
+    items: [
+      { label: 'Checkbox', path: 'Hexa UI Components/Checkbox' },
+      { label: 'Radio', path: 'Hexa UI Components/Radio' },
+      { label: 'Toggle', path: 'Hexa UI Components/Toggle' },
+      { label: 'ToggleButton', path: 'Hexa UI Components/ToggleButton' },
+      { label: 'SegmentedButton', path: 'Hexa UI Components/SegmentedButton' },
+      { label: 'SegmentedControl', path: 'Hexa UI Components/SegmentedControl' },
+      { label: 'Dropdown', path: 'Hexa UI Components/Dropdown' },
+      { label: 'QuickFilter', path: 'Hexa UI Components/QuickFilter' },
+      
+    ]
+  },
+  {
+    title: 'Поля ввода и формы',
+    description: 'Компоненты для ввода значений, составления форм, фильтрации и редактирования данных.',
+    items: [
+      { label: 'Textbox (Input Text)', path: 'Hexa UI Components/Inputs/Input' },
+      { label: 'InputPassword', path: 'Hexa UI Components/Inputs/InputPassword' },
+      { label: 'Textarea', path: 'Hexa UI Components/Inputs/Textarea' },
+      { label: 'Search', path: 'Hexa UI Components/Inputs/Search' },
+      { label: 'Select', path: 'Hexa UI Components/Select' },
+      { label: 'TreeSelect', path: 'Hexa UI Components/TreeSelect' },
+      { label: 'DatePicker', path: 'Hexa UI Components/DateTime Pickers/DatePicker' },
+      { label: 'RangePicker', path: 'Hexa UI Components/DateTime Pickers/RangePicker' },
+      { label: 'RangeTimeInput', path: 'Hexa UI Components/DateTime Pickers/RangeTimeInput' },
+      { label: 'TimeInput', path: 'Hexa UI Components/DateTime Pickers/TimeInput' },
+      { label: 'CodeViewer', path: 'Hexa UI Components/Inputs/CodeViewer' },
+      { label: 'Field', path: 'Hexa UI Components/Field' },
+      { label: 'FieldSet', path: 'Hexa UI Components/FieldSet' },
+      { label: 'FormLabel', path: 'Hexa UI Components/FormLabel' },
+      { label: 'TenantFilter', path: 'Hexa UI Components/TenantFilter' },
+      { label: 'WeeklySchedule', path: 'Hexa UI Components/WeeklySchedule' },
+      { label: 'RichTextEditor', path: 'Hexa UI Components/RichTextEditor' },
+      { label: 'Upload', path: 'Hexa UI Components/Upload' }
+    ]
+  },
+  {
+    title: 'Навигация и каркас страниц',
+    description: 'Компоненты для построения структуры экранов, маршрутов, панелей и пользовательских сценариев навигации.',
+    items: [
+      { label: 'AnchorNavigation', path: 'Hexa UI Components/AnchorNavigation' },
+      { label: 'Breadcrumbs', path: 'Hexa UI Components/Breadcrumbs' },
+      { label: 'Tabs', path: 'Hexa UI Components/Tabs' },
+      { label: 'Menu', path: 'Hexa UI Components/Menu' },
+      { label: 'Submenu', path: 'Hexa UI Components/Submenu' },
+      { label: 'HorizontalNav', path: 'Hexa UI Components/HorizontalNav' },
+      { label: 'TopNavigation', path: 'Hexa UI Components/TopNavigation' },
+      { label: 'PageHeader', path: 'Hexa UI Components/PageHeader' },
+      { label: 'Sidebar', path: 'Hexa UI Components/Sidebar' },
+      { label: 'Toolbar', path: 'Hexa UI Components/Toolbar' },
+      { label: 'Pagination', path: 'Hexa UI Components/Pagination' },
+      { label: 'Wizard', path: 'Hexa UI Components/Wizard' },
+      { label: 'Modal', path: 'Hexa UI Components/Modal' },
+      { label: 'Layout', path: 'Hexa UI Components/Layout' },
+      { label: ' - Grid', path: 'Hexa UI Components/Layout/Grid' },
+      { label: ' - Space', path: 'Hexa UI Components/Layout/Space' },
+      { label: 'Panel', path: 'Hexa UI Components/Panel' },
+      { label: 'PanelGroup', path: 'Hexa UI Components/Panel/PanelGroup' }
+    ]
+  },
+  {
+    title: 'Данные и контент',
+    description: 'Компоненты для отображения таблиц, деревьев, карточек, текстового и медиаконтента.',
+    items: [
+      { label: 'Table', path: 'Hexa UI Components/Table' },
+      { label: 'Tree', path: 'Hexa UI Components/Tree' },
+      { label: 'Card', path: 'Hexa UI Components/Card' },
+      { label: 'InformationCard', path: 'Hexa UI Components/InformationCard' },
+      { label: 'LicenseCard', path: 'Hexa UI Components/LicenseCard' },
+      { label: 'Status Card', path: 'Hexa UI Components/Status Card' },
+      { label: 'Gallery', path: 'Other/Gallery' },
+      { label: 'Markdown', path: 'Other/Markdown' },
+      { label: 'CodeCompare', path: 'Hexa UI Components/CodeCompare' },
+      { label: 'Terminal', path: 'Hexa UI Components/Terminal' },
+      { label: 'TextDiff', path: 'Hexa UI Components/TextDiff' },
+      { label: 'ExpandableText', path: 'Hexa UI Components/ExpandableText' },
+      { label: 'Expand', path: 'Hexa UI Components/Expand' },
+      { label: 'Divider', path: 'Hexa UI Components/Divider' },
+      { label: 'LockGroup', path: 'Hexa UI Components/LockGroup' }
+    ]
+  },
+  {
+    title: 'Нотификации и состояния',
+    description: 'Компоненты обратной связи, индикации статусов, загрузки и подсказок.',
+    items: [
+      { label: 'Alert', path: 'Hexa UI Components/Alert' },
+      { label: 'Badge', path: 'Hexa UI Components/Badge' },
+      { label: 'Chip', path: 'Hexa UI Components/Chip' },
+      { label: 'HelpMessage', path: 'Hexa UI Components/HelpMessage' },
+      { label: 'Indicator', path: 'Hexa UI Components/Indicator' },
+      { label: 'Loader', path: 'Hexa UI Components/Loader' },
+      { label: 'LoadingOverlay', path: 'Hexa UI Components/LoadingOverlay' },
+      { label: 'Notification', path: 'Hexa UI Components/Notification' },
+      { label: 'Popover', path: 'Hexa UI Components/Popover' },
+      { label: 'Placeholder', path: 'Hexa UI Components/Placeholder' },
+      { label: 'ProgressBar', path: 'Hexa UI Components/ProgressBar' },
+      { label: 'SectionMessage', path: 'Hexa UI Components/SectionMessage' },
+      { label: 'Severity', path: 'Other/Severity' },
+      { label: 'Skeleton', path: 'Hexa UI Components/Skeleton' },
+      { label: 'Status', path: 'Hexa UI Components/Status' },
+      { label: 'Status Group', path: 'Hexa UI Components/Status/Group' },
+      { label: 'Tag', path: 'Hexa UI Components/Tag' },
+      { label: 'Tag Group', path: 'Hexa UI Components/Tag/Group' },
+      { label: 'Tooltip', path: 'Hexa UI Components/Tooltip' }
+    ]
+  },
+  {
+    title: 'Служебные и инфраструктурные',
+    description: 'Компоненты и вспомогательные блоки, которые используются для окружения, локали и составных сценариев.',
+    items: [
+      { label: 'Locale', path: 'Other/Locale' },
+      { label: 'Scrollbar / Browser', path: 'Hexa UI Components/Scrollbar/Browser' },
+      { label: 'Scrollbar', path: 'Hexa UI Components/Scrollbar' }
+    ]
+  }
+]
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Hexa UI Components"
+  description="Разводящая страница со списком публичных компонентов Hexa UI. Компоненты сгруппированы по назначению, чтобы было проще быстро перейти в нужный раздел документации."
+/>
+
+<p>
+  В список включены основные компоненты и самостоятельные семейства компонентов из раздела
+  <strong> Hexa UI Components</strong>. Служебные examples, presets, templates и узкоспециализированные demo-страницы
+  не вынесены отдельно: их можно открыть уже внутри документации конкретного компонента.
+</p>
+
+{groups.map(({ title, description, items }) => (
+  <section key={title}>
+    <h2>{title}</h2>
+    <p>{description}</p>
+    <ul>
+      {items.map(({ label, path, page }) => (
+        <li key={path}>
+          <a href={buildDocsHref(path, page)}>{label}</a>
+        </li>
+      ))}
+    </ul>
+  </section>
+))}
+
+</DocPageLayout>

@@ -40,7 +40,7 @@ export const inputInnerStyles = css`
     &, & input {
       ${fontStyles(inputFont)}
       color: ${fromProps('enabled.color')};
-      background-color: ${fromProps('enabled.background')};
+      background-color: var(--bg--neutral--level_0);
 
       ::placeholder {
         color: ${fromProps('enabled.placeholderColor')};
@@ -49,7 +49,7 @@ export const inputInnerStyles = css`
 
     // normal
     border-radius: ${inputSize.borderRadius};
-    background-color: ${fromProps('enabled.background')};
+    background-color: var(--bg--neutral--level_0);
     border: 1px solid ${fromProps('enabled.border')};
     box-shadow: unset;
 
@@ -80,7 +80,7 @@ export const inputInnerStyles = css`
 
     // disabled & readonly
     &.kl6-textbox-disabled, &.kl6-textbox-readonly {
-      background-color: ${fromProps('disabled.background')};
+      background-color: var(--bg--neutral--level_2);
       color: ${fromProps('disabled.color')};
       border: 1px solid ${fromProps('disabled.border')};
 
@@ -134,12 +134,12 @@ export const inputInnerStyles = css`
     // https://css-tricks.com/snippets/css/change-autocomplete-styles-webkit-browsers/
     & {
       --autofill-color: ${fromProps('enabled.color')};
-      --autifill-bg-color: ${fromProps('enabled.background')};
+      --autifill-bg-color: var(--bg--neutral--level_0);
 
       [readonly],
       :disabled {
         --autofill-color: ${fromProps('disabled.color')};
-        --autifill-bg-color: ${fromProps('disabled.background')};
+        --autifill-bg-color: var(--bg--neutral--level_2);
       }
 
       :-webkit-autofill,
@@ -228,36 +228,55 @@ export const inputTextareaStyles = css`
   }
 `
 
-export const inputTextareaContainerStyles = css<{cssConfig: InputCssConfig, disabled?: boolean}>`
+export const inputTextareaContainerStyles = css<{ cssConfig: InputCssConfig, disabled?: boolean }>`
   width: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
-  
-  textarea {
+
+  border-radius: ${inputSize.borderRadius};
+  border: 1px solid ${fromProps('enabled.border')};
+  overflow: hidden;
+  transition: all 0.3s, height 0s;
+
+  && textarea.ant-input {
     padding: 6px 12px;
+    border: none;
   }
 
-  &&&.kl6-textbox-textarea-has-counter {
+  &&&.kl6-textbox-textarea-has-counter:not([disabled]):not(:has(textarea[readonly])) {
     textarea {
       padding-bottom: ${inputTextLineHeigt + inputPaddingTop}px; 
     }
   }
 
   .kl6-textbox-textarea-counter {
-    width: calc(100% - 20px);
+    width: calc(100% - 17px);
     position: absolute;
     bottom: 1px;
     left: 1px;
-    border-radius: 8px;
+    border-radius: 0 0 0 8px;
     padding-top: 4px;
     padding-bottom: 5px;
     padding-left: 11px;
     transition: background-color 0.3s;
-    background-color: ${fromProps('enabled.background')};
+    background-color: var(--bg--neutral--level_0);
   }
 
-  &[disabled] .kl6-textbox-textarea-counter {
-    background-color: ${fromProps('disabled.background')};
+  &[disabled] .kl6-textbox-textarea-counter,
+  &:has(textarea[readonly]) .kl6-textbox-textarea-counter {
+    display:none;
+  }
+
+  // hover
+  &:hover {
+    border-color: ${fromProps('hover.border')};
+  }
+  
+  // active & focus
+  &:focus-visible,
+  &:has(textarea:focus-visible) {
+    box-shadow: ${fromProps('focus.boxShadow')};
+    border-color: ${fromProps('enabled.border')};
   }
 `

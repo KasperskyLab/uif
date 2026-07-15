@@ -15,13 +15,13 @@ export const useThemedPagination = (props: PaginationProps): PaginationViewProps
     componentName: 'pagination',
     defaultValues: {}
   })
-  
+
   const { cssConfig: inputCssConfig } = useThemedTextbox({ ...props, theme: props.theme && themeMap[props.theme] })
-  
+
   const cssConfig = useMemo(
     () => ({ ...inputCssConfig, ...paginationCssConfig }),
     [inputCssConfig, paginationCssConfig]
   )
-  
+
   return { ...rest, cssConfig }
 }

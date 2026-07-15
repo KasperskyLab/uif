@@ -1,15 +1,15 @@
-import { DefaultSorter, TableColumn } from '@src/table/types'
+import { DefaultSorter, TableColumn, TableRecord } from '@src/table/types'
 import { useEffect, useRef } from 'react'
 
-export const useInitTableSorters = ({ columns }: { columns?: TableColumn[] }) => {
-  const initSort = (columns: TableColumn[]) => {
-    return columns.reduce((map, { dataIndex, customSorter }) => {
-      customSorter && map.set(dataIndex, customSorter)
+export const useInitTableSorters =<T extends TableRecord = TableRecord>({ columns }: { columns?: TableColumn<T>[] }) => {
+  const initSort = (columns: TableColumn<T>[]) => {
+    return columns.reduce((map, { key, customSorter }) => {
+      customSorter && map.set(key, customSorter)
       return map
     }, new Map())
   }
 
-  const map = useRef<Map<string, DefaultSorter>>(initSort(columns || []))
+  const map = useRef<Map<string, DefaultSorter<T>>>(initSort(columns || []))
 
   useEffect(() => {
     map.current = initSort(columns || [])

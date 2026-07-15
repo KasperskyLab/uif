@@ -1,60 +1,22 @@
-import { ITableProps } from '@src/table'
-import { getTabsConfig } from '@src/table/helpers/getTabsConfig'
-import { Toolbar, ToolbarProps as OriginToolbarProps } from '@src/toolbar'
+import { ITableProps, TableRecord } from '@src/table'
+import { Toolbar } from '@src/toolbar'
 import { ToolbarItemKey, ToolbarItems } from '@src/toolbar/types'
-import React, { Key, ReactNode, useEffect, useRef, useState } from 'react'
+import React, {
+  Key,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import styled, { css } from 'styled-components'
 
-import { Filter, FilterWithIndicator } from '@kaspersky/hexa-ui-icons/16'
-
+import { TableComponent } from '..'
 import { useTableContext } from '../../context/TableContext'
-import { isFilterConfig } from '../Filters/helpers'
-import { TableModule } from '../index'
+import { FilterApi } from '../Filters'
+import { isSidebarFilter } from '../Filters/helpers'
 
 import { FilterItems } from './FilterItems'
-import { Search } from './Search'
-
-export type ToolbarCommonProps = Omit<OriginToolbarProps, 'right'> & {
-  right?: (existingElements: ReactNode[]) => ReactNode[],
-  showSearch?: boolean,
-  collapsibleSearch?: boolean,
-  showFilter?: boolean,
-  showFilterSidebar?: boolean,
-  showSettingsSearch?: boolean
-}
-
-export type TabConfigBase = boolean | {
-  hideTabHeader?: boolean
-}
-
-export type ColumnsTabConfig = TabConfigBase & {
-  // дополнительные пропы если потребуются
-}
-
-export type GroupingTabConfig = TabConfigBase & {
-  // дополнительные пропы если потребуются
-}
-
-// все табы, заголовки не скрыты
-export type ToolbarWithAllVisibleTabHeaders = ToolbarCommonProps & {
-  showColumns?: true | ColumnsTabConfig & { hideTabHeader?: false },
-  showGrouping?: true | GroupingTabConfig & { hideTabHeader?: false }
-}
-
-// только один таб с явно скрытым заголовком
-export type ToolbarWithOnlyOneHiddenTabHeader =
-  | (ToolbarCommonProps & {
-      showColumns: ColumnsTabConfig & { hideTabHeader: true },
-      showGrouping?: never
-    })
-  | (ToolbarCommonProps & {
-      showColumns?: never,
-      showGrouping: GroupingTabConfig & { hideTabHeader: true }
-    })
-
-export type ToolbarProps =
-  | ToolbarWithAllVisibleTabHeaders
-  | ToolbarWithOnlyOneHiddenTabHeader
+import { getRightElements } from './getRightElements'
 
 const StyledTableContainer = styled.div<Pick<ITableProps, 'fullHeight'>>`
   width: 100%;
@@ -83,15 +45,31 @@ const createToolbarElements = (nodes: ReactNode[]): ToolbarItems<ToolbarItemKey>
   }))
 }
 
-export const ToolbarIntegration: TableModule = Component => function ToolbarIntegrationModule (props) {
-  const { filterApi } = useTableContext()
+export const ToolbarIntegration = <T extends TableRecord = TableRecord> (
+  Component: TableComponent<T>
+): TableComponent<T> => function ToolbarIntegrationModule (props) {
+  const { filterApi, rowSelection, sorting, updateContext, searchValue } = useTableContext()
   const [filteredRows, setFilteredRows] = useState(props.dataSource)
   const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([])
   const [openColumnsSelector, setOpenColumnsSelector] = useState(false)
   const [openFilterSidebar, setOpenFilterSidebar] = useState(false)
   const [table, setTable] = useState(null as HTMLDivElement | null)
+  const [customActions, setCustomActions] = useState<ToolbarItems<ToolbarItemKey>[]>([])
 
-  const additionalElements: ReactNode[] = []
+  const predefinedActions = getRightElements({
+    toolbar: props.toolbar,
+    dataSource: props.dataSource,
+    columns: props.columns,
+    table: table,
+    filterApi: filterApi as FilterApi<T> | null,
+    setFilteredRows,
+    setExpandedRowKeys,
+    setOpenFilterSidebar,
+    setOpenColumnsSelector,
+    onSearch: props.onSearch,
+    onClientSearch: props.onClientSearch,
+    enableSearchHighlighting: props.enableSearchHighlighting
+  })
   const tableRef = useRef(null as HTMLDivElement | null)
 
   useEffect(() => {
@@ -102,44 +80,44 @@ export const ToolbarIntegration: TableModule = Component => function ToolbarInte
     setTable(tableRef.current)
   }, [tableRef])
 
-  if (props.toolbar) {
-    props.toolbar.showSearch && additionalElements.push(
-      <Search
-        setFilteredRows={setFilteredRows}
-        setExpandedRowKeys={setExpandedRowKeys}
-        dataSource={props.dataSource}
-        onSearch={props.onSearch}
-        onClientSearch={props.onClientSearch}
-        columns={props.columns}
-        tableContainer={table}
-        enableSearchHighlighting={props.enableSearchHighlighting}
-        collapsibleSearch={props.toolbar.collapsibleSearch}
-      />
-    )
+  const [filters, setFilters] = useState(filterApi?.getRootGroupFilters())
 
-    const { showColumnsTab, showGroupingTab } = getTabsConfig(props.toolbar)
+  useEffect(() => {
+    if (!filterApi) return
 
-    const showConfigurationPanel = showColumnsTab || showGroupingTab
-    showConfigurationPanel && additionalElements.push(
-      <Toolbar.SettingsItem
-        testId="table-settings"
-        klId="table-configuration"
-        onClick={() => setOpenColumnsSelector(true)}
-      />
-    )
+    return filterApi.subscribe(() => {
+      setFilters(filterApi.getRootGroupFilters())
+    })
+  }, [filterApi])
 
-    if (props.toolbar.showFilterSidebar) {
-      const filtersApplied = !!filterApi?.getRootGroupFilters().filter(isFilterConfig).length
-      additionalElements.push(
-        <Toolbar.FilterSidebar
-          testId="table-filter-sidebar"
-          onClick={() => setOpenFilterSidebar(true)}
-          showIndicator={filtersApplied}
-          iconBefore={filtersApplied ? <FilterWithIndicator /> : <Filter />}
-        />
-      )
+  useEffect(() => {
+    const updateСustomAction = async () => {
+      const params = {
+        filters,
+        sidebarFilters: filters?.filter(isSidebarFilter),
+        searchString: searchValue,
+        sorting,
+        dataSource: props.dataSource,
+        ...rowSelection
+      }
+
+      if (props.toolbar?.getLeftItems) {
+        const items = await props.toolbar.getLeftItems(params)
+        setCustomActions(items)
+      }
+
+      updateContext({ toolbarContext: params })
     }
-  }
+
+    updateСustomAction()
+  }, [
+    props.toolbar?.getLeftItems,
+    filters,
+    sorting,
+    props.dataSource,
+    rowSelection,
+    searchValue
+  ])
 
   if (props.toolbar) {
     return (
@@ -149,11 +127,11 @@ export const ToolbarIntegration: TableModule = Component => function ToolbarInte
           componentId="table-toolbar"
           sticky={props.toolbar.sticky}
           leftLimit={props.toolbar.leftLimit}
-          left={props.toolbar.left ?? []}
+          left={props.toolbar.getLeftItems ? customActions : (props.toolbar.left ?? [])}
           right={
             props.toolbar.right
-              ? createToolbarElements(props.toolbar.right(additionalElements))
-              : createToolbarElements(additionalElements)
+              ? createToolbarElements(props.toolbar.right(predefinedActions))
+              : createToolbarElements(predefinedActions)
           }
           autoDropdown={props.toolbar.autoDropdown}
         />
@@ -183,9 +161,11 @@ export const ToolbarIntegration: TableModule = Component => function ToolbarInte
             }}
           />
         </div>
-      </StyledTableContainer>)
+      </StyledTableContainer>
+    )
   }
 
   return <Component {...props} />
 }
 
+export * from './types'

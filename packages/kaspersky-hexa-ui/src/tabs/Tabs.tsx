@@ -6,7 +6,7 @@ import { Badge } from '@src/badge'
 import { Indicator } from '@src/indicator'
 import { Space } from '@src/space'
 import { Tooltip } from '@src/tooltip'
-import { Tabs as AntdTabs } from 'antd'
+import AntdTabs from 'antd/es/tabs'
 import cn from 'classnames'
 import React, {
   Children,
@@ -112,9 +112,11 @@ export const TabPaneHead: FC<TabPaneHeadProps> = ({
   )
 
   return disabledTooltip
-    ? <Tooltip text={disabledTooltip} defaultAlign>
-        {tabPaneHead}
-      </Tooltip>
+    ? (
+        <Tooltip text={disabledTooltip} defaultAlign>
+          {tabPaneHead}
+        </Tooltip>
+      )
     : tabPaneHead
 }
 
@@ -166,7 +168,8 @@ const TabView: FC<TabsViewProps> = ({
         }
       })
       return result
-    }, [children]
+    },
+    [children]
   )
 
   let extraContentWidthWithGap = 0
@@ -268,7 +271,7 @@ const TabView: FC<TabsViewProps> = ({
       <StyledTabsWrapper
         ref={tabsRef}
         className={cn(
-          className, 
+          className,
           rootHashClass,
           { 'with-padding': padding },
           { 'no-margin': noMargin }

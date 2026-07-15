@@ -2,13 +2,14 @@ import { assertUnreachable } from '@helpers/typesHelpers'
 import { Tag, TagMode } from '@src/tag'
 import { Text } from '@src/typography'
 import React from 'react'
+import { type TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 
-import { StatusErrorSolid, StatusOkSolid} from '@kaspersky/hexa-ui-icons/16'
+import { StatusErrorSolid, StatusOkSolid } from '@kaspersky/hexa-ui-icons/16'
 
 import { LicenseCardMode } from './types'
 
-export const copyLicenseKey =  async (licenseKey: string) => {
+export const copyLicenseKey = async (licenseKey: string) => {
   try {
     await navigator.clipboard.writeText(licenseKey)
   } catch (error) {
@@ -71,31 +72,35 @@ export const shouldShowRemainingField = (mode: LicenseCardMode): boolean => {
 const STATUS_TO_PROPS_MAP = {
   valid: {
     icon: <StatusOkSolid />,
-    label: 'status',
-    mode: 'positive' 
+    labelKey: 'licenseCard.statuses.valid',
+    mode: 'positive'
   },
   warning: {
     icon: <StatusOkSolid />,
-    label: 'status',
-    mode: 'positive' 
+    labelKey: 'licenseCard.statuses.valid',
+    mode: 'positive'
   },
   expiresSoon: {
     icon: <StatusOkSolid />,
-    label: 'status',
-    mode: 'positive' 
+    labelKey: 'licenseCard.statuses.valid',
+    mode: 'positive'
   },
   expired: {
     icon: <StatusErrorSolid />,
-    label: 'expired',
+    labelKey: 'licenseCard.statuses.expired',
     mode: 'critical'
   },
   finished: {
     icon: <StatusErrorSolid />,
-    label: 'expired',
+    labelKey: 'licenseCard.statuses.expired',
     mode: 'critical'
   }
 } as const
 
-export const statusToProps = (mode: LicenseCardMode) => {
-  return STATUS_TO_PROPS_MAP[mode] || STATUS_TO_PROPS_MAP.valid
+export const statusToProps = (mode: LicenseCardMode, licenseKeyStatus: string | undefined, t: TFunction) => {
+  const { labelKey, ...rest } = STATUS_TO_PROPS_MAP[mode] || STATUS_TO_PROPS_MAP.valid
+  return {
+    ...rest,
+    label: licenseKeyStatus ?? t(labelKey) as string
+  }
 }

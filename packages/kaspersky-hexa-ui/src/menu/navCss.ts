@@ -119,8 +119,10 @@ export const navItemCss = css`
   
   &.expanded,
   .expanded {
-    > .uif-nav-item-entry .uif-nav-item-entry-arrow {
-      transform: rotate(90deg);
+    &:not(.popup-expanded) {
+      > .uif-nav-item-entry .uif-nav-item-entry-arrow {
+        transform: rotate(90deg);
+      }
     }
 
     > .uif-nav-item-child {

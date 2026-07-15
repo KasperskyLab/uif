@@ -1,0 +1,211 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+import { ActionButton } from '@src/action-button'
+import { Button } from '@src/button'
+import { Space } from '@src/space'
+
+import { Menu2 } from '@kaspersky/hexa-ui-icons/16'
+import { ArrowForward } from '@kaspersky/hexa-ui-icons/24'
+
+import { LicenseCard } from '../LicenseCard'
+import * as LicenseCardStories from '../LicenseCard.stories'
+import { licenseCardDesignPropPresentation, licenseCardContentDesignPropPresentation } from './LicenseCard.design.properties'
+
+export const licenseBasePropsCode = `const licenseBaseProps = {
+  number: 'EB29584F-A5C7-4510-9B8B-01A6FA952B95',
+  title: 'Kaspersky | Russian Edition',
+  expirationDate: new Date('2025-03-01'),
+  activationDate: new Date('2023-03-01'),
+  term: 730,
+  daysRemaining: 340
+}`
+
+<Meta of={LicenseCardStories} name="LicenseCard Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="LicenseCard"
+  description='**LicenseCard** — карточка для отображения сведений о лицензии продуктов «Лаборатории Касперского»'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**LicenseCard** отображает ключевые сведения о лицензии: заголовок, номер ключа с кнопкой копирования, статус, срок действия и оставшиеся дни. Компонент включает две настраиваемые секции — **statusSection** (статус и номер лицензии) и **validitySection** (даты и срок действия). Поддерживает компактный режим (**compact**), произвольные действия (**actions**) и дополнительное содержимое (**children**). Настраиваются **mode**, **title**, **number**, **iconBefore**, **elementAfter**, **minWidth**, **licenseKeyStatus**."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Статус лицензии. Доступные значения: `valid`, `warning`, `expiresSoon`, `expired`, `finished`. По умолчанию — `valid`. Влияет на цветовую полосу слева, цвет заголовка и иконки, а также на отображение секции с оставшимися днями (скрывается при `expired` и `finished`)."
+      previewDirection="vertical"
+      codeBlock="collapsed"
+      setupCode={licenseBasePropsCode}
+      code='
+<LicenseCard {...licenseBaseProps} mode="valid" />
+<LicenseCard {...licenseBaseProps} mode="warning" />
+<LicenseCard {...licenseBaseProps} mode="expiresSoon" />
+<LicenseCard {...licenseBaseProps} mode="expired" />
+<LicenseCard {...licenseBaseProps} mode="finished" />'
+    />
+
+    <DocExampleBlock
+      title="number"
+      description="Обязательный проп. Ключ лицензии, отображаемый в секции статуса. Рядом с ключом всегда рендерится кнопка копирования."
+      setupCode={licenseBasePropsCode}
+      code='<LicenseCard {...licenseBaseProps} />'
+    />
+
+    <DocExampleBlock
+      title="title"
+      description="Заголовок карточки. Отображается в шапке над секциями. Если не задан — шапка рендерится без текста."
+      setupCode={licenseBasePropsCode}
+      code='
+<LicenseCard {...licenseBaseProps} title="Kaspersky | Russian Edition" />
+<LicenseCard {...licenseBaseProps} title={undefined} />'
+    />
+
+    <DocExampleBlock
+      title="compact"
+      description="Компактный режим карточки. По умолчанию — `false`. В компактном режиме метки полей не отображаются, поля секции validitySection располагаются горизонтально, а **elementAfter** становится видимым в шапке."
+      setupCode={licenseBasePropsCode}
+      code='<LicenseCard {...licenseBaseProps} compact />'
+    />
+
+    <DocExampleBlock
+      title="iconBefore"
+      description="Иконка перед заголовком в шапке карточки. Цвет иконки меняется в зависимости от **mode**: при `expired` — критический, при `finished` — отключённый, иначе — активный."
+      setupCode={licenseBasePropsCode}
+      code='<LicenseCard {...licenseBaseProps} iconBefore={<ArrowForward />} />'
+      scope={{ ArrowForward }}
+    />
+
+    <DocExampleBlock
+      title="elementAfter"
+      description="Произвольный элемент после заголовка в шапке. Отображается только в компактном режиме (`compact=true`)."
+      setupCode={licenseBasePropsCode}
+      code='<LicenseCard {...licenseBaseProps} compact elementAfter={<ActionButton icon={<Menu2 />} size="large" />} />'
+      scope={{ ActionButton, Menu2 }}
+    />
+
+    <DocExampleBlock
+      title="statusSection"
+      description="Управляет видимостью секции со статусом и номером лицензии. По умолчанию — `true`. При `false` секция не рендерится."
+      setupCode={licenseBasePropsCode}
+      code='
+<LicenseCard {...licenseBaseProps} statusSection={true} />
+<LicenseCard {...licenseBaseProps} statusSection={false} />'
+    />
+
+    <DocExampleBlock
+      title="validitySection"
+      description="Управляет видимостью секции с датами и сроком действия лицензии. По умолчанию — `true`. При `false` секция не рендерится."
+      setupCode={licenseBasePropsCode}
+      code='
+<LicenseCard {...licenseBaseProps} validitySection={true} />
+<LicenseCard {...licenseBaseProps} validitySection={false} />'
+    />
+
+    <DocExampleBlock
+      title="expirationDate, activationDate, term и daysRemaining"
+      description="Данные для секции действия лицензии. **expirationDate** и **activationDate** — объекты `Date`, форматируются локальным хелпером. **term** — срок действия в днях. **daysRemaining** — оставшиеся дни (не отображается при `mode` = `expired` или `finished`)."
+      setupCode={licenseBasePropsCode}
+      code='<LicenseCard {...licenseBaseProps} />'
+    />
+
+    <DocExampleBlock
+      title="licenseKeyStatus"
+      description="Переопределяет стандартный лейбл статуса в секции статуса. Если не задан — отображается i18n-строка, соответствующая текущему **mode**."
+      setupCode={licenseBasePropsCode}
+      code='<LicenseCard {...licenseBaseProps} licenseKeyStatus="Custom status label" />'
+    />
+
+    <DocExampleBlock
+      title="actions"
+      description="Произвольные элементы управления в нижней части карточки, рендерятся после секций и **children**. Типичное содержимое — кнопки действий."
+      setupCode={licenseBasePropsCode}
+      code='<LicenseCard {...licenseBaseProps} actions={<Button mode="secondary">Delete license</Button>} />'
+      scope={{ Button }}
+    />
+
+    <DocExampleBlock
+      title="children"
+      description="Произвольное содержимое, отображаемое перед **actions** и после основных секций."
+      setupCode={licenseBasePropsCode}
+      code='<LicenseCard {...licenseBaseProps} children={<Text>Custom content</Text>} />'
+      scope={{ Text }}
+    />
+
+    <DocExampleBlock
+      title="minWidth"
+      description="Минимальная ширина карточки в пикселях. Устанавливается через CSS-переменную `--license-card-min-width`. По умолчанию — `600px`."
+      setupCode={licenseBasePropsCode}
+      code='<LicenseCard {...licenseBaseProps} minWidth={400} />'
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**LicenseCard** применяется в разделах управления лицензиями для отображения одной лицензии продукта «Лаборатории Касперского». Компонент объединяет в одном блоке статус активации, номер ключа, срок действия, а также дополнительный контент — список модулей, счётчики устройств, кнопки действий. Используйте его каждый раз, когда необходимо представить лицензию как отдельную сущность с полным набором атрибутов.
+
+Вариант с режимом `compact` предназначен для контекстов с ограниченной шириной: в этом случае карточка компактнее отображает секцию сроков и допускает элемент управления в шапке. Если вся страница посвящена одной лицензии — используйте стандартный режим с полными подписями полей."
+    />
+
+    <DocExampleBlock
+      title="Статусы лицензии"
+      description="Выбирайте **mode** исходя из реального состояния лицензии на бэкенде: `valid` — активна и не требует внимания; `warning` — требует внимания (например, близкое истечение по другим критериям); `expiresSoon` — истекает в ближайшее время; `expired` — истекла; `finished` — деактивирована или срок действия завершён. Не используйте **mode** как визуальное оформление — он несёт семантическую нагрузку."
+      previewDirection="vertical"
+      codeBlock="hidden"
+      setupCode={licenseBasePropsCode}
+      code='
+<LicenseCard {...licenseBaseProps} mode="valid" />
+<LicenseCard {...licenseBaseProps} mode="expiresSoon" />
+<LicenseCard {...licenseBaseProps} mode="expired" />'
+    />
+
+    <DocExampleBlock
+      title="Компактный режим"
+      description="Используйте `compact=true`, когда карточка располагается в узком контейнере или в составе списка лицензий с ограниченной шириной. В компактном режиме к шапке можно добавить кнопку действий через **elementAfter**."
+      codeBlock="hidden"
+      setupCode={licenseBasePropsCode}
+      code='<LicenseCard {...licenseBaseProps} compact elementAfter={<ActionButton icon={<Menu2 />} size="large" />} />'
+      scope={{ ActionButton, Menu2 }}
+    />
+
+    <DocExampleBlock
+      title="Дополнительный контент"
+      description="Слот **children** предназначен для дополнительной информации о лицензии — счётчиков устройств, пользователей или списков модулей. Слот **actions** — для кнопок действий (замена лицензии, удаление). Оба слота отображаются после основных секций и разделяются разделителем, если секции видимы."
+      codeBlock="hidden"
+      setupCode={licenseBasePropsCode}
+      code='<LicenseCard {...licenseBaseProps} actions={<Space gap={8}><Button mode="primary">Replace</Button><Button mode="secondary">Delete</Button></Space>} />'
+      scope={{ Button, Space }}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Space direction="vertical" gap={40} align="start">
+      <Space direction="vertical" gap={16} align="start">
+        <Text type="H3">license card</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(licenseCardDesignPropPresentation)} />
+      </Space>
+      <Space direction="vertical" gap={16} align="start">
+        <Text type="H3">license card / content</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(licenseCardContentDesignPropPresentation)} />
+      </Space>
+    </Space>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={LicenseCardStories} />
+    <AutodocArgsTable components={LicenseCard} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

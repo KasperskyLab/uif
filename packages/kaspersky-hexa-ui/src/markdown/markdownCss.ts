@@ -11,10 +11,10 @@ export const StyledText = styled.span.withConfig({ shouldForwardProp })`
   ${getTextSizes(textLevels.BTR3)};
   > * {
     color: ${({ themedColor, theme }: MarkdownProps & { theme: ThemeConfig }) => {
-    if (theme?.colors) {
-      return theme.colors.textIconsElements[themedColor || 'primary']
-    }
-  }};
+      if (theme?.colors) {
+        return theme.colors.textIconsElements[themedColor || 'primary']
+      }
+    }};
   }
   
   strong {

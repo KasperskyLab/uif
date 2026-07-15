@@ -1,10 +1,10 @@
 import { Focus } from '@design-system/tokens/focus'
 import { ThemeKey } from '@design-system/types'
 import { TestingProps } from '@helpers/typesHelpers'
-import { TreeProps } from 'antd'
+import type { TreeProps } from 'antd'
 import type { NodeDragEventParams } from 'rc-tree/lib/contextTypes'
 import type { DataNode as BaseDataNode, EventDataNode, Key } from 'rc-tree/lib/interface'
-import React from 'react'
+import React, { PropsWithChildren, ReactNode } from 'react'
 
 export type { EventDataNode, Key, NodeDragEventParams, TreeProps }
 
@@ -15,7 +15,7 @@ export type NodeDropEventParams = NodeDragEventParams & {
   dropToGap: boolean
 }
 
-export type DraggableFn = (node: DataNode) => boolean;
+export type DraggableFn = (node: DataNode) => boolean
 
 export interface DraggableConfig {
   icon?: React.ReactNode | false,
@@ -105,6 +105,10 @@ type TreeCommonProps = TreeThemeProps & Pick<TreeProps, 'loadData' | 'icon' | 'o
   onDrop?: (info: NodeDropEventParams) => void,
   /** Callback function for when the onClick event occurs on settings button */
   onActionClick?: (node: DataNode) => void,
+  /** Custom render action. Children is ActionButton(Gear) */
+  renderAction?: ({ children, node }: PropsWithChildren<{ node: DataNode }>) => void,
+  /** Custom action icon. Default is <SettingsGear /> */
+  actionIcon?: ReactNode,
   /** Specify the keys of the default checked treeNodes */
   defaultCheckedKeys?: Key[],
   /** Specify the keys of the default expanded treeNodes */

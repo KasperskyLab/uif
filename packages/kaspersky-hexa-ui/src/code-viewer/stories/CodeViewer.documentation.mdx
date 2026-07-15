@@ -1,0 +1,206 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { codeViewerDesignPropPresentation } from './CodeViewer.design.properties'
+
+import { CodeViewer } from '../CodeViewer'
+import * as CodeViewerStories from './CodeViewer.stories'
+import {
+  codeViewerInitialValueExampleSetupCode,
+  codeViewerLanguageExampleSetupCode
+} from './codeViewerDocExamples'
+
+<Meta of={CodeViewerStories} name="CodeViewer Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="CodeViewer"
+  description='**CodeViewer** — редактор кода с подсветкой синтаксиса на базе CodeMirror для ввода, просмотра и проверки текстовых фрагментов'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**CodeViewer** отображает область редактирования с нумерацией строк, подсветкой синтаксиса и историей изменений. Встроенные языки: `html`, `json`, `xml`, `javascript`, `jsx`, `typescript`, `tsx`, `yara`; дополнительные задаются через **customLanguages**. Настраиваются **language**, **initialValue**, режим **readonly**, статус **validationStatus**, размер (**width**, **height**, **resizable**, **resizeAxis**, **minConstraints**, **maxConstraints**), подсветка строк **linesHighlighted**, перенос **lineWrapping**, валидация **linter**, автодополнение **completions** и колбэк **onChange**. На корневом объекте доступны модули CodeMirror: `View`, `LangJson`, `Lint`, `Commands`, `Language`, `Autocomplete`, `State`."
+    />
+
+    <DocExampleBlock
+      title="language"
+      description="Обязательный проп. Язык подсветки синтаксиса. Встроенные значения: `yara`, `xml`, `json`, `html`, `tsx`, `jsx`, `javascript`, `typescript`. Для языков вне списка передайте расширение в **customLanguages** и укажите соответствующий ключ."
+      setupCode={codeViewerLanguageExampleSetupCode}
+      previewDirection="vertical"
+      code={`
+<CodeViewer language="javascript" initialValue={javascriptSample} />
+<CodeViewer language="json" initialValue={jsonSample} />
+<CodeViewer language="yara" initialValue={yaraSample} />`}
+    />
+
+    <DocExampleBlock
+      title="initialValue"
+      description="Начальное содержимое редактора. При изменении пропа текст в области полностью заменяется. Если не задан или `null`, используется пустая строка."
+      setupCode={codeViewerInitialValueExampleSetupCode}
+      previewDirection="vertical"
+      code={`
+<CodeViewer language="javascript" initialValue={javascriptSample} />
+<CodeViewer language="javascript" />`}
+    />
+
+    <DocExampleBlock
+      title="readonly"
+      description="Режим только для чтения: редактирование отключено, курсор скрыт. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`
+<CodeViewer language="javascript" initialValue={'console.log("editable")'} />
+<CodeViewer language="javascript" initialValue={'console.log("readonly")'} readonly />`}
+    />
+
+    <DocExampleBlock
+      title="validationStatus"
+      description="Визуальный статус валидации поля. Доступные значения: `default`, `error`, `success`. По умолчанию — `default`."
+      code={`
+<CodeViewer language="json" initialValue="{}" validationStatus="default" />
+<CodeViewer language="json" initialValue="{}" validationStatus="error" />
+<CodeViewer language="json" initialValue="{}" validationStatus="success" />`}
+    />
+
+    <DocExampleBlock
+      title="resizable"
+      description="Разрешить пользователю менять размер области редактора за уголок в правом нижнем углу. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`
+<CodeViewer language="javascript" initialValue={'console.log("fixed size")'} />
+<CodeViewer language="javascript" initialValue={'console.log("resizable")'} resizable />`}
+    />
+
+    <DocExampleBlock
+      title="resizeAxis"
+      description="Направление изменения размера при **resizable**=`true`. Доступные значения: `both`, `x`, `y`, `none`."
+      code={`
+<CodeViewer language="javascript" initialValue={'console.log("both axes")'} resizable resizeAxis="both" />
+<CodeViewer language="javascript" initialValue={'console.log("vertical only")'} resizable resizeAxis="y" />`}
+    />
+
+    <DocExampleBlock
+      title="width и height"
+      description="Начальная ширина и высота области редактора в пикселях. По умолчанию — `400` и `200`."
+      code={`
+<CodeViewer language="javascript" initialValue={'console.log("default size")'} />
+<CodeViewer language="javascript" initialValue={'console.log("600x400")'} width={600} height={400} />`}
+    />
+
+    <DocExampleBlock
+      title="minConstraints и maxConstraints"
+      description="Минимальные и максимальные размеры при **resizable**=`true` — пары `[ширина, высота]` в пикселях. По умолчанию — `[300, 150]` и `[1600, 1200]`."
+      code={`
+<CodeViewer
+  language="javascript"
+  initialValue={'console.log("constrained")'}
+  resizable
+  minConstraints={[400, 200]}
+  maxConstraints={[800, 500]}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="linesHighlighted"
+      description={'Номера строк для фоновой подсветки в режиме **readonly**=`true`. Формат элементов массива: одна строка (`"15"`) или диапазон (`"2-4"`). Без **readonly** подсветка не применяется.'}
+      code={`
+<CodeViewer
+  language="javascript"
+  readonly
+  initialValue={'line 1\\nline 2\\nline 3\\nline 4'}
+  linesHighlighted={['2-3']}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="lineWrapping"
+      description="Перенос длинных строк на следующую строку внутри редактора. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`
+<CodeViewer
+  language="javascript"
+  lineWrapping
+  initialValue={'const longLine = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua";'}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="linter"
+      description="Источник диагностики CodeMirror: при передаче включаются gutter с метками и подсветка проблем. Для `json` дополнительно активен встроенный парсер JSON. Сообщения могут иметь severity `error` или `warning`."
+      code={`
+const codeViewerLinter = (view) => {
+  const text = view.state.doc.toString()
+  if (text.includes('TODO')) {
+    return [{ from: 0, to: text.length, message: 'Remove TODO', severity: 'warning' }]
+  }
+  return []
+}
+
+<CodeViewer language="javascript" initialValue={"// TODO: fix me"} linter={codeViewerLinter} />`}
+    />
+
+    <DocExampleBlock
+      title="completions"
+      description="Расширение CodeMirror для автодополнения — передаётся готовый `Extension`, например через `jsonLanguage.data.of({ autocomplete: ... })`. Работает вместе с выбранным **language**."
+      code={`
+import { jsonLanguage } from '@codemirror/lang-json'
+
+const codeViewerCompletions = jsonLanguage.data.of({
+  autocomplete: (context) => ({
+    from: context.matchBefore(/\\w*/)?.from,
+    options: [{ label: 'hello', type: 'keyword' }]
+  })
+})
+
+<CodeViewer language="json" initialValue="{}" completions={codeViewerCompletions} />`}
+    />
+
+    <DocExampleBlock
+      title="customLanguages"
+      description="Дополнительные языки подсветки: объект `{ [ключ]: Extension }`. Ключ используется как значение **language**, если для него нет встроенного расширения."
+      code={`
+const myLanguage = CodeViewer.Language.StreamLanguage.define(/* parser */)
+
+<CodeViewer
+  language="myLang"
+  customLanguages={{ myLang: myLanguage }}
+  initialValue="custom syntax"
+/>`}
+    />
+
+    <DocExampleBlock
+      title="onChange"
+      description="Колбэк при изменении текста: `(text, update) => void`, где `text` — текущее содержимое, `update` — объект обновления CodeMirror."
+      code={`
+const [value, setValue] = useState('console.log("Hello")')
+
+<CodeViewer language="javascript" initialValue={value} onChange={setValue} />`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**CodeViewer** — когда в интерфейсе нужно ввести или показать фрагмент кода, конфигурации или скрипта с подсветкой синтаксиса: правило в форме, JSON/XML в боковой панели, фрагмент YARA или TypeScript в модальном окне. Компонент рассчитан на осмысленный объём текста с нумерацией строк и опциональной проверкой содержимого.
+
+Для сравнения двух версий одного текста используйте **CodeCompare**, а не два **CodeViewer** рядом. Для короткой однострочной вставки без подсветки и нумерации строк выбирайте **Input** или **Textarea**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(codeViewerDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={CodeViewerStories} />
+    <AutodocArgsTable components={CodeViewer} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

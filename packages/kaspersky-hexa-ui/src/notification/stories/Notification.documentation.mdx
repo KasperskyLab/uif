@@ -1,0 +1,135 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Notification } from '../Notification'
+import { openNotification } from '../NotificationService'
+import { Button } from '@src/button'
+import { Space } from '@src/space'
+import * as NotificationStories from './Notification.stories'
+import { notificationDesignPropPresentation } from './Notification.design.properties'
+
+export const notificationScope = { Notification, openNotification, Button, Space }
+
+<Meta of={NotificationStories} name="Notification Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Notification"
+  description='**Notification** — всплывающее уведомление поверх страницы с иконкой статуса, текстом и опциональной кнопкой действия'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Notification** отображает кратковременные глобальные сообщения поверх страницы. Состоит из двух частей: контейнера **Notification** (точка монтирования в DOM) и функции **openNotification** (вызов для показа уведомления). Семантика задаётся **mode** (`success`, `error`, `warning`, `info`, `ai`) при вызове **openNotification**. Настраиваются текст сообщения (**description**), длительность показа (**duration**), кнопка действия (**actionButton**), колбэк при закрытии (**onClose**) и скрытие иконки статуса на контейнере (**noIcon**)."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Обязательный проп. Семантический вариант уведомления, передаётся в **openNotification**. Доступные значения: `success`, `error`, `warning`, `info`, `ai`. Задаёт цветовое оформление фона, иконку статуса и стиль кнопки закрытия. Для `warning` используется светлый вариант кнопки закрытия, для остальных — инвертированный."
+      scope={notificationScope}
+      code={`<>
+  <Notification />
+  <Space gap={8}>
+    <Button onClick={() => openNotification({ mode: 'success', description: 'Операция выполнена' })}>success</Button>
+    <Button onClick={() => openNotification({ mode: 'error', description: 'Произошла ошибка' })}>error</Button>
+    <Button onClick={() => openNotification({ mode: 'warning', description: 'Предупреждение' })}>warning</Button>
+    <Button onClick={() => openNotification({ mode: 'info', description: 'Информация' })}>info</Button>
+    <Button onClick={() => openNotification({ mode: 'ai', description: 'AI-ответ' })}>ai</Button>
+  </Space>
+</>`}
+    />
+
+    <DocExampleBlock
+      title="description"
+      description="Содержимое уведомления: текст или произвольный `ReactNode`."
+      scope={notificationScope}
+      code={`<>
+  <Notification />
+  <Button onClick={() => openNotification({ mode: 'info', description: 'Текст уведомления' })}>Показать</Button>
+</>`}
+    />
+
+    <DocExampleBlock
+      title="duration"
+      description="Длительность показа уведомления в секундах. По умолчанию — `5`. При значении `0` уведомление не закрывается автоматически и остаётся до явного закрытия пользователем."
+      scope={notificationScope}
+      code={`<>
+  <Notification />
+  <Space gap={8}>
+    <Button onClick={() => openNotification({ mode: 'info', description: 'Закроется через 2 с', duration: 2 })}>duration: 2</Button>
+    <Button onClick={() => openNotification({ mode: 'info', description: 'Не закрывается', duration: 0 })}>duration: 0</Button>
+  </Space>
+</>`}
+    />
+
+    <DocExampleBlock
+      title="actionButton"
+      description="Кнопка действия перед иконкой закрытия. Принимает объект `{ title: string, onClick: (arg: any) => void }`. Если не передан, кнопка не отображается."
+      scope={notificationScope}
+      code={`<>
+  <Notification />
+  <Button onClick={() => openNotification({
+    mode: 'info',
+    description: 'Уведомление с действием',
+    actionButton: { title: 'Перейти', onClick: () => alert('Действие') }
+  })}>Показать</Button>
+</>`}
+    />
+
+    <DocExampleBlock
+      title="onClose"
+      description="Колбэк при закрытии уведомления. Вызывается после нажатия на кнопку закрытия."
+      scope={notificationScope}
+      code={`<>
+  <Notification />
+  <Button onClick={() => openNotification({
+    mode: 'info',
+    description: 'Нажмите × для закрытия',
+    onClose: () => alert('Закрыто')
+  })}>Показать</Button>
+</>`}
+    />
+
+    <DocExampleBlock
+      title="noIcon"
+      description="Скрывает иконку статуса во всех уведомлениях, отображаемых в данном контейнере. Задаётся на компоненте **Notification**. По умолчанию — `false`."
+      scope={notificationScope}
+      code={`<>
+  <Notification noIcon />
+  <Space gap={8}>
+    <Button onClick={() => openNotification({ mode: 'success', description: 'Без иконки' })}>success</Button>
+    <Button onClick={() => openNotification({ mode: 'error', description: 'Без иконки' })}>error</Button>
+  </Space>
+</>`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Notification** — для кратковременной обратной связи после действия пользователя: сохранение, отправка, ошибка запроса, завершение фоновой операции. Уведомление появляется поверх интерфейса в правом верхнем углу и исчезает автоматически. Используйте, когда важно сообщить пользователю о результате без прерывания рабочего процесса.
+
+Для сообщений, которые должны оставаться в потоке страницы и не исчезать автоматически, используйте **Alert**. Для акцента внутри конкретной секции или формы — **SectionMessage**. Компактные метки рядом с элементами — **Badge**, а не **Notification**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(notificationDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={NotificationStories} />
+    <AutodocArgsTable components={Notification} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

@@ -1,83 +1,93 @@
 import { SetState, useStateProps } from '@helpers/hooks/useStateProps'
 import { MakeRequired } from '@helpers/typesHelpers'
 import { PaginationProps } from '@src/pagination'
-import { ITableProps, TablePaginationProps } from '@src/table'
+import { ITableProps, TablePaginationProps, TableRecord } from '@src/table'
 import { getPersistentStorageValue, updatePersistentStorage } from '@src/table/helpers/persistentStorage'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+
+import { DEFAULT_TABLE_PAGE_SIZE, DEFAULT_TABLE_PAGE_SIZE_OPTIONS } from '../../types'
 
 const FIRST_PAGE = 1
-const DEFAULT_PAGE_SIZE = 20
-const DEFAULT_PAGE_SIGE_OPTIONS = ['10', '20', '50', '100']
 
-type TablePaginationConfig = MakeRequired<TablePaginationProps, 'current' | 'pageSize'> & {
+export type TablePaginationConfig<T extends TableRecord = TableRecord> = MakeRequired<TablePaginationProps<T>, 'current' | 'pageSize'> & {
   paginationDisabled?: boolean,
 }
 
-export type TablePaginationConfigExtended = TablePaginationConfig | {
+export type TablePaginationConfigExtended<T extends TableRecord = TableRecord> = TablePaginationConfig<T> | {
   paginationDisabled: true,
   current: 1,
-  pageSize: number
+  pageSize: number,
+  total: 0
 }
 
-type UseExistingPagination = (config: (
-  Pick<ITableProps, 'storageKey'> & { pagination?: TablePaginationProps, serverPagination: boolean }
-)) => {
-  pagination: TablePaginationConfig,
+type UseExistingPaginationProps<T extends TableRecord = TableRecord> =
+  Pick<ITableProps, 'storageKey'> & { pagination?: TablePaginationProps<T>, serverPagination: boolean }
+
+type UseExistingPaginationReturn<T extends TableRecord = TableRecord> = {
+  pagination: TablePaginationConfig<T>,
   additional: {
     setHideOnSinglePage: SetState<boolean | undefined>,
+    setSelected: SetState<number | undefined>,
     setTotal: SetState<number | undefined>
   }
 }
 
-export type UsePaginationConfigReturn = {
-  pagination: TablePaginationConfigExtended,
-  additional?: ReturnType<UseExistingPagination>['additional'] 
+type UsePaginationConfigProps<T extends TableRecord = TableRecord> = Pick<ITableProps<T>, 'storageKey' | 'pagination'> & { serverPagination: boolean }
+
+export type UsePaginationConfigReturn<T extends TableRecord = TableRecord> = {
+  pagination: TablePaginationConfigExtended<T>,
+  additional?: UseExistingPaginationReturn['additional']
 }
 
-export type UsePaginationConfig = (config: (
-  Pick<ITableProps, 'storageKey' | 'pagination'> & { serverPagination: boolean })
-) => UsePaginationConfigReturn
-
-export const usePaginationConfig: UsePaginationConfig = ({ pagination, ...rest }) => {
+export const usePaginationConfig = <T extends TableRecord = TableRecord> ({
+  pagination,
+  ...rest
+}: UsePaginationConfigProps<T>): UsePaginationConfigReturn<T> => {
   if (pagination === false) {
     return {
       pagination: {
         paginationDisabled: true,
         current: 1,
-        pageSize: Infinity
+        pageSize: Infinity,
+        total: 0
       },
       additional: undefined
     }
   }
-  return useExistingPagination({ pagination, ...rest })
+  return useExistingPagination<T>({ pagination, ...rest })
 }
 
-const useExistingPagination: UseExistingPagination = ({
+const useExistingPagination = <T extends TableRecord = TableRecord> ({
   pagination: {
+    virtualInfiniteScroll = false,
+    rowHeight,
+    tableBodyHeight,
     showOnlyTotalSummary = false,
     current: propsCurrent = FIRST_PAGE,
     pageSize: propsPageSize,
     total: propsTotal,
     total: propsTotalRoot,
+    infiniteScrollPageGetter,
     onChange: propsOnChange,
     onShowSizeChange: propsOnShowSizeChange,
     cursor = false,
     simple = false,
     jumper = false,
     restoreCurrentWhenDataChange,
-    selected,
+    selected: propsSelected,
     showSelected,
     showSizeChanger: propsShowSizeChanger,
     hideOnSinglePage: hideOnSinglePageProps,
-    pageSizeOptions = DEFAULT_PAGE_SIGE_OPTIONS,
+    pageSizeOptions = DEFAULT_TABLE_PAGE_SIZE_OPTIONS,
     isServerPagination: isServerPaginationProps
   } = {},
   serverPagination,
   storageKey
-}) => {
+}: UseExistingPaginationProps<T>): UseExistingPaginationReturn<T> => {
   const [current, setCurrent] = useStateProps(propsCurrent)
-  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
+  const [pageSize, setPageSize] = useStateProps(propsPageSize || DEFAULT_TABLE_PAGE_SIZE)
   const [total, setTotal] = useState(propsTotal)
+  const [selected, setSelected] = useStateProps(propsSelected)
   const [hideOnSinglePage, setHideOnSinglePage] = useStateProps(hideOnSinglePageProps)
 
   useEffect(() => {
@@ -87,7 +97,7 @@ const useExistingPagination: UseExistingPagination = ({
     })
     const actualPageSize = persistentPageSize || propsPageSize
     actualPageSize && setPageSize(actualPageSize)
-  }, [propsPageSize])
+  }, [propsPageSize, storageKey])
 
   useEffect(() => {
     if (propsTotalRoot !== undefined) {
@@ -97,80 +107,101 @@ const useExistingPagination: UseExistingPagination = ({
     }
   }, [propsTotalRoot, propsTotal])
 
-  const isServerPagination = (
+  const shouldSliceDataSource = !(
     isServerPaginationProps ||
     serverPagination ||
     propsTotal !== undefined ||
     propsTotalRoot !== undefined
   )
 
-  useEffect(() => {
-    if (isServerPagination) {
-      setCurrent(FIRST_PAGE)
-    }
-  }, [total, isServerPagination])
-
   const isCurrentPageOutOfRage = Math.ceil((total || 0) / pageSize) < current
 
   useEffect(() => {
-    if (propsOnChange && isServerPagination) {
+    if (propsOnChange && !shouldSliceDataSource) {
       setCurrent(FIRST_PAGE)
       propsOnChange(current, pageSize)
     }
-  }, [isCurrentPageOutOfRage, isServerPagination])
-  
+  }, [isCurrentPageOutOfRage, shouldSliceDataSource])
+
   useEffect(() => {
     if (restoreCurrentWhenDataChange && isCurrentPageOutOfRage) {
       setCurrent(FIRST_PAGE)
     }
   }, [isCurrentPageOutOfRage, restoreCurrentWhenDataChange])
 
-  const onCurrentPageChange: NonNullable<PaginationProps['onChange']> = (current) => {
-    if (propsOnChange) {
-      propsOnChange(current, pageSize)
-    } else {
-      setCurrent(current)
+  const paginationConfig: UseExistingPaginationReturn<T> = useMemo(() => {
+    const onCurrentPageChange: NonNullable<PaginationProps['onChange']> = (current) => {
+      if (propsOnChange) {
+        propsOnChange(current, pageSize)
+      } else {
+        setCurrent(current)
+      }
     }
-  }
-  
-  const onPageSizeChange: NonNullable<PaginationProps['onShowSizeChange']> = (_, size) => {
-    if (propsOnShowSizeChange) {
-      propsOnShowSizeChange(current, size)
-    } else {
-      setPageSize(size)
-    }
-    if (storageKey) {
-      updatePersistentStorage({
-        storageKey,
-        featureKey: 'pageSize',
-        updatedValue: size
-      })
-    }
-  }
-  
-  return {
-    pagination: {
-      cursor,
-      current,
-      hideOnSinglePage,
-      onChange: onCurrentPageChange,
-      onShowSizeChange: onPageSizeChange,
-      pageSize,
-      pageSizeOptions,
-      restoreCurrentWhenDataChange,
-      showOnlyTotalSummary,
-      showSelected,
-      showSizeChanger: propsShowSizeChanger,
-      selected,
-      simple,
-      jumper,
-      total,
-      isServerPagination
-    },
-    additional: {
-      setHideOnSinglePage,
-      setTotal
-    }
-  }
-}
 
+    const onPageSizeChange: NonNullable<PaginationProps['onShowSizeChange']> = (_, size) => {
+      if (propsOnShowSizeChange) {
+        propsOnShowSizeChange(current, size)
+      } else {
+        setPageSize(size)
+      }
+      if (storageKey) {
+        updatePersistentStorage({
+          storageKey,
+          featureKey: 'pageSize',
+          updatedValue: size
+        })
+      }
+    }
+
+    return {
+      pagination: {
+        cursor,
+        current,
+        hideOnSinglePage,
+        virtualInfiniteScroll,
+        rowHeight,
+        tableBodyHeight,
+        infiniteScrollPageGetter,
+        onChange: onCurrentPageChange,
+        onShowSizeChange: onPageSizeChange,
+        pageSize,
+        pageSizeOptions,
+        restoreCurrentWhenDataChange,
+        showOnlyTotalSummary,
+        showSelected,
+        showSizeChanger: propsShowSizeChanger,
+        selected,
+        simple,
+        jumper,
+        total,
+        isServerPagination: !shouldSliceDataSource
+      },
+      additional: {
+        setHideOnSinglePage,
+        setTotal,
+        setSelected
+      }
+    }
+  }, [
+    cursor,
+    current,
+    hideOnSinglePage,
+    virtualInfiniteScroll,
+    rowHeight,
+    tableBodyHeight,
+    infiniteScrollPageGetter,
+    pageSize,
+    pageSizeOptions,
+    restoreCurrentWhenDataChange,
+    showOnlyTotalSummary,
+    showSelected,
+    propsShowSizeChanger,
+    selected,
+    simple,
+    jumper,
+    total,
+    shouldSliceDataSource
+  ])
+
+  return paginationConfig
+}

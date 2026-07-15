@@ -59,7 +59,7 @@ const meta: Meta<HeadingProps> = {
   decorators: [
     (Story, context) => (
       <Space gap={16} direction="vertical">
-        <Story {...context}/>
+        <Story {...context} />
       </Space>
     )
   ]

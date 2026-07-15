@@ -29,23 +29,28 @@ const IconWrapper = styled.span`
 export const IconGallery = (props: { color: string }) => {
   const folderSizes = [icons8, icons16, icons24, icons32, icons40, icons48]
   const folderSizesNames = ['Size 8', 'Size 16', 'Size 24', 'Size 32', 'Size 40', 'Size 48']
-  return (<>
-    <div>
-      {
-        folderSizes.map((size, index) => <>
-          <StoryLabel label={folderSizesNames[index]} vertical/>
-          <SizeWrapper key={`size${index}-key`}>
-            {Object.keys(size).map((iconName) => {
-              // @ts-ignore
-              const SpecificStory = size[iconName]
-              return <IconWrapper key={`${size}-${iconName}-key`}>
-                <Tooltip text={iconName}><SpecificStory color={props.color}/></Tooltip>
-              </IconWrapper>
-            })}
-          </SizeWrapper>
-        </>)
-      }
-    </div>
-  </>
+  return (
+    <>
+      <div>
+        {
+          folderSizes.map((size, index) => (
+            <>
+              <StoryLabel label={folderSizesNames[index]} vertical />
+              <SizeWrapper key={`size${index}-key`}>
+                {Object.keys(size).map((iconName) => {
+                  // @ts-expect-error пакет иконок
+                  const SpecificStory = size[iconName]
+                  return (
+                    <IconWrapper key={`${size}-${iconName}-key`}>
+                      <Tooltip text={iconName}><SpecificStory color={props.color} /></Tooltip>
+                    </IconWrapper>
+                  )
+                })}
+              </SizeWrapper>
+            </>
+          ))
+        }
+      </div>
+    </>
   )
 }

@@ -1,6 +1,6 @@
 import { BORDER_RADIUS, SPACES } from '@design-system/theme'
 import { getFromProps } from '@helpers/getFromProps'
-import { css } from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { ScrollbarCssConfig } from '../types'
 
@@ -56,3 +56,29 @@ export const viewCss = css`
   padding-right: ${SPACES[4]}px;
   padding-bottom: ${SPACES[4]}px;
 `
+
+export const TrackVertical = styled.div<{
+  $isVisible?: boolean
+  cssConfig: ScrollbarCssConfig
+}>`
+  ${trackVerticalCss}
+
+  visibility: ${({ $isVisible }) => ($isVisible ? 'visible' : 'hidden')};
+  pointer-events: ${({ $isVisible }) => ($isVisible ? 'auto' : 'none')};
+`
+
+export const TrackHorizontal = styled.div<{
+  $isVisible?: boolean
+  cssConfig: ScrollbarCssConfig
+}>`
+  ${trackHorizontalCss}
+
+  visibility: ${({ $isVisible }) => ($isVisible ? 'visible' : 'hidden')};
+  pointer-events: ${({ $isVisible }) => ($isVisible ? 'auto' : 'none')};
+`
+
+export const ThumbVertical = styled.div`${thumbVerticalCss}`
+
+export const ThumbHorizontal = styled.div`${thumbHorizontalCss}`
+
+export const View = styled.div`${viewCss}`

@@ -32,8 +32,7 @@ const navItems = [
       itemClass: null,
       klId: 'navigation.users-and-roles.users',
       onClick: menuItemClickHandler
-    },
-    {
+    }, {
       state: 'roles',
       weight: 200,
       key: 'Roles',
@@ -59,9 +58,9 @@ const MenuComponent = (props: MenuProps) => (
     <Menu {...defaultProps} {...props} >
       <ServicesNav>
         {getNotificationsIcon(true)}
-        <Help className="item" role="button" onClick={ () => alert('open online help') } />
+        <Help className="item" role="button" onClick={() => alert('open online help')} />
       </ServicesNav>
-      <AppLogo/>
+      <AppLogo />
     </Menu>
   </ConfigProvider>
 )

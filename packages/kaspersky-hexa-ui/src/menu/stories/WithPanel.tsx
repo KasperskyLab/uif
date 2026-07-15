@@ -11,12 +11,19 @@ import { mockedItemsWithoutContent } from '@src/submenu/stories/mocks'
 import { TreeList, TreeNav } from '@src/tree'
 import { treeDataMock, treeDataMockWithIcons } from '@src/tree/stories/mocks'
 import { StoryObj } from '@storybook/react'
-import { Layout as AntLayout } from 'antd'
+import AntLayout from 'antd/es/layout'
 import React, { PropsWithChildren, useCallback } from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import { BookmarkOutline, BookmarkSolid, Help, Moon, Switch1, Wrap } from '@kaspersky/hexa-ui-icons/16'
+import {
+  BookmarkOutline,
+  BookmarkSolid,
+  Help,
+  Moon,
+  Switch1,
+  Wrap
+} from '@kaspersky/hexa-ui-icons/16'
 import { Layers, Placeholder, Usb } from '@kaspersky/hexa-ui-icons/16'
 
 import { Hamburger, Menu as MenuComponent } from '../Menu'
@@ -188,7 +195,7 @@ export const WithPanel: StoryObj<MenuProps & MenuStoryProps> = {
           setPanelOpen(true)
           clickHandler(item.key)
           setActiveKey(item.state as MenuState)
-        } 
+        }
       }))
     , [])
 
@@ -201,24 +208,32 @@ export const WithPanel: StoryObj<MenuProps & MenuStoryProps> = {
           pinIcon={<BookmarkOutline />}
           unpinIcon={<BookmarkSolid />}
         >
-          {!args.minimizerBottom && <ServicesNav>
-            <Hamburger
-              className="item left"
-              role="button"
-              name="hamburger"
-              collapsed={collapsed}
-              onClick={() => setCollapsed(prevSate => !prevSate)}
-            />
-            {getNotificationsIcon(true)}
-            <Moon className="item" role="button" onClick={() => clickHandler('change theme')} />
-            <Help className="item" role="button" onClick={() => clickHandler('open online help')} />
-          </ServicesNav>}
-          {args.showLogo && <AppLogo/>}
+          {!args.minimizerBottom && (
+            <ServicesNav>
+              <Hamburger
+                className="item left"
+                role="button"
+                name="hamburger"
+                collapsed={collapsed}
+                onClick={() => setCollapsed(prevSate => !prevSate)}
+              />
+              {getNotificationsIcon(true)}
+              <Moon className="item" role="button" onClick={() => clickHandler('change theme')} />
+              <Help className="item" role="button" onClick={() => clickHandler('open online help')} />
+            </ServicesNav>
+          )}
+          {args.showLogo && <AppLogo />}
         </MenuComponent>
         <Layout width="unset" justify="flex-start" align="flex-start">
           <Notification />
           {activeKey !== 'default' && (
-            <RightPanel $overlayAbove={activeKey === 'checkboxGroup'} resizable resizeHandle="right" open={panelOpen} onClose={() => { setPanelOpen(false) }}>
+            <RightPanel
+              $overlayAbove={activeKey === 'checkboxGroup'}
+              resizable
+              resizeHandle="right"
+              open={panelOpen}
+              onClose={() => { setPanelOpen(false) }}
+            >
               {contentMap[activeKey]}
             </RightPanel>
           )}

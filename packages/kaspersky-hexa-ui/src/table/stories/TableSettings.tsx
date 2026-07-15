@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 import { TableColumn } from '..'
 import mockData from '../__mocks__/table-mock-data.json'
 
@@ -17,9 +16,7 @@ const dataSource = mockData.map((el, i) => {
 export const TableSettings: Story = {
   render: (args) => <BasicTableStory {...args} />,
   args: {
-    
     pagination: {
-      pageSize: 10,
       restoreCurrentWhenDataChange: true,
       showSizeChanger: true
     },
@@ -35,7 +32,7 @@ export const TableSettings: Story = {
     controls: {
       exclude: [
         'pagination',
-        'columns', 
+        'columns',
         'dataSource',
         'useFiltersSidebar',
         'onFilterChange'

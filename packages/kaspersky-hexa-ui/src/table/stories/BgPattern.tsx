@@ -11,8 +11,7 @@ export const BgPattern: Story = {
     dataSource: generatedData.map((row, index) => (
       index > 1 && index < 5
         ? { ...row, _blendedBackground: true }
-        : row)
-    ),
+        : row)),
     toolbar: {
       left: [
         {

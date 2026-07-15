@@ -1,7 +1,13 @@
 import { isFilterConfig } from '@src/table/modules/Filters/helpers'
 
 import { FiltersStateManager } from '../../modules/Filters/FiltersStateManager'
-import { FilterConfig, FilterFromColumn, FilterGroup, FilterOperation, FilterType } from '../../modules/Filters/types'
+import {
+  FilterConfig,
+  FilterFromColumn,
+  FilterGroup,
+  FilterOperation,
+  FilterType
+} from '../../modules/Filters/types'
 
 describe('FiltersStateManager', () => {
   const mockFilter1: FilterConfig = {
@@ -38,7 +44,7 @@ describe('FiltersStateManager', () => {
 
       it('should initialize with array of filters', () => {
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([mockFilter1, mockFilter2, mockColumnFilter1])
+        api.initDefaultFilters([mockFilter1, mockFilter2, mockColumnFilter1])
         expect(api.getRootGroupFilters()).toEqual([mockFilter1, mockFilter2, mockColumnFilter1])
       })
 
@@ -46,21 +52,21 @@ describe('FiltersStateManager', () => {
         const api = new FiltersStateManager()
         const listener = jest.fn()
         api.subscribe(listener)
-        
+
         api.setExternalFilters([mockFilter1, mockFilter2, mockColumnFilter1])
-        
+
         expect(api.getRootGroupFilters()).toEqual([mockFilter1, mockFilter2, mockColumnFilter1])
         expect(listener).toHaveBeenCalledTimes(1)
       })
 
       it('should replace predefined filters by external filters', () => {
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([mockFilter1])
+        api.initDefaultFilters([mockFilter1])
         const listener = jest.fn()
         api.subscribe(listener)
-        
+
         api.setExternalFilters([mockFilter2, mockColumnFilter1])
-        
+
         expect(api.getRootGroupFilters()).toEqual([mockFilter2, mockColumnFilter1])
         expect(listener).toHaveBeenCalledTimes(1)
       })
@@ -71,9 +77,9 @@ describe('FiltersStateManager', () => {
         const api = new FiltersStateManager()
         const listener = jest.fn()
         api.subscribe(listener)
-        
+
         api.addFilter(mockFilter1)
-        
+
         expect(api.getRootGroupFilters()).toEqual([mockFilter1])
         expect(listener).toHaveBeenCalledTimes(1)
       })
@@ -82,9 +88,9 @@ describe('FiltersStateManager', () => {
         const api = new FiltersStateManager()
         const listener = jest.fn()
         api.subscribe(listener)
-        
+
         api.addFilter(mockColumnFilter1)
-        
+
         expect(api.getRootGroupFilters()).toEqual([mockColumnFilter1])
         expect(listener).toHaveBeenCalledTimes(1)
       })
@@ -96,13 +102,13 @@ describe('FiltersStateManager', () => {
           logicOperation: 'AND'
         }
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([nestedGroup])
+        api.initDefaultFilters([nestedGroup])
 
         const listener = jest.fn()
         api.subscribe(listener)
-  
+
         api.addFilter(mockFilter1, 'nested')
-        
+
         expect(api.getRootGroupFilters()).toEqual([
           {
             id: 'nested',
@@ -117,26 +123,26 @@ describe('FiltersStateManager', () => {
     describe('removeFilter', () => {
       it('should remove existing sidebar-like filter', () => {
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([mockFilter1, mockFilter2])
+        api.initDefaultFilters([mockFilter1, mockFilter2])
 
         const listener = jest.fn()
         api.subscribe(listener)
-        
+
         api.removeFilter(mockFilter1)
-        
+
         expect(api.getRootGroupFilters()).toEqual([mockFilter2])
         expect(listener).toHaveBeenCalledTimes(1)
       })
 
       it('should remove existing column-like filter', () => {
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([mockColumnFilter1, mockColumnFilter2])
+        api.initDefaultFilters([mockColumnFilter1, mockColumnFilter2])
 
         const listener = jest.fn()
         api.subscribe(listener)
-        
+
         api.removeFilter(mockColumnFilter1)
-        
+
         expect(api.getRootGroupFilters()).toEqual([mockColumnFilter2])
         expect(listener).toHaveBeenCalledTimes(1)
       })
@@ -148,13 +154,13 @@ describe('FiltersStateManager', () => {
           logicOperation: 'AND'
         }
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([nestedGroup])
+        api.initDefaultFilters([nestedGroup])
 
         const listener = jest.fn()
         api.subscribe(listener)
-  
+
         api.removeFilter(mockFilter1, 'nested')
-        
+
         expect(api.getRootGroupFilters()).toEqual([
           {
             id: 'nested',
@@ -169,13 +175,13 @@ describe('FiltersStateManager', () => {
     describe('updateFilter', () => {
       it('should update filter value (only sidebar-like filters)', () => {
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([mockFilter1])
+        api.initDefaultFilters([mockFilter1])
 
         const listener = jest.fn()
         api.subscribe(listener)
-        
+
         api.updateFilter(mockFilter1, { value: 'updated' })
-        
+
         expect(api.getRootGroupFilters()).toEqual([
           {
             ...mockFilter1,
@@ -192,13 +198,13 @@ describe('FiltersStateManager', () => {
           logicOperation: 'AND'
         }
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([nestedGroup])
+        api.initDefaultFilters([nestedGroup])
 
         const listener = jest.fn()
         api.subscribe(listener)
-  
+
         api.updateFilter(mockFilter1, { value: 'nested-updated' }, 'nested')
-        
+
         expect(api.getRootGroupFilters()).toEqual([
           {
             id: 'nested',
@@ -217,26 +223,26 @@ describe('FiltersStateManager', () => {
     describe('resetFilters', () => {
       it('should reset all filters when no filter function is provided', () => {
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([mockFilter1, mockFilter2, mockColumnFilter1])
+        api.initDefaultFilters([mockFilter1, mockFilter2, mockColumnFilter1])
 
         const listener = jest.fn()
         api.subscribe(listener)
-        
+
         api.resetFilters()
-        
+
         expect(api.getRootGroupFilters()).toEqual([])
         expect(listener).toHaveBeenCalledTimes(1)
       })
 
       it('should reset filters with custom filter function', () => {
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([mockFilter1, mockFilter2, mockColumnFilter1])
+        api.initDefaultFilters([mockFilter1, mockFilter2, mockColumnFilter1])
 
         const listener = jest.fn()
         api.subscribe(listener)
-        
+
         api.resetFilters('root', isFilterConfig)
-        
+
         expect(api.getRootGroupFilters()).toEqual([mockFilter1, mockFilter2])
         expect(listener).toHaveBeenCalledTimes(1)
       })
@@ -248,14 +254,13 @@ describe('FiltersStateManager', () => {
           logicOperation: 'AND'
         }
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([mockColumnFilter1, nestedGroup])
+        api.initDefaultFilters([mockColumnFilter1, nestedGroup])
 
         const listener = jest.fn()
         api.subscribe(listener)
-        
-        
+
         api.resetFilters('nested', isFilterConfig)
-        
+
         expect(api.getRootGroupFilters()).toEqual([
           mockColumnFilter1,
           {
@@ -269,35 +274,35 @@ describe('FiltersStateManager', () => {
 
       it('should handle reset when group is not found', () => {
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([mockFilter1])
+        api.initDefaultFilters([mockFilter1])
 
         const listener = jest.fn()
         api.subscribe(listener)
-        
+
         api.resetFilters('nonExistentGroup', () => true)
-        
+
         expect(api.getRootGroupFilters()).toEqual([mockFilter1])
         expect(listener).not.toHaveBeenCalled()
       })
     })
   })
 
-  describe('operations with groups', () => {  
+  describe('operations with groups', () => {
     describe('createGroup', () => {
       it('should create group in root', () => {
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([mockFilter1, mockColumnFilter1])
+        api.initDefaultFilters([mockFilter1, mockColumnFilter1])
 
         const listener = jest.fn()
         api.subscribe(listener)
-        
+
         const newGroup: FilterGroup = {
           id: 'newGroup',
           logicOperation: 'OR',
           items: [mockColumnFilter2, mockFilter2]
         }
         api.createGroup(newGroup)
-  
+
         expect(api.getRootGroupFilters()).toEqual([
           mockFilter1,
           mockColumnFilter1,
@@ -307,32 +312,84 @@ describe('FiltersStateManager', () => {
       })
 
       it('should create group in nested level', () => {
-        const nestedGroup: FilterGroup = {
-          id: 'nested',
-          items: [mockFilter1, mockFilter2],
-          logicOperation: 'AND'
+        const baseGroup: FilterGroup = {
+          id: 'base',
+          logicOperation: 'AND',
+          items: [mockFilter1, mockFilter2]
         }
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([nestedGroup])
+        api.initDefaultFilters([baseGroup])
 
         const listener = jest.fn()
         api.subscribe(listener)
-        
-        const newGroup: FilterGroup = {
-          id: 'newGroup',
+
+        const nestedGroup: FilterGroup = {
+          id: 'nested-level-1',
           logicOperation: 'OR',
           items: [mockColumnFilter2, mockFilter2]
         }
-        api.createGroup(newGroup, 'nested')
-  
+        api.createGroup(nestedGroup, 'base')
+
         expect(api.getRootGroupFilters()).toEqual([
           {
-            ...nestedGroup,
+            ...baseGroup,
             items: [
-              ...nestedGroup.items,
-              newGroup
-            ],
-            logicOperation: 'AND'
+              ...baseGroup.items,
+              nestedGroup
+            ]
+          }
+        ])
+
+        const deepNestedGroup: FilterGroup = {
+          id: 'nested-level-2',
+          logicOperation: 'AND',
+          items: [mockFilter2]
+        }
+        api.createGroup(deepNestedGroup, 'nested-level-1')
+
+        expect(api.getRootGroupFilters()).toEqual([
+          {
+            ...baseGroup,
+            items: [
+              ...baseGroup.items,
+              {
+                ...nestedGroup,
+                items: [
+                  ...nestedGroup.items,
+                  deepNestedGroup
+                ]
+              }
+            ]
+          }
+        ])
+        expect(listener).toHaveBeenCalledTimes(2)
+      })
+    })
+
+    describe('removeGroup', () => {
+      it('should remove group from nested level', () => {
+        const groupToRemove: FilterGroup = {
+          id: 'groupToRemove',
+          items: [mockFilter1],
+          logicOperation: 'AND'
+        }
+        const parentGroup: FilterGroup = {
+          id: 'parent',
+          items: [groupToRemove, mockColumnFilter1],
+          logicOperation: 'OR'
+        }
+        const api = new FiltersStateManager()
+        api.initDefaultFilters([parentGroup])
+
+        const listener = jest.fn()
+        api.subscribe(listener)
+
+        api.removeGroup('groupToRemove')
+
+        expect(api.getRootGroupFilters()).toEqual([
+          {
+            ...parentGroup,
+            items: [mockColumnFilter1]
           }
         ])
         expect(listener).toHaveBeenCalledTimes(1)
@@ -347,7 +404,7 @@ describe('FiltersStateManager', () => {
           logicOperation: 'AND'
         }
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([mockColumnFilter1, groupToUngroup, mockColumnFilter2])
+        api.initDefaultFilters([mockColumnFilter1, groupToUngroup, mockColumnFilter2])
 
         const listener = jest.fn()
         api.subscribe(listener)
@@ -370,7 +427,7 @@ describe('FiltersStateManager', () => {
           logicOperation: 'OR'
         }
         const api = new FiltersStateManager()
-        api.initPredefinedFilters([parentGroup])
+        api.initDefaultFilters([parentGroup])
 
         const listener = jest.fn()
         api.subscribe(listener)
@@ -382,6 +439,41 @@ describe('FiltersStateManager', () => {
             id: 'parent',
             items: [mockFilter1, mockFilter2, mockColumnFilter1],
             logicOperation: 'OR'
+          }
+        ])
+        expect(listener).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    describe('setGroupLogicOperation', () => {
+      it('should update logic operation in deep nested group', () => {
+        const deepNestedGroup: FilterGroup = {
+          id: 'level-2',
+          items: [mockFilter1],
+          logicOperation: 'AND'
+        }
+        const nestedGroup: FilterGroup = {
+          id: 'level-1',
+          items: [deepNestedGroup],
+          logicOperation: 'OR'
+        }
+        const api = new FiltersStateManager()
+        api.initDefaultFilters([nestedGroup])
+
+        const listener = jest.fn()
+        api.subscribe(listener)
+
+        api.setGroupLogicOperation('level-2', 'OR')
+
+        expect(api.getRootGroupFilters()).toEqual([
+          {
+            ...nestedGroup,
+            items: [
+              {
+                ...deepNestedGroup,
+                logicOperation: 'OR'
+              }
+            ]
           }
         ])
         expect(listener).toHaveBeenCalledTimes(1)

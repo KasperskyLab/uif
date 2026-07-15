@@ -12,7 +12,19 @@ export type PopoverThemeProps = {
 export type PopoverProps = Omit<AbstractTooltipProps, 'placement'> & {
   content?: React.ReactNode | RenderFunction,
   /** Popover position relative to the target */
-  placement?: 'top' | 'left' | 'right' | 'bottom' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'leftTop' | 'leftBottom' | 'rightTop' | 'rightBottom',
+  placement?:
+    'top' |
+    'left' |
+    'right' |
+    'bottom' |
+    'topLeft' |
+    'topRight' |
+    'bottomLeft' |
+    'bottomRight' |
+    'leftTop' |
+    'leftBottom' |
+    'rightTop' |
+    'rightBottom',
   /** Should set max width and max height */
   shouldLimitSize?: boolean,
   /** Width */

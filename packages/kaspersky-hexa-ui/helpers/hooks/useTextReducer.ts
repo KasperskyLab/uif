@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 type UseTextReducer = {
   containerRef: React.RefObject<HTMLDivElement>;
-};
+}
 
 const useTextReducer = ({ containerRef }: UseTextReducer) => {
   const ref = useRef<HTMLDivElement>(null)

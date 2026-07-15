@@ -78,10 +78,12 @@ const contentData = {
           Some button
         </Button>
         {
-          text && <>
-            <Divider />
-            <div>{text}</div>
-          </>
+          text && (
+            <>
+              <Divider />
+              <div>{text}</div>
+            </>
+          )
         }
       </Space>
     )
@@ -98,10 +100,12 @@ const contentData = {
           Another button
         </Button>
         {
-          text && <>
-            <Divider />
-            <div>{text}</div>
-          </>
+          text && (
+            <>
+              <Divider />
+              <div>{text}</div>
+            </>
+          )
         }
       </Space>
     )
@@ -145,7 +149,7 @@ export const Icons: Story = {
     tabsData: tabsData.map(tab => {
       return {
         ...tab,
-        iconBefore: <Placeholder/>
+        iconBefore: <Placeholder />
       }
     }),
     contentData,
@@ -159,7 +163,7 @@ export const WithIndicator: Story = {
     tabsData: tabsData.map(tab => {
       return {
         ...tab,
-        iconBefore: <Placeholder/>,
+        iconBefore: <Placeholder />,
         indicator: Math.floor(Math.random() * 10) > 5 ? 'new' : 'critical'
       }
     }),
@@ -174,7 +178,7 @@ export const WithCounter: Story = {
     tabsData: tabsData.map(tab => {
       return {
         ...tab,
-        iconBefore: <Placeholder/>,
+        iconBefore: <Placeholder />,
         counter: {
           number: Math.floor(Math.random() * 14),
           mode: Math.floor(Math.random() * 10) > 5 ? 'critical_transparent' : 'neutral_transparent'
@@ -192,7 +196,7 @@ export const WithTooltip: Story = {
     tabsData: tabsData.map(tab => {
       return {
         ...tab,
-        iconBefore: <Placeholder/>,
+        iconBefore: <Placeholder />,
         infoTooltip: 'Lorem ipsum'
       }
     }),

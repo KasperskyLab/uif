@@ -2,6 +2,7 @@ import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
+import { DEFAULT_TABLE_PAGE_SIZE, DEFAULT_TABLE_PAGE_SIZE_OPTIONS } from '@src/table/types'
 import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
@@ -34,8 +35,8 @@ const meta: Meta<PaginationProps> = {
     showSizeChanger: false,
     jumper: false,
     current: 1,
-    pageSize: 10,
-    pageSizeOptions: ['10', '20', '50', '100'],
+    pageSize: DEFAULT_TABLE_PAGE_SIZE,
+    pageSizeOptions: DEFAULT_TABLE_PAGE_SIZE_OPTIONS,
     hideOnSinglePage: false,
     selected: 25,
     testId: 'pagination-test-id',
@@ -51,7 +52,7 @@ const meta: Meta<PaginationProps> = {
   decorators: [
     (Story, context) => (
       <Wrapper>
-        <Story {...context}/>
+        <Story {...context} />
       </Wrapper>
     )
   ]

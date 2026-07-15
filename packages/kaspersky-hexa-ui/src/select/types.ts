@@ -7,7 +7,19 @@ import { OptionProps as RcOptionProps } from 'rc-select/es/Option'
 import { BaseOptionType as RcBaseOptionType, DefaultOptionType as RcDefaultOptionType } from 'rc-select/es/Select'
 import React, { FocusEventHandler, PropsWithChildren, ReactNode } from 'react'
 
-export type OptionType = Omit<RcOptionProps, 'isSelectOption'> & { options?: OptionType[], description?: string}
+export type OptionType = Omit<RcOptionProps, 'isSelectOption'> & {
+  options?: OptionType[],
+  description?: string
+  actions?: OptionAction[],
+  /** Setting up the data-label field */
+  dataLabel?: string
+}
+
+export type OptionAction = {
+  key?: string,
+  icon: ReactNode,
+  onClick: () => void
+}
 
 type OptionProp = RcBaseOptionType | RcDefaultOptionType
 
@@ -59,7 +71,7 @@ export type SelectThemeProps = {
 
 export type LabelValue = string | number | LabeledValue
 
-export type SelectProps<ValueType = any, > = SelectThemeProps & PropsWithChildren<{
+export type SelectProps<ValueType = any> = SelectThemeProps & PropsWithChildren<{
   /** Footer renderer */
   renderFooter?: () => JSX.Element,
   /** Header renderer */
@@ -189,6 +201,4 @@ export type SelectProps<ValueType = any, > = SelectThemeProps & PropsWithChildre
   usePortal?: boolean
 }> & TestingProps
 
-export type SelectViewProps = ToViewProps<SelectProps, SelectCssConfig, SelectThemeProps> & {
-  setSelectOffsetWidth?: (width: number) => void
-}
+export type SelectViewProps = ToViewProps<SelectProps, SelectCssConfig, SelectThemeProps>

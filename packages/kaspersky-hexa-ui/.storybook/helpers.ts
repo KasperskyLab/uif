@@ -1,4 +1,4 @@
-import { Addon_ArgType } from 'storybook/internal/types'
+import { StorybookArgType } from './adapters/storybook'
 
 export const sbSetDefaultValue = (text: string) => ({
   table: { defaultValue: { summary: text } }
@@ -15,7 +15,7 @@ export const sbHideControls = (controls: string[]) => (
 
 export type PropsWithTooltip<T> = T & { tooltip: string }
 
-export type SBArgType = Addon_ArgType
+export type SBArgType = StorybookArgType
 export type SBArgTypes = { [key in string]: SBArgType }
 export type SBArgTypeControl = SBArgType['control']
 
@@ -38,10 +38,10 @@ export function sbMergeActions<T extends Record<string, any>> (args: T, actions:
     const addonAction = out[key]
     const action = actions[key]
 
-    // @ts-ignore
+    // @ts-expect-error плохой тайпинг плагина
     out[key] = (...args2) => {
       addonAction?.(...args2)
-      // @ts-ignore
+      // @ts-expect-error плохой тайпинг плагина
       action(...args2)
     }
   }

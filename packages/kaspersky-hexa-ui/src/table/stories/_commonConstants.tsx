@@ -2,9 +2,12 @@ import { SBArgType, SBArgTypeControl } from '@sb/helpers'
 import { Locale } from '@src/locale'
 import { FilterOperation, FilterType, Table, TableColumn } from '@src/table'
 import { ITableProps } from '@src/table/types'
+import { ToolbarItems } from '@src/toolbar'
 import { StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
+
+import { GetLeftItems } from '../modules/ToolbarIntegration'
 
 // Components
 export const Wrapper = styled.div`
@@ -50,6 +53,15 @@ export const genArgType = (description?: string, control?: string, defaultValue?
 
 export const basicArgTypes = {
   columns: genArgType('An array of column objects'),
+  contextMenu: {
+    description: 'Show context menu for table rows<br />\
+    `rows` - rows for which the context menu is invoked.\
+    If some of the rows are selected and the right-clicked row is one of them, contains all selected rows.\
+    Otherwise, contains the single row that was right-clicked',
+    table: {
+      type: { summary: '(rows: ToolbarItems[], context: Object) => ToolbarItems[]' }
+    }
+  },
   dataSource: genArgType('An array of data. Each object should contain all field used as a "dataIndex" in "columns"'),
   rowSelection: genArgType(
     'rowSelection.selectedRowKeys - an array of selected rows<br/>\
@@ -70,10 +82,11 @@ export const basicArgTypes = {
     ...genArgType('Background pattern that will be visible on rows with _blendedBackground', 'radio', 'diagonal'),
     options: [undefined, 'diagonal']
   },
+  borderedStyle: genArgType('Table styled with vertical and horizontal borders', 'boolean', 'false'),
   onColumnResize: genArgType('Handler on column resize'),
   resizingMode: {
     ...genArgType('Resizing mode', 'select'),
-    options: ['max', 'last', 'manual', 'scroll']
+    options: ['max', 'last', 'scroll']
   },
   stickyHeader: genArgType('Intend from top in px. Set undefined if sticky is not needed', 'number', 'undefined'),
   loading: genArgType('Is table loading', 'boolean', 'false'),
@@ -120,7 +133,8 @@ export const basicTwoColumns = [
     title: 'table.column.name',
     key: 'name',
     dataIndex: 'name',
-    width: 300
+    width: 300,
+    hasEmptyCellDash: true
   },
   {
     title: 'table.column2.name',
@@ -130,7 +144,7 @@ export const basicTwoColumns = [
 ]
 
 export const generateDataSource = (length: number) => (
-  Array.from({ length }, (_, index): BasicRowType & { key: number, details?: { city: string, email: string} } => ({
+  Array.from({ length }, (_, index): BasicRowType & { key: number, details?: { city: string, email: string } } => ({
     name: `Value ${index + 1}`,
     description: `Description ${index + 1}`,
     key: index + 1,
@@ -140,6 +154,42 @@ export const generateDataSource = (length: number) => (
     }
   }))
 )
+
+export const mockGetLeftItems: GetLeftItems = async (args) => {
+  const {
+    sidebarFilters,
+    sorting,
+    selectedRowKeys,
+    deselectedRowKeys,
+    isSelectedAll
+  } = args
+  console.log('getLeftItems', args)
+  const left: ToolbarItems[] = [
+    {
+      type: 'button',
+      key: 'sidebarFilters',
+      label: 'Enabled if has sidebar filters',
+      onClick: () => console.log('sidebarFilters'),
+      testId: '123',
+      disabled: !sidebarFilters?.length
+    },
+    {
+      type: 'button',
+      key: 'sorting',
+      label: 'Enabled if has sorting',
+      onClick: () => console.log('sorting'),
+      disabled: !sorting?.field
+    },
+    {
+      type: 'button',
+      key: 'rowSelection',
+      label: 'Enabled if has rowSelection',
+      onClick: () => console.log('rowSelection'),
+      disabled: !(isSelectedAll || selectedRowKeys?.length || deselectedRowKeys?.length)
+    }
+  ]
+  return left
+}
 
 export const basicDataSource = generateDataSource(180)
 

@@ -1,0 +1,100 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Textbox } from '../Textbox'
+import * as TextareaStories from './Textarea.stories'
+import { textareaDesignPropPresentation } from './Textarea.design.properties'
+
+<Meta of={TextareaStories} name="Textarea Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Textarea"
+  description="**Textarea** — многострочное поле текстового ввода"
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Textarea** принимает и отображает многострочный текст. Реализован на Ant Design Input.TextArea с темизацией Hexa UI. Доступен через подкомпонент **Textbox.Textarea**. Настраиваются **disabled**, **readOnly**, **validationStatus**, **placeholder**, **value**, **rows**, **showCount** и **maxLength**."
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключает поле: ввод и фокус недоступны. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<Textbox.Textarea disabled placeholder="Placeholder" />`}
+    />
+
+    <DocExampleBlock
+      title="readOnly"
+      description="Режим только для чтения: значение отображается, но не редактируется. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<Textbox.Textarea value="Только чтение" readOnly />`}
+    />
+
+    <DocExampleBlock
+      title="validationStatus"
+      description="Визуальный статус валидации поля. Доступные значения: `default`, `error`, `success`. По умолчанию — `default`."
+      code={`<Textbox.Textarea validationStatus="default" placeholder="Placeholder" />
+<Textbox.Textarea validationStatus="error" placeholder="Placeholder" />
+<Textbox.Textarea validationStatus="success" placeholder="Placeholder" />`}
+    />
+
+    <DocExampleBlock
+      title="placeholder"
+      description="Подсказка, отображаемая в пустом поле, когда **value** не задано."
+      code={`<Textbox.Textarea placeholder="Введите текст" />`}
+    />
+
+    <DocExampleBlock
+      title="value"
+      description="Контролируемое значение поля. Изменения передаются через **onChange**."
+      code={`<Textbox.Textarea value="Текст в поле" />`}
+    />
+
+    <DocExampleBlock
+      title="onChange"
+      description="Вызывается при изменении текста в поле. Передаёт новую строку."
+      code={`<Textbox.Textarea onChange={(value) => alert(value)} />`}
+    />
+
+    <DocExampleBlock
+      title="rows"
+      description="Количество видимых строк поля. По умолчанию — `3`."
+      code={`<Textbox.Textarea rows={5} placeholder="Placeholder" />`}
+    />
+
+    <DocExampleBlock
+      title="showCount и maxLength"
+      description="**showCount** включает счётчик символов под полем. **maxLength** задаёт максимальное количество символов и отображается в счётчике. Счётчик скрывается в состояниях **disabled** и **readOnly**. По умолчанию **showCount** — `false`."
+      code={`<Textbox.Textarea showCount maxLength={100} value="Текст" />`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Textarea** применяют для ввода и редактирования многострочного текста: описание, комментарий, заметка, сообщение. Используйте, когда пользователю нужно ввести текст длиннее одной строки или когда количество символов заранее неизвестно. Обычно размещают внутри **Field** с подписью и сообщением валидации.
+
+Для однострочного ввода выбирайте **Textbox**. Для поиска с выпадающим списком результатов — **Search**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(textareaDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={TextareaStories} />
+    <AutodocArgsTable components={Textbox.Textarea} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

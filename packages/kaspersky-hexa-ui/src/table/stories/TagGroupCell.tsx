@@ -23,12 +23,16 @@ const tagItems: TagGroupProps['items'] = [
   { label: 'Северо-Кавказская жд' },
   { label: 'Московская окружная жд' },
   { label: 'Южно-Уральская жд' },
-  { label: 'Октябрьская жд' }
+  { label: 'Октябрьская жд' },
+  { label: 'Краснодарская жд' },
+  { label: 'Транссиб' },
+  { label: 'Дальневосточная жд' },
+  { label: 'Северо-Кавказская жд' }
 ]
 
 const dataSource = [
   {
-    tags: <TagReductionGroup items={tagItems}/>,
+    tags: <TagReductionGroup items={tagItems} />,
     description: 'Description',
     key: 'tag-row-1'
   }

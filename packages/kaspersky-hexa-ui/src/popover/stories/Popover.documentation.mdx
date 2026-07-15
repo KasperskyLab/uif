@@ -1,0 +1,186 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Popover } from '../Popover'
+import * as PopoverStories from './Popover.stories'
+import { popoverDesignPropPresentation } from './Popover.design.properties'
+
+<Meta of={PopoverStories} name="Popover Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Popover"
+  description='**Popover** — немодальный диалог с функциональным содержимым, привязанный к элементу-триггеру'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+  <DocExampleBlock
+    title="Описание компонента"
+    description="**Popover** — немодальный диалог, который появляется рядом с элементом-триггером и может содержать произвольную разметку: текст, ссылки, поля ввода и другие компоненты Hexa UI. В основе лежит Popover из Ant Design с темизацией Hexa UI. Компонент поддерживает позиционирование через **placement**, способ открытия **trigger** (`click`, `hover`, `focus`), ограничение размеров **shouldLimitSize**, кастомные **width** и **height**, а также настройку контейнера overlay через **getPopupContainer** для scrollable-областей. При открытии одного popover остальные автоматически закрываются."
+  />
+
+  <DocExampleBlock
+    title="content"
+    description="Содержимое popover. Может быть простым текстом или сложной разметкой с несколькими компонентами."
+    code={`
+<Popover content="Simple text content">
+    <Button>Open popover</Button>
+</Popover>
+
+<Popover
+  content={
+    <Space gap={12} direction="vertical" align="flex-start">
+      <Text>User anomaly behavior analysis tracks the following events</Text>
+      <Link text="Online help" decoration="icon" size="medium" />
+    </Space>
+  } >
+  <Button mode="secondary">Rich content</Button>
+</Popover>`}
+  />
+
+  <DocExampleBlock
+    title="children"
+    description="Элемент-триггер, к которому привязан popover. Обычно это **Button** или **ActionButton**."
+    code={`
+<Popover content="Popover content">
+    <Button>Open popover</Button>
+</Popover>
+
+<Popover content="More info">
+    <ActionButton interactive={false} icon={<StatusInfoOutline />} />
+</Popover>`}
+  />
+
+  <DocExampleBlock
+    title="placement"
+    description="Позиция popover относительно триггера. Доступные значения: `top`, `topLeft`, `topRight`, `bottom`, `bottomLeft`, `bottomRight`, `left`, `leftTop`, `leftBottom`, `right`, `rightTop`, `rightBottom`. По умолчанию — `bottom`."
+    maxCodeLines={15}
+    code={`
+<div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', padding: 24 }}>
+  <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
+    <Popover placement="topLeft" content="topLeft">
+      <Button>TL</Button>
+    </Popover>
+    <Popover placement="top" content="top">
+      <Button>Top</Button>
+    </Popover>
+    <Popover placement="topRight" content="topRight">
+      <Button>TR</Button>
+    </Popover>
+  </div>
+  <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
+      <Popover placement="leftTop" content="leftTop">
+        <Button>LT</Button>
+      </Popover>
+      <Popover placement="left" content="left">
+        <Button>Left</Button>
+      </Popover>
+      <Popover placement="leftBottom" content="leftBottom">
+        <Button>LB</Button>
+      </Popover>
+    </div>
+    <div style={{ width: 88, flexShrink: 0 }} aria-hidden />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
+      <Popover placement="rightTop" content="rightTop">
+        <Button>RT</Button>
+      </Popover>
+      <Popover placement="right" content="right">
+        <Button>Right</Button>
+      </Popover>
+      <Popover placement="rightBottom" content="rightBottom">
+        <Button>RB</Button>
+      </Popover>
+    </div>
+  </div>
+  <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
+    <Popover placement="bottomLeft" content="bottomLeft">
+      <Button>BL</Button>
+    </Popover>
+    <Popover placement="bottom" content="bottom">
+      <Button>Bottom</Button>
+    </Popover>
+    <Popover placement="bottomRight" content="bottomRight">
+      <Button>BR</Button>
+    </Popover>
+  </div>
+</div>`}
+  />
+
+  <DocExampleBlock
+    title="trigger"
+    description="Способ открытия popover. Доступные значения: `click`, `hover`, `focus`. По умолчанию — `click`."
+    code={`
+<Popover trigger="click" content="Click to open">
+  <Button>Click</Button>
+</Popover>
+
+<Popover trigger="hover" content="Hover to open">
+  <Button>Hover</Button>
+</Popover>
+
+<Popover trigger="focus" content="Focus to open">
+  <Button>Focus</Button>
+</Popover>`}
+  />
+
+  <DocExampleBlock
+    title="shouldLimitSize"
+    description="Ограничение максимальной ширины и высоты popover; при переполнении появляется прокрутка. По умолчанию — `true`."
+    code={`
+<Popover shouldLimitSize content="Content with size limit">
+  <Button>Limited size</Button>
+</Popover>
+
+<Popover shouldLimitSize={false} content="Content without size limit">
+  <Button>No limit</Button>
+</Popover>`}
+  />
+
+  <DocExampleBlock
+    title="width и height"
+    description="Задают фиксированные размеры popover в пикселях."
+    code={`
+<Popover width={320} height={200} content="Fixed size popover">
+  <Button>Open</Button>
+</Popover>`}
+  />
+
+  <DocExampleBlock
+    title="defaultVisible"
+    description="Открывает popover сразу при монтировании компонента. По умолчанию — `false`."
+    code={`
+<Popover defaultVisible content="Visible by default">
+  <Button>Trigger</Button>
+</Popover>`}
+  />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Popover** применяют, когда нужно отобразить дополнительную информацию или интерактивный контент в контексте конкретного элемента интерфейса, не прерывая основной сценарий работы. Используйте Popover для форм, ссылок, списков действий и других компонентов, которые появляются рядом с триггером по клику, наведению или фокусу.
+
+Для кратких текстовых подсказок без интерактивного содержимого выбирайте **Tooltip**. Если действие требует явного подтверждения пользователя и должно блокировать основной интерфейс — используйте **Modal**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(popoverDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={PopoverStories} />
+    <AutodocArgsTable components={Popover} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

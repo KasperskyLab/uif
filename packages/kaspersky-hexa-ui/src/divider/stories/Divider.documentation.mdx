@@ -1,0 +1,77 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Divider } from '../Divider'
+import * as DividerStories from './Divider.stories'
+import { dividerDesignPropPresentation } from './Divider.design.properties'
+
+<Meta of={DividerStories} name="Divider Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Divider"
+  description='**Divider** — тонкая линия для визуального разделения и группировки контента'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Divider** рисует однопиксельную линию между блоками интерфейса: горизонтально на всю ширину контейнера или вертикально между соседними элементами в ряду. Цвет линии задаётся темизацией Hexa UI. Настраиваются **mode**, **direction**, **theme** и **className**."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Цветовой режим линии. Доступные значения: `bold`, `light`, `onLightStatic`, `inverted`. По умолчанию — `bold`."
+      previewDirection="vertical"
+      code='
+    <Divider mode="bold" />
+    <Divider mode="light" />
+    <Divider mode="onLightStatic" />
+    <Divider mode="inverted" />'
+    />
+
+    <DocExampleBlock
+      title="direction"
+      description="Ориентация линии. Доступные значения: `horizontal`, `vertical`. По умолчанию — `horizontal`. `horizontal` — ширина 100%, высота 1px; `vertical` — ширина 1px между элементами в ряду."
+      previewDirection="vertical"
+      code={`
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: 200 }}>
+      <div style={{ height: 24, background: '#eee' }} />
+      <Divider direction="horizontal" />
+      <div style={{ height: 24, background: '#eee' }} />
+    </div>
+    <div style={{ display: 'flex', alignItems: 'stretch', gap: 8, height: 48 }}>
+      <div style={{ width: 40, background: '#eee' }} />
+      <Divider direction="vertical" />
+      <div style={{ width: 40, background: '#eee' }} />
+    </div>
+  `}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Divider** отделяет или объединяет соседние блоки контента без смены смысла раздела: между группами пунктов в меню, секциями формы или боковой панели, шагами мастера, кнопками на панели инструментов, фильтрами в таблице. Линия снижает визуальный шум и показывает иерархию там, где заголовок или карточка избыточны."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(dividerDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={DividerStories} />
+    <AutodocArgsTable components={Divider} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

@@ -3,7 +3,13 @@ import { ITableProps } from '@src/table/types'
 import { Text } from '@src/typography'
 import React from 'react'
 
-import { basicDataSource, basicTwoColumns, genArgType, Story, Wrapper } from './_commonConstants'
+import {
+  basicDataSource,
+  basicTwoColumns,
+  genArgType,
+  Story,
+  Wrapper
+} from './_commonConstants'
 
 const InnerTable = () => (
   <Table

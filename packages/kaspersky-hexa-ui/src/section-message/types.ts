@@ -1,5 +1,6 @@
 import { ThemeKey } from '@design-system/types'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { LinkProps } from '@src/link'
 import { AllHTMLAttributes, DetailedHTMLProps, MouseEventHandler } from 'react'
 
 export const sectionMessageModes = ['error', 'success', 'info', 'warning'] as const
@@ -28,7 +29,7 @@ export enum ActionsMap {
 type ActionType = {
   text?: string,
   onClick?: MouseEventHandler<HTMLElement> | undefined
-}
+} & LinkProps
 
 type ActionConfig = Partial<Record<keyof typeof ActionsMap, ActionType>>
 
@@ -40,11 +41,13 @@ export type SectionMessageThemeProps = {
 }
 
 type DivProps = DetailedHTMLProps<AllHTMLAttributes<HTMLDivElement>, HTMLDivElement>
-export type SectionMessageProps = Omit<DivProps, 'title' | 'ref' | 'as' | 'type' > & {
+export type SectionMessageProps = Omit<DivProps, 'title' | 'ref' | 'as' | 'type'> & {
   /** If alert can be closed */
   closable?: boolean,
   /** If alert can be expanded */
   expandable?: boolean,
+  /** Initial expanded / collapsed state. Default is `true`. Use in conjunction with `expandable` prop */
+  defaultExpanded?: boolean,
   /** Title of SectionMessage */
   title?: string,
   /** Callback on close */

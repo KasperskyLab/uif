@@ -1,0 +1,167 @@
+import { ArgTypes, Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Card } from '../Card'
+import * as CardStories from './Card.stories'
+import { cardDesignPropPresentation } from './Card.design.properties'
+
+export const contentExampleCode = `const contentExample = (
+  <Text>{'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '.repeat(3)}</Text>
+)`
+
+export const scrollableContentExampleCode = `const scrollableContentExample = (
+  <Text>{'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '.repeat(20)}</Text>
+)`
+
+<Meta of={CardStories} name="Card Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Card"
+  description='**Card** — контейнер для группировки связанного контента и действий'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Card** группирует связанный контент, выделяет его на фоне страницы и может показывать область настройки или редактирования. Поддерживаются цветовые варианты **mode**, размеры **size**, заголовок **title** с элементами до и после текста, действия **actions** в шапке, перетаскивание **draggable**, закрытие **closable**, интерактивные состояния **interactive** и прокрутка контента при **maxHeight**. Ширину и точечное оформление задают через **style**, **className** или обёртку."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Цветовой вариант карточки. Доступные значения: `base`, `filled`, `selected`. По умолчанию — `base`."
+      previewDirection="vertical"
+      setupCode={contentExampleCode}
+      code={`
+<Card mode="base">{contentExample}</Card>
+<Card mode="filled">{contentExample}</Card>
+<Card mode="selected">{contentExample}</Card>`}
+    />
+
+    <DocExampleBlock
+      title="size"
+      description="Размер внутренних отступов и компоновки. Доступные значения: `small`, `medium`, `large`. По умолчанию — `medium`. Для **size** `large` без **title** действия и кнопка закрытия выводятся в правом верхнем углу карточки."
+      previewDirection="vertical"
+      setupCode={contentExampleCode}
+      code={`
+<Card size="small" title={{ value: 'Title', size: 'small' }}>{contentExample}</Card>
+<Card size="medium" title={{ value: 'Title', size: 'medium' }}>{contentExample}</Card>
+<Card size="large" title={{ value: 'Title', size: 'medium' }}>{contentExample}</Card>`}
+    />
+
+    <DocExampleBlock
+      title="title"
+      description="Заголовок карточки: обязательное поле **value**, необязательный **size**, **elementBefore** (иконка, `checkbox`, `radio`, `toggle` или произвольный узел) и **elementAfter** (**text**, `toggle`, `radio`). **title.size** — типографика заголовка. Доступные значения: `small`, `medium`. По умолчанию — `small` (рендер **H6**); при `medium` — **H5**. Действия и кнопка закрытия при наличии **title** выводятся в одной строке с заголовком."
+      code={`
+<Card style={{ width: 400 }}
+closable
+  title={{
+    value: 'Title',
+    size: 'small',
+    elementBefore: <Map />,
+    elementAfter: { component: 'toggle'}
+  }}
+>
+  Content
+</Card>`}
+    />
+
+    <DocExampleBlock
+      title="children"
+      description="Основное содержимое карточки: текст, компоненты **Hexa UI** или произвольная разметка. Базовая типографика корня — **BTR3**."
+      setupCode={contentExampleCode}
+      code='<Card>{contentExample}</Card>'
+    />
+
+    <DocExampleBlock
+      title="actions"
+      description="Массив действий в шапке. Одно действие — **Action Button** с **icon** и **onClick**; несколько — выпадающее меню с пунктами **value** и **onClick**. Действия доступны только в карточке размера `large`"
+      code={`
+<Card style={{ width: 400 }}
+size="large"
+closable
+actions={[
+    { icon: <Placeholder />, value: 'Action 1', onClick: () => {} },
+    { icon: <Placeholder />, value: 'Action 2', onClick: () => {} }
+]}
+>
+Content
+</Card>
+
+<Card style={{ width: 400 }}
+size="large"
+closable
+actions={[
+    { icon: <Placeholder />, value: 'Action 1', onClick: () => {} },
+]}
+>
+Content
+</Card>`}
+    />
+
+    <DocExampleBlock
+      title="closable"
+      description="Показывает кнопку закрытия в шапке. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Card style={{ width: 400 }} size="large" closable>Content</Card>'
+    />
+
+    <DocExampleBlock
+      title="onCloseButtonClick"
+      description="Колбэк при клике по кнопке закрытия. Имеет смысл только при **closable**."
+      code={`
+<Card closable onCloseButtonClick={() => console.log('close')}>
+  Content
+</Card>`}
+    />
+
+    <DocExampleBlock
+      title="draggable"
+      description="Показывает иконку перетаскивания слева от карточки и включает атрибут **draggable** на корневом элементе. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Card draggable>Content</Card>'
+    />
+
+    <DocExampleBlock
+      title="interactive"
+      description="Визуальные состояния `hover` и `active` для кликабельных карточек. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Card interactive>Content</Card>'
+    />
+
+    <DocExampleBlock
+      title="maxHeight"
+      description="Максимальная высота контента в CSS-единицах (например, `200px`). При переполнении и **size** !== `small` внутри карточки появляется прокрутка."
+      setupCode={scrollableContentExampleCode}
+      code={`
+<Card style={{ width: 400 }} maxHeight="200px">
+  {scrollableContentExample}
+</Card>`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Card** — для группировки связанного контента и действий в одной визуальной области: блоки настроек, элементы списка с собственным заголовком, вложенные секции на странице или в боковой панели. Карточка помогает показать, к какому объекту или группе параметров относится содержимое, и отделить его от остального интерфейса.
+
+Для важных сообщений на уровне страницы используйте **Alert** или **Notification**, а не **Card**. Для акцента внутри формы или секции — **SectionMessage**. Компактные метки и счётчики рядом с элементами — **Badge**. Основные действия сценария оформляйте **Button**, а не только иконками в шапке карточки."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(cardDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={CardStories} />
+    <AutodocArgsTable component={Card} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

@@ -1,0 +1,302 @@
+import { ArgTypes, Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Button } from '../Button'
+import * as ButtonStories from './Button.stories'
+import { buttonDesignPropPresentation } from './Button.design.properties'
+
+<Meta of={ButtonStories} name="Button Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Button"
+  description='**Button** — основной интерактивный элемент для действий пользователя в интерфейсе'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Button** инициирует действия: отправка форм, подтверждение, навигация, запуск операций. Реализован на Ant Design Button с темизацией Hexa UI. Доступны подкомпоненты **Button.Group** (группа кнопок) и **Button.SplitButton** (кнопка с выпадающим меню). Настраиваются **mode**, **size**, **iconBefore**, **iconAfter**, **loading**, **disabled**, **isPressed**, подпись через **text** или **children**, **type**, а также **theme**, **className** и **style**."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Семантический стиль кнопки. Доступные значения: `primary`, `secondary`, `tertiary`, `dangerFilled`, `dangerOutlined`, `ai`. По умолчанию — `primary`. Неподдерживаемое значение заменяется на `primary`, в консоль выводится предупреждение."
+      code='
+    <Button mode="primary" text="primary" />
+    <Button mode="secondary" text="secondary" />
+    <Button mode="tertiary" text="tertiary" />
+    <Button mode="dangerFilled" text="dangerFilled" />
+    <Button mode="dangerOutlined" text="dangerOutlined" />
+    <Button mode="ai" text="ai" />'
+    />
+
+    <DocExampleBlock
+      title="size"
+      description="Размер кнопки: влияет на высоту, минимальную ширину, отступы и типографику подписи. Доступные значения: `small`, `medium`, `large`, `extraLarge`. По умолчанию — `medium`."
+      code='
+    <Button size="small" text="Button" />
+    <Button size="medium" text="Button" />
+    <Button size="large" text="Button" />
+    <Button size="extraLarge" text="Button" />'
+    />
+
+    <DocExampleBlock
+      title="iconBefore и iconAfter"
+      description="Иконки слева и справа от подписи. Если **text** и **children** не заданы, отображается только иконка — применяется layout `iconOnly`."
+      codeBlock="collapsed"
+      code='
+    <Button text="Button" iconBefore={<ArrowLeftSmall />} />
+    <Button text="Button" iconAfter={<ArrowRightSmall />} />
+    <Button text="Button" />
+    <Button iconBefore={<Plus />} />
+    <Button iconAfter={<Settings />} />'
+    />
+
+    <DocExampleBlock
+      title="loading"
+      description="Состояние загрузки: подпись и иконки скрываются, внутри отображается [**Loader**](/?path=/docs/hexa-ui-components-loader) размера `small`. Стандартный индикатор Ant Design отключён. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Button loading text="Button" />'
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключенная кнопка не реагирует на клики и использует стиль `disabled` — как для текстовой кнопки, так и для кнопки только с иконкой. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Button disabled text="Button" />
+    <Button disabled iconBefore={<Placeholder />} text="Button" />'
+    />
+
+    <DocExampleBlock
+      title="isPressed"
+      description="Принудительно включает внешний вид нажатой кнопки без реального клика. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Button isPressed text="Button" />'
+    />
+
+    <DocExampleBlock
+      title="text и children"
+      description="Подпись через **text** или произвольное содержимое через **children**. Если заданы оба, рендерится **text**, **children** игнорируются. Если не переданы ни один из них, отображается только иконка."
+      code='
+    <Button text="From text" />
+    <Button>From children</Button>
+    <Button text="From text">From children</Button>'
+    />
+
+    <DocExampleBlock
+      title="type"
+      description="Нативный атрибут **type** кнопки. Доступные значения: `button`, `submit`, `reset`. По умолчанию — `button`. Задаёт поведение при работе с формами."
+      code='
+    <Button type="button" text="Button" />
+    <Button type="submit" text="Submit" />'
+    />
+    
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Button** — основной способ инициировать действие в интерфейсе: сохранить форму, подтвердить диалог, перейти к следующему шагу, удалить элемент. Используйте для ключевых действий на странице, в форме, модальном окне или панели инструментов; вариант оформления подбирают под иерархию действий в контексте.
+
+Для компактных вторичных действий в панелях, ячейках таблицы и элементах списка выбирайте **Action Button**. Если нужно одно действие с набором связанных опций — **Split Button**."
+    />
+
+    <DocExampleBlock
+      title="Варианты"
+      description="**`button`** — классическая кнопка с текстом или с текстом и иконками (слева, справа или с обеих сторон). Используйте, когда действие должно быть понятно по текстовой подписи.
+
+**`iconButton`** — минималистичный вариант только с иконкой. Подходит для интуитивно понятных действий (редактировать, удалить, скачать) и компактных зон интерфейса. Если смысл иконки неочевиден — выбирайте **`button`**."
+      previewGap={8}
+      codeBlock="hidden"
+      code={`
+<Button text="Сохранить" iconBefore={<Placeholder />} />
+<Button iconBefore={<Settings />} />`}
+    />
+
+    <DocExampleBlock
+      title="Семантика mode"
+      description="**`primary`** — главное действие на странице или в форме (например, «Сохранить»): продвигает пользователя по сценарию. **`secondary`** — дополнительные действия, не являющиеся основным фокусом. **`tertiary`** — вспомогательные функции с низким приоритетом: доступны, но не должны перетягивать внимание. **`ai`** — градиентный фон для возможностей на базе ИИ, чтобы подчеркнуть их технологическую природу."
+      previewGap={8}
+      codeBlock="hidden"
+      code={`
+<Button mode="primary" text="Сохранить" />
+<Button mode="secondary" text="Отмена" />
+<Button mode="tertiary" text="Сбросить" />
+<Button mode="ai" text="Сгенерировать" />`}
+    />
+
+    <DocExampleBlock
+      description="Допускается несколько кнопок **`primary`**, если на экране несколько равнозначных элементов с одинаковым действием (например, удаление в каждой строке таблицы)."
+      previewGap={8}
+      codeBlock="hidden"
+      code={`
+<Space gap={8}>
+  <Button mode="primary" text="Удалить" />
+  <Button mode="primary" text="Удалить" />
+</Space>`}
+    />
+
+    <DocExampleBlock
+      title="Несколько кнопок в одном контексте"
+      description="В случае необходимости использования двух кнопок рядом, одна из них должна быть `secondary` или `tertiary`, чтобы сохранить акцент на основном действии."
+      previewGap={8}
+      codeBlock="hidden"
+      code={`
+<Button mode="primary" text="Save" />
+<Button mode="secondary" text="Close" />`}
+    />
+
+    <DocExampleBlock
+      description="На одной странице (рядом друг с другом) нельзя располагать две кнопки с типом `primary`."
+      previewGap={8}
+      mode="dont"
+      codeBlock="hidden"
+      code={`
+<Button mode="primary" text="Save" />
+<Button mode="primary" text="Close" />`}
+    />
+
+    <DocExampleBlock
+      title="size"
+      description="Независимо от выбранного размера минимальная кликабельная область кнопки должна быть не менее 40 px."
+      codeBlock="hidden"
+      code={`
+<Button size="small" text="Button" />
+<Button size="extraLarge" text="Button" />`}
+    />
+
+    <DocExampleBlock
+      title="state"
+      description="При показе состояний в макетах используйте `enabled`, `hover`, `active` или эффекты фокуса. В реализации активное состояние без клика задаётся пропом **`isPressed`**."
+      codeBlock="hidden"
+      code='<Button isPressed text="Button" />'
+    />
+
+    <DocExampleBlock
+      title="loading"
+      description="В состоянии загрузки подпись и иконки скрываются, отображается индикатор загрузки."
+      code='<Button loading text="Сохранение" />'
+    />
+
+    <DocExampleBlock
+      title="iconBefore и iconAfter"
+      description="Слоты иконок можно заполнять любой иконкой из библиотеки. Рекомендуемый размер иконки — 16 px."
+      previewGap={8}
+      codeBlock="hidden"
+      code={`
+<Button text="Назад" iconBefore={<ArrowLeftSmall />} />
+<Button text="Далее" iconAfter={<ArrowRightSmall />} />`}
+    />
+
+    <DocExampleBlock
+      title="Текст в одну строку"
+      description="Текст кнопки всегда размещается в одну строку. Используйте короткие формулировки, которые помещаются без переноса."
+      codeBlock="hidden"
+      code='<Button text="Save and close" />'
+    />
+
+    <DocExampleBlock
+      description="Не сужайте кнопку настолько, чтобы подпись переносилась на вторую строку — это ухудшает читаемость и нарушает гайдлайн."
+      codeBlock="hidden"
+      mode="dont"
+      code={`
+<Button
+  text="Save and close"
+  style={{ width: 72, height: 'auto', whiteSpace: 'normal', lineHeight: 1.2 }}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="Деструктивные кнопки"
+      description="**`dangerFill`** (`dangerFilled` в коде) — для необратимых действий с серьёзными последствиями (удаление аккаунта, сброс всех настроек). **`dangerOutline`** (`dangerOutlined` в коде) — для деструктивных действий второго приоритета: обычно с подтверждением; контурный стиль менее заметен, но предупреждает о риске потери данных.
+
+Если деструктивное действие не является основным на странице, используйте `dangerOutlined`. Это помогает выделить менее критичные действия, не отвлекая внимание от более важных, при этом обеспечивая доступ к удалению или изменению данных на уровне отдельных элементов."
+      codeBlock="hidden"
+      code='<Button mode="dangerOutlined" text="Delete selected" />'
+    />
+
+    <DocExampleBlock
+      description="Никогда не ставьте две `dangerFilled` рядом друг с другом. Это создаст путаницу, так как не будет понятно, какое действие является основным."
+      previewGap={8}
+      codeBlock="hidden"
+      mode="dont"
+      code={`
+<Button mode="dangerFilled" text="Delete all" />
+<Button mode="dangerFilled" text="Delete selected" />`}
+    />
+
+    <DocExampleBlock
+      description="Старайтесь избегать ситуаций, когда `dangerFilled` и `dangerOutlined` расположены рядом. Это может сбивать пользователей с толку и увеличивает вероятность ошибки, так как два деструктивных действия могут восприниматься как равноценные, даже если их последствия существенно различаются."
+      previewGap={8}
+      codeBlock="hidden"
+      mode="dont"
+      code={`
+<Button mode="dangerFilled" text="Delete all" />
+<Button mode="dangerOutlined" text="Delete selected" />`}
+    />
+
+    <DocExampleBlock
+      title="Отключённая кнопка с подсказкой"
+      description="Отключённую кнопку можно обернуть в **Tooltip**, чтобы пояснить, почему действие недоступно."
+      codeBlock="collapsed"
+      code={`
+<Tooltip text="Недоступно">
+  <Button disabled text="Button" />
+</Tooltip>`}
+    />
+
+    <DocExampleBlock
+      title="Кнопка в составе Field"
+      description="Кнопка может быть частью компонента **Field** — в слоте `control` (вариант field с кнопкой в макете)."
+      codeBlock="hidden"
+      code={`
+<Field
+  label="File"
+  labelPosition="before"
+  control={<Button mode="secondary" text="Upload" />}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="Расстояние между кнопками"
+      description="Если кнопки связаны логически, расстояние `8 px` между элементами группы."
+      previewGap={8}
+      codeBlock="hidden"
+      code={`
+<Space gap={8}>
+  <Button mode="primary" text="Save" />
+  <Button mode="secondary" text="Cancel" />
+  <Button mode="tertiary" text="Reset" />
+</Space>`}
+    />
+
+    <DocExampleBlock
+      description="Расстояние между отдельностоящими кнопками — `16 px`."
+      previewDirection="vertical"
+      previewGap={16}
+      codeBlock="hidden"
+      code={`
+<Space direction="vertical" gap={16} align="flex-start">
+  <Button mode="primary" text="Save" />
+  <Button mode="secondary" text="Cancel" />
+  <Button mode="tertiary" text="Reset" />
+</Space>`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(buttonDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={ButtonStories} />
+    <AutodocArgsTable components={Button}/>
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

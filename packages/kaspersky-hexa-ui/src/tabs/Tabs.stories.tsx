@@ -55,7 +55,7 @@ const meta: Meta<TabsProps> = {
   decorators: [
     (Story, context) => (
       <Container>
-        <Story {...context}/>
+        <Story {...context} />
       </Container>
     )
   ]
@@ -130,7 +130,7 @@ const indicatorMode = IndicatorModes.filter(
 
 type StoryTabsProps = TabsProps & {
   indicatorMode: typeof indicatorMode[number]
-};
+}
 
 export const WithIndicator: StoryObj<StoryTabsProps> = {
   render: (args: StoryTabsProps) => {
@@ -150,32 +150,33 @@ export const WithIndicator: StoryObj<StoryTabsProps> = {
           Content of Tab Pane 2
         </Tabs.TabPane>
         <Tabs.TabPane
-          tab={
+          tab={(
             <Tabs.TabPaneHead
               text="Tab"
               indicator
               indicatorMode={indicatorMode}
               iconBefore={<Placeholder />}
-            />}
+            />
+          )}
           key="3"
         >
           Content of Tab Pane 3
         </Tabs.TabPane>
         <Tabs.TabPane
-          tab={
+          tab={(
             <Tabs.TabPaneHead
               text="Tab"
               indicator
               indicatorMode={indicatorMode}
               iconAfter={<Placeholder />}
             />
-          }
+          )}
           key="4"
         >
           Content of Tab Pane 4
         </Tabs.TabPane>
         <Tabs.TabPane
-          tab={
+          tab={(
             <Tabs.TabPaneHead
               text="Tab"
               indicator
@@ -183,13 +184,13 @@ export const WithIndicator: StoryObj<StoryTabsProps> = {
               iconBefore={<Placeholder />}
               number={5}
             />
-          }
+          )}
           key="5"
         >
           Content of Tab Pane 5
         </Tabs.TabPane>
         <Tabs.TabPane
-          tab={
+          tab={(
             <Tabs.TabPaneHead
               text="Tab"
               indicator
@@ -198,7 +199,7 @@ export const WithIndicator: StoryObj<StoryTabsProps> = {
               iconAfter={<Placeholder />}
               number={5}
             />
-          }
+          )}
           key="6"
         >
           Content of Tab Pane 6
@@ -221,20 +222,20 @@ export const WithInfoIcon: StoryObj<StoryTabsProps> = {
     return (
       <Tabs {...props}>
         <Tabs.TabPane
-          tab={
+          tab={(
             <Tabs.TabPaneHead
               text="Tab"
               indicator
               indicatorMode={indicatorMode}
               infoTooltip="Lorem ipsum"
             />
-          }
+          )}
           key="1"
         >
           Content of Tab Pane 1
         </Tabs.TabPane>
         <Tabs.TabPane
-          tab={
+          tab={(
             <Tabs.TabPaneHead
               text="Tab"
               indicator
@@ -242,33 +243,34 @@ export const WithInfoIcon: StoryObj<StoryTabsProps> = {
               number={5}
               infoTooltip="Lorem ipsum"
             />
-          }
+          )}
           key="2"
         >
           Content of Tab Pane 2
         </Tabs.TabPane>
         <Tabs.TabPane
-          tab={
+          tab={(
             <Tabs.TabPaneHead
               text="Tab"
               indicator
               indicatorMode={indicatorMode}
               iconBefore={<Placeholder />}
               infoTooltip="Lorem ipsum"
-            />}
+            />
+          )}
           key="3"
         >
           Content of Tab Pane 3
         </Tabs.TabPane>
         <Tabs.TabPane
-          tab={
+          tab={(
             <Tabs.TabPaneHead
               text="Tab"
               iconBefore={<Placeholder />}
               infoTooltip="Lorem ipsum"
               number={5}
             />
-          }
+          )}
           key="4"
         >
           Content of Tab Pane 4
@@ -289,14 +291,14 @@ export const WithDisabled: Story = {
   render: (args: TabsProps) => (
     <Tabs {...args}>
       <Tabs.TabPane
-        tab={
+        tab={(
           <Tabs.TabPaneHead
             text="Tab"
             indicator
             iconBefore={<Placeholder />}
             number={5}
           />
-        }
+        )}
         key="1"
       >
         Content of Tab Pane 1
@@ -331,22 +333,24 @@ export const CollapsedHorizontalGroup: Story = {
   render: (props: TabsProps) => {
     return (
       <Tabs {...props}>
-        {generateTabs(20, 'tabs.dropdown.more').map((el, i) => <Tabs.TabPane
-          tab={
-            <Tabs.TabPaneHead testId={`tab-${i + 1}`} text={useLocalization(el.text) + ' ' + (i + 1)} iconBefore={<Placeholder/>}/>
-          }
-          key={i + 1}
-          disabled={el.disabled}
-        >
-          {el.content}
-        </Tabs.TabPane>
-        )}
-      </Tabs>)
+        {generateTabs(20, 'tabs.dropdown.more').map((el, i) => (
+          <Tabs.TabPane
+            tab={
+              <Tabs.TabPaneHead testId={`tab-${i + 1}`} text={useLocalization(el.text) + ' ' + (i + 1)} iconBefore={<Placeholder />} />
+            }
+            key={i + 1}
+            disabled={el.disabled}
+          >
+            {el.content}
+          </Tabs.TabPane>
+        ))}
+      </Tabs>
+    )
   }
 }
 
-const RightButton = <Button mode="secondary" text="Right extra button"/>
-const LeftButton = <Button mode="secondary" text="Left extra button"/>
+const RightButton = <Button mode="secondary" text="Right extra button" />
+const LeftButton = <Button mode="secondary" text="Left extra button" />
 
 export const WithExtraContent: Story = {
   render: (args: TabsProps) => (
@@ -368,40 +372,46 @@ export const SidebarWithDynamicTabs = () => {
     }
     return tabs
   }, [tabsCount])
-  return (<>
-    <Button
-      mode="tertiary"
-      iconBefore={<Plus/>}
-      onClick={() => setSidebarVisible(!sidebarVisible)}
-    />
-    <Sidebar visible={sidebarVisible} size="large" onClose={() => setSidebarVisible(false)}>
-      <Tabs
-        tabBarExtraContent={<>
-          <Button
-            mode="tertiary"
-            iconBefore={<Plus/>}
-            onClick={() => { setTabsCount(i => i + 1) }}
-          >
-          </Button>
-          <Button
-            mode="tertiary"
-            iconBefore={<Minus/>}
-            onClick={() => { setTabsCount(i => i - 1) }}
-          >
-          </Button>
-        </>}
-      >
-        {tabs.map(i => {
-          return <Tabs.TabPane
-            tab={<Tabs.TabPaneHead text={`Tab ${i}`} number={i}/>}
-            key={i}
-          >
-            Content of Tab Pane {i}
-          </Tabs.TabPane>
-        })}
-      </Tabs>
-    </Sidebar>
-  </>)
+  return (
+    <>
+      <Button
+        mode="tertiary"
+        iconBefore={<Plus />}
+        onClick={() => setSidebarVisible(!sidebarVisible)}
+      />
+      <Sidebar visible={sidebarVisible} size="large" onClose={() => setSidebarVisible(false)}>
+        <Tabs
+          tabBarExtraContent={(
+            <>
+              <Button
+                mode="tertiary"
+                iconBefore={<Plus />}
+                onClick={() => { setTabsCount(i => i + 1) }}
+              >
+              </Button>
+              <Button
+                mode="tertiary"
+                iconBefore={<Minus />}
+                onClick={() => { setTabsCount(i => i - 1) }}
+              >
+              </Button>
+            </>
+          )}
+        >
+          {tabs.map(i => {
+            return (
+              <Tabs.TabPane
+                tab={<Tabs.TabPaneHead text={`Tab ${i}`} number={i} />}
+                key={i}
+              >
+                Content of Tab Pane {i}
+              </Tabs.TabPane>
+            )
+          })}
+        </Tabs>
+      </Sidebar>
+    </>
+  )
 }
 
 export const WithGroupedTabs: Story = {
@@ -413,14 +423,14 @@ export const WithGroupedTabs: Story = {
         key="tab-group-header-1"
       />
       <Tabs.TabPane
-        tab={
+        tab={(
           <Tabs.TabPaneHead
             text="Tab 1"
             indicator
             iconBefore={<Placeholder />}
             number={5}
           />
-        }
+        )}
         key="1"
       >
         Content of Tab Pane 1
@@ -593,7 +603,7 @@ export const WithPreventTabChange: Story = {
                 value: '123'
               }
             }
-          ]}/>
+          ]} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Tab 2" key="2">
           <FieldSet items={[
@@ -633,7 +643,7 @@ export const WithPreventTabChange: Story = {
                 value: '123'
               }
             }
-          ]}/>
+          ]} />
         </Tabs.TabPane>
       </Tabs>
     )

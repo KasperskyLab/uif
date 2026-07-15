@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 
 import { DropdownItemInner } from './DropdownItemInner'
 import { DropdownItemProps } from './types'
+import { TextReducer } from '@helpers/index'
 
 export const DropdownItem: FC<DropdownItemProps> = ({
   children,
@@ -12,6 +13,7 @@ export const DropdownItem: FC<DropdownItemProps> = ({
   tooltip,
   type,
   title,
+  truncateItemWidth,
   icon,
   ...rest
 }: DropdownItemProps) => {
@@ -24,7 +26,7 @@ export const DropdownItem: FC<DropdownItemProps> = ({
         tooltip={tooltip}
         icon={icon}
       >
-        {children}
+        <TextReducer truncationWidth={truncateItemWidth}>{children}</TextReducer>
       </DropdownItemInner>
     </Menu.Item>
   )

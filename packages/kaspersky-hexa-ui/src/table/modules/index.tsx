@@ -1,8 +1,11 @@
+import { FC } from 'react'
+
 import { TableContextProvider } from '../context/TableContext'
-import { Table } from '../Table'
+import { ITableProps, TableRecord, TableRef } from '../types'
 
 import { TableAccordion } from './Accordion'
 import { ColumnsSelection } from './ColumnsSelection'
+import { ContextMenu } from './ContextMenu'
 import { DraggableTable } from './Draggable'
 import { EmptyCellDash } from './EmptyCellDash'
 import { Filters } from './Filters'
@@ -10,6 +13,7 @@ import { Groups } from './Groups'
 import { InfiniteScroll } from './InfiniteScroll'
 import { Initial } from './Initial'
 import { LocalizeColumnTitles } from './LocalizeColumnTitles'
+import { MemoizeProps } from './MemoizeProps'
 import { Pagination } from './Pagination'
 import { Reductions } from './Reductions'
 import { ResizableColumns } from './ResizableColumns/ResizableColumns'
@@ -19,9 +23,10 @@ import { SortingAndFilters } from './SortingAndFilters'
 import { ToolbarIntegration } from './ToolbarIntegration'
 import { VirtualTanstack as Virtual } from './Virtual'
 
-export type TableModule = (Component: typeof Table) => typeof Table
+export type TableComponent<T extends TableRecord = TableRecord> = FC<ITableProps<T> & React.RefAttributes<TableRef>>
+export type TableModule<T extends TableRecord = TableRecord> = (Component: TableComponent<T>) => TableComponent<T>
 
-export const composeWithModules = (Component: typeof Table, modules: TableModule[]) => {
+export const composeWithModules = (Component: TableComponent, modules: TableModule[]) => {
   const TableWithModules = modules.reduce((Component, module) => module(Component), Component)
   return TableContextProvider(TableWithModules)
 }
@@ -49,11 +54,13 @@ export const tableModules: TableModule[] = [
   ColumnsSelection,
   SidebarFilters,
   InfiniteScroll,
+  ContextMenu,
   ToolbarIntegration,
   Virtual, // in developing, not ready for use
   LocalizeColumnTitles,
   Filters,
-  Initial
+  Initial,
+  MemoizeProps('columns')
 ] // calls in reverse order - tableModules[n], tableModules[n-1] etc...
 
 export { useTableModules } from './hooks'

@@ -1,3 +1,4 @@
+import { PopupConfigProvider } from '@helpers/components/PopupConfigProvider'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { CodeViewer } from '@src/code-viewer'
@@ -12,8 +13,13 @@ import { FilterConfig, FilterOperation, FilterType } from '../modules/Filters'
 import { getTableFilters } from '../modules/SidebarFilters/filters'
 import { ITableProps, TableColumn } from '../types'
 
-import { BasicTableStory, columns, columnsWithLegacyEnumCountries, Story, Wrapper } from './_commonConstants'
-import { PopupConfigProvider } from '@helpers/components/PopupConfigProvider'
+import {
+  BasicTableStory,
+  columns,
+  columnsWithLegacyEnumCountries,
+  Story,
+  Wrapper
+} from './_commonConstants'
 
 const meta: Meta<ITableProps> = {
   title: 'Hexa UI Components/Table/SidebarFilters',
@@ -43,7 +49,6 @@ export const Basic: Story = {
   render: (args) => <BasicTableStory {...args} />,
   args: {
     pagination: {
-      pageSize: 10,
       restoreCurrentWhenDataChange: true,
       showSizeChanger: true
     },
@@ -69,7 +74,8 @@ export const Basic: Story = {
         value: 7
       }
     ],
-    onFilterChange: (val) => console.log(val, 'onFilterChange')
+    onFilterChange: (val) => console.log(val, 'onFilterChange'),
+    borderedStyle: false
   }
 }
 
@@ -77,7 +83,6 @@ export const ToolbarTabsConfig: Story = {
   render: (args) => <BasicTableStory {...args} />,
   args: {
     pagination: {
-      pageSize: 10,
       restoreCurrentWhenDataChange: true,
       showSizeChanger: true
     },
@@ -104,7 +109,8 @@ export const ToolbarTabsConfig: Story = {
         value: 7
       }
     ],
-    onFilterChange: (val) => console.log(val, 'onFilterChange')
+    onFilterChange: (val) => console.log(val, 'onFilterChange'),
+    borderedStyle: false
   }
 }
 
@@ -115,13 +121,14 @@ export const ToolbarTabsConfig: Story = {
  */
 export const EnumFallbackGetAvailableValues: Story = {
   render: (args) => {
-    return <>
-      <BasicTableStory {...args} />
-    </>
+    return (
+      <>
+        <BasicTableStory {...args} />
+      </>
+    )
   },
   args: {
     pagination: {
-      pageSize: 10,
       restoreCurrentWhenDataChange: true,
       showSizeChanger: true
     },
@@ -147,7 +154,8 @@ export const EnumFallbackGetAvailableValues: Story = {
         value: 7
       }
     ],
-    onFilterChange: (val) => console.log(val, 'onFilterChange')
+    onFilterChange: (val) => console.log(val, 'onFilterChange'),
+    borderedStyle: false
   }
 }
 
@@ -241,40 +249,42 @@ export const ServerFiltering: Story = {
       setFilters(curFilters)
     }
 
-    return <Wrapper>
-      <Table
-        {...args}
-        rowSelection={{
-          selectedRowKeys,
-          onChange: handleSelectionChange
-        }}
-        useFiltersSidebar
-        dataSource={data}
-        columns={columns as TableColumn[]}
-        sidebarFilters={filters}
-        onSidebarFiltersChange={handleFiltersChange}
-        isServerFiltering
-      />
-      <Markdown value={serverFilteringInfo} />
-      <CodeViewer
-        initialValue={codeExample}
-        // @ts-ignore
-        language="typescript"
-        readonly
-        width={1000}
-        height={500}
-      />
-    </Wrapper>
+    return (
+      <Wrapper>
+        <Table
+          {...args}
+          rowSelection={{
+            selectedRowKeys,
+            onChange: handleSelectionChange
+          }}
+          useFiltersSidebar
+          dataSource={data}
+          columns={columns as TableColumn[]}
+          sidebarFilters={filters}
+          onSidebarFiltersChange={handleFiltersChange}
+          isServerFiltering
+        />
+        <Markdown value={serverFilteringInfo} />
+        <CodeViewer
+          initialValue={codeExample}
+          // @ts-expect-error костыль для строрибука
+          language="typescript"
+          readonly
+          width={1000}
+          height={500}
+        />
+      </Wrapper>
+    )
   },
   args: {
     pagination: {
-      pageSize: 10,
       restoreCurrentWhenDataChange: true,
       showSizeChanger: true
     },
     toolbar: {
       showFilterSidebar: true
-    }
+    },
+    borderedStyle: false
   }
 }
 
@@ -294,13 +304,12 @@ import { PopupConfigProvider } from '@kaspersky/hexa-ui'
 </PopupConfigProvider>
 `
 
-
 export const CustomDropdownContainer: Story = {
   render: (args) => {
 
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const handleSelectionChange = (newSelectedRowKeys: React.Key[]) => setSelectedRowKeys(newSelectedRowKeys)
-    
+
     return (
       <PopupConfigProvider getPopupContainer={() => {
         const container = document.querySelector('.hexa-ui-tabletoolbar-container')
@@ -320,7 +329,7 @@ export const CustomDropdownContainer: Story = {
           <Markdown value={customDropdownContainerInfo} />
           <CodeViewer
             initialValue={code}
-            // @ts-ignore
+            // @ts-expect-error костыль для сторибука
             language="typescript"
             readonly
             width={1000}
@@ -332,7 +341,6 @@ export const CustomDropdownContainer: Story = {
   },
   args: {
     pagination: {
-      pageSize: 10,
       restoreCurrentWhenDataChange: true,
       showSizeChanger: true
     },
@@ -340,6 +348,7 @@ export const CustomDropdownContainer: Story = {
       showColumns: true,
       showGrouping: true,
       showFilterSidebar: true
-    }
+    },
+    borderedStyle: false
   }
 }

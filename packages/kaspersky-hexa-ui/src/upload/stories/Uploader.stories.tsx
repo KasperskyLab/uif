@@ -5,7 +5,9 @@ import { withMeta } from '@sb/components/Meta'
 import { StyledTag } from '@sb/components/Warnings'
 import { renderVariants } from '@sb/StoryComponents'
 import { Button } from '@src/button'
+import { Field } from '@src/field'
 import { SectionMessage } from '@src/section-message'
+import { Sidebar } from '@src/sidebar'
 import { P, Text } from '@src/typography'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
@@ -82,6 +84,14 @@ const meta: Meta<UploaderProps> = {
             defaultValue: { summary: 'medium' },
             type: { summary: 'small | medium' }
           }
+        },
+        validationStatus: {
+          control: { type: 'inline-radio' },
+          options: ['default', 'error'],
+          table: {
+            defaultValue: { summary: 'default' },
+            type: { summary: 'default | error' }
+          }
         }
       },
       args: {
@@ -148,14 +158,16 @@ function customRequest ({
 
 export const UploaderStory: StoryObj<UploaderProps> = {
   render: args => {
-    return <div style={{ width: '100%' }}>
-      <SectionMessage closable={false} mode="info">
-        <P>You can simulate an upload error by selecting a file that contains the string &quot;error&quot; in its name.</P>
-        <P>Вы можете сэмулировать ошибку загрузки, выбрав файл, содержащий в своем имени подстроку &quot;error&quot;.</P>
-      </SectionMessage>
+    return (
+      <div style={{ width: '100%' }}>
+        <SectionMessage closable={false} mode="info">
+          <P>You can simulate an upload error by selecting a file that contains the string &quot;error&quot; in its name.</P>
+          <P>Вы можете сэмулировать ошибку загрузки, выбрав файл, содержащий в своем имени подстроку &quot;error&quot;.</P>
+        </SectionMessage>
 
-      <Uploader {...args} style={{ marginTop: 16 }} />
-    </div>
+        <Uploader {...args} style={{ marginTop: 16 }} />
+      </div>
+    )
   },
   name: 'Uploader'
 }
@@ -233,8 +245,21 @@ export const ManualUpload: StoryObj<UploaderProps> = {
 
 function Container ({ children, style, ...props }: any) {
   return (
-    <div {...props} style={{ border: '1px solid grey', height: 520, padding: 20, position: 'relative', ...style }}>
-      <Text style={{ background: 'white', padding: '0 5px', position: 'absolute', left: 0, top: 0, transform: 'translate(10px, -50%' }}>
+    <div {...props} style={{
+      border: '1px solid grey',
+      height: 520,
+      padding: 20,
+      position: 'relative',
+      ...style
+    }}>
+      <Text style={{
+        background: 'white',
+        padding: '0 5px',
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        transform: 'translate(10px, -50%'
+      }}>
         Container
       </Text>
       {children}
@@ -298,6 +323,51 @@ export const ControlOverFileList: StoryObj<UploaderProps> = {
     ],
     manual: true,
     maxFileSize: 320 * 1024
+  }
+}
+
+export const Validation: StoryObj<UploaderProps> = {
+  render: () => {
+    const [files, setFiles] = React.useState<UploadFile[]>([])
+    const [error, setError] = React.useState<string | undefined>(undefined)
+
+    function onSubmit () {
+      if (files.length === 0) {
+        setError('Upload a file to conitniue')
+      } else {
+        setError('Something went wrong. Try again')
+      }
+    }
+
+    return (
+      <Sidebar
+        footerLeft={(
+          <>
+            <Button onClick={onSubmit}>Import</Button>
+          </>
+        )}
+        size="small"
+        title="Import a policy"
+        visible
+      >
+        <Field
+          control={(
+            <Uploader
+              description="Select a file to import a policy"
+              fileList={files}
+              manual
+              maxCount={1}
+              onChange={info => {
+                setError(undefined)
+                setFiles(info.fileList)
+              }}
+              validationStatus={error ? 'error' : undefined}
+            />
+          )}
+          message={error}
+        />
+      </Sidebar>
+    )
   }
 }
 

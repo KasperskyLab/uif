@@ -9,7 +9,6 @@ import { DividerColorConfig, DividerMode } from '@src/divider/types'
 import { ExpandableTextColorConfig } from '@src/expandable-text/types'
 import { FieldColorConfig } from '@src/field/types'
 import { FormLabelStateProps } from '@src/form-label/types'
-import { HelpMessageCssConfig, HelpMessageMode } from '@src/help-message/types'
 import { IconColorConfig } from '@src/icon/types'
 import { IndicatorCssConfig, IndicatorMode } from '@src/indicator/types'
 import {
@@ -43,7 +42,6 @@ import {
   SidebarSizeConfig
 } from '@src/sidebar/types'
 import { StatusColorConfig, StatusMode } from '@src/status/types'
-import { TableColorConfig } from '@src/table/types'
 import { TagColorConfig, TagMode, TagSize, TagSizeConfig } from '@src/tag/types'
 import { TooltipCssConfig } from '@src/tooltip/types'
 import { UploadColorConfig } from '@src/upload/legacy/types'
@@ -119,8 +117,6 @@ export type ThemeConfig = Readonly<{
       sizes: Record<ModalSize, ModalSizeConfig>
     },
     keyValue: { colors: KeyValueCssConfig },
-    table: { colors: TableColorConfig },
-    helpMessage: { colors: Record<HelpMessageMode, HelpMessageCssConfig> },
     anchors: { colors: AnchorColorConfig & AnchorLinkColorConfig },
     icon: { colors: IconColorConfig },
     formLabel: { colors: FormLabelStateProps },

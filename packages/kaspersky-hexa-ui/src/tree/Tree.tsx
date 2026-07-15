@@ -2,7 +2,8 @@ import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { ActionButton } from '@src/action-button'
 import { Checkbox } from '@src/checkbox'
 import { Radio } from '@src/radio'
-import { Tree as TreeAntd, TreeNodeProps, TreeProps } from 'antd'
+import TreeAntd from 'antd/es/tree'
+import type { TreeNodeProps, TreeProps } from 'antd'
 import React, { FC, MouseEventHandler } from 'react'
 import styled from 'styled-components'
 
@@ -104,11 +105,13 @@ export const Tree: FC<ITreeProps> = ({
   checkParents = false,
   showLine = false,
   interactive = false,
+  renderAction,
+  actionIcon = <SettingsGear />,
   ...props
 }) => {
   const { testAttributes } = useTestAttribute(props)
   const parents = React.useMemo(() => getParents(treeData), [treeData])
-  const [nonStrictlyCheckedKeys, setNonStrictlyCheckedKeys] = React.useState<{ checked: Key[], halfChecked: Key[]}>(
+  const [nonStrictlyCheckedKeys, setNonStrictlyCheckedKeys] = React.useState<{ checked: Key[], halfChecked: Key[] }>(
     () => sortCheckedKeys(treeData, defaultCheckedKeys)
   )
   const treeCheckedKeys = React.useMemo(
@@ -245,7 +248,7 @@ export const Tree: FC<ITreeProps> = ({
         )
       }}
       invalid={invalid}
-      // @ts-ignore
+      // @ts-expect-error не разобрался
       onCheck={checkStrictly ? onCheck : onCheckFn}
       selectable={selectable}
       showIcon={checkable}
@@ -256,16 +259,19 @@ export const Tree: FC<ITreeProps> = ({
           e.stopPropagation()
           onActionClick?.(node)
         }
+
+        const actionButton = (renderAction || onActionClick) && node._action !== false && (
+          <ActionButton
+            className="hexa-ui-tree-node-action"
+            icon={actionIcon}
+            onClick={handleActionClick}
+          />
+        )
+
         return (
           <span className="hexa-ui-tree-node-title">
             <span>{node.title}</span>
-            {onActionClick && node._action !== false && (
-              <ActionButton
-                className="hexa-ui-tree-node-action"
-                icon={<SettingsGear />}
-                onClick={handleActionClick}
-              />
-            )}
+            {renderAction?.({ node, children: actionButton }) || actionButton}
           </span>
         )
       }}

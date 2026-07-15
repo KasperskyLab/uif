@@ -19,7 +19,7 @@ export default function useCloseOnEscape ({ visible, onClose, isTopmost }: UseCl
     }
 
     document.addEventListener('keydown', handle)
-    return () => 
+    return () =>
       document.removeEventListener('keydown', handle)
   }, [visible, onClose, isTopmost])
 }

@@ -18,7 +18,7 @@ import { scrollbarCss } from './scrollbarCss'
 import { ScrollbarProps } from './types'
 
 const meta: Meta<ScrollbarProps> = {
-  title: 'Hexa UI Components/Scrollbar/Browser',
+  title: 'Hexa UI Components/Scrollbar/Stories/Browser',
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
     docs: {

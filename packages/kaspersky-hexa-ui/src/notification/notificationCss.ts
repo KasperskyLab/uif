@@ -60,9 +60,8 @@ export const NotificationCss = css<{ cssConfig: NotificationCssConfig, noIcon?: 
           }
         }
       }
-    `
-  ).join('')
-}
+    `).join('')
+  }
 
   .toast-action-button::after {
     display: block;
@@ -117,5 +116,5 @@ export const NotificationCss = css<{ cssConfig: NotificationCssConfig, noIcon?: 
     .ant-notification-notice-icon {
       display: none;
     }`
-}
+  }
 `

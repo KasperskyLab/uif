@@ -10,8 +10,7 @@ const columns = [{
   key: 'name',
   dataIndex: 'name',
   width: 300
-},
-{
+}, {
   title: 'table.column2.name',
   key: 'description',
   dataIndex: 'description',
@@ -28,13 +27,20 @@ const rows = [
     name: 'Value 2',
     description: 'Description 2',
     key: 2
+  },
+  {
+    name: 'Value 3',
+    description: 'Description 3',
+    key: 3
   }
 ]
 
 export const rowsCount = getTotalRowCount(rows)
 
 export const Table: FC<ITableProps> = (props) => {
-  return <ConfigProvider theme={ThemeKey.Light} locale="en-us">
-    <BaseTable columns={columns} dataSource={rows} {...props} />
-  </ConfigProvider>
+  return (
+    <ConfigProvider theme={ThemeKey.Light} locale="en-us">
+      <BaseTable columns={columns} dataSource={rows} {...props} />
+    </ConfigProvider>
+  )
 }

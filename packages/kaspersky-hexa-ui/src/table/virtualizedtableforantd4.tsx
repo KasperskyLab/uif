@@ -52,7 +52,7 @@ const TOP_DONE     = 1
 
 
 
-interface RefObject {
+export interface RefObject {
   scrollTo: (y: number) => void;
   scrollToIndex: (idx: number) => void;
 }
@@ -462,7 +462,7 @@ const VTable: React.ForwardRefRenderFunction<RefObject, VTableProps> = (props, r
 
   const ref_func = useRef<() => void>(() => {})
 
-  // eslint-disable-next-line prefer-const
+   
   let scroll_hook: (e?: SimEvent | Event) => void
 
   /*********** DOM ************/
@@ -692,6 +692,15 @@ const VTable: React.ForwardRefRenderFunction<RefObject, VTableProps> = (props, r
       })
     } catch {
       el.addEventListener('scroll', scroll_hook as any, false)
+    }
+    return () => {
+      el.removeEventListener('scroll', scroll_hook as any)
+
+      ctx.vt_state = e_VT_STATE.INIT
+      if (ctx.HND_RAF) {
+        clearTimeout(ctx.HND_RAF)
+        ctx.HND_RAF = 0
+      }
     }
   }, [wrap_inst.current])
 

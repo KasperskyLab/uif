@@ -1,8 +1,8 @@
 import useEscapeToClose from '@helpers/hooks/useCloseOnEscape'
 import { getChildTestAttr, useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { Drawer } from 'antd'
+import Drawer from 'antd/es/drawer'
 import cn from 'classnames'
-import React, { FC, useEffect, useState } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import styled from 'styled-components'
 
 import SidebarHeader from './components/SidebarHeader'
@@ -16,35 +16,41 @@ const StyledSidebar = styled(Drawer).withConfig({
   ${sidebarCss}
 `
 
-export const Sidebar: FC<SidebarProps> = (rawProps: SidebarProps) => {
-  const themedProps = useThemedSidebar(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <SidebarView {...props} />
+export interface SidebarHandle {
+  reassignTopmostSidebar: () => void
 }
 
-const SidebarView: FC<SidebarViewProps> = ({
-  title,
-  cssConfig,
-  mask = true,
-  visible = false,
-  zIndex = 1000,
-  flex = false,
-  onClose,
-  headerActions = null,
-  subtitle,
-  titlePrefix,
-  titlePostfix,
-  children,
-  testAttributes,
-  subHeader,
-  destroyOnClose,
-  truncateTitle,
-  footerLeft,
-  footerRight,
-  noPaddingContent,
-  titleLineClamp,
-  ...rest
-}: SidebarViewProps) => {
+export const Sidebar = forwardRef<SidebarHandle, SidebarProps>((rawProps, ref) => {
+  const themedProps = useThemedSidebar(rawProps)
+  const props = useTestAttribute(themedProps)
+
+  const {
+    title,
+    className,
+    cssConfig,
+    mask = true,
+    visible = false,
+    zIndex = 1000,
+    flex = false,
+    onClose,
+    headerActions = null,
+    subtitle,
+    titlePrefix,
+    titlePostfix,
+    children,
+    testAttributes,
+    subHeader,
+    destroyOnClose,
+    truncateTitle,
+    footerLeft,
+    footerRight,
+    noPaddingContent,
+    titleLineClamp,
+    closeTestId,
+    afterVisibleChange,
+    ...rest
+  }: SidebarViewProps = props
+
   const contentRef = React.useRef<HTMLDivElement>(null)
   const [key, setKey] = useState(Math.random())
   const [open, setOpen] = useState(false)
@@ -54,12 +60,12 @@ const SidebarView: FC<SidebarViewProps> = ({
     return !!wrapper && wrapper.classList.contains('antd-sidebar-wrapper_last')
   }, [])
 
-  const handleClose = React.useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
-      if (!visible) return onClose?.(e)
+  const reassignTopmostSidebar = React.useCallback(
+    () => {
+      if (!visible) return
 
       const openDrawers = Array.from(document.querySelectorAll('.antd-sidebar-wrapper .ant-drawer-open'))
-      if (openDrawers.length <= 1) return onClose?.(e)
+      if (openDrawers.length <= 1) return
 
       document
         .querySelectorAll('.antd-sidebar-wrapper_last')
@@ -69,10 +75,18 @@ const SidebarView: FC<SidebarViewProps> = ({
       // получает класс _last для правильного отображения подложки
       const previousDrawer = openDrawers[openDrawers.length - 2]
       previousDrawer?.parentElement?.classList.add('antd-sidebar-wrapper_last')
+    },
+    [visible]
+  )
 
+  useImperativeHandle(ref, () => ({ reassignTopmostSidebar }))
+
+  const handleClose = React.useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
+      reassignTopmostSidebar()
       onClose?.(e)
     },
-    [visible, onClose]
+    [reassignTopmostSidebar, onClose]
   )
 
   useEscapeToClose({
@@ -119,7 +133,7 @@ const SidebarView: FC<SidebarViewProps> = ({
 
   return (
     <StyledSidebar
-      className={cn({ 'no-padding': noPaddingContent })}
+      className={cn(className, 'hexa-ui-sidebar', { 'no-padding': noPaddingContent })}
       key={key}
       maskStyle={{
         backgroundColor: cssConfig.mask.background,
@@ -127,8 +141,11 @@ const SidebarView: FC<SidebarViewProps> = ({
         transition: 'none'
       }}
       drawerStyle={{ backgroundColor: cssConfig.drawer.background }}
-      afterVisibleChange={handleVisibleChange}
-      title={
+      afterVisibleChange={(visible) => {
+        handleVisibleChange(visible)
+        afterVisibleChange?.(visible)
+      }}
+      title={(
         <SidebarHeader
           title={title}
           subtitle={subtitle}
@@ -139,8 +156,9 @@ const SidebarView: FC<SidebarViewProps> = ({
           subHeader={subHeader}
           truncateTitle={truncateTitle}
           lineClamp={titleLineClamp}
+          closeTestId={closeTestId}
         />
-      }
+      )}
       closeIcon={null}
       width={sidebarWidth}
       onClose={handleClose}
@@ -179,4 +197,4 @@ const SidebarView: FC<SidebarViewProps> = ({
       </div>
     </StyledSidebar>
   )
-}
+})

@@ -4,7 +4,7 @@ import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 import { ThemeKey } from '../../types'
 import { THEME_CONFIG } from '../themes/config'
 
-export type PropsWithTheme<P extends Record<string, unknown>> = P & { readonly theme?: ThemeKey };
+export type PropsWithTheme<P extends Record<string, unknown>> = P & { readonly theme?: ThemeKey }
 
 export function withTheme<P extends Record<string, unknown>> (
   Component: React.FC<P>
@@ -12,8 +12,7 @@ export function withTheme<P extends Record<string, unknown>> (
   return ((props: PropsWithTheme<P>) => {
     let { theme } = props
 
-    // TODO: remove when updating storybook to version >=10.2, see - https://github.com/storybookjs/storybook/pull/33276
-    // @ts-ignore
+    // @ts-expect-error TODO: remove when updating storybook to version >=10.2, see - https://github.com/storybookjs/storybook/pull/33276
     if (theme === '_reset') { theme = ThemeKey.Light }
 
     if (theme === ThemeKey.Dark) {

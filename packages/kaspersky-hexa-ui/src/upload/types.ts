@@ -1,5 +1,5 @@
 import { Theme } from '@design-system/types'
-import { TestingProps } from '@helpers/typesHelpers'
+import { TestingProps, ValidationStatus } from '@helpers/typesHelpers'
 import {
   type RcFile,
   type UploadProps as RcUploadProps,
@@ -34,7 +34,7 @@ export type UploadChangeParam = {
   file: UploadFile,
   fileList: UploadFile[],
   event?: {
-      percent: number
+    percent: number
   }
 }
 
@@ -118,6 +118,7 @@ export type UploaderProps = {
   /**
    * Shorten a long file name with ellipses if it doesn't fit on one line
    */
-  truncateFileName?: boolean
-} & Pick<RcUploadProps, 'accept' | 'action' | 'customRequest' | 'directory' | 'headers' | 'method'>
-  & TestingProps
+  truncateFileName?: boolean,
+  validationStatus?: Exclude<ValidationStatus, 'success'>
+} & Pick<RcUploadProps, 'accept' | 'action' | 'customRequest' | 'directory' | 'headers' | 'method'> &
+  TestingProps

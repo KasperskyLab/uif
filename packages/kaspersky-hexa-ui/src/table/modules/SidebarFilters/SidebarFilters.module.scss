@@ -1,7 +1,7 @@
 .filtersList {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing--gap_grouped);
+  gap: var(--gap);
 }
 
 .filterItemContainer {
@@ -11,6 +11,12 @@
   width: 100%;
 }
 
+.filtersSeparator {
+  display: flex;
+  justify-content: center;
+  margin: var(--spacing--padding_s) 0;
+}
+
 .propertyRow {
   display: flex;
   flex-direction: column;
@@ -18,16 +24,29 @@
 }
 
 .valueRow {
-  display: grid;
+  display: flex;
   gap: var(--spacing--gap_related);
+  align-items: end;
+
+  .filterCondition {
+    display: flex;
+    width: 100%;
+    gap: var(--spacing--gap_related);
+  }
+
+  .filterAttribute {
+    display: flex;
+    height: fit-content;
+    margin-top: var(--spacing--padding_m);
+  }
 }
 
 .valueRow.valueRow.valueRow :global(.kl6-field-control-box) {
   min-width: unset;
 }
 
-.grid48 {
-  grid-template-columns: 4fr 8fr;
+.addFilterRowButton {
+  display: flex;
 }
 
 .filtersToolbar {

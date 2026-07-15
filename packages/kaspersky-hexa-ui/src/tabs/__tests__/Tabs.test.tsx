@@ -16,26 +16,30 @@ const getTabs = (klId = defaultProps.klId) => screen.getByTestId(klId)
 
 const DefaultTabs = ({ children, ...props }: TabsProps) => {
   if (children) {
-    return <ConfigProvider>
-      <Tabs {...defaultProps} {...props}>
-        {children}
-      </Tabs>
-    </ConfigProvider>
+    return (
+      <ConfigProvider>
+        <Tabs {...defaultProps} {...props}>
+          {children}
+        </Tabs>
+      </ConfigProvider>
+    )
   }
 
-  return <ConfigProvider>
-    <Tabs {...defaultProps} {...props}>
-      <Tabs.TabPane tab={<Tabs.TabPaneHead testId="tab-1" text="Tab 1" />} key="1">
-        Content of Tab Pane 1
-      </Tabs.TabPane>
-      <Tabs.TabPane tab="Tab 2" key="2">
-        Content of Tab Pane 2
-      </Tabs.TabPane>
-      <Tabs.TabPane tab="Tab 3" key="3">
-        Content of Tab Pane 3
-      </Tabs.TabPane>
-    </Tabs>
-  </ConfigProvider>
+  return (
+    <ConfigProvider>
+      <Tabs {...defaultProps} {...props}>
+        <Tabs.TabPane tab={<Tabs.TabPaneHead testId="tab-1" text="Tab 1" />} key="1">
+          Content of Tab Pane 1
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Tab 2" key="2">
+          Content of Tab Pane 2
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Tab 3" key="3">
+          Content of Tab Pane 3
+        </Tabs.TabPane>
+      </Tabs>
+    </ConfigProvider>
+  )
 }
 
 describe('Tabs', () => {
@@ -252,22 +256,27 @@ describe('Tabs', () => {
   })
 
   test('should show more button', () => {
-    const generateTabs = (length: number, tabText = 'Tab', contentText = 'Content of tab') => Array.from({ length: length }, (_, i) => i).map((i) => ({
+    const generateTabs = (
+      length: number,
+      tabText = 'Tab',
+      contentText = 'Content of tab'
+    ) => Array.from({ length: length }, (_, i) => i).map((i) => ({
       text: tabText,
       content: `${contentText} ${i + 1}`
     }
     ))
     const { container } = render(
       <DefaultTabs>
-        {generateTabs(2).map((el, i) => <Tabs.TabPane
-          tab={
-            <Tabs.TabPaneHead text={el.text + ' ' + (i + 2)} />
-          }
-          key={i + 1}
-        >
-          {el.content}
-        </Tabs.TabPane>
-        )}
+        {generateTabs(2).map((el, i) => (
+          <Tabs.TabPane
+            tab={
+              <Tabs.TabPaneHead text={el.text + ' ' + (i + 2)} />
+            }
+            key={i + 1}
+          >
+            {el.content}
+          </Tabs.TabPane>
+        ))}
       </DefaultTabs>
     )
     const visibility = getComputedStyle(container.querySelector('.kl6-tabs-more-button') as Element).visibility

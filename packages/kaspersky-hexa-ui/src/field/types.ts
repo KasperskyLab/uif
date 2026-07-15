@@ -55,7 +55,7 @@ export type FieldProps = {
   messageMode?: HelpMessageMode,
   /** Handler on help icon click */
   onHelpClick?: () => void,
-   /** Parent Node which the popover should be rendered to */
+  /** Parent Node which the popover should be rendered to */
   getPopupContainer?: PopoverProps['getPopupContainer'],
   /** Grid values for grid-template-columns. If it is set, it overrides labelPosition and labelType */
   gridLayout?: string | {

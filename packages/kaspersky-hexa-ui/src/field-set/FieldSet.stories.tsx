@@ -75,10 +75,10 @@ export const Basic: Story = {
     return (
       <Container>
         <LayoutSwitcher>
-          <SegmentedButton items={viewItems} value={view} onChange={setView} />  
+          <SegmentedButton items={viewItems} value={view} onChange={setView} />
           {isGrid && (
-            <Select 
-              options={Object.values(LayoutPreset).map(x => ({ label: x, value: x }))} 
+            <Select
+              options={Object.values(LayoutPreset).map(x => ({ label: x, value: x }))}
               onChange={setGridPreset}
               style={{ width: 125 }}
               value={gridPreset}
@@ -289,7 +289,7 @@ export const Basic: Story = {
         control: {
           component: 'tag-group',
           items: [
-            <Tag key={0} label="Tag text 1"/>,
+            <Tag key={0} label="Tag text 1" />,
             ...Array.from({ length: 19 }, (_, index) => ({
               label: `Tag text ${index + 2}`
             }))
@@ -318,7 +318,7 @@ export const Basic: Story = {
         control: <>
           <Textbox.Number value={150} style={{ maxWidth: 150 }} />
           {' / '}
-          <Select 
+          <Select
             options={[
               { label: 'KB', value: 'KB' },
               { label: 'MB', value: 'MB' },
@@ -352,7 +352,7 @@ export const WaysToDeclareComponent: Story = {
           label: 'JSON-like field, JSX control',
           message: 'сомнительно, но окээээй',
           messageMode: 'warning',
-          control: <Textbox value="its ok, but common props (disabled)"/>
+          control: <Textbox value="its ok, but common props (disabled)" />
         },
         <Field
           key="JSX Field and control"
@@ -361,7 +361,7 @@ export const WaysToDeclareComponent: Story = {
           messageMode="error"
           control={<Textbox validationStatus="error" />}
         />
-      ]}/>
+      ]} />
     </Container>
   )
 }

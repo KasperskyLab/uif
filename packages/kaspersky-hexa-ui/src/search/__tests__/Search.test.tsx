@@ -51,7 +51,7 @@ describe('Search ', () => {
     const { container: containerWithValue } = render(<DefaultSearch value="search" />)
     const { container: containerNoValue } = render(<DefaultSearch />)
 
-    expect(containerWithValue.querySelector('[data-testid="search-clear"]')).toBeInTheDocument()
+    expect(containerWithValue.querySelector('[data-testid="clear-button"]')).toBeInTheDocument()
     expect(containerNoValue.querySelector('[data-testid="search-icon"]')).toBeInTheDocument()
   })
 
@@ -68,10 +68,10 @@ describe('Search ', () => {
     const { getByTestId } = render(<SearchTestComponent klId={klId} />)
 
     const search = getByTestId(klId)
-    await act(async () => {
-      await userEvent.clear(search)
-      await userEvent.type(search, 'text')
-    })
+
+    await userEvent.clear(search)
+    await userEvent.type(search, 'text')
+
     expect(search).toHaveValue('text')
     expect(screen.getByText('result 1')).toBeInTheDocument()
   })
@@ -108,27 +108,23 @@ describe('Search ', () => {
   test('should render clear button when value is present', () => {
     const { container } = render(<DefaultSearch klId="test-search-id" value="test" />)
 
-    expect(container.querySelector('[data-testid="search-clear"]')).toBeInTheDocument()
+    expect(container.querySelector('[data-testid="clear-button"]')).toBeInTheDocument()
+  })
+
+  test('should render clear button when value is present and showClearButton is false', () => {
+    const { container } = render(<DefaultSearch klId="test-search-id" value="test" showClearButton={false} />)
+
+    expect(container.querySelector('[data-testid="clear-button"]')).toBeInTheDocument()
   })
 
   test('should call onClearClick when clear button is clicked', async () => {
     const onClearClick = jest.fn()
     const { container } = render(<DefaultSearch klId="test-search-id" value="test" onClearClick={onClearClick} />)
 
-    const clearButton = container.querySelector('[data-testid="search-clear"]')
+    const clearButton = container.querySelector('[data-testid="clear-button"]')
     if (clearButton) {
       await userEvent.click(clearButton)
       expect(onClearClick).toHaveBeenCalled()
-    }
-  })
-
-  test('should handle undefined onClearClick without errors', async () => {
-    const { container } = render(<DefaultSearch klId="test-search-id" value="test" />)
-
-    const clearButton = container.querySelector('[data-testid="search-clear"]')
-    if (clearButton) {
-      await userEvent.click(clearButton)
-      expect(clearButton).toBeInTheDocument()
     }
   })
 

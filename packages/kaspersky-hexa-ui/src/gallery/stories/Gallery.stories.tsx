@@ -14,7 +14,7 @@ import exampleFull3 from './mocks/office_3_full.jpg'
 import examplePreview3 from './mocks/office_3_preview.jpg'
 
 export default {
-  title: 'Hexa UI Components/Gallery',
+  title: 'Other/Gallery',
   component: Gallery,
   parameters: {
     docs: {

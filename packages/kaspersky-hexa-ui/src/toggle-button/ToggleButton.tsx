@@ -1,11 +1,10 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { TextReducer } from '@helpers/index'
+import { generateId, TextReducer } from '@helpers/index'
 import { Tooltip } from '@src/tooltip'
 import { Text } from '@src/typography'
 import cn from 'classnames'
 import { FC, useMemo } from 'react'
 import React from 'react'
-import { v4 as uuid } from 'uuid'
 
 import styles from './ToggleButton.module.scss'
 import { ToggleButtonProps } from './types'
@@ -28,9 +27,8 @@ export const ToggleButton: FC<ToggleButtonProps> = (props) => {
     selected
   } = props
 
-
   const { testAttributes } = useTestAttribute(props)
-  const inputId = useMemo(() => uuid(), [])
+  const inputId = useMemo(() => generateId(), [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!onChange) return
@@ -42,7 +40,7 @@ export const ToggleButton: FC<ToggleButtonProps> = (props) => {
 
   const textElement = !isIconOnly ? (
     <TextReducer tooltip={text} placement="left" className={styles.reducer}>
-      <Text type={textType} className={styles.text}>
+      <Text type={textType} className={cn(styles.text, 'hexa-ui-toggle-button-text')}>
         {text}
       </Text>
     </TextReducer>
@@ -81,6 +79,7 @@ export const ToggleButton: FC<ToggleButtonProps> = (props) => {
       <label
         htmlFor={inputId}
         className={cn(
+          'hexa-ui-toggle-button',
           styles.toggleBtn,
           isIconOnly && styles.iconOnly,
           loading && styles.toggleBtnLoading,
@@ -88,10 +87,12 @@ export const ToggleButton: FC<ToggleButtonProps> = (props) => {
         )}
         data-testid={testId ? `${testId}-label` : undefined}
       >
-        {tooltip 
-          ? <Tooltip text={tooltip}>
-              {content}
-            </Tooltip> 
+        {tooltip
+          ? (
+              <Tooltip text={tooltip}>
+                {content}
+              </Tooltip>
+            )
           : content}
       </label>
     </div>

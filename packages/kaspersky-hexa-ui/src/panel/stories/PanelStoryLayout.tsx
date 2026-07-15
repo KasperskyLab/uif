@@ -36,24 +36,28 @@ export const OtherArea = styled.div`
   background-image: repeating-linear-gradient(135deg, #f9f9f9, #f9f9f9 10px, transparent 10px, transparent 20px);
 `
 
-export const mockText = <Text>Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
-Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
-Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
-Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
-Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
-Lorem ipsum dolor sit amet.
-Phasellus rutrum felis non ligula feugiat finibus.
-Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.</Text>
+export const mockText = (
+  <Text>
+    Lorem ipsum dolor sit amet.
+    Phasellus rutrum felis non ligula feugiat finibus.
+    Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
+    Lorem ipsum dolor sit amet.
+    Phasellus rutrum felis non ligula feugiat finibus.
+    Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
+    Lorem ipsum dolor sit amet.
+    Phasellus rutrum felis non ligula feugiat finibus.
+    Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
+    Lorem ipsum dolor sit amet.
+    Phasellus rutrum felis non ligula feugiat finibus.
+    Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
+    Lorem ipsum dolor sit amet.
+    Phasellus rutrum felis non ligula feugiat finibus.
+    Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
+    Lorem ipsum dolor sit amet.
+    Phasellus rutrum felis non ligula feugiat finibus.
+    Aliquam a lorem at libero eleifend tristique et ut dolor. Integer tristique placerat mollis.
+  </Text>
+)
 
 export const storySettings: Meta<PanelProps> = {
   parameters: {

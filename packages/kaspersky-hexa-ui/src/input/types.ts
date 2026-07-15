@@ -2,9 +2,16 @@ import { Focus } from '@design-system/tokens/focus'
 import { SizingType, ThemeKey } from '@design-system/types'
 import { TestingProps, ToViewProps, ValidationStatus } from '@helpers/typesHelpers'
 import { ButtonProps } from '@src/button'
-import { IconNames } from '@src/icon'
-import { Input, InputNumber as AntdInputNumber } from 'antd'
-import { ComponentProps, FC, FocusEventHandler, PropsWithChildren, ReactNode, RefObject } from 'react'
+import Input from 'antd/es/input'
+import AntdInputNumber from 'antd/es/input-number'
+import {
+  ComponentProps,
+  FC,
+  FocusEventHandler,
+  PropsWithChildren,
+  ReactNode,
+  RefObject
+} from 'react'
 import { IMaskInputProps } from 'react-imask'
 
 export type ISizeType = Extract<
@@ -61,9 +68,11 @@ export type TextboxToViewProps<T> = ToViewProps<T, InputCssConfig, TextboxThemed
 export type TextboxProps = PropsWithChildren<Omit<ComponentProps<typeof Input>, TypesToOmit> & {
   /** Handler */
   onChange?: (value: string, mask?: IMaskInputProps) => void,
+  onClearClick?: () => void,
   /** Controlled Value */
   value?: string,
-  onBlur?: FocusEventHandler
+  onBlur?: FocusEventHandler,
+  showClearButton?: boolean
 } & BaseTextboxProps>
 
 export type TextboxViewProps = TextboxToViewProps<TextboxProps>
@@ -85,10 +94,10 @@ export type TextboxMaskedProps = Omit<TextboxProps, 'maskOptions'> & {
 
 export type MaskedStyledInputType = {
   inputRef:
-    | ((instance: HTMLInputElement | null) => void)
-    | RefObject<HTMLInputElement>
-    | null
-    | undefined,
+    ((instance: HTMLInputElement | null) => void) |
+    RefObject<HTMLInputElement> |
+    null |
+    undefined,
   className?: string,
   disabled?: boolean,
   readOnly?: boolean,
@@ -121,8 +130,8 @@ export type TextboxPasswordProps = Omit<ComponentProps<typeof Input.Password>, T
   actions?: Array<{
     /** Tooltip text */
     tooltip?: string,
-    /** Icon name for the action */
-    icon?: IconNames,
+    /* Icon for the action */
+    icon?: ReactNode,
     /** Button mode */
     mode?: ButtonProps['mode'],
     /** Handler called when the action button is clicked */
@@ -131,7 +140,7 @@ export type TextboxPasswordProps = Omit<ComponentProps<typeof Input.Password>, T
 } & BaseTextboxProps
 
 // Textbox.Number
-export type TextboxNumberProps = Omit<ComponentProps<typeof AntdInputNumber>, TypesToOmit | 'controls'> & {
+export type TextboxNumberProps = Omit<ComponentProps<typeof AntdInputNumber>, TypesToOmit | 'controls' | 'min' | 'max'> & {
   /** Handler  */
   onChange?: (value: TextboxNumberProps['value']) => void,
   /** (optional) Icons for controls */
@@ -146,7 +155,9 @@ export type TextboxNumberProps = Omit<ComponentProps<typeof AntdInputNumber>, Ty
   /** Controlled Value */
   value?: number | string,
   /** The min value */
-  min?: number
+  min?: number,
+  /** The max value */
+  max?: number
 } & BaseTextboxProps
 
 // Textbox.Textarea

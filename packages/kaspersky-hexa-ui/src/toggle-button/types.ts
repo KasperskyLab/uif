@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 
 export const toggleButtonModes = [
   'grey',
-  'red', 
+  'red',
   'orange',
   'yellow',
   'grass',
@@ -19,7 +19,7 @@ export type ToggleButtonMode = typeof toggleButtonModes[number]
 
 export const toggleButtonSizes = [
   'extraSmall',
-  'small', 
+  'small',
   'medium'
 ] as const
 

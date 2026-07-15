@@ -87,7 +87,7 @@
       "total": "총 {{count}}개",
       "selected": "{{count}}개 선택",
       "page": "페이지",
-      "goto": "다음으로 가기"
+      "goto": "페이지로 이동"
     },
     "search": {
       "raw": "검색",
@@ -100,6 +100,14 @@
         "sorting": "정렬",
         "filters": "필터",
         "resetFilters": "필터 초기화"
+      },
+      "contextMenu": {
+        "selected": "{{count}}개 선택됨"
+      },
+      "selectAll": {
+        "selectAll": "모두 선택",
+        "selectCurrentPage": "현재 페이지에서 모두 선택",
+        "deselectAll": "모두 초기화"
       },
       "columnsSettings": {
         "header": "테이블 설정",
@@ -124,12 +132,18 @@
           "add": "추가",
           "clearAll": "모두 지우기",
           "property": "속성",
+          "attribute": "특성",
           "condition": "조건",
           "from": "시작",
           "to": "종료",
-          "value": "값"
+          "value": "값",
+          "validation": {
+            "emptyValue": "필터링 값 지정",
+            "duplicateFilters": "중복 필터. 각 필터가 고유한지 확인하십시오."
+          }
         },
-        "columnHideIsUnavailable": "열 숨기기를 이용할 수 없음"
+        "columnHideIsUnavailable": "열 숨기기를 이용할 수 없음",
+        "onlyForFiltering": "이 열은 필터링 전용입니다"
       },
       "filterOperation": {
         "⊆": "포함",
@@ -207,7 +221,11 @@
       "term": "기간",
       "dayLeft": "{{count}}일 남음",
       "daysLeft": "{{count}}일 남음",
-      "termDays": "{{count}}일"
+      "termDays": "{{count}}일",
+      "statuses": {
+        "valid": "액티브",
+        "expired": "만료됨"
+      }
     },
     "input": {
       "password": {

@@ -1,0 +1,137 @@
+import { ArgTypes, Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, DocExampleBlock, DocPageHeader, DocPageLayout, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Button } from '../Button'
+import * as ButtonStories from './Button.stories'
+import * as SplitButtonStories from './SplitButton.stories'
+
+<Meta of={SplitButtonStories} name="SplitButton Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="SplitButton"
+  description='**SplitButton** — составная кнопка с основным действием и выпадающим меню дополнительных опций'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**SplitButton** объединяет основное действие и список дополнительных сценариев в одном контроле. Компонент поддерживает режимы `primary`, `secondary`, `dangerFilled`, иконку перед подписью, состояния **loading** и **disabled**, а также настройку выпадающего меню через **items** и `dropdownPlacement`."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Цветовой вариант применяется сразу к основной кнопке и кнопке-триггеру меню. Доступные значения: `primary`, `secondary`, `dangerFilled`. По умолчанию — `primary`."
+      code='
+    <Button.SplitButton mode="primary" text="primary" items={[{ children: "Option 1" }, { children: "Option 2" }]} />
+    <Button.SplitButton mode="secondary" text="secondary" items={[{ children: "Option 1" }, { children: "Option 2" }]} />
+    <Button.SplitButton mode="dangerFilled" text="dangerFilled" items={[{ children: "Option 1" }, { children: "Option 2" }]} />'
+    />
+
+    <DocExampleBlock
+      title="iconBefore"
+      description="Иконка перед текстом задаётся только для основной кнопки. Правая часть всегда использует встроенный chevron для открытия меню."
+      code='
+    <Button.SplitButton text="Action" iconBefore={<Update size="small" />} items={[{ children: "Option 1" }, { children: "Option 2" }]} />'
+    />
+
+    <DocExampleBlock
+      title="items"
+      description="Содержимое выпадающего меню передаётся через items. Для меню используется компонент [**Dropdown**](/?path=/docs/hexa-ui-components-dropdown--docs), поэтому для элементов доступны его возможности и параметры айтемов. В items можно задавать подпись, описание, tooltip, элементы до и после текста, disabled-состояние, обработчики и вложенные меню."
+      code={`
+    <Button.SplitButton text="Split button"
+      items={[
+        { children: "Option 1", description: "Some description" },
+        { children: "Option 2" },
+        {
+          children: "Option 3",
+          description: "Some description",
+          componentsBefore: [<Loader key="loader" size="small" />]
+        }
+      ]} />`}
+    />
+
+    <DocExampleBlock
+      title="dropdownPlacement"
+      description="Управляет позицией меню относительно правой кнопки-триггера. Доступные значения: `topLeft`, `topCenter`, `topRight`, `bottomLeft`, `bottomCenter`, `bottomRight`."
+      code='
+    <Button.SplitButton text="Top left" dropdownPlacement="topLeft" items={[{ children: "Option 1" }, { children: "Option 2" }]} />
+    <Button.SplitButton text="Top center" dropdownPlacement="topCenter" items={[{ children: "Option 1" }, { children: "Option 2" }]} />
+    <Button.SplitButton text="Top right" dropdownPlacement="topRight" items={[{ children: "Option 1" }, { children: "Option 2" }]} />
+    <Button.SplitButton text="Bottom left" dropdownPlacement="bottomLeft" items={[{ children: "Option 1" }, { children: "Option 2" }]} />
+    <Button.SplitButton text="Bottom center" dropdownPlacement="bottomCenter" items={[{ children: "Option 1" }, { children: "Option 2" }]} />
+    <Button.SplitButton text="Bottom right" dropdownPlacement="bottomRight" items={[{ children: "Option 1" }, { children: "Option 2" }]} />'
+    />
+
+    <DocExampleBlock
+      title="loading"
+      description="При **loading**=`true` индикатор загрузки показывается только на основной кнопке. Правая часть с chevron остаётся отдельным trigger-элементом и по-прежнему позволяет открыть меню, если компонент не **disabled**. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Button.SplitButton loading text="Split button" items={[{ children: "Option 1" }, { children: "Option 2" }]} />'
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключённое состояние блокирует и основное действие, и открытие выпадающего меню. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Button.SplitButton disabled text="Split button" items={[{ children: "Option 1" }, { children: "Option 2" }]} />'
+    />
+
+    <DocExampleBlock
+      title="text и children"
+      description="Подпись основной кнопки можно передать через text или children. Если заданы оба, используется text."
+      code='
+    <Button.SplitButton text="From text" items={[{ children: "Option 1" }, { children: "Option 2" }]} />
+    <Button.SplitButton items={[{ children: "Option 1" }, { children: "Option 2" }]}>From children</Button.SplitButton>
+    <Button.SplitButton text="From text" items={[{ children: "Option 1" }, { children: "Option 2" }]}>From children</Button.SplitButton>'
+    />
+
+    <DocExampleBlock
+      title="theme"
+      description="Проп theme задаёт светлую или тёмную тему на корневом контейнере split button."
+      code='
+    <Button.SplitButton theme="dark" text="Split button" items={[{ children: "Option 1" }, { children: "Option 2" }]} />
+    <Button.SplitButton theme="light" text="Split button" items={[{ children: "Option 1" }, { children: "Option 2" }]} />
+'
+    />
+
+    <DocExampleBlock
+      title="className и style"
+      description="className и style позволяют точечно переопределить контейнер split button. Для вариантов дизайн-системы используйте mode."
+      code='<Button.SplitButton className="custom-split-button" style={{ width: "100%" }} text="Wide split button" items={[{ children: "Option 1" }, { children: "Option 2" }]} />'
+    />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+      <Text type="H5">Правила использования</Text>
+      <Text type="BTR3">
+        Раздел зарезервирован под правила использования. Содержимое будет добавлено в следующих релизах.
+      </Text>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+      <Text type="H5">Дизайн</Text>
+      <Text type="BTR3">
+        Раздел зарезервирован под дизайн-гайдлайны. Содержимое будет добавлено в следующих релизах.
+      </Text>
+  </Tabs.TabPane>
+
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <PropsTable />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="autodoc" key="autodoc">
+    <Text type="H5">SplitButton</Text>
+    <Description of={SplitButtonStories} />
+    <AutodocArgsTable of={Button.SplitButton} includeTestingProps />
+
+    <Text type="H5" style={{ marginTop: 32 }}>Button</Text>
+    <Description of={ButtonStories} />
+    <AutodocArgsTable of={Button} includeTestingProps />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

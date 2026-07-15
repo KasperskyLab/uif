@@ -2,7 +2,14 @@ import { LabelType } from '@design-system/tokens'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
-import { Button, Field, FieldSet, Select, Sidebar, Textbox } from '@src/index'
+import {
+  Button,
+  Field,
+  FieldSet,
+  Select,
+  Sidebar,
+  Textbox
+} from '@src/index'
 import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
@@ -74,7 +81,7 @@ export const EmptyLabel: Story = {
           key={type}
           {...args}
           labelType={type}
-          control={<Textbox placeholder={`labelType: ${type}`}/>}
+          control={<Textbox placeholder={`labelType: ${type}`} />}
         />
       ))}
     </>
@@ -91,7 +98,7 @@ export const InSmallSidebar: Story = {
 
     return (
       <>
-        <Button text="Open sidebar" onClick={() => setIsOpen(true)}/>
+        <Button text="Open sidebar" onClick={() => setIsOpen(true)} />
         <Sidebar
           visible={isOpen}
           onClose={() => setIsOpen(false)}
@@ -100,8 +107,8 @@ export const InSmallSidebar: Story = {
         >
           <FieldSet items={[
             <Field key="1" control={args.control} label={args.label} />,
-            <Field key="2" control={args.control} label={args.label} labelPosition="before"/>
-          ]}/>
+            <Field key="2" control={args.control} label={args.label} labelPosition="before" />
+          ]} />
         </Sidebar>
       </>
     )

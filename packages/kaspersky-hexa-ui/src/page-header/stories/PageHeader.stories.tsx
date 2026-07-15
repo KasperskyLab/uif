@@ -63,10 +63,10 @@ const processArgs = ({
   let iconBefore
   switch (iconBeforeRaw) {
     case 'Placeholder':
-      iconBefore = <Placeholder/>
+      iconBefore = <Placeholder />
       break
     case 'Settings':
-      iconBefore = <Settings/>
+      iconBefore = <Settings />
       break
     case '-':
     default:
@@ -76,16 +76,16 @@ const processArgs = ({
   let elementAfter
   switch (elementAfterRaw) {
     case 'Icon':
-      elementAfter = <Placeholder/>
+      elementAfter = <Placeholder />
       break
     case 'Tag':
       elementAfter = <Tag>Some tag</Tag>
       break
     case 'Textbox':
-      elementAfter = <Textbox/>
+      elementAfter = <Textbox />
       break
     case 'Button':
-      elementAfter = <Button text="Some button"/>
+      elementAfter = <Button text="Some button" />
       break
     case '-':
     default:
@@ -96,7 +96,13 @@ const processArgs = ({
 
   const breadcrumbs = breadcrumbsRaw ? { routes: generateRoutes() } : undefined
 
-  return { iconBefore, elementAfter, tagsAfter, breadcrumbs, ...rest }
+  return {
+    iconBefore,
+    elementAfter,
+    tagsAfter,
+    breadcrumbs,
+    ...rest
+  }
 }
 
 export const PageHeader: Story = {

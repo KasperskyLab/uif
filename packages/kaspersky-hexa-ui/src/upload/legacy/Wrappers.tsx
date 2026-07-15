@@ -1,7 +1,7 @@
 import { BORDER_RADIUS, SPACES } from '@design-system/theme/themes/variables'
 import { getFromProps } from '@helpers/getFromProps'
 import { Heading, Text } from '@src/typography'
-import { Upload as AntdUpload } from 'antd'
+import AntdUpload from 'antd/es/upload'
 import * as React from 'react'
 import styled from 'styled-components'
 
@@ -17,7 +17,7 @@ from external module ".../kl-components/node_modules/antd/lib/upload/Upload" but
 After research I`ve found that the interface UploadInterface is not exporting and TS compiler
 can`t find it. So I made this trick to avoid TS issue.
 */
-const WrappedAntUpload = (props: React.ComponentProps<typeof AntdUpload>): JSX.Element => <AntdUpload {...props}/>
+const WrappedAntUpload = (props: React.ComponentProps<typeof AntdUpload>): JSX.Element => <AntdUpload {...props} />
 
 const fromProps = getFromProps<UploadColorConfig>()
 
@@ -75,7 +75,8 @@ export const StretchHelper = styled.div <{ width?: number }>`
 export const StyledUrlUploader = styled(WrappedAntUpload as (props: React.ComponentProps<typeof AntdUpload> & {
   width: number | undefined,
   height: number | undefined,
-  disabled: boolean | undefined }) => JSX.Element)`
+  disabled: boolean | undefined
+}) => JSX.Element)`
   &&& {
     border: ${fromProps('normal.border')};
     border-radius: ${BORDER_RADIUS[6]}px;

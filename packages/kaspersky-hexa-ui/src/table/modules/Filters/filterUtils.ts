@@ -1,25 +1,39 @@
+import { TableRecord } from '@src/table/types'
 import cloneDeep from 'lodash/cloneDeep'
 
 import { isFilter, isGroup, isSameItem, prefix } from './helpers'
 import { FilterGroup } from './types'
 
-type FilterStructure = FilterGroup['items'] | FilterGroup
+export type FilterStructure<T extends TableRecord = TableRecord> = FilterGroup<T>['items'] | FilterGroup<T>
 
-export const mergeFilterStructures = <T extends FilterStructure>(base: T, toMerge: T): T => {
+export function mergeFilterStructures<T extends TableRecord> (
+  base: FilterGroup<T>['items'],
+  toMerge: FilterGroup<T>['items']
+): FilterGroup<T>['items']
+
+export function mergeFilterStructures<T extends TableRecord> (
+  base: FilterGroup<T>,
+  toMerge: FilterGroup<T>
+): FilterGroup<T>
+
+export function mergeFilterStructures <T extends TableRecord> (base: FilterStructure<T>, toMerge: FilterStructure<T>): FilterStructure<T> {
   if (Array.isArray(base) && Array.isArray(toMerge)) {
-    return mergeArrays(base, toMerge) as T
+    return mergeArrays(base, toMerge)
   }
 
   if (!Array.isArray(base) && !Array.isArray(toMerge)) {
-    return mergeGroups(base, toMerge) as T
+    return mergeGroups(base, toMerge)
   }
 
   throw new Error(`${prefix} Cannot merge array with group directly`)
 }
 
-const mergeArrays = (base: FilterGroup['items'], toMerge: FilterGroup['items']): FilterGroup['items'] => {
-  const groupsMap = new Map<string, FilterGroup>()
-  const result: FilterGroup['items'] = []
+const mergeArrays = <T extends TableRecord = TableRecord> (
+  base: FilterGroup<T>['items'],
+  toMerge: FilterGroup<T>['items']
+): FilterGroup<T>['items'] => {
+  const groupsMap = new Map<string, FilterGroup<T>>()
+  const result: FilterGroup<T>['items'] = []
 
   base.forEach((item) => {
     if (isGroup(item)) {
@@ -54,7 +68,7 @@ const mergeArrays = (base: FilterGroup['items'], toMerge: FilterGroup['items']):
   return result
 }
 
-const mergeGroups = (base: FilterGroup, toMerge: FilterGroup): FilterGroup => ({
+const mergeGroups = <T extends TableRecord = TableRecord>(base: FilterGroup<T>, toMerge: FilterGroup<T>): FilterGroup<T> => ({
   ...cloneDeep(base),
   ...cloneDeep(toMerge),
   items: mergeArrays(base.items, toMerge.items)

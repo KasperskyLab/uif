@@ -56,14 +56,15 @@ export const SubHeaderWrapper = styled.div<{ paddingBottom?: boolean }>`
   padding-bottom: ${({ paddingBottom }) => (paddingBottom ? '24px' : '0px')};
 `
 
-const CloseButton: React.FC<{ onClose: ISidebarTitle['onClose'] }> = ({
-  onClose
+const CloseButton: React.FC<{ onClose: ISidebarTitle['onClose'], testId?: string }> = ({
+  onClose,
+  testId
 }) => (
   <ActionButton
     onClick={onClose}
     size="large"
-    testId="sidebar-close-icon"
-    klId="close-icon"
+    testId={testId || 'sidebar-close-icon'}
+    klId={testId || 'close-icon'}
   />
 )
 
@@ -76,7 +77,8 @@ interface ISidebarTitle {
   headerActions?: React.ReactNode,
   truncateTitle?: boolean,
   onClose: SidebarProps['onClose'],
-  lineClamp?: number
+  lineClamp?: number,
+  closeTestId?: string
 }
 
 const SidebarHeader: React.FC<ISidebarTitle> = ({
@@ -88,10 +90,11 @@ const SidebarHeader: React.FC<ISidebarTitle> = ({
   onClose,
   subHeader,
   truncateTitle,
-  lineClamp
+  lineClamp,
+  closeTestId
 }) => {
 
-  const titleContent =  (
+  const titleContent = (
     typeof title === 'string'
       ? (
           <H3 testId="sidebar-title" klId="title" className={cn((truncateTitle || (lineClamp && lineClamp >= 1)) && 'hexa-ui-truncated-title')}>
@@ -129,7 +132,7 @@ const SidebarHeader: React.FC<ISidebarTitle> = ({
         <div className="ant-drawer-extra">
           <ExtraActions>
             {headerActions}
-            <CloseButton onClose={onClose} />
+            <CloseButton onClose={onClose} testId={closeTestId} />
           </ExtraActions>
         </div>
       </StyledHeaderFirstLine>

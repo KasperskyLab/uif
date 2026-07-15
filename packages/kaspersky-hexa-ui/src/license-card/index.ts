@@ -1,5 +1,5 @@
 export * from './LicenseCard'
-export type { 
-  LicenseCardMode, 
-  LicenseCardProps 
+export type {
+  LicenseCardMode,
+  LicenseCardProps
 } from './types'

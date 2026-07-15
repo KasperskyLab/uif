@@ -9,20 +9,20 @@ import { useTableContext } from '../../context/TableContext'
 import { isColumnReadonly } from '../../helpers/common'
 import { getPersistentStorageValue, updatePersistentStorage } from '../../helpers/persistentStorage'
 import { TableColumn, TableRecord } from '../../types'
+import { FilterType } from '../Filters'
 import { useInitTableSorters } from '../hooks/useInitTableSorters'
-import { TableModule } from '../index'
+import { TableComponent } from '../index'
 
 import { DropdownColumnTitle } from './DropdownColumnTitle'
+import { hasFiltersOrSorting } from './helpers'
 import { customSortFunctionWrapper, defaultSortFunction } from './sortFunction'
 import { ActiveSorting } from './types'
 
-const hasFiltersOrSorting = (columns: TableColumn[]) => {
-  return columns.some(({ filters, isSortable }) => filters || isSortable)
-}
-
 const EMPTY_OBJ = Object.freeze({})
 
-export const SortingAndFilters: TableModule = Component => function SortingAndFiltersModule ({
+export const SortingAndFilters = <T extends TableRecord = TableRecord> (
+  Component: TableComponent<T>
+): TableComponent<T> => function SortingAndFiltersModule ({
   columns,
   dataSource,
   onSortChange,
@@ -32,30 +32,32 @@ export const SortingAndFilters: TableModule = Component => function SortingAndFi
   setExternalSorting,
   storageKey,
   ...props
-}): React.ReactElement {
+}) {
   if (!columns || !Array.isArray(dataSource)) {
     return <Component {...props} storageKey={storageKey} />
   }
 
-  if (!hasFiltersOrSorting(columns)) {
+  if (!columns.some(hasFiltersOrSorting)) {
     return <Component {...props} columns={columns} dataSource={dataSource} storageKey={storageKey} />
   }
 
-  const { filterApi, pagination, updateContext } = useTableContext()
+  const { filterApi, pagination, updateContext } = useTableContext<T>()
 
   const initialSorting: ActiveSorting = props.initialSorting || EMPTY_OBJ
 
-  const [activeSorting, setActiveSorting] = useState<ActiveSorting>(initialSorting)
-  const [sortingWithExternal, setSortingWithExternal] = useState<ActiveSorting>(activeSorting || initialSorting)
+  const [activeSorting, setActiveSorting] = useState<ActiveSorting<T>>(initialSorting)
+  const [sortingWithExternal, setSortingWithExternal] = useState<ActiveSorting<T>>(activeSorting || initialSorting)
   const { columnsSortersConfig } = useInitTableSorters({ columns })
 
   useEffect(() => {
     setSortingWithExternal(activeSorting || initialSorting)
   }, [props.initialSorting, activeSorting])
-  
 
   useEffect(() => {
-    updateContext({ sorting: sortingWithExternal })
+    updateContext({
+      sorting: sortingWithExternal,
+      setSorting: setSortingWithExternal
+    })
   }, [sortingWithExternal])
 
   useEffect(() => {
@@ -65,11 +67,11 @@ export const SortingAndFilters: TableModule = Component => function SortingAndFi
         setActiveSorting(savedSorting)
       }
     }
-  }, [props.initialSorting, externalSorting])
+  }, [props.initialSorting, externalSorting, storageKey])
 
   const processedColumns = useMemo(() => (
-    columns.map((column: TableColumn, index: number): TableColumn => {
-      if (!(column.isSortable || column.filters || column.sorter) || isColumnReadonly(column)) {
+    columns.map((column, index): TableColumn<T> => {
+      if (!hasFiltersOrSorting(column) || isColumnReadonly(column)) {
         return column
       }
 
@@ -77,39 +79,42 @@ export const SortingAndFilters: TableModule = Component => function SortingAndFi
         ...column,
         sorter: undefined,
         filters: undefined,
-        key: column.dataIndex || index,
+        key: column.filterName || column.key || String(index),
         title:
-          <DropdownColumnTitle
-            testId={props?.testId}
-            klId={props?.klId}
-            allowMultipleFilters={Boolean(column.allowMultipleFilters)}
-            closeDropdownOnSelect={column.closeDropdownOnSelect}
-            title={column.title}
-            columnId={column.columnId}
-            dataIndex={column.dataIndex!}
-            availableFilters={column.filters}
-            isSortable={column.isSortable}
-            sortingAttributes={column.sortingAttributes}
-            sorter={column.sorter}
-            filterApi={filterApi}
-            onDropdownFiltersChange={onDropdownFiltersChange}
-            activeSorting={activeSorting}
-            setActiveSorting={setExternalSorting || setActiveSorting}
-            showFilterIcon={column.showFilterIcon}
-          />
+            <DropdownColumnTitle
+              testId={props?.testId}
+              klId={props?.klId}
+              allowMultipleFilters={Boolean(column.allowMultipleFilters)}
+              closeDropdownOnSelect={column.closeDropdownOnSelect}
+              title={column.title}
+              columnId={column.columnId}
+              columnServerField={column.columnServerField}
+              columnKey={String(column.key)}
+              filterName={column.filterName}
+              showEnumFiltersInColumn={column.showEnumFiltersInColumn}
+              filters={column.filters}
+              isSortable={Boolean(column.isSortable || column.sorter)}
+              sortingAttributes={column.sortingAttributes}
+              filterApi={filterApi}
+              onDropdownFiltersChange={onDropdownFiltersChange}
+              activeSorting={activeSorting}
+              setActiveSorting={setExternalSorting || setActiveSorting}
+              showFilterIcon={column.showFilterIcon}
+              enumOptionsGetter={column.filterType?.type === FilterType.Enum ? column?.filterType?.getAvailableOptions : undefined}
+            />
       }
     })
-  ), [columns, activeSorting])
+  ), [filterApi, columns, activeSorting])
 
   const preparedData = useMemo(() => {
     const shouldSort = 'field' in (sortingWithExternal) && !isDefaultSortDisabled && !pagination.useDataSourceFunction
 
-    let resultDataSource: TableRecord[] = dataSource as TableRecord[]
+    let resultDataSource = dataSource
 
     if (shouldSort) {
-      const field = sortingWithExternal.columnId || sortingWithExternal.field
+      const field = sortingWithExternal.columnServerField || sortingWithExternal.columnId || sortingWithExternal.field
       const attribute = sortingWithExternal.attribute
-      const sortWithNestedItems = (data: TableRecord[]) => {
+      const sortWithNestedItems = (data: T[]) => {
         if (!field) {
           return data
         }
@@ -117,7 +122,7 @@ export const SortingAndFilters: TableModule = Component => function SortingAndFi
         let customSorter = sortingWithExternal.customSorter
 
         if (!customSorter) {
-          customSorter = columns.find(el => el.dataIndex === field)?.sorter
+          customSorter = columns.find(el => el.key === field)?.sorter
         }
 
         const isAsc = sortingWithExternal.direction === 'asc'
@@ -126,21 +131,21 @@ export const SortingAndFilters: TableModule = Component => function SortingAndFi
 
         const sortedData = customSorter
           ? customSortFunctionWrapper(
-            data,
-            customSorter,
-            isAsc
-          )
+              data,
+              customSorter,
+              isAsc
+            )
           : sortFunction(data, field as string, isAsc, attribute as string)
 
-        sortedData.forEach(item => {
+        sortedData.forEach((item) => {
           if (item._hasChildren) {
-            item.children = sortWithNestedItems(item.children as TableRecord[])
+            item.children = sortWithNestedItems(item.children as T[])
           }
         })
         return sortedData
       }
 
-      resultDataSource = sortWithNestedItems(resultDataSource as TableRecord[])
+      resultDataSource = sortWithNestedItems(resultDataSource)
     }
 
     return resultDataSource
@@ -173,10 +178,12 @@ export const SortingAndFilters: TableModule = Component => function SortingAndFi
     if (externalSorting) setActiveSorting(externalSorting)
   }, [externalSorting])
 
-  return <Component
-    {...props}
-    dataSource={preparedData}
-    columns={processedColumns}
-    storageKey={storageKey}
-  />
+  return (
+    <Component
+      {...props}
+      dataSource={preparedData}
+      columns={processedColumns}
+      storageKey={storageKey}
+    />
+  )
 }

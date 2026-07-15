@@ -26,16 +26,16 @@ const neutralColorsList = (Object.keys(allColors) as Array<keyof typeof allColor
   return key.includes('fixedneutralcolor')
 })
 
-export type ColorKey = keyof typeof allColors;
-export type FilterUnionByStringIncludes<T, K extends string> = T & K;
-export type NeutralColor = FilterUnionByStringIncludes<extendedColorType, `fixedneutralcolor_${string}`>;
+export type ColorKey = keyof typeof allColors
+export type FilterUnionByStringIncludes<T, K extends string> = T & K
+export type NeutralColor = FilterUnionByStringIncludes<extendedColorType, `fixedneutralcolor_${string}`>
 
 export const fixedNeutralColors = neutralColorsList
   .reduce<Record<NeutralColor, string>>(
     (acc, key) => {
       return { ...acc, [key]: allColors[key as keyof typeof allColors] }
     },
-  {} as Record<NeutralColor, string>
+    {} as Record<NeutralColor, string>
   )
 
 export const colors = {

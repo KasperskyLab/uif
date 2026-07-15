@@ -1,42 +1,86 @@
+@use "sass:map";
 @use '../../design-system/tokens/typography.module.scss';
 
-@mixin create-ai-colors {
-  --button--ai--bg--enabled:
-    linear-gradient(90deg, var(--button--ai--bg--green--enable) 0%, var(--button--ai--bg--green--enable_gr) 42.48%),
-    linear-gradient(224.45deg, var(--button--ai--bg--violet--enabled) 6.22%, var(--button--ai--bg--marina--enabled) 69.82%);
-  --button--ai--bg--hover: 
-      linear-gradient(90deg, var(--button--ai--bg--green--enable) 0%, var(--button--ai--bg--green--enable_gr) 42.48%),
-      linear-gradient(224.45deg, var(--button--ai--bg--violet--hover) 6.22%, var(--button--ai--bg--marina--hover) 69.82%);
-  --button--ai--bg--active:
-      linear-gradient(90deg, var(--button--ai--bg--green--active) 0%, var(--button--ai--bg--green--active_gr) 42.48%),
-      linear-gradient(224.45deg, var(--button--ai--bg--violet--active) 6.22%, var(--button--ai--bg--marina--active) 69.82%);
-  --button--ai--bg--disabled: var(--button--primary--bg--disabled);
-  --button--ai--text--disabled: var(--button--primary--text--disabled);
-}
+$button-tokens: (
+  primary: (
+    bg: var(--common--accent--enabled),
+    color: var(--fg--neutral_inverted--primary),
+    hover: var(--common--accent--hover),
+    active: var(--common--accent--active),
+    border: none,
+    disabled-border: none
+  ),
+  secondary: (
+    bg: var(--bg--neutral--level_0),
+    color: var(--fg--neutral--primary),
+    hover: var(--bg--neutral--level_0_hover),
+    active: var(--bg--neutral--level_0--active),
+    border: 1px solid var(--border--neutral--bold),
+    disabled-border: 1px solid var(--border--neutral--subtle_overlay)
+  ),
+  tertiary: (
+    bg: none,
+    color: var(--fg--neutral--primary),
+    hover: var(--bg--neutral--level_0_hover),
+    active: var(--bg--neutral--level_0--active),
+    border: none,
+    disabled-border: none
+  ),
+  dangerFilled: (
+    bg: var(--common--danger--enabled),
+    color: var(--fg--neutral_inverted--primary),
+    hover: var(--common--danger--hover),
+    active: var(--common--danger--active),
+    border: none,
+    disabled-border: none
+  ),
+  dangerOutlined: (
+    bg: none,
+    color: var(--common--danger--enabled),
+    hover: var(--bg--danger_subtle--hover),
+    active: var(--bg--danger_subtle--active),
+    border: 1px solid var(--common--danger--enabled),
+    disabled-border: 1px solid var(--border--neutral--subtle_overlay)
+  ),
+  ai: (
+    bg: (
+      linear-gradient(90deg, var(--brand--solid--kaspersky_green_300) 0%, var(--brand--transparent--kaspersky_green_300_0) 42.475%),
+      linear-gradient(188.86deg, var(--common--violet--enabled) 6.222%, var(--common--marina--enabled) 69.82%)
+    ),
+    color: var(--fg--neutralinverted--primary),
+    hover: (
+      linear-gradient(90deg, var(--brand--solid--kaspersky_green_300) 0%, var(--brand--transparent--kaspersky_green_300_0) 42.475%),
+      linear-gradient(188.86deg, var(--common--violet--hover) 6.222%, var(--common--marina--hover) 69.82%)
+    ),
+    active: (
+      linear-gradient(90deg, var(--brand--solid--kaspersky_green_600) 0%, var(--brand--transparent--kaspersky_green_300_0) 42.475%),
+      linear-gradient(188.86deg, var(--common--violet--active) 6.222%, var(--common--marina--active) 69.82%)
+    ),
+    border: none,
+    disabled-border: none
+  )
+);
 
-@mixin apply-colors($mode, $hasBorder) {
-  background: var(--button--#{$mode}--bg--enabled);
-  color: var(--button--#{$mode}--text--enabled);
+@mixin apply-colors($mode) {
+  $theme: map.get($button-tokens, $mode);
 
-  @if $hasBorder {
-    border: 1px solid var(--button--#{$mode}--border--enabled);
-  } @else {
-    border: none;
-  }
+  background: map.get($theme, bg);
+  color: map.get($theme, color);
+  border: map.get($theme, border);
 
   &:not([disabled]) > span[role="img"] > svg {
-    color: var(--button--#{$mode}--text--enabled);
+    color: map.get($theme, color);
   }
 
   &:hover,
   &:hover:focus {
-    background: var(--button--#{$mode}--bg--hover);
+    background: map.get($theme, hover);
   }
 
   &:active,
   &:active:focus,
   &.buttonPressed {
-    background: var(--button--#{$mode}--bg--active);
+    background: map.get($theme, active);
     transition-duration: .02s;
   }
 
@@ -46,45 +90,42 @@
     &:hover,
     &:active,
     &:focus {
-      background: var(--button--#{$mode}--bg--disabled);
+      background-color: var(--bg--neutral_transparent--level_1);
       box-shadow: none;
-      color: var(--button--#{$mode}--text--disabled);
+      color: var(--fg--neutral--tertiary);
       cursor: not-allowed;
-
-      @if $hasBorder {
-        border-color: var(--button--#{$mode}--border--disabled);
-      }
+      border: map.get($theme, disabled-border);
 
       svg {
-        color: var(--button--#{$mode}--text--disabled);
+        color: var(--fg--neutral--tertiary);
       }
     }
   }
 
   &:global(.ant-dropdown-trigger):global(.ant-dropdown-open) {
-    background: var(--button--#{$mode}--bg--active);
+    background: map.get($theme, active);
   }
 }
 
 .buttonGroup {
-  gap: 6px;
+  gap: var(--spacing--padding_m);
 
   :global(.ant-btn):first-child:not(:last-child) {
-    border-radius: 8px 0 0 8px;
+    border-radius: var(--radius--m) var(--radius--none) var(--radius--none) var(--radius--m);
   }
 
   :global(.ant-btn):not(:last-child):not(:first-child) {
-    border-radius: 0;
+    border-radius: var(--radius--none);
   }
 
   :global(.ant-btn):last-child:not(:first-child) {
-    border-radius: 0 8px 8px 0;
+    border-radius: var(--radius--none) var(--radius--m) var(--radius--m) var(--radius--none);
   }
 }
 
 .splitButton.primary,
 .splitButton.dangerFilled {
-  gap: 2px;
+  gap: var(--spacing--gap_closest);
 }
 
 .splitButton.secondary {
@@ -100,15 +141,19 @@
   box-shadow: none;
   display: inline-flex;
   flex-direction: row;
-  gap: 4px;
+  gap: var(--spacing--gap_dependent);
   justify-content: center;
   max-width: 100%;
   outline: none;
-  
+
+  .iconWrapper {
+    display: flex;
+    flex-shrink: 0;
+  }
 
   &:focus-visible {
     // can not import '@kaspersky/hexa-ui-core/colors/js'.effects.focus[1]
-    box-shadow: 0px 0px 0px 2px var(--focus--stroke);
+    box-shadow: 0px 0px 0px 2px var(--border--color--focus);
   }
 
   &[ant-click-animating-without-extra-node=true]::after,
@@ -145,28 +190,27 @@
 }
 
 :global(.ant-btn):global(.ant-btn).primary {
-  @include apply-colors(primary, false);
+  @include apply-colors(primary);
 }
 
 :global(.ant-btn):global(.ant-btn).secondary {
-  @include apply-colors(secondary, true);
+  @include apply-colors(secondary);
 }
 
 :global(.ant-btn):global(.ant-btn).tertiary {
-  @include apply-colors(tertiary, false);
+  @include apply-colors(tertiary);
 }
 
 :global(.ant-btn):global(.ant-btn).dangerFilled {
-  @include apply-colors(destructive, false);
+  @include apply-colors(dangerFilled);
 }
 
 :global(.ant-btn):global(.ant-btn).dangerOutlined {
-  @include apply-colors(destructive_secondary, true);
+  @include apply-colors(dangerOutlined);
 }
 
 :global(.ant-btn):global(.ant-btn).ai {
-  @include create-ai-colors();
-  @include apply-colors(ai, false);
+  @include apply-colors(ai);
 }
 
 :global(.ant-btn).iconOnly {
@@ -180,10 +224,10 @@
 
 /* Button Size */
 :global(.ant-btn).small {
-  border-radius: 4px;
+  border-radius: var(--radius--s);
   height: 24px;
   min-width: 64px;
-  padding: 2px 8px;
+  padding: var(--spacing--padding_xs) var(--spacing--padding_m);
 
 
   &.iconOnly {
@@ -197,10 +241,10 @@
 }
 
 :global(.ant-btn).medium {
-  border-radius: 8px;
+  border-radius: var(--radius--m);
   height: 32px;
   min-width: 80px;
-  padding: 6px 12px;
+  padding: var(--spacing--padding_sm) var(--spacing--padding_ml);
 
 
   &.iconOnly {
@@ -214,10 +258,10 @@
 }
 
 :global(.ant-btn).large {
-  border-radius: 8px;
+  border-radius: var(--radius--m);
   height: 40px;
   min-width: 80px;
-  padding: 8px 20px;
+  padding: var(--spacing--padding_m) var(--spacing--padding_lg);
 
   &.iconOnly {
     min-width: 40px;
@@ -230,10 +274,10 @@
 }
 
 :global(.ant-btn).extraLarge {
-  border-radius: 8px;
+  border-radius: var(--radius--m);
   height: 48px;
   min-width: 80px;
-  padding: 10px 24px;
+  padding: var(--spacing--padding_ml) var(--spacing--padding_xl);
 
   &.iconOnly {
     min-width: 48px;

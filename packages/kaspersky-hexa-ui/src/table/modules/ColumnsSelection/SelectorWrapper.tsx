@@ -1,4 +1,3 @@
-import { SPACES } from '@design-system/theme'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -14,7 +13,7 @@ const Wrapper = styled.div`
     margin-top: 0;
 
     p {
-      margin-left: ${SPACES[8]}px;
+      margin-left: var(--spacing--gap_grouped);
     }
   }
 

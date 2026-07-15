@@ -1,5 +1,4 @@
 import { Placeholder, PlaceholderProps } from '@src/placeholder'
-import { placeholderImageVariants } from '@src/placeholder/types'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -34,12 +33,11 @@ const customEmptyText = () => (
 export const EmptyHeightFull: Story = {
   render: (args: ITableProps) => (
     <Wrapper>
-      <Table {...args} emptyText={customEmptyText}/>
+      <Table {...args} emptyText={customEmptyText} />
     </Wrapper>
   ),
   args: {
     dataSource: [],
-    pagination: false,
     fullHeight: true,
     toolbar: {
       left: [

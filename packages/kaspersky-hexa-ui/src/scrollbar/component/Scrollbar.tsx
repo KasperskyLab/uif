@@ -1,32 +1,21 @@
-import React, { forwardRef, useCallback } from 'react'
+import React, { forwardRef, useCallback, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import styled from 'styled-components'
 
 import { useThemedScrollbar } from '../useThemedScrollbar'
 
 import {
-  thumbHorizontalCss,
-  thumbVerticalCss,
-  trackHorizontalCss,
-  trackVerticalCss,
-  viewCss
+  TrackVertical,
+  TrackHorizontal,
+  ThumbVertical,
+  ThumbHorizontal,
+  View
 } from './scrollbarCss'
 import { ScrollbarProps, ScrollbarViewProps } from './types'
 import { useIsThumbIncreased } from './useIsThumbIncreased'
 
-const TrackVertical = styled.div`${trackVerticalCss}`
-
-const TrackHorizontal = styled.div`${trackHorizontalCss}`
-
-const ThumbVertical = styled.div`${thumbVerticalCss}`
-
-const ThumbHorizontal = styled.div`${thumbHorizontalCss}`
-
-const View = styled.div`${viewCss}`
-
 export const Scrollbar = forwardRef<Scrollbars, ScrollbarProps>((rawProps, ref) => {
   const props = useThemedScrollbar(rawProps)
-  return <ScrollbarView {...props} ref={ref}/>
+  return <ScrollbarView {...props} ref={ref} />
 })
 
 Scrollbar.displayName = 'Scrollbar'
@@ -36,12 +25,17 @@ const ScrollbarView = forwardRef<Scrollbars, ScrollbarViewProps>((props, ref) =>
   const [, setIsVerticalThumbIncreased] = useIsThumbIncreased()
   const [, setIsHorizontalThumbIncreased] = useIsThumbIncreased()
 
+  const [isVerticalScrollable, setIsVerticalScrollable] = useState(false)
+  const [isHorizontalScrollable, setIsHorizontalScrollable] = useState(false)
+
   const renderTrackVertical = useCallback(
-    (props) => <TrackVertical {...props} cssConfig={cssConfig} />, [cssConfig]
+    (props) => <TrackVertical {...props} cssConfig={cssConfig} $isVisible={isVerticalScrollable} />,
+    [cssConfig, isVerticalScrollable]
   )
 
   const renderTrackHorizontal = useCallback(
-    (props) => <TrackHorizontal {...props} cssConfig={cssConfig} />, [cssConfig]
+    (props) => <TrackHorizontal {...props} cssConfig={cssConfig} $isVisible={isHorizontalScrollable} />,
+    [cssConfig, isHorizontalScrollable]
   )
 
   const renderThumbVertical = useCallback(
@@ -66,8 +60,17 @@ const ScrollbarView = forwardRef<Scrollbars, ScrollbarViewProps>((props, ref) =>
     [setIsHorizontalThumbIncreased, cssConfig]
   )
 
+  const { onUpdate } = props
+  const handleUpdate = useCallback((values) => {
+    setIsVerticalScrollable(values.scrollHeight > values.clientHeight)
+    setIsHorizontalScrollable(values.scrollWidth > values.clientWidth)
+
+    onUpdate?.(values)
+  }, [onUpdate])
+
   const renderView = useCallback(
-    (props) => <View {...props} cssConfig={cssConfig} />, [cssConfig]
+    (props) => <View {...props} cssConfig={cssConfig} />,
+    [cssConfig]
   )
 
   return (
@@ -77,6 +80,7 @@ const ScrollbarView = forwardRef<Scrollbars, ScrollbarViewProps>((props, ref) =>
       renderThumbVertical={renderThumbVertical}
       renderThumbHorizontal={renderThumbHorizontal}
       renderView={renderView}
+      onUpdate={handleUpdate}
       ref={ref}
       {...forwardedProps}
     />

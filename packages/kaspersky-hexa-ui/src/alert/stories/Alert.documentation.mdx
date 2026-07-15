@@ -1,0 +1,114 @@
+import { ArgTypes, Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Alert } from '../Alert'
+import * as AlertStories from './Alert.stories'
+import { alertDesignPropPresentation } from './Alert.design.properties'
+import { alertPropPresentation } from './Alert.controls'
+
+export const alertActionsExampleCode = `
+<Alert
+  mode="info"
+  actions={{
+    FIRST_ACTION: { text: 'Action 1', onClick: () => {} },
+    SECOND_ACTION: { text: 'Action 2', onClick: () => {} }
+  }}
+>
+  Alert with actions
+</Alert>
+`
+
+<Meta of={AlertStories} name="Alert Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Alert"
+  description='**Alert** — блок уведомления с иконкой статуса, текстом или произвольным содержимым и опциональными действиями'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Alert** отображает важное сообщение в потоке страницы: слева — иконка по **mode**, справа — **children** (текст или разметка), при необходимости — до двух ссылок-действий (**actions**) и кнопка закрытия (**closable**). Семантика задаётся **mode** (`info`, `success`, `warning`, `error`). Ширина — **width** или 100% контейнера."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Семантический вариант уведомления. Обязательный проп.
+      Доступные значения: `info`, `success`, `warning`, `error`. По умолчанию — `info`. Нераспознанное значение заменяется на `info` с предупреждением в консоли."
+      code='
+    <Alert mode="info">Info message</Alert>
+    <Alert mode="success">Success message</Alert>
+    <Alert mode="warning">Warning message</Alert>
+    <Alert mode="error">Error message</Alert>'
+    />
+
+    <DocExampleBlock
+      title="children"
+      description="Содержимое сообщения: текст или произвольная разметка (теги, заголовки, несколько строк)."
+      code='
+    <Alert mode="info">Simple text message</Alert>
+    <Alert mode="info">
+      <Space gap={8}>
+        <Space>
+          <Tag outlined>Tag</Tag>
+          <Text type="H6">Custom title</Text>
+        </Space>
+        <Text>With multiple lines</Text>
+      </Space>
+    </Alert>'
+    />
+
+    <DocExampleBlock
+      title="actions"
+      description="Необязательный набор из одного или двух действий: ключи **FIRST_ACTION** и **SECOND_ACTION**. Каждое действие рендерится как **Link** с **text** и **onClick**."
+      code={alertActionsExampleCode}
+    />
+
+    <DocExampleBlock
+      title="closable"
+      description="Показывает иконку для закрытия. Доступные значения: `true`, `false`. По умолчанию — `false`. После клика компонент скрывается."
+      code='<Alert mode="info" closable>Closable alert</Alert>'
+    />
+
+    <DocExampleBlock
+      title="onClose"
+      description="Необязательный колбэк при закрытии через **closable**. Вызывается перед скрытием компонента."
+      code='<Alert mode="info" closable onClose={() => {}}>Closable alert</Alert>'
+    />
+
+    <DocExampleBlock
+      title="width"
+      description="Ширина блока в пикселях (`number` или `string`). Без **width** Alert занимает 100% ширины родительского контейнера."
+      code='<Alert mode="info" width={480}>Fixed width alert</Alert>'
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Alert** — для важных сообщений, которые должны оставаться в макете страницы: статус продукта, ограничения доступа, результат операции на уровне экрана, призыв к действию с одной или двумя ссылками. Блок читается как часть контента, а не как всплывающая подсказка.
+
+Для краткой обратной связи после действия пользователя (сохранение, отправка, ошибка запроса) с автоматическим исчезновением используйте **Notification**. Для акцента внутри отдельной секции формы или карточки — **SectionMessage**. Компактные метки рядом с элементами — **Badge**, не **Alert**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(alertDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={AlertStories} />
+    <AutodocArgsTable components={Alert} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

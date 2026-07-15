@@ -101,6 +101,9 @@
         "filters": "Фильтр",
         "resetFilters": "Сбросить фильтр"
       },
+      "contextMenu": {
+        "selected": "Выбрано: {{count}}"
+      },
       "selectAll": {
         "selectAll": "Выбрать все",
         "selectCurrentPage": "Выбрать все на текущей странице",
@@ -127,24 +130,41 @@
         },
         "filtering": {
           "add": "Добавить",
+          "addCondition": "Добавить условие",
           "clearAll": "Очистить все",
           "property": "Свойство",
+          "attribute": "Атрибут",
           "condition": "Условие",
           "from": "с",
           "to": "по",
           "value": "Значение",
+          "operators": {
+            "or": "ИЛИ",
+            "and": "И"
+          },
+          "booleanFilter": {
+            "on": "Включено",
+            "off": "Выключено"
+          },
           "validation": {
             "emptyValue": "Укажите значение фильтра",
             "duplicateFilters": "Продублировать фильтры. Убедитесь, что каждый фильтр уникален."
           }
         },
-        "columnHideIsUnavailable": "Скрытие столбцов недоступно"
+        "resetSettingsModal": {
+          "content": "Все параметры задач будут сброшены до параметров по умолчанию",
+          "header": "Сбросить параметры столбцов?",
+          "firstButton": "Сбросить",
+          "secondButton": "Отмена"
+        },
+        "columnHideIsUnavailable": "Скрытие столбцов недоступно",
+        "onlyForFiltering": "Этот столбец используется только для фильтрации"
       },
       "filterOperation": {
         "⊆": "Содержит",
         "⊄": "Не содержит",
         "cont_and": "Содержит (AND)",
-        "cont_or": "Содержит (OR)",
+        "cont_or": "Один из",
         "ncont_or": "Не содержит",
         "*=": "Регулярное выражение",
         "empty": "Пусто",
@@ -173,7 +193,8 @@
     "actionBar": {
       "unsavedChanges": "Изменения, ожидающие подтверждения",
       "save": "Применить",
-      "cancel": "Отмена"
+      "cancel": "Отмена",
+      "resetSettings": "Сбросить параметры"
     },
     "textarea": {
       "wordsCount": "{{count}} из {{total}}"
@@ -216,7 +237,11 @@
       "term": "Условие",
       "dayLeft": "дней: {{count}}",
       "daysLeft": "дней: {{count}}",
-      "termDays": "дней: {{count}}"
+      "termDays": "дней: {{count}}",
+      "statuses": {
+        "valid": "Активна",
+        "expired": "Срок действия истек"
+      }
     },
     "input": {
       "password": {
