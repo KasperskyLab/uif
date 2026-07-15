@@ -62,6 +62,12 @@ export const cssVarString = `:root {
   --text--btr5--font-size: 10px;
   --text--btr5--line-height: 12px;
   --text--btr5--letter-spacing: 0px;
+  --text--bts4--font-family: "Kaspersky Sans Text", "Kaspersky Sans", Arial, sans-serif;
+  --text--bts4--font-weight: 600;
+  --text--bts4--font-style: normal;
+  --text--bts4--font-size: 14px;
+  --text--bts4--line-height: 20px;
+  --text--bts4--letter-spacing: 0px;
   --text--btm2--font-family: "Kaspersky Sans Text", "Kaspersky Sans", Arial, sans-serif;
   --text--btm2--font-weight: 500;
   --text--btm2--font-style: normal;

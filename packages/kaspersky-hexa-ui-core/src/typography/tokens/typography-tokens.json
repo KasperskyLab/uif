@@ -89,6 +89,15 @@
     "letterSpacing": "0px",
     "htmlTag": "span"
   },
+  "BodyTextRegular/BTS4": {
+    "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
+    "fontWeight": 600,
+    "fontStyle": "normal",
+    "fontSize": "14px",
+    "lineHeight": "20px",
+    "letterSpacing": "0px",
+    "htmlTag": "span"
+  },
   "BodyTextMedium/BTM2": {
     "fontFamily": "\"Kaspersky Sans Text\", \"Kaspersky Sans\", Arial, sans-serif",
     "fontWeight": 500,

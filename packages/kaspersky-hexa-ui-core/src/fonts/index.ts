@@ -4,6 +4,12 @@ import KasperskySansBold from './assets/fonts/kaspersky-sans/Kaspersky_Sans_V3_T
 import KasperskySansExtraBold from './assets/fonts/kaspersky-sans/Kaspersky_Sans_V3_Text_ExtraBold.woff2'
 import KasperskySansMedium from './assets/fonts/kaspersky-sans/Kaspersky_Sans_V3_Text_Medium.woff2'
 import KasperskySansRegular from './assets/fonts/kaspersky-sans/Kaspersky_Sans_V3_Text_Regular.woff2'
+import KasperskySansDisplayBold from './assets/fonts/kaspersky-sans-display/Kaspersky_Sans_Display_Bold.woff2'
+import KasperskySansDisplayExtraBold from './assets/fonts/kaspersky-sans-display/Kaspersky_Sans_Display_ExtraBold.woff2'
+import KasperskySansDisplayLight from './assets/fonts/kaspersky-sans-display/Kaspersky_Sans_Display_Light.woff2'
+import KasperskySansDisplayMedium from './assets/fonts/kaspersky-sans-display/Kaspersky_Sans_Display_Medium.woff2'
+import KasperskySansDisplayRegular from './assets/fonts/kaspersky-sans-display/Kaspersky_Sans_Display_Regular.woff2'
+import KasperskySansDisplaySemiBold from './assets/fonts/kaspersky-sans-display/Kaspersky_Sans_Display_SemiBold.woff2'
 import KasperskySansMonoBold from './assets/fonts/kaspersky-sans-mono/Kaspersky_Sans_Mono_Bold.woff2'
 import KasperskySansMonoRegular from './assets/fonts/kaspersky-sans-mono/Kaspersky_Sans_Mono_Regular.woff2'
 import KasperskySansTextBold from './assets/fonts/kaspersky-sans-text/Kaspersky_Sans_Text_Bold.woff2'
@@ -41,6 +47,39 @@ const fontFacePrimary: FontFace[] = [
     fontFamily: FontFamilySingle.Primary,
     fontWeight: FontWeight.ExtraBold,
     src: [{ format: 'woff2', url: KasperskySansExtraBold }]
+  }
+]
+
+const fontFaceDisplay: FontFace[] = [
+  {
+    fontFamily: FontFamilySingle.Display,
+    fontWeight: FontWeight.Light,
+    src: [{ format: 'woff2', url: KasperskySansDisplayLight }]
+  },
+  {
+    fontFamily: FontFamilySingle.Display,
+    fontWeight: FontWeight.Regular,
+    src: [{ format: 'woff2', url: KasperskySansDisplayRegular }]
+  },
+  {
+    fontFamily: FontFamilySingle.Display,
+    fontWeight: FontWeight.Medium,
+    src: [{ format: 'woff2', url: KasperskySansDisplayMedium }]
+  },
+  {
+    fontFamily: FontFamilySingle.Display,
+    fontWeight: FontWeight.SemiBold,
+    src: [{ format: 'woff2', url: KasperskySansDisplaySemiBold }]
+  },
+  {
+    fontFamily: FontFamilySingle.Display,
+    fontWeight: FontWeight.Bold,
+    src: [{ format: 'woff2', url: KasperskySansDisplayBold }]
+  },
+  {
+    fontFamily: FontFamilySingle.Display,
+    fontWeight: FontWeight.ExtraBold,
+    src: [{ format: 'woff2', url: KasperskySansDisplayExtraBold }]
   }
 ]
 
@@ -87,6 +126,7 @@ const fontFaceMono: FontFace[] = [
 
 export const fontFace: FontFace[] = [
   ...fontFacePrimary,
+  ...fontFaceDisplay,
   ...fontFaceText,
   ...fontFaceMono
 ]

@@ -45,6 +45,18 @@
               "value": 32
             },
             {
+              "name": "padding/none",
+              "type": "number",
+              "isAlias": false,
+              "value": 0
+            },
+            {
+              "name": "padding/xs",
+              "type": "number",
+              "isAlias": false,
+              "value": 2
+            },
+            {
               "name": "padding/s",
               "type": "number",
               "isAlias": false,
@@ -73,6 +85,12 @@
               "type": "number",
               "isAlias": false,
               "value": 16
+            },
+            {
+              "name": "padding/lg",
+              "type": "number",
+              "isAlias": false,
+              "value": 20
             },
             {
               "name": "padding/xl",

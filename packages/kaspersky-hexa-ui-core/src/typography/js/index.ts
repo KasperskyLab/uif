@@ -5,13 +5,15 @@ export const typographyCssVarString = cssVarString
 export enum FontFamily {
   Primary = '"Kaspersky Sans", Arial, sans-serif',
   Text = '"Kaspersky Sans Text", "Kaspersky Sans", Arial, sans-serif',
-  Mono = '"Kaspersky Sans Mono", "Kaspersky Sans", Arial, sans-serif'
+  Mono = '"Kaspersky Sans Mono", "Kaspersky Sans", Arial, sans-serif',
+  Display = '"Kaspersky Sans Display", "Kaspersky Sans", Arial, sans-serif'
 }
 
 export enum FontFamilySingle {
   Primary = 'Kaspersky Sans',
   Text = 'Kaspersky Sans Text',
-  Mono = 'Kaspersky Sans Mono'
+  Mono = 'Kaspersky Sans Mono',
+  Display = 'Kaspersky Sans Display'
 }
 
 export enum FontWeight {
@@ -46,7 +48,8 @@ export enum TextTypes {
   BTR2 = 'BodyTextRegular/BTR2',
   BTR3 = 'BodyTextRegular/BTR3',
   BTR4 = 'BodyTextRegular/BTR4',
-  BTR5 = 'BodyTextRegular/BTR5'
+  BTR5 = 'BodyTextRegular/BTR5',
+  BTS4 = 'BodyTextRegular/BTS4'
 }
 
 export enum MonoTextTypes {
@@ -186,6 +189,18 @@ const typographyBTR = {
   }
 }
 
+const typographyBTS = {
+  [textLevels.BTS4]: {
+    fontFamily: FontFamily.Text,
+    fontWeight: FontWeight.SemiBold,
+    fontStyle: FontStyle.Normal,
+    fontSize: '14px',
+    lineHeight: '20px',
+    letterSpacing: '0px',
+    htmlTag: textTags.Span
+  }
+}
+
 const typographyBTM = {
   [textLevels.BTM2]: {
     ...typographyBTR[TextTypes.BTR2],
@@ -219,6 +234,7 @@ const typographyMTR = {
 export const typography: TypographyList = {
   ...typographyHeader,
   ...typographyBTR,
+  ...typographyBTS,
   ...typographyBTM,
   ...typographyMTR
 }
