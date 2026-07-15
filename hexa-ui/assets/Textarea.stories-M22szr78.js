@@ -1,0 +1,12 @@
+import{G as n,R as r,H as x}from"./iframe-4-PRSI1I.js";import{e as y,g as S,c as f}from"./propPresentation-CfZ5yVim.js";import{T as c}from"./Textbox-Dh9d3MYi.js";import{s as b}from"./resolveDesignControls-CL29RUJI.js";import{v as P}from"./typesHelpers-tpz7Of7L.js";const T=(e,t={})=>y(b[e],t),v={disabled:!1,readOnly:!1,validationStatus:"default",placeholder:"Placeholder",rows:3,maxLength:1024,showCount:!1,value:""},p={disabled:T("disabled",{description:"Отключённое поле: ввод недоступен"}),readOnly:{control:"boolean",description:"Режим только для чтения: значение отображается, но не редактируется"},validationStatus:{control:"select",description:"Визуальный статус валидации поля",options:[...P]},placeholder:{control:"text",description:"Подсказка в пустом поле"},rows:{control:"number",description:"Количество видимых строк поля"},maxLength:{control:"number",description:"Максимальное количество символов"},showCount:{control:"boolean",description:"Показывать счётчик символов под полем"},value:{control:"text",description:"Контролируемое значение поля"}},h=x.div`
+  width: 400px;
+`,_="https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=39947:148668",u={argTypes:f(p),args:{...v,testId:"textarea-test-id",klId:"textarea-kl-id"},parameters:{badges:[n.stable,n.reviewedByDesign],design:_},decorators:[(e,t)=>r.createElement(h,null,r.createElement(e,{...t}))]},E={title:"Hexa UI Components/Textarea",component:c.Textarea,tags:["!autodocs"],includeStories:["Playground"],excludeStories:["textareaStorySettings"],...u},I=({value:e,onChange:t,...m})=>{const[g,a]=r.useState(e);return r.useEffect(()=>{a(e)},[e]),r.createElement(c.Textarea,{...m,value:g,onChange:s=>{a(s),t==null||t(s)}})},o={name:"Playground",render:e=>r.createElement(I,{...e}),parameters:{controls:{include:S(p),sort:"none"}}};var l,d,i;o.parameters={...o.parameters,docs:{...(l=o.parameters)==null?void 0:l.docs,source:{originalSource:`{
+  name: 'Playground',
+  render: args => <TextareaPlayground {...args} />,
+  parameters: {
+    controls: {
+      include: getControlsInclude(textareaPropPresentation),
+      sort: 'none'
+    }
+  }
+}`,...(i=(d=o.parameters)==null?void 0:d.docs)==null?void 0:i.source}}};const w=["textareaStorySettings","Playground"],j=Object.freeze(Object.defineProperty({__proto__:null,Playground:o,__namedExportsOrder:w,default:E,textareaStorySettings:u},Symbol.toStringTag,{value:"Module"}));export{j as T,u as t};

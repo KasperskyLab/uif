@@ -1,0 +1,79 @@
+import{T as _}from"./Palette-CL2qD4Vl.js";import{c as A,G as S,v as r,R as e,T as d,a as F,P as y}from"./iframe-4-PRSI1I.js";import{w as G}from"./withMeta-BwOuJ6tr.js";import{S as I,C as Y}from"./ScrollableContainer-BA6BbvEe.js";import{S as a}from"./Warnings-i-859-qY.js";import{s as J}from"./helpers-BytZKRkB.js";import{a as u}from"./StoryComponents-BWv8uEx9.js";import{B as T}from"./Button-D2E54Ulj.js";import{F as K}from"./Field-D3g66Aq-.js";import{S as Q}from"./SegmentedButton-CErJIP_5.js";import"./preload-helper-Dp1pzeXC.js";import"./Markdown-BenFmRMk.js";import"./shouldForwardProp-Cdy-RLhZ.js";import"./DocPageLayout-CZPyVaN8.js";import"./blocks-yA_hxWl_.js";import"./TextReducer-JHIejSuK.js";import"./SubComponents-EaKLKwRG.js";import"./TextWithTruncation-BuGmQSH-.js";import"./Badge-B3_Y1H2J.js";import"./index-C0IykO9V.js";import"./colors-DQ3Fg32p.js";import"./type-Bla-MjNb.js";import"./Divider-Cb8Cmzqg.js";import"./Indicator-D1HJCmfp.js";import"./Grid-CDQgOgKy.js";import"./Tag-B3SARhhR.js";import"./index-B-OY55d_.js";import"./omit-DXgDXInf.js";import"./wave-DF9O9Ycp.js";import"./Group-D8YF7Z5T.js";import"./FormLabel-CoXJxjwh.js";import"./Dropdown-BZXGqesC.js";import"./KeyCode-c5NdJp32.js";import"./isEqual-vUrjsNbx.js";import"./useMergedState-5V6OeSqY.js";import"./focus-C8_PqSex.js";import"./imaskDateOptionsGenerator-CH929rNC.js";import"./index-Chjiymov.js";import"./Loader-CzWCOjAf.js";import"./index-CJ8XlVHE.js";import"./Toggle-Cpn23pdP.js";import"./AdditionalContent-CRQIPW1O.js";import"./HelpMessage-B93eXAoX.js";import"./ArrowRight-AkM1Q671.js";import"./v4-BoP187Zn.js";import"./button-DY_DOuYn.js";import"./Help-C_e3rqgL.js";import"./generateId-BXJELych.js";const X={designTokens:!0,useThemedHook:!0,unitTests:!1,screenshotTests:!1,migration:!0,apiTable:!0,storybook:!0,pixsoView:!0},Z="Tooltip",j="Компонент для отрисовки подсказок. В качестве основы используется Tooltip из библиотеки Antd.",q="Элемент появляется при наведении на родительский элемент, к которому присвоен Tooltip",$="https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=29814%3A96714",ee="https://pixso.net/app/design/4XYVGB274R5-e8c7lGsxDA",x={dod:X,component:Z,description:j,usage:q,designLink:$,pixsoView:ee},Xe={title:"Hexa UI Components/Tooltip",component:r,argTypes:{text:{control:{type:"text"}},...J(["theme"])},args:{text:"Lorem ipsum"},parameters:{badges:[S.stable,S.reviewedByDesign],docs:{page:G(x)},design:x.pixsoView}},s={render:t=>e.createElement(u,{style:{paddingLeft:"200px"}},e.createElement(d,{type:"BTM5",themedColor:"primary"},"Tooltip here:"),e.createElement(r,{...t},e.createElement(T,null,"hover me to see Tooltip")))},i={render:t=>e.createElement(u,{style:{paddingLeft:"200px"}},e.createElement(d,{type:"BTM5"},"Tooltip here:"),e.createElement(r,{...t,text:e.createElement(d,{type:"BTM3",themedColor:"primary-invert"},"I'm a Text component")},e.createElement(T,null,"hover me to see Tooltip")))},l={render:t=>e.createElement(u,null,e.createElement(F,{closable:!1,mode:"info",style:{marginBottom:16}},e.createElement(y,null,"Use wrapper for ",e.createElement(a,null,"disabled")," components inside ",e.createElement(a,null,"Tooltip")," if it's not working"),e.createElement(y,null,"Используйте обёртку для ",e.createElement(a,null,"disabled")," компонентов внутри ",e.createElement(a,null,"Tooltip")," если тултип не отображается")),e.createElement(r,{...t},e.createElement("span",null,e.createElement(T,{disabled:!0,text:"Button"}))))},p={render:t=>e.createElement(I,null,e.createElement(Y,null,e.createElement(r,{...t,getPopupContainer:n=>n.parentElement}))),args:{children:e.createElement(T,null,"Click me and scroll my container"),trigger:"click"}},m={render:t=>{const[n,N]=e.useState(10),O=e.useMemo(()=>{const o=[];for(let g=0;g<=n;g++)o.push(g);return o},[n]),U=[{value:"10",text:"10"},{value:"100",text:"100"},{value:"1000",text:"1000"}];return e.createElement(u,null,e.createElement(K,{control:e.createElement(Q,{value:[n.toString()],type:"radio",items:U,onChange:o=>{N(Number(o[0]))}}),label:"Number of tooltips on page"}),O.map(o=>e.createElement(r,{...t,key:o,text:o,destroyTooltipOnHide:!0},e.createElement(d,null,o,": hover me to see Tooltip"))))}},c={args:{source:A.tooltip},render:t=>e.createElement(_,{...t})};var C,f,E;s.parameters={...s.parameters,docs:{...(C=s.parameters)==null?void 0:C.docs,source:{originalSource:`{
+  render: (args: TooltipProps) => <StoryColumn style={{
+    paddingLeft: '200px'
+  }}>
+      <Text type="BTM5" themedColor="primary">
+        Tooltip here:
+      </Text>
+      <Tooltip {...args}>
+        <Button>hover me to see Tooltip</Button>
+      </Tooltip>
+    </StoryColumn>
+}`,...(E=(f=s.parameters)==null?void 0:f.docs)==null?void 0:E.source}}};var h,b,B;i.parameters={...i.parameters,docs:{...(h=i.parameters)==null?void 0:h.docs,source:{originalSource:`{
+  render: (args: TooltipProps) => <StoryColumn style={{
+    paddingLeft: '200px'
+  }}>
+      <Text type="BTM5">
+        Tooltip here:
+      </Text>
+      <Tooltip {...args} text={<Text type="BTM3" themedColor="primary-invert">I&apos;m a Text component</Text>}>
+        <Button>hover me to see Tooltip</Button>
+      </Tooltip>
+    </StoryColumn>
+}`,...(B=(b=i.parameters)==null?void 0:b.docs)==null?void 0:B.source}}};var v,P,k;l.parameters={...l.parameters,docs:{...(v=l.parameters)==null?void 0:v.docs,source:{originalSource:`{
+  render: (args: TooltipProps) => <StoryColumn>
+      <SectionMessage closable={false} mode="info" style={{
+      marginBottom: 16
+    }}>
+        <P>Use wrapper for <StyledTag>disabled</StyledTag> components inside <StyledTag>Tooltip</StyledTag> if it&apos;s not working</P>
+        <P>Используйте обёртку для <StyledTag>disabled</StyledTag> компонентов внутри <StyledTag>Tooltip</StyledTag> если тултип не отображается</P>
+      </SectionMessage>
+      <Tooltip {...args}>
+        <span><Button disabled={true} text="Button" /></span>
+      </Tooltip>
+    </StoryColumn>
+}`,...(k=(P=l.parameters)==null?void 0:P.docs)==null?void 0:k.source}}};var M,w,z;p.parameters={...p.parameters,docs:{...(M=p.parameters)==null?void 0:M.docs,source:{originalSource:`{
+  render: (args: TooltipProps) => <ScrollableContainer>
+      <ContentContainer>
+        <Tooltip {...args} getPopupContainer={trigger => trigger.parentElement as HTMLElement} />
+      </ContentContainer>
+    </ScrollableContainer>,
+  args: {
+    children: <Button>Click me and scroll my container</Button>,
+    trigger: 'click'
+  }
+}`,...(z=(w=p.parameters)==null?void 0:w.docs)==null?void 0:z.source}}};var L,W,D;m.parameters={...m.parameters,docs:{...(L=m.parameters)==null?void 0:L.docs,source:{originalSource:`{
+  render: (args: TooltipProps) => {
+    const [performSize, setPerformSize] = React.useState(10);
+    const tooltips = React.useMemo(() => {
+      const arr: number[] = [];
+      for (let i = 0; i <= performSize; i++) {
+        arr.push(i);
+      }
+      return arr;
+    }, [performSize]);
+    const items: SegmentedButtonOption[] = [{
+      value: '10',
+      text: '10'
+    }, {
+      value: '100',
+      text: '100'
+    }, {
+      value: '1000',
+      text: '1000'
+    }];
+    return <StoryColumn>
+        <Field control={<SegmentedButton value={[performSize.toString()]} type="radio" items={items} onChange={value => {
+        setPerformSize(Number(value[0]));
+      }} />} label="Number of tooltips on page" />
+        {tooltips.map(t => <Tooltip {...args} key={t} text={t} destroyTooltipOnHide>
+            <Text>{t}: hover me to see Tooltip</Text>
+          </Tooltip>)}
+      </StoryColumn>;
+  }
+}`,...(D=(W=m.parameters)==null?void 0:W.docs)==null?void 0:D.source}}};var H,R,V;c.parameters={...c.parameters,docs:{...(H=c.parameters)==null?void 0:H.docs,source:{originalSource:`{
+  args: {
+    source: componentColors.tooltip
+  },
+  render: args => <ThemedPalette {...args} />
+}`,...(V=(R=c.parameters)==null?void 0:R.docs)==null?void 0:V.source}}};const Ze=["Basic","WithTextComponent","WithDisabledComponent","WithinScrollableContainer","PerformanceExample","ColorTokens"];export{s as Basic,c as ColorTokens,m as PerformanceExample,l as WithDisabledComponent,i as WithTextComponent,p as WithinScrollableContainer,Ze as __namedExportsOrder,Xe as default};

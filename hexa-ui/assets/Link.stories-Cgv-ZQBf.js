@@ -1,0 +1,14 @@
+import{G as r,L as i,R as e,av as u}from"./iframe-4-PRSI1I.js";import{e as k,g as f,b as S}from"./propPresentation-CfZ5yVim.js";import{t as b}from"./ArrowRight-AkM1Q671.js";import{o as P}from"./Placeholder-DoG1ulbQ.js";import{r as x}from"./SettingsGear-Cqb3tsn_.js";import{s as y}from"./resolveDesignControls-CL29RUJI.js";const _="https://pixso.net/app/design/KGurJC5_m7nSJTeVxB0zDg",h={pixsoView:_},I=["medium","large","noSize"],E=["none","icon"],V=["before","after"],z=["_self","_blank","_parent","_top"],s=(t,n={})=>k(y[t],n),L=["linkExternal","arrowRight","settingsGear","placeholder"],C={size:"noSize",decoration:"none",disabled:!1,visited:!1,iconPosition:"after",isTooltipVisible:!0,text:"Link",href:"#",target:"_self",icon:"linkExternal"},d={size:s("size",{options:[...I]}),decoration:{description:"Оформление: без иконки или с иконкой",control:"select",options:[...E]},disabled:s("disabled"),visited:{description:"Визуальное состояние посещённой ссылки",control:"boolean"},icon:{description:'Иконка рядом с текстом. Отображается только при decoration="icon"',control:"select",options:[...L]},iconPosition:{description:"Позиция иконки относительно текста",control:"select",options:[...V]},isTooltipVisible:{description:"Показывать тултип с href для ссылки с иконкой",control:"boolean"},text:{control:"text",description:"Текст ссылки"},href:{control:"text",description:"URL ссылки"},target:{description:"Атрибут target элемента <a>",control:"select",options:[...z]}},p={linkExternal:e.createElement(u,null),arrowRight:e.createElement(b,null),settingsGear:e.createElement(x,null),placeholder:e.createElement(P,null)},m={argTypes:S(i,d),args:{...C,testId:"link-test-id",klId:"link-kl-id"},parameters:{badges:[r.stable,r.reviewedByDesign],design:h.pixsoView}},v={title:"Hexa UI Components/Link",component:i,tags:["!autodocs"],includeStories:["Playground"],excludeStories:["linkStorySettings","linkIconVariants"],...m},o={name:"Playground",render:({icon:t,decoration:n,...g})=>e.createElement(i,{...g,decoration:n,icon:n==="icon"?p[t]:void 0}),parameters:{controls:{include:f(d),sort:"none"}}};var a,l,c;o.parameters={...o.parameters,docs:{...(a=o.parameters)==null?void 0:a.docs,source:{originalSource:`{
+  name: 'Playground',
+  render: ({
+    icon,
+    decoration,
+    ...rest
+  }) => <LinkComponent {...rest} decoration={decoration} icon={decoration === 'icon' ? linkIconVariants[icon] : undefined} />,
+  parameters: {
+    controls: {
+      include: getControlsInclude(linkPropPresentation),
+      sort: 'none'
+    }
+  }
+}`,...(c=(l=o.parameters)==null?void 0:l.docs)==null?void 0:c.source}}};const O=["linkIconVariants","linkStorySettings","Playground"],A=Object.freeze(Object.defineProperty({__proto__:null,Playground:o,__namedExportsOrder:O,default:v,linkIconVariants:p,linkStorySettings:m},Symbol.toStringTag,{value:"Module"}));export{A as L,m as l};

@@ -1,0 +1,10 @@
+import{G as o,R as g}from"./iframe-4-PRSI1I.js";import{e as l,g as m,c as u}from"./propPresentation-CfZ5yVim.js";import{P as i}from"./ProgressBar-D_esqz8R.js";import{s as P}from"./resolveDesignControls-CL29RUJI.js";const y="https://pixso.net/app/design/z5T--auQwugkuiBVOERlzA",S={pixsoView:y},b=["critical","warning","success","accent","neutralBold","neutralSubtle","orange","grass","violet","purple","coldgray"],B=["small","medium","large"],s=(e,p={})=>l(P[e],p),f={mode:"critical",size:"medium",track:50,background:!0,width:200},c={mode:s("mode",{options:[...b],description:"Семантический цвет активной полосы прогресса"}),size:s("size",{options:[...B],description:"Высота полосы прогресса"}),track:{control:{type:"range",min:0,max:100,step:1},description:"Заполнение полосы в процентах (от 0 до 100)"},background:{control:"boolean",description:"Показывать фоновую дорожку под активной полосой"},width:{control:"number",description:"Ширина в пикселях; без значения полоса растягивается на 100% родителя"}},d={argTypes:u(c),args:{...f,testId:"progress-bar-test-id",klId:"progress-bar-kl-id"},parameters:{badges:[o.stable,o.reviewedByDesign],design:S.pixsoView}},x={title:"Hexa UI Components/ProgressBar",component:i,tags:["!autodocs"],includeStories:["Playground"],excludeStories:["progressBarStorySettings"],...d},r={name:"Playground",parameters:{controls:{include:m(c),sort:"none"}},render:e=>g.createElement(i,{...e})};var t,a,n;r.parameters={...r.parameters,docs:{...(t=r.parameters)==null?void 0:t.docs,source:{originalSource:`{
+  name: 'Playground',
+  parameters: {
+    controls: {
+      include: getControlsInclude(progressBarPropPresentation),
+      sort: 'none'
+    }
+  },
+  render: args => <ProgressBarComponent {...args} />
+}`,...(n=(a=r.parameters)==null?void 0:a.docs)==null?void 0:n.source}}};const k=["progressBarStorySettings","Playground"],C=Object.freeze(Object.defineProperty({__proto__:null,Playground:r,__namedExportsOrder:k,default:x,progressBarStorySettings:d},Symbol.toStringTag,{value:"Module"}));export{C as P,b as a,B as b,d as p};

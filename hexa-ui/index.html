@@ -55,11 +55,9 @@
     <link href="./sb-addons/storybook-3/manager-bundle.js" rel="modulepreload" />
       
     <style>
-      .css-1wmxdc3, .css-1nwijr1 {
-        margin-right: 0 !important;
-      }
-      .css-1rb1jn6 {
-        max-width: 100% !important;
+      /* Last path segment "stories" is typed as component; hide the built-in component icon. */
+      .sidebar-item[data-nodetype="component"][data-item-id$="-stories"]:not([data-item-id*="-stories-"]) svg[type="component"] {
+        display: none;
       }
     </style>
    

@@ -46,7 +46,7 @@
       window.FRAMEWORK_OPTIONS = {};
       window.CHANNEL_OPTIONS = {};
       window.FEATURES = {"argTypeTargetsV7":true,"legacyDecoratorFileOrder":false,"disallowImplicitActionsInRenderV8":true,"viewport":true,"highlight":true,"controls":true,"interactions":true,"actions":true,"backgrounds":true,"outline":true,"measure":true};
-      window.STORIES = [{"titlePrefix":"","directory":"./docs","files":"**/*.@(mdx|stories.@(ts|tsx))","importPathMatcher":"^\\.[\\\\/](?:docs(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)\\/|\\/|$)(?!\\.)(?=.)[^/]*?\\.(mdx|stories\\.(ts|tsx)))$"},{"titlePrefix":"","directory":"./docs","files":"*.@(mdx|stories.@(ts|tsx))","importPathMatcher":"^\\.[\\\\/](?:docs\\/(?!\\.)(?=.)[^/]*?\\.(mdx|stories\\.(ts|tsx)))$"},{"titlePrefix":"","directory":"./src","files":"**/*.@(mdx|stories.@(ts|tsx))","importPathMatcher":"^\\.[\\\\/](?:src(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)\\/|\\/|$)(?!\\.)(?=.)[^/]*?\\.(mdx|stories\\.(ts|tsx)))$"},{"titlePrefix":"","directory":".","files":"Changelog.mdx","importPathMatcher":"^\\.[\\\\/](?:Changelog\\.mdx)$"}];
+      window.STORIES = [{"titlePrefix":"","directory":"./docs","files":"**/*.@(mdx|stories*.@(ts|tsx))","importPathMatcher":"^\\.[\\\\/](?:docs(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)\\/|\\/|$)(?!\\.)(?=.)[^/]*?\\.(mdx|stories[^/]*?\\.(ts|tsx)))$"},{"titlePrefix":"","directory":"./docs","files":"*.@(mdx|stories*.@(ts|tsx))","importPathMatcher":"^\\.[\\\\/](?:docs\\/(?!\\.)(?=.)[^/]*?\\.(mdx|stories[^/]*?\\.(ts|tsx)))$"},{"titlePrefix":"","files":"**/*.@(mdx|stories*.@(ts|tsx))","directory":"./src","importPathMatcher":"^\\.[\\\\/](?:src(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)\\/|\\/|$)(?!\\.)(?=.)[^/]*?\\.(mdx|stories[^/]*?\\.(ts|tsx)))$"},{"titlePrefix":"","directory":".","files":"Changelog.mdx","importPathMatcher":"^\\.[\\\\/](?:Changelog\\.mdx)$"}];
       window.DOCS_OPTIONS = {"defaultName":"Docs"};
       window.TAGS_OPTIONS = {};
 
@@ -529,8 +529,8 @@
   }
 </script>
 
-    <script type="module" crossorigin src="./assets/iframe-DVE_7kq9.js"></script>
-    <link rel="modulepreload" crossorigin href="./assets/preload-helper-C1FmrZbK.js">
+    <script type="module" crossorigin src="./assets/iframe-4-PRSI1I.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/preload-helper-Dp1pzeXC.js">
     <link rel="stylesheet" crossorigin href="./assets/iframe-NR-X1obM.css">
   </head>
 
@@ -539,6 +539,17 @@
 <style>
   html {
     font-family: "Kaspersky Sans Text", "Kaspersky Sans", Arial, sans-serif;
+  }
+
+  /* Storybook Docs: .sbdocs-content задаёт 16px на все div/pre; sb-unstyled + явный размер MTR3. */
+  .sbdocs.sbdocs-content .hexa-docs-editor.sb-unstyled,
+  .sbdocs.sbdocs-content .hexa-docs-editor.sb-unstyled pre,
+  .sbdocs.sbdocs-content .hexa-docs-editor.sb-unstyled pre.prism-code,
+  .sbdocs.sbdocs-content .hexa-docs-editor.sb-unstyled .token-line,
+  .sbdocs.sbdocs-content .hexa-docs-editor.sb-unstyled textarea {
+    font-family: "Kaspersky Sans Mono", "Kaspersky Sans", ui-monospace, Menlo, Consolas, monospace !important;
+    font-size: 14px !important;
+    line-height: 20px !important;
   }
 </style>
 <div class="sb-preparing-story sb-wrapper">

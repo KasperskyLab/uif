@@ -1,0 +1,9 @@
+import{G as e}from"./iframe-4-PRSI1I.js";import{e as p,g as l,c as g}from"./propPresentation-CfZ5yVim.js";import{w as m}from"./withMeta-BwOuJ6tr.js";import{a as u,I as y}from"./Indicator-D1HJCmfp.js";import{s as S}from"./resolveDesignControls-CL29RUJI.js";const b={designTokens:!0,useThemedHook:!0,unitTests:!1,screenshotTests:!1,migration:!1,apiTable:!0,storybook:!0,pixsoView:!0},f="Indicator",P="Компонент для цветовой индикации.",x="",I="https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=50458%3A391378",k="https://pixso.net/app/design/2AUio1HxjxE7CpaF8r38Sw",t={dod:b,component:f,description:P,usage:x,designLink:I,pixsoView:k},w=(d,c={})=>p(S[d],c),T={mode:"accent",border:!1},a={mode:w("mode",{options:[...u]}),border:{description:"Показывать границу вокруг индикатора.",control:"boolean"},borderBackground:{description:"Цвет границы индикатора при border={true}. По умолчанию используется цвет из палитры режима.",control:"color"}},i={argTypes:g(a),args:{...T,testId:"indicator-test-id",klId:"indicator-kl-id"},parameters:{badges:[e.stable,e.reviewedByDesign],docs:{page:m(t)},design:t.pixsoView}},_={title:"Hexa UI Components/Indicator",component:y,tags:["!autodocs"],includeStories:["Playground"],excludeStories:["indicatorStorySettings"],...i},o={name:"Playground",parameters:{controls:{include:l(a),sort:"none"}}};var r,s,n;o.parameters={...o.parameters,docs:{...(r=o.parameters)==null?void 0:r.docs,source:{originalSource:`{
+  name: 'Playground',
+  parameters: {
+    controls: {
+      include: getControlsInclude(indicatorPropPresentation),
+      sort: 'none'
+    }
+  }
+}`,...(n=(s=o.parameters)==null?void 0:s.docs)==null?void 0:n.source}}};const h=["indicatorStorySettings","Playground"],D=Object.freeze(Object.defineProperty({__proto__:null,Playground:o,__namedExportsOrder:h,default:_,indicatorStorySettings:i},Symbol.toStringTag,{value:"Module"}));export{D as I,i};

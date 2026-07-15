@@ -1,0 +1,9 @@
+import{G as s}from"./iframe-4-PRSI1I.js";import{e as c,g,c as m}from"./propPresentation-CfZ5yVim.js";import{w as u}from"./withMeta-BwOuJ6tr.js";import{H as h}from"./HelpMessage-B93eXAoX.js";import{s as y}from"./resolveDesignControls-CL29RUJI.js";const x={designTokens:!0,useThemedHook:!0,unitTests:!1,screenshotTests:!1,migration:!1,apiTable:!0,storybook:!0,pixsoView:!0},S="Help message",M="Текст дополняющий различные поля ввода дополнительной информацией. Например валидационный текст",f="Вывод текстового значения или состояния UI-элементов",P="https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=38476%3A139817",b="https://pixso.net/app/design/6NkPn1KUdxbJ8Bvsexerzw",o={dod:x,component:S,description:M,usage:f,designLink:P,pixsoView:b},w=["error","warning","success","common"],k=["small","medium"],t=(d,l={})=>c(y[d],l),H={mode:"common",text:"some text",size:"small"},i={mode:t("mode",{options:[...w]}),text:{description:"Отображаемый текст",control:"text"},size:t("size",{options:[...k]})},T=g(i),p={argTypes:m(i),args:{...H,testId:"help-message-test-id",klId:"help-message-kl-id"},parameters:{badges:[s.stable,s.reviewedByDesign],docs:{page:u(o)},design:o.pixsoView}},_={title:"Hexa UI Components/HelpMessage",component:h,tags:["!autodocs"],includeStories:["Playground"],excludeStories:["helpMessageStorySettings"],...p},e={name:"Playground",parameters:{controls:{include:T,sort:"none"}}};var n,r,a;e.parameters={...e.parameters,docs:{...(n=e.parameters)==null?void 0:n.docs,source:{originalSource:`{
+  name: 'Playground',
+  parameters: {
+    controls: {
+      include: helpMessageControlsOrder,
+      sort: 'none'
+    }
+  }
+}`,...(a=(r=e.parameters)==null?void 0:r.docs)==null?void 0:a.source}}};const z=["helpMessageStorySettings","Playground"],v=Object.freeze(Object.defineProperty({__proto__:null,Playground:e,__namedExportsOrder:z,default:_,helpMessageStorySettings:p},Symbol.toStringTag,{value:"Module"}));export{v as H,p as h};

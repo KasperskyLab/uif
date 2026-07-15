@@ -1,0 +1,12 @@
+import{G as c,R as t,H as P}from"./iframe-4-PRSI1I.js";import{e as b,g as R,c as x}from"./propPresentation-CfZ5yVim.js";import{t as _,M as v}from"./types-uVm4-zKu.js";import{R as g}from"./RangeTimeInput-CYLai2LW.js";import{s as E}from"./resolveDesignControls-CL29RUJI.js";import{v as H}from"./typesHelpers-tpz7Of7L.js";const O=(e,r={})=>b(E[e],r),k={format:"HH:mm:ss",disabled:!1,readOnly:!1,validationStatus:"default"},f={format:{group:"appearance",description:"Формат отображения времени в полях ввода",control:"select",options:[..._]},placeholder:{group:"appearance",description:"Подсказка в пустых полях. Если не задана, формируется из **format**",control:"text"},disabled:O("disabled"),readOnly:{group:"appearance",description:"Только чтение: поля не редактируются",control:"boolean"},validationStatus:{group:"appearance",description:"Визуальный статус валидации полей",control:"select",options:[...H]}},w=P.div`
+  width: 300px;
+`,y={argTypes:x(f),args:{...k,testId:"range-time-input-test-id",klId:"range-time-input-kl-id"},parameters:{badges:[c.stable,c.needsDesignReview],design:v.pixsoView},decorators:[(e,r)=>t.createElement(w,null,t.createElement(e,{...r}))]},D={title:"Hexa UI Components/DateTime Pickers/RangeTimeInput",component:g,tags:["!autodocs"],includeStories:["Playground"],excludeStories:["rangeTimeInputStorySettings"],...y},M=({valueStart:e,valueEnd:r,onChangeStart:o,onChangeEnd:s,...S})=>{const[I,p]=t.useState(e),[T,l]=t.useState(r);return t.useEffect(()=>{p(e)},[e]),t.useEffect(()=>{l(r)},[r]),t.createElement(g,{...S,valueStart:I,valueEnd:T,onChangeStart:(a,i)=>{p(a),o==null||o(a,i)},onChangeEnd:(a,i)=>{l(a),s==null||s(a,i)}})},n={name:"Playground",render:e=>t.createElement(M,{...e}),parameters:{controls:{include:R(f),sort:"none"}}};var d,m,u;n.parameters={...n.parameters,docs:{...(d=n.parameters)==null?void 0:d.docs,source:{originalSource:`{
+  name: 'Playground',
+  render: args => <RangeTimeInputPlayground {...args} />,
+  parameters: {
+    controls: {
+      include: getControlsInclude(rangeTimeInputPropPresentation),
+      sort: 'none'
+    }
+  }
+}`,...(u=(m=n.parameters)==null?void 0:m.docs)==null?void 0:u.source}}};const V=["rangeTimeInputStorySettings","Playground"],W=Object.freeze(Object.defineProperty({__proto__:null,Playground:n,__namedExportsOrder:V,default:D,rangeTimeInputStorySettings:y},Symbol.toStringTag,{value:"Module"}));export{W as R,y as r};

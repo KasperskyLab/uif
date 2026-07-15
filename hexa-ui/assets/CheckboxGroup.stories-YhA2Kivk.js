@@ -1,0 +1,10 @@
+import{G as t,R as u}from"./iframe-4-PRSI1I.js";import{e as m,g as b,b as g}from"./propPresentation-CfZ5yVim.js";import{w as x}from"./withMeta-BwOuJ6tr.js";import{a as r}from"./Checkbox-C_Wci0Rq.js";import{M as n}from"./meta-QOHxIele.js";import{s as h}from"./resolveDesignControls-CL29RUJI.js";const y=["primary","secondary","disabled"],k=["vertical","horizontal"],s=(e,p={})=>m(h[e],p),f=[{label:"One",value:1},{label:"Two",value:2},{label:"Three",value:3,description:"Description in checkbox group"}],G={direction:"vertical",disabled:!1,readonly:!1,invalid:!1,mode:"primary",defaultValue:[1,2],options:[...f]},l={direction:{control:"select",description:"Расположение чекбоксов в группе",options:[...k]},disabled:s("disabled",{description:"Отключает всю группу чекбоксов"}),readonly:{control:"boolean",description:"Режим только для чтения для всей группы"},invalid:{control:"boolean",description:"Состояние ошибки валидации для всей группы"},mode:s("mode",{options:[...y],description:"Режим подписи FormLabel для строковых label в options"})},S=b(l),d={argTypes:g(r.Group,l),args:{...G,testId:"checkbox-group-test-id",klId:"checkbox-group-kl-id"},parameters:{badges:[t.stable,t.reviewedByDesign],docs:{page:x(n)},design:n.pixsoView}},C={title:"Hexa UI Components/CheckboxGroup",component:r.Group,tags:["!autodocs"],includeStories:["Playground"],excludeStories:["checkboxGroupStorySettings"],...d},o={name:"Playground",parameters:{controls:{include:S,sort:"none"}},render:e=>u.createElement(r.Group,{...e})};var a,c,i;o.parameters={...o.parameters,docs:{...(a=o.parameters)==null?void 0:a.docs,source:{originalSource:`{
+  name: 'Playground',
+  parameters: {
+    controls: {
+      include: checkboxGroupControlsInclude,
+      sort: 'none'
+    }
+  },
+  render: args => <CheckboxComponent.Group {...args} />
+}`,...(i=(c=o.parameters)==null?void 0:c.docs)==null?void 0:i.source}}};const P=["checkboxGroupStorySettings","Playground"],O=Object.freeze(Object.defineProperty({__proto__:null,Playground:o,__namedExportsOrder:P,checkboxGroupStorySettings:d,default:C},Symbol.toStringTag,{value:"Module"}));export{O as C,d as c};

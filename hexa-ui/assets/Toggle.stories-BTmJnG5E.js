@@ -1,0 +1,9 @@
+import{G as o}from"./iframe-4-PRSI1I.js";import{e as i,g as c,c as g}from"./propPresentation-CfZ5yVim.js";import{T as p}from"./Toggle-Cpn23pdP.js";import{s as m}from"./resolveDesignControls-CL29RUJI.js";const u="https://pixso.net/app/design/u7KQ8mwSPSbdesEcdJJlsQ",b={pixsoView:u},r=(l,d={})=>i(m[l],d),f={disabled:!1,readonly:!1,loading:!1,checked:!1,labelPosition:"after",required:!1,children:"Label"},a={disabled:r("disabled",{description:"Недоступное состояние: переключатель не реагирует на действия пользователя"}),readonly:{control:"boolean",description:"Только для чтения: состояние видно, но изменить его нельзя"},loading:r("loading",{description:"Состояние загрузки переключателя"}),checked:{control:"boolean",description:"Включённое состояние в контролируемом режиме"},labelPosition:{control:"select",options:["after","before"],description:"Расположение подписи относительно переключателя"},required:{control:"boolean",description:"Обязательное поле: к подписи добавляется маркер required"},children:{control:"text",description:"Подпись переключателя"}},P={title:"Hexa UI Components/Toggle",component:p,tags:["!autodocs"],includeStories:["Playground"],argTypes:g(a),args:{...f,testId:"toggle-test-id",klId:"toggle-kl-id"},parameters:{badges:[o.stable,o.reviewedByDesign],design:b.pixsoView}},e={name:"Playground",parameters:{controls:{include:c(a),sort:"none"}}};var t,n,s;e.parameters={...e.parameters,docs:{...(t=e.parameters)==null?void 0:t.docs,source:{originalSource:`{
+  name: 'Playground',
+  parameters: {
+    controls: {
+      include: getControlsInclude(togglePropPresentation),
+      sort: 'none'
+    }
+  }
+}`,...(s=(n=e.parameters)==null?void 0:n.docs)==null?void 0:s.source}}};const y=["Playground"],_=Object.freeze(Object.defineProperty({__proto__:null,Playground:e,__namedExportsOrder:y,default:P},Symbol.toStringTag,{value:"Module"}));export{_ as T};

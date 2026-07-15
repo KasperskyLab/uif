@@ -1,0 +1,1 @@
+import{l as x}from"./iframe-4-PRSI1I.js";const n=({className:t,disabled:e,readOnly:s,validationStatus:a="default",...o})=>{const l=x(t,a,{"kl6-textbox-disabled":e,"kl6-textbox-readonly":s});return{...o,disabled:e,readOnly:s,className:l}};export{n as u};

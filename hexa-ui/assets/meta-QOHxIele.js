@@ -1,0 +1,3 @@
+const e={designTokens:!0,useThemedHook:!0,unitTests:!0,screenshotTests:!1,migration:!0,apiTable:!0,storybook:!0,pixsoView:!0},t="Checkbox",s=`Компонент для отрисовки чекбоксов. В качестве основы используется AntdCheckbox из библиотеки Antd.
+
+Вертикальная группа чекбоксов строится с расстоянием 8px. Горизонтальная группа чекбоксов строится с расстоянием 16px.`,o="Элемент, при нажатии на который выставляется флажок и происходит переключение Boolean состояния.",n="https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=32959%3A116559",i="https://pixso.net/app/design/2F7yl9KnNDzfb069cfbcTg",p={dod:e,component:t,description:s,usage:o,designLink:n,pixsoView:i};export{p as M};
