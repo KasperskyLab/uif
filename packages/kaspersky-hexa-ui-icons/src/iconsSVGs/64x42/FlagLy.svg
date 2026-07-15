@@ -1,14 +1,1 @@
-<svg width="64" height="42" viewBox="0 0 64 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_37941_2287)">
-<rect width="64" height="42" rx="5" fill="white"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 27.9999H64V13.9999H0V27.9999Z" fill="#262626"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 42H64V28H0V42Z" fill="#34B857"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 14H64V0H0V14Z" fill="#F41F34"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M34.1001 17.5001C34.1788 17.5001 34.2569 17.5026 34.3342 17.5078C33.6667 17.0607 32.8638 16.7999 32 16.7999C29.6804 16.7999 27.8 18.6803 27.8 20.9999C27.8 23.3195 29.6804 25.1999 32 25.1999C32.8636 25.1999 33.6663 24.9393 34.3338 24.4924C34.2566 24.4974 34.1786 24.5 34.1001 24.5C32.1671 24.5 30.6001 22.933 30.6001 21C30.6001 19.0671 32.1671 17.5001 34.1001 17.5001ZM34.7999 22.4C35.5731 22.4 36.1999 21.7732 36.1999 21C36.1999 20.2268 35.5731 19.6 34.7999 19.6C34.0268 19.6 33.4 20.2268 33.4 21C33.4 21.7732 34.0268 22.4 34.7999 22.4Z" fill="white"/>
-</g>
-<defs>
-<clipPath id="clip0_37941_2287">
-<rect width="64" height="42" rx="5" fill="white"/>
-</clipPath>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="42" fill="none" viewBox="0 0 64 42"><g clip-path="url(#a)"><rect width="64" height="42" fill="#fff" rx="5"/><path fill="#262626" fill-rule="evenodd" d="M0 27.9999h64v-14H0z" clip-rule="evenodd"/><path fill="#34b857" fill-rule="evenodd" d="M0 42h64V28H0z" clip-rule="evenodd"/><path fill="#f41f34" fill-rule="evenodd" d="M0 14h64V0H0z" clip-rule="evenodd"/><path fill="#fff" fill-rule="evenodd" d="M34.1001 17.5001q.1181 0 .2341.0077A4.18 4.18 0 0 0 32 16.7999c-2.3196 0-4.2 1.8804-4.2 4.2s1.8804 4.2 4.2 4.2a4.18 4.18 0 0 0 2.3338-.7075 3.6 3.6 0 0 1-.2337.0076c-1.933 0-3.5-1.567-3.5-3.5s1.567-3.4999 3.5-3.4999m.6998 4.8999c.7732 0 1.4-.6268 1.4-1.4s-.6268-1.4-1.4-1.4S33.4 20.2268 33.4 21s.6268 1.4 1.3999 1.4" clip-rule="evenodd"/></g><defs><clipPath id="a"><rect width="64" height="42" fill="#fff" rx="5"/></clipPath></defs></svg>

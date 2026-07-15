@@ -127,6 +127,10 @@ const heightReg = /height="([^"]+)"/
 const viewBoxReg = /viewBox="[^"]+"/
 
 const fixSize = (pathToFile) => {
+  if (skipSizeFixing(pathToFile)) {
+    return
+  }
+
   const content = fs.readFileSync(pathToFile, { encoding: 'utf-8' })
 
   const folderSize = pathToFile.split('\\').find((s) => folderSizes.includes(s))
@@ -152,12 +156,17 @@ const fixSize = (pathToFile) => {
   }
 }
 
-const flagsFolders = ['16x12', '28x20', '64x42']
+function skipSizeFixing (iconPath) {
+  const flagsFolders = ['16x12', '28x20', '64x42']
+  const nonSquareIcons = ['ExclamationMark']
+
+  return flagsFolders.some(x => iconPath.includes(x)) || nonSquareIcons.some(x => iconPath.includes(x))
+}
 
 const fixIconSizes = () => {
   const folders = fs.readdirSync(outputPath)
   const iconPaths = folders.reduce((acc, curFolder) => {
-    if (folderSizes.includes(curFolder) && !flagsFolders.includes(curFolder)) {
+    if (folderSizes.includes(curFolder) && !skipSizeFixing(curFolder)) {
       const folderPath = path.join(outputPath, curFolder)
       acc.push(...getAllFilePaths(folderPath))
     }

@@ -1,18 +1,1 @@
-<svg width="64" height="42" viewBox="0 0 64 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_37941_2324)">
-<rect width="64" height="42" rx="5" fill="white"/>
-<rect x="0.5" y="0.5" width="63" height="41" rx="4.5" stroke="#F5F5F5"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M64 0H19.4V42L64 42V0Z" fill="#0A632F"/>
-<g clip-path="url(#clip1_37941_2324)">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M52.3074 22.5761C52.0379 25.2025 50.9185 27.7261 48.9398 29.7047C44.2235 34.4211 36.4112 34.2554 31.4906 29.3348C26.57 24.4142 26.4044 16.602 31.1207 11.8856C33.0994 9.90698 35.6229 8.78759 38.2493 8.51809C37.422 9.00562 36.639 9.6072 35.9241 10.3221C31.6365 14.6097 31.4244 21.3491 35.4504 25.375C39.4763 29.401 46.2158 29.1889 50.5033 24.9013C51.2182 24.1865 51.8198 23.4034 52.3074 22.5761ZM46.8941 17.0198L46.2258 21.0065L44.3583 17.4214L40.3601 18.0178L43.1927 15.1338L41.39 11.5157L45.0081 13.3183L47.8921 10.4858L47.2957 14.4839L50.8808 16.3515L46.8941 17.0198Z" fill="white"/>
-</g>
-</g>
-<defs>
-<clipPath id="clip0_37941_2324">
-<rect width="64" height="42" rx="5" fill="white"/>
-</clipPath>
-<clipPath id="clip1_37941_2324">
-<rect width="27.3" height="27.3" fill="white" transform="translate(22.0859 20.505) rotate(-45)"/>
-</clipPath>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="42" fill="none" viewBox="0 0 64 42"><g clip-path="url(#a)"><rect width="64" height="42" fill="#fff" rx="5"/><rect width="63" height="41" x="1" y="1" stroke="#f5f5f5" rx="5"/><path fill="#0a632f" fill-rule="evenodd" d="M64 0H19.4v42H64z" clip-rule="evenodd"/><g clip-path="url(#b)"><path fill="#fff" fill-rule="evenodd" d="M52.3074 22.5761c-.2695 2.6264-1.3889 5.15-3.3676 7.1286-4.7163 4.7164-12.5286 4.5507-17.4492-.3699s-5.0862-12.7328-.3699-17.4492c1.9787-1.9786 4.5022-3.098 7.1286-3.3675-.8273.4875-1.6103 1.0891-2.3252 1.804-4.2876 4.2876-4.4997 11.027-.4737 15.0529s10.7654 3.8139 15.0529-.4737a11.66 11.66 0 0 0 1.8041-2.3252m-5.4133-5.5563-.6683 3.9867-1.8675-3.5851-3.9982.5964 2.8326-2.884-1.8027-3.6181 3.6181 1.8026 2.884-2.8325-.5964 3.9981 3.5851 1.8676z" clip-rule="evenodd"/></g></g><defs><clipPath id="a"><rect width="64" height="42" fill="#fff" rx="5"/></clipPath><clipPath id="b"><path fill="#fff" d="m22.0859 20.505 19.304-19.304 19.304 19.304L41.39 39.809z"/></clipPath></defs></svg>

@@ -1,11 +1,1 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M22 12C22 17.5228 17.5228 22 12 22C6.47716 22 2 17.5228 2 12C2 6.47716 6.47716 2 12 2C17.5228 2 22 6.47716 22 12Z" fill="url(#paint0_linear_21654_2212)"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M21.5156 12C21.5156 17.2553 17.2553 21.5156 12 21.5156C6.74465 21.5156 2.48438 17.2553 2.48438 12C2.48438 6.74466 6.74465 2.48438 12 2.48438C17.2553 2.48438 21.5156 6.74466 21.5156 12Z" fill="white"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M18.4375 7.87505L13.0859 13.1094V19.6172C13.0859 19.7344 12.5781 19.8282 12 19.836C11.4453 19.8282 10.914 19.7344 10.914 19.6172V13.1094L5.56249 7.87505C5.47655 7.78911 5.74999 7.38286 6.17186 6.96099C6.59374 6.53911 7.0078 6.26568 7.08593 6.35161L11.9922 11.1407L16.8984 6.35161C16.9844 6.26568 17.3906 6.53911 17.8125 6.96099C18.2344 7.38286 18.5156 7.78911 18.4375 7.87505Z" fill="#EC1C24"/>
-<defs>
-<linearGradient id="paint0_linear_21654_2212" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
-<stop offset="1e-07" stop-color="#F5F5F6"/>
-<stop offset="1" stop-color="#EDEDEE"/>
-</linearGradient>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="url(#a)" fill-rule="evenodd" d="M22 12c0 5.5228-4.4772 10-10 10S2 17.5228 2 12 6.4772 2 12 2s10 4.4772 10 10" clip-rule="evenodd"/><path fill="#fff" fill-rule="evenodd" d="M21.5156 12c0 5.2553-4.2603 9.5156-9.5156 9.5156S2.4844 17.2553 2.4844 12 6.7447 2.4844 12 2.4844 21.5156 6.7447 21.5156 12" clip-rule="evenodd"/><path fill="#ec1c24" fill-rule="evenodd" d="m18.4375 7.875-5.3516 5.2344v6.5078c0 .1172-.5078.211-1.0859.2188-.5547-.0078-1.086-.1016-1.086-.2188v-6.5078L5.5625 7.875c-.086-.0859.1875-.4921.6094-.914.4218-.4219.8359-.6953.914-.6094l4.9063 4.7891 4.9062-4.789c.086-.086.4922.1874.9141.6093s.7031.8281.625.914" clip-rule="evenodd"/><defs><linearGradient id="a" x1="12" x2="12" y1="2" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f5f5f6"/><stop offset="1" stop-color="#ededee"/></linearGradient></defs></svg>

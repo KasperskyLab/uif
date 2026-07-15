@@ -1,18 +1,1 @@
-<svg width="28" height="20" viewBox="0 0 28 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_5138_372)">
-<path d="M0 2C0 0.895431 0.895431 0 2 0H26C27.1046 0 28 0.895431 28 2V18C28 19.1046 27.1046 20 26 20H2C0.895431 20 0 19.1046 0 18V2Z" fill="white"/>
-<mask id="mask0_5138_372" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="28" height="20">
-<path d="M0 2C0 0.895431 0.895431 0 2 0H26C27.1046 0 28 0.895431 28 2V18C28 19.1046 27.1046 20 26 20H2C0.895431 20 0 19.1046 0 18V2Z" fill="white"/>
-</mask>
-<g mask="url(#mask0_5138_372)">
-<rect width="28" height="20" fill="#157CBB"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 12H8V20H12V12H28V8H12V0H8V8H0V12Z" fill="#FFD34D"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 10.6667H9.33333V20H10.6667V10.6667H28V9.33333H10.6667V0H9.33333V9.33333H0V10.6667Z" fill="#EB363A"/>
-</g>
-</g>
-<defs>
-<clipPath id="clip0_5138_372">
-<rect width="28" height="20" fill="white"/>
-</clipPath>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="20" fill="none" viewBox="0 0 28 20"><g clip-path="url(#a)"><path fill="#fff" d="M0 2C0 .8954.8954 0 2 0h24c1.1046 0 2 .8954 2 2v16c0 1.1046-.8954 2-2 2H2c-1.1046 0-2-.8954-2-2z"/><mask id="b" width="28" height="20" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:luminance"><path fill="#fff" d="M0 2C0 .8954.8954 0 2 0h24c1.1046 0 2 .8954 2 2v16c0 1.1046-.8954 2-2 2H2c-1.1046 0-2-.8954-2-2z"/></mask><g mask="url(#b)"><path fill="#157cbb" d="M0 0h28v20H0z"/><path fill="#ffd34d" fill-rule="evenodd" d="M0 12h8v8h4v-8h16V8H12V0H8v8H0z" clip-rule="evenodd"/><path fill="#eb363a" fill-rule="evenodd" d="M0 10.6667h9.3333V20h1.3334v-9.3333H28V9.3333H10.6667V0H9.3333v9.3333H0z" clip-rule="evenodd"/></g></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h28v20H0z"/></clipPath></defs></svg>
