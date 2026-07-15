@@ -1,1 +1,0 @@
-import{a as t}from"./palette-CcbSufZ2.js";import"./index-B3FZByPw.js";if(!document.querySelector("head > style.hexa-ui-colors")){const e=document.createElement("style");e.className="hexa-ui-colors",e.textContent=t,document.head.appendChild(e)}
