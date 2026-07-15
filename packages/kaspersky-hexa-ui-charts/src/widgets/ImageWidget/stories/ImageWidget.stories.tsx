@@ -6,7 +6,7 @@ import { action } from 'storybook/actions'
 import MetaData from '../__meta__/meta.json'
 
 import { ImageWidgetStoryWrapper } from './ImageWidgetStoryWrapper'
-import { imageWidgetStub } from './imageWidgetStub'
+import { imageWidgetStub } from './ImageWidgetStub'
 
 const meta = {
   title: 'Widget/ImageWidget',
