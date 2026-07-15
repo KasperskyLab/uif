@@ -7,7 +7,7 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "noImplicitAny": true,
     "strict": true,
@@ -17,11 +17,12 @@
     "baseUrl": ".",
     "outDir": "dist",
     "allowJs": true,
-    "jsx": "react"
+    "jsx": "react",
+    "paths": {
+      "@sb/*": [".storybook/*"],
+      "@src/*": ["src/*"]
+    }
   },
-  "include": ["./src/*"],
-  "exclude": [
-    "dist",
-    "node_modules"
-  ]
+  "include": ["./src/**/*"],
+  "exclude": ["dist", "node_modules", "tests", "playwright.visual.config.ts"]
 }

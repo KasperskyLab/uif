@@ -4,17 +4,21 @@
   min-height: 50px;
 }
 
+.hidden {
+  display: none !important;
+}
 .overlayContent {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--chart--overlay);
+  background-color: var(--fg--neutral_inverted--primary);
+  opacity: 0.9;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 997;
+  z-index: 7;
   width: 100%;
   height: 100%;
   & * {
@@ -29,23 +33,28 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 998;
+  z-index: 8;
   color: var(--link--default--text--enabled);
+  cursor: pointer;
 }
 
 .hoverable {
-  .overlayContent{
-    background-color: var(--widget_image--bg--enabled);
-    &:hover{
-      background-color: var(--chart--overlay);
+  &:hover .overlayContent {
+    background-color: var(--fg--neutral_inverted--primary);
+    opacity: 0.9;
+    border-radius: 8px;
+    &.dashedBorder {
+      border: 1px dashed var(--border--neutral--bold);
+    }
+    
+    &.solidBlueBorder {
+      border: 1px solid var(--border--color--accent_hover);
     }
   }
-  .overlayIcon{
-    border-radius: 4px;
-    border: 1px dashed transparent;
-    &:hover{
-      background-color: color-mix(in srgb, var(--chart--overlay) 90%, transparent);
-      border: 1px dashed var(--widget_image--border--focus);
-    }
+
+  &.overlayContent {
+    background-color: var(--bg--neutral_transparent--level_1);
+    border-radius: 8px;
   }
+
 }

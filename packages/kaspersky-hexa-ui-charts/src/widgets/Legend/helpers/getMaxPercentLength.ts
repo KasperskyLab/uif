@@ -1,5 +1,3 @@
-import { toString } from 'lodash'
-
 import { getPercent } from '../../../helpers/getPercent'
 import { LegendItemType, TLegendItem, TLegendItemRow } from '../types'
 
@@ -15,7 +13,7 @@ export function getMaxPercentLength (items: TLegendItem[], getNumberFromData: (i
   return items.reduce((result, item) => {
     if (isLegendItemRow(item)) {
       const percent = getPercent(getNumberFromData(item), total, precision)
-      return Math.max(result, toString(percent).length)
+      return Math.max(result, percent.toFixed(precision).length)
     }
 
     return result

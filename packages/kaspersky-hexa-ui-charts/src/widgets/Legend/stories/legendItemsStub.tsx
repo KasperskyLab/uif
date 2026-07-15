@@ -14,7 +14,7 @@ export const legendItems: TLegendItem[] = [
     title: 'one',
     payload: undefined,
     color: colors.marengo500,
-    value: Math.floor(Math.random() * 1000)
+    value: 479
   },
   {
     kind: LegendItemType.Row,
@@ -22,7 +22,7 @@ export const legendItems: TLegendItem[] = [
     icon: <Icons16.Battery />,
     payload: undefined,
     color: colors.grass500,
-    value: Math.floor(Math.random() * 10000)
+    value: 8945
   },
   { kind: LegendItemType.Divider },
   {
@@ -31,6 +31,6 @@ export const legendItems: TLegendItem[] = [
     tooltip: LONG_TEXT,
     payload: undefined,
     color: colors.purple500,
-    value: Math.floor(Math.random() * 100000)
+    value: 75629
   }
 ]

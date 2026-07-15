@@ -1,44 +1,81 @@
 import { useMemo } from 'react'
 import { BlockProps, DomainPaddingPropType } from 'victory'
 
-import { DEFAULT_BOTTOM_OFFSET, DEFAULT_HORIZONTAL_BOTTOM_OFFSET, DEFAULT_HORIZONTAL_LEFT_OFFSET, DEFAULT_LEFT_TEXT_OFFSET, DEFAULT_LETTER_SIZE, DEFAULT_MAX_LABEL_ANGLE, DEFAULT_RIGHT_TEXT_OFFSET, DEFAULT_TEXT_ROTATION_STEP, DEFAULT_TICK_LABEL_OVERSIZE_RATIO, DEFAULT_TOP_TEXT_OFFSET, GUP_MAX_TICK_LABEL_Y_LENGTH, MIN_BOTTOM_OFFSET } from '../../../constants'
+import {
+  DEFAULT_BOTTOM_OFFSET,
+  DEFAULT_HORIZONTAL_BOTTOM_OFFSET,
+  DEFAULT_HORIZONTAL_LEFT_OFFSET,
+  DEFAULT_LEFT_TEXT_OFFSET,
+  DEFAULT_LETTER_SIZE,
+  DEFAULT_MAX_LABEL_ANGLE,
+  DEFAULT_RIGHT_TEXT_OFFSET,
+  DEFAULT_TEXT_ROTATION_STEP,
+  DEFAULT_TICK_LABEL_OVERSIZE_RATIO,
+  DEFAULT_TOP_TEXT_OFFSET,
+  GUP_MAX_TICK_LABEL_Y_LENGTH,
+  MIN_BOTTOM_OFFSET
+} from '../../../constants'
 import { getCategoriesFromData } from '../../../helpers/getCategoriesFromData'
 import { IGroupedStackedChartData } from '../../../types/chartData'
 import { SCALE_TOP_OFFSET } from '../constants'
-import { addDomainPadding, DELTA_GRAD, getNearestSize, getScaleByType, getTotalBarWith } from '../helpers'
+import { addDomainPadding, DELTA_GRAD, getNearestSize, getScaleByType, getStartBarGap, getTotalBarWith } from '../helpers'
 import { DomainPadding } from '../types/domainPadding'
 
 export function useAxisLabelPadding ({
-  data, padding, categoriesFormat, valueFormat = (v: any): string => v, minTickLabelXHorizontalLength, horizontal, height, width, maxDistanceBetweenBar, minDistanceBetweenBar, maxGroupDistanceBetweenBar, minGroupDistanceBetweenBar, minTickLabelYLength, minTickLabelXVerticalLength, barWidth, distanceBetweenBarInGroup, yScale, tickLetterSize = DEFAULT_LETTER_SIZE
+  data,
+  padding,
+  categoriesFormat,
+  valueFormat = (v: any): string => v,
+  minTickLabelXHorizontalLength,
+  horizontal,
+  height,
+  width,
+  maxDistanceBetweenBar,
+  minDistanceBetweenBar,
+  maxGroupDistanceBetweenBar,
+  minGroupDistanceBetweenBar,
+  minTickLabelYLength,
+  minTickLabelXVerticalLength,
+  barWidth,
+  distanceBetweenBarInGroup,
+  minStartBarGap,
+  yScale,
+  tickLetterSize = DEFAULT_LETTER_SIZE,
+  xTickHide,
+  yTickHide
 }: {
-  data: IGroupedStackedChartData,
-  padding: Required<BlockProps>,
-  categoriesFormat?: (tick: any) => string,
-  valueFormat?: (tick: any) => string,
-  minTickLabelXHorizontalLength: number,
-  horizontal: boolean,
-  height: number,
-  width: number,
-  maxDistanceBetweenBar: number,
-  minDistanceBetweenBar: number,
-  maxGroupDistanceBetweenBar?: number,
-  minGroupDistanceBetweenBar?: number,
-  minTickLabelYLength: number,
-  minTickLabelXVerticalLength: number,
-  barWidth: number,
-  distanceBetweenBarInGroup: number,
-  yScale?: 'linear' | 'sqrt' | 'log',
+  data: IGroupedStackedChartData
+  padding: Required<BlockProps>
+  categoriesFormat?: (tick: any) => string
+  valueFormat?: (tick: any) => string
+
+  minTickLabelXHorizontalLength: number
+  horizontal: boolean
+  height: number
+  width: number
+  maxDistanceBetweenBar: number
+  minDistanceBetweenBar: number
+  maxGroupDistanceBetweenBar?: number
+  minGroupDistanceBetweenBar?: number
+  minTickLabelYLength: number
+  minTickLabelXVerticalLength: number
+  barWidth: number
+  distanceBetweenBarInGroup: number
+  minStartBarGap?: number
+  yScale?: 'linear' | 'sqrt' | 'log'
   tickLetterSize?: number
+  xTickHide?: boolean
+  yTickHide?: boolean
 }): {
-  maxLabelXLength: number,
-  maxLabelYLength: number,
-  paddingWithLabel: Required<BlockProps>,
-  angle: number,
-  textAnchor: string,
-  dy: number,
-  dx: number,
-  nearestSize: number,
-  domainPadding: DomainPaddingPropType,
+  maxLabelXLength: number
+  maxLabelYLength: number
+  paddingWithLabel: Required<BlockProps>
+  angle: number
+  textAnchor: string
+  dy: number
+  dx: number
+  nearestSize: number
+  domainPadding: DomainPaddingPropType
   leftTextOffset: number
 } {
   return useMemo(() => {
@@ -71,8 +108,8 @@ export function useAxisLabelPadding ({
       const left = Math.max(minLabelXLength * tickLetterSize, DEFAULT_LEFT_TEXT_OFFSET)
       const paddingWithLabel = {
         ...padding,
-        left: padding.left + left + DEFAULT_HORIZONTAL_LEFT_OFFSET,
-        bottom: padding.bottom + DEFAULT_HORIZONTAL_BOTTOM_OFFSET,
+        left: padding.left + (xTickHide ? 0 : left + DEFAULT_HORIZONTAL_LEFT_OFFSET),
+        bottom: padding.bottom + (yTickHide ? 0 : DEFAULT_HORIZONTAL_BOTTOM_OFFSET),
         right: Math.max(padding.right, DEFAULT_RIGHT_TEXT_OFFSET)
       }
       const { nearestSize } = getNearestSize({
@@ -113,23 +150,35 @@ export function useAxisLabelPadding ({
       }
     }
 
+    const values = stackedData
+      .flatMap((stack) => stack.data)
+      .map((point) => point.value)
+
+    const positiveValues = values.filter((v) => v > 0)
+
+    const domainStart = yScale === 'log'
+      ? (positiveValues.length ? Math.min(...positiveValues) : 1)
+      : 0
+
     const scale = getScaleByType(
       yScale,
-      [0, height],
-      [0, ...stackedData.map((d) => d.data.map((point) => point.value)).flat()]
+      [domainStart, height],
+      [0, ...values]
     )
+
     const maxYTextLength = Math.max(...scale.ticks().map((point) => valueFormat(point).toString().length))
     const maxLabelYLength = Math.min(maxYTextLength + GUP_MAX_TICK_LABEL_Y_LENGTH, minTickLabelYLength)
     const left = maxLabelYLength * tickLetterSize + DEFAULT_LEFT_TEXT_OFFSET
     const paddingWithLabel: Required<BlockProps> = {
       ...padding,
       top: Math.max(padding.top, DEFAULT_TOP_TEXT_OFFSET),
-      left: padding.left + left,
+      left: padding.left + (yTickHide ? 0 : left),
       right: Math.max(padding.right, DEFAULT_RIGHT_TEXT_OFFSET)
     }
+    const targetSize = width - paddingWithLabel.left
     const { nearestSize, distanceBetweenBar } = getNearestSize({
       barSize: totalBarWidth,
-      targetSize: width - paddingWithLabel.left,
+      targetSize,
       categories: totalCategories,
       maxDistanceBetweenBar,
       minDistanceBetweenBar,
@@ -138,13 +187,19 @@ export function useAxisLabelPadding ({
       totalGroups,
       withStartGup: true
     })
-    let domainPadding: DomainPadding = { x: [distanceBetweenBar, 0], y }
+    const startBarGap = getStartBarGap({
+      categories: totalCategories,
+      distanceBetweenBar,
+      minStartBarGap
+    })
+    const nearestSizeWithStartBarGap = nearestSize - distanceBetweenBar + startBarGap
+    let domainPadding: DomainPadding = { x: [startBarGap, 0], y }
 
-    if (nearestSize <= width - paddingWithLabel.left) {
+    if (nearestSizeWithStartBarGap <= targetSize) {
       domainPadding = addDomainPadding(
         domainPadding,
         0,
-        width - paddingWithLabel.left - nearestSize + distanceBetweenBar
+        targetSize - nearestSizeWithStartBarGap + distanceBetweenBar
       )
     } else {
       domainPadding = addDomainPadding(domainPadding, 0, totalGroups > 1 ? totalBarWidth / 2 : totalBarWidth)
@@ -166,7 +221,7 @@ export function useAxisLabelPadding ({
         maxLabelYLength: minTickLabelYLength,
         paddingWithLabel: {
           ...paddingWithLabel,
-          bottom: paddingWithLabel.bottom + DEFAULT_BOTTOM_OFFSET
+          bottom: paddingWithLabel.bottom + (xTickHide ? 0 : DEFAULT_BOTTOM_OFFSET)
         },
         angle: 0,
         textAnchor: 'middle',
@@ -189,7 +244,7 @@ export function useAxisLabelPadding ({
     const paddingWithBottom = {
       ...paddingWithLabel,
       left: Math.max(bottom / 1.8, paddingWithLabel.left),
-      bottom: Math.max(paddingWithLabel.bottom + bottom, DEFAULT_BOTTOM_OFFSET)
+      bottom: xTickHide ? paddingWithLabel.bottom : Math.max(paddingWithLabel.bottom + bottom, DEFAULT_BOTTOM_OFFSET)
     }
 
     return {
@@ -222,6 +277,9 @@ export function useAxisLabelPadding ({
     minTickLabelXVerticalLength,
     barWidth,
     distanceBetweenBarInGroup,
-    tickLetterSize
+    minStartBarGap,
+    tickLetterSize,
+    xTickHide,
+    yTickHide
   ])
 }

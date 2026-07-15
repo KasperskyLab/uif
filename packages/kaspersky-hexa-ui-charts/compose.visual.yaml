@@ -1,0 +1,28 @@
+services:
+  visual-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.visual
+      args:
+        PLAYWRIGHT_VERSION: "1.60.0"
+    platform: linux/amd64
+    working_dir: /app
+    environment:
+      TZ: "UTC"
+      LANG: "C.UTF-8"
+      LC_ALL: "C.UTF-8"
+      npm_config_strict_ssl: "false"
+    volumes:
+      - .:/app
+      - visual_node_modules:/app/node_modules
+      - visual_npm_cache:/root/.npm
+    command: >
+      sh -c "
+        npm ci --prefer-offline &&
+        npm run build-storybook &&
+        npm run test:visual:run
+      "
+
+volumes:
+  visual_node_modules:
+  visual_npm_cache:

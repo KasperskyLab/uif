@@ -1,42 +1,48 @@
-import { action } from '@storybook/addon-actions'
+import { withMeta } from '@sb/components/Meta'
 import { Meta, StoryObj } from '@storybook/react'
-import React, { useState } from 'react'
+import React from 'react'
+import { action } from 'storybook/actions'
 
-import { ImageWidget } from '../ImageWidget'
+import MetaData from '../__meta__/meta.json'
 
-import { ImageWidgetStub } from './ImageWidgetStub'
+import { ImageWidgetStoryWrapper } from './ImageWidgetStoryWrapper'
+import { imageWidgetStub } from './imageWidgetStub'
 
-const meta: Meta<typeof ImageWidget> = {
+const meta = {
   title: 'Widget/ImageWidget',
-  component: ImageWidget,
+  component: ImageWidgetStoryWrapper,
   args: {
     onOverlayClick: action('onOverlayClick'),
-    src: null,
     readonly: false,
     editTrigger: 'Upload picture',
     placeholder: 'No Image Selected',
     width: 300,
     height: 300
+  },
+  argTypes: {
+    width: { control: { type: 'range', min: 100, max: 1000 } },
+    height: { control: { type: 'range', min: 100, max: 1000 } }
+  },
+  parameters:{
+    docs: {
+      page: withMeta(MetaData)
+    }
   }
-}
-
+} satisfies Meta<typeof ImageWidgetStoryWrapper>
 export default meta
-
-type Story = StoryObj<typeof ImageWidget>
+type Story = StoryObj<typeof ImageWidgetStoryWrapper>
 
 export const NP: Story = {
   name: 'No Picture (readonly)',
-  args: ImageWidgetStub[0]
+  args: imageWidgetStub[0]
 }
-export const NP3: Story = {
-  name: 'No Picture',
-  args: ImageWidgetStub[1]
-}
+
 export const P: Story = {
   name: 'Picture (readonly)',
-  args: ImageWidgetStub[2]
+  args: imageWidgetStub[2]
 }
-export const P3: Story = {
-  name: 'Picture',
-  args: ImageWidgetStub[3]
+
+export const E: Story = {
+  name: 'Editable',
+  args: imageWidgetStub[1]
 }

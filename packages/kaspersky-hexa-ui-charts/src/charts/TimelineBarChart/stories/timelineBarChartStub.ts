@@ -1,19 +1,23 @@
+import { getStableValue } from '@sb/data'
 import { add, Duration } from 'date-fns'
-import { random } from 'lodash'
 
-import { IStackedChartData } from '../../../types/chartData'
 import { TimelineBarChartProps } from '../components/TimelineBarChart'
 
-const now = new Date()
+const FIXED_NOW = new Date(2026, 0, 1, 12, 0, 0)
 
-function getDateArrayByRandomValue (durationType: keyof Duration, randomNumber: number, total = 40, title?: string) {
-  return Array.from({ length: total }).map((_, idx) => {
-    const metric = add(now, { [durationType]: idx })
+function getDateArrayByRandomValue (
+  durationType: keyof Duration,
+  maxValue: number,
+  total = 40,
+  title?: string
+) {
+  return Array.from({ length: total }).map((_, pointIndex) => {
+    const metric = add(FIXED_NOW, { [durationType]: pointIndex })
 
     return {
       metric,
-      value: random(randomNumber),
-      originalPayload: add(now, { [durationType]: idx }),
+      value: getStableValue(maxValue, pointIndex),
+      originalPayload: metric,
       title: title && ((metric: string) => `${title}${metric}`)
     }
   })
@@ -58,6 +62,11 @@ export const singleStackedBarChartData: TimelineBarChartProps['data'] = [
   }
 ]
 
+export const singleStackedBarChartDomain: TimelineBarChartProps['domain'] = [
+  singleStackedBarChartData[0].data[0].metric as Date,
+  singleStackedBarChartData[0].data[singleStackedBarChartData[0].data.length - 1].metric as Date
+]
+
 export const groupStackedBarChartData = [
   {
     name: 'Current',
@@ -71,4 +80,22 @@ export const groupStackedBarChartData = [
     group: 'previous',
     color: 'var(--color-marina500)'
   }
+]
+const singlePointDate = add(FIXED_NOW, { hours: -2})
+export const singlePointData: TimelineBarChartProps['data'] = [
+  {
+    name: 'High',
+    color: 'var(--color-marina500)',
+    data: [
+      {
+        metric: singlePointDate,
+        value: 10
+      }
+    ]
+  }
+]
+
+export const singlePointDomain: TimelineBarChartProps['domain'] = [
+  add(singlePointDate, {hours: -1}),
+  add(singlePointDate, {hours: 2})
 ]

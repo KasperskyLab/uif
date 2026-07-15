@@ -1,0 +1,21 @@
+.chartsLayout {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 100%;
+}
+
+.chartsRow {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+.chartSlot {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.chartBottom {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}

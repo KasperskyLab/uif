@@ -1,0 +1,36 @@
+.wrapper {
+  border-radius: var(--radius--m);
+  border: 1px solid var(--border--base--bold);
+  
+  &.large {
+    padding: 24px;
+  }
+
+  &.medium {
+    padding: 16px;
+  }
+
+  &.invalid {
+    border-color: var(--input_textarea--border--error);
+  }
+
+  &.active {
+    border: 1px solid var(--border--color--accent);
+    background-color: var(--bg--accent_subtle--enabled);
+  }
+
+  div[class*='legendScrollContainer']::-webkit-scrollbar {
+    height: 7px;
+  }
+}
+
+@media print {
+  div.wrapper {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+
+    & > div {
+      min-width: 0;
+    }
+  }
+}

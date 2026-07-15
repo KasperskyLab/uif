@@ -29,22 +29,22 @@ export const ChartTooltipWrapper: React.FC<ChartTooltipWrapperProps> = memo(
   }) => {
     return datum?.active
       ? (
-      <foreignObject
-        x={x}
-        y={y}
-        width={0}
-        height={0}
-        className={styles.foreignObjectContainer}
-      >
-        <TooltipComponent
-          {...{
-            tooltipContentComponent,
-            activeRecord: datum as IChartDataPoint,
-            data,
-            theme
-          }}
-        />
-      </foreignObject>
+          <foreignObject
+            x={x}
+            y={y}
+            width={0}
+            height={0}
+            className={styles.foreignObjectContainer}
+          >
+            <TooltipComponent
+              {...{
+                tooltipContentComponent,
+                activeRecord: datum as IChartDataPoint,
+                data,
+                theme
+              }}
+            />
+          </foreignObject>
         )
       : null
   }

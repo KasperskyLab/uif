@@ -1,0 +1,13 @@
+{
+  "dod": {
+    "designTokens": false,
+    "unitTests": false,
+    "screenshotTests": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "StackedBarChart",
+  "usage": "Stacked bar chart — компонент для отображения составных значений по категориям. Каждая колонка (или строка, в зависимости от ориентации) состоит из нескольких сегментов, складывающихся в общее значение. Используется для демонстрации структуры данных внутри одной категории: например, долей, распределений или прогресса",
+  "designLink": "https://pixso.net/app/design/Nm37XP3kqM_HJPFAXaciuw?file_type=10&icon_type=1&page-id=2544%3A49895" ,
+  "pixsoView": "https://pixso.net/app/design/LaTmaWE_JObQIc6YZuYaWw?page-id=156%3A179472"
+}

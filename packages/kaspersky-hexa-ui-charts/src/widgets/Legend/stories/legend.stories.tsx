@@ -1,9 +1,11 @@
-import { action } from '@storybook/addon-actions'
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { withMeta } from '@sb/components/Meta'
+import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
+import { action } from 'storybook/actions'
 
 import { colors } from '@kaspersky/hexa-ui/design-system/tokens'
 
+import MetaData from '../__meta__/meta.json'
 import { ILegendProps, Legend } from '../components/Legend'
 import { LegendItemType, TLegendItem } from '../types'
 
@@ -30,85 +32,120 @@ for (let i = 0; i < 100; i++) {
   }
 }
 
-export default {
-  title: 'Legend',
+const meta = {
+  title: 'Widget/Legend',
   component: Legend,
   args: {
-    onClick: action('onClick'),
+    onCheck: action('onClick'),
     onHover: action('onHover'),
     onSelect: action('onSelect'),
-    showPercents: true,
-    totalLabel: 'totalLabel'
+    onLeave: action('onLeave'),
+    totalLabel: 'totalLabel',
+    selectable: false
   },
-  decorators: [(story) => <div style={{ width: 300 }}>{story()}</div>]
-} as ComponentMeta<typeof Legend>
+  parameters:{
+    docs: {
+      page: withMeta(MetaData)
+    }
+  }
+} satisfies Meta<typeof Legend>
 
-export const Default: ComponentStory<typeof Legend> = (args: any) => {
-  return <Legend {...args} items={legendItems} />
+export default meta
+
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {
+  args: {
+    items: legendItems
+  }
 }
 
-export const WithValue: ComponentStory<typeof Legend> = (args: any) => {
-  return <Legend {...args} items={legendItems} />
+export const WithWidthModeIsFlex: Story = {
+  args: {
+    items: legendItems,
+    widthMode: 'flex'
+  }
 }
 
-export const WithValueAndTotal: ComponentStory<typeof Legend> = (args: any) => {
-  return <Legend {...args} items={legendItems} showTotal />
+export const WithValueAndTotal: Story = {
+  args: {
+    items: legendItems,
+    showTotal: true
+  }
 }
 
-export const WithPercentage: ComponentStory<typeof Legend> = (args: any) => {
-  return <Legend {...args} items={legendItems} showTotal showPercentage />
+export const WithPercentage: Story = {
+  args: {
+    items: legendItems,
+    showPercentage: true,
+    showTotal: true
+  }
 }
 
-export const WithDescription: ComponentStory<typeof Legend> = (args: any) => {
-  return (
-    <Legend
-      {...args}
-      items={legendItems}
-      showTotal
-      showPercentage
-      description="In elit veniam commodo culpa dolor et cillum aliqua laboris."
-    />
-  )
+export const WithDescription: Story = {
+  args: {
+    items: legendItems,
+    description: 'In elit veniam commodo culpa dolor et cillum aliqua laboris.',
+    showTotal: true
+  }
 }
 
-export const WithTitle: ComponentStory<typeof Legend> = (args: any) => {
-  return (
-    <Legend
-      {...args}
-      items={legendItems}
-      legendTitle="In elit veniam commodo"
-    />
-  )
+export const WithTitle: Story = {
+  args: {
+    items: legendItems,
+    legendTitle: 'In elit veniam commodo'
+  }
 }
 
-export const WithScroll: ComponentStory<typeof Legend> = (args: any) => {
-  return (
-    <div style={{ height: 300 }}>
-      <Legend
-        {...args}
-        items={legendItemsLargeDataset}
-        showTotal
-        description="In elit veniam commodo culpa dolor et cillum aliqua laboris."
-      />
-    </div>
-  )
+export const WithDefaultHeightScrollContainer: Story = {
+  args: {
+    items: legendItemsLargeDataset,
+    showTotal: true,
+    description: 'In elit veniam commodo culpa dolor et cillum aliqua laboris.'
+  }
 }
 
-export const Selectable: ComponentStory<typeof Legend> = (args: any) => {
-  const [legendItems, setlegendItems] = useState(legendItemsSelectable)
+export const WithCustomHeightScrollContainer: Story = {
+  args: {
+    items: legendItemsLargeDataset,
+    showTotal: true,
+    description: 'In elit veniam commodo culpa dolor et cillum aliqua laboris.',
+    maxHeightScrollContainer: 300
+  }
+}
 
-  const onSelect: ILegendProps['onSelect'] = (itemData) =>
-    setlegendItems((legendItems) =>
-      legendItems.map((l) => ({
-        ...l,
-        selected:
-          l.kind === LegendItemType.Row && itemData.title === l.title
-            ? !l.selected
-            : l.selected
-      }))
-    )
+export const Selectable: Story = {
+  // @ts-expect-error - we use legendItems from hook in render
+  args: {
+    selectable: true
+  },
+  render: (args) => {
+    const [legendItems, setlegendItems] = useState(legendItemsSelectable)
 
-  return (
-    <Legend {...args} items={legendItems} onSelect={onSelect} selectable />
-  )
+    const onSelect: ILegendProps['onSelect'] = (itemData) =>
+      setlegendItems((legendItems) =>
+        legendItems.map((l) => ({
+          ...l,
+          selected: l.kind === LegendItemType.Row && itemData.title === l.title ? !l.selected : l.selected
+        }))
+      )
+
+    const onCheck: ILegendProps['onCheck'] = (itemData) =>
+      setlegendItems((legendItems) =>
+        legendItems.map((l) => {
+          if (l.kind === LegendItemType.Row) {
+            return {
+              ...l,
+              checked:
+                itemData.title === l.title
+                  ? !l.checked
+                  : l.checked
+            }
+          }
+          return l
+        })
+      )
+
+    return <Legend {...args} onSelect={onSelect} onCheck={onCheck} items={legendItems} />
+  }
 }

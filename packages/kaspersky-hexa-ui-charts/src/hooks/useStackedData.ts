@@ -8,7 +8,8 @@ import { IGroupedStackedChartData, IStackedChartData } from '../types/chartData'
 export function useStackedData (
   data: IStackedChartData,
   isStackedBy100 = false,
-  reversed = false
+  reversed = false,
+  precision?: number
 ): IGroupedStackedChartData {
   return useMemo(() => {
     // for events
@@ -28,7 +29,7 @@ export function useStackedData (
 
     let groupedData = Array.from(groupedByName.entries())
 
-    groupedData = isStackedBy100 ? groupBy100(groupedData) : groupedData
+    groupedData = isStackedBy100 ? groupBy100(groupedData, precision) : groupedData
 
     groupedData = reversed ? reversedStackedChart(groupedData) : groupedData
 

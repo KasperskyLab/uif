@@ -80,26 +80,31 @@ export const multipleStackedBarChartData = [
     data: [
       {
         metric: 'first',
+        category: 'category',
         value: 15,
         originalPayload: 'first-43'
       },
       {
         metric: 'second',
+        category: 'category',
         value: 21,
         originalPayload: 'second-21'
       },
       {
         metric: 'third',
+        category: 'category',
         value: 34,
         originalPayload: 'third-34'
       },
       {
         metric: 'four',
+        category: 'category',
         value: 76,
         originalPayload: 'four-76'
       },
       {
         metric: 'five',
+        category: 'category',
         value: 21,
         originalPayload: 'five-21'
       }
@@ -462,7 +467,7 @@ export const multipleStackedColorInDataBarChartData = [
   }
 ]
 
-export const currentPreviousStackedBarChartData = [
+export const groupStackedBarChartData = [
   {
     name: 'Tank Picture',
     group: 'current',

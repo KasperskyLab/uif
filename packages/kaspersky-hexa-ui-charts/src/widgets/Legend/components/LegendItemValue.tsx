@@ -8,6 +8,7 @@ import styles from '../Legend.module.scss'
 
 interface LegendItemValueProps {
   value: number,
+  valueType?: 'MTR3' | 'BTR3',
   total: number,
   showPercentage?: boolean,
   precision?: number,
@@ -17,6 +18,7 @@ interface LegendItemValueProps {
 
 export const LegendItemValue: React.FC<LegendItemValueProps> = ({
   value,
+  valueType,
   total,
   showPercentage,
   precision,
@@ -28,8 +30,8 @@ export const LegendItemValue: React.FC<LegendItemValueProps> = ({
 
   return (
     <Space gap={8} wrap="nowrap" direction="horizontal" align="center" className={styles.legendItemValue}>
-      <Text type="MTR3">{value}</Text>
       {showPercentage && <Text className={styles.legendItemValuePercentage} style={{ width }} type="MTR3">{percent}%</Text>}
+      <Text type={valueType ?? 'MTR3'}>{value}</Text>
     </Space>
   )
 }

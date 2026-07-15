@@ -1,5 +1,10 @@
 import { ReactNode } from 'react'
 
+export interface ISideLabel {
+  text: string,
+  href?: string
+}
+
 export interface IChartDataPoint<T = unknown> {
   metric: number | string | Date,
   title?: ReactNode | ((metric: number | string | Date) => ReactNode),
@@ -8,8 +13,9 @@ export interface IChartDataPoint<T = unknown> {
   color?: string,
   emptyMetric?: boolean,
   active?: boolean,
-  selected?: boolean,
-  aggregatedRecords?: T[]
+  checked?: boolean,
+  aggregatedRecords?: T[],
+  sideLabel?: ISideLabel
 }
 
 export type IChartData<T = unknown> = IChartDataPoint<T>[];
@@ -22,7 +28,7 @@ export interface IStackedChartDataPoint<T = unknown> {
   color?: string,
   opacity?: number,
   emptyName?: boolean,
-  selected?: boolean
+  checked?: boolean
 }
 
 export type IStackedChartData<T = unknown> = IStackedChartDataPoint<T>[];

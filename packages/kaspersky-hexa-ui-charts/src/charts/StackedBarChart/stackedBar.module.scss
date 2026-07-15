@@ -2,22 +2,6 @@
   position: relative;
 }
 
-.containerGraph {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
-
-.containerGraphScrollY {
-  overflow-y: auto;
-  scrollbar-gutter: stable;
-}
-
-.containerGraphScrollX {
-  overflow-x: auto;
-}
-
 .containerFixed {
   position: absolute;
   width: 100%;

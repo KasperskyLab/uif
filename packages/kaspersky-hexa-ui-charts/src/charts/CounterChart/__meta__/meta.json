@@ -1,0 +1,13 @@
+{
+  "dod": {
+    "designTokens": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "CounterChart",
+  "usage": "CounterChart - компонент для отображения значения с визуальной индикацией тренда. Используется для представления динамики показателя, например: рост/падение, изменения метрики, разницы по сравнению с прошлым периодом. Может использоваться как полноценный тренд-компонент с направлением (стрелкой), либо как акцентное число без трендовой информации",
+  "designLink": "https://pixso.net/app/design/Nm37XP3kqM_HJPFAXaciuw?file_type=10&icon_type=1&page-id=2544%3A49898",
+  "pixsoView": "https://pixso.net/app/design/LaTmaWE_JObQIc6YZuYaWw?page-id=156%3A193943"
+}

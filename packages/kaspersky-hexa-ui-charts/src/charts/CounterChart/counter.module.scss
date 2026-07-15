@@ -1,5 +1,6 @@
 .counterValues {
   position: relative;
+  width: 100%;
 }
 
 .value {
@@ -10,6 +11,9 @@
   flex: 1;
   position: relative;
   top: 0;
+  align-self: flex-end;
+  margin-bottom: var(--counter-previous-offset, 5px);
+  min-width: 0;
 
   .previousValue {
     text-align: left;
@@ -19,14 +23,20 @@
 .valueWrapper {
   &.withPreviousValue {
     flex: 1;
+    min-width: 0;
   }
+}
+
+.valueTextWrapper {
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
 .trend {
   position: absolute;
   width: 16px;
   height: 16px;
-  top: 12px;
+  top: var(--counter-trend-top, 12px);
   left: calc(50% + 4px);
 
   &.bigger {
@@ -36,11 +46,6 @@
   &.equal {
     color: var(--chart--counter_indicator--text--neutral);
   }
-}
-
-.description {
-  width: 100%;
-  text-align: center;
 }
 
 .good {
@@ -62,11 +67,8 @@ bad.good {
   color: var(--text--secondary) !important;
 }
 
-.description,
-.valueWrapper,
-.value,
-.previousValueWrapper {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+.prefix,
+.suffix {
+  color: var(--chart--counter--text--secondary) !important;
+  margin-top: var(--counter-prefix-offset, 5px);
 }

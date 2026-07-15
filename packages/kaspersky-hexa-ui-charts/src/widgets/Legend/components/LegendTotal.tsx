@@ -14,11 +14,11 @@ interface LegendTotalProps {
 }
 
 export const LegendTotal: React.FC<LegendTotalProps> = ({ value, precision, description }) => (
-    <Space direction="vertical" align="stretch">
-      <LegendItemDivider className={styles.legendItemDivider}/>
-      <Space gap={16} justify="space-between">
-        <Text type="BTR3">{description}</Text>
-        <Text type="MTR3">{cutNumberToPrecision(value, precision)}</Text>
-      </Space>
+  <Space direction="vertical" align="stretch" className={styles.legendTotal}>
+    <LegendItemDivider className={styles.legendItemDivider}/>
+    <Space gap={16} justify="space-between">
+      <Text type="BTR3">{description}</Text>
+      <Text type="MTR3">{cutNumberToPrecision(value, precision)}</Text>
     </Space>
+  </Space>
 )

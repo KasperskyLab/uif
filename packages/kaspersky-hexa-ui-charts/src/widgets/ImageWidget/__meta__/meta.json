@@ -1,0 +1,13 @@
+{
+  "dod": {
+    "designTokens": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "ImageWidget",
+  "usage": "Widget image — это компонент для отображения изображений в дашбордах с поддержкой редактирования и адаптации. Позволяет пользователю загрузить изображение, задать его размеры, а также при необходимости удалить или заменить. Поддерживает режимы просмотра (View) и редактирования (Edit)",
+  "designLink": "https://pixso.net/app/design/Nm37XP3kqM_HJPFAXaciuw?file_type=10&icon_type=1&page-id=3048%3A33071",
+  "pixsoView": "https://pixso.net/app/design/LaTmaWE_JObQIc6YZuYaWw?page-id=156%3A344456"
+}

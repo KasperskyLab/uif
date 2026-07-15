@@ -1,5 +1,6 @@
 import { NumberValue, ScaleLinear, scaleLinear, scaleLog, ScaleLogarithmic, ScalePower, scaleSqrt } from 'd3'
 
+import { DEFAULT_START_BAR_GAP_MAX_CATEGORIES } from './constants'
 import { DomainPadding } from './types/domainPadding'
 
 export const DELTA_GRAD = 10
@@ -64,6 +65,25 @@ export function getNearestSize ({
   }
 
   return { nearestSize: totalWithOffset, distanceBetweenBar: minDistanceBetweenBar }
+}
+
+export function getStartBarGap ({
+  categories,
+  distanceBetweenBar,
+  minStartBarGap = 0
+}: {
+  categories: number,
+  distanceBetweenBar: number
+  minStartBarGap?: number
+}): number {
+  if (categories <= DEFAULT_START_BAR_GAP_MAX_CATEGORIES) {
+    return distanceBetweenBar
+  }
+
+  return Math.max(
+    minStartBarGap,
+    Math.round(distanceBetweenBar * (DEFAULT_START_BAR_GAP_MAX_CATEGORIES / categories))
+  )
 }
 
 export function addDomainPadding ({ x, y }: DomainPadding, startOffset = 0, endOffset = 0): DomainPadding {

@@ -35,4 +35,8 @@ yarn link @kaspersky/hexa-ui-charts
 
 ```sh
 yarn unlink @kaspersky/hexa-ui-charts
-````
+```
+
+#### Testing
+
+В пакете есть скриншотное тестирование. Подробнее в VISUAL_TESTS.md.

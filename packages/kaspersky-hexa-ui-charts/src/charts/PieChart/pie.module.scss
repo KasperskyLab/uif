@@ -1,3 +1,11 @@
+.pieContainer {
+  overflow: visible;
+  
+  svg {
+    overflow: visible;
+  }
+}
+
 .pieLabel {
   height: 100%;
   padding-bottom: 16px; // bug with square height, need refactor

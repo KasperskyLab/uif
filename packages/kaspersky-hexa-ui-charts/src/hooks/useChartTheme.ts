@@ -3,7 +3,6 @@ import { useMemo } from 'react'
 import { BlockProps, VictoryLabelStyleObject, VictoryTheme, VictoryThemeDefinition } from 'victory'
 
 import { ThemeConfig, useTheme } from '@kaspersky/hexa-ui/design-system'
-import { widgetColorsShortcuts } from '@kaspersky/hexa-ui-core/colors/js'
 
 import { DEFAULT_CHART_PADDING } from '../constants'
 import { getFontFamily } from '../helpers/getFontFamily'
@@ -38,7 +37,7 @@ export function getChartTheme (theme: ThemeConfig, colors?: string[], chartTheme
         labels: {
           style: {
             fontSize: 18,
-            fontFamily: getFontFamily(theme)
+            fontFamily: getFontFamily()
           }
         },
         area: {
@@ -47,7 +46,7 @@ export function getChartTheme (theme: ThemeConfig, colors?: string[], chartTheme
           style: {
             labels: {
               fontSize: 12,
-              fontFamily: getFontFamily(theme)
+              fontFamily: getFontFamily()
             }
           }
         },
@@ -55,13 +54,13 @@ export function getChartTheme (theme: ThemeConfig, colors?: string[], chartTheme
           animate: false,
           style: {
             tickLabels: {
-              fontFamily: getFontFamily(theme),
+              fontFamily: getFontFamily(),
               fontSize: 12,
               fill: 'var(--axis--text--enabled)'
             },
             labels: {
               fontSize: 12,
-              fontFamily: getFontFamily(theme)
+              fontFamily: getFontFamily()
             },
             axis: {
               strokeWidth: 1,
@@ -73,11 +72,17 @@ export function getChartTheme (theme: ThemeConfig, colors?: string[], chartTheme
         dependentAxis: {
           animate: false,
           style: merge(cloneDeep(VictoryTheme.grayscale.axis?.style), {
-            grid: { stroke: 'var(--axis--border--enabled)', strokeWidth: 1, strokeDasharray: '5, 5' },
+            grid: { 
+              stroke: 'var(--axis--border--enabled)',
+              strokeWidth: 1,
+              strokeDasharray: '5, 5'
+            },
             axis: {
               strokeWidth: 0
             },
             tickLabels: {
+              fontFamily: getFontFamily(),
+              fontSize: 12,
               fill: 'var(--axis--text--enabled)'
             }
           })
@@ -91,7 +96,7 @@ export function getChartTheme (theme: ThemeConfig, colors?: string[], chartTheme
             },
             grid: { strokeWidth: 0 },
             tickLabels: {
-              fontFamily: getFontFamily(theme),
+              fontFamily: getFontFamily(),
               fontSize: 12,
               fill: 'var(--axis--text--enabled)'
             }
@@ -103,7 +108,7 @@ export function getChartTheme (theme: ThemeConfig, colors?: string[], chartTheme
             fill: theme.colors.bg['base-invert']
           },
           style: {
-            fontFamily: getFontFamily(theme),
+            fontFamily: getFontFamily(),
             fontSize: 12,
             fill: theme.colors['text-icons-elements']['primary-invert']
           }
@@ -133,7 +138,9 @@ export function getChartTheme (theme: ThemeConfig, colors?: string[], chartTheme
             tickLabel: {
               fill: theme.colors.text,
               fontSize: 10,
-              fontWeight: 500
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: 12
             },
             pointer: {
               fill: 'var(--axis--text--enabled)'

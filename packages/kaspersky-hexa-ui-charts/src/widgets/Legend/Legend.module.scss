@@ -1,6 +1,15 @@
+:root {
+  --scrollbar-width: 6px;
+  --max-footer-height: 50%;
+}
+
 .legend {
-  display: flex;
-  overflow: hidden auto;
+  width: 100%;
+  min-width: 135px;
+
+  &.mediumWidth {
+    max-width: 268px;
+  }
 
   .resetPadding {
     padding: 0;
@@ -9,7 +18,9 @@
 }
 
 .legendHorizontal {
+  overflow: hidden auto;
   flex-flow: row wrap;
+  display: flex;
   max-height: 100%;
 
   .legendScrollContainer {
@@ -18,9 +29,18 @@
 }
 
 .legendVertical {
-  padding: 0 8px;
-  flex-direction: column;
+  display: grid;
+  padding: 0 var(--scrollbar-width);
   max-height: 100%;
+  height: 100%;
+
+  &.withTitle {
+    grid-template-rows: auto 1fr fit-content(var(--max-footer-height));
+  }
+
+  &.noTitle {
+    grid-template-rows: 1fr fit-content(var(--max-footer-height));
+  }
 
   &.resetPadding {
     padding: 0;
@@ -29,15 +49,20 @@
 }
 
 .legendScrollContainer {
-  overflow: auto;
+  overflow-y: auto;
+  height: 100%;
+  scrollbar-gutter: stable;
+  margin-right: calc(var(--scrollbar-width) * -2);
+  padding-right: var(--scrollbar-width);
 
   &.resetPadding {
-    padding: 0 6px;
+    padding: 0;
+    margin-right: calc(var(--scrollbar-width) * -1);
   }
 
   &::-webkit-scrollbar {
     -webkit-appearance: none;
-    width: 7px;
+    width: var(--scrollbar-width);
     height: 7px;
   }
 
@@ -48,7 +73,7 @@
   }
 
   .legendDivider {
-    margin: 4px 0;
+    margin: 4px 6px;
     width: auto;
 
     &.resetPadding {
@@ -58,12 +83,28 @@
   }
 }
 
+.legendTotal {
+  padding:  0 6px;
+}
+
 .legendTitle {
   height: 24px;
   margin-bottom: 4px;
+  
+  max-width: 100%;    
+  width: 100%;        
+  min-width: 0;       
+  overflow: hidden;  
+  display: flex;  
 }
 
 .legendFooter {
+  min-height: 0;
+  .legendDescription {
+    overflow-y: auto;
+    min-height: 0;
+    display: block;
+  }
   .legendDivider {
     margin: 4px 0;
   }
@@ -72,7 +113,31 @@
 .legendItem {
   border-radius: 4px;
   line-height: 24px;
+  padding: 0 6px;
 
+  &.itemSelectable {
+    cursor: pointer;
+  }
+  &.itemActive.itemActive {
+    background-color: var(--legend_item--bg--active);
+  }
+  &.itemSelected {
+    background-color: var(--legend_item--bg--enabled_selected);
+    &.itemActive.itemActive {
+      background-color: var(--legend_item--bg--active_selected);
+    }
+    &:hover {
+      background-color: var(--legend_item--bg--hover_selected);
+    }
+    &.prevSelected {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+    &.nextSelected {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
   &:hover {
     background-color: var(--legend_item--bg--hover);
   }
@@ -86,6 +151,8 @@
       text-align: right;
       min-width: 26px;
       max-width: 59px;
+      // explicitly specify initial since it inherits break-word from .ant-drawer-body
+      word-wrap: initial;
     }
   }
 

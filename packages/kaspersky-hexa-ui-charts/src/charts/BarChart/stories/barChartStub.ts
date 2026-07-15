@@ -45,6 +45,48 @@ export const stubSingleBarChartData: IStackedChartData<[number, number]> = [
   }
 ]
 
+export const stubSingleBarChartDataWithSideLabels: IStackedChartData<[number, number]> = [
+  {
+    name: 'Marine Sprite',
+    title: 'Title Marine Sprite',
+    color: colors[0],
+    data: [
+      {
+        metric: 'Q1-2020',
+        title: 'title Q1-2020',
+        value: 74,
+        originalPayload: [2020, 44],
+        sideLabel: { text: 'Text 2020' }
+      },
+      {
+        metric: 'Q1-2021',
+        title: (metric: string): string => `title ${metric}`,
+        value: 4,
+        originalPayload: [2021, 4],
+        sideLabel: { text: 'Text 2021' }
+      },
+      {
+        metric: 'Q1-2022',
+        value: 12,
+        originalPayload: [2022, 12],
+        sideLabel: { text: 'Text 2022' }
+      },
+      {
+        metric: 'Q1-2023',
+        value: 25,
+        originalPayload: [2025, 25],
+        sideLabel: { text: 'Link 2023', href: 'https://www.kaspersky.ru/' }
+      },
+      {
+        metric: 'Q1-2024',
+        value: 35,
+        originalPayload: [2024, 35],
+        sideLabel: { text: 'Link 2024', href: 'https://www.kaspersky.ru/' }
+      }
+    ]
+  }
+]
+
 export const stubSingleBarChartDataWithLongText: IStackedChartData<[number, number]> = [
   {
     name: 'Marine Sprite',
@@ -114,7 +156,7 @@ export const stubMultipleBarChartData = [
   }
 ]
 
-export const stubPreviousBarChartData = [
+export const stubGroupBarChartData = [
   {
     name: 'Marine Sprite',
     data: [
@@ -278,5 +320,15 @@ export const stubMultipleColorInChartData = [
         originalPayload: [2024, 2]
       }
     ]
+  }
+]
+export const denseBarChartData = [
+  {
+    name: 'Marine Sprite',
+    data: Array.from({ length: 24 }, (_, index) => ({
+      metric: `Q${index + 1}`,
+      value: 20 + ((index * 13) % 70),
+      originalPayload: [index + 1, 20 + ((index * 13) % 70)]
+    }))
   }
 ]

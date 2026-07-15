@@ -138,7 +138,7 @@ export const addTickValue = (tick: Tick, gauge: GaugeContext): void => {
   if (!isInner) {
     centerToArcLengthSubtract = arcWidth * 10 - 10
   } else {
-    centerToArcLengthSubtract -= 10
+    centerToArcLengthSubtract -= 15
   }
   const tickDistanceFromArc =
     tick.lineConfig?.distanceFromArc || labels?.tickLabels?.defaultTickLineConfig?.distanceFromArc || 0
@@ -166,27 +166,8 @@ export const addTickValue = (tick: Tick, gauge: GaugeContext): void => {
   } else {
     text = utils.floatingNumber(tickValue, maxDecimalDigits).toString()
   }
-  if (labels?.tickLabels?.type === 'inner') {
-    if (tickAnchor === 'end') {
-      coords.x += 10
-    }
-    if (tickAnchor === 'start') {
-      coords.x -= 10
-    }
-    // if (tickAnchor === "middle") coords.y -= 0;
-  } else {
-    // if(tickAnchor === "end") coords.x -= 10;
-    // if(tickAnchor === "start") coords.x += 10;
-    if (tickAnchor === 'middle') {
-      coords.y += 2
-    }
-  }
-  if (tickAnchor === 'middle') {
-    coords.y += 0
-  } else {
-    coords.y += 3
-  }
   tickValueStyle.textAnchor = tickAnchor as any
+  tickValueStyle.dominantBaseline = 'central'
   addText(text, coords.x, coords.y, gauge, tickValueStyle, CONSTANTS.tickValueClassname)
 }
 export const addTick = (tick: Tick, gauge: GaugeContext): void => {
@@ -210,26 +191,8 @@ export const getLabelCoordsByValue = (
   y: number
 } => {
   const labels = gauge.props.labels as Labels
-  // let minValue = gauge.props.minValue as number;
-  // let maxValue = gauge.props.maxValue as number;
   const type = labels.tickLabels?.type
-  let { x, y } = getCoordByValue(value, gauge, type, centerToArcLengthSubtract, 0.93)
-  // let percent = utils.calculatePercentage(minValue, maxValue, value);
-  // This corrects labels in the cener being too close from the arc
-  // let isValueBetweenCenter = percent > CONSTANTS.rangeBetweenCenteredTickValueLabel[0] &&
-  //                               percent < CONSTANTS.rangeBetweenCenteredTickValueLabel[1];
-  // if (isValueBetweenCenter){
-  //   let isInner = type == "inner";
-  //   y+= isInner ? 8 : -1;
-  // }
-  if (gauge.props.type === GaugeType.RADIAL) {
-    if (type === 'inner') {
-      y += 1
-    } else {
-      y += 3
-    }
-  }
-  return { x, y }
+  return getCoordByValue(value, gauge, type, centerToArcLengthSubtract, 0.90)
 }
 export const addText = (
   html: any,
@@ -277,6 +240,7 @@ export const calculateAnchorAndAngleByValue = (
   const minValue = gauge.props.minValue as number
   const maxValue = gauge.props.maxValue as number
   const valuePercentage = utils.calculatePercentage(minValue, maxValue, value)
+  //tick rotation angle
   const gaugeTypesAngles: Record<string, { startAngle: number, endAngle: number }> = {
     [GaugeType.GRAFANA]: {
       startAngle: -20,
@@ -294,21 +258,7 @@ export const calculateAnchorAndAngleByValue = (
   const { startAngle, endAngle } = gaugeTypesAngles[gauge.props.type as string]
 
   const angle = startAngle + (valuePercentage * 100 * endAngle) / 100
-  const isValueLessThanHalf = valuePercentage < 0.5
-  // Values between 40% and 60% are aligned in the middle
-  const isValueBetweenTolerance =
-    valuePercentage > CONSTANTS.rangeBetweenCenteredTickValueLabel[0] &&
-    valuePercentage < CONSTANTS.rangeBetweenCenteredTickValueLabel[1]
-  let tickAnchor = ''
-  const isInner = labels?.tickLabels?.type === 'inner'
-  if (isValueBetweenTolerance) {
-    tickAnchor = 'middle'
-  } else if (isValueLessThanHalf) {
-    tickAnchor = isInner ? 'start' : 'end'
-  } else {
-    tickAnchor = isInner ? 'end' : 'start'
-  }
-  // if(valuePercentage > 0.50) angle = angle - 180;
+  const tickAnchor = 'middle'
   return { tickAnchor, angle }
 }
 const shouldHideTickLine = (tick: Tick, gauge: GaugeContext): boolean => {

@@ -1,7 +1,9 @@
 import { get, set } from 'lodash'
 import React, { FC, memo, useMemo } from 'react'
-import { ScaleName, VictoryTooltipProps } from 'victory'
+import { ScaleName, VictoryLabel, VictoryTooltipProps } from 'victory'
 
+import { DEFAULT_Y } from '../../constants'
+import { getFontFamily } from '../../helpers/getFontFamily'
 import { CustomTheme } from '../../hooks/useChartTheme'
 import { IChartDataPoint, IStackedChartData } from '../../types/chartData'
 import { ChartTooltip } from '../ChartTooltip/ChartTooltip'
@@ -21,6 +23,8 @@ export type ChartTooltipWrapperProps = Omit<VictoryTooltipProps, 'theme' | 'data
   maxTooltipItems?: number,
   totalLabel?: string,
   showTotal?: boolean,
+  showTooltip?: boolean,
+  showBarValues?: boolean,
   tooltipDateFormat?: (date: Date | number, supposedFormat: string) => string
 };
 
@@ -44,6 +48,8 @@ export const ChartTooltipWrapper: React.FC<ChartTooltipWrapperProps> = memo(
     maxTooltipItems,
     showTotal,
     totalLabel,
+    showTooltip,
+    showBarValues,
     tooltipDateFormat
   }) => {
     const enrichedData = useMemo(
@@ -63,35 +69,55 @@ export const ChartTooltipWrapper: React.FC<ChartTooltipWrapperProps> = memo(
     const xTooltip = Math.min(Math.max(x + (horizontal ? 0 : barWidth / 2), 0), width)
     const yTooltip = Math.min(Math.max(y - (horizontal ? barWidth / 2 : 0), 0), height)
 
-    return active
-      ? (
-      <foreignObject
-        x={xTooltip}
-        y={yTooltip}
-        width={0}
-        height={0}
-        className={styles.foreignObjectContainer}
-      >
-        <TooltipComponent
-          {...{
-            height,
-            width,
-            tooltipContentComponent,
-            activeRecord: datum as IChartDataPoint,
-            enrichedData,
-            theme,
-            horizontal,
-            otherLabel,
-            tooltipDateFormat,
-            maxTooltipItems,
-            showTotal,
-            totalLabel,
-            xScale
-          }}
-        />
-      </foreignObject>
-        )
-      : null
+    const valueText = get(datum, DEFAULT_Y) ?? ''
+
+    return (
+      <>
+        {showBarValues && (
+          <VictoryLabel
+            x={xTooltip}
+            y={yTooltip}
+            text={`${valueText}`}
+            dy={horizontal ? 0 : -10}
+            dx={horizontal ? 10 : 0}
+            textAnchor={horizontal ? 'start' : 'middle'}
+            style={{
+              fontFamily: getFontFamily(),
+              fontSize: 14,
+              fill: 'var(--axis--text--enabled)'
+            }}
+          />
+        )}
+
+        {showTooltip && active && (
+          <foreignObject
+            x={xTooltip}
+            y={yTooltip}
+            width={0}
+            height={0}
+            className={styles.foreignObjectContainer}
+          >
+            <TooltipComponent
+              {...{
+                height,
+                width,
+                tooltipContentComponent,
+                activeRecord: datum as IChartDataPoint,
+                enrichedData,
+                theme,
+                horizontal,
+                otherLabel,
+                tooltipDateFormat,
+                maxTooltipItems,
+                showTotal,
+                totalLabel,
+                xScale
+              }}
+            />
+          </foreignObject>
+        )}
+      </>
+    )
   }
 )
 

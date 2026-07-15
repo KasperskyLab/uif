@@ -1,4 +1,3 @@
-import { random } from "lodash"
 import { add, Duration } from 'date-fns'
 import { IStackedChartData } from "../src/types/chartData"
 
@@ -14,28 +13,60 @@ const numberFormatter = new Intl.NumberFormat('en-US', {
   style: 'percent'
 })
 
-export function generateData (total = 1, totalInStack = 5, maxRandomValue = 1000): IStackedChartData {
-  return Array.from({ length: total }).map((_, idx) => ({
-    name: numberFormatter.format(idx),
-    color: colors[idx % colors.length],
-    data: Array.from({ length: totalInStack }).map((_, idx) => ({ metric: 10 * idx, value: random(0, maxRandomValue), originalPayload: idx.toString() }))
-  }))
+const FIXED_NOW = new Date(Date.UTC(2026, 0, 1, 12, 0, 0));
+
+export const getStableValue = (
+  maxValue: number,
+  pointIndex: number,
+  seriesIndex = 0,
+): number => {
+  if (maxValue <= 0) {
+    return 0;
+  }
+
+  return (
+    ((pointIndex + 1) * 137 +
+      (seriesIndex + 1) * 71 +
+      (pointIndex + 1) * (seriesIndex + 1) * 29) %
+    (maxValue + 1)
+  );
+};
+
+export function generateData(
+  total = 1,
+  totalInStack = 5,
+  maxRandomValue = 1000,
+): IStackedChartData {
+  return Array.from({ length: total }).map((_, seriesIndex) => ({
+    name: numberFormatter.format(seriesIndex),
+    color: colors[seriesIndex % colors.length],
+    data: Array.from({ length: totalInStack }).map((_, pointIndex) => ({
+      metric: 10 * pointIndex,
+      value: getStableValue(maxRandomValue, pointIndex, seriesIndex),
+      originalPayload: pointIndex.toString(),
+    })),
+  }));
 }
 
-const now = new Date()
+export function generateTimelineData(
+  total = 1,
+  totalInStack = 20,
+  maxRandomValue = 1000,
+  durationType: keyof Duration = 'days',
+  title?: string,
+): IStackedChartData {
+  return Array.from({ length: total }).map((_, seriesIndex) => ({
+    name: numberFormatter.format(seriesIndex),
+    color: colors[seriesIndex % colors.length],
+    data: Array.from({ length: totalInStack }).map((_, pointIndex) => {
+      const metric = add(FIXED_NOW, { [durationType]: pointIndex });
 
-export function generateTimelineData (total = 1, totalInStack = 20, maxRandomValue = 1000, durationType: keyof Duration = 'days', title?: string): IStackedChartData {
-  return Array.from({ length: total }).map((_, idx) => ({
-    name: numberFormatter.format(idx),
-    color: colors[idx % colors.length],
-    data: Array.from({ length: totalInStack }).map((_, idx) => {
-      const metric = add(now, { [durationType]: idx })
-
-      return ({ metric,
-        value: random(maxRandomValue),
-        originalPayload: add(now, { [durationType]: idx }),
-        title: title && ((metric: string) => `${title}${metric}`) })
-      })
-    })
-  )
+      return {
+        metric,
+        value: getStableValue(maxRandomValue, pointIndex, seriesIndex),
+        originalPayload: metric,
+        title: title && ((metric: string) => `${title}${metric}`),
+      };
+    }),
+  }));
 }

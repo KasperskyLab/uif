@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react'
 import { BlockProps } from 'victory'
 
-import { Space, Text, Tooltip } from '@kaspersky/hexa-ui'
+import { Space } from '@kaspersky/hexa-ui'
 
+import { TextTruncateWithPopup } from '../../../../src/components/TextTruncateWithPopup/TextTruncateWithPopup'
 import { getRectInsideEllipsis } from '../helpers/getRectInsideEllipsis'
 import styles from '../pie.module.scss'
 
@@ -21,13 +22,11 @@ export const usePieChartTextComponent = (
       return (
         <foreignObject {...props} x={props.x - x / 2} y={props.y - y / 2} width={x} height={y}>
           <Space gap={16} wrap="nowrap" direction="vertical" align="center" justify="center" className={styles.pieLabel}>
-            <Tooltip text={total}>{children}</Tooltip>
+            <TextTruncateWithPopup customTooltipContent={total}>{children}</TextTruncateWithPopup>
             {description && (
-              <Tooltip text={description}>
-                <Text color="secondary" className={styles.pieLabelDescription}>
-                  {description}
-                </Text>
-              </Tooltip>
+              <TextTruncateWithPopup color="secondary" className={styles.pieLabelDescription}>
+                {description}
+              </TextTruncateWithPopup>
             )}
           </Space>
         </foreignObject>
