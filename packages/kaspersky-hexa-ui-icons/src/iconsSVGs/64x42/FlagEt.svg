@@ -1,18 +1,1 @@
-<svg width="64" height="42" viewBox="0 0 64 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_37941_2238)">
-<rect width="64" height="42" rx="5" fill="white"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 14H64V0H0V14Z" fill="#20AA46"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 42H64V28H0V42Z" fill="#E92F3B"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 28.0001H64V14.0001H0V28.0001Z" fill="#FADF50"/>
-<circle cx="32.0001" cy="21.0001" r="9.80001" fill="#205CCA"/>
-<mask id="path-6-inside-1_37941_2238" fill="white">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M31.9999 23.7301L27.8854 26.6632L29.4035 21.8437L25.3425 18.8369L30.3952 18.7915L31.9999 14.0001L33.6045 18.7915L38.6573 18.8369L34.5963 21.8437L36.1144 26.6632L31.9999 23.7301Z"/>
-</mask>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M31.9999 23.7301L27.8854 26.6632L29.4035 21.8437L25.3425 18.8369L30.3952 18.7915L31.9999 14.0001L33.6045 18.7915L38.6573 18.8369L34.5963 21.8437L36.1144 26.6632L31.9999 23.7301Z" stroke="#FFDB3D" stroke-width="2.8" mask="url(#path-6-inside-1_37941_2238)"/>
-</g>
-<defs>
-<clipPath id="clip0_37941_2238">
-<rect width="64" height="42" rx="5" fill="white"/>
-</clipPath>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="42" fill="none" viewBox="0 0 64 42"><g clip-path="url(#a)"><rect width="64" height="42" fill="#fff" rx="5"/><path fill="#20aa46" fill-rule="evenodd" d="M0 14h64V0H0z" clip-rule="evenodd"/><path fill="#e92f3b" fill-rule="evenodd" d="M0 42h64V28H0z" clip-rule="evenodd"/><path fill="#fadf50" fill-rule="evenodd" d="M0 28.0001h64v-14H0z" clip-rule="evenodd"/><circle cx="32" cy="21" r="10" fill="#205cca"/><mask id="b" fill="#fff"><path fill-rule="evenodd" d="m31.9999 23.7301-4.1145 2.9331 1.5181-4.8195-4.061-3.0068 5.0527-.0454 1.6047-4.7914 1.6046 4.7914 5.0528.0454-4.061 3.0068 1.5181 4.8195z" clip-rule="evenodd"/></mask><path stroke="#ffdb3d" stroke-width="3" d="m31.9999 23.7301-4.1145 2.9331 1.5181-4.8195-4.061-3.0068 5.0527-.0454 1.6047-4.7914 1.6046 4.7914 5.0528.0454-4.061 3.0068 1.5181 4.8195z" clip-rule="evenodd" mask="url(#b)"/></g><defs><clipPath id="a"><rect width="64" height="42" fill="#fff" rx="5"/></clipPath></defs></svg>

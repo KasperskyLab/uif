@@ -4,6 +4,7 @@ module.exports = {
     '#000': '{resolveColorToken(props.color) || props.color || "currentColor"}',
     currentColor: '{resolveColorToken(props.color) || props.color || "currentColor"}',
     black: '{resolveColorToken(props.color) || props.color || "currentColor"}',
+    '#1D1E20': '{resolveColorToken(props.color) || props.color || "currentColor"}',
     '#0D0D15': '{resolveColorToken(props.color) || props.color || "currentColor"}'
   },
   template: require('./templateIcons'),

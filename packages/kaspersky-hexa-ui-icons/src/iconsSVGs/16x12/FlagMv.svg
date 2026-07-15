@@ -1,18 +1,1 @@
-<svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_41818_3252)">
-<rect width="16" height="12" rx="2" fill="white"/>
-<mask id="mask0_41818_3252" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="12">
-<rect width="16" height="12" rx="2" fill="white"/>
-</mask>
-<g mask="url(#mask0_41818_3252)">
-<rect width="16" height="12" fill="#F32249"/>
-<rect x="2.28577" y="2.39999" width="11.4286" height="7.2" rx="0.666667" fill="#15A04F"/>
-<path d="M8.76233 3.19954C8.95821 3.19957 9.14879 3.22382 9.33264 3.26595C8.13495 3.54099 7.23792 4.66023 7.23792 6.00032C7.23806 7.34024 8.13508 8.45867 9.33264 8.73372C9.14877 8.77585 8.95823 8.80009 8.76233 8.80013C7.28967 8.80013 6.0955 7.54657 6.09534 6.00032C6.09534 4.45392 7.28957 3.19954 8.76233 3.19954Z" fill="white"/>
-</g>
-</g>
-<defs>
-<clipPath id="clip0_41818_3252">
-<rect width="16" height="12" fill="white"/>
-</clipPath>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" fill="none" viewBox="0 0 16 12"><g clip-path="url(#a)"><rect width="16" height="12" fill="#fff" rx="2"/><mask id="b" width="16" height="12" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:luminance"><rect width="16" height="12" fill="#fff" rx="2"/></mask><g mask="url(#b)"><path fill="#f32249" d="M0 0h16v12H0z"/><rect width="11" height="7" x="2" y="2" fill="#15a04f" rx="1"/><path fill="#fff" d="M8.7623 3.1995c.196 0 .3865.0243.5703.0665C8.135 3.541 7.238 4.6602 7.238 6.0003c.0002 1.34.8972 2.4584 2.0947 2.7334a2.55 2.55 0 0 1-.5703.0664c-1.4726 0-2.6668-1.2535-2.667-2.7998 0-1.5464 1.1943-2.8008 2.667-2.8008"/></g></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h16v12H0z"/></clipPath></defs></svg>
