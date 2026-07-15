@@ -1,7 +1,12 @@
 import { useMemo } from 'react'
 import { BlockProps } from 'victory'
 
-import { DEFAULT_LEFT_TEXT_OFFSET, DEFAULT_LETTER_SIZE, DEFAULT_RIGHT_TEXT_OFFSET } from '../constants'
+import {
+  DEFAULT_BOTTOM_OFFSET,
+  DEFAULT_LEFT_TEXT_OFFSET,
+  DEFAULT_LETTER_SIZE,
+  DEFAULT_RIGHT_TEXT_OFFSET
+} from '../constants'
 import { getCategoriesFromData, getValuesFromData } from '../helpers/getCategoriesFromData'
 import { getTickCountByTimeline } from '../helpers/tickCount'
 import { IStackedChartData } from '../types/chartData'
@@ -13,9 +18,11 @@ export function useDynamicTickCount (
   chartPadding: BlockProps,
   xTickFormat: (tick: any, index: number, ticks: any[]) => string,
   yTickFormat: (tick: any, index: number, ticks: any[]) => string,
+  xTickHide: boolean,
+  yTickHide: boolean,
   categoriesFormat: (tick: Date) => string = (v) => v.toString(),
   tickLetterSize = DEFAULT_LETTER_SIZE
-): { paddingWithLabel: BlockProps, maxYTextLength: number, xTickCount: number } {
+): { paddingWithLabel: BlockProps; maxYTextLength: number; xTickCount: number } {
   return useMemo(() => {
     const yValues = getValuesFromData(data)
     const maxYTextLength = Math.max(...yValues.map((c, idx) => yTickFormat(c, idx, yValues).length))
@@ -24,8 +31,9 @@ export function useDynamicTickCount (
     const xValues = getCategoriesFromData(data, categoriesFormat).map((s) => Number.parseInt(s))
     const paddingWithLabel = {
       ...chartPadding,
-      left: (chartPadding.left ?? 0) + left,
-      right: Math.max(chartPadding.right ?? 0, DEFAULT_RIGHT_TEXT_OFFSET)
+      left: (chartPadding.left ?? 0) + (yTickHide ? 0 : left),
+      right: Math.max(chartPadding.right ?? 0, DEFAULT_RIGHT_TEXT_OFFSET),
+      bottom: xTickHide ? 0 : DEFAULT_BOTTOM_OFFSET
     }
     const xTickCount = getTickCountByTimeline(
       width - paddingWithLabel.left - paddingWithLabel.right,

@@ -1,0 +1,11 @@
+{
+  "dod": {
+    "designTokens": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "storybook": true,
+    "pixsoView": false
+  },
+  "component": "WidgetView",
+  "usage": "WidgetView — infrastructure container for widgets: per-chart state, optional headers, legends, additional chart slots (elementAfter, elementBottom), lifecycle callbacks, and render-error handling via WidgetErrorBoundary."
+}

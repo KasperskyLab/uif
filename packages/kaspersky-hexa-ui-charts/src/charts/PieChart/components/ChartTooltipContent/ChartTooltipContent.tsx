@@ -16,18 +16,18 @@ export const ChartTooltipContent: FC<ChartTooltipContentProps> = memo(({ activeR
     const { metric, value, title, color } = activeRecord
 
     return (
-        <Space gap={8} direction="horizontal" align="center" justify="space-between" className={styles.row}>
-          <Space gap={8} direction="horizontal">
-            { color && <div
-              style={{
-                background: color
-              }}
-              className={styles.dot}
-            />}
-            <MetricLabel metric={metric} title={title} />
-          </Space>
-          <Text datatype="BTR3">{value}</Text>
+      <Space gap={8} direction="horizontal" align="center" justify="space-between" className={styles.row}>
+        <Space gap={8} direction="horizontal">
+          { color && <div
+            style={{
+              background: color
+            }}
+            className={styles.dot}
+          />}
+          <MetricLabel metric={metric} title={title} />
         </Space>
+        <Text datatype="BTR3">{value}</Text>
+      </Space>
     )
   }
 

@@ -1,40 +1,112 @@
-import React, { FC, ReactNode } from 'react'
-import { RenderPlaceholderProps } from 'slate-react'
+import React, { useCallback, useEffect, useReducer } from 'react'
 
-import { Overlay } from '../../components/Overlay/Overlay'
-import { allPlugins, Descendant, RichTextEditor } from '../../components/RichText'
+import { allPlugins, dividerPluginsProps, RichTextEditor } from '@kaspersky/hexa-ui'
 
-export interface TextWidgetProps {
-    initialValue?: Descendant[],
-    readonly: boolean,
-    showOverlay: boolean,
-    editTrigger?: ReactNode,
-    placeholder?: string,
-    renderPlaceholder?: (props: RenderPlaceholderProps) => ReactNode,
-    onChange: (text: Descendant[]) => void,
-    onHover?: (isHovered: boolean) => void,
-    onFocus?: () => void,
-    onBlur?: () => void,
-    onOverlayClick: () => void,
-    width?: number,
-    height?: number,
-    limit?: number
-}
+import { BorderHoverType, Overlay } from '../../components/Overlay/Overlay'
 
-export const TextWidget: FC<TextWidgetProps> = ({ editTrigger, initialValue, readonly, showOverlay, onOverlayClick, onChange, onBlur, onFocus, onHover, width, height, placeholder, renderPlaceholder, limit }) => {
+
+import { ActionType, TextWidgetEditorState } from './constants'
+import { usePlugins } from './hooks/usePlugins'
+import { useTextWidgetReducer } from './hooks/useTextWidgetReducer'
+import { TextWidgetProps } from './types'
+
+export const TextWidget = ({
+  editTrigger,
+  initialValue,
+  readonly,
+  onOverlayClick,
+  onChange,
+  onBlur,
+  onFocus,
+  onHover,
+  width = '100%',
+  height = 'max-content',
+  placeholder,
+  renderPlaceholder,
+  limit,
+  linkPopupText
+}: TextWidgetProps) => {
+  const reducer = useTextWidgetReducer()
+  const [state, dispatch] = useReducer(
+    reducer,
+    readonly ? TextWidgetEditorState.DISABLED : TextWidgetEditorState.ENABLED,
+    (init) => ({
+      editorState: init,
+      showOverlay: false
+    })
+  )
+
+  const { showOverlay, editorState } = state
+
+  useEffect(() => {
+    if (readonly) {
+      dispatch({ type: ActionType.SET_READONLY })
+    } else {
+      dispatch({ type: ActionType.BLUR })
+    }
+  }, [readonly])
+
+  const handleHover = useCallback(() => {
+    if (!readonly && editorState !== TextWidgetEditorState.FOCUS) {
+      dispatch({ type: ActionType.HOVER })
+      onHover?.(true)
+    }
+  }, [readonly, editorState, onHover])
+
+  const handleMouseLeave = useCallback(() => {
+    if (state.editorState !== TextWidgetEditorState.FOCUS) {
+      dispatch({ type: ActionType.MOUSE_LEAVE })
+      onHover?.(false)
+    }
+  }, [state.editorState, onHover])
+
+  const handleOverlayClick = useCallback(
+    (event: React.MouseEvent) => {
+      dispatch({ type: ActionType.OVERLAY_CLICK })
+      onOverlayClick?.()
+      event.stopPropagation()
+    },
+    [onOverlayClick]
+  )
+
+  const handleFocus = useCallback(() => {
+    dispatch({ type: ActionType.FOCUS })
+    onFocus?.()
+  }, [onFocus])
+
+  const handleBlur = useCallback(() => {
+    dispatch({ type: ActionType.BLUR })
+    onBlur?.()
+  }, [onBlur])
+
+  const plugins = usePlugins(allPlugins, { linkPopupText })
+
   return (
-    <Overlay editTrigger={editTrigger} onClick={onOverlayClick} show={showOverlay} width={width} height={height}>
-        <RichTextEditor
-          initialValue={initialValue}
-          onChange={onChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          readOnly={readonly || showOverlay}
-          plugins={allPlugins}
-          placeholder={placeholder}
-          renderPlaceholder={renderPlaceholder}
-          limitTextSize={limit}
-        />
+    <Overlay
+      editTrigger={editTrigger}
+      onClick={handleOverlayClick}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={handleHover}
+      show={showOverlay}
+      width={width}
+      hoverable
+      height={height}
+      borderHoverType={BorderHoverType.Solid}
+    >
+      <RichTextEditor
+        initialValue={initialValue}
+        onChange={onChange}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        readOnly={readonly}
+        autoFocus={!readonly && editorState === TextWidgetEditorState.FOCUS}
+        enabled={!readonly && editorState === TextWidgetEditorState.FOCUS}
+        plugins={plugins}
+        dividerPluginsProps={dividerPluginsProps}
+        placeholder={placeholder}
+        renderPlaceholder={renderPlaceholder}
+        limitTextSize={limit}
+      />
     </Overlay>
   )
 }

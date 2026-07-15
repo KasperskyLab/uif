@@ -1,0 +1,13 @@
+{
+  "dod": {
+    "designTokens": false,
+    "unitTests": false,
+    "screenshotTests": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "SpeedometerChart",
+  "usage": "Speedometer chart— компонент для отображения значения в форме прогресса с визуальной аналогией «спидометра». Используется для представления скорости, уровня выполнения, процента загрузки и других метрик, у которых важен текущий прогресс относительно диапазона",
+  "designLink": "https://pixso.net/app/design/Nm37XP3kqM_HJPFAXaciuw?file_type=10&icon_type=1&page-id=2544%3A49898" ,
+  "pixsoView": "https://pixso.net/app/design/LaTmaWE_JObQIc6YZuYaWw?page-id=156%3A188884"
+}

@@ -1,0 +1,13 @@
+{
+  "dod": {
+    "designTokens": false,
+    "unitTests": false,
+    "screenshotTests": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "BarChart",
+  "usage": "BarChart - компонент для отображения данных в виде столбчатой диаграммы. Используется для сравнения категорий по количественным значениям.",
+  "pixsoView": "https://pixso.net/app/design/LaTmaWE_JObQIc6YZuYaWw?page-id=156%3A160777",
+  "designLink": "https://pixso.net/app/design/Nm37XP3kqM_HJPFAXaciuw?file_type=10&icon_type=1&page-id=2544%3A49894"
+}

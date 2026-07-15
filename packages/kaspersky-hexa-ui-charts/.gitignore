@@ -13,3 +13,7 @@ dist/
 .eslintcache
 
 *storybook.log
+
+playwright-report/
+storybook-static/
+test-results/

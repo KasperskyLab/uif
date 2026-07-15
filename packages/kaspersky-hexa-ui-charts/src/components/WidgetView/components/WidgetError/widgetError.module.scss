@@ -1,0 +1,9 @@
+.error {
+  min-height: 0;
+
+  .description {
+    line-break: anywhere;
+    flex: 0 1 auto;
+    overflow: auto;
+  }
+}

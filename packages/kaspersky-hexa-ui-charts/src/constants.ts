@@ -2,7 +2,7 @@ export const chartConstants = {
   metricField: 'metric',
   valueField: 'value'
 }
-
+export const DEFAULT_AXIS_HEIGHT = 40
 export const DEFAULT_LETTER_SIZE = 6.4
 export const DEFAULT_MAX_TICK_LABEL_X_VERTICAL_LENGTH = 16
 export const DEFAULT_MAX_TICK_LABEL_X_VERTICAL_MIN_LENGTH = 10
@@ -15,6 +15,7 @@ export const DEFAULT_BOTTOM_OFFSET = 30
 export const DEFAULT_HORIZONTAL_BOTTOM_OFFSET = 30
 export const DEFAULT_HORIZONTAL_LEFT_OFFSET = 10
 export const MIN_BOTTOM_OFFSET = 5
+export const DEFAULT_SIDE_LABEL_OFFSET = 12
 export const DEFAULT_LEFT_TEXT_OFFSET = 12
 export const DEFAULT_TOP_TEXT_OFFSET = 14
 export const DEFAULT_RIGHT_TEXT_OFFSET = 14

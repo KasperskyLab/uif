@@ -1,0 +1,13 @@
+{
+  "dod": {
+    "designTokens": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "TextWidget",
+  "usage": "Widget text — это интерактивный виджет для текстового ввода, используемый в режиме редактирования дашбордов. Позволяет пользователю настраивать размеры виджета и форматировать текст. После выхода из режима редактирования виджет автоматически сжимается по высоте до объема содержимого. В режиме просмотра (View) отображает финальный текст без возможности редактирования. Отступы между заголовками разных типов и текстом выставляются автоматически в соответствии с правилами дизайн-системы",
+  "designLink": "https://pixso.net/app/design/Nm37XP3kqM_HJPFAXaciuw?file_type=10&icon_type=1&page-id=3035%3A32851" ,
+  "pixsoView": "https://pixso.net/app/design/LaTmaWE_JObQIc6YZuYaWw?page-id=156%3A208378"
+}

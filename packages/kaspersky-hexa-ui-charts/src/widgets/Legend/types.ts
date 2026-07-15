@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { CSSProperties, ReactNode } from 'react'
 
 export enum LegendItemType {
   Row,
@@ -8,12 +8,17 @@ export enum LegendItemType {
 export type TLegendItemRow<T = any> = {
   kind: LegendItemType.Row,
   title: ReactNode,
+  titleType?: 'BTR3' | 'BTM3',
   tooltip?: ReactNode,
   icon?: ReactNode,
   value?: number | ReactNode,
+  valueType?: 'MTR3' | 'BTR3',
   color?: string,
   selected?: boolean,
-  payload?: T
+  checked?: boolean,
+  payload?: T,
+  // style?: CSSProperties,
+  className?: string
 };
 
 export type TLegendItemDivider = {

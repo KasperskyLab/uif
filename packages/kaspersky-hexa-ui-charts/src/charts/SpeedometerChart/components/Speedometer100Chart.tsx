@@ -11,7 +11,7 @@ export type Speedometer100ChartProps = SpeedometerChartProps & {
 
 export const Speedometer100Chart: FC<Speedometer100ChartProps> = ({
   ticksGroup = 10,
-  ticksUnitInGroup = 10,
+  ticksUnitInGroup = 5,
   value = 0,
   minValue = 0,
   maxValue,

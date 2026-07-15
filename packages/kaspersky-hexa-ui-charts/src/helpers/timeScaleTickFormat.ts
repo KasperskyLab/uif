@@ -8,11 +8,11 @@ import { dateFormat } from './../l10n/dateFormat'
 const intervals: { size: number, format: string }[] = [
   {
     size: milliseconds({ months: 1 }),
-    format: 'DD.MMM'
+    format: 'dd.MMM'
   },
   {
     size: milliseconds({ days: 1 }),
-    format: 'DD MMM HH:mm'
+    format: 'dd MMM HH:mm'
   },
   {
     size: milliseconds({ hours: 1 }),
@@ -35,7 +35,7 @@ const determineFormatFromInterval = memoize((_: number, interval: number) => {
     }
   }
 
-  return 'MMM YY'
+  return 'MMM yyyy'
 })
 
 export function determineFormat (tick: Date, ticks: unknown[]): string {
@@ -49,13 +49,13 @@ export function determineFormat (tick: Date, ticks: unknown[]): string {
   if ((M || Y) && !D) {
     return 'MMM yyyy'
   }
+  
+  if (h) {
+    return 'dd MMM HH:mm'
+  }
 
   if (D) {
     return 'dd.MMM'
-  }
-
-  if (h) {
-    return 'dd MMM HH:mm'
   }
 
   if ((m && s) || m) {

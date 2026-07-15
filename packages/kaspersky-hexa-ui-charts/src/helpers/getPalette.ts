@@ -33,8 +33,8 @@ export const getCommonPalette = memoize((): string[] => {
 export const getPiePalette = memoize((): string[] => {
   return [
     'var(--chart--base--series--marina--primary--500)',
-    'var(--chart--base--series--violet--primary--500)',
-    'var(--chart--base--series--marengo--primary--500)',
+    'var(--chart--base--series--violet--primary--400)',
+    'var(--chart--base--series--marengo--primary--400)',
     'var(--chart--base--series--grass--primary--500)',
     'var(--chart--base--series--purple--primary--500)',
     'var(--chart--base--series--coldgrey--primary--500)',
@@ -51,8 +51,7 @@ export const getPiePalette = memoize((): string[] => {
     'var(--chart--base--series--marengo--primary--700)',
     'var(--chart--base--series--grass--primary--700)',
     'var(--chart--base--series--purple--primary--700)',
-    'var(--chart--base--series--coldgrey--primary--700)',
-    'var(--chart--base--series--orange--primary--700)'
+    'var(--chart--base--series--coldgrey--primary--700)'
   ]
 })
 

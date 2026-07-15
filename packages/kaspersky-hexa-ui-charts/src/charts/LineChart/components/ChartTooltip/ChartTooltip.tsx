@@ -69,17 +69,17 @@ export const GenericChartTooltip = <T, >({
   return (
     <Popover
       content={
-              <TooltipContentComponent
-                showTotal={showTotal}
-                totalLabel={totalLabel}
-                enrichedData={enrichedData}
-                activeRecord={activeRecord}
-                theme={theme}
-                otherLabel={otherLabel}
-                xScale={xScale}
-                tooltipDateFormat={tooltipDateFormat}
-                />
-              }
+        <TooltipContentComponent
+          showTotal={showTotal}
+          totalLabel={totalLabel}
+          enrichedData={enrichedData}
+          activeRecord={activeRecord}
+          theme={theme}
+          otherLabel={otherLabel}
+          xScale={xScale}
+          tooltipDateFormat={tooltipDateFormat}
+        />
+      }
       placement="bottom"
       shouldLimitSize
       defaultVisible

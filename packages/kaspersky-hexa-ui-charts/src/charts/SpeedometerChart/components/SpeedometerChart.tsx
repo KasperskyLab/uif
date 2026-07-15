@@ -1,8 +1,7 @@
 import { isUndefined } from 'lodash'
 import React, { FC, memo, useMemo } from 'react'
 
-import { H4, Space, Text } from '@kaspersky/hexa-ui'
-
+import { TextTruncateWithPopup } from '../../../../src/components/TextTruncateWithPopup/TextTruncateWithPopup'
 import { DEFAULT_CHART_HEIGHT, DEFAULT_CHART_WIDTH } from '../../../constants'
 import { getPaddings } from '../../../helpers/getPaddings'
 import { useChartTheme } from '../../../hooks/useChartTheme'
@@ -28,7 +27,7 @@ export type SpeedometerChartProps = BaseChartProps &
 export const SpeedometerChart: FC<SpeedometerChartProps> = memo(
   ({
     ticksGroup = 10,
-    ticksUnitInGroup = 10,
+    ticksUnitInGroup = 5,
     tickUnitLength = 4,
     ticksUnitInGroupLength = 8,
     segments = [],
@@ -181,8 +180,12 @@ export const SpeedometerChart: FC<SpeedometerChartProps> = memo(
       <div className={styles.container} style={style}>
         {percentage && (
           <div className={styles.titleContainer}>
-            <H4>{`${percentage}%`}</H4>
-            <Text className={styles.description} type="BTR5">{labelDescription}</Text>
+            <TextTruncateWithPopup type="H4">{`${percentage}%`}</TextTruncateWithPopup>
+            {labelDescription && (
+              <div className={styles.description} style={{maxWidth: `calc(82% - ${DEFAULT_TICK_LINE_CONFIG.distanceFromArc + DEFAULT_TICK_LINE_CONFIG.length}% - 37px )`}}>
+                <TextTruncateWithPopup type="BTR5">{labelDescription}</TextTruncateWithPopup>
+              </div>
+            )}
           </div>
         )}
         <Gauge

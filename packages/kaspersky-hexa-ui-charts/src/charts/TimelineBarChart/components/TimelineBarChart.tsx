@@ -21,36 +21,40 @@ import { BaseChartProps } from '../../../types/chart'
 import { IStackedChartData } from '../../../types/chartData'
 import { TChartEventCallback } from '../../../types/chartEvent'
 import { OptionalProperty } from '../../../types/utils'
+import { AxisGridX } from '../../AxisGridX'
+import { AxisGridY } from '../../AxisGridY'
 import { AxisLabel } from '../../AxisLabel'
 import { ChartTooltipContent } from '../../ChartTooltipContent/ChartTooltipContent'
 import { ChartTooltipWrapper } from '../../ChartTooltipWrapper'
 import { ChartTooltipWrapperProps } from '../../ChartTooltipWrapper/ChartTooltipWrapper'
 import { SCALE_TOP_OFFSET } from '../../StackedBarChart/constants'
+import { getVisibleDataDomain } from '../helpers'
 
 import { ContainerTimelineBarChart, ContainerTimelineBarChartProps } from './ContainerTimelineBarChart'
 
-export type TimelineBarChartProps<T = any> = OptionalProperty<Omit<ContainerTimelineBarChartProps, 'padding' | 'domain'> &
-  Pick<
-      ChartTooltipWrapperProps, 'tooltipDateFormat'
-    > &
-  BaseChartProps & {
-    domain?: [Date, Date],
-    theme?: CustomTheme,
-    yScale?: 'linear' | 'sqrt' | 'log',
-    yMin?: number,
-    yMax?: number,
-    showTooltip?: boolean,
-    totalLabel?: string,
-    showTotal?: boolean,
-    data: IStackedChartData<T>,
-    chartAfter?: ReactElement | ReactElement[],
-    otherLabel?: string,
-    maxTooltipItems?: number,
-    onClickData?: TChartEventCallback<T>,
-    onHoverData?: TChartEventCallback<T>,
-    onLeaveData?: TChartEventCallback<T>,
-    onMoveData?: TChartEventCallback<T>
-  }, 'xTickFormat' | 'yTickFormat'>;
+export type TimelineBarChartProps<T = any> = OptionalProperty<
+  Omit<ContainerTimelineBarChartProps, 'groupCount' | 'visibleDataDomain' | 'padding' | 'domain'> &
+    Pick<ChartTooltipWrapperProps, 'tooltipDateFormat'> &
+    BaseChartProps & {
+      domain?: [Date, Date]
+      theme?: CustomTheme
+      yScale?: 'linear' | 'sqrt' | 'log'
+      yMin?: number
+      yMax?: number
+      showTooltip?: boolean
+      totalLabel?: string
+      showTotal?: boolean
+      data: IStackedChartData<T>
+      chartAfter?: ReactElement | ReactElement[]
+      otherLabel?: string
+      maxTooltipItems?: number
+      onClickData?: TChartEventCallback<T>
+      onHoverData?: TChartEventCallback<T>
+      onLeaveData?: TChartEventCallback<T>
+      onMoveData?: TChartEventCallback<T>
+    },
+  'xTickFormat' | 'yTickFormat'
+>
 
 function GenericTimelineBarChart<T> ({
   data,
@@ -68,6 +72,7 @@ function GenericTimelineBarChart<T> ({
   minTickLabelXLength = DEFAULT_MAX_TICK_LABEL_X_VERTICAL_LENGTH,
   minTickLabelYLength = DEFAULT_MAX_TICK_LABEL_Y_LENGTH,
   standalone = true,
+  size,
   domain,
   timeScaleInterval,
   showTooltip = true,
@@ -78,6 +83,8 @@ function GenericTimelineBarChart<T> ({
   tooltipDateFormat,
   xTickFormat,
   yTickFormat = tickNumberFormat,
+  xTickHide,
+  yTickHide,
   onClickData,
   onHoverData,
   onLeaveData,
@@ -86,12 +93,19 @@ function GenericTimelineBarChart<T> ({
   const isStack100 = isStack100Prop && data.length > 1
   const events = useCommonEvents(onClickData, onHoverData, onLeaveData, onMoveData)
   const groupedData = useStackedData(data, isStack100)
+  const visibleDataDomain = useMemo(() => getVisibleDataDomain(data), data)
   const chartTheme = useChartTheme(colors)
   const themeLabelPaddings = getPaddings(chartTheme?.chart?.padding)
   const chartPadding = useMemo(() => ({ ...themeLabelPaddings, ...padding }), [padding, themeLabelPaddings])
   const locale = useLocale()
-  const xTickFormatWithLocale = useMemo(() => xTickFormat ? wrapCustomTickFormat(xTickFormat) : timeScaleTickFormat(locale), [locale, xTickFormat])
-  const domainPadding = useMemo(() => ({ y: [0, horizontal ? width * SCALE_TOP_OFFSET : height * SCALE_TOP_OFFSET] }) as ForAxes<PaddingType>, [horizontal, width, height])
+  const xTickFormatWithLocale = useMemo(
+    () => (xTickFormat ? wrapCustomTickFormat(xTickFormat) : timeScaleTickFormat(locale)),
+    [locale, xTickFormat]
+  )
+  const domainPadding = useMemo(
+    () => ({ y: [0, horizontal ? width * SCALE_TOP_OFFSET : height * SCALE_TOP_OFFSET] }) as ForAxes<PaddingType>,
+    [horizontal, width, height]
+  )
 
   return (
     <VictoryChart
@@ -111,15 +125,42 @@ function GenericTimelineBarChart<T> ({
           minTickLabelXLength={minTickLabelXLength}
           minTickLabelYLength={minTickLabelYLength}
           singleQuadrantDomainPadding
+          size={size}
+          groupCount={groupedData.length}
+          visibleDataDomain={visibleDataDomain}
+          hasExplicitDomain={Boolean(domain)}
           timeScaleInterval={timeScaleInterval}
           tickLetterSize={tickLetterSize}
           xTickFormat={xTickFormatWithLocale}
           yTickFormat={yTickFormat}
+          xTickHide={xTickHide}
+          yTickHide={yTickHide}
         />
       }
     >
-      <VictoryAxis fixLabelOverlap tickFormat={xTickFormatWithLocale} axisComponent={<></>} />
-      <VictoryAxis tickLabelComponent={<AxisLabel />} dependentAxis tickFormat={yTickFormat} crossAxis={false} />
+      <VictoryAxis
+        tickLabelComponent={xTickHide ? <></> : <AxisLabel />}
+        fixLabelOverlap
+        tickFormat={xTickFormatWithLocale}
+        axisComponent={<></>}
+        gridComponent={horizontal ? <AxisGridX /> : undefined}
+        style={horizontal
+          ? {
+              grid: {
+                strokeWidth: 1,
+                stroke: 'var(--axis--border--enabled)'
+              }
+            }
+          : undefined
+        }
+      />
+      <VictoryAxis
+        tickLabelComponent={yTickHide ? <></> : <AxisLabel />}
+        dependentAxis        
+        tickFormat={yTickFormat}
+        crossAxis={false}
+        gridComponent={<AxisGridY />}
+      />
       <VictoryGroup events={events}>
         {groupedData.map(([name, data]) => (
           <VictoryStack key={name}>
@@ -127,8 +168,7 @@ function GenericTimelineBarChart<T> ({
               <VictoryBar
                 key={name}
                 labelComponent={
-                  showTooltip
-                    ? (
+                  showTooltip ? (
                     <ChartTooltipWrapper
                       totalLabel={totalLabel}
                       showTotal={showTotal}
@@ -138,12 +178,12 @@ function GenericTimelineBarChart<T> ({
                       tooltipDateFormat={tooltipDateFormat}
                       otherLabel={otherLabel}
                       maxTooltipItems={maxTooltipItems}
+                      showTooltip={showTooltip}
                       xScale="time"
                     />
-                      )
-                    : (
+                  ) : (
                     <></>
-                      )
+                  )
                 }
                 labels={(d) => `${name}: ${d.datum.originalPayload || d.datum[DEFAULT_Y]}`}
                 x={DEFAULT_X}

@@ -79,37 +79,37 @@ export const ChartTooltipWrapper: React.FC<ChartTooltipWrapperProps> = memo(
     }, [x])
 
     return (
-    <foreignObject ref={container} x={x} y={0} width={0} height={0} className={styles.foreignObjectContainer}>
-      {top && left
-        ? (
-        <TooltipComponent
-          {...{
-            showTotal,
-            totalLabel,
-            top,
-            left,
-            x: top,
-            y,
-            height,
-            width,
-            lineComponent,
-            tooltipContentComponent,
-            metricLineWidth,
-            activeRecord: datum as IChartDataPoint,
-            enrichedData,
-            data,
-            theme,
-            padding,
-            xScale,
-            yScale,
-            otherLabel,
-            tooltipDateFormat,
-            onClick
-          }}
-        />
-          )
-        : null}
-    </foreignObject>
+      <foreignObject ref={container} x={x} y={0} width={0} height={0} className={styles.foreignObjectContainer}>
+        {top && left
+          ? (
+              <TooltipComponent
+                {...{
+                  showTotal,
+                  totalLabel,
+                  top,
+                  left,
+                  x: top,
+                  y,
+                  height,
+                  width,
+                  lineComponent,
+                  tooltipContentComponent,
+                  metricLineWidth,
+                  activeRecord: datum as IChartDataPoint,
+                  enrichedData,
+                  data,
+                  theme,
+                  padding,
+                  xScale,
+                  yScale,
+                  otherLabel,
+                  tooltipDateFormat,
+                  onClick
+                }}
+              />
+            )
+          : null}
+      </foreignObject>
     )
   }
 )

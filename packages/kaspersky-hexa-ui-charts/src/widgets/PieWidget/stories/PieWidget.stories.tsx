@@ -1,13 +1,16 @@
-import { action } from '@storybook/addon-actions'
+import { withMeta } from '@sb/components/Meta'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
+import { action } from 'storybook/actions'
 
-import { legendItems } from '../../Legend/stories/legendItemsStub'
+import { IChartDataPoint } from '../../../types/chartData'
+import { TLegendItemRow } from '../../Legend'
+import MetaData from '../__meta__/meta.json'
 import { PieWidget } from '../PieWidget'
 
-import { pieChartStub } from './pieChartStub'
+import { extendedPieChartStub, getLegendData, pieChartStub } from './pieChartStub'
 
-const meta: Meta<typeof PieWidget> = {
+const meta = {
   title: 'Widget/PieWidget',
   component: PieWidget,
   args: {
@@ -17,20 +20,51 @@ const meta: Meta<typeof PieWidget> = {
       text: 'View the list of devices'
     },
     data: pieChartStub,
-    legend: legendItems,
-    description: 'Description text',
-    showTotal: true,
-    onClick: action('onClick'),
-    onHover: action('onHover')
+    onClickData: action('onClickData'),
+    onHoverData: action('onHoverData'),
+    onLeaveData: action('onLeaveData'),
+    onMoveData: action('onMoveData'),
+    legendProps: {
+      description: 'Description text',
+      items: getLegendData(pieChartStub),
+      totalLabel: 'Total'
+    },
+    showTotal: true
+  },
+  parameters:{
+    docs: {
+      page: withMeta(MetaData)
+    }
   }
-}
+} satisfies Meta<typeof PieWidget>
 
 export default meta
 
-type Story = StoryObj<any>
+type Story = StoryObj<typeof meta>;
 
-export const Default = (args: any) => {
-  return (
-    <PieWidget<[string, string]> {...args} showTotal={true} />
-  )
+const renderPieWidget = (args: Story['args']) => {
+  if (!args?.legendProps || !args?.data) {
+    return null
+  }
+
+  const matchLegendToDataPoint = (legendItem: TLegendItemRow<IChartDataPoint>, pieData: IChartDataPoint[]) => {
+    return pieData.find(data => (data.metric === legendItem.payload?.metric))
+  }
+  return <PieWidget {...args} legendProps={args.legendProps} data={args?.data} matchLegendToDataPoint={matchLegendToDataPoint} />
+}
+
+export const Default: Story = {
+  render: renderPieWidget
+}
+
+export const WithScroll: Story = {
+  args: {
+    data: extendedPieChartStub,
+    legendProps: {
+      description: '',
+      items: getLegendData(extendedPieChartStub),
+      totalLabel: 'Total'
+    }
+  },
+  render: renderPieWidget
 }

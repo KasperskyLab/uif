@@ -1,49 +1,63 @@
 import { isFunction } from 'lodash'
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { CallbackArgs, SliceProps, VictoryContainer, VictoryLabel, VictoryPie } from 'victory'
+import React, { memo, useCallback, useMemo } from 'react'
+import {
+  CallbackArgs,
+  SliceProps,
+  VictoryContainer,
+  VictoryLabel,
+  VictoryPie
+} from 'victory'
 
 import { H4 } from '@kaspersky/hexa-ui'
 
-import { DEFAULT_CHART_HEIGHT, DEFAULT_CHART_WIDTH, DEFAULT_X, DEFAULT_Y } from '../../../constants'
+import { DEFAULT_X, DEFAULT_Y } from '../../../constants'
 import { useChartTheme } from '../../../hooks/useChartTheme'
 import { useCommonEvents } from '../../../hooks/useCommonEvents'
 import { BaseChartProps } from '../../../types/chart'
 import { IChartDataPoint } from '../../../types/chartData'
 import { TChartEventCallback } from '../../../types/chartEvent'
-import { PIE_CHART_CORNER_RADIUS, PIE_CHART_INNER_PAD_ANGLE, PIE_CHART_INNER_RADIUS_RATIO, PIE_CHART_RADIUS_HOVER_INCREASE } from '../constants'
+import {
+  PIE_CHART_INNER_PAD_ANGLE,
+  PIE_CHART_RADIUS_HOVER_INCREASE
+} from '../constants'
+import type { PieChartSize } from '../constants'
+import { getPieChartSize } from '../helpers/getPieChartSize'
 import { usePieChartTextComponent } from '../hooks/usePieChartTextComponent'
 import { useStandalonePie } from '../hooks/useStandalonePie'
+import styles from '../pie.module.scss'
 
 import { ChartTooltipWrapper } from './ChartTooltipWrapper/ChartTooltipWrapper'
 import { PieChartDataComponent } from './PieChartDataComponent'
 
 export type InnerRadiusCallbackArgs = CallbackArgs & {
-  radius?: number,
-  origin?: { x: number, y: number }
+  radius?: number;
+  origin?: { x: number; y: number };
 };
 
 export type PieChartProps<T> = BaseChartProps & {
-  data: IChartDataPoint<T>[],
-  showTotal?: boolean,
-  showTooltip?: boolean,
-  innerRadiusRatio?: number,
-  padAngle?: number,
-  description?: string,
-  standalone?: boolean,
-  onClickData?: TChartEventCallback<T>,
-  onHoverData?: TChartEventCallback<T>,
-  onLeaveData?: TChartEventCallback<T>,
-  onMoveData?: TChartEventCallback<T>
+  data: IChartDataPoint<T>[];
+  size?: PieChartSize;
+  showTotal?: boolean;
+  showTooltip?: boolean;
+  innerRadiusRatio?: number;
+  padAngle?: number;
+  description?: string;
+  standalone?: boolean;
+  onClickData?: TChartEventCallback<T>;
+  onHoverData?: TChartEventCallback<T>;
+  onLeaveData?: TChartEventCallback<T>;
+  onMoveData?: TChartEventCallback<T>;
 };
 
 function GenericPieChart<T> ({
   data,
   padding,
-  innerRadiusRatio = PIE_CHART_INNER_RADIUS_RATIO,
+  size,
+  innerRadiusRatio: innerRadiusRatioProp,
   padAngle = PIE_CHART_INNER_PAD_ANGLE,
   showTooltip = false,
-  width = DEFAULT_CHART_WIDTH,
-  height = DEFAULT_CHART_HEIGHT,
+  width: widthProp,
+  height: heightProp,
   showTotal = false,
   colors,
   theme,
@@ -54,9 +68,34 @@ function GenericPieChart<T> ({
   onLeaveData,
   onMoveData
 }: PieChartProps<T>) {
-  const { data: innerStateData, onHover: handleOnHover, onLeave: handleOnLeave } = useStandalonePie(data, standalone, onHoverData, onLeaveData)
+  const {
+    width,
+    height,
+    chartPadding,
+    chartRadius,
+    innerRadiusRatio,
+    cornerRadius,
+    outlineWidth
+  } = getPieChartSize({
+    width: widthProp,
+    height: heightProp,
+    size,
+    padding,
+    innerRadiusRatio: innerRadiusRatioProp
+  })
 
-  const commonEvents = useCommonEvents(onClickData, handleOnHover, handleOnLeave, onMoveData)
+  const {
+    data: innerStateData,
+    onHover: handleOnHover,
+    onLeave: handleOnLeave
+  } = useStandalonePie(data, standalone, onHoverData, onLeaveData)
+
+  const commonEvents = useCommonEvents(
+    onClickData,
+    handleOnHover,
+    handleOnLeave,
+    onMoveData
+  )
   const chartTheme = useChartTheme(colors, theme)
   const { total, compactTotal } = useMemo(() => {
     let total = 0
@@ -70,28 +109,47 @@ function GenericPieChart<T> ({
       total += record.value
     }
 
-    return { total, compactTotal: Intl.NumberFormat('en', { notation: 'compact' }).format(total) }
+    return {
+      total,
+      compactTotal: Intl.NumberFormat('en', { notation: 'compact' }).format(
+        total
+      )
+    }
   }, [innerStateData])
 
   const innerRadius = useCallback(
-    (d: InnerRadiusCallbackArgs) => (d.radius || (d?.origin?.x || 0) - 50) * innerRadiusRatio,
+    (d: InnerRadiusCallbackArgs) =>
+      (d.radius || (d?.origin?.x || 0) - 50) * innerRadiusRatio,
     [innerRadiusRatio]
   )
 
-  const labelRadius = useCallback(
-    (d: SliceProps) => {
-      const innerRadius = isFunction(d?.innerRadius) ? d?.innerRadius?.(d) : d?.innerRadius || 0
-      const radius = +(d.radius || 0) || (d?.origin?.x || 0) - 50
+  const labelRadius = useCallback((d: SliceProps) => {
+    const innerRadius = isFunction(d?.innerRadius)
+      ? d?.innerRadius?.(d)
+      : d?.innerRadius || 0
+    const radius = +(d.radius || 0) || (d?.origin?.x || 0) - 50
 
-      return innerRadius + ((radius - innerRadius) / 2) + PIE_CHART_RADIUS_HOVER_INCREASE
-    },
-    []
+    return (
+      innerRadius + (radius - innerRadius) / 2 + PIE_CHART_RADIUS_HOVER_INCREASE
+    )
+  }, [])
+
+  const TextComponent = usePieChartTextComponent(
+    width,
+    height,
+    total,
+    innerRadiusRatio,
+    description
   )
 
-  const TextComponent = usePieChartTextComponent(width, height, total, innerRadiusRatio, description, padding)
-
   return (
-    <VictoryContainer theme={chartTheme} width={width} height={height} style={{ width, height }}>
+    <VictoryContainer
+      className={styles.pieContainer}
+      theme={chartTheme}
+      width={width}
+      height={height}
+      style={{ width, height }}
+    >
       <VictoryPie
         theme={chartTheme}
         data={innerStateData}
@@ -99,20 +157,25 @@ function GenericPieChart<T> ({
         width={width}
         x={DEFAULT_X}
         y={DEFAULT_Y}
-        padding={padding}
-        cornerRadius={PIE_CHART_CORNER_RADIUS}
+        padding={chartPadding}
+        origin={{ x: width / 2, y: height / 2 }}
+        radius={chartRadius}
+        cornerRadius={cornerRadius}
         innerRadius={innerRadius}
         labelRadius={labelRadius}
         events={commonEvents}
         labelComponent={
-          showTooltip ? <ChartTooltipWrapper theme={chartTheme} data={data} /> : <></>
+          showTooltip ? (
+            <ChartTooltipWrapper theme={chartTheme} data={data} />
+          ) : (
+            <></>
+          )
         }
         padAngle={padAngle}
         standalone={false}
-        dataComponent={<PieChartDataComponent />}
+        dataComponent={<PieChartDataComponent outlineWidth={outlineWidth} />}
       />
-      {showTotal
-        ? (
+      {showTotal ? (
         <VictoryLabel
           textAnchor="middle"
           style={{ ...chartTheme.labels?.style }}
@@ -122,10 +185,9 @@ function GenericPieChart<T> ({
           textComponent={<TextComponent />}
           tspanComponent={<H4 />}
         />
-          )
-        : (
+      ) : (
         <></>
-          )}
+      )}
     </VictoryContainer>
   )
 }

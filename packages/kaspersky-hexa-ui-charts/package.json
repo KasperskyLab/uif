@@ -1,6 +1,6 @@
 {
   "name": "@kaspersky/hexa-ui-charts",
-  "version": "1.21.11",
+  "version": "1.50.0",
   "author": "AO Kaspersky Lab",
   "description": "Kaspersky Hexa UI Design System Widgets and Charts",
   "license": "Apache-2.0",
@@ -20,7 +20,6 @@
     "hexa ui"
   ],
   "types": "./index.d.ts",
-  "sideEffects": false,
   "exports": {
     ".": {
       "import": "./src/index.js",
@@ -35,31 +34,38 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o storybook/hexa-ui-charts",
     "lint:fix": "eslint --cache --fix src --ext .ts,.tsx",
-    "lint": "tsc --noEmit && eslint src --ext .ts,.tsx"
+    "lint": "tsc --noEmit && eslint src --ext .ts,.tsx",
+    "test:visual:run": "playwright test -c playwright.visual.config.ts",
+    "test:visual:update:run": "playwright test -c playwright.visual.config.ts --update-snapshots",
+    "test:visual": "docker compose -f compose.visual.yaml run --rm visual-tests",
+    "test:visual:update": "docker compose -f compose.visual.yaml run --rm visual-tests sh -c \"npm ci --prefer-offline && npm run build-storybook && npm run test:visual:update:run\""
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "3.2.5",
-    "@kaspersky/dev-tools": "2.32.2",
+    "@kaspersky/dev-tools": "3.9.2",
+    "@playwright/test": "1.60.0",
     "@rollup/plugin-commonjs": "26.0.1",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-node-resolve": "15.2.3",
     "@rollup/plugin-typescript": "12.1.2",
-    "@storybook/addon-essentials": "8.6.4",
-    "@storybook/addon-interactions": "8.6.4",
-    "@storybook/addon-onboarding": "8.6.4",
-    "@storybook/blocks": "8.6.4",
-    "@storybook/react": "8.6.4",
-    "@storybook/react-vite": "8.6.4",
-    "@storybook/test": "8.6.4",
+    "@storybook/addon-docs": "10.1.11",
+    "@storybook/addon-links": "10.1.11",
+    "@storybook/react-vite": "10.1.11",
     "@types/is-hotkey": "0.1.10",
     "@types/lodash": "4.14.202",
     "@types/react": "17.0.2",
     "@types/styled-components": "5.1.34",
-    "@typescript-eslint/parser": "5.12.1",
+    "@types/uuid": "11.0.0",
+    "@typescript-eslint/parser": "8.53.0",
     "clsx": "2.1.1",
     "dotenv": "16.0.0",
-    "eslint": "7.14.0",
+    "eslint": "9.33.0",
+    "eslint-import-resolver-typescript": "4.4.4",
+    "eslint-plugin-import-x": "4.16.1",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-security": "1.7.1",
+    "eslint-plugin-storybook": "10.1.11",
     "gulp": "4.0.2",
+    "http-server": "14.1.1",
     "jest": "26.1.0",
     "rollup": "4.21.2",
     "rollup-plugin-copy": "3.5.0",
@@ -72,15 +78,16 @@
     "rollup-plugin-typescript2": "0.31.2",
     "sass": "1.60.0",
     "sass-loader": "10.4.1",
-    "storybook": "8.6.4",
-    "storybook-addon-mock": "5.0.0",
+    "storybook": "10.1.11",
     "styled-components": "5.3.3",
     "ts-node": "10.9.2",
+    "tsc-alias": "1.6.2",
+    "typescript": "5.8.2",
+    "typescript-plugin-css-modules": "5.2.0",
     "vite": "6.0.11"
   },
   "overrides": {
     "es5-ext": "0.10.46",
-    "eslint-plugin-storybook": "0.6.15",
     "slate-react": {
       "react": "^17.x",
       "react-dom": "^17.x"
@@ -93,7 +100,7 @@
     "@types/d3": "7.4.3",
     "@wojtekmaj/color-utils": "3.2.1",
     "d3": "7.9.0",
-    "date-fns": "2.28.0",
+    "date-fns": "2.30.0",
     "is-hotkey": "^0.2.0",
     "lodash": "4.17.23",
     "slate": "^0.118.1",
@@ -102,15 +109,14 @@
     "slate-react": "^0.117.4",
     "style-inject": "0.3.0",
     "svg-round-corners": "0.4.3",
+    "uuid": "13.0.2",
     "victory": "37.3.6"
   },
   "peerDependencies": {
-    "@kaspersky/hexa-ui": "6.323.10",
-    "@kaspersky/hexa-ui-core": "0.17.2",
-    "@kaspersky/hexa-ui-icons": "2.13.4",
-    "eslint": "^6.0.0 || ^7.0.0 || ^8.0.0",
+    "@kaspersky/hexa-ui": "^6.387.4",
+    "@kaspersky/hexa-ui-core": ">=0.21.0",
+    "@kaspersky/hexa-ui-icons": "^2.19.0",
     "react": "16.x || 17.x",
-    "react-dom": "16.x || 17.x",
-    "typescript": ">=4.0.0"
+    "react-dom": "16.x || 17.x"
   }
 }

@@ -1,15 +1,14 @@
-import clsx from 'clsx'
 import { get } from 'lodash'
-import React, { FC, memo, useMemo } from 'react'
+import React, { FC, memo } from 'react'
 import { ScaleName } from 'victory'
 
-import { Divider, Space, Text } from '@kaspersky/hexa-ui'
+import { Space, Text } from '@kaspersky/hexa-ui'
 import { Calendar } from '@kaspersky/hexa-ui-icons/16'
 
-import { preciseAdd } from '../../helpers/preciseAdd'
 import { topStackedChartTooltipPointsData } from '../../helpers/topData'
 import { CustomTheme } from '../../hooks/useChartTheme'
 import { IChartDataPoint, StackedChartTooltipPointsData } from '../../types/chartData'
+import { Legend, LegendItem } from '../../widgets/Legend'
 import { MetricLabel } from '../MetricLabel'
 
 import styles from './ChartTooltipContent.module.scss'
@@ -38,88 +37,57 @@ export const ChartTooltipContent: FC<ChartTooltipContentProps> = memo(({
   tooltipDateFormat
 }) => {
   const formatter = useDateFormat(tooltipDateFormat)
-  const total = useMemo(() => enrichedData ? preciseAdd(enrichedData.map(d => d.value || 0)) : 0, [enrichedData])
 
   if (activeRecord && enrichedData) {
     if (enrichedData.length === 1) {
       const [{ title, metric, value, color }] = enrichedData
 
+      const titleNode = xScale === 'time'
+        ? <Space gap={8} align="center" justify="space-between">
+            <Calendar color="var(--text-icons-elements--secondary2-solid)" />
+            {formatter(metric as number | Date, 'FF')}
+          </ Space>
+        : <MetricLabel metric={metric} title={title} />
+
       return (
-        <Space gap={8} direction="horizontal" align="center" justify="space-between" className={styles.row}>
-          <Space gap={8} direction="horizontal">
-            { color && <div
-              style={{
-                background: color
-              }}
-              className={styles.dot}
-            />}
-            {xScale === 'time'
-              ? <>
-                  <Calendar color="var(--text-icons-elements--secondary2-solid)" className={styles.timeIcon} />
-                  {formatter(metric as number | Date, 'FF')}
-                </>
-              : (
-              <MetricLabel metric={metric} title={title} />
-                )}
-          </Space>
-          <Text datatype="BTR3">{value}</Text>
-        </Space>
+        <LegendItem
+          item={{kind: 0, title: titleNode, color: color, titleType: 'BTR3'}}
+          value={value}
+          valueType="BTR3"
+          isSelectable={false}
+          total={0}
+        />
       )
     }
 
     const stackIndex = (get(activeRecord, '_stack') || 0) - 1
-    const barsDataWithSelected = enrichedData.map((b, idx) => ({ ...b, selected: idx === stackIndex }))
-    const top10 = topStackedChartTooltipPointsData(barsDataWithSelected, maxTooltipItems, otherLabel)
+    const barsDataWithChecked = enrichedData.map((b, idx) => ({ ...b, checked: idx === stackIndex }))
+    const top10 = topStackedChartTooltipPointsData(barsDataWithChecked, maxTooltipItems, otherLabel)    
+    const top10Items = top10.map(item => ({
+      kind: 0,
+      title: <MetricLabel metric={item.name} title={item.title} />,
+      color: item.color,
+      titleType: 'BTR3',
+      value: item.value,
+      valueType: 'BTR3',
+      isSelectable: false,
+      className: item.checked ? styles.checked : undefined,
+      total: 0
+    }))
+    const titleNode = xScale === 'time' || enrichedData[0]?.metric instanceof Date
+      ? <Space gap={8} align="center">
+          <Calendar color="var(--text-icons-elements--secondary2-solid)" />
+          {formatter(enrichedData[0]?.metric as number | Date, 'FF')}
+        </ Space>
+      : <Text datatype="BTR3">{enrichedData[0]?.metric}</Text>
 
     return (
-      <Space wrap="nowrap" gap="related" direction="vertical" align="stretch">
-      <Space gap={8} align="center" className={styles.time}>
-        {xScale === 'time' || enrichedData[0]?.metric instanceof Date
-          ? (
-          <>
-            <Calendar color="var(--text-icons-elements--secondary2-solid)" className={styles.timeIcon} />
-            {formatter(enrichedData[0]?.metric as number | Date, 'FF')}
-          </>
-            )
-          : (
-          <Text datatype="BTR3">{enrichedData[0]?.metric}</Text>
-            )}
-      </Space>
-
-      <Space direction="vertical" align="stretch" gap={2}>
-        {top10.map(({ value, name, title, color, selected }) => (
-          <Space
-            key={(title || name).toString()}
-            gap={8}
-            direction="horizontal"
-            align="center"
-            className={clsx(styles.row, selected && styles.selected)}
-          >
-            <div
-              style={{
-                background: color
-              }}
-              className={styles.dot}
-            />
-            <Space gap={16} direction="horizontal" justify="space-between" className={styles.title}>
-              <MetricLabel metric={name} title={title} />
-              <Text type="BTR3">{value}</Text>
-            </Space>
-          </Space>
-        ))}
-        {showTotal && (
-          <>
-            <Divider className={styles.totalDivider} />
-            <Space gap={16} justify="space-between">
-              <Text type="BTR3">{totalLabel}</Text>
-              <Text type="MTR3">{total}</Text>
-            </Space>
-          </>
-        )
-        }
-
-      </Space>
-      </Space>
+      <Legend 
+        items={top10Items}
+        legendTitle={titleNode}
+        showTotal={showTotal}
+        totalLabel={totalLabel}
+      />
     )
   }
 

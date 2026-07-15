@@ -85,7 +85,8 @@ export const Gauge: FC<GaugeProps> = (props) => {
     const valueChanged = JSON.stringify(prevProps.current.value) !== JSON.stringify(mergedProps.current.value)
     const minValueChanged = JSON.stringify(prevProps.current.minValue) !== JSON.stringify(mergedProps.current.minValue)
     const maxValueChanged = JSON.stringify(prevProps.current.maxValue) !== JSON.stringify(mergedProps.current.maxValue)
-    return arcsPropsChanged || pointerPropsChanged || valueChanged || minValueChanged || maxValueChanged
+    const labelsChanged = JSON.stringify(prevProps.current.labels) !== JSON.stringify(mergedProps.current.labels)
+    return arcsPropsChanged || pointerPropsChanged || valueChanged || minValueChanged || maxValueChanged || labelsChanged
   }
   useLayoutEffect(() => {
     updateMergedProps()

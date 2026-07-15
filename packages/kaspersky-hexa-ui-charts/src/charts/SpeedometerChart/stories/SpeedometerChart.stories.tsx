@@ -1,9 +1,18 @@
-import { Meta } from '@storybook/react'
-import React, { FC } from 'react'
+import { withMeta } from '@sb/components/Meta'
+import { Meta, StoryObj } from '@storybook/react'
+import React from 'react'
 
-import { SpeedometerChart, SpeedometerChartProps } from '..'
+import { SpeedometerChart } from '..'
+import MetaData from '../__meta__/meta.json'
 
-export default {
+const trafficLightColors = [
+  '',
+  'var(--chart--base--status--primary--positive)',
+  'var(--chart--base--status--primary--medium)',
+  'var(--chart--base--status--primary--critical)'
+]
+
+const meta = {
   title: 'Charts/SpeedometerChart',
   component: SpeedometerChart,
   decorators: [
@@ -17,58 +26,115 @@ export default {
     height: 180,
     width: 180,
     value: 5,
-    segments: [0, 2, 4, 6, 8, 10],
+    segments: [0, 30, 70, 100],
     labelDescription: 'SomeDescription'
   },
   argTypes: {
-    width: { control: { type: 'range', min: 100, max: 1000, step: 10 } },
-    height: { control: { type: 'range', min: 100, max: 1000, step: 10 } }
+    colors: { description: 'Colors of speedometer' },
+    labelDescription: { description: 'Description under precentage'},
+    padding: { description: 'Speedometer padding' },
+    segments: { description: 'Segments on speedometer' },
+    showLabels: { description: 'Show labels inside of speedometer' },
+    showTotal: { description: 'Show precentage' },
+    ticksGroup: { description: 'Number of ticks groups'},
+    ticksUnitInGroup: { description: 'Number of ticks in group' },
+    ticksUnitInGroupLength: { description: 'Length of group starting tick line' },
+    tickUnitLength: { description: 'Length of tick line'},
+    value: { description: 'Selected value on speedometer'},
+    width: { table: { disable: true } },
+    height: { table: { disable: true } }
+  },
+  parameters:{
+    docs: {
+      page: withMeta(MetaData)
+    },
+    visual: {
+      delayMs: 3000
+    }
   }
-} as Meta
+} satisfies Meta<typeof SpeedometerChart>
 
-export const Default: FC<SpeedometerChartProps> = (args) => <SpeedometerChart {...args} />
+export default meta
+type Story = StoryObj<typeof meta>
 
-export const Default300 = {
-  render: (args: SpeedometerChartProps) => <SpeedometerChart {...args} />,
+export const Default: Story = {
   args: {
-    height: 300,
-    width: 300
+    colors: trafficLightColors
   }
 }
 
-export const Default800 = {
-  render: (args: SpeedometerChartProps) => <SpeedometerChart {...args} />,
+export const WithoutDescription: Story = {
   args: {
-    height: 800,
-    width: 800
+    labelDescription: undefined,
+    colors: trafficLightColors
   }
 }
 
-export const WithoutDescription: FC<SpeedometerChartProps> = (args) => <SpeedometerChart {...args} labelDescription={undefined} />
+export const LongDescription: Story = {
+  args: {
+    labelDescription: 'Pariatur commodo qui ut exercitation sint voluptate deserunt dolore amet aliqua',
+    colors: trafficLightColors
+  }
+}
 
-export const LongDescription: FC<SpeedometerChartProps> = (args) => (
-  <SpeedometerChart
-    {...args}
-    labelDescription="Pariatur commodo qui ut exercitation sint voluptate deserunt dolore amet aliqua"
-  />
-)
+export const ValueGreaterMax: Story = {
+  args: {
+    colors: trafficLightColors
+  },
+  render: (args) => <SpeedometerChart {...args} value={(args.segments?.at(-1) || 0) + 10} />
+}
 
-export const ValueGreaterMax: FC<SpeedometerChartProps> = (args) => <SpeedometerChart {...args} value={(args.segments?.at(-1) || 0) + 10} />
+export const ValueLessMin: Story = {
+  args: {
+    colors: trafficLightColors
+  },
+  render: (args) => <SpeedometerChart {...args} value={(args.segments.at(0) || 0) - 10} />
+}
 
-export const ValueLessMin: FC<SpeedometerChartProps> = (args) => <SpeedometerChart {...args} value={(args.segments.at(0) || 0) - 10} />
+export const ShowLabelsHide: Story = {
+  args: {
+    colors: trafficLightColors,
+    showLabels: 'hide'
+  }
+}
 
-export const ShowLabelsHide: FC<SpeedometerChartProps> = (args) => <SpeedometerChart {...args} showLabels="hide" />
+export const ShowLabelsBySegments: Story = {
+  args: {
+    colors: trafficLightColors,
+    showLabels: 'bySegments'
+  }
+}
 
-export const ShowLabelsBySegments: FC<SpeedometerChartProps> = (args) => <SpeedometerChart {...args} showLabels="bySegments" />
+export const PercentageSegments: Story = {
+  args: {
+    segments: [0, 15, 85, 100],
+    colors: trafficLightColors,
+    showLabels: 'bySegments',
+    value: 40
+  }
+}
 
-export const PercentageSegments: FC<SpeedometerChartProps> = (args) => (
-  <SpeedometerChart {...args} value={40} segments={[0, 15, 85, 100]} showLabels="bySegments" />
-)
+export const TwoSegments: Story = {
+  args: {
+    segments: [0, 40, 100],
+    showLabels: 'bySegments',
+    value: 40
+  }
+}
 
-export const TwoSegments: FC<SpeedometerChartProps> = (args) => (
-  <SpeedometerChart {...args} value={40} segments={[0, 40, 100]} showLabels="bySegments" />
-)
+export const BigValues: Story = {
+  args: {
+    segments: [0, 3000, 7000, 10000],
+    colors: trafficLightColors,
+    showLabels: 'bySegments',
+    value: 4000
+  }
+}
 
-export const OtherSegments: FC<SpeedometerChartProps> = (args) => (
-  <SpeedometerChart {...args} value={4000} segments={[0, 100, 1000, 2000, 10000]} showLabels="bySegments" />
-)
+export const OtherSegments: Story = {
+  args: {
+    segments: [0, 100, 300, 800, 1000],
+    showLabels: 'bySegments',
+    value: 400
+  }
+}

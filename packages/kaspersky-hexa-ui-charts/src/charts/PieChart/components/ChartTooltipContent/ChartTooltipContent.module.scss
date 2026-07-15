@@ -2,7 +2,7 @@
   padding: 4px 6px;
   height: 24px;
 
-  &.selected {
+  &.checked {
     background-color: var(--legend_item--bg--hover);
     border-radius: 4px;
   }

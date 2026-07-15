@@ -364,8 +364,8 @@ export const getCoordByValue = (
       endAngle: utils.degToRad(179.1)
     },
     [GaugeType.RADIAL]: {
-      startAngle: utils.degToRad(-39),
-      endAngle: utils.degToRad(219)
+      startAngle: utils.degToRad(-41.3),
+      endAngle: utils.degToRad(221.3)
     }
   }
 

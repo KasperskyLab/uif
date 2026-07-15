@@ -1,0 +1,12 @@
+{
+  "dod": {
+    "designTokens": false,
+    "unitTests": false,
+    "screenshotTests": false,
+    "storybook": false,
+    "pixsoView": false
+  },
+  "component": "Widget",
+  "designLink": "https://pixso.net/app/design/Nm37XP3kqM_HJPFAXaciuw?item-id=2545%3A37779",
+  "pixsoView": "https://pixso.net/app/design/LaTmaWE_JObQIc6YZuYaWw?item-id=156%3A55900"
+}

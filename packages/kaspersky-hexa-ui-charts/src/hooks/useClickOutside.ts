@@ -1,20 +1,18 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 
-export function useClickOutside <T extends HTMLElement> (element: T | null, callback: (e: Event) => void): void {
+export function useClickOutside <T extends HTMLElement> (element: React.MutableRefObject<T | null>, callback: (event: MouseEvent) => void): void {
   const memorizedCallback = useRef(callback)
-  const memorizedElement = useRef(element)
 
   useEffect(() => {
     memorizedCallback.current = callback
   }, [callback])
 
   useEffect(() => {
-    memorizedElement.current = element
-  }, [element])
-
-  useEffect(() => {
-    const handler = (e: Event): void => {
-      if (!memorizedElement.current?.contains(e.target as Node | null)) {
+    const handler = (e: MouseEvent): void => {
+      if (!element.current) {
+        return
+      }
+      if (!element.current.contains(e.target as Node | null)) {
         memorizedCallback.current(e)
       }
     }

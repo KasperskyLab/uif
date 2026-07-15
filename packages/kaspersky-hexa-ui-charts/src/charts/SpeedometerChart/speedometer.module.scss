@@ -12,17 +12,9 @@
   inset: 0;
   align-items: center;
   justify-content: center;
-  top: calc(50% - 20px);
-  height: 32px;
-
-  .description {
-    position: absolute;
-    width: 50%;
-    top: 100%;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    text-align: center;
+  height: calc(100% - 20px);
+  .description{
+    z-index: 9;
   }
 }
 

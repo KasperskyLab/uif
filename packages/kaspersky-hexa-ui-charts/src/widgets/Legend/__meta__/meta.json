@@ -1,0 +1,13 @@
+{
+  "dod": {
+    "designTokens": true,
+    "unitTests": false,
+    "screenshotTests": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "Legend",
+  "usage": "Легенда используется для отображения обозначений и расшифровки данных на графике. Она помогает пользователям понять, что обозначают цвета и линии в визуализации",
+  "designLink": "https://pixso.net/app/design/Nm37XP3kqM_HJPFAXaciuw?item-id=650%3A243991",
+  "pixsoView": "https://pixso.net/app/design/LaTmaWE_JObQIc6YZuYaWw?item-id=156%3A55665"
+}

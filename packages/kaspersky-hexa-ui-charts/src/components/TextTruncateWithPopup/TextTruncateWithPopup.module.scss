@@ -1,0 +1,13 @@
+.truncateTextWrapper {
+  display: block;
+  max-width: 100%;
+  width: fit-content;
+}
+
+.truncateTextContainer {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 100%;
+}

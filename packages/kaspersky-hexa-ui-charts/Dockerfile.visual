@@ -1,0 +1,14 @@
+ARG PLAYWRIGHT_VERSION=1.60.0
+
+FROM mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-noble
+
+WORKDIR /app
+
+ENV TZ=UTC
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    fonts-noto \
+    fonts-liberation \
+  && rm -rf /var/lib/apt/lists/*

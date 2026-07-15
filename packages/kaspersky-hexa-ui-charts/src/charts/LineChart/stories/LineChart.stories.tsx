@@ -1,12 +1,14 @@
-
-import { action } from '@storybook/addon-actions'
+import { withMeta } from '@sb/components/Meta'
 import { Meta, StoryObj } from '@storybook/react'
-import React, { FC } from 'react'
+import React from 'react'
+import { ChartLocale } from 'src/types/locales'
+import { action } from 'storybook/actions'
 
-import { LineChart } from '..'
 import { generateData } from '../../../../.storybook/data'
 import { DEFAULT_CHART_HEIGHT, DEFAULT_CHART_WIDTH } from '../../../constants'
 import { LocalizationProvider } from '../../../l10n/LocalizationProvider'
+import MetaData from '../__meta__/meta.json'
+import { LineChart, LineChartProps } from '../components/LineChart'
 
 import {
   stubLineChartData,
@@ -18,13 +20,17 @@ import {
   stubLineTimeEmpty
 } from './lineChartStub'
 
-export default {
+interface LineChartPropsLocale extends LineChartProps {
+  locale: ChartLocale
+}
+
+const meta = {
   title: 'Charts/LineChart',
   component: LineChart,
   decorators: [
     (Story, { args }) => (
       <div style={{ width: args.width, height: args.height }}>
-        <LocalizationProvider {...args}>
+        <LocalizationProvider locale={args.locale}>
           <Story />
         </LocalizationProvider>
       </div>
@@ -48,69 +54,127 @@ export default {
   argTypes: {
     width: { control: { type: 'range', min: 100, max: 1000, step: 10 } },
     height: { control: { type: 'range', min: 100, max: 1000, step: 10 } },
-    locale: { control: 'radio', options: ['en-us', 'ru-ru'] },
     lineWidth: { control: { type: 'range', min: 1, max: 10, step: 1 } },
     pointSize: { control: { type: 'range', min: 1, max: 10, step: 1 } },
     xMin: { control: { type: 'range', min: -500, max: 1000, step: 10 } },
     xMax: { control: { type: 'range', min: -500, max: 1000, step: 10 } },
     yMin: { control: { type: 'range', min: -500, max: 10000, step: 10 } },
     yMax: { control: { type: 'range', min: -500, max: 10000, step: 10 } },
-    metricLineWidth: { control: { type: 'range', min: 1, max: 100, step: 1 } },
-    showTooltip: { control: 'boolean' },
-    gradient: { control: 'boolean' },
-    otherLabel: { control: 'text' },
-    totalLabel: { control: 'text' },
-    showTotal: { control: 'boolean' }
+    metricLineWidth: { control: { type: 'range', min: 1, max: 100, step: 1 } }
+  },
+  parameters:{
+    docs: {
+      page: withMeta(MetaData)
+    }
   }
-} as Meta
+} satisfies Meta<LineChartPropsLocale>
 
-export const Default: FC = (props) => <LineChart {...props} data={stubLineChartData} />
+export default meta
+type Story = StoryObj<typeof meta>
 
-export const DataBigger10: FC = (props) => <LineChart {...props} data={generateData(15)} />
+const exampleData = generateData(15)
 
-export const Single: FC = (props) => <LineChart {...props} data={stubLineChartDataOne} />
-
-export const WithoutTooltip: StoryObj<Meta> = {
-  render: (props) => <LineChart {...props} data={stubLineChartData} />,
+export const Default: Story = {
   args: {
+    data: stubLineChartData
+  }
+}
+
+export const DataBigger10: Story = {
+  args: {
+    data: exampleData
+  }
+}
+
+export const Single: Story = {
+  args: {
+    data: stubLineChartDataOne
+  }
+}
+
+export const WithoutTooltip: Story = {
+  args: {
+    data: stubLineChartData,
     showTooltip: false
   }
 }
 
-export const WithoutGradient: StoryObj<Meta> = {
-  render: (props) => <LineChart {...props} data={stubLineChartData} />,
+export const WithoutGradient: Story = {
   args: {
+    data: stubLineChartData,
     gradient: false
   }
 }
 
-export const I18nRu: StoryObj<Meta> = {
-  render: (props) => <LineChart {...props} data={stubLineTimeChartData} xScale="time" />,
+export const I18nRu: Story = {
   args: {
-    locale: 'ru'
+    locale: 'ru',
+    xScale: 'time',
+    data: stubLineTimeChartData
   }
 }
 
-export const Logarithmic: FC = (props) => <LineChart {...props} yScale="log" data={stubLineChartWithLongTextData} />
+export const Logarithmic: Story = {
+  args: {
+    data: stubLineChartWithLongTextData,
+    yScale: 'log'
+  }
+}
 
-export const ColorInData: FC = (props) => <LineChart {...props} data={stubLineColorInDataChartData} />
+export const ColorInData: Story = {
+  args: {
+    data: stubLineColorInDataChartData
+  }
+}
 
-export const Timeline: FC = (props) => <LineChart {...props} data={stubLineTimeChartData} xScale="time" />
+export const Timeline: Story = {
+  args: {
+    data: stubLineTimeChartData,
+    xScale: 'time'
+  }
+}
 
-export const TimelineWithTimezone: FC = (props) => <LineChart {...props} data={stubLineTimeChartData} xScale="time" xTickFormat={(arg1, arg2, arg3, supposedFormat) => {
-  return String(supposedFormat)
-}} tooltipDateFormat={(date) => {
-  return date.toString()
-}} />
+export const TimelineWithTimezone: Story = {
+  args:{
+    data: stubLineTimeChartData,
+    xScale: 'time',
+    xTickFormat: (tick: any, index: number, ticks: any[], supposedFormat?: string) => {
+      return String(supposedFormat)
+    },
+    tooltipDateFormat: (date: number | Date) => {
+      return date.toString()
+    }
+  }
+}
 
-export const TimelineOne: FC = (props) => <LineChart {...props} data={stubLineTimeChartDataOne} xScale="time" />
+export const TimelineOne: Story = {
+  args: {
+    data: stubLineTimeChartDataOne,
+    xScale: 'time'
+  }
+}
 
-export const TimelineEmpty: FC = (props) => <LineChart
-      {...props}
-      xScale="time"
-      xMin={undefined}
-      xMax={undefined}
-      yMin={undefined}
-      yMax={undefined}
-      data={stubLineTimeEmpty}
-    />
+export const TimelineEmpty: Story = {
+  args: {
+    data: stubLineTimeEmpty,
+    xScale: 'time',
+    xMin: undefined,
+    xMax: undefined,
+    yMin: undefined,
+    yMax: undefined
+  }
+}
+
+export const xTickHide: Story = {
+  args: {
+    data: stubLineTimeChartData,
+    xTickHide: true
+  }
+}
+
+export const yTickHide: Story = {
+  args: {
+    data: stubLineTimeChartData,
+    yTickHide: true
+  }
+}

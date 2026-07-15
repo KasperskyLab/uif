@@ -1,6 +1,8 @@
+import { round } from 'lodash'
+
 import { IGroupedStackedChartData } from '../types/chartData'
 
-export function groupBy100<T> (groupedData: IGroupedStackedChartData<T>): IGroupedStackedChartData<T> {
+export function groupBy100<T> (groupedData: IGroupedStackedChartData<T>, precision?: number): IGroupedStackedChartData<T> {
   const xTotals = groupedData.reduce((result, [group, d]) => {
     let xGroupTotals = result.get(group)
 
@@ -37,10 +39,11 @@ export function groupBy100<T> (groupedData: IGroupedStackedChartData<T>): IGroup
             value: 0
           }
         }
+        const resultValue = (d.value / value) * 100
 
         return {
           ...d,
-          value: (d.value / value) * 100
+          value:  precision !== undefined ? round(resultValue, precision) : resultValue
         }
       })
     }))
