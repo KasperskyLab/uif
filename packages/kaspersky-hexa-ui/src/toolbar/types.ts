@@ -5,7 +5,14 @@ import { DropdownItemProps, DropdownProps } from '@src/dropdown/types'
 import { IconProps } from '@src/icon/types'
 import { LinkProps } from '@src/link/types'
 import { SearchProps } from '@src/search/types'
-import { FC, ForwardRefExoticComponent, MouseEventHandler, ReactNode, RefAttributes } from 'react'
+import { ToggleButtonProps } from '@src/toggle-button/types'
+import {
+  FC,
+  ForwardRefExoticComponent,
+  MouseEventHandler,
+  ReactNode,
+  RefAttributes
+} from 'react'
 
 export type ToolbarThemeProps = {
   /** Custom theme */
@@ -14,7 +21,9 @@ export type ToolbarThemeProps = {
 
 export const ToolbarItemKeyConst = {
   BUTTON: 'button',
+  TOGGLE: 'toggleButton',
   LINK: 'link',
+  /** @deprecated Use BUTTON with iconBefore prop instead */
   ICON: 'icon',
   DROPDOWN: 'dropdown',
   DIVIDER: 'divider',
@@ -39,6 +48,10 @@ export type ToolbarButtonProps = ToolbarButtonCommonProps & {
   type: (typeof ToolbarItemKeyConst)['BUTTON'],
   isPressed?: ButtonProps['isPressed'],
   label?: ReactNode
+}
+
+export type ToolbarToggleButtonProps = Omit<ToggleButtonProps, 'mode' | 'size'> & {
+  type: (typeof ToolbarItemKeyConst)['TOGGLE']
 }
 
 type ToolbarDropdownProps = ToolbarButtonCommonProps & DropdownProps & {
@@ -73,27 +86,27 @@ export type ToolbarItems<T extends ToolbarItemKey = ToolbarItemKey> = {
   key: string,
   children?: ReactNode,
   type: T,
-  testId?: string,
   visible?: boolean
-} & (
-  | ToolbarButtonProps
-  | ToolbarDropdownProps
-  | ToolbarIconProps
-  | ToolbarLinkProps
-  | ToolbarDividerProps
-  | ToolbarChildrenProps
+} & Pick<TestingProps, 'testId' | 'klId'> & (
+  ToolbarButtonProps |
+  ToolbarDropdownProps |
+  ToolbarIconProps |
+  ToolbarLinkProps |
+  ToolbarDividerProps |
+  ToolbarChildrenProps |
+  ToolbarToggleButtonProps
 )
 
 export type ToolbarVariantButtonProps = Omit<ButtonProps, keyof ToolbarButtonCommonProps> & ToolbarButtonCommonProps
 
-interface ImportExportButtonProps extends ToolbarVariantButtonProps {
+export interface ImportExportButtonProps extends ToolbarVariantButtonProps {
   /** Switch ImportExportButton, true - dropdown, false - button */
   dropdown: false,
   /** Called after clicking on ImportExportButton */
   onClick?: MouseEventHandler<HTMLElement>
 }
 
-interface ImportExportDropdownProps extends Omit<DropdownProps, 'overlay'> {
+export interface ImportExportDropdownProps extends Omit<DropdownProps, 'overlay'> {
   /** Called after clicking on ImportExportButton */
   onClick?: MouseEventHandler<HTMLElement>,
   /** Switch ImportExportButton, true - dropdown, false - button */
@@ -102,6 +115,10 @@ interface ImportExportDropdownProps extends Omit<DropdownProps, 'overlay'> {
   onImport?: DropdownItemProps['onClick'],
   /** Called after clicking on ExportButton */
   onExport?: DropdownItemProps['onClick']
+  /** Text for ExportButton */
+  buttonExportText?: string,
+  /** Text for ImportButton */
+  buttonImportText?: string
 }
 
 export type ToolbarVariants = {

@@ -62,7 +62,6 @@ describe('ToggleButton', () => {
     expect(onChange).toHaveBeenNthCalledWith(2, 'opt', false)
   })
 
-
   test('should render iconBefore and elementAfter', () => {
     render(
       <DefaultToggle

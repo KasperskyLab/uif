@@ -30,7 +30,7 @@ module.exports = {
     '<rootDir>/src',
     '<rootDir>/helpers'
   ],
-  setupFilesAfterEnv: ['<rootDir>/setupTests.js'],
+  setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
   testPathIgnorePatterns: ['/src/table/__tests__/Filters/helpers.ts'],
   transformIgnorePatterns: ['/node_modules/(?!@xtem/xtem|other-module)', '/node_modules/', '\\.pnp\\.[^\\/]+$']
 }

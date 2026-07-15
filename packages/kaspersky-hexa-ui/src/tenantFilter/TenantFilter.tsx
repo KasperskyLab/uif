@@ -4,7 +4,13 @@ import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { Key, TreeCheckEvent } from '@src/tree'
 import debounce from 'lodash/debounce'
 import isEmpty from 'lodash/isEmpty'
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
 import styled from 'styled-components'
 
 import { Button } from '../button'
@@ -224,7 +230,6 @@ export const TenantFilter: FC<TenantFilterProps> = ({
           testId="tenant-filter-search"
           klId="kl-tenant-filter-search"
           value={searchValue}
-          // @ts-ignore
           onChange={onChangeSearch}
           onClearClick={() => onChangeSearch('')}
         />

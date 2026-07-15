@@ -1,5 +1,5 @@
 import { generateId } from '@helpers/generateId'
-import { Tabs as AntdTabs } from 'antd'
+import AntdTabs from 'antd/es/tabs'
 import React, {
   Children,
   FC,
@@ -19,19 +19,20 @@ const createGroupTabPane = (props: TabPaneHeaderProps): JSX.Element => {
     <AntdTabs.TabPane
       key={tabKey}
       {...restProps}
-      tab={
+      tab={(
         <>
           {divider ? <StyledDivider className={dividerClassName} /> : null}
-          {children || (title &&
+          {children || (title && (
             <StyledText
               type="BTR4"
               themedColor="secondary"
             >
               {title}
             </StyledText>
+          )
           )}
         </>
-      }
+      )}
       disabled
     />
   )

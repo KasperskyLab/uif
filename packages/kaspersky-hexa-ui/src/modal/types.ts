@@ -1,7 +1,7 @@
 import { Theme } from '@design-system/types'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 import { ButtonMode } from '@src/button/types'
-import { ModalProps as AntdModalProps } from 'antd'
+import type { ModalProps as AntdModalProps } from 'antd'
 import { MouseEventHandler, ReactNode } from 'react'
 
 type ActionType = {
@@ -54,7 +54,19 @@ export type ModalThemeProps = {
   size?: ModalSize
 }
 
-type AntdModalPropsToOmit = 'title' | 'okText' | 'cancelText' | 'maskClosable' | 'footer' | 'type' | 'onOk' | 'okButtonProps' | 'cancelButtonProps' | 'mask' | 'keyboard'
+type AntdModalPropsToOmit =
+  'title' |
+  'okText' |
+  'cancelText' |
+  'maskClosable' |
+  'footer' |
+  'type' |
+  'onOk' |
+  'okButtonProps' |
+  'cancelButtonProps' |
+  'mask' |
+  'keyboard' |
+  'width'
 
 export type ModalProps = Omit<AntdModalProps, AntdModalPropsToOmit> & {
   /** Header */
@@ -63,8 +75,6 @@ export type ModalProps = Omit<AntdModalProps, AntdModalPropsToOmit> & {
   content?: ReactNode,
   /** Actions set, use the actions prop to let users act on the content in the modal */
   actions?: ActionConfig,
-  /** Width */
-  width?: string | number,
   /** More buttons for modal, need for backward compatibility with console Confirmation Popup */
   customButtons?: ActionType[]
 } & ModalThemeProps & TestingProps

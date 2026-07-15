@@ -1,0 +1,172 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Field } from '../Field'
+import * as FieldStories from './Field.stories'
+import { fieldDesignPropPresentation } from './Field.design.properties'
+
+<Meta of={FieldStories} name="Field Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Field"
+  description='**Field** — обёртка для элементов управления: добавляет метку, вспомогательный текст, сообщение валидации и всплывающую подсказку'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Field** — контейнер, который объединяет любой контрол со структурными элементами формы: меткой (**label**), вспомогательным текстом (**description**), сообщением валидации (**message**), всплывающей подсказкой (**tooltip**) и дополнительным компонентом (**additionalComponent**). Положение метки задаётся через **labelPosition**, тип — через **labelType**. Для сеточного выравнивания нескольких полей используются **gridLayout** и **gridPreset**."
+    />
+
+    <DocExampleBlock
+      title="label"
+      description="Текст метки поля. Принимает строку или произвольный `ReactNode`. Если не передан, метка не отображается. Когда метка отсутствует, а **tooltip** задан, иконка подсказки отображается рядом с контролом."
+      code='
+<Field label="Имя пользователя" control={<Textbox />} />
+<Field control={<Textbox placeholder="Без метки" />} />'
+    />
+
+    <DocExampleBlock
+      title="labelPosition"
+      description="Положение метки относительно контрола. Доступные значения: `top`, `before`, `after`. По умолчанию — `top`."
+      code='
+<Field label="Top" labelPosition="top" control={<Textbox />} />
+<Field label="Before" labelPosition="before" control={<Textbox />} />
+<Field label="After" labelPosition="after" control={<Textbox />} />'
+    />
+
+    <DocExampleBlock
+      title="labelType"
+      description="Управляет шириной и поведением колонки метки при **labelPosition** равном `before`. Доступные значения: `default`, `full`, `stretch`. По умолчанию — `default`. Игнорируется при **gridLayout** и **gridPreset**."
+      code='
+<Field label="Default" labelPosition="before" labelType="default" control={<Textbox />} />
+<Field label="Full" labelPosition="before" labelType="full" control={<Textbox />} />
+<Field label="Stretch" labelPosition="before" labelType="stretch" control={<Textbox />} />'
+    />
+
+    <DocExampleBlock
+      title="required"
+      description="Отображает маркер обязательности (`*`) рядом с меткой. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<Field label="Email" required control={<Textbox />} />'
+    />
+
+    <DocExampleBlock
+      title="tooltip"
+      description="Содержимое всплывающей подсказки рядом с меткой (или рядом с контролом, если метка не задана). Принимает строку с поддержкой Markdown или `ReactNode`. Позицию и контейнер попапа можно задать через **popoverPlacement** и **getPopupContainer**."
+      code={'<Field label="Пароль" tooltip="Не менее 8 символов, минимум одна заглавная буква" control={<Textbox />} />' /* not_a_secret */}
+    />
+
+    <DocExampleBlock
+      title="description"
+      description="Вспомогательный текст под контролом. Принимает строку с поддержкой Markdown. Отображается через **HelpMessage** в режиме `common`."
+      code='<Field label="Адрес сервера" description="Укажите IP-адрес или доменное имя" control={<Textbox />} />'
+    />
+
+    <DocExampleBlock
+      title="message и messageMode"
+      description="Текст сообщения валидации (**message**) и его цветовой режим (**messageMode**). Доступные значения **messageMode**: `error`, `warning`, `success`, `common`. По умолчанию — `error`. Сообщение отображается под контролом через **HelpMessage**."
+      code='
+<Field label="Поле" messageMode="error" message="Неверный формат" control={<Textbox validationStatus="error" />} />
+<Field label="Поле" messageMode="success" message="Значение принято" control={<Textbox validationStatus="success" />} />'
+    />
+
+    <DocExampleBlock
+      title="control"
+      description="Основной контрол поля. Принимает любой `ReactElement`. Состояние `disabled` задаётся напрямую на переданном контроле, а не через **Field**."
+      code='
+<Field label="Текст" control={<Textbox />} />
+<Field label="Переключатель" control={<Toggle>Включить</Toggle>} />'
+    />
+
+    <DocExampleBlock
+      title="additionalComponent"
+      description="Дополнительный элемент, отображаемый после **description** и **message**. Принимает произвольный `ReactNode`."
+      code='<Field label="Согласие" control={<Textbox />} additionalComponent={<Checkbox>Я принимаю условия</Checkbox>} />'
+    />
+
+    <DocExampleBlock
+      title="gridPreset"
+      description="Предустановленный grid-пресет для двухколоночного выравнивания метки и контрола. При задании переопределяет **labelPosition** и **labelType**. Доступные значения: `6fr`, `8fr`, `12fr`, `3fr 6fr`, `4fr 6fr`, `3fr 8fr`, `4fr 8fr`."
+      code='
+<Field label="Сервер" gridPreset="4fr 6fr" control={<Textbox />} />
+<Field label="Порт" gridPreset="4fr 6fr" control={<Textbox />} />'
+    />
+
+    <DocExampleBlock
+      title="gridLayout"
+      description="Произвольные значения `grid-template-columns` для двухколоночного выравнивания. При задании переопределяет **labelPosition** и **labelType**. Принимает строку или объект `{ firstCol, secondCol }`."
+      code='<Field label="Значение" gridLayout={{ firstCol: "120px", secondCol: "1fr" }} control={<Textbox />} />'
+    />
+
+    <DocExampleBlock
+      title="controlWidth"
+      description="Фиксированная ширина колонки контрола в пикселях. Применяется только при **labelPosition** равном `before`."
+      code='<Field label="Широкое поле" labelPosition="before" controlWidth={300} control={<Textbox />} />'
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Field** — структурный компонент для форм и настроек: он объединяет элемент управления с меткой, подсказкой и сообщениями об ошибках. Используйте **Field** всякий раз, когда контрол должен иметь подпись, описание или сообщение валидации — в диалогах, панелях настроек, мастерах и других формах.
+
+Когда несколько полей расположены рядом, выравнивайте колонки меток через **gridPreset** или **gridLayout** — это обеспечивает сеточное единообразие без дополнительной обёртки. Для группировки нескольких **Field** с общим заголовком используйте **FieldSet**."
+    />
+
+    <DocExampleBlock
+      title="Позиции метки"
+      description="Выбирайте `top` для одноколоночных форм и коротких контролов: метка занимает минимум места. Используйте `before` для двухколоночных форм и настроек, где нужна вертикальная выравненность меток и значений. Позиция `after` подходит для переключателей и чекбоксов, где подпись идёт после контрола."
+      codeBlock="hidden"
+      code='
+<Field label="Top" labelPosition="top" control={<Textbox />} />
+<Field label="Before" labelPosition="before" control={<Textbox />} />
+<Field label="After" labelPosition="after" control={<Toggle>Включить</Toggle>} />'
+    />
+
+    <DocExampleBlock
+      title="Выравнивание колонок через gridPreset"
+      description="При использовании нескольких полей с меткой `before` применяйте одинаковый **gridPreset** — так метки и контролы образуют сеточные колонки и выглядят единообразно."
+      codeBlock="hidden"
+      code='
+<Field label="Сервер" gridPreset="4fr 6fr" control={<Textbox />} />
+<Field label="Порт" gridPreset="4fr 6fr" control={<Textbox />} />
+<Field label="Протокол" gridPreset="4fr 6fr" control={<Textbox />} />'
+    />
+
+    <DocExampleBlock
+      title="Сообщения валидации"
+      description="Показывайте сообщение об ошибке через **message** вместе с визуальным состоянием контрола. Выбирайте **messageMode** в зависимости от типа обратной связи: `error` — для ошибок, `warning` — для предупреждений, `success` — для успешного ввода."
+      codeBlock="hidden"
+      code='
+<Field label="Email" messageMode="error" message="Неверный формат адреса" control={<Textbox validationStatus="error" />} />
+<Field label="Email" messageMode="success" message="Адрес проверен" control={<Textbox validationStatus="success" />} />'
+    />
+
+    <DocExampleBlock
+      title="Отключённый контрол"
+      description="**Field** не управляет состоянием `disabled` — передавайте его напрямую в контрол внутри **Field**."
+      codeBlock="hidden"
+      code='<Field label="Поле" control={<Textbox disabled />} />'
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(fieldDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={FieldStories} />
+    <AutodocArgsTable components={Field} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

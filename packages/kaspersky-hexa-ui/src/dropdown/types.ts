@@ -1,9 +1,16 @@
 import { Theme } from '@design-system/types'
 import { TestingProps } from '@helpers/typesHelpers'
 import { DividerProps } from '@src/divider/types'
+import { ToggleProps } from '@src/toggle'
 import type { DropdownProps as RcDropdownProps } from 'rc-dropdown'
 import type { MenuItemProps, MenuProps, SubMenuProps } from 'rc-menu'
-import { FC, Key, ReactElement, ReactNode } from 'react'
+import {
+  CSSProperties,
+  FC,
+  Key,
+  ReactElement,
+  ReactNode
+} from 'react'
 
 export type DropdownThemeProps = {
   /** Custom theme */
@@ -47,6 +54,7 @@ export type DropdownProps = {
   placement?: Placement,
   /** The class name of the dropdown root element */
   overlayClassName?: string,
+  overlayStyle?: CSSProperties,
   /** Css class */
   className?: string,
   /** Set max height for dropdownMenu in pixels */
@@ -66,19 +74,30 @@ export type DropdownVariants = {
   MenuDivider: FC<DividerProps>,
   GroupTitle: FC<any>,
   InnerActions: FC<DropdownItemActionsProps>,
+  Toggle: FC<ToggleProps>
 }
 
-export type DropdownItemInnerProps = {
+type DropdownItemBaseProps = {
   children: ReactNode | DropdownItemProps[],
   /** @deprecated Use 'componentsBefore' prop instead */
-  icon?: ReactNode
+  icon?: ReactNode,
   key?: string | Key | null,
-  type?: 'group' | 'submenu' | 'action' | 'divider' | 'innerActions',
   description?: string,
   tooltip?: string,
   componentsBefore?: ReactNode[],
-  componentsAfter?: ReactNode[]
+  componentsAfter?: ReactNode[],
+  truncateItemWidth?: number,
 }
+
+type DropdownItemStandardProps = DropdownItemBaseProps & {
+  type?: 'group' | 'submenu' | 'action' | 'divider' | 'innerActions'
+}
+
+export type DropdownItemToggleProps = DropdownItemBaseProps & {
+  type: 'toggle'
+} & Omit<ToggleProps, keyof DropdownThemeProps | 'labelPosition'>
+
+export type DropdownItemInnerProps = DropdownItemStandardProps | DropdownItemToggleProps
 
 export type DropdownItemProps = Omit<MenuItemProps, 'type' | 'title' | 'children' | 'itemIcon' | 'extra'> & DropdownItemInnerProps & {
   title?: ReactNode

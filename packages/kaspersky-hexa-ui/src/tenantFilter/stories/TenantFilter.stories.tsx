@@ -162,7 +162,7 @@ const callback = (keys: string[]) => {
 }
 
 const meta: Meta<TenantFilterProps> = {
-  title: 'Hexa UI Components/TenantFilter',
+  title: 'Other/TenantFilter',
   component: TenantFilter,
   argTypes: {
     ...sbHideControls(['theme', 'allTenantsKeys'])

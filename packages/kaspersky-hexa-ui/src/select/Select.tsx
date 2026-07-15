@@ -3,10 +3,13 @@ import { TextReducer } from '@helpers/components/TextReducer'
 import { useGlobalStyles } from '@helpers/hooks/useGlobalStyles'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { useGlobalComponentStyles } from '@helpers/useGlobalComponentStyles'
+import { ActionButton } from '@src/action-button'
 import { Divider } from '@src/divider'
 import { Loader } from '@src/loader'
+import { Space } from '@src/space'
 import { Tag, TagProps } from '@src/tag'
 import cn from 'classnames'
+import once from 'lodash/once'
 import RcSelect, { BaseSelectRef, OptGroup as RcOptGroup, Option as RcOption } from 'rc-select'
 import React, {
   forwardRef,
@@ -32,15 +35,40 @@ import {
   prepareValues,
   removeValue
 } from './helpers'
-import { DropdownContent, getSelectGlobalStyles, OptionDescription, selectCss, SelectInnerWrapper, SelectWrapper } from './selectCss'
-import { OptionType, SelectProps, SelectViewProps } from './types'
+import styles from './Select.module.scss'
+import {
+  DropdownContent,
+  getSelectGlobalStyles,
+  OptionContent,
+  OptionDescription,
+  OptionTextContent,
+  selectCss,
+  SelectInnerWrapper,
+  SelectWrapper
+} from './selectCss'
+import { OptionAction, OptionType, SelectProps, SelectViewProps } from './types'
 import { useThemedSelect } from './useThemedSelect'
+
+const OPTION_ACTION_WIDTH = 16
+const CHECKBOX_WIDTH = 18 + 4
 
 const StyledSelect = styled(RcSelect).withConfig({
   shouldForwardProp: (prop) => !['cssConfig', 'validationStatus'].includes(prop)
 })`${selectCss}`
 
 export const maxTagPlaceholder: SelectProps['maxTagPlaceholder'] = omittedValues => <Tag size="small">{`+ ${omittedValues.length} ...`}</Tag>
+
+const extractText = (node: React.ReactNode): string => {
+  if (typeof node === 'string' || typeof node === 'number') return String(node)
+
+  if (React.isValidElement(node) && node.props.children) {
+    return React.Children.toArray(node.props.children)
+      .map(extractText)
+      .join('')
+  }
+
+  return ''
+}
 
 export const Select = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const {
@@ -52,14 +80,10 @@ export const Select = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     ...rest
   } = useTestAttribute(useThemedSelect(props))
 
-  const [selectOffsetWidth, setSelectOffsetWidth] = useState<number>()
-
-  const onLoadMoreRef = useRef(onLoadMore)
-  onLoadMoreRef.current = onLoadMore
-
-  const handleLoadMore = useCallback(() => {
-    onLoadMoreRef.current?.()
-  }, [])
+  // once - to prevent next trigger after user scrolls out and in
+  const handleLoadMore = useMemo(() => once(() => {
+    onLoadMore?.()
+  }), [onLoadMore])
   const isMultiSelect = props.mode === 'multiple' || props.mode === 'tags'
 
   function renderOption (option: OptionType) {
@@ -71,38 +95,60 @@ export const Select = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       )
     }
 
+    const actionsWidth = option.actions?.length
+      ? option.actions.length * OPTION_ACTION_WIDTH + option.actions.length * 4
+      : 0
+    const reservedSpace = (isMultiSelect ? CHECKBOX_WIDTH : 0) + actionsWidth
+
     return (
       <RcOption
         {...option}
         key={option.value}
         data-value={option.value}
-        // Remove this one, when TreeSelect will be available thought adapter/ui-builder
+        // Remove this line when TreeSelect will be available through adapter/ui-builder
         label={typeof option.label === 'string' ? option.label.trim() : option.label}
+        data-label={option.dataLabel ?? extractText(option.label).trim()}
         role="option"
+        className={styles.option}
       >
-        <div className="kl6-select-option-content">
-          {isMultiSelect && (
-            <div className="kl6-select-option-checkbox-cell">
-              <MultiSelectCheckBox />
-            </div>
-          )}
-          <div className="kl6-select-option-text">
-            <TextReducer truncationWidth={selectOffsetWidth}>
+        <OptionContent>
+          {isMultiSelect && <MultiSelectCheckBox />}
+          <OptionTextContent reservedSpace={reservedSpace}>
+            <TextReducer>
               {option.label}
             </TextReducer>
             {option.description && (
               <OptionDescription cssConfig={cssConfig}>
-                {option.description}
+                <TextReducer>
+                  {option.description}
+                </TextReducer>
               </OptionDescription>
             )}
-          </div>
-        </div>
+          </OptionTextContent>
+        </OptionContent>
+        {option.actions?.length
+          ? (
+              <Space gap="dependent" className={styles.optionActions} wrap="nowrap">
+                {option.actions?.map(({ key, icon, onClick }: OptionAction, index: number) => (
+                  <ActionButton
+                    key={key ?? index}
+                    icon={icon}
+                    className={styles.optionAction}
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      onClick()
+                    }}
+                  />
+                ))}
+              </Space>
+            )
+          : null}
       </RcOption>
     )
   }
 
   return (
-    <SelectView {...rest} ref={ref} mode={props.mode} cssConfig={cssConfig} setSelectOffsetWidth={setSelectOffsetWidth}>
+    <SelectView {...rest} ref={ref} mode={props.mode} cssConfig={cssConfig}>
       {children || options?.map(renderOption)}
       {hasMore && (
         <RcOption key="loading-more-option" disabled>
@@ -114,7 +160,6 @@ export const Select = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 }) as SelectComponent
 
 const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
-  setSelectOffsetWidth,
   allowNonUniqueValues,
   autoClearSearchValue = true,
   autoFocus = false,
@@ -173,14 +218,11 @@ const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
 
   const selectWrapperRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (selectWrapperRef.current) {
-      const width = selectWrapperRef.current.offsetWidth
-      setSelectOffsetWidth && setSelectOffsetWidth(width)
+  const handleScrollAndWheel = useCallback((event) => {
+    if (event?.target?.closest('.dropdown-custom')) {
+      return
     }
-  }, [selectWrapperRef])
 
-  const handleScroll = useCallback(() => {
     if (closeOnParentScroll && selectWrapperRef?.current) {
       setInitialOpen(false)
     }
@@ -227,16 +269,24 @@ const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
   }, [onChange, preparedValue, allowNonUniqueValues, autoClearSearchValue])
 
   useEffect(() => {
-    const parent = findScrollableParent(selectWrapperRef?.current)
-
-    if (!(parent instanceof Element) || !closeOnParentScroll) {
+    if (!closeOnParentScroll) {
       return
     }
 
-    parent.addEventListener('scroll', handleScroll)
+    const parent = findScrollableParent(selectWrapperRef?.current)
 
-    return () => parent.removeEventListener('scroll', handleScroll)
-  }, [closeOnParentScroll, open, selectWrapperRef, handleScroll])
+    if (!(parent instanceof Element)) {
+      return
+    }
+
+    parent.addEventListener('scroll', handleScrollAndWheel)
+    parent.addEventListener('wheel', handleScrollAndWheel)
+
+    return () => {
+      parent.removeEventListener('wheel', handleScrollAndWheel)
+      parent.removeEventListener('scroll', handleScrollAndWheel)
+    }
+  }, [closeOnParentScroll, open, selectWrapperRef, handleScrollAndWheel])
 
   const renderDropdownMenu = useCallback((menu: ReactElement) => {
     const dataTestId = testAttributes?.['data-testid'] ? `${testAttributes?.['data-testid']}-select-dropdown` : 'select-dropdown'
@@ -252,21 +302,23 @@ const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
       >
         {loading
           ? <Loader centered testId="select-loader" klId="loader" />
-          : <>
-              {renderHeader && (
-                <>
-                  {renderHeader()}
-                  <Divider mode="light" />
-                </>
-              )}
-              {renderDropdown ? renderDropdown(menu) : menu}
-              {renderFooter && (
-                <>
-                  <Divider mode="light" />
-                  {renderFooter()}
-                </>
-              )}
-            </>
+          : (
+              <>
+                {renderHeader && (
+                  <>
+                    {renderHeader()}
+                    <Divider mode="light" />
+                  </>
+                )}
+                {renderDropdown ? renderDropdown(menu) : menu}
+                {renderFooter && (
+                  <>
+                    <Divider mode="light" />
+                    {renderFooter()}
+                  </>
+                )}
+              </>
+            )
         }
       </DropdownContent>
     )
@@ -287,20 +339,17 @@ const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
       }
     }
 
+    onDropdownVisibleChange?.(open)
+
     if (closeOnParentScroll) {
       setInitialOpen(open)
       return
     }
-
-    onDropdownVisibleChange && onDropdownVisibleChange(open)
   }, [closeOnParentScroll, onDropdownVisibleChange, preparedValue])
 
   const loadingErrorContent = loadingError && <LoadingErrorContent cssConfig={cssConfig}>{loadingError}</LoadingErrorContent>
 
   return (
-    // broken type infer because of styled components
-    // @ts-ignore
-    // div wrapper cause RC Select don't contain native select element in ref
     <SelectWrapper ref={ref}>
       <SelectInnerWrapper ref={selectWrapperRef}>
         <StyledSelect
@@ -322,8 +371,8 @@ const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
           dropdownRender={renderDropdownMenu}
           filterOption={filterOption as never}
           getPopupContainer={
-            getPopupContainer ?? 
-            config.getPopupContainer ??  
+            getPopupContainer ??
+            config.getPopupContainer ??
             (triggerNode => (usePortal ?? config.usePortal) ? document.body : triggerNode.parentElement)
           }
           listHeight={dropdownMaxHeight ?? 256}
@@ -332,7 +381,7 @@ const SelectView = forwardRef<HTMLElement, SelectViewProps>(({
           menuItemSelectedIcon={null}
           mode={mode}
           notFoundContent={loadingErrorContent || notFoundContent || <EmptyData />}
-          // @ts-ignore
+          // @ts-expect-error не разобрался
           onBlurCapture={handleBlurCapture}
           onChange={handleOnChange}
           onDropdownVisibleChange={onDropdownVisibleChangeHandler}

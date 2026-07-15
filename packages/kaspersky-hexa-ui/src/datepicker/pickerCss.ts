@@ -21,7 +21,7 @@ export const listCss = css`
   display: inline-flex;
   align-items: start;
   justify-content: start;
-  gap: 8px;
+  gap: 4px;
   padding: 0;
   width: 100%;
   flex-direction: column;
@@ -95,6 +95,32 @@ export const pickerCss = css`
 export const pickerContainerCss = css`
   background: ${fromProps('unselected.enabled.background')};
   
+  &.kl6-datepicker-presets-calendar {
+    .ant-picker-datetime-panel + .ant-picker-footer {
+      display: flex;
+    }
+
+    .ant-picker-ranges {
+      display: none;
+    }
+  }
+  
+  &.kl6-datepicker-range-presets-calendar {
+    display: flex;
+
+    .ant-picker-panel {
+      flex-direction: row-reverse;
+    }
+
+    .ant-picker-panels + .ant-picker-footer {
+      display: flex;
+
+      .ant-picker-ranges {
+        display: none;
+      }
+    }
+  }
+
   &:not(.kl6-datepicker-range-time-calendar) {
     height: ${DATE_PICKER_PANEL_HEIGHT}; 
   }
@@ -102,13 +128,12 @@ export const pickerContainerCss = css`
   &.kl6-datepicker-range-time-calendar {
     .ant-picker-footer {
       width: 100%;
-      border-right: 0;
     }
   }
 
   .ant-picker-panel {
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     background: ${fromProps('unselected.enabled.background')};
     border: none;
 
@@ -138,6 +163,8 @@ export const pickerContainerCss = css`
     padding: 8px;
     height: ${DATE_PICKER_PANEL_HEADER_HEIGHT};
     width: ${DATE_PICKER_PANEL_WIDTH};
+    border-color: ${fromProps('separator')};
+
     button {
       color: ${fromProps('selected.enabled.background')};
     }
@@ -328,14 +355,20 @@ export const pickerContainerCss = css`
 
   .ant-picker-footer {
     min-width: ${DATE_PICKER_PANEL_FOOTER_WIDTH};
-    border-width: 0 1px 0 0;
+    border-width: 0 0 0 1px;
     border-style: solid;
     border-color: ${fromProps('separator')};
     
     .ant-picker-footer-extra {
       line-height: 1;
-      padding: 16px 4px;
+      padding: 16px 8px;
+      max-width: 200px;
+      min-width: 120px;
     }
+  }
+
+  .ant-picker-footer-extra:not(:last-child) {
+    border-bottom: none;
   }
 
   .ant-picker-datetime-panel, .ant-picker-panels {
@@ -348,6 +381,10 @@ export const pickerContainerCss = css`
     height: 0;
   }
 
+  .ant-picker-time-panel {
+    border-left: 1px solid ${fromProps('separator')};
+  }
+
   .ant-picker-time-panel .ant-picker-header {
     display: none;
   }
@@ -357,7 +394,10 @@ export const pickerContainerCss = css`
     scrollbar-width: none;
     padding: 16px 12px;
     
-    
+    &:not(:first-child) {
+      border-left: 1px solid ${fromProps('separator')};
+    }
+
     & > li {
       padding: 0;
       width: 24px;

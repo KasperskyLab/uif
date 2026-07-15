@@ -12,18 +12,18 @@ import useMergedState from 'rc-util/lib/hooks/useMergedState'
 import React from 'react'
 
 export type TooltipPlacement =
-  | 'top'
-  | 'left'
-  | 'right'
-  | 'bottom'
-  | 'topLeft'
-  | 'topRight'
-  | 'bottomLeft'
-  | 'bottomRight'
-  | 'leftTop'
-  | 'leftBottom'
-  | 'rightTop'
-  | 'rightBottom';
+  'top' |
+  'left' |
+  'right' |
+  'bottom' |
+  'topLeft' |
+  'topRight' |
+  'bottomLeft' |
+  'bottomRight' |
+  'leftTop' |
+  'leftBottom' |
+  'rightTop' |
+  'rightBottom'
 
 // https://github.com/react-component/tooltip
 // https://github.com/yiminghe/dom-align
@@ -49,7 +49,7 @@ export interface AbstractTooltipProps extends Partial<Omit<RcTooltipProps, 'chil
   children?: React.ReactNode
 }
 
-type RenderFunction = () => React.ReactNode;
+type RenderFunction = () => React.ReactNode
 
 export interface TooltipPropsWithOverlay extends AbstractTooltipProps {
   title?: React.ReactNode | RenderFunction,
@@ -61,7 +61,7 @@ export interface TooltipPropsWithTitle extends AbstractTooltipProps {
   overlay?: React.ReactNode | RenderFunction
 }
 
-export declare type TooltipProps = TooltipPropsWithTitle | TooltipPropsWithOverlay;
+export declare type TooltipProps = TooltipPropsWithTitle | TooltipPropsWithOverlay
 
 const splitObject = (obj: any, keys: string[]) => {
   const picked: any = {}
@@ -162,7 +162,7 @@ export const Tooltip = React.forwardRef<unknown, TooltipProps>((props, ref) => {
       for (const config of Object.values(placements)) {
         config.overflow = {
           ...config.overflow,
-          // @ts-ignore
+          // @ts-expect-error legacy
           shiftX: true
         }
       }
@@ -238,7 +238,7 @@ export const Tooltip = React.forwardRef<unknown, TooltipProps>((props, ref) => {
       {...otherProps}
       prefixCls={prefixCls}
       getTooltipContainer={getPopupContainer || getTooltipContainer}
-      // @ts-ignore
+      // @ts-expect-error legacy
       ref={ref}
       builtinPlacements={getTooltipPlacements()}
       overlay={getOverlay()}

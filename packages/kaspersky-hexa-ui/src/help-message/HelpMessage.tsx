@@ -1,39 +1,63 @@
-import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import { Space } from '@src/space'
 import cn from 'classnames'
 import React, { FC } from 'react'
-import styled from 'styled-components'
+
+import { StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
 
 import { Text } from '../typography/text'
 
-import { helpMessageCss } from './helpMessageCss'
-import { HelpMessageProps, HelpMessageViewProps } from './types'
-import { useThemedHelpMessage } from './useThemedHelpMessage'
+import styles from './HelpMessage.module.scss'
+import { HelpMessageMode, HelpMessageProps } from './types'
 
-const StyledHelpMessage = styled(Text).withConfig({
-  shouldForwardProp: prop => !['cssConfig'].includes(prop as string)
-}).attrs({ type: 'BTR4' })`
-${helpMessageCss}
-`
+const ICON_MAP = {
+  common: StatusInfoOutline,
+  error: StatusDangerOutline1,
+  warning: StatusWarningOutline,
+  success: StatusOkOutline
+} as const
 
-export const HelpMessage: FC<HelpMessageProps> = (rawProps: HelpMessageProps) => {
-  const themedProps = useThemedHelpMessage(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <HelpMessageView {...props} />
+function getIcon (mode: HelpMessageMode) {
+  const IconComponent = ICON_MAP[mode]
+
+  if (!IconComponent) return null
+
+  return <IconComponent className={styles.icon} />
 }
 
-const HelpMessageView: FC<HelpMessageViewProps> = ({
+export const HelpMessage: FC<HelpMessageProps> = ({
   text,
-  testAttributes,
   className,
+  mode = 'common',
+  size = 'small',
+  testId,
+  dataTestId,
+  componentType,
+  klId,
   ...rest
-}: HelpMessageViewProps) => {
+}) => {
+
+  const testingProps = { testId, dataTestId, componentType, klId }
+
   return (
-    <StyledHelpMessage
-      className={cn('kl6-help-message', className)}
-      {...testAttributes}
+    <Space
+      gap="related"
+      className={cn(
+        'kl6-help-message',
+        className,
+        styles.helpMessage,
+        styles[size],
+        styles[mode]
+      )}
+      {...testingProps}
       {...rest}
     >
-      { text }
-    </StyledHelpMessage>
+      {size === 'medium' && getIcon(mode)}
+      <Text
+        type= {size === 'small' ? 'BTR4' : 'BTR3'}
+        className={styles.text}
+      >
+        {text}
+      </Text>
+    </Space>
   )
 }

@@ -1,3 +1,4 @@
+import { breakpoints } from '@design-system/breakpoints'
 import { getTextSizes } from '@design-system/tokens'
 import { getFromProps } from '@helpers/getFromProps'
 import { CSSProperties } from 'react'
@@ -63,12 +64,18 @@ export function getMaskStyle (cssConfig: ModalCssConfig): CSSProperties {
 }
 
 export const modalCss = css<ModalStyledCssProps>`
-  padding: 0;
+  box-sizing: content-box; 
+  padding: var(--spacing--padding_xl);
   margin: 0 auto;
   position: relative;
-  min-width: ${fromProps('width')};
+  width: 100%;
   max-width: ${fromProps('width')};
-  
+
+  @media (max-width: ${breakpoints.mobile}px) {
+    padding: var(--spacing--padding_l);
+    width: calc(100% - 2 * var(--spacing--padding_l));
+  }
+    
   .ant-modal-close {
     width: auto;
     height: auto;
@@ -82,7 +89,7 @@ export const modalCss = css<ModalStyledCssProps>`
     }
   }
 
-  .ant-modal-content, 
+  .ant-modal-content,
   .ant-modal-header,
   .ant-modal-footer {
     background: ${fromProps('background')};
@@ -116,7 +123,7 @@ export const modalCss = css<ModalStyledCssProps>`
     border-bottom: ${modalSize.borderWidth} solid;
     border-bottom-color: ${(props) => props.showTopBorder ? `${fromProps('border')(props)}` : 'transparent'};
 
-    .ant-modal-title div {
+    .ant-modal-title > div {
       display: flex;
       gap: 8px;
       color: ${fromProps('color')};

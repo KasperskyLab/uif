@@ -1,3 +1,10 @@
+import * as Autocomplete from '@codemirror/autocomplete'
+import * as Commands from '@codemirror/commands'
+import * as LangJson from '@codemirror/lang-json'
+import * as Language from '@codemirror/language'
+import * as Lint from '@codemirror/lint'
+import * as State from '@codemirror/state'
+import * as View from '@codemirror/view'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { shouldForwardProp } from '@helpers/shouldForwardProp'
 import cn from 'classnames'
@@ -87,5 +94,13 @@ const CodeViewerView = <T extends CustomLanguages>(
     </StyledCodeViewer>
   )
 }
+
+CodeViewer.View = View
+CodeViewer.LangJson = LangJson
+CodeViewer.Lint = Lint
+CodeViewer.Commands = Commands
+CodeViewer.Language = Language
+CodeViewer.Autocomplete = Autocomplete
+CodeViewer.State = State
 
 const CodeViewerForwardRef = memo(forwardRef<CodeViewerRef, CodeViewerViewProps<any>>(CodeViewerView))

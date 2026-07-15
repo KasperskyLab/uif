@@ -1,7 +1,7 @@
 import { showDeprecationWarn } from '@helpers/showDeprecationWarn'
 import { useThemedComponent } from '@helpers/useThemedComponent'
 
-import { 
+import {
   AlertCssConfig,
   alertModes,
   AlertProps,

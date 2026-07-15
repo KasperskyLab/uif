@@ -21,7 +21,7 @@ export const NavItem = (rawProps: NavItemProps): JSX.Element => {
   const { applyAppTheme } = useContext(MenuContext)
   const themedProps: MenuViewProps = useThemedMenu({ ...rawProps, applyAppTheme })
   const { testAttributes, ...rest } = useTestAttribute(themedProps)
-  return <StyledNavItem {...testAttributes} {...rest} {...rawProps}/>
+  return <StyledNavItem {...testAttributes} {...rest} {...rawProps} />
 }
 const NavItemComponent = ({
   data,
@@ -122,7 +122,7 @@ const NavItemComponent = ({
     pinIcon,
     unpinIcon
   }
-  
+
   const lookForNewItems = (items: NavItemData[]) => {
     for (let i = 0; i < items.length; i++) {
       const item = items[i]
@@ -138,7 +138,7 @@ const NavItemComponent = ({
 
     return false
   }
- 
+
   const hasItems = items?.length
   const hasNew = hasItems ? lookForNewItems(items) : false
   const shouldBeMarkedAsNewIndicator = hasNew
@@ -155,74 +155,82 @@ const NavItemComponent = ({
       data-testid={data.klId}
       onClick={entryClick}
     >
-      { icon && <div className="uif-nav-item-entry-icon">
-        <NavItemIcon/>
-      </div> }
+      {icon && (
+        <div className="uif-nav-item-entry-icon">
+          <NavItemIcon />
+        </div>
+      )}
       <div className={cn(
         'uif-nav-item-entry-title',
-        {'title-wo-icon': !icon}
+        { 'title-wo-icon': !icon }
       )}>
         <TextWithTruncation text={key} lineClamp={lineClamp}>
           <span>{key}</span>
         </TextWithTruncation>
       </div>
       <div className="uif-nav-item-entry-props">
-        { shouldBeMarkedAsNewIndicator && NewIndicator }
-        { shouldBeMarkedAsNewBadge && NewBadge }
-        { elementAfter }
-        { isItemFavEnabled && <AddToFavs { ...favsProps }/> }
-        { hasChild && <ArrowRightMini className="uif-nav-item-entry-arrow"/> }
+        {shouldBeMarkedAsNewIndicator && NewIndicator}
+        {shouldBeMarkedAsNewBadge && NewBadge}
+        {elementAfter}
+        {isItemFavEnabled && <AddToFavs {...favsProps} />}
+        {hasChild && <ArrowRightMini className="uif-nav-item-entry-arrow" />}
       </div>
     </div>
   )
 
   return (
     <>
-      { itemDivider === ItemDivider.Before && <NavDivider /> }
+      {itemDivider === ItemDivider.Before && <NavDivider />}
       <div className={cn(
         className,
         'uif-nav-item',
         {
           'uif-nav-caption': isCaption,
           'expanded': !minimized && expanded,
-          'popup-expanded': menuActivePopupItem === state
+          'popup-expanded': menuActivePopupItem === state && expanded
         }
       )}>
         {
           minimized && !_isChild
-            ? <Tooltip text={key} placement="right">
-                {navEntry}
-              </Tooltip>
+            ? (
+                <Tooltip text={key} placement="right">
+                  {navEntry}
+                </Tooltip>
+              )
             : navEntry
         }
         {
-          hasChild && <div className="uif-nav-item-child">
-            <div className="uif-nav-item-child-wrapper">
-              { items?.map((item: NavItemData) => {
-                const { isCaption, isRoot } = item
-                if (isCaption) {
-                  return <NavCaptionItem
-                    className={cn({ 'caption-root': isRoot })}
-                    key={`${item.key}-child`}
-                    data={item}
-                    menuState={menuState} />
-                }
-                return (
-                  <NavItem
-                    key={`${item.key}-child`}
-                    data={item}
-                    menuState={menuState}
-                    pinIcon={pinIcon}
-                    unpinIcon={unpinIcon}
-                    _isChild
-                  />
-                )
-              })}
+          hasChild && (
+            <div className="uif-nav-item-child">
+              <div className="uif-nav-item-child-wrapper">
+                {items?.map((item: NavItemData) => {
+                  const { isCaption, isRoot } = item
+                  if (isCaption) {
+                    return (
+                      <NavCaptionItem
+                        className={cn({ 'caption-root': isRoot })}
+                        key={`${item.key}-child`}
+                        data={item}
+                        menuState={menuState} />
+                    )
+                  }
+                  return (
+                    <NavItem
+                      key={`${item.key}-child`}
+                      data={item}
+                      menuState={menuState}
+                      pinIcon={pinIcon}
+                      unpinIcon={unpinIcon}
+                      _isChild
+                    />
+                  )
+                })}
+              </div>
             </div>
-          </div>
+          )
         }
       </div>
-      { itemDivider === ItemDivider.After && <NavDivider/> }
+      {itemDivider === ItemDivider.After && <NavDivider />}
     </>
   )
 }
@@ -257,12 +265,14 @@ const AddToFavs = ({
       : setNavFavItems([data, ...navFavItems])
   }
 
-  return <ActionButton
-    className="uif-nav-fav-add"
-    mode="ghost"
-    onClick={favHandler}
-    icon={ isPinned ? unpinIcon : pinIcon }
-  />
+  return (
+    <ActionButton
+      className="uif-nav-fav-add"
+      mode="ghost"
+      onClick={favHandler}
+      icon={isPinned ? unpinIcon : pinIcon}
+    />
+  )
 }
 
 const NewBadge = <Badge mode="new" size="medium" text="NEW" />

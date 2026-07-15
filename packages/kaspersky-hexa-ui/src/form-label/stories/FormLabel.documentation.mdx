@@ -1,0 +1,101 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { FormLabel } from '../FormLabel'
+import * as FormLabelStories from './FormLabel.stories'
+import { formLabelDesignPropPresentation } from './FormLabel.design.properties'
+
+<Meta of={FormLabelStories} name="Form Label Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Form Label"
+  description='**FormLabel** — подпись поля формы с опциональной меткой обязательности, подсказкой и тегами'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**FormLabel** оформляет текстовую подпись для элементов формы: чекбоксов, переключателей, полей ввода. Рендерится как `label` с текстом (**children**), опциональной меткой обязательности (**required**), иконкой подсказки (**tooltip**) и тегами справа (**tagsAfter**). Настраиваются **mode**, **disabled**, **popoverPlacement** и **popoverWidth**."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Цветовой режим подписи. Доступные значения: `primary`, `secondary`, `disabled`. По умолчанию — `primary`. При **disabled**=`true` режим принудительно становится `disabled` независимо от переданного **mode**."
+      code='
+    <FormLabel mode="primary">primary</FormLabel>
+    <FormLabel mode="secondary">secondary</FormLabel>
+    <FormLabel mode="disabled">disabled</FormLabel>'
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Недоступное состояние подписи и связанных тегов. Доступные значения: `true`, `false`. По умолчанию — `false`. При **disabled**=`true` визуальный режим переключается на `disabled`."
+      code='
+    <FormLabel disabled>Disabled label</FormLabel>
+    <FormLabel disabled tagsAfter={["Tag"]}>Disabled with tags</FormLabel>'
+    />
+
+    <DocExampleBlock
+      title="required"
+      description="Метка обязательного поля: после текста подписи отображается символ `*`. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='<FormLabel required>Required field</FormLabel>'
+    />
+
+    <DocExampleBlock
+      title="children"
+      description="Текст или содержимое подписи. Рендерится компонентом **Text** с типом `BTR3`."
+      code='<FormLabel>Label text</FormLabel>'
+    />
+
+    <DocExampleBlock
+      title="tooltip"
+      description="Содержимое всплывающей подсказки у иконки info справа от подписи. Строка рендерится через **Markdown**; можно передать **ReactNode**. Без **tooltip** иконка не отображается."
+      code='<FormLabel tooltip="Подсказка к полю">With tooltip</FormLabel>'
+    />
+
+    <DocExampleBlock
+      title="tagsAfter"
+      description="Массив строк — подписи тегов справа от подписи. Каждый элемент рендерится компонентом **Tag**. По умолчанию — пустой массив. Пустые элементы массива пропускаются. У тегов включается контур (`outlined`), если подпись не в состоянии **disabled**."
+      code='<FormLabel tagsAfter={["1", "2", "Tag"]}>Label with tags</FormLabel>'
+    />
+
+    <DocExampleBlock
+      title="popoverPlacement"
+      description="Позиция всплывающей подсказки относительно иконки info. Доступные значения: `top`, `left`, `right`, `bottom`. Передаётся в **Popover** как **placement**."
+      code='<FormLabel tooltip="Подсказка" popoverPlacement="bottom">Label</FormLabel>'
+    />
+
+    <DocExampleBlock
+      title="popoverWidth"
+      description="Ширина всплывающей подсказки в пикселях. Передаётся в **Popover** как **width**."
+      code='<FormLabel tooltip="Длинный текст подсказки" popoverWidth={500}>Label</FormLabel>'
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**FormLabel** сопровождает элементы ввода там, где пользователю нужно понять назначение поля до взаимодействия с ним: в формах, фильтрах, настройках и мастерах. Подпись связывает текст с контролом и может дополняться меткой обязательности, краткой подсказкой и тегами статуса или категории. Для составных полей с собственным заголовком и сообщениями об ошибке используйте [**Field**](/?path=/story/hexa-ui-components-field--basic), который уже включает **FormLabel** в разметке."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(formLabelDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={FormLabelStories} />
+    <AutodocArgsTable components={FormLabel} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

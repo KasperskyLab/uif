@@ -4,6 +4,7 @@ import merge from 'lodash/merge'
 import { v4 as uuid } from 'uuid'
 
 import { EnumFilterType, TableColumn, TableRecord } from '../../types'
+import { isFilterConfig, isFilterFromColumn, isGroup, resolveEnumOptions } from '../Filters/helpers'
 import {
   ActiveFilter,
   DateRangeFilter,
@@ -17,8 +18,7 @@ import {
   NumberFilter,
   TextFilter,
   UnitedFilter
-} from '../Filters'
-import { isFilterConfig, isFilterFromColumn, isGroup } from '../Filters/helpers'
+} from '../Filters/types'
 
 const isDateValid = (date: Date) => !isNaN(date.valueOf())
 
@@ -46,14 +46,14 @@ export const getEnumOption = (
   }
 }
 
-export const getNewFilter = async (
-  column: TableColumn,
+export const getNewFilter = async <T extends TableRecord = TableRecord>(
+  column: TableColumn<T>,
   attribute?: string
 ): Promise<FilterConfigInternal> => {
 
-  const resultFilter:MakePartial<FilterConfigInternal, 'value'> = {
+  const resultFilter: MakePartial<FilterConfigInternal, 'value'> = {
     id: uuid(),
-    name: column.dataIndex!,
+    name: column.filterName || String(column.key),
     isUserDefined: true,
     type: column.filterType?.type as FilterConfigInternal['type'] || FilterType.Text,
     condition: FilterOperation.eq
@@ -68,13 +68,13 @@ export const getNewFilter = async (
     }
     resultFilter.type = resultAttribute.filter.type as FilterConfigInternal['type']
   }
-  
+
   switch (resultFilter.type) {
     case FilterType.Enum: {
       const enumFilter = resultFilter as EnumFilter & { id: string }
       const getter = enumFilter?.attribute?.getAvailableOptions || (column.filterType as EnumFilterType)?.getAvailableOptions
-      const availableOptions = await getter?.()
-      const defaultEnumValue = getEnumOption(availableOptions?.[0])
+      const availableOptions = await resolveEnumOptions(getter, undefined, column.key)
+      const defaultEnumValue = availableOptions?.[0]
 
       return {
         ...enumFilter,
@@ -213,14 +213,16 @@ export function getTableFilters (filters: FilterConfig[]): ActiveFilter {
           break
         case FilterType.Text:
         default:
-          // @ts-ignore
+          // @ts-expect-error это легаси с ActiveFilter, которое использует современные типы
           activeFilter[index] = getTextFilter(filter)
       }
       return activeFilter
-    }, {})
+    },
+    {}
+  )
 }
 
-export const getColumnFilters = (filterItems: UnitedFilter[]): ActiveFilter => (
+export const getColumnFilters = <T extends TableRecord = TableRecord>(filterItems: UnitedFilter<T>[]): ActiveFilter => (
   filterItems.reduce<ActiveFilter>((acc, filterItem) => {
     if (isGroup(filterItem) && filterItem.id.startsWith('column.')) {
       filterItem.items
@@ -237,7 +239,7 @@ export const getColumnFilters = (filterItems: UnitedFilter[]): ActiveFilter => (
   }, {})
 )
 
-export const getActiveFilters = (filterItems: UnitedFilter[]): ActiveFilter => {
+export const getActiveFilters = <T extends TableRecord = TableRecord>(filterItems: UnitedFilter<T>[]): ActiveFilter => {
   const sidebarFilters = getTableFilters(filterItems.filter(isFilterConfig))
   const columnFilters = getColumnFilters(filterItems)
   return merge(sidebarFilters, columnFilters)

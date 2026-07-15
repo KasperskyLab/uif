@@ -1,10 +1,16 @@
 import { generateId } from '@helpers/generateId'
 import { showDeprecationWarn } from '@helpers/showDeprecationWarn'
 import { ActionButton, ActionButtonMode } from '@src/action-button'
-import { notification } from 'antd'
+import notification from 'antd/es/notification'
 import React from 'react'
 
-import { Kira, StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
+import {
+  Kira,
+  StatusDangerOutline1,
+  StatusInfoOutline,
+  StatusOkOutline,
+  StatusWarningOutline
+} from '@kaspersky/hexa-ui-icons/16'
 
 import { Description } from './notificationCss'
 import { NotificationApiParams, NotificationMode, NotificationModeArray, NotificationProps } from './types'
@@ -43,22 +49,24 @@ const openNotificationInstance: any = (config: NotificationProps) => {
 
   const IconInfoComponent = IconInfoMap[notDeprecatedMode as NotificationMode]
   const IconCloseComponent = IconCloseMap[notDeprecatedMode as NotificationMode]
-  const DescriptionComponent = <Description data-toasttype={notDeprecatedMode}>
-    <span className="toast-text">
-      {config.description}
-    </span>
-    {config.actionButton &&
-      <ActionButton
-        onClick={config.actionButton?.onClick}
-        mode={actionButtonMode}
-        size="large"
-        className="toast-action-button"
-        noIcon
-      >
-        {config.actionButton.title}
-      </ActionButton>
-    }
-  </Description>
+  const DescriptionComponent = (
+    <Description data-toasttype={notDeprecatedMode}>
+      <span className="toast-text">
+        {config.description}
+      </span>
+      {config.actionButton && (
+        <ActionButton
+          onClick={config.actionButton?.onClick}
+          mode={actionButtonMode}
+          size="large"
+          className="toast-action-button"
+          noIcon
+        >
+          {config.actionButton.title}
+        </ActionButton>
+      )}
+    </Description>
+  )
 
   notification.open({
     message: '',

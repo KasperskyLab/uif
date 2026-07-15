@@ -13,7 +13,7 @@ import { DetailsPage } from './DetailsPage'
 import { DetailsPageProps } from './types'
 
 const meta: Meta<DetailsPageProps> = {
-  title: 'Hexa UI Components/DetailsPage',
+  title: 'Other/DetailsPage',
   component: DetailsPage,
   argTypes: {
     onChange: {},

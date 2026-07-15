@@ -17,11 +17,16 @@ const commonDeprecatedMapper: DeprecatedToActualMap = {
 
 export const showDeprecationWarn = (
   prop: string,
-  deprecatedPropType: string
+  deprecatedPropType: string,
+  message?: string
 ) => {
-  console.warn(
-    commonDeprecatedMapper[deprecatedPropType]
-      ? `'${prop}' = '${deprecatedPropType}' is deprecated. Use '${commonDeprecatedMapper[deprecatedPropType]}' instead`
-      : `'${prop}' = '${deprecatedPropType}' is deprecated.`
-  )
+  let warning = `'${prop}' = '${deprecatedPropType}' is deprecated.`
+
+  if (commonDeprecatedMapper[deprecatedPropType]) {
+    warning += ` Use '${commonDeprecatedMapper[deprecatedPropType]}' instead`
+  } else if (message) {
+    warning += ` ${message}`
+  }
+
+  console.warn(warning)
 }

@@ -28,7 +28,9 @@ export type LockGroupProps = {
   informationText?: string | ReactNode | FC,
   /** Flag to hide lock icon. Header, Toggle and other parts are visible by default, they managed by different flags */
   isHideLock?: boolean,
-  /** Flag to hide lock icon, Toggle and whole right parts of LockGroup. Header and other parts are visible by default, they managed by different flags */
+  /** Flag to hide lock icon, Toggle and whole right parts of LockGroup. Header and other parts are visible by default,
+   *  they managed by different flags
+   */
   isHideControl?: boolean,
   /** Flag to open or close lock and enable or disable Toggle  */
   isLockClosed?: boolean,
@@ -49,9 +51,13 @@ export type LockGroupProps = {
   /** Text which will be shown in LockGroup Header  */
   title?: ReactNode,
   /** Level for LockGroup Header — H6, H5, H4  */
-   titleLevel?: Extract<TextType, 'H6' | 'H5' | 'H4'>,
-  /** List of Tags near Header. Used for example to show supported operating system for LockGroup  */
+  titleLevel?: Extract<TextType, 'H6' | 'H5' | 'H4'>,
+  /** @deprecated Use titleElementAfterInstead. List of Tags near Header. Used for example to show supported
+   * operating system for LockGroup
+   */
   titleTags?: string[],
+  /** Element to render after title */
+  titleElementAfter?: ReactNode,
   /** Status icon */
   statusIcon?: StatusIcon,
   /** Tooltip text for status icon */

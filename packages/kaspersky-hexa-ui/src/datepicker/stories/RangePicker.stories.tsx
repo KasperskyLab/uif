@@ -1,42 +1,27 @@
-import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
-import { validationStatuses } from '@helpers/typesHelpers'
 import { badges } from '@sb/badges'
-import { withMeta } from '@sb/components/Meta'
-import { sbHideControls } from '@sb/helpers'
+import { buildStoryArgTypes, getControlsInclude } from '@sb/components/Documentation'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
 
-import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-
 import MetaData from '../__meta__/metaRange.json'
 import { RangePicker } from '../RangePicker'
 import { RangePickerProps } from '../types'
+import { defaultArgs, rangePickerPropPresentation } from './RangePicker.controls'
 
 const Wrapper = styled.div`
   width: 300px;
 `
 
-const meta: Meta<RangePickerProps> = {
-  title: 'Hexa UI Components/Inputs/DateRanges',
-  component: RangePicker,
-  argTypes: {
-    validationStatus: {
-      control: { type: 'radio' },
-      options: validationStatuses
-    },
-    ...sbHideControls(['theme'])
-  },
+export const rangePickerStorySettings: Meta<RangePickerProps> = {
+  argTypes: buildStoryArgTypes(rangePickerPropPresentation),
   args: {
+    ...defaultArgs,
     testId: 'range-picker-test-id',
-    klId: 'range-picker-kl-id',
-    validationStatus: 'default'
+    klId: 'range-picker-kl-id'
   },
   parameters: {
     badges: [badges.stable],
-    docs: {
-      page: withMeta(MetaData)
-    },
     design: MetaData.pixsoView
   },
   decorators: [
@@ -47,57 +32,46 @@ const meta: Meta<RangePickerProps> = {
     )
   ]
 }
+
+const meta: Meta<typeof RangePicker> = {
+  title: 'Hexa UI Components/DateTime Pickers/RangePicker',
+  component: RangePicker,
+  tags: ['!autodocs'],
+  includeStories: ['Playground'],
+  excludeStories: ['rangePickerStorySettings'],
+  ...rangePickerStorySettings
+}
+
 export default meta
 
-const WrapperForRangeWithTime = styled.div`
-  width: 500px;
-`
+type Story = StoryObj<RangePickerProps>
 
-type StoryRangePicker = StoryObj<RangePickerProps>
+const RangePickerPlayground: React.FC<RangePickerProps> = ({ value: valueProp, onChange, ...rest }) => {
+  const [dates, setDates] = React.useState<RangePickerProps['value']>(valueProp ?? [null, null])
 
-const RangePickerExample: React.FC<RangePickerProps> = ({ onChange, value, ...props }) => {
-  const [dates, setDates] = React.useState<RangePickerProps['value']>([
-    null,
-    null
-  ])
+  React.useEffect(() => {
+    setDates(valueProp ?? [null, null])
+  }, [valueProp])
 
   return (
     <RangePicker
+      {...rest}
       value={dates}
-      onChange={(value: any) => setDates(value)}
-      {...props}
+      onChange={(newDates) => {
+        setDates(newDates)
+        onChange?.(newDates)
+      }}
     />
   )
 }
 
-export const Basic: StoryRangePicker = {
-  render: (args: RangePickerProps) => <RangePickerExample {...args} />
-}
-
-export const RangeWithTime: StoryRangePicker = {
-  render: ({ showTime, ...args }: RangePickerProps) => <RangePickerExample {...args} showTime />,
-  decorators: [
-    (Story, context) => (
-      <WrapperForRangeWithTime>
-        <Story {...context} />
-      </WrapperForRangeWithTime>
-    )
-  ]
-}
-
-export const RangeWithFormat: StoryRangePicker = {
-  render: (args: RangePickerProps) => <RangePickerExample {...args} format="DD.MM" placeholder={['__.__', '__.__']} />
-}
-
-type PaletteStory = StoryObj<ThemedPaletteProps>
-export const ColorTokens: PaletteStory = {
-  args: {
-    source: {
-      input_datetime_picker: componentColors.input_datetime_picker,
-      calendar_dropdown: componentColors.calendar_dropdown,
-      calendar_dropdown_button: componentColors.calendar_dropdown_button,
-      calendar_preset_button: componentColors.calendar_preset_button
+export const Playground: Story = {
+  name: 'Playground',
+  render: (args) => <RangePickerPlayground {...args} />,
+  parameters: {
+    controls: {
+      include: getControlsInclude(rangePickerPropPresentation),
+      sort: 'none'
     }
-  },
-  render: args => <ThemedPalette {...args} />
+  }
 }

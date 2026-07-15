@@ -13,7 +13,6 @@ import { divider } from './divider'
 import { expandableText } from './expandableText'
 import { field } from './field'
 import { formLabel } from './formLabel'
-import { helpMessage } from './helpMessage'
 import { icon } from './icon'
 import { indicator } from './indicator'
 import { informationCard, informationCardSize } from './informationCard'
@@ -30,7 +29,6 @@ import { segmentedControl, segmentedControlSize } from './segmentedControl'
 import { severity } from './severity'
 import { sidebar, sidebarSize } from './sidebar'
 import { status } from './status'
-import { table } from './table'
 import { tag, tagSize } from './tag'
 import { tooltip } from './tooltip'
 import { upload } from './upload'
@@ -110,10 +108,6 @@ export const DARK_THEME: ThemeConfig = {
       sizes: modalSize
     },
     keyValue: { colors: keyValue({ colors, effects }) },
-    table: {
-      colors: table({ colors, effects })
-    },
-    helpMessage: { colors: helpMessage({ colors, effects }) },
     anchors: { colors: anchor({ colors, effects }) },
     icon: icon({ colors, effects }),
     formLabel: {

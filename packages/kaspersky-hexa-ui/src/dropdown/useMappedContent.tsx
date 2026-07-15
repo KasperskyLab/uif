@@ -7,8 +7,15 @@ import { v4 as uuid } from 'uuid'
 import { DropdownItem } from './DropdownItem'
 import { DropdownItemInner } from './DropdownItemInner'
 import styles from './styles/Dropdown.module.scss'
-import { DropdownItemProps, DropdownProps } from './types'
-import { DropdownDivider, DropdownGroup, DropdownInnerActions, DropdownMenu, DropdownSubmenu } from './wrappers'
+import { DropdownItemProps, DropdownItemToggleProps, DropdownProps } from './types'
+import {
+  DropdownDivider,
+  DropdownGroup,
+  DropdownInnerActions,
+  DropdownMenu,
+  DropdownSubmenu,
+  DropdownToggle
+} from './wrappers'
 
 const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
   return (
@@ -31,7 +38,7 @@ const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
           return (
             <DropdownSubmenu
               key={key}
-              title={
+              title={(
                 <DropdownItemInner
                   type={type}
                   description={description}
@@ -42,7 +49,7 @@ const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
                 >
                   {title}
                 </DropdownItemInner>
-              }
+              )}
               popupOffset={[16, -10]}
               popupClassName={overlayClassName}
               disabled={disabled}
@@ -53,14 +60,26 @@ const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
             </DropdownSubmenu>
           )
         case 'group':
-          return <>
-            <DropdownGroup data-dropdown-item-group>{title}</DropdownGroup>
-            {mapOverlay(children as DropdownItemProps[], overlayClassName)}
-          </>
+          return (
+            <>
+              <DropdownGroup data-dropdown-item-group key={key}>{title}</DropdownGroup>
+              {mapOverlay(children as DropdownItemProps[], overlayClassName)}
+            </>
+          )
         case 'divider':
-          return <DropdownDivider />
+          return <DropdownDivider key={key} />
         case 'innerActions':
-          return <DropdownInnerActions>{children}</DropdownInnerActions>
+          return <DropdownInnerActions key={key}>{children}</DropdownInnerActions>
+        case 'toggle':
+          return (
+            <DropdownToggle
+              {...props as DropdownItemToggleProps}
+              disabled={disabled}
+              tooltip={tooltip}
+            >
+              {children}
+            </DropdownToggle>
+          )
         default:
           return (
             <DropdownItem
@@ -84,6 +103,14 @@ const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
       }
     })
   )
+}
+
+const getStickyItem = (item: DropdownProps['header'] | DropdownProps['footer'], className: string) => {
+  if (!item) return
+
+  const { sticky, ...itemWithoutSticky } = item
+
+  return mapOverlay([{ ...itemWithoutSticky, className: cn(item.className, { [className]: sticky }) }])
 }
 
 export const useMappedContent = ({
@@ -112,11 +139,11 @@ export const useMappedContent = ({
           {
             loading
               ? <Loader size="medium" />
-              : <>
-                  {header && mapOverlay([{ ...header, className: cn(header.className, { [styles.dropdownItemStickyHeader]: header.sticky }) }])}
-                  {mapOverlay(overlay, overlayClassName)}
-                  {footer && mapOverlay([{ ...footer, className: cn(footer.className, { [styles.dropdownItemStickyFooter]: footer.sticky }) }])}
-                </>
+              : [
+                  getStickyItem(header, styles.dropdownItemStickyHeader),
+                  mapOverlay(overlay, overlayClassName),
+                  getStickyItem(footer, styles.dropdownItemStickyFooter)
+                ]
           }
         </DropdownMenu>
       )

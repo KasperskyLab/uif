@@ -22,7 +22,7 @@ export const DateTimeItem: FC<DateTimeItemProps> = ({ filter, onChange, dateOnly
       onChange({ ...filter, value: { from: null, to: null } })
       return
     }
-    
+
     const from = value[0]
     const to = value[1]
 

@@ -45,7 +45,7 @@ export const Expand = ({
     const isOverflow = element.scrollHeight > collapsedHeight
     setVisible(isOverflow)
   }, [collapsedHeight, textRect])
-  
+
   return (
     <StyledExpander className={cn(
       'hexa-ui-expand',
@@ -55,25 +55,25 @@ export const Expand = ({
       <div
         className="hexa-ui-expand-container"
         style={collapsedCSS}
-        { ...getChildTestProps('body', testAttributes) }
+        {...getChildTestProps('body', testAttributes)}
         ref={textRef}
       >
         {children}
       </div>
-      {visible && 
-        (<ActionButton
+      {visible && (
+        <ActionButton
           mode="ghost"
           size="large"
           elementAfter={actionButtonIcon}
           interactive
           noIcon
-          { ...getChildTestProps('action-button', testAttributes) }
+          {...getChildTestProps('action-button', testAttributes)}
           onClick={() => setCollapsed(prevSate => !prevSate)}
           className="hexa-ui-expand-button"
         >
           {actionButtonText}
-        </ActionButton>)
-      }
+        </ActionButton>
+      )}
     </StyledExpander>
   )
 }

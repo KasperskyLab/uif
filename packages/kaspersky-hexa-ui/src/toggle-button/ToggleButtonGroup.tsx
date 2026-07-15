@@ -7,7 +7,6 @@ import { ToggleButton } from './ToggleButton'
 import styles from './ToggleButton.module.scss'
 import { ToggleButtonGroupProps } from './types'
 
-
 export const ToggleButtonGroup: FC<ToggleButtonGroupProps> = (props) => {
   const { testAttributes } = useTestAttribute(props)
   const {

@@ -13,7 +13,7 @@ export const IconWrapper = styled.span`
 `
 
 export const StyledLink = styled.a.withConfig({
-  shouldForwardProp: prop => !['cssConfig'].includes(prop)
+  shouldForwardProp: prop => !['cssConfig', 'isTooltipVisible'].includes(prop)
 })<{
   cssConfig: LinkCssConfig
 }>`

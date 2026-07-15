@@ -10,7 +10,7 @@ import { SubmenuItemProps } from '../types'
 
 const customToggle = <span onClick={e => { e.stopPropagation() }}><Toggle /></span>
 
-const HoverActionButton = () =>
+const HoverActionButton = () => (
   <Dropdown
     getPopupContainer={trigger => trigger.parentElement as HTMLElement}
     overlay={[
@@ -29,6 +29,7 @@ const HoverActionButton = () =>
   >
     <ActionButton icon={<Menu2 />} mode="ghost" />
   </Dropdown>
+)
 
 export const mockedItems: SubmenuItemProps[] = [
   {

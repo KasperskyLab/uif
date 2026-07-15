@@ -1,15 +1,11 @@
-import { BORDER_RADIUS, SPACES } from '@design-system/theme/themes/variables'
-import { getFromProps } from '@helpers/getFromProps'
-import { Checkbox as AntdCheckbox } from 'antd'
+import AntdCheckbox from 'antd/es/checkbox'
 import styled, { css } from 'styled-components'
 
-import { CheckboxCssConfig, CheckboxGroupProps } from './types'
+import { CheckboxGroupProps } from './types'
 
-const fromCheckboxProps = getFromProps<CheckboxCssConfig>()
-
-export const getCheckboxCss = (fromProps: any) => css`
-  color: ${fromProps('default.enabled.color')};
-  line-height: ${SPACES[10]}px;
+export const getCheckboxCss = () => css`
+  color: var(--checkbox--text--base--enabled);
+  line-height: 20px;
 
   && {
     position: relative;
@@ -39,18 +35,18 @@ export const getCheckboxCss = (fromProps: any) => css`
   }
 
   .ant-checkbox-inner {
-    height: ${SPACES[7]}px;
-    width: ${SPACES[7]}px;
-    border-color: ${fromProps('default.enabled.border')};
-    background-color: ${fromProps('default.enabled.background.unselected')};
-    border-radius: ${BORDER_RADIUS[2]}px;
+    height: 14px;
+    width: 14px;
+    border-color: var(--checkbox--border--base--enabled);
+    background-color: var(--checkbox--bg--base--enabled);
+    border-radius: var(--radius--s);
   }
   .ant-checkbox-checked .ant-checkbox-inner,
   .ant-checkbox-indeterminate .ant-checkbox-inner {
-    border-color: ${fromProps('default.enabled.background.selected')};
-    background-color: ${fromProps('default.enabled.background.selected')};
+    border-color: var(--checkbox--bg--base--enabled_selected);
+    background-color: var(--checkbox--bg--base--enabled_selected);
     &::after {
-      border-color: ${fromProps('default.enabled.checkColor')};
+      border-color: var(--checkbox--icon--base--enabled);
       border-radius: 1px;
       border-bottom-left-radius: 2px;
       border-top-right-radius: 2px;
@@ -62,89 +58,89 @@ export const getCheckboxCss = (fromProps: any) => css`
     border: none;
   }
   .ant-checkbox-indeterminate .ant-checkbox-inner::after {
-    background-color: ${fromProps('default.enabled.checkColor')};
-    width: ${SPACES[4]}px;
-    height: ${SPACES[1]}px;
-    border-radius: ${BORDER_RADIUS[2]}px;
+    background-color: var(--checkbox--icon--base--enabled);
+    width: 8px;
+    height: 2px;
+    border-radius: var(--radius--s);
   }
 
   // hover
   &:hover {
     .ant-checkbox-inner {
-      background-color: ${fromProps('default.hover.background.unselected')};
-      border-color: ${fromProps('default.hover.border')};
+      background-color: var(--checkbox--bg--base--hover);
+      border-color: var(--checkbox--border--base--hover);
     }
     .ant-checkbox-checked .ant-checkbox-inner,
     .ant-checkbox-indeterminate .ant-checkbox-inner {
-      background-color: ${fromProps('default.hover.background.selected')};
+      background-color: var(--checkbox--bg--base--hover_selected);
       border-color: transparent;
     }
     .ant-checkbox-indeterminate .ant-checkbox-inner::after {
-      border-color: ${fromProps('default.hover.checkColor')};
+      border-color: var(--checkbox--icon--base--hover);
     }
     .ant-checkbox-indeterminate .ant-checkbox-inner::after {
-      background-color: ${fromProps('default.hover.checkColor')};
+      background-color: var(--checkbox--icon--base--hover);
     }
   }    
 
   // focus
   .ant-checkbox-input:focus + .ant-checkbox-inner {
-    border-color: ${fromProps('default.enabled.border')};
+    border-color: var(--checkbox--border--base--enabled);
   }
   .ant-checkbox-checked .ant-checkbox-input:focus + .ant-checkbox-inner,
   .ant-checkbox-indeterminate .ant-checkbox-input:focus + .ant-checkbox-inner {
     border-color: transparent;
   }
   .ant-checkbox-input:focus-visible + .ant-checkbox-inner {
-    box-shadow: ${fromProps('focus.boxShadow')};
+    box-shadow: 0px 0px 0px 2px var(--focus--stroke);
   }
   .ant-checkbox-checked .ant-checkbox-input:focus-visible + .ant-checkbox-inner,
   .ant-checkbox-indeterminate .ant-checkbox-input:focus-visible + .ant-checkbox-inner{
-    background-color: ${fromProps('default.enabled.background.selected')};
+    background-color: var(--checkbox--bg--base--enabled_selected);
   }
   .ant-checkbox-checked .ant-checkbox-input:focus-visible + .ant-checkbox-inner::after {
-    border-color: ${fromProps('default.enabled.checkColor')};
+    border-color: var(--checkbox--icon--base--enabled);
   }
   .ant-checkbox-indeterminate .ant-checkbox-input:focus-visible + .ant-checkbox-inner::after {
-    background-color: ${fromProps('default.enabled.checkColor')};
+    background-color: var(--checkbox--icon--base--enabled);
   }
 
   // active
   &:active {
     .ant-checkbox-inner {
-      background-color: ${fromProps('default.active.background.unselected')};
-      border-color: ${fromProps('default.active.border')};
+      background-color: var(--checkbox--bg--base--active);
+      border-color: var(--checkbox--border--base--active);
     }
     .ant-checkbox-checked .ant-checkbox-inner,
     .ant-checkbox-indeterminate .ant-checkbox-inner {
-      background-color: ${fromProps('default.active.background.selected')};
-      border-color: ${fromProps('default.active.border')};
+      background-color: var(--checkbox--bg--base--active_selected);
+      border-color: var(--checkbox--border--base--active);
       box-shadow: none;
     }
     .ant-checkbox-checked .ant-checkbox-inner::after {
-      border-color: ${fromProps('default.active.checkColor')};
+      border-color: var(--checkbox--icon--base--active);
     } 
     .ant-checkbox-indeterminate .ant-checkbox-inner::after {
-      background-color: ${fromProps('default.active.checkColor')};
+      background-color: var(--checkbox--icon--base--active);
     }
   }
 
   // invalid
   &&.kl6-checkbox-invalid {
     .ant-checkbox-inner {
-      border-color: ${fromProps('invalid.enabled.border')};
-      background-color: ${fromProps('invalid.enabled.background.unselected')};
+      border-color: var(--checkbox--border--danger--enabled);
+      background-color: var(--checkbox--bg--danger--enabled);
     }
     .ant-checkbox-checked .ant-checkbox-inner,
     .ant-checkbox-indeterminate .ant-checkbox-inner {
-      background-color: ${fromProps('invalid.enabled.background.selected')};
-      border-color: ${fromProps('invalid.enabled.border')};
+      background-color: var(--checkbox--bg--danger--enabled_selected);
+      border-color: var(--checkbox--border--danger--enabled);
     }
     .ant-checkbox-checked .ant-checkbox-inner::after {
-      border-color: ${fromProps('invalid.enabled.checkColor')};
+      border-color: var(--checkbox--icon--danger--enabled);
     }
     .ant-checkbox-indeterminate .ant-checkbox-inner::after {
-      background-color: ${fromProps('invalid.enabled.checkColor')};
+      background-color: var(--checkbox--icon--danger--enabled);
     }
   }
 
@@ -154,26 +150,26 @@ export const getCheckboxCss = (fromProps: any) => css`
   }
   .ant-checkbox-disabled {
     + span {
-      color: ${fromProps('default.disabled.color')};
+      color: var(--checkbox--text--base--disabled);
       cursor: default;
       & .form-label > span {
         cursor: default;
-        color: ${fromProps('default.disabled.color')};
+        color: var(--checkbox--text--base--disabled);
       }
     }
     .ant-checkbox-inner {
-      background-color: ${fromProps('default.disabled.background.unselected')} !important;
+      background-color: var(--checkbox--bg--base--disabled) !important;
       border-color: transparent !important;
     }
     &.ant-checkbox-checked .ant-checkbox-inner,
     &.ant-checkbox-indeterminate .ant-checkbox-inner {
-      background-color: ${fromProps('default.disabled.background.selected')} !important;
+      background-color: var(--checkbox--bg--base--disabled_selected) !important;
     }
     &.ant-checkbox-checked .ant-checkbox-inner::after {
-      border-color: ${fromProps('default.disabled.checkColor')} !important;
+      border-color: var(--checkbox--icon--base--disabled) !important;
     }
     &.ant-checkbox-indeterminate .ant-checkbox-inner::after {
-      background-color: ${fromProps('default.disabled.checkColor')} !important;
+      background-color: var(--checkbox--icon--base--disabled) !important;
     }
   }
 
@@ -184,44 +180,44 @@ export const getCheckboxCss = (fromProps: any) => css`
   }
   &.kl6-checkbox-readonly .ant-checkbox-disabled {
     + span {
-      color: ${fromProps('default.readonly.color')};
+      color: var(--checkbox--text--base--readonly);
       cursor: default;
       & .form-label > span {
         cursor: default;
-        color: ${fromProps('default.readonly.color')};
+        color: var(--checkbox--text--base--readonly);
       }
     }
     .ant-checkbox-inner {
-      background-color: ${fromProps('default.readonly.background.unselected')} !important;
+      background-color: var(--checkbox--bg--base--readonly) !important;
       border-color: transparent !important;
     }
     &.ant-checkbox-checked .ant-checkbox-inner,
     &.ant-checkbox-indeterminate .ant-checkbox-inner {
-      background-color: ${fromProps('default.readonly.background.selected')} !important;
+      background-color: var(--checkbox--bg--base--readonly_selected) !important;
     }
     &.ant-checkbox-checked .ant-checkbox-inner::after {
-      border-color: ${fromProps('default.readonly.checkColor')} !important;
+      border-color: var(--checkbox--icon--base--readonly) !important;
     }
     &.ant-checkbox-indeterminate .ant-checkbox-inner::after {
-      background-color: ${fromProps('default.readonly.checkColor')} !important;
+      background-color: var(--checkbox--icon--base--readonly) !important;
     }
   }
 `
 
-export const checkboxCss = getCheckboxCss(fromCheckboxProps)
+export const checkboxCss = getCheckboxCss()
 
 export const StyledCheckboxGroup = styled(AntdCheckbox.Group)<CheckboxGroupProps>`
   &.kl6-checkbox-group-vertical {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: ${SPACES[4]}px;
+    gap: var(--spacing--gap_related);
   }
   
   &.kl6-checkbox-group-horizontal {
     display: flex;
     flex-direction: row;
-    gap: ${SPACES[8]}px;
+    gap: var(--spacing--gap_grouped);
   }
 
   .ant-checkbox-wrapper + .ant-checkbox-wrapper {

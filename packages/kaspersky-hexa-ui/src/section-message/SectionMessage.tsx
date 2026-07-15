@@ -8,7 +8,13 @@ import cn from 'classnames'
 import React, { FC, useState } from 'react'
 import styled from 'styled-components'
 
-import { ArrowDown1, StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
+import {
+  ArrowDown1,
+  StatusDangerOutline1,
+  StatusInfoOutline,
+  StatusOkOutline,
+  StatusWarningOutline
+} from '@kaspersky/hexa-ui-icons/16'
 
 import { IconStyled, sectionMessageCss, SpaceBox } from './sectionMessageCss'
 import { SectionMessageMode, sectionMessageModes, SectionMessageProps, SectionMessageViewProps } from './types'
@@ -18,7 +24,7 @@ const IconInfoMap: { [key in SectionMessageMode]: FC } = {
   error: () => <StatusDangerOutline1 data-component-id="icon-error" />,
   warning: () => <StatusWarningOutline data-component-id="icon-warning" />,
   success: () => <StatusOkOutline data-component-id="icon-success" />,
-  info: () => <StatusInfoOutline data-component-id="icon-info"/>
+  info: () => <StatusInfoOutline data-component-id="icon-info" />
 }
 
 const StyledSectionMessage = styled.div.withConfig({
@@ -43,10 +49,10 @@ export const SectionMessage: FC<SectionMessageProps> = (rawProps: SectionMessage
 
 const SectionMessageView: FC<SectionMessageViewProps> = (props: SectionMessageViewProps) => {
   const { mode, title, children, cssConfig } = props
-  const { klId, testId, actions, expandable, closable = true, testAttributes, ...forwardedProps } = props
+  const { klId, testId, actions, expandable, closable = true, testAttributes, defaultExpanded = true, ...forwardedProps } = props
 
   const [visibility, setVisibility] = useState(true)
-  const [visibilityContent, setVisibilityContent] = useState(true)
+  const [visibilityContent, setVisibilityContent] = useState(defaultExpanded)
 
   const IconComponent = IconInfoMap[mode as SectionMessageMode]
 
@@ -57,68 +63,74 @@ const SectionMessageView: FC<SectionMessageViewProps> = (props: SectionMessageVi
 
   return (
     <>
-      {visibility && <StyledSectionMessage {...testAttributes} {...forwardedProps}>
-        <IconStyled cssConfig={cssConfig}>
-          <IconComponent/>
-        </IconStyled>
-        <SpaceBox
-          gap={8}
-          direction="vertical"
-          align="flex-start"
-        >
-          {title && (
-            <Text testId="alert-title" klId="alert-title" type="H6">
-              {title}
-            </Text>
-          )}
-          {visibilityContent && (children || actions) && <SpaceBox
-            gap={16}
+      {visibility && (
+        <StyledSectionMessage {...testAttributes} {...forwardedProps}>
+          <IconStyled cssConfig={cssConfig}>
+            <IconComponent />
+          </IconStyled>
+          <SpaceBox
+            gap={8}
             direction="vertical"
             align="flex-start"
           >
-            {children}
-            {actions && (
-              <Space gap={16} direction="horizontal">
-                {actions.FIRST_ACTION && (
-                  <Link
-                    {...actions.FIRST_ACTION}
-                  >
-                    {actions.FIRST_ACTION.text}
-                  </Link>
-                )}
-                {actions.SECOND_ACTION && (
-                  <Link
-                    {...actions.SECOND_ACTION}
-                  >
-                    {actions.SECOND_ACTION.text}
-                  </Link>
-                )}
-              </Space>
+            {title && (
+              <Text testId="alert-title" klId="alert-title" type="H6">
+                {title}
+              </Text>
             )}
+            {visibilityContent && (children || actions) && (
+              <SpaceBox
+                gap={16}
+                direction="vertical"
+                align="flex-start"
+                testId="alert-content"
+              >
+                {children}
+                {actions && (
+                  <Space gap={16} direction="horizontal">
+                    {actions.FIRST_ACTION && (
+                      <Link
+                        {...actions.FIRST_ACTION}
+                      >
+                        {actions.FIRST_ACTION.text}
+                      </Link>
+                    )}
+                    {actions.SECOND_ACTION && (
+                      <Link
+                        {...actions.SECOND_ACTION}
+                      >
+                        {actions.SECOND_ACTION.text}
+                      </Link>
+                    )}
+                  </Space>
+                )}
+              </SpaceBox>
+            )
+            }
           </SpaceBox>
-          }
-        </SpaceBox>
-        {expandable && (
-          <ActionButton
-            icon={<ArrowDown1 className={cn(!visibilityContent && 'rotated-icon')} />}
-            onClick={() => setVisibilityContent(!visibilityContent)}
-            klId={`${klId}-section-message-expansion-icon`}
-            testId={`${testId}-section-message-expansion-icon`}
-          />
-        )}
-        {closable && (
-          <div className="hexa-ui-section-message-close-container">
+          {expandable && (
             <ActionButton
-              onClick={() => closeNotification()}
-              klId={`${klId}-section-message-close-icon`}
-              testId={`${testId}-section-message-close-icon`}
-              size="large"
+              icon={<ArrowDown1 className={cn(!visibilityContent && 'rotated-icon')} />}
+              onClick={() => setVisibilityContent(!visibilityContent)}
+              klId={`${klId}-section-message-expansion-icon`}
+              testId={`${testId}-section-message-expansion-icon`}
             />
-          </div>
-        )}
-      </StyledSectionMessage>
+          )}
+          {closable && (
+            <div className="hexa-ui-section-message-close-container">
+              <ActionButton
+                onClick={() => closeNotification()}
+                klId={`${klId}-section-message-close-icon`}
+                testId={`${testId}-section-message-close-icon`}
+                size="large"
+              />
+            </div>
+          )}
+        </StyledSectionMessage>
+      )
       }
-    </>)
+    </>
+  )
 }
 
 SectionMessage.displayName = 'SectionMessage'

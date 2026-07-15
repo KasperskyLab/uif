@@ -5,8 +5,15 @@ import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { generateDateIMaskOptions, prepareFormatForDateFNS } from '@helpers/imaskDateOptionsGenerator'
 import { ActionButton } from '@src/action-button'
 import { inputStyles } from '@src/input/inputCss'
+import cn from 'classnames'
 import { startOfDay } from 'date-fns'
-import React, { useEffect, useMemo, useRef, useState, VFC } from 'react'
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  VFC
+} from 'react'
 import { IMask } from 'react-imask'
 import styled from 'styled-components'
 
@@ -35,7 +42,7 @@ import { useThemedPicker } from './useThemedPicker'
 
 const StyledPicker = styled(DatePicker).withConfig<
   CalendarProps & { cssConfig: PickerInputCssConfig }
-  >({ shouldForwardProp: prop => !['cssConfig'].includes(prop) })`
+>({ shouldForwardProp: prop => !['cssConfig'].includes(prop) })`
   ${inputStyles}
   ${pickerCss}
 `
@@ -73,6 +80,8 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
   placeholder,
   onOpenChange,
   onSelect,
+  onPickerClose,
+  allowClear = true,
   ...rest
 }) => {
   const [date, setDate] = useState<DateInputValue>(value)
@@ -123,6 +132,7 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
     // Close calendar when click on seconds in range with time
     if (isNestedInDOM(timeSecondsWrapper, e.target, 5)) {
       changeOpenState(false)
+      onPickerClose?.()
     }
     setDate(newDate)
     handleOnChange(newDate)
@@ -208,7 +218,7 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
         panelRender={(container) => (
           <CalendarContainer
             ref={calendarRef}
-            className={rest.className}
+            className={cn(rest.className, rest.dropdownClassName, 'kl6-datepicker-calendar', { 'kl6-datepicker-presets-calendar': presets?.length })}
             cssConfig={cssConfig.pickerCssConfig}
             data-testid={`${testId}-calendar`}
             key={dynamicKey.toString()}
@@ -233,22 +243,25 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
           // open calendar dropdown manually
           // onOpenChange only close calendar dropdown
           if (open === false) {
+            onPickerClose?.()
             changeOpenState(open)
           }
         }}
         value={date}
-        suffixIcon={date && !disabled && !readonly
-          ? (<ActionButton
-              testId={`${testId}-calendar-clear-icon`}
-              mode="filled"
-              onClick={
-                (event) => {
-                  destroyMask()
-                  setDate(null)
-                  handleOnChange(null)
-                  event.stopPropagation()
-                }}
-            />)
+        suffixIcon={date && !disabled && !readonly && allowClear
+          ? (
+              <ActionButton
+                testId={`${testId}-calendar-clear-icon`}
+                mode="filled"
+                onClick={
+                  (event) => {
+                    destroyMask()
+                    setDate(null)
+                    handleOnChange(null)
+                    event.stopPropagation()
+                  }}
+              />
+            )
           : <CalendarIcon testId={`${testId}-calendar-icon`} />}
         superNextIcon={<ArrowDoubleRightIcon testId={testId} />}
         superPrevIcon={<ArrowDoubleLeftIcon testId={testId} />}
@@ -260,14 +273,16 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
         format={getFormat(format)}
         renderExtraFooter={
           presets
-            ? () => <Presets
-                presets={presets}
-                onChange={(date) => {
-                  changeOpenState(false)
-                  destroyMask()
-                  setDate(date)
-                  handleOnChange(date)
-                }} />
+            ? () => (
+                <Presets
+                  presets={presets}
+                  onChange={(date) => {
+                    changeOpenState(false)
+                    destroyMask()
+                    setDate(date)
+                    handleOnChange(date)
+                  }} />
+              )
             : undefined
         }
         cssConfig={cssConfig.inputCssConfig}

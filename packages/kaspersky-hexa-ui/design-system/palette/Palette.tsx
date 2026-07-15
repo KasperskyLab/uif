@@ -17,7 +17,7 @@ import {
   ThemedPaletteProps
 } from './types'
 
-const getTokenByColorValue = <T, >(colors: Record<string, T>, value: T) =>
+const getTokenByColorValue = <T,>(colors: Record<string, T>, value: T) =>
   Object.keys(colors).find(token => colors[token] === value && token.includes('_'))
 
 const ColorItem = styled.div<{ margin?: number }>`
@@ -94,12 +94,12 @@ export const StaticPalette: React.FC<StaticPaletteProps> = ({ source }) => {
     <Container>
       {Object.entries(groupedColors).map(([groupKey, groupValue]) => (
         <ColorGroup key={groupKey}>
-          {Object.entries(groupValue).map(([colorKey, colorValue]) =>
+          {Object.entries(groupValue).map(([colorKey, colorValue]) => (
             <ColorBox color={colorValue} key={colorKey}>
               {colorKey}
               <div className="ds-colorBox" />
             </ColorBox>
-          )}
+          ))}
         </ColorGroup>
       ))}
     </Container>
@@ -133,7 +133,7 @@ export const ThemedPalette: React.FC<ThemedPaletteProps> = ({ source }) => {
   const withTokensAliases = useMemo(() => {
     const addAliases = (obj: PaletteWithValues, level = 1): PaletteWithAliases => {
       return Object.keys(obj).reduce((acc, key) => {
-        if (typeof obj[key] === 'object' && !('dark' in obj[key])) {
+        if (typeof obj[key] === 'object' && !('light' in obj[key] && 'dark' in obj[key])) {
           acc[key] = addAliases(obj[key] as PaletteWithValues, level + 1)
         } else {
           acc[key] = {
@@ -159,7 +159,7 @@ export const ThemedPalette: React.FC<ThemedPaletteProps> = ({ source }) => {
       if (typeof obj[key] === 'object' && 'dark' in obj[key] && 'light' in obj[key]) {
         const color = obj[key] as ThemedColorToken
         return (
-          <ColorItem margin={KEY_TO_LEVEL_MAP[level].margin} key={key}>
+          <ColorItem margin={KEY_TO_LEVEL_MAP[level]?.margin ?? KEY_TO_LEVEL_MAP[1]} key={key}>
             <Text width={128}>{key}</Text>
             <ColorItemRow color={color.light.value}>
               <div className="ds-colorBox" />

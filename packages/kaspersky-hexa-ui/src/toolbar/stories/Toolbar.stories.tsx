@@ -7,9 +7,11 @@ import { Button } from '@src/button'
 import { Link } from '@src/link'
 import { Sidebar } from '@src/sidebar'
 import { Space } from '@src/space'
+import { Table } from '@src/table'
+import { generatedData, tableColumns } from '@src/table/__mocks__/filtersMockData'
 import { Toggle } from '@src/toggle'
 import { Meta, StoryObj } from '@storybook/react'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
 import { FilterWithIndicator as FilterWithIndicatorIcon, Placeholder } from '@kaspersky/hexa-ui-icons/16'
@@ -40,7 +42,7 @@ const meta: Meta<ToolbarProps> = {
   decorators: [
     (Story, context) => (
       <div style={{ width: '90vw' }}>
-        <Story {...context}/>
+        <Story {...context} />
       </div>
     )
   ],
@@ -91,16 +93,10 @@ export const getItemsLeft = (): ToolbarItems[] => [
   },
   {
     type: 'button',
-    key: '3',
-    label: 'Button 3',
-    onClick: () => console.log('Button 3'),
-    testId: 'item-3'
-  },
-  {
-    type: 'button',
     key: '4',
     label: 'Button 4',
-    visible: false
+    visible: false,
+    testId: 'item-4'
   },
   {
     type: 'dropdown',
@@ -108,13 +104,16 @@ export const getItemsLeft = (): ToolbarItems[] => [
     label: 'Button 5',
     overlay: getItems(),
     iconBefore: <Placeholder />,
-    disabled: true
+    disabled: true,
+    testId: 'item-5',
+    klId: 'klid-item-5'
   },
   {
     type: 'dropdown',
     key: '6',
     label: 'Button 6',
-    overlay: getItems()
+    overlay: getItems(),
+    testId: 'item-6'
   },
   {
     type: 'button',
@@ -122,7 +121,10 @@ export const getItemsLeft = (): ToolbarItems[] => [
     label: 'Button 7',
     iconBefore: <Placeholder />,
     iconAfter: <Placeholder />,
-    onClick: () => console.log('Button 7')
+    onClick: () => console.log('Button 7'),
+    disabled: true,
+    testId: 'item-7',
+    klId: 'klid-item-7'
   },
   {
     type: 'children',
@@ -130,13 +132,17 @@ export const getItemsLeft = (): ToolbarItems[] => [
     children: <Toolbar.Button>Button 8</Toolbar.Button>
   },
   {
-    type: 'button',
+    type: 'toggleButton',
     key: '9',
-    label: 'Button 9',
-    onClick: () => console.log('Button 9'),
-    disabled: true
+    text: 'Toggle Button',
+    testId: 'item-9',
+    value: 'item-9',
+    iconBefore: <Placeholder />,
+    onChange: () => console.log('Toggle Button 9')
   }
 ]
+
+const toggleButtonItem = getItemsLeft()[8]
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('')
@@ -149,13 +155,19 @@ const Search = () => {
   )
 }
 
-const CollapsibleSearch = () => {
-  const [searchValue, setSearchValue] = useState('')
+const CollapsibleSearch = ({ onSearch }: { onSearch: (value: string) => void }) => {
+  const [value, setValue] = useState('')
+
   return (
     <Toolbar.CollapsibleSearch
-      onChange={value => setSearchValue(value as string)}
-      value={searchValue}
-      onClearClick={() => setSearchValue('')}
+      placeholder="Write something and press Enter"
+      value={value}
+      onChange={value => setValue(value)}
+      onPressEnter={() => onSearch(value)}
+      onClearClick={() => {
+        setValue('')
+        onSearch('')
+      }}
     />
   )
 }
@@ -171,7 +183,7 @@ export const getItemsRight = (): ToolbarItems[] => [
     key: '2',
     children: (
       <Space gap={4} wrap="nowrap">
-        <Toolbar.ScaleItem onClick={() => console.log('sizeMaximize')}/>
+        <Toolbar.ScaleItem onClick={() => console.log('sizeMaximize')} />
         <Toolbar.SettingsItem onClick={() => console.log('settings')} />
       </Space>
     )
@@ -209,10 +221,10 @@ export const FilterWithIndicator: Story = {
       .map((item, index) => (
         index === 0
           ? {
-            ...item,
-            showIndicator: true,
-            iconBefore: <FilterWithIndicatorIcon />
-          } as ToolbarItems
+              ...item,
+              showIndicator: true,
+              iconBefore: <FilterWithIndicatorIcon />
+            } as ToolbarItems
           : item
       )),
     right: [
@@ -279,7 +291,12 @@ export const TestAttributes: Story = {
           <>
             <Toolbar.Search testId="Search" />
             <Toolbar.ImportExportItem dropdown={false} testId="ImportExportItem" />
-            <Toolbar.ImportExportItem dropdown={true} testId="ImportExportItem" />
+            <Toolbar.ImportExportItem
+              dropdown={true}
+              testId="ImportExportItem"
+              onExport={() => console.log('Export')}
+              onImport={() => console.log('Import')}
+            />
             <Toolbar.ExportItem testId="ExportItem" />
             <Toolbar.ImportItem testId="ImportItem" />
             <Toolbar.CollapsibleSearch testId="CollapsibleSearch" />
@@ -354,11 +371,27 @@ export const WithLeftLimit: Story = {
 }
 
 export const AutoDropdown: Story = {
-  args: {
-    left: getItemsLeft(),
-    autoDropdown: true,
-    leftLimit: undefined,
-    right: getItemsRight()
+  render: () => {
+    const [toggleSelect, setToggleSelect] = useState(false)
+
+    return (
+      <Toolbar
+        autoDropdown
+        leftLimit={undefined}
+        left={[
+          ...getItemsLeft().slice(0, 8),
+          {
+            ...toggleButtonItem,
+            selected: toggleSelect,
+            onChange: () => {
+              setToggleSelect(prev => !prev)
+              console.log('Toggle Button clicked')
+            }
+          } as ToolbarItems
+        ]}
+        right={getItemsRight()}
+      />
+    )
   }
 }
 
@@ -376,18 +409,69 @@ export const Variations: Story = {
   )
 }
 
+const tableDataSource = generatedData.slice(0, 10)
+
 export const WithCollapsibleSearch: Story = {
-  args: {
-    autoDropdown: true,
-    left: getItemsLeft(),
-    right: [
-      {
-        type: 'children',
-        key: '1',
-        children: <CollapsibleSearch />
-      },
-      ...getItemsRight().slice(1)
-    ]
+  render: () => {
+    const [searchValue, setSearchValue] = useState('')
+    const [toggleSelect, setToggleSelect] = useState(false)
+
+    const filteredData = useMemo(() => {
+      const search = searchValue.trim().toLowerCase()
+
+      if (!search) {
+        return tableDataSource
+      }
+
+      return tableDataSource.filter(row => {
+        const searchableValues = [
+          row.fullname,
+          row.group,
+          row.salary,
+          row.dateHired,
+          row.datetime,
+          row.isTrainee ? 'Yes' : 'No',
+          row.details?.email,
+          row.details?.city
+        ]
+
+        return searchableValues.some(value => (
+          String(value).toLowerCase().includes(search)
+        ))
+      })
+    }, [searchValue])
+
+    return (
+      <>
+        <Toolbar
+          autoDropdown
+          left={[
+            ...getItemsLeft().slice(0, 8),
+            {
+              ...toggleButtonItem,
+              selected: toggleSelect,
+              onChange: () => {
+                setToggleSelect(!toggleSelect)
+                console.log('Toggle Button clicked')
+              }
+            } as ToolbarItems
+          ]}
+          right={[
+            {
+              type: 'children',
+              key: '1',
+              children: <CollapsibleSearch onSearch={setSearchValue} />
+            },
+            ...getItemsRight().slice(1)
+          ]}
+        />
+        <div style={{ height: '16px' }}></div>
+        <Table
+          columns={tableColumns}
+          dataSource={filteredData}
+        />
+      </>
+    )
   }
 }
 

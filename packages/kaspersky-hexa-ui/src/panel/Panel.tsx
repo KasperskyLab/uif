@@ -35,14 +35,14 @@ export const Panel = ({
   elementAfter,
   initialSize,
   padding = 'large',
-  parentLayout
+  parentLayout,
+  onResize
 }: PanelProps): JSX.Element => {
   const [hidden, setHidden] = useState(!open)
   const { testAttributes } = useTestAttribute({ testId, klId, componentId, componentType })
   const panelRef = useRef<HTMLDivElement | null>(null)
 
   const direction = ['left', 'right'].includes(resizeHandle) ? DIRECTIONS.VERTICAL : DIRECTIONS.HORIZONTAL
-  
 
   useEffect(() => { setHidden(!open) }, [open])
 
@@ -70,9 +70,15 @@ export const Panel = ({
 
     const handleMouseMove = (event: MouseEvent) => {
       if (direction === DIRECTIONS.VERTICAL) {
-        panelRef.current?.style.setProperty('--panel-size', `${panelWidth + ((event.clientX - startPos.x) * mouseMoveDirection)}px`)
+        const panelSize = panelWidth + ((event.clientX - startPos.x) * mouseMoveDirection)
+        onResize?.(panelSize)
+
+        panelRef.current?.style.setProperty('--panel-size', `${panelSize}px`)
       } else {
-        panelRef.current?.style.setProperty('--panel-size', `${panelHeight + (event.clientY - startPos.y) * mouseMoveDirection}px`)
+        const panelSize = panelHeight + (event.clientY - startPos.y) * mouseMoveDirection
+        onResize?.(panelSize)
+
+        panelRef.current?.style.setProperty('--panel-size', `${panelSize}px`)
       }
     }
 
@@ -92,12 +98,12 @@ export const Panel = ({
       className={cn(
         'hexa-ui-panel',
         className,
-        {'panel-horizontal': direction === DIRECTIONS.HORIZONTAL},
-        {'panel-resizable': resizable},
-        {'panel-not-resizable': !resizable},
-        {'panel-hidden': hidden},
-        {'panel-medium': padding === 'medium'},
-        {'panel-parent': parentLayout}
+        { 'panel-horizontal': direction === DIRECTIONS.HORIZONTAL },
+        { 'panel-resizable': resizable },
+        { 'panel-not-resizable': !resizable },
+        { 'panel-hidden': hidden },
+        { 'panel-medium': padding === 'medium' },
+        { 'panel-parent': parentLayout }
       )}
       ref={panelRef}
       {...testAttributes}
@@ -105,21 +111,23 @@ export const Panel = ({
       <div
         className={cn(
           'hexa-ui-panel-handle',
-          {'handle-left': resizeHandle === 'left'},
-          {'handle-right': resizeHandle === 'right'},
-          {'handle-top': resizeHandle === 'top'},
-          {'handle-bottom': resizeHandle === 'bottom'}
+          { 'handle-left': resizeHandle === 'left' },
+          { 'handle-right': resizeHandle === 'right' },
+          { 'handle-top': resizeHandle === 'top' },
+          { 'handle-bottom': resizeHandle === 'bottom' }
         )}
         onMouseDown={handleMouseDown}
       />
-      {!parentLayout && <div className="hexa-ui-panel-header">
-        {title && <div className="hexa-ui-panel-header-title"><PanelTitle text={title} size={titleSize}/></div>}
-        {elementAfter && <div className="hexa-ui-panel-header-after">{elementAfter}</div>}
-        {closable && !parentLayout && <ActionButton className="hexa-ui-panel-close" size="large" onClick={closePanel} />}
-      </div>}
+      {!parentLayout && (
+        <div className="hexa-ui-panel-header">
+          {title && <div className="hexa-ui-panel-header-title"><PanelTitle text={title} size={titleSize} /></div>}
+          {elementAfter && <div className="hexa-ui-panel-header-after">{elementAfter}</div>}
+          {closable && !parentLayout && <ActionButton className="hexa-ui-panel-close" size="large" onClick={closePanel} />}
+        </div>
+      )}
       <div
         className={cn('hexa-ui-panel-container')}
-        { ...getChildTestAttr('body', testAttributes) }
+        {...getChildTestAttr('body', testAttributes)}
       >
         {children}
       </div>

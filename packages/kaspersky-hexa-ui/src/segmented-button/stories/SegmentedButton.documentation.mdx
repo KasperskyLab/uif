@@ -1,0 +1,243 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+import { Space } from '@src/space'
+
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
+
+import { SegmentedButton } from '../SegmentedButton'
+import * as SegmentedButtonStories from './SegmentedButton.stories'
+import { segmentedButtonDesignPropPresentation, segmentedButtonItemDesignPropPresentation } from './SegmentedButton.design.properties'
+
+<Meta of={SegmentedButtonStories} name="SegmentedButton Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="SegmentedButton"
+  description="**SegmentedButton** — группа кнопок для выбора одного значения из набора"
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**SegmentedButton** отображает набор взаимоисключающих вариантов в виде горизонтальной группы кнопок. Пользователь выбирает один вариант — остальные снимаются. Компонент управляемый: состав элементов задаётся через **items**, текущий выбор — через **value** и **onChange**. Настраиваются **size**, **disabled**, **isStretch**; каждый элемент поддерживает **text**, **componentsBefore**, **componentsAfter**, **disabled**, **tooltip**."
+    />
+
+    <DocExampleBlock
+      title="items"
+      description="Обязательный проп. Массив объектов, описывающих элементы группы. Каждый объект должен содержать уникальный **value**. Порядок элементов в массиве определяет порядок отображения."
+      code={`
+<SegmentedButton
+  value={['opt2']}
+  onChange={alert}
+  items={[
+    { text: 'Option 1', value: 'opt1' },
+    { text: 'Option 2', value: 'opt2' },
+    { text: 'Option 3', value: 'opt3' }
+  ]}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="value и onChange"
+      description="Обязательные пропы. **value** — массив строк с выбранными значениями (в режиме `radio` содержит не более одного элемента). **onChange** вызывается при каждом изменении выбора и получает новый массив значений."
+      code={`
+<SegmentedButton
+  value={['opt1']}
+  onChange={alert}
+  items={[
+    { text: 'Option 1', value: 'opt1' },
+    { text: 'Option 2', value: 'opt2' },
+    { text: 'Option 3', value: 'opt3' }
+  ]}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="size"
+      description="Размер кнопок в группе: влияет на высоту, отступы и минимальную ширину элементов. Доступные значения: `medium`, `large`. По умолчанию — `medium`."
+      previewDirection="vertical"
+      previewGap={16}
+      code={`
+<SegmentedButton
+  size="medium"
+  value={['opt1']}
+  onChange={alert}
+  items={[{ text: 'Option 1', value: 'opt1' }, { text: 'Option 2', value: 'opt2' }, { text: 'Option 3', value: 'opt3' }]}
+/>
+<SegmentedButton
+  size="large"
+  value={['opt1']}
+  onChange={alert}
+  items={[{ text: 'Option 1', value: 'opt1' }, { text: 'Option 2', value: 'opt2' }, { text: 'Option 3', value: 'opt3' }]}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Переводит все элементы группы в недоступное состояние: они не реагируют на клики. Доступные значения: `true`, `false`. По умолчанию — `false`. Для отключения отдельного элемента используйте **disabled** в объекте `items[i]`."
+      previewGap={16}
+      previewDirection="vertical"
+      code={`
+<SegmentedButton
+  disabled
+  value={['opt1']}
+  onChange={alert}
+  items={[{ text: 'Option 1', value: 'opt1' }, { text: 'Option 2', value: 'opt2' }, { text: 'Option 3', value: 'opt3' }]}
+/>
+<SegmentedButton
+  value={['opt1']}
+  onChange={alert}
+  items={[
+    { text: 'Option 1', value: 'opt1' },
+    { text: 'Option 2 (disabled)', value: 'opt2', disabled: true },
+    { text: 'Option 3', value: 'opt3' }
+  ]}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="isStretch"
+      description="Растягивает группу кнопок на всю ширину контейнера: элементы распределяются равномерно. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`
+<SegmentedButton
+  isStretch
+  value={['We']}
+  onChange={alert}
+  items={['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map(d => ({ text: d, value: d }))}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="componentsBefore и componentsAfter"
+      description="Слоты для дополнительных элементов внутри каждой кнопки — иконок, бейджей и других React-узлов. **componentsBefore** отображается слева от текста, **componentsAfter** — справа. Оба принимают массив React-узлов."
+      code={`
+<SegmentedButton
+  value={['icons']}
+  onChange={alert}
+  items={[
+    { text: 'Текст', value: 'text' },
+    { text: 'С иконкой', value: 'icons', componentsBefore: [<Placeholder key="i" />] },
+    { text: 'Оба слота', value: 'both', componentsBefore: [<Placeholder key="i" />], componentsAfter: [<Placeholder key="a" />] }
+  ]}
+/>`}
+      scope={{ Placeholder }}
+    />
+
+    <DocExampleBlock
+      title="tooltip"
+      description="Тултип, отображаемый при наведении на элемент. Задаётся через `items[i].tooltip` и принимает строку."
+      code={`
+<SegmentedButton
+  value={['opt1']}
+  onChange={alert}
+  items={[
+    { text: 'Option 1', value: 'opt1' },
+    { text: 'Option 2', value: 'opt2', tooltip: 'Подсказка для Option 2', disabled: true }
+  ]}
+/>`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**SegmentedButton** применяется для выбора одного варианта из небольшого фиксированного набора. Подходит там, где все варианты равнозначны и должны быть видны одновременно без раскрывающегося списка: например, переключение режимов отображения, фильтрация по периоду, выбор дня недели.
+
+Компонент не подходит для длинных списков — при большом числе элементов предпочтительнее использовать **Select** или **RadioGroup**. Если нужен множественный выбор, используйте **ToggleButtonGroup**."
+    />
+
+    <DocExampleBlock
+      title="Размер"
+      description="Выбирайте `large` для заметных переключателей в верхней части страницы или в фильтрах с широкой кликабельной зоной. Используйте `medium` в компактных областях интерфейса — панелях, карточках, тулбарах."
+      previewGap={16}
+      previewDirection="vertical"
+      codeBlock="hidden"
+      code={`
+<SegmentedButton
+  size="large"
+  value={['day']}
+  onChange={alert}
+  items={[{ text: 'День', value: 'day' }, { text: 'Неделя', value: 'week' }, { text: 'Месяц', value: 'month' }]}
+/>
+<SegmentedButton
+  size="medium"
+  value={['day']}
+  onChange={alert}
+  items={[{ text: 'День', value: 'day' }, { text: 'Неделя', value: 'week' }, { text: 'Месяц', value: 'month' }]}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="Иконки в элементах"
+      description="Иконки в **componentsBefore** и **componentsAfter** уточняют смысл варианта. Рекомендуется использовать иконки одинакового размера (16 px) во всех элементах группы для визуальной согласованности."
+      previewGap={16}
+      codeBlock="hidden"
+      code={`
+<SegmentedButton
+  value={['list']}
+  onChange={alert}
+  items={[
+    { text: 'Список', value: 'list', componentsBefore: [<Placeholder key="i" />] },
+    { text: 'Сетка', value: 'grid', componentsBefore: [<Placeholder key="i" />] }
+  ]}
+/>`}
+      scope={{ Placeholder }}
+    />
+
+    <DocExampleBlock
+      title="Растяжение на всю ширину"
+      description="Используйте `isStretch`, когда группа кнопок должна занимать всю доступную ширину контейнера — например, в мобильных макетах или в узких панелях."
+      codeBlock="hidden"
+      code={`
+<SegmentedButton
+  isStretch
+  value={['Mo']}
+  onChange={alert}
+  items={['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map(d => ({ text: d, value: d }))}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="Недоступные элементы"
+      description="Отдельный элемент можно сделать недоступным через `disabled` в его объекте. Если недоступна вся группа, используйте `disabled` на уровне компонента. Рекомендуется добавлять **tooltip** к недоступным элементам — это поясняет пользователю причину ограничения."
+      codeBlock="hidden"
+      code={`
+<SegmentedButton
+  value={['opt1']}
+  onChange={alert}
+  items={[
+    { text: 'Option 1', value: 'opt1' },
+    { text: 'Option 2', value: 'opt2', disabled: true, tooltip: 'Недоступно для вашей роли' }
+  ]}
+/>`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Space direction="vertical" gap={40} align="start">
+      <Space direction="vertical" gap={16} align="start">
+        <Text type="H3">segmented button</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(segmentedButtonDesignPropPresentation)} />
+      </Space>
+
+      <Space direction="vertical" gap={16} align="start">
+        <Text type="H3">segmented button item</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(segmentedButtonItemDesignPropPresentation)} />
+      </Space>
+    </Space>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={SegmentedButtonStories} />
+    <AutodocArgsTable components={SegmentedButton} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

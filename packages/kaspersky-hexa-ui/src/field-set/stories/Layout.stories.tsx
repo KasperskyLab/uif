@@ -5,7 +5,7 @@ import {
   FieldSet,
   FieldSetItem,
   Grid,
-  H4, 
+  H4,
   H5,
   Hamburger,
   InformationCard,
@@ -16,7 +16,7 @@ import {
   P,
   PageHeader,
   SectionMessage,
-  Select, 
+  Select,
   ServicesNav,
   Space,
   Table,
@@ -31,14 +31,14 @@ import { getNotificationsIcon } from '@src/menu/stories/Notifications'
 import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
- 
-import { 
+
+import {
   BookmarkOutline,
   BookmarkSolid,
   Help
 } from '@kaspersky/hexa-ui-icons/16'
 
-import { 
+import {
   gridItems,
   navItems,
   navUserItems,
@@ -127,7 +127,7 @@ const items1: FieldSetItem[] = [
     control: <>
       <Textbox value="81.163.20.206" />
       {' / '}
-      <Select 
+      <Select
         options={[
           { label: '8070', value: '8070' },
           { label: '8080', value: '8080' },
@@ -157,7 +157,7 @@ const items2: FieldSetItem[] = [
       component: 'select',
       options: [
         { label: 'None', value: -1 },
-        { label: 'Yes', value: 1},
+        { label: 'Yes', value: 1 },
         { label: 'No', value: 0 }
       ],
       value: -1
@@ -169,7 +169,7 @@ const items2: FieldSetItem[] = [
       component: 'select',
       options: [
         { label: 'None', value: -1 },
-        { label: 'Yes', value: 1},
+        { label: 'Yes', value: 1 },
         { label: 'No', value: 0 }
       ],
       value: -1
@@ -198,9 +198,9 @@ const items3: FieldSetItem[] = [
 ]
 
 const souceCodeLink = (
-  <Link 
-    href="https://github.com/KasperskyLab/uif/blob/master/packages/kaspersky-hexa-ui/src/field-set/FieldSet.stories.tsx"
-    target="_blank" 
+  <Link
+    href="https://github.com/KasperskyLab/uif/blob/master/packages/kaspersky-hexa-ui/src/field-set/stories/Layout.stories.tsx"
+    target="_blank"
     text="Source code"
   />
 )
@@ -234,11 +234,11 @@ export const Basic: StoryObj = {
             {getNotificationsIcon(true)}
             <Help className="item" role="button" onClick={() => clickHandler('open online help')} />
           </ServicesNav>
-          <AppLogo/>
+          <AppLogo />
         </Menu>
         <Notification />
         <div>
-          <PageHeader 
+          <PageHeader
             description="Описание страницы"
             elementAfter={souceCodeLink}
             title="Заголовок Страницы"
@@ -272,7 +272,7 @@ export const Basic: StoryObj = {
               <Tabs.TabPane
                 key="2"
                 disabled
-                tab={<Tabs.TabPaneHead text="Empty" infoTooltip="it is empty!" />}    
+                tab={<Tabs.TabPaneHead text="Empty" infoTooltip="it is empty!" />}
               >
                 Empty
               </Tabs.TabPane>
@@ -307,7 +307,7 @@ export const Basic: StoryObj = {
                     <Grid cols={2}>
                       {gridItems.map(item => (
                         <Grid.Item key={item.title}>
-                          <InformationCard 
+                          <InformationCard
                             description={item.description}
                             footer={<Button mode="secondary">Настройки</Button>}
                             rightCorner={<Toggle />}
@@ -323,7 +323,7 @@ export const Basic: StoryObj = {
               <Tabs.TabPane
                 key="2"
                 disabled
-                tab={<Tabs.TabPaneHead text="Empty" infoTooltip="it is empty!" />}    
+                tab={<Tabs.TabPaneHead text="Empty" infoTooltip="it is empty!" />}
               >
                 Empty
               </Tabs.TabPane>
@@ -350,7 +350,7 @@ export const SidebarStory: StoryObj = {
           </Button>
           {souceCodeLink}
         </Space>
-        
+
         <DetailsPage
           actions={{
             FIRST_ACTION: {
@@ -434,7 +434,7 @@ export const SidebarStory: StoryObj = {
                         <Grid cols={2} style={{ maxWidth: 1056 }}>
                           {gridItems.map(item => (
                             <Grid.Item key={item.title}>
-                              <InformationCard 
+                              <InformationCard
                                 description={item.description}
                                 footer={<Button mode="secondary">Настройки</Button>}
                                 rightCorner={<Toggle />}
@@ -474,17 +474,17 @@ export const SidebarStory: StoryObj = {
           ]}
           onChange={setTabActiveKey}
           onClose={() => setIsOpen(false)}
-          subHeader={
+          subHeader={(
             <>
               <div style={{ padding: '0 24px 24px 24px' }}>
                 <SectionMessage closable={false} mode="warning">
-                  Изменения настроек для устройств под управлением Windows, macOS, Linux и Android 
+                  Изменения настроек для устройств под управлением Windows, macOS, Linux и Android
                   не могут быть применены.
                 </SectionMessage>
-              </div>  
+              </div>
               <div>Workaround. That node would be hidden.</div>
             </>
-          }
+          )}
           title="Sidebar 1200"
           visible={isOpen}
         />

@@ -9,7 +9,15 @@ import React from 'react'
 
 import { productColors } from '@kaspersky/hexa-ui-core/colors/js'
 
-import { H1, H2, H3, H4, H5, H6, Text } from '../Typography'
+import {
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  Text
+} from '../Typography'
 
 describe('Typography - Text', () => {
   const klId = 'test-text-id'
@@ -45,7 +53,7 @@ describe('Typography - Text', () => {
     )
 
     expect(getByTestId(klId)).toHaveTextContent('hello')
-    // @ts-ignore
+    // @ts-expect-error загадка
     expect(getByTestId(klId)).toHaveStyleRule({
       color: productColors.text.secondary
     })
@@ -60,9 +68,9 @@ describe('Typography - Text', () => {
       </ThemeProvider>
     )
 
-    // @ts-ignore
+    // @ts-expect-error загадка
     expect(getByTestId(klId)).toHaveStyleRule({
-      color: THEME_CONFIG[ThemeKey.Light].colors.textIconsElements.primary
+      color: 'var(--text-icons-elements--primary)'
     })
   })
 
@@ -75,7 +83,7 @@ describe('Typography - Text', () => {
       </ThemeProvider>
     )
 
-    // @ts-ignore
+    // @ts-expect-error загадка
     expect(getByTestId(klId)).toHaveStyleRule({
       ' font-family': 'Kaspersky Sans'
     })
@@ -113,7 +121,7 @@ describe('Typography - Heading', () => {
     )
 
     expect(getByTestId(klId)).toHaveTextContent('hello')
-    // @ts-ignore
+    // @ts-expect-error загадка
     expect(getByTestId(klId)).toHaveStyleRule({
       color: productColors.text.primary
     })
@@ -128,9 +136,9 @@ describe('Typography - Heading', () => {
       </ThemeProvider>
     )
 
-    // @ts-ignore
+    // @ts-expect-error загадка
     expect(getByTestId(klId)).toHaveStyleRule({
-      color: THEME_CONFIG[ThemeKey.Light].colors.textIconsElements.primary
+      color: 'var(--text-icons-elements--primary)'
     })
   })
 
@@ -143,7 +151,7 @@ describe('Typography - Heading', () => {
       </ThemeProvider>
     )
 
-    // @ts-ignore
+    // @ts-expect-error загадка
     expect(getByTestId(klId)).toHaveStyleRule({
       ' font-family': 'Kaspersky Sans'
     })
@@ -158,7 +166,6 @@ describe('Typography - Heading', () => {
       </ThemeProvider>
     )
 
-    // @ts-ignore
     expect(getByRole('heading', { level: 1 })).toBeInTheDocument()
   })
 
@@ -171,7 +178,6 @@ describe('Typography - Heading', () => {
       </ThemeProvider>
     )
 
-    // @ts-ignore
     expect(getByRole('heading', { level: 2 })).toBeInTheDocument()
   })
 
@@ -184,7 +190,6 @@ describe('Typography - Heading', () => {
       </ThemeProvider>
     )
 
-    // @ts-ignore
     expect(getByRole('heading', { level: 3 })).toBeInTheDocument()
   })
 
@@ -197,7 +202,6 @@ describe('Typography - Heading', () => {
       </ThemeProvider>
     )
 
-    // @ts-ignore
     expect(getByRole('heading', { level: 4 })).toBeInTheDocument()
   })
 
@@ -210,7 +214,6 @@ describe('Typography - Heading', () => {
       </ThemeProvider>
     )
 
-    // @ts-ignore
     expect(getByRole('heading', { level: 5 })).toBeInTheDocument()
   })
 
@@ -223,7 +226,6 @@ describe('Typography - Heading', () => {
       </ThemeProvider>
     )
 
-    // @ts-ignore
     expect(getByRole('heading', { level: 6 })).toBeInTheDocument()
   })
 })

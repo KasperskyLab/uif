@@ -136,7 +136,7 @@ const dataTypes = ['JSON', 'XML', 'HTML', 'CSV', 'Binary'] as const
 const categories = ['System', 'Storage', 'Cache', 'Balancing', 'Security'] as const
 const tags = ['Security', 'Log', 'Backup', 'Performance', 'Traffic'] as const
 
-const getRandomElements = <T, >(options: { arr: Readonly<Array<T>>, multipleElements?: boolean }) => {
+const getRandomElements = <T,>(options: { arr: Readonly<Array<T>>, multipleElements?: boolean }) => {
   const { arr, multipleElements = false } = options
   const sampleSize = multipleElements ? Math.ceil(Math.random() * 2) : 1
   const shuffled = [...arr].sort(() => Math.random() - 0.5)

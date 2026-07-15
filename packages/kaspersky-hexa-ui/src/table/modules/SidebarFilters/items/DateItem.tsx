@@ -1,6 +1,4 @@
-import { useLocalization } from '@helpers/localization/useLocalization'
 import { Calendar, DateInputValue } from '@src/datepicker'
-import { Field } from '@src/field'
 import { Grid } from '@src/grid'
 import React, { FC, useCallback } from 'react'
 
@@ -34,27 +32,17 @@ export const DateItem: FC<DateItemProps> = ({ filter, onChange, validationStatus
 
   return (
     <Grid cols={2} layoutProperty={{ gap: 8 }}>
-      <Field
-        label={useLocalization('table.columnsSettings.filtering.from')}
-        control={
-          <Calendar
-            format={dateFormat}
-            value={convertToDate(filter.value.from)}
-            onChange={handleFromChange}
-            validationStatus={validationStatus}
-          />
-        }
+      <Calendar
+        format={dateFormat}
+        value={convertToDate(filter.value.from)}
+        onChange={handleFromChange}
+        validationStatus={validationStatus}
       />
-      <Field
-        label={useLocalization('table.columnsSettings.filtering.to')}
-        control={
-          <Calendar
-            format={dateFormat}
-            value={convertToDate(filter.value.to)}
-            onChange={handleToChange}
-            validationStatus={validationStatus}
-          />
-        }
+      <Calendar
+        format={dateFormat}
+        value={convertToDate(filter.value.to)}
+        onChange={handleToChange}
+        validationStatus={validationStatus}
       />
     </Grid>
   )

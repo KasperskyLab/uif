@@ -42,16 +42,18 @@ export const DetailsPage: FC<DetailsPageProps> = ({
       }
     >
       {navigation
-        ? <HorizontalTabs tabPosition="top" defaultActiveKey={defaultActiveKey} onChange={onChange}>
-            {navigation.map(({ key, content, navigation: innerNavigation, ...rest }) => (
-              <Tabs.TabPane key={key} tab={<Tabs.TabPaneHead {...rest} />}>
-                {innerNavigation
-                  ? <Submenu {...innerNavigation} />
-                  : <HorizontalTabsContent>{content}</HorizontalTabsContent>
-                }
-              </Tabs.TabPane>
-            ))}
-          </HorizontalTabs>
+        ? (
+            <HorizontalTabs tabPosition="top" defaultActiveKey={defaultActiveKey} onChange={onChange}>
+              {navigation.map(({ key, content, navigation: innerNavigation, ...rest }) => (
+                <Tabs.TabPane key={key} tab={<Tabs.TabPaneHead {...rest} />}>
+                  {innerNavigation
+                    ? <Submenu {...innerNavigation} />
+                    : <HorizontalTabsContent>{content}</HorizontalTabsContent>
+                  }
+                </Tabs.TabPane>
+              ))}
+            </HorizontalTabs>
+          )
         : children
       }
     </StyledSidebar>

@@ -15,7 +15,7 @@ export const HorizontalNav = ({
   const { testAttributes, ...rest } = useTestAttribute(props)
   const [selected, setSelected] = useState(items?.filter(item => item.selected)[0]?.key)
   const navRef = useRef<HTMLDivElement>(null)
-  
+
   useEffect(() => {
     if (!activeKey) {
       const selectedItem = items?.find(item => item.selected)
@@ -37,7 +37,7 @@ export const HorizontalNav = ({
       )}
     >
       {
-        items?.map(({ key, onClick, label, disabled, componentsAfter, testId, klId }: HorizontalNavItemProps): JSX.Element =>
+        items?.map(({ key, onClick, label, disabled, componentsAfter, testId, klId }: HorizontalNavItemProps): JSX.Element => (
           <button
             key={key}
             data-testid={testId}
@@ -61,9 +61,8 @@ export const HorizontalNav = ({
               ))}
             </span>
           </button>
-        )
+        ))
       }
     </nav>
   )
 }
-

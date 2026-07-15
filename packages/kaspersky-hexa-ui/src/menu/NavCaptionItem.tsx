@@ -11,9 +11,9 @@ const NavCaptionItemComponent = ({
   className
 }: NavItemProps) => (
   <>
-    { itemDivider === ItemDivider.Before && <NavDivider/> }
+    {itemDivider === ItemDivider.Before && <NavDivider />}
     <div className={cn(className, 'uif-nav-caption', { 'caption-root': isRoot })}>{key}</div>
-    { itemDivider === ItemDivider.After && <NavDivider/> }
+    {itemDivider === ItemDivider.After && <NavDivider />}
   </>
 )
 

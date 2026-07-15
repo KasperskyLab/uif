@@ -74,17 +74,19 @@ export const WithTextComponent: Story = {
 }
 
 export const WithDisabledComponent: Story = {
-  render: (args: TooltipProps) => <StoryColumn>
-    <SectionMessage closable={false} mode="info" style={{ marginBottom: 16 }}>
-      <P>Use wrapper for <StyledTag>disabled</StyledTag> components inside <StyledTag>Tooltip</StyledTag> if it&apos;s not working</P>
-      <P>Используйте обёртку для <StyledTag>disabled</StyledTag> компонентов внутри <StyledTag>Tooltip</StyledTag> если тултип не отображается</P>
-    </SectionMessage>
-    <Tooltip
-      {...args}
-    >
-      <span><Button disabled={true} text="Button" /></span>
-    </Tooltip>
-  </StoryColumn>
+  render: (args: TooltipProps) => (
+    <StoryColumn>
+      <SectionMessage closable={false} mode="info" style={{ marginBottom: 16 }}>
+        <P>Use wrapper for <StyledTag>disabled</StyledTag> components inside <StyledTag>Tooltip</StyledTag> if it&apos;s not working</P>
+        <P>Используйте обёртку для <StyledTag>disabled</StyledTag> компонентов внутри <StyledTag>Tooltip</StyledTag> если тултип не отображается</P>
+      </SectionMessage>
+      <Tooltip
+        {...args}
+      >
+        <span><Button disabled={true} text="Button" /></span>
+      </Tooltip>
+    </StoryColumn>
+  )
 }
 
 export const WithinScrollableContainer: Story = {
@@ -128,15 +130,16 @@ export const PerformanceExample: Story = {
     return (
       <StoryColumn>
         <Field
-          control={<SegmentedButton
-            value={[performSize.toString()]}
-            type="radio"
-            items={items}
-            onChange={value => {
-              setPerformSize(Number(value[0]))
-            }}
-          />
-          }
+          control={(
+            <SegmentedButton
+              value={[performSize.toString()]}
+              type="radio"
+              items={items}
+              onChange={value => {
+                setPerformSize(Number(value[0]))
+              }}
+            />
+          )}
           label="Number of tooltips on page"
         />
         {tooltips.map((t) => (

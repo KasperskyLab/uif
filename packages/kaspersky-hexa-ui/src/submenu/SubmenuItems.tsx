@@ -4,25 +4,28 @@ import React, { FC, useState } from 'react'
 import { SubmenuDivider, SubmenuRow, SubmenuTitle } from './SubComponents'
 import { CommonSubComponentProps, LeveledRowProps, LeveledSubmenuItemProps } from './types'
 
-export const SubmenuItems: FC<CommonSubComponentProps & { items: LeveledSubmenuItemProps[] }> = ({ items, ...props }) => (
-  <>
-    {items.map((rawItem, index) => {
-      const item = useTestAttribute(rawItem)
-      switch (item.type) {
-        case 'row':
-          return <Row {...props} row={item} key={item.key} />
-        case 'title':
-          return <SubmenuTitle {...item} key={item.key} />
-        case 'divider':
-          return <SubmenuDivider {...item} key={index} />
-        default:
-          return null
-      }
-    })}
-  </>
-)
+export const SubmenuItems: FC<CommonSubComponentProps & { items: LeveledSubmenuItemProps[] }> = ({ items, ...props }) => {
+  const hasChildren = items.some(item => item.type === 'row' && item.children?.length)
 
-const Row: FC<CommonSubComponentProps & { row: LeveledRowProps }> = ({ row, ...props }) => {
+  return (
+    <>
+      {items.map((rawItem, index) => {
+        const item = useTestAttribute(rawItem)
+        switch (item.type) {
+          case 'row':
+            return <Row {...props} row={item} key={item.key} hasChildren={hasChildren} />
+          case 'title':
+            return <SubmenuTitle {...item} key={item.key} />
+          case 'divider':
+            return <SubmenuDivider {...item} key={index} />
+          default:
+            return null
+        }
+      })}
+    </>
+  )}
+
+const Row: FC<CommonSubComponentProps & { row: LeveledRowProps } & { hasChildren: boolean }> = ({ row, ...props }) => {
   const { children } = row
 
   const [showChildren, setShowChildren] = useState(row.opened)
@@ -38,15 +41,17 @@ const Row: FC<CommonSubComponentProps & { row: LeveledRowProps }> = ({ row, ...p
     children && setShowChildren(!showChildren)
   }
 
-  return <>
-    <SubmenuRow
-      {...props}
-      row={{ ...row, opened: showChildren }}
-      selected={props.activeRowKey === row.key}
-      collapsible={!!children}
-      onCollapsibleClick={handleCollapsibleRowClick}
-      onClick={handleRowClick}
-    />
-    {children && showChildren && <SubmenuItems {...props} items={children} />}
-  </>
+  return (
+    <>
+      <SubmenuRow
+        {...props}
+        row={{ ...row, opened: showChildren }}
+        selected={props.activeRowKey === row.key}
+        collapsible={!!children}
+        onCollapsibleClick={handleCollapsibleRowClick}
+        onClick={handleRowClick}
+      />
+      {children && showChildren && <SubmenuItems {...props} items={children} />}
+    </>
+  )
 }

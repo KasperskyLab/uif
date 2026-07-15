@@ -14,7 +14,7 @@ const getPreparedTenantTreeData = (tenants: Tenant[], testId: string) => {
     const mappedTenant: TenantFilterTreeDataItem = {
       key: id,
       title: name,
-      // @ts-ignore
+      // @ts-expect-error тип не содержит в себе дата атрибуты
       'data-testid': `${testId}-${id}`
     }
 
@@ -148,8 +148,7 @@ describe('TenantFilter', () => {
     await clickOnNodeCheckbox(container, '0-0')
     await clickOnNodeCheckbox(container, '0-0-0')
 
-    expect(applyHandler).toBeCalledWith(['0-0', '0-0-1', '0-0-1-0', '0-0-1-1']
-    )
+    expect(applyHandler).toBeCalledWith(['0-0', '0-0-1', '0-0-1-0', '0-0-1-1'])
   })
 
   it('should not uncheck parent node', async () => {
@@ -160,7 +159,6 @@ describe('TenantFilter', () => {
     await clickOnNodeCheckbox(container, '0-0-0-0')
     await clickOnNodeCheckbox(container, '0-0-0-1')
 
-    expect(applyHandler).toBeCalledWith(['0-0-0']
-    )
+    expect(applyHandler).toBeCalledWith(['0-0-0'])
   })
 })

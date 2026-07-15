@@ -22,7 +22,7 @@ export const CenterButton = ({
   ...props
 }: CenterButtonProps): JSX.Element => {
   const { testAttributes } = useTestAttribute(props)
-  
+
   return (
     <Dropdown {...getChildTestProps('dropdown', testAttributes)} {...dropdownMenuProps}>
       <Button {...getChildTestProps('button', testAttributes)} {...buttonProps}>

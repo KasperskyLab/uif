@@ -87,7 +87,7 @@
       "total": "总共 {{count}}",
       "selected": "已选择 {{count}}",
       "page": "页面",
-      "goto": "转到组(&G)"
+      "goto": "转到页面"
     },
     "search": {
       "raw": "搜索",
@@ -100,6 +100,14 @@
         "sorting": "排序",
         "filters": "过滤器",
         "resetFilters": "重置过滤器"
+      },
+      "contextMenu": {
+        "selected": "已选择 {{count}}"
+      },
+      "selectAll": {
+        "selectAll": "全部选择",
+        "selectCurrentPage": "在当前页面上全选",
+        "deselectAll": "全部重置"
       },
       "columnsSettings": {
         "header": "表格设置",
@@ -122,24 +130,41 @@
         },
         "filtering": {
           "add": "添加",
+          "addCondition": "添加条件",
           "clearAll": "全部清空",
           "property": "属性",
+          "attribute": "属性",
           "condition": "条件",
           "from": "从",
           "to": "到",
           "value": "值",
+          "operators": {
+            "or": "OR",
+            "and": "AND"
+          },
+          "booleanFilter": {
+            "on": "打开",
+            "off": "关闭"
+          },
           "validation": {
             "emptyValue": "指定过滤值",
-            "duplicateFilters": "重复的过滤器。确保每个过滤器都是唯一的"
+            "duplicateFilters": "重复的过滤器。确保每个过滤器都是唯一的。"
           }
         },
-        "columnHideIsUnavailable": "列隐藏不可用"
+        "resetSettingsModal": {
+          "content": "所有任务都将重置为默认设置",
+          "header": "重置列设置码？",
+          "firstButton": "重置",
+          "secondButton": "取消"
+        },
+        "columnHideIsUnavailable": "列隐藏不可用",
+        "onlyForFiltering": "此列仅用于过滤"
       },
       "filterOperation": {
         "⊆": "包含",
         "⊄": "不包含",
         "cont_and": "包含 (AND)",
-        "cont_or": "包含 (OR)",
+        "cont_or": "是其中之一",
         "ncont_or": "不包含",
         "*=": "Regexp",
         "empty": "空",
@@ -168,7 +193,8 @@
     "actionBar": {
       "unsavedChanges": "等待更改",
       "save": "应用",
-      "cancel": "取消"
+      "cancel": "取消",
+      "resetSettings": "重置设置"
     },
     "textarea": {
       "wordsCount": "{{count}} / {{total}}"
@@ -178,7 +204,7 @@
       "navUserItem": {
         "userProps": {
           "status": {
-            "available": "可用空间",
+            "available": "可用",
             "unavailable": "不可用"
           }
         }
@@ -211,7 +237,11 @@
       "term": "期限",
       "dayLeft": "剩余 {{count}} 天",
       "daysLeft": "剩余 {{count}} 天",
-      "termDays": "{{count}} 天"
+      "termDays": "{{count}} 天",
+      "statuses": {
+        "valid": "主动响应式",
+        "expired": "已过期"
+      }
     },
     "input": {
       "password": {

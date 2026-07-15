@@ -1,4 +1,25 @@
-export const basicExample = 'console.log("Hello, World!")'
+export const javascriptExample = `async function fetchAlerts(filters) {
+  const params = new URLSearchParams(filters)
+  const response = await fetch(\`/api/alerts?\${params}\`)
+
+  if (!response.ok) {
+    throw new Error(\`Request failed: \${response.status}\`)
+  }
+
+  const payload = await response.json()
+  return payload.items.map((item) => ({
+    id: item.id,
+    severity: item.severity,
+    title: item.title,
+    detectedAt: new Date(item.detectedAt)
+  }))
+}
+
+fetchAlerts({ severity: 'high', limit: 50 })
+  .then((alerts) => console.log(\`Loaded \${alerts.length} alerts\`))
+  .catch((error) => console.error(error.message))`
+
+export const basicExample = javascriptExample
 
 export const htmlExample = `<html>
   <head>
@@ -89,13 +110,20 @@ const FunctionalCounter: FC<Props> = ({ title, initialCount }) => {
 export default FunctionalCounter;
 `
 
-export const yaraExample = `rule ExampleRule
+export const yaraExample = `rule SuspiciousScript
 {
-    strings:  // this is comment
-        $my_text_string = "text here"
-        $my_hex_string = { E2 34 A1 C8 23 FB }
+    meta:
+        description = "Detects suspicious script execution patterns"
+        author = "Security Team"
+        severity = "high"
+
+    strings:
+        $powershell = "powershell.exe" nocase
+        $encoded = /-[Ee]ncoded[Cc]ommand/
+        $download = "DownloadString" nocase
+        $hidden = "-WindowStyle Hidden" nocase
 
     condition:
-        $my_text_string or $my_hex_string
+        $powershell and ($encoded or $download) and $hidden
 }
 `

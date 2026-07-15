@@ -1,7 +1,7 @@
 import { buildCssVarsPalette, buildCssVarsTokens } from '@helpers/build-css-vars'
 import { createGlobalStyle, css } from 'styled-components'
 
-import('@kaspersky/hexa-ui-core/fonts')
+import ('@kaspersky/hexa-ui-core/fonts')
 import('@kaspersky/hexa-ui-core/colors/css')
 import('@kaspersky/hexa-ui-core/typography/css')
 

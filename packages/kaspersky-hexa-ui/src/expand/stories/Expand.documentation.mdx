@@ -1,0 +1,80 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Expand } from '../Expand'
+import * as ExpandStories from '../Expand.stories'
+import { expandLongTextExampleCode } from './expandStoryData'
+
+<Meta of={ExpandStories} name="Expand Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Expand"
+  description={'**Expand** — сворачивает длинный контент и показывает кнопку разворота, если текст не помещается в заданную высоту'}
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description={'**Expand** оборачивает произвольное содержимое (**children**) и в свёрнутом виде ограничивает высоту контейнера через **collapsedHeight**. Если фактическая высота контента больше порога, под блоком появляется **Action Button** с подписью и иконкой стрелки; по клику контент разворачивается или снова сворачивается. Подписи кнопки настраиваются через **textToExpand** и **textToCollapse**.'}
+    />
+
+    <DocExampleBlock
+      title="children"
+      description="Содержимое внутри сворачиваемой области: текст, типографика, списки или другие компоненты Hexa UI."
+      setupCode={expandLongTextExampleCode}
+      code={`<Expand collapsedHeight={64}>{expandLongText}</Expand>`}
+    />
+
+    <DocExampleBlock
+      title="collapsedHeight"
+      description="Максимальная высота контейнера в свёрнутом состоянии (в пикселях, через `max-height`). Кнопка разворота показывается только если `scrollHeight` контента больше этого значения. По умолчанию — `64`."
+      previewDirection="vertical"
+      setupCode={expandLongTextExampleCode}
+      code={`
+<Expand collapsedHeight={60}>{expandLongText}</Expand>
+<Expand collapsedHeight={60}><Text>Если текст меньше collapsedHeight, то кнопка не показывается.</Text></Expand>`}
+    />
+
+    <DocExampleBlock
+      title="textToExpand и textToCollapse"
+      description="Подписи **Action Button** в свёрнутом и развёрнутом состоянии. По умолчанию берутся из локализации: «Развернуть» и «Свернуть» (ключи `expand.toExpand`, `expand.toCollapse`)."
+      setupCode={expandLongTextExampleCode}
+      code={`
+<Expand
+textToExpand="Показать то, что скрыто"
+textToCollapse="Скрыть то, что показано"
+>
+    {expandLongText}
+</Expand>`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description={'**Expand** уместен там, где длинный текст или описание нельзя показывать целиком без перегрузки экрана: карточка, боковая панель, модальное окно, ячейка или блок подробностей. Компонент даёт пользователю добровольно раскрыть фрагмент контента, не меняя структуру страницы.\n\nДля нескольких независимых секций с заголовками и разным содержимым используйте **Accordion**, а не **Expand**. Для основного действия на экране — **Button** или **Action Button**, а не подмену ими разворота текста.'}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+      <Text type="H3">Дизайн</Text>
+      <Text type="BTR3">
+        Раздел зарезервирован под дизайн-гайдлайны. Содержимое будет добавлено в следующих релизах.
+      </Text>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={ExpandStories} />
+    <AutodocArgsTable components={Expand} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

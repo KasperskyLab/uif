@@ -18,7 +18,7 @@ const CustomComponent = ({ className }: any) => {
           </div>
         </div>
       </div>
-      <NavDivider/>
+      <NavDivider />
     </>
   )
 }

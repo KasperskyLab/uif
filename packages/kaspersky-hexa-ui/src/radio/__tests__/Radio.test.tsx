@@ -107,7 +107,7 @@ describe('Radio', () => {
 
   test('should render description', () => {
     const description = 'some description'
-    render(<DefaultRadio options={[{ label: '1', value: '1', description }]} initialValue="1"/>)
+    render(<DefaultRadio options={[{ label: '1', value: '1', description }]} initialValue="1" />)
     expect(screen.getByText(description)).toBeInTheDocument()
   })
 
@@ -115,7 +115,7 @@ describe('Radio', () => {
     const klId = 'dependend_element'
     render(
       <DefaultRadio
-        options={[{ label: '1', value: '1', dependentElement: <Textbox klId={klId}/> }]}
+        options={[{ label: '1', value: '1', dependentElement: <Textbox klId={klId} /> }]}
         initialValue="1"
       />
     )
@@ -149,7 +149,7 @@ describe('Radio', () => {
   })
 
   test('should handle empty options array gracefully', () => {
-    render(<Radio {...defaultProps} options={[]}/>)
+    render(<Radio {...defaultProps} options={[]} />)
     expect(screen.queryAllByRole('radio').length).toBe(0)
   })
 

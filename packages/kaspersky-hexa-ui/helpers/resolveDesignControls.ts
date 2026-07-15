@@ -1,11 +1,3 @@
-import { PropsWithTooltip } from '@sb/helpers'
-import { AccordionPanelProps, AccordionProps } from '@src/accordion'
-import { defaultArgs } from '@src/accordion/stories/constants'
-import { AlertProps } from '@src/alert'
-import { BadgeProps } from '@src/badge'
-import { ButtonProps, SplitButtonProps } from '@src/button'
-import { CodeCompareProps } from '@src/code-compare'
-import { DropdownProps } from '@src/dropdown'
 import { HorizontalNavProps } from '@src/horizontal-nav/types'
 import { LicenseCardProps } from '@src/license-card'
 import { LoadingOverlayProps } from '@src/loading-overlay'
@@ -27,13 +19,7 @@ import { FileItemProps } from '@src/upload/UploadList/FileItem'
 import { WizardSidebarProps } from '@src/wizard/types'
 import { InputType } from 'storybook/internal/types'
 
-export type Components =
-  { type: 'accordion', props: AccordionProps & AccordionPanelProps & typeof defaultArgs } |
-  { type: 'alert', props: AlertProps } |
-  { type: 'badge', props: PropsWithTooltip<BadgeProps> } |
-  { type: 'button', props: PropsWithTooltip<ButtonProps> & SplitButtonProps } |
-  { type: 'codeCompare', props: CodeCompareProps } |
-  { type: 'dropdown', props: DropdownProps } |
+export type Components =|
   { type: 'horizontalNav', props: HorizontalNavProps } |
   { type: 'loadingOverlay', props: LoadingOverlayProps } |
   { type: 'licenseCard', props: LicenseCardProps } |
@@ -62,138 +48,117 @@ type ControlConfig = {
   defaultValue?: unknown
 }
 
+export type SharedPropConfig = ControlConfig & {
+  group?: 'appearance' | 'technical',
+  deprecated?: boolean,
+  showInControls?: boolean
+}
+
 type PropControl<Component extends Components['type']> = Partial<{
   [propName in keyof GetComponentProps<Component>]: ControlConfig
 }>
 
-const shared = {
+export const sharedPropConfig: Record<string, SharedPropConfig> = {
   children: {
-    description: 'React children'
+    description: 'React children',
+    control: false,
+    group: 'appearance'
   },
   disabled: {
-    description: 'Недоступное состояние'
+    description: 'Недоступное состояние',
+    control: { type: 'boolean' },
+    group: 'appearance'
   },
   loading: {
-    description: 'Состояние загрузки'
+    description: 'Состояние загрузки',
+    control: { type: 'boolean' },
+    group: 'appearance'
   },
   mode: {
-    description: 'Цветовой режим'
+    description: 'Цветовой режим',
+    control: { type: 'select' },
+    group: 'appearance'
   },
   size: {
-    description: 'Размер'
+    description: 'Размер',
+    control: { type: 'select' },
+    group: 'appearance'
   },
   actions: {
-    description: 'Набор действий'
+    description: 'Набор действий',
+    control: false,
+    group: 'appearance'
   },
   tooltip: {
-    description: 'Тултип'
+    description: 'Тултип',
+    control: false
+  },
+  className: {
+    description: 'Пользовательский CSS-класс для переопределения внешнего вида.',
+    control: false,
+    group: 'appearance'
+  },
+  style: {
+    description: 'Инлайновые стили для пользовательского переопределения внешнего вида.',
+    control: false,
+    group: 'appearance'
+  },
+  id: {
+    description: 'HTML-атрибут id на базовом элементе.',
+    control: { type: 'text' },
+    group: 'technical'
+  },
+  onClick: {
+    description: 'Обработчик клика.',
+    control: false,
+    group: 'technical'
+  },
+  type: {
+    description: 'Нативный атрибут type элемента.',
+    group: 'technical'
+  },
+  testId: {
+    description: 'Значение для атрибута data-testid, используемого в автотестах.',
+    control: { type: 'text' },
+    group: 'technical'
+  },
+  componentType: {
+    description: 'Необязательный маркер типа компонента для тестовых метаданных.',
+    control: { type: 'text' },
+    group: 'technical'
+  },
+  theme: {
+    group: 'technical',
+    description: 'Тёмная или светлая тема',
+    control: false
+  },
+  klId: {
+    description: 'Legacy autotest identifier mapped to kl-id. Use testId instead.',
+    control: false,
+    group: 'technical',
+    deprecated: true
+  },
+  componentId: {
+    description: 'Deprecated autotest identifier. Use testId instead.',
+    control: false,
+    group: 'technical',
+    deprecated: true
+  },
+  dataTestId: {
+    description: 'Deprecated autotest identifier. Use testId instead.',
+    control: false,
+    group: 'technical',
+    deprecated: true
   }
 }
+
+const shared = sharedPropConfig
 
 type DesignControlsConfig = {
   [componentName in Components['type']]: PropControl<componentName>
 }
 
 export const designControlsConfig: DesignControlsConfig = {
-  accordion: {
-    accordion: {
-      description: 'Открытие одного или нескольких аккордеонов одновременно'
-    },
-    withBorder: {
-      description: 'Отображать компонент с рамкой'
-    },
-    titleSize: {
-      description: 'Размер заголовка'
-    },
-    title: {
-      description: 'Заголовок'
-    },
-    disabled: shared.disabled,
-    tagBeforeLabel: {
-      description: 'Текст тега до заголовка (не является пропом аккордеона)'
-    },
-    tagBeforeMode: {
-      description: 'Цветовой режим тега до заголовка (не является пропом аккордеона)'
-    },
-    additionalText: {
-      description: 'Дополнительный текст'
-    },
-    indicatorMode: {
-      description: 'Цветовой режим индикатора (не является пропом аккордеона)'
-    },
-    tagAfterLabel: {
-      description: 'Текст тега после заголовка (не является пропом аккордеона)'
-    },
-    tagAfterMode: {
-      description: 'Цветовой режим тега после заголовка (не является пропом аккордеона)'
-    },
-    shouldDisableActions: {
-      description: 'Следует заблокировать действия, когда панель аккордеона находится в недоступном состоянии'
-    }
-  },
-  alert: {
-    mode: shared.mode,
-    actions: shared.actions,
-    closable: {
-      description: 'Показать/скрыть возможность удаления элемента'
-    },
-    children: shared.children,
-    width: {
-      description: 'Ширина в пикселях'
-    }
-  },
-  badge: {
-    mode: shared.mode,
-    size: {
-      control: false,
-      description: 'Все возможные комбинации размеров и модов можно посмотреть в сторе `Size`'
-    },
-    count: {
-      description: 'Отображаемое число'
-    },
-    overflowCount: {
-      description: 'Максимальное значение, которое может отображаться'
-    },
-    text: {
-      description: 'Текст вместо числа'
-    },
-    tooltip: shared.tooltip
-  },
-  button: {
-    mode: shared.mode,
-    size: shared.size,
-    disabled: shared.disabled,
-    loading: shared.loading,
-    iconBefore: {
-      description: 'Иконка до текста'
-    },
-    text: {
-      description: 'Текст'
-    },
-    iconAfter: {
-      description: 'Иконка после текста'
-    },
-    dropdownPlacement: {
-      description: 'Расположение выпадающего списка'
-    },
-    tooltip: shared.tooltip
-  },
-  codeCompare: {
-    oldValue: {
-      description: 'Исходный код'
-    },
-    newValue: {
-      description: 'Сравниваемый код'
-    },
-    loading: shared.loading
-  },
-  dropdown: {
-    disabled: shared.disabled,
-    loading: shared.loading,
-    placement: {
-      description: 'Расположение выпадающего списка'
-    }
-  },
   horizontalNav: {},
   loadingOverlay: {
     description: {

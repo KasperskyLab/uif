@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react'
 
 export type TextWithTruncationProps = {
   lineClamp?: number,
-  /* @deprecated Use lineClamp={1} instead */ 
+  /* @deprecated Use lineClamp={1} instead */
   truncate?: boolean
   text: ReactNode
   tooltip?: ReactNode

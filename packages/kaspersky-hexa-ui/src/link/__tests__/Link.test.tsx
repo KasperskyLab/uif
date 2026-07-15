@@ -62,7 +62,7 @@ describe('Link', () => {
   })
 
   it('should hide tooltip when isTooltipVisible is false for icon link', () => {
-    const { container } = render(<DefaultLink decoration="icon" isTooltipVisible={false}/>)
+    const { container } = render(<DefaultLink decoration="icon" isTooltipVisible={false} />)
     expect(container.querySelector('[role="tooltip"]')).toBeNull()
   })
 

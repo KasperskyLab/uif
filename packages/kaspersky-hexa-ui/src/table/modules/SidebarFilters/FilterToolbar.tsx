@@ -4,27 +4,26 @@ import React from 'react'
 
 import { Cross, Plus } from '@kaspersky/hexa-ui-icons/16'
 
-import { TableColumn } from '../../types'
+import { TableRecord } from '../../types'
 import { FilterConfigInternal } from '../Filters'
-import { isFilterConfigInternal } from '../Filters/helpers'
 
 import { getNewFilter } from './filters'
 import styles from './SidebarFilters.module.scss'
+import { FilterToolbarProps } from './types'
 
-export type FilterToolbarProps = {
-  filters: FilterConfigInternal[],
-  onChange: (filters: FilterConfigInternal[]) => void,
-  columns: TableColumn[]
-}
-
-const FilterToolbar: React.FC<FilterToolbarProps> = ({ onChange, filters, columns }) => {
+const FilterToolbar = <T extends TableRecord = TableRecord>({
+  onChange,
+  filters,
+  columns,
+  additionalButtons
+}: FilterToolbarProps<T>): JSX.Element => {
   const handleAdd = async () => {
     const newFilter: FilterConfigInternal = await getNewFilter(columns[0])
     onChange([...filters, newFilter])
   }
 
   const handleClearAll = () => {
-    onChange(filters.filter(filter => !isFilterConfigInternal(filter)))
+    onChange([])
   }
 
   return (
@@ -49,6 +48,13 @@ const FilterToolbar: React.FC<FilterToolbarProps> = ({ onChange, filters, column
           <Locale localizationKey="table.columnsSettings.filtering.clearAll" />
         </Button>
       )}
+      {additionalButtons?.map((button, index) => (
+        <Button
+          key={button?.testId || button.testId || index}
+          {...button}
+          mode="tertiary"
+        />
+      ))}
     </div>
   )
 }

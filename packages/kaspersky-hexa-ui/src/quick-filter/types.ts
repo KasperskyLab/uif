@@ -8,12 +8,12 @@ import { ToggleButtonGroupProps } from '@src/toggle-button'
 type QuickFilterLabelConfig = { label: string }
 
 export type QuickFilterItem =
-  ({ component: 'select', width?: string } & SelectProps & QuickFilterLabelConfig)
-  | ({ component: 'segmented-button' } & SegmentedButtonProps & QuickFilterLabelConfig)
-  | ({ component: 'toggle' } & ToggleProps)
-  | ({ component: 'toggle-button-group' } & ToggleButtonGroupProps & QuickFilterLabelConfig)
-  | ({ component: 'date-picker' } & CalendarProps & QuickFilterLabelConfig)
-  | ({ component: 'range-picker' } & RangePickerProps & QuickFilterLabelConfig)
+  ({ component: 'select', width?: string } & SelectProps & QuickFilterLabelConfig) |
+  ({ component: 'segmented-button' } & SegmentedButtonProps & QuickFilterLabelConfig) |
+  ({ component: 'toggle' } & ToggleProps) |
+  ({ component: 'toggle-button-group' } & ToggleButtonGroupProps & QuickFilterLabelConfig) |
+  ({ component: 'date-picker' } & CalendarProps & QuickFilterLabelConfig) |
+  ({ component: 'range-picker' } & RangePickerProps & QuickFilterLabelConfig)
 
 export type QuickFilterProps = {
   /** Custom class name */

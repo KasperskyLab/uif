@@ -3,7 +3,7 @@ import { getChildTestProps, useTestAttribute } from '@helpers/hooks/useTestAttri
 import { showDeprecationWarn } from '@helpers/showDeprecationWarn'
 import { Dropdown } from '@src/dropdown'
 import { Loader } from '@src/loader'
-import { Button as AntdButton } from 'antd'
+import AntdButton from 'antd/es/button'
 import cn from 'classnames'
 import React from 'react'
 
@@ -45,6 +45,12 @@ export const Button = ({
 
   const child = text || children
 
+  const renderIcon = (icon: React.ReactNode, key: string) => (
+    <div key={key} className={styles.iconWrapper}>
+      {cloneWithKey(icon, key)}
+    </div>
+  )
+
   return (
     <AntdButton
       {...testAttributes}
@@ -66,9 +72,11 @@ export const Button = ({
       {
         child
           ? [
-              cloneWithKey(iconBefore, 'iconBefore'),
-              <span key="radio" className={styles.buttonText}> {child} </span>,
-              cloneWithKey(iconAfter, 'iconAfter')
+              renderIcon(iconBefore, 'iconBefore'),
+              <span key="radio" className={styles.buttonText}>
+                {child}
+              </span>,
+              renderIcon(iconAfter, 'iconAfter')
             ]
           : iconBefore || iconAfter
       }

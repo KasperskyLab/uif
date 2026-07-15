@@ -43,9 +43,10 @@ export type CardThemeProps = {
 
 type TitleElement = ({ component: 'toggle' } & ToggleProps) | ({ component: 'radio' } & RadioProps)
 
-export type ElementBefore = TitleElement
-  | ({ component: 'checkbox' } & CheckboxProps)
-  | ({ component: 'icon' } & IconResolverProps)
+export type ElementBefore = TitleElement |
+  ReactNode |
+  ({ component: 'checkbox' } & CheckboxProps) |
+  ({ component: 'icon' } & IconResolverProps)
 
 export type ElementAfter = TitleElement | ({ component: 'text' } & TextProps)
 
@@ -79,6 +80,8 @@ export type CardProps = CardThemeProps & {
   children?: ReactNode,
   /** Inline styles */
   style?: CSSProperties,
+  /** Max height. Scrollable when maxHeight provided, size !== 'small', and content overflows */
+  maxHeight?: string,
   /** Custom class name */
   className?: string
 } & TestingProps

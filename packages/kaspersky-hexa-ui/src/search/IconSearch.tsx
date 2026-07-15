@@ -4,12 +4,12 @@ import { Space } from '@src/space'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { Search1 } from '@kaspersky/hexa-ui-icons/16'
+import { Search1, SearchActive } from '@kaspersky/hexa-ui-icons/16'
 
-const StyledIndicator = styled(Indicator)<{ cursor?: string }>`
+const StyledIndicator = styled(Indicator)`
   position: absolute;
   top: 6px;
-  right: 8px;
+  right: 6px;
 `
 
 export const IconSearch: FC<SearchIconProps> = ({
@@ -19,19 +19,34 @@ export const IconSearch: FC<SearchIconProps> = ({
   className,
   onClick,
   indicator = false,
+  modeIndicator = 'high',
+  borderBackground,
   componentId
 }: SearchIconProps) => {
   return (
-    <Space onClick={onClick}>
-      <Search1
-        color={color}
-        style={{ cursor: onClick ? 'pointer' : 'default' }}
-        data-testid={testId}
-        data-component-id={componentId}
-        className={className}
-        kl-id={klId}
-      />
-      {indicator && <StyledIndicator border mode="high" cursor={onClick ? 'pointer' : 'default'} />}
+    <Space onClick={onClick} style={onClick ? { cursor: 'pointer' } : undefined}>
+      {indicator
+        ? (
+            <>
+              <SearchActive
+                color={color}
+                data-testid={testId}
+                data-component-id={componentId}
+                className={className}
+                kl-id={klId}
+              />
+              <StyledIndicator mode={modeIndicator} borderBackground={borderBackground} />
+            </>
+          )
+        : (
+            <Search1
+              color={color}
+              data-testid={testId}
+              data-component-id={componentId}
+              className={className}
+              kl-id={klId}
+            />
+          )}
     </Space>
   )
 }

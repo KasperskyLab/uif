@@ -8,12 +8,18 @@ import { getStatusIcon } from '@src/menu/NavUserItem'
 import { Notification } from '@src/notification'
 import { Space } from '@src/space'
 import { Meta, StoryObj } from '@storybook/react'
-import { Layout as AntLayout } from 'antd'
+import AntLayout from 'antd/es/layout'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { AppUpdate, BookmarkOutline, BookmarkSolid, Help, Moon } from '@kaspersky/hexa-ui-icons/16'
+import {
+  AppUpdate,
+  BookmarkOutline,
+  BookmarkSolid,
+  Help,
+  Moon
+} from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
 import { Hamburger, Menu as MenuComponent } from '../Menu'
@@ -172,19 +178,21 @@ const MockMenuStory = (args: MenuProps & MenuStoryProps) => {
         pinIcon={<BookmarkOutline />}
         unpinIcon={<BookmarkSolid />}
       >
-        { !args.minimizerBottom && <ServicesNav>
-          <Hamburger
-            className="item left"
-            role="button"
-            name="hamburger"
-            collapsed={collapsed}
-            onClick={() => setCollapsed(prevSate => !prevSate)}
-          />
-          {getNotificationsIcon(true)}
-          <Moon className="item" role="button" onClick={ () => clickHandler('change theme') } />
-          <Help className="item" role="button" onClick={ () => clickHandler('open online help') } />
-        </ServicesNav>}
-        { args.showLogo && <AppLogo/> }
+        {!args.minimizerBottom && (
+          <ServicesNav>
+            <Hamburger
+              className="item left"
+              role="button"
+              name="hamburger"
+              collapsed={collapsed}
+              onClick={() => setCollapsed(prevSate => !prevSate)}
+            />
+            {getNotificationsIcon(true)}
+            <Moon className="item" role="button" onClick={() => clickHandler('change theme')} />
+            <Help className="item" role="button" onClick={() => clickHandler('open online help')} />
+          </ServicesNav>
+        )}
+        {args.showLogo && <AppLogo />}
       </MenuComponent>
       <Section gap={10} align="auto" direction="vertical">
         <Notification />

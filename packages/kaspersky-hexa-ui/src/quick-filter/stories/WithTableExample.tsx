@@ -11,9 +11,29 @@ import { tableColumns, tableDataSource } from './mocks'
 
 const filterMappings: Record<string, any> = {
   status: { 1: 'All', 2: true, 3: false },
-  dataType: { 1: 'All', 2: 'JSON', 3: 'XML', 4: 'HTML', 5: 'CSV', 6: 'Binary' },
-  category: { 1: 'All', 2: 'System', 3: 'Storage', 4: 'Cache', 5: 'Balancing', 6: 'Security' },
-  tags: { 1: 'Security', 2: 'Log', 3: 'Backup', 4: 'Performance', 5: 'Traffic' },
+  dataType: {
+    1: 'All',
+    2: 'JSON',
+    3: 'XML',
+    4: 'HTML',
+    5: 'CSV',
+    6: 'Binary'
+  },
+  category: {
+    1: 'All',
+    2: 'System',
+    3: 'Storage',
+    4: 'Cache',
+    5: 'Balancing',
+    6: 'Security'
+  },
+  tags: {
+    1: 'Security',
+    2: 'Log',
+    3: 'Backup',
+    4: 'Performance',
+    5: 'Traffic'
+  },
   availability: { 1: true, 2: false }
 }
 

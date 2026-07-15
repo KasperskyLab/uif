@@ -22,8 +22,8 @@ const DefaultLicenseCard = (props: Omit<LicenseCardProps, 'number'>) => (
 describe('License Card', () => {
 
   test('should render', () => {
-    const { container } = render(<DefaultLicenseCard testId="test-id"  />)
-    
+    const { container } = render(<DefaultLicenseCard testId="test-id" />)
+
     expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
 
@@ -72,7 +72,7 @@ describe('License Card', () => {
 
   test('should render compact mode correctly', () => {
     const { container } = render(<DefaultLicenseCard compact />)
-  
+
     const content = container.querySelector(`.${styles['licenseCardContent--compact']}`) as HTMLElement
     expect(content).toBeInTheDocument()
 
@@ -84,5 +84,19 @@ describe('License Card', () => {
     const actions = <button>Replace license</button>
     render(<DefaultLicenseCard actions={actions} />)
     expect(screen.getByText('Replace license')).toBeInTheDocument()
+  })
+
+  test('should render without status section', () => {
+    const { container } = render(<DefaultLicenseCard statusSection={false} />)
+
+    const row = container.querySelector(`.${styles['licenseCardContentRow']}`) as HTMLElement
+    expect(row).not.toBeInTheDocument()
+  })
+
+  test('should render without validity section', () => {
+    const { container } = render(<DefaultLicenseCard validitySection={false} />)
+
+    const row = container.querySelector(`.${styles['licenseRow']}`) as HTMLElement
+    expect(row).not.toBeInTheDocument()
   })
 })

@@ -3,7 +3,13 @@ import { Loader } from '@src/loader'
 import { Space } from '@src/space'
 import * as React from 'react'
 
-import { CrossS, Download2, File, Reload, StatusDangerOutlineSquare } from '@kaspersky/hexa-ui-icons/16'
+import {
+  CrossS,
+  Download2,
+  File,
+  Reload,
+  StatusDangerOutlineSquare
+} from '@kaspersky/hexa-ui-icons/16'
 
 import {
   FileError,

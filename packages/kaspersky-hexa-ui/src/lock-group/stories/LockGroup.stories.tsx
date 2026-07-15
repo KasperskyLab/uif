@@ -3,6 +3,9 @@ import { withDesignControls } from '@sb/components/designControls'
 import { withMeta } from '@sb/components/Meta'
 import { SBArgType } from '@sb/helpers'
 import { Textbox } from '@src/input'
+import { Popover } from '@src/popover'
+import { Space } from '@src/space'
+import { Tag } from '@src/tag'
 import { Meta, StoryObj } from '@storybook/react'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -19,7 +22,7 @@ const Wrapper = styled.div`
 `
 
 const titleLevels = {
-  options: Object.keys(textLevels).filter(level => ['H6','H5','H4'].includes(level)),
+  options: Object.keys(textLevels).filter(level => ['H6', 'H5', 'H4'].includes(level)),
   control: { type: 'inline-radio' }
 } as SBArgType
 
@@ -100,5 +103,20 @@ export const WithInformationText: Story = {
   render: StoryDefaultRender.bind({}),
   args: {
     informationText: () => <Text>Information text with <a>Information link</a></Text>
+  }
+}
+
+export const ElementAfter: Story = {
+  render: StoryDefaultRender.bind({}),
+  args: {
+    titleElementAfter: (
+      <Space gap="dependent">
+        <Tag>Windows</Tag>
+        <Tag>Mac</Tag>
+        <Popover content={<>Some content</>}>
+          <Tag>Linux (Overwritten)</Tag>
+        </Popover>
+      </Space>
+    )
   }
 }

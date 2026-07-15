@@ -17,7 +17,7 @@ type RepeaterPropsStory = Omit<IRepeaterProps, 'component'> & {
 }
 
 const meta: Meta<IRepeaterProps> = {
-  title: 'Unsorted/Repeater',
+  title: 'Other/Repeater',
   component: Repeater,
   parameters: {
     badges: [badges.dev, badges.missingDesign],

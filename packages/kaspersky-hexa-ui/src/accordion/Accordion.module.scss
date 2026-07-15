@@ -1,6 +1,10 @@
 @use '../../design-system/tokens/typography.module.scss';
 
 .accordionPanel {
+  &.hexa-ui-accordion-title-extraSmall .accordion-header-title {
+    @extend .btm3;
+    min-height: var(--text--btm3--line-height);
+  }
   &.hexa-ui-accordion-title-small .accordion-header-title {
     @extend .h6;
     min-height: var(--text--h6--line-height);
@@ -43,7 +47,7 @@
 
       :global(.rc-collapse-title) {
         order: -1;
-        padding-right: var(--spacing--padding_m);
+        padding-right: var(--spacing--padding_s);
 
         .accordion-header {
           display: flex;
@@ -58,6 +62,10 @@
 
             .accordion-header-tag {
               margin-right: 0;
+            }
+
+            .accordion-header-element-before {
+              display: flex; 
             }
 
             .accordion-header-title {
@@ -99,6 +107,22 @@
 
     &:global(.rc-collapse-item-active):not(:global(.rc-collapse-item-disabled)) :global(.rc-collapse-expand-icon) {
       transform: rotate(90deg);
+    }
+
+    &.hexa-ui-accordion-title-extraSmall {
+      :global(.rc-collapse-header) :global(.rc-collapse-expand-icon) {
+        width: 16px;
+        height: 16px;
+
+        :global(svg) {
+          width: 16px;
+          height: 16px;
+        }
+      }
+
+      :global(.rc-collapse-content) :global(.rc-collapse-body) {
+        padding-top: var(--spacing--padding_m);
+      }
     }
   }
 

@@ -1,6 +1,15 @@
 import { Text } from '@src/typography'
 import React, { FC, useCallback, useMemo, useState } from 'react'
-import { Diff, Hunk, HunkData, markEdits, tokenize, TokenizeOptions, useSourceExpansion, ViewType } from 'react-diff-view'
+import {
+  Diff,
+  Hunk,
+  HunkData,
+  markEdits,
+  tokenize,
+  TokenizeOptions,
+  useSourceExpansion,
+  ViewType
+} from 'react-diff-view'
 import { useTranslation } from 'react-i18next'
 
 import { CollapseAll, ExpandAll } from '@kaspersky/hexa-ui-icons/16'
@@ -73,7 +82,8 @@ export const DiffViewer: FC<DiffViewerProps> = ({ oldValue = '', newValue = '', 
       }
 
       return output
-    }, [expandCode]
+    },
+    [expandCode]
   )
 
   return (
@@ -86,7 +96,7 @@ export const DiffViewer: FC<DiffViewerProps> = ({ oldValue = '', newValue = '', 
           {addedLines ? <Text color="positive">+{addedLines}</Text> : null}
           {expandable && (
             <CodeExpandButton
-              icon={expandedAll ? <CollapseAll /> : <ExpandAll /> }
+              icon={expandedAll ? <CollapseAll /> : <ExpandAll />}
               onClick={() => setExpandedAll(!expandedAll)}
             >
               {t(expandedAll ? 'codeCompare.collapseAll' : 'codeCompare.expandAll')}

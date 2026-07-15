@@ -273,7 +273,6 @@ describe('Modal', () => {
             actions={{
               FIRST_ACTION: {
                 text: 'OK',
-                // @ts-ignore
                 testId: 'first-action',
                 onClick: () => setVisible(false)
               },
@@ -348,7 +347,7 @@ describe('Modal', () => {
   })
 
   it('should not render antd default footer if actions is not passed', async () => {
-    const modal = render(<Modal testId="testModal" visible/>)
+    const modal = render(<Modal testId="testModal" visible />)
     expect(modal.container.querySelector('.ant-modal-footer')).toBeFalsy()
   })
 })

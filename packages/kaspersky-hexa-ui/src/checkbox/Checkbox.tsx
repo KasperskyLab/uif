@@ -1,9 +1,10 @@
 import { AdditionalContent } from '@helpers/components/AdditionalContent'
 import { usePopupConfig } from '@helpers/components/PopupConfigProvider'
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useId } from '@helpers/hooks/useId'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { FormLabel } from '@src/form-label'
-import { Checkbox as AntdCheckbox } from 'antd'
+import AntdCheckbox from 'antd/es/checkbox'
 import cn from 'classnames'
 import React, { FC } from 'react'
 import styled from 'styled-components'
@@ -12,41 +13,32 @@ import { checkboxCss, StyledCheckboxGroup } from './checkboxCss'
 import {
   CheckboxGroupProps,
   CheckboxOption,
-  CheckboxProps,
-  CheckboxViewProps
+  CheckboxProps
 } from './types'
-import { useThemedCheckbox } from './useThemedCheckbox'
 
-const StyledCheckbox = styled(AntdCheckbox).withConfig<CheckboxViewProps>({
-  shouldForwardProp: prop => !['cssConfig'].includes(prop)
-})`${checkboxCss}`
+const StyledCheckbox = styled(AntdCheckbox)`${checkboxCss}`
 
 export const StyledCheckboxWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `
 
-export const Checkbox = (rawProps: CheckboxProps): JSX.Element => {
-  const themedProps = useThemedCheckbox(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <CheckboxView role="checkbox" {...props} mode={rawProps.mode} />
-}
-
-const CheckboxView: FC<CheckboxViewProps> = ({
+export const Checkbox = ({
   className,
   invalid,
   children,
   disabled,
   readonly,
   required,
+  theme,
   tooltip,
   mode = 'primary',
-  testAttributes,
   description,
   dependentElement,
   id,
-  ...rest
-}: CheckboxViewProps) => {
+  ...rawProps
+}: CheckboxProps): JSX.Element => {
+  const { testAttributes, ...rest } = useTestAttribute(rawProps)
   const uid = id || useId()
 
   const config = usePopupConfig()
@@ -56,26 +48,29 @@ const CheckboxView: FC<CheckboxViewProps> = ({
       <StyledCheckbox
         id={uid}
         disabled={disabled || readonly}
-        className={cn(className, {
+        className={cn(getClassNameWithTheme(className, theme), {
           'kl6-checkbox-invalid': invalid,
           'kl6-checkbox-readonly': readonly
         })}
+        role="checkbox"
         {...rest}
       >
         {typeof children === 'string'
-          ? <FormLabel
-              disabled={disabled}
-              required={required}
-              tooltip={tooltip}
-              mode={mode}
-              htmlFor={uid}
-              getPopupContainer={
-                config.getPopupContainer ??
+          ? (
+              <FormLabel
+                disabled={disabled}
+                required={required}
+                tooltip={tooltip}
+                mode={mode}
+                htmlFor={uid}
+                getPopupContainer={
+                  config.getPopupContainer ??
                 (triggerNode => config.usePortal ? document.body : triggerNode.parentElement!)
-              }
-            >
-              {children}
-            </FormLabel>
+                }
+              >
+                {children}
+              </FormLabel>
+            )
           : children
         }
       </StyledCheckbox>
@@ -90,6 +85,7 @@ export const CheckboxGroup: FC<CheckboxGroupProps> = ({
   className,
   role = 'checkbox-group',
   onChange,
+  theme,
   ...rawProps
 }: CheckboxGroupProps) => {
   const { testAttributes, ...rest } = useTestAttribute(rawProps)
@@ -99,7 +95,7 @@ export const CheckboxGroup: FC<CheckboxGroupProps> = ({
       {...rest}
       onChange={onChange}
       role={role}
-      className={cn(className, {
+      className={cn(getClassNameWithTheme(className, theme), {
         'kl6-checkbox-group-vertical': direction === 'vertical',
         'kl6-checkbox-group-horizontal': direction === 'horizontal'
       })}

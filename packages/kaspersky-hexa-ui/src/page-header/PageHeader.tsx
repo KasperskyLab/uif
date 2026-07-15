@@ -2,6 +2,7 @@ import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { Breadcrumbs } from '@src/breadcrumbs'
 import { Tag } from '@src/tag'
 import { H3, Text } from '@src/typography'
+import cn from 'classnames'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -20,11 +21,12 @@ export const PageHeader = (props: PageHeaderProps): JSX.Element => {
     tagsAfter,
     elementAfter,
     title,
-    testAttributes
+    testAttributes,
+    className
   } = useTestAttribute(props)
 
   return (
-    <StyledPageHeader className={prefixClass} {...testAttributes}>
+    <StyledPageHeader className={cn(prefixClass, className)} {...testAttributes}>
       {breadcrumbs && <Breadcrumbs {...breadcrumbs} size="small" />}
       <div className={`${prefixClass}-content`}>
         <div className={`${prefixClass}-content-left`}>
@@ -38,7 +40,7 @@ export const PageHeader = (props: PageHeaderProps): JSX.Element => {
                 </div>
               )}
             </div>
-            <Text type="BTR2">{description}</Text>
+            {description && <Text type="BTR2">{description}</Text>}
           </div>
         </div>
         {elementAfter && <div className={`${prefixClass}-content-right`}>{elementAfter}</div>}

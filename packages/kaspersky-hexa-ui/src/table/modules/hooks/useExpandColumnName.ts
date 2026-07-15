@@ -1,18 +1,26 @@
-import { Table } from 'antd'
-import { useEffect, useState } from 'react'
+import Table from 'antd/es/table'
+import { useEffect, useMemo, useState } from 'react'
 
-import { ITableProps } from '../../types'
-import { defaultExpandConfig } from '../ExpandableRows'
+import { ITableProps, TableRecord } from '../../types'
+import { getDefaultExpandConfig } from '../ExpandableRows'
 
-type UseExpandColumnNameParams = Pick<ITableProps, 'expandable' | 'columns' | 'rowSelection'>
-type UseExpandColumnNameReturnType = ITableProps['expandable']
+type UseExpandColumnNameParams<T extends TableRecord> = Pick<ITableProps<T>, 'expandable' | 'columns' | 'rowSelection'>
+type UseExpandColumnNameReturnType<T extends TableRecord> = ITableProps<T>['expandable']
 
-export const useExpandColumnName = ({ expandable, columns, rowSelection }: UseExpandColumnNameParams): UseExpandColumnNameReturnType => {
-  const [expandableConfig, setExpandableConfig] = useState<ITableProps['expandable']>({ ...defaultExpandConfig, ...expandable })
+export const useExpandColumnName = <T extends TableRecord = TableRecord> ({
+  expandable,
+  columns,
+  rowSelection
+}: UseExpandColumnNameParams<T>): UseExpandColumnNameReturnType<T> => {
+  const defaultExpandConfig = useMemo(() => getDefaultExpandConfig<T>(), [])
+
+  const [expandableConfig, setExpandableConfig] = useState<ITableProps<T>['expandable']>({ ...defaultExpandConfig, ...expandable })
+
+  const hasRowSelection = !!rowSelection
 
   useEffect(() => {
     if (!(expandable?.expandColumnName && columns)) {
-      setExpandableConfig({ ...defaultExpandConfig, ...expandable })
+      setExpandableConfig({ ...defaultExpandConfig, ...expandable, expandIconColumnIndex: hasRowSelection ? 2 : 0 })
       return
     }
 
@@ -23,7 +31,7 @@ export const useExpandColumnName = ({ expandable, columns, rowSelection }: UseEx
       )
     }
 
-    const currentExpandColumnIndex = columns.findIndex(({ dataIndex }) => dataIndex === expandable.expandColumnName)
+    const currentExpandColumnIndex = columns.findIndex(({ key }) => key === expandable.expandColumnName)
 
     if (currentExpandColumnIndex < 0) {
       setExpandableConfig({ ...defaultExpandConfig, ...expandable })
@@ -45,7 +53,7 @@ export const useExpandColumnName = ({ expandable, columns, rowSelection }: UseEx
     }
 
     setExpandableConfig({ ...defaultExpandConfig, ...result })
-  }, [columns, expandable?.expandColumnName, rowSelection])
+  }, [columns, expandable, hasRowSelection])
 
   return expandableConfig
 }

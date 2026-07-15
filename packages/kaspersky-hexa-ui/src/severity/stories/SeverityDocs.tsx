@@ -15,24 +15,25 @@ export const SeverityDocs: React.VFC = () => {
         <Text>Medium</Text>
         <Space gap={4} direction="horizontal" align="flex-start" >
           {Object.keys(themeColors.criticalitystatuses)
-            .map((status) =>
+            .map((status) => (
               <Severity key={status}
                 mode={status as SeverityProps['mode']}
                 size="medium"
 
-              >{status}</Severity>)}
+              >{status}</Severity>
+            ))}
         </Space>
         <Text>Small</Text>
         <Space gap={4} direction="horizontal" align="flex-start" >
           {Object.keys(themeColors.criticalitystatuses)
-            .map((status) =>
+            .map((status) => (
               <Severity key={status}
                 mode={status as SeverityProps['mode']}
                 size="small"
               >
                 {status}
               </Severity>
-            )}
+            ))}
         </Space>
       </Space>
     </>

@@ -2,9 +2,8 @@ import { Textbox } from '@src/input'
 import { Select } from '@src/select'
 import React, { FC, useEffect, useState } from 'react'
 
-import { EnumOption, FilterOperation, LegacyEnumOption } from '../../Filters'
-import { isMultipleOp } from '../../Filters/helpers'
-import { getEnumOption } from '../filters'
+import { EnumOption, FilterOperation } from '../../Filters'
+import { isMultipleOp, resolveEnumOptions } from '../../Filters/helpers'
 
 import { EnumItemProps } from './types'
 
@@ -13,26 +12,22 @@ export const EnumItem: FC<EnumItemProps> = ({
   onChange,
   validationStatus,
   getAvailableOptions,
-  getAvailableValues
+  getAvailableValues,
+  ...props
 }) => {
-  const [options, setOptions] = useState<(EnumOption | LegacyEnumOption)[]>([])
+  const [options, setOptions] = useState<EnumOption[]>([])
+  const testId = `filter-item-value-select-${props.index}`
 
   useEffect(() => {
-    if (getAvailableOptions) {
-      getAvailableOptions().then(setOptions)
-
+    if (!getAvailableOptions && !getAvailableValues) {
+      console.warn(
+        'getAvailableOptions or getAvailableValues is required for EnumItem'
+      )
       return
     }
 
-    if (getAvailableValues) {
-      getAvailableValues().then(setOptions)
-
-      return
-    }
-
-    console.warn(
-      'getAvailableOptions or getAvailableValues is required for EnumItem'
-    )
+    resolveEnumOptions(getAvailableOptions, getAvailableValues, filter.name)
+      .then(res => res && setOptions(res))
   }, [])
 
   const handleValueChange = (value: EnumOption['value'] | EnumOption['value'][]) => {
@@ -55,17 +50,16 @@ export const EnumItem: FC<EnumItemProps> = ({
 
   return (
     <Select
+      testId={testId}
+      klId={testId}
       mode={isMultiple ? 'multiple' : undefined}
       onChange={handleValueChange}
       value={filter.value ?? undefined}
-      options={options.map((option, index) => {
-        const { value, label } = getEnumOption(option) || {}
-        return {
-          value,
-          label,
-          key: `${value}:${index}`
-        }
-      })}
+      options={options.map((option, index) => ({
+        ...option,
+        testId: `filter-item-value-select-option-${props.index}-${index}`,
+        key: `${option.value}:${index}`
+      }))}
       validationStatus={validationStatus}
     />
   )

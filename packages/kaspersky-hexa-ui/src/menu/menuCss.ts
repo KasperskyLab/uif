@@ -15,6 +15,11 @@ export const menuCss = css`
   &.menu-submenu-margin {
     margin-right: 280px;
   }
+
+  && .menu-collapse-button,
+  && .menu-collapse-button > svg {
+    color: var(--menu_item--text--label--enabled);
+  }
 `
 
 export const bottomWrapperCss = css`

@@ -8,7 +8,7 @@ import { getMappedControl } from './getMappedControl'
 import { FieldSetItem, FieldSetProps } from './types'
 
 export const FieldSet: FC<FieldSetProps> = (rawProps: FieldSetProps) => {
-  const { 
+  const {
     className,
     disabled,
     items,

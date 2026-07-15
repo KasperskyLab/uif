@@ -44,7 +44,7 @@ describe('ActionButton', () => {
   // Tabnine
   it('should render correctly with custom icon', () => {
     const { container } = render(
-      <ActionButton icon={<ArrowDown className="custom-action-button-icon"/>}>
+      <ActionButton icon={<ArrowDown className="custom-action-button-icon" />}>
         Custom Icon Text
       </ActionButton>
     )
@@ -57,7 +57,7 @@ describe('ActionButton', () => {
 
   it('should render correctly with react node after', () => {
     const { container } = render(
-      <ActionButton elementAfter={<ArrowDown className="react-node-after"/>}>
+      <ActionButton elementAfter={<ArrowDown className="react-node-after" />}>
         Custom Icon Text
       </ActionButton>
     )

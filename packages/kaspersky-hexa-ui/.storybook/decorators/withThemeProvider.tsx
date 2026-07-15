@@ -8,13 +8,20 @@ import styled from 'styled-components'
 export const withThemeProvider = (Story: FC, context: any) => {
   const themeKey = context.globals.theme || ThemeKey.Light
   const direction = context.globals.direction || 'ltr'
+  const isFullscreenLayout = context.parameters?.layout === 'fullscreen'
 
   return (
     <ThemeProvider theme={themeKey}>
       <GlobalStyle />
-      <StoryLayoutContainer theme={themeKey} dir={direction}>
-        <Story {...context} theme={themeKey} />
-      </StoryLayoutContainer>
+      {isFullscreenLayout ? (
+        <div dir={direction}>
+          <Story {...context} theme={themeKey} />
+        </div>
+      ) : (
+        <StoryLayoutContainer theme={themeKey} dir={direction}>
+          <Story {...context} theme={themeKey} />
+        </StoryLayoutContainer>
+      )}
     </ThemeProvider>
   )
 }

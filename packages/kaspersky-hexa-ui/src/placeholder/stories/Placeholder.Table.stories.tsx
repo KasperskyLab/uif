@@ -78,8 +78,14 @@ export const InTable: Story = {
   render: (args) => (
     <Space gap={16}>
       <SectionMessage mode="info" closable={false}>
-        <P>If the table is surrounded by form elements, other parts of the interface, or other tables, then the Placeholder takes on a height depending on the content, but not less than 200px.</P>
-        <P>Если таблицу окружают элементы формы, другие части интерфейса или другие таблицы, то Placeholder принимает высоту в зависимости от контента, но не менее 200px.</P>
+        <P>
+          If the table is surrounded by form elements, other parts of the interface, or other tables,
+          then the Placeholder takes on a height depending on the content, but not less than 200px.
+        </P>
+        <P>
+          Если таблицу окружают элементы формы, другие части интерфейса или другие таблицы, то Placeholder принимает
+          высоту в зависимости от контента, но не менее 200px.
+        </P>
       </SectionMessage>
       <StyledTable
         dataSource={[]}
@@ -109,8 +115,14 @@ export const HorizontalScrolling: Story = {
   render: (args) => (
     <Space width="100%" gap={16}>
       <SectionMessage mode="info" closable={false}>
-        <P>In this case, the placeholder is arranged according to the rules for tables. It remains fixed when scrolling horizontally. Only the header of the table will be scrolled.</P>
-        <P>Placeholder в таком случае располагается по правилам для таблиц. При горизонтальном скролле остаётся неподвижным. Скроллится только шапка таблицы.</P>
+        <P>
+          In this case, the placeholder is arranged according to the rules for tables. It remains fixed when scrolling horizontally.
+          Only the header of the table will be scrolled.
+        </P>
+        <P>
+          Placeholder в таком случае располагается по правилам для таблиц. При горизонтальном скролле остаётся неподвижным.
+          Скроллится только шапка таблицы.
+        </P>
       </SectionMessage>
       <StyledTable
         dataSource={[]}

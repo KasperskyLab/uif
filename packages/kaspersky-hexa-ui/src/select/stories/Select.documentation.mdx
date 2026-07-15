@@ -1,0 +1,181 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Select } from '../Select'
+import * as SelectStories from './Select.stories'
+import { selectDesignPropPresentation } from './Select.design.properties'
+
+<Meta of={SelectStories} name="Select Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Select"
+  description='**Select** — компонент выбора значения из выпадающего списка'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Select** позволяет выбрать одно или несколько значений из предопределённого списка опций. Основан на rc-select с темизацией Hexa UI. Поддерживает одиночный выбор (по умолчанию), множественный выбор (**mode**=`multiple`) и режим тегов (**mode**=`tags`). Ключевые настройки: **mode**, **validationStatus**, **disabled**, **readOnly**, **allowClear**, **showSearch**, **loading**, **options**, **placeholder**, **renderHeader**, **renderFooter**, **loadingError**, **hasMore**/**onLoadMore**."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Режим выбора значений. По умолчанию — одиночный (без указания **mode**). `multiple` — множественный выбор: выбранные значения отображаются в виде тегов с чекбоксами в списке. `tags` — аналогично `multiple`, но дополнительно позволяет вводить произвольные значения, не входящие в список опций."
+      code='
+<Select
+  usePortal
+  options={[{label: "Moscow", value: 1}, {label: "Kazan", value: 2}, {label: "Omsk", value: 3}]}
+  placeholder="Single"
+/>
+<Select
+  usePortal
+  mode="multiple"
+  options={[{label: "Moscow", value: 1}, {label: "Kazan", value: 2}, {label: "Omsk", value: 3}]}
+  placeholder="Multiple"
+/>
+<Select
+  usePortal
+  mode="tags"
+  options={[{label: "Moscow", value: 1}, {label: "Kazan", value: 2}, {label: "Omsk", value: 3}]}
+  placeholder="Tags"
+/>'
+    />
+
+    <DocExampleBlock
+      title="validationStatus"
+      description="Статус валидации компонента. Доступные значения: `default`, `error`, `success`. По умолчанию — `default`."
+      code='
+<Select usePortal validationStatus="default" options={[{label: "Опция 1", value: 1}]} placeholder="default" />
+<Select usePortal validationStatus="error" options={[{label: "Опция 1", value: 1}]} placeholder="error" />
+<Select usePortal validationStatus="success" options={[{label: "Опция 1", value: 1}]} placeholder="success" />'
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Недоступное состояние. Компонент не реагирует на взаимодействие пользователя и отображается в стиле `disabled`. По умолчанию — `false`."
+      code='<Select usePortal disabled options={[{label: "Опция 1", value: 1}]} defaultValue={1} />'
+    />
+
+    <DocExampleBlock
+      title="readOnly"
+      description="Режим только для чтения. В отличие от **disabled**, сохраняет нормальный визуальный стиль, но не принимает новых значений. По умолчанию — `false`."
+      code='<Select usePortal readOnly options={[{label: "Опция 1", value: 1}]} defaultValue={1} />'
+    />
+
+    <DocExampleBlock
+      title="allowClear"
+      description="Кнопка сброса выбранного значения. В режиме `multiple` и `tags` кнопка сброса отображается всегда независимо от **allowClear**. По умолчанию — `false`."
+      code='<Select usePortal allowClear options={[{label: "Опция 1", value: 1}]} defaultValue={1} />'
+    />
+
+    <DocExampleBlock
+      title="showSearch"
+      description="Включает поле поиска в выпадающем списке. Фильтрация выполняется по полю `label` опции. По умолчанию — `false`. Связанный проп **autoClearSearchValue** — сбрасывает строку поиска при выборе значения (по умолчанию `true`, применяется в режимах `multiple` и `tags`)."
+      code='<Select usePortal showSearch allowClear options={[{label: "Moscow", value: 1}, {label: "Saint Petersburg", value: 2}, {label: "Novosibirsk", value: 3}, {label: "Kazan", value: 4}]} placeholder="Search..." />'
+    />
+
+    <DocExampleBlock
+      title="loading"
+      description="Состояние загрузки. В выпадающем списке отображается **Loader**, опции скрыты. По умолчанию — `false`."
+      code='<Select usePortal loading options={[{label: "Опция 1", value: 1}]} placeholder="Loading..." />'
+    />
+
+    <DocExampleBlock
+      title="loadingError"
+      description="Сообщение об ошибке загрузки данных. Скрывает опции и стандартный контент «нет данных». Принимает `ReactElement` или строку."
+      code='<Select usePortal loadingError={<span>Ошибка загрузки данных</span>} options={[{label: "Опция 1", value: 1}]} placeholder="Select" />'
+    />
+
+    <DocExampleBlock
+      title="placeholder"
+      description="Текст-заполнитель, отображаемый при отсутствии выбранного значения."
+      code='<Select usePortal placeholder="Выберите город" options={[{label: "Moscow", value: 1}, {label: "Kazan", value: 2}]} />'
+    />
+
+    <DocExampleBlock
+      title="options"
+      description="Список опций для отображения. Принимает массив объектов типа `OptionType`. Каждая опция может содержать: `label` — отображаемый текст, `value` — уникальное значение, `description` — дополнительное описание под `label`, `disabled` — недоступная опция, `actions` — кнопки действий при наведении, `dataLabel` — строковое представление `label` для атрибута `data-label`."
+      code='<Select
+  usePortal
+  options={[
+    {label: "Опция без описания", value: 1},
+    {label: "Опция с описанием", value: 2, description: "Дополнительная информация"},
+    {label: "Недоступная опция", value: 3, disabled: true}
+  ]}
+  placeholder="Select"
+/>'
+    />
+
+    <DocExampleBlock
+      title="renderHeader и renderFooter"
+      description="Слоты для кастомного контента в шапке и подвале выпадающего списка. Контент отделяется от списка опций разделителем **Divider**."
+      code='<Select
+  usePortal
+  renderHeader={() => <div style={{padding: "8px 12px", fontWeight: "bold"}}>Заголовок списка</div>}
+  renderFooter={() => <div style={{padding: "8px 12px", color: "gray"}}>Подвал списка</div>}
+  options={[{label: "Опция 1", value: 1}, {label: "Опция 2", value: 2}]}
+  placeholder="Select"
+/>'
+    />
+
+    <DocExampleBlock
+      title="hasMore и onLoadMore"
+      description="Используются вместе для реализации пагинации при загрузке опций. **hasMore**=`true` отображает спиннер после последней опции. **onLoadMore** вызывается один раз при прокрутке к концу списка — функция должна быть обёрнута в `useCallback`. Требует включённого виртуального скролла (**virtual** не `false`)."
+      code='<Select
+  usePortal
+  hasMore
+  onLoadMore={() => alert("Load more triggered")}
+  options={[{label: "Опция 1", value: 1}, {label: "Опция 2", value: 2}, {label: "Опция 3", value: 3}]}
+  placeholder="Select"
+/>'
+    />
+
+    <DocExampleBlock
+      title="maxTagCount"
+      description="Максимальное количество отображаемых тегов в режимах `multiple` и `tags`. Когда выбрано больше — лишние теги сворачиваются в счётчик `+ N ...`. Значение `responsive` автоматически подстраивается под ширину компонента. По умолчанию — без ограничений."
+      code='<Select
+  usePortal
+  mode="multiple"
+  maxTagCount={2}
+  defaultValue={[1, 2, 3]}
+  options={[{label: "Moscow", value: 1}, {label: "Kazan", value: 2}, {label: "Omsk", value: 3}]}
+  placeholder="Select"
+/>'
+    />
+
+    <DocExampleBlock
+      title="usePortal и getPopupContainer"
+      description="Управляют местом рендеринга выпадающего списка. По умолчанию список рендерится внутри родительского DOM-узла, что может вызывать проблемы с `overflow: hidden` или `z-index`. **usePortal**=`true` — сокращение для `getPopupContainer={() => document.body}`, переносит список в `body`. **closeOnParentScroll**=`true` — закрывает открытый список при прокрутке родительского скроллируемого элемента."
+      code='<Select usePortal options={[{label: "Опция 1", value: 1}]} placeholder="usePortal" />'
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Select** применяется в формах и настройках, когда пользователю нужно выбрать одно или несколько значений из фиксированного набора вариантов, который слишком велик для радиокнопок или чекбоксов. Одиночный режим подходит для полей с однозначным выбором — страна, статус, категория. Множественный режим (`multiple`) используется, когда допускается выбор нескольких значений из предопределённых: теги, роли, разрешения. Режим `tags` подходит, когда пользователю нужна возможность вводить произвольные значения помимо готовых вариантов — например, email-адреса или ключевые слова.
+
+Используйте **Field** или **FieldSet** в качестве обёртки, чтобы связать компонент с подписью. Если список опций подгружается динамически — используйте **loading** при ожидании данных и **loadingError** при ошибке. При проблемах с перекрытием выпадающего списка другими блоками или при скролле родительского контейнера — применяйте **usePortal** или **closeOnParentScroll**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(selectDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={SelectStories} />
+    <AutodocArgsTable components={Select} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

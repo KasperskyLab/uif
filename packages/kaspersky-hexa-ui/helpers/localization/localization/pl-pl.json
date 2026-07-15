@@ -87,7 +87,7 @@
       "total": "Łącznie {{count}}",
       "selected": "Wybrano {{count}}",
       "page": "strona",
-      "goto": "Przejdź do"
+      "goto": "Przejdź do strony"
     },
     "search": {
       "raw": "Szukaj",
@@ -100,6 +100,14 @@
         "sorting": "Sortowanie",
         "filters": "Filtr",
         "resetFilters": "Resetuj filtr"
+      },
+      "contextMenu": {
+        "selected": "Wybrano: {{count}}"
+      },
+      "selectAll": {
+        "selectAll": "Wybierz wszystkie",
+        "selectCurrentPage": "Wybierz wszystko na bieżącej stronie",
+        "deselectAll": "Zresetuj wszystko"
       },
       "columnsSettings": {
         "header": "Ustawienia tabeli",
@@ -124,18 +132,24 @@
           "add": "Dodaj",
           "clearAll": "Wyczyść wszystkie",
           "property": "Własność",
+          "attribute": "Atrybut",
           "condition": "Warunek",
           "from": "od",
           "to": "do",
-          "value": "Wartość"
+          "value": "Wartość",
+          "validation": {
+            "emptyValue": "Określ wartość filtrowania",
+            "duplicateFilters": "Zduplikowane filtry. Upewnij się, że każdy filtr jest unikalny."
+          }
         },
-        "columnHideIsUnavailable": "Ukrywanie kolumn nie jest dostępne"
+        "columnHideIsUnavailable": "Ukrywanie kolumn nie jest dostępne",
+        "onlyForFiltering": "Ta kolumna służy wyłącznie do filtrowania"
       },
       "filterOperation": {
         "⊆": "Zawiera",
         "⊄": "Nie zawiera",
         "cont_and": "Zawiera (ORAZ)",
-        "cont_or": "Zawiera (LUB)",
+        "cont_or": "Is one of",
         "ncont_or": "Nie zawiera",
         "*=": "Regexp",
         "empty": "Puste",
@@ -204,10 +218,14 @@
       "remaining": "Pozostało",
       "activationDate": "Data aktywacji",
       "expirationDate": "Data wygaśnięcia",
-      "term": "Warunek",
+      "term": "Okres obowiązywania",
       "dayLeft": "Pozostał {{count}} dzień",
       "daysLeft": "Pozostało {{count}} dni",
-      "termDays": "{{count}} dni"
+      "termDays": "{{count}} dni",
+      "statuses": {
+        "valid": "Aktywny",
+        "expired": "Utraciła ważność"
+      }
     },
     "input": {
       "password": {

@@ -53,7 +53,7 @@ describe('FieldSet', () => {
     }))
 
     const { container } = render(<>
-      <DefaultFieldSet items={[items[0], items[1]]}/>
+      <DefaultFieldSet items={[items[0], items[1]]} />
       <DefaultFieldSet
         items={[items[2], items[3]]}
         fieldClassName="common-class1"

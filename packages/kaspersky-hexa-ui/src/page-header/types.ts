@@ -9,5 +9,6 @@ export type PageHeaderProps = {
   elementAfter?: ReactNode,
   iconBefore?: ReactNode,
   tagsAfter?: TagGroupProps['items'],
-  title?: string
+  title?: string,
+  className?: string
 } & TestingProps

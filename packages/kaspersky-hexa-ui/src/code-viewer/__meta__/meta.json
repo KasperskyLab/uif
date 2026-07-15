@@ -11,7 +11,7 @@
     "pixsoView": true
   },
   "component": "Code viewer",
-  "description": "Компонент Code viewer используется в сценариях, когда нужно работать с кодом и функциями. Редактор построен на CodeMirror 6: все пакеты @codemirror/* в приложении-потребителе должны резолвиться в одну физическую копию, иначе возможен runtime-crash (в том числе при language=\"json\"). В @kaspersky/hexa-ui версии @codemirror зафиксированы через overrides и прямые зависимости. Если в проекте есть собственные @codemirror, настройте дедупликацию: Vite — resolve.dedupe для @codemirror/state, @codemirror/view, @codemirror/language, @codemirror/lint, @codemirror/autocomplete и @codemirror/commands; Webpack — resolve.alias на единственный экземпляр этих пакетов; npm/yarn — overrides с версиями из package.json hexa-ui (@codemirror/state 6.5.0, @codemirror/view 6.36.1 и др.). Проверка: npm ls @codemirror/state — должна быть одна версия без вложенных дубликатов.",
+  "description": "Компонент Code viewer используется в сценариях, когда нужно работать с кодом и функциями.",
   "usage": "Нотации и языки по умолчанию: HTML, JSON, XML, JavaScript, JSX, TypeScript, TSX.",
   "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=53702%3A194802",
   "pixsoView": "https://pixso.net/app/design/v67aCRl5t--3QSa2Az8TaQ"

@@ -99,7 +99,7 @@ export const Field: FC<FieldProps> = (props: FieldProps) => {
           )}
           {onHelpClick && (
             <div className="kl6-field-control-additional">
-              <Help onClick={onHelpClick} className="kl6-field-help-icon"/>
+              <Help onClick={onHelpClick} className="kl6-field-help-icon" />
             </div>
           )}
         </div>

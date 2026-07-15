@@ -1,7 +1,8 @@
 import { useIntersectionChildren } from '@helpers/useIntersectionChildren'
 import { ReactElement, RefObject } from 'react'
 
-export function useIntersection (tabsRef: RefObject<HTMLDivElement>,
+export function useIntersection (
+  tabsRef: RefObject<HTMLDivElement>,
   tabs: ReactElement[],
   buttonMoreSize: number,
   extraContentWidthWithGap: number,

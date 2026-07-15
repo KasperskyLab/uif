@@ -6,15 +6,15 @@ import React from 'react'
 import { Table } from '..'
 import MetaData from '../__meta__/meta.json'
 import { createMockDataSourceFunction, generatedData, tableColumns } from '../__mocks__/filtersMockData'
-import { ITableProps, TableColumn } from '../types'
+import { ITableProps } from '../types'
 
-import { Story, Wrapper } from './_commonConstants'
+import { mockGetLeftItems, Story, Wrapper } from './_commonConstants'
 
 const meta: Meta<ITableProps> = {
   title: 'Hexa UI Components/Table/dataSourceFunction',
   component: Table,
   args: {
-    columns: tableColumns as TableColumn[],
+    columns: tableColumns,
     dataSourceFunction: createMockDataSourceFunction(generatedData),
     useFiltersSidebar: true,
     rowSelection: {
@@ -24,8 +24,10 @@ const meta: Meta<ITableProps> = {
     toolbar: {
       showGrouping: true,
       showFilterSidebar: true,
-      showSearch: true
-    }
+      showSearch: true,
+      getLeftItems: mockGetLeftItems
+    },
+    borderedStyle: false
   },
   parameters: {
     badges: [badges.stable],
@@ -37,7 +39,7 @@ const meta: Meta<ITableProps> = {
     }
   },
   decorators: [
-    (Story, context) => <Wrapper><Story {...context}/></Wrapper>
+    (Story, context) => <Wrapper><Story {...context} /></Wrapper>
   ],
   tags: ['!autodocs']
 }

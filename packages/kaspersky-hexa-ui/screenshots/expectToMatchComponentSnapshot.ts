@@ -27,7 +27,7 @@ export async function toMatchComponentSnapshot ({ browser, story, type }: MatchP
   const image = await page.screenshot({ fullPage: true })
   await page.close()
 
-  // @ts-ignore
+  // @ts-expect-error легаси
   return toMatchImageSnapshot.call(this, image, {
     ...snapshotConfig,
     customSnapshotIdentifier: `${type}/${story}`

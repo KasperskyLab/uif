@@ -12,7 +12,10 @@ import { StatusCard as StatusCardComponent } from './StatusCard'
 import { iconVariants, statusCardModes, StatusCardProps, statusCardSizes } from './types'
 
 const DefaultDescription = () => (
-  <>Lorem ipsum dolor sit amet, consectetur adipiscing elit. <Link href="#">Nullam nulla</Link> purus, aliquam at massa at, imperdiet malesuada neque. Sed mollis <Link href="#">accumsan</Link> quam ac ultrices. Vestibulum rhoncus ante sit amet gravida ornare.</>
+  <>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. <Link href="#">Nullam nulla</Link> purus, aliquam at massa at,
+    imperdiet malesuada neque. Sed mollis <Link href="#">accumsan</Link> quam ac ultrices. Vestibulum rhoncus ante sit amet gravida ornare.
+  </>
 )
 
 const DefaultChildren = () => (

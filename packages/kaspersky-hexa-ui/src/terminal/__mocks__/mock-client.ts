@@ -34,11 +34,11 @@ export class MockClient {
     error: Array<(ev: Event) => void>,
     close: Array<(ev: CloseEvent) => void>
   } = {
-      open: [],
-      message: [],
-      error: [],
-      close: []
-    }
+    open: [],
+    message: [],
+    error: [],
+    close: []
+  }
 
   connect () {
     setTimeout(() => {

@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { generatedData, groups, tableColumns } from '../__mocks__/filtersMockData'
+import { modifyColumns } from '../test-utils/helpers'
 import { Table } from '../test-utils/shared'
 
 const DefaultTable = (props: ITableProps) => (
@@ -33,8 +34,28 @@ describe('Groups module', () => {
     expect(groupTitleRows.length).toBe(0)
   })
 
-  it('should group rows by specified field', () => {
+  it('should group rows by specified field when groupBy is provided', () => {
     const { container } = render(<DefaultTable />)
+
+    const groupTitles = getGroupTitles(container)
+
+    groups.forEach(group => {
+      expect(groupTitles).toContain(group)
+    })
+  })
+
+  it('should group rows by specified field when defaultGroupBy is provided', () => {
+    const { container } = render(<DefaultTable groupBy={undefined} defaultGroupBy="group" />)
+
+    const groupTitles = getGroupTitles(container)
+
+    groups.forEach(group => {
+      expect(groupTitles).toContain(group)
+    })
+  })
+
+  it('should group rows by specified field when both groupBy and defaultGroupBy are provided', () => {
+    const { container } = render(<DefaultTable defaultGroupBy="isTrainee" />)
 
     const groupTitles = getGroupTitles(container)
 
@@ -53,6 +74,20 @@ describe('Groups module', () => {
 
     const customTitlesInContainer = container.querySelectorAll('[kl-id="custom-group-title"]')
     expect(customTitlesInContainer.length).toBeGreaterThan(0)
+  })
+
+  it('should handle group text using resolveGroupingValue', () => {
+    const patchedColumns = modifyColumns(tableColumns, 'group', {
+      resolveGroupingValue: (row) => row.group.someInnerValue,
+      render: (value) => value?.someInnerValue
+    })
+    const patchedData = generatedData.map(({ group, ...row }) => ({ ...row, group: { someInnerValue: group } }))
+    const { container } = render(
+      <DefaultTable columns={patchedColumns} dataSource={patchedData} />
+    )
+
+    const groupTitle = container.querySelector('.group-title-item')?.textContent
+    expect(groupTitle).toBe('Unmanaged')
   })
 
   it('should sort groups alphabetically by default when groupComparer is not provided', () => {

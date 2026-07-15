@@ -1,9 +1,9 @@
 import { badges } from '@sb/badges'
-import { withDesignControls } from '@sb/components/designControls'
+import {
+  buildStoryArgTypes,
+  getControlsInclude
+} from '@sb/components/Documentation'
 import { withMeta } from '@sb/components/Meta'
-import { renderVariants } from '@sb/StoryComponents'
-import { Space } from '@src/space'
-import { Tag } from '@src/tag'
 import { Text } from '@src/typography'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
@@ -12,140 +12,67 @@ import MetaData from '../__meta__/meta.json'
 import { Alert as AlertComponent } from '../Alert'
 import { alertModes, AlertProps } from '../types'
 
-const meta: Meta<AlertProps> = {
+import { alertPropPresentation } from './Alert.controls'
+
+export { alertModes }
+
+const alertControlsOrder = getControlsInclude(alertPropPresentation)
+
+export const alertStorySettings: Meta<AlertProps> = {
+  args: {
+    mode: 'info',
+    closable: false,
+    children: 'You can swap «children»',
+    testId: 'alert-test-id',
+    klId: 'alert-kl-id'
+  },
+  argTypes: buildStoryArgTypes(alertPropPresentation),
+  parameters: {
+    badges: [badges.stable, badges.reviewedByDesign],
+    docs: {
+      page: withMeta(MetaData)
+    },
+    design: MetaData.pixsoView
+  }
+}
+
+const meta = {
   title: 'Hexa UI Components/Alert',
   component: AlertComponent,
-  ...withDesignControls<AlertProps>({
-    componentName: 'alert',
-    meta: {
-      argTypes: {
-        mode: {
-          control: 'select',
-          options: alertModes
-        },
-        actions: {
-          control: 'boolean'
-        },
-        width: {
-          control: {
-            type: 'number',
-            min: 0,
-            max: 2000,
-            step: 1
-          }
-        }
-      },
-      args: {
-        mode: 'info',
-        closable: false,
-        children: 'You can swap «children»',
-        testId: 'alert-test-id',
-        klId: 'alert-kl-id'
-      },
-      parameters: {
-        badges: [badges.stable, badges.reviewedByDesign],
-        docs: {
-          page: withMeta(MetaData)
-        },
-        design: MetaData.pixsoView
-      }
-    }
-  })
-}
+  tags: ['!autodocs'],
+  includeStories: ['Playground'],
+  excludeStories: ['alertModes', 'alertStorySettings'],
+  ...alertStorySettings
+} satisfies Meta<typeof AlertComponent>
+
 export default meta
 
-type StoryAlertProps = Omit<AlertProps, 'actions'> & {
-  actions: boolean
-}
+type Story = StoryObj<AlertProps>
 
-type Story = StoryObj<StoryAlertProps>
-
-const actionsButtons: AlertProps['actions'] = {
-  FIRST_ACTION: {
-    text: 'Action',
-    onClick: () => console.log('Action1')
-  }
-}
-
-export const Alert: Story = {
-  render: ({ actions, ...rest }: StoryAlertProps) => <AlertComponent {...rest} actions={actions ? actionsButtons : undefined} />
-}
-
-export const Mode: Story = {
-  render: ({
-    children,
-    actions,
-    ...rest
-  }: StoryAlertProps) =>
-    renderVariants(
-      alertModes.map(mode => ({
-        label: mode,
-        content:
-          <AlertComponent {...rest} mode={mode} actions={actions ? actionsButtons : undefined}>
-            <Text type="BTR3">{children}</Text>
-          </AlertComponent>
-      })),
-      true
-    ),
-  argTypes: {
-    mode: { control: false }
-  }
-}
-
-export const Action: Story = {
-  render: ({
-    children,
-    ...rest
-  }: StoryAlertProps) =>
-    renderVariants(
-      alertModes.map(mode => ({
-        label: mode,
-        content:
-          <AlertComponent {...rest} mode={mode} actions={actionsButtons}>
-            <Text type="BTR3">{children}</Text>
-          </AlertComponent>
-      })),
-      true
-    ),
-  argTypes: {
-    mode: { control: false },
-    actions: { control: false }
-  }
-}
-
-export const Closable: Story = {
-  render: ({
-    children,
-    actions,
-    ...rest
-  }: StoryAlertProps) =>
-    renderVariants(
-      alertModes.map(mode => ({
-        label: mode,
-        content:
-          <AlertComponent {...rest} mode={mode} actions={actions ? actionsButtons : undefined} closable>
-            <Text type="BTR3">{children}</Text>
-          </AlertComponent>
-      })),
-      true
-    ),
-  argTypes: {
-    mode: { control: false },
-    closable: { control: false }
-  }
-}
-
-export const Children: Story = {
-  render: ({ actions, ...rest }: StoryAlertProps) => <AlertComponent {...rest} actions={actions ? actionsButtons : undefined} />,
+export const Playground: Story = {
   args: {
-    children: (
-      <Space gap={8}>
-        <Space>
-          <Tag outlined>Tag</Tag>
-          <Text type="H6">Custom title</Text>
-        </Space>
-        <Text>With multiple lines</Text>
-      </Space>
-    )
-  }
+    mode: 'success',
+    closable: true,
+    children: 'Текст сообщения',
+    width: ''
+  },
+
+  name: 'Playground',
+
+  parameters: {
+    controls: {
+      include: alertControlsOrder,
+      sort: 'none'
+    }
+  },
+
+  render: ({ children, ...rest }: AlertProps) => (
+    <AlertComponent {...rest}>
+      {typeof children === 'string' ? (
+        <Text type="BTR3">{children}</Text>
+      ) : (
+        children
+      )}
+    </AlertComponent>
+  )
 }

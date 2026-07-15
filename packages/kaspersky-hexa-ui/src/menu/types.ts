@@ -1,7 +1,7 @@
 import { Theme } from '@design-system/types'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 import { SubmenuItemProps } from '@src/submenu'
-import { SiderProps as AntSiderProps } from 'antd'
+import type { SiderProps as AntSiderProps } from 'antd'
 import { Dispatch, PropsWithChildren, ReactNode, SetStateAction } from 'react'
 
 export type UserStatus = 'available' | 'unavailable'
@@ -11,6 +11,7 @@ export type NavItemNotifications = {
   warning?: number,
   info?: number,
   multi?: number,
+  new?: number
 }
 
 export type NavItemData = {
@@ -160,6 +161,7 @@ MenuApplyTheme & {
   onItemsChanged?: OnItemsChangedCallback,
   onFavChanged?: OnFavChangedCallback,
   onFavToggle?: OnFavToggleCallback,
+  onCollapse?: (value: boolean) => void,
   pinIcon?: ReactNode,
   unpinIcon?: ReactNode
   favIcon?: ReactNode,

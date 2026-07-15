@@ -222,7 +222,7 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
         {...testAttributes}
         {...rest}
         locale={localeOptions.locale}
-        separator={<RangeSeparator/>}
+        separator={<RangeSeparator />}
         cssConfig={cssConfig.inputCssConfig}
         onKeyDown={handleKeyDown}
         open={open ?? isOpen}
@@ -251,21 +251,26 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
         }}
         renderExtraFooter={
           presets
-            ? () => <Presets
-                presets={presets}
-                onChange={(dates: RangeDateInputValue) => {
-                  setOpenState(false)
-                  destroyMask()
-                  setDate(dates)
-                  handleOnChange(dates)
-                }}
-              />
+            ? () => (
+                <Presets
+                  presets={presets}
+                  onChange={(dates: RangeDateInputValue) => {
+                    setOpenState(false)
+                    destroyMask()
+                    setDate(dates)
+                    handleOnChange(dates)
+                  }}
+                />
+              )
             : undefined
         }
         panelRender={(container: HTMLElement) => (
           <CalendarContainer
             ref={calendarRef}
-            className={cn(rest.className, 'kl6-datepicker-calendar', { 'kl6-datepicker-range-time-calendar': showTime })}
+            className={cn(rest.className, rest.dropdownClassName, 'kl6-datepicker-calendar', {
+              'kl6-datepicker-range-time-calendar': showTime,
+              'kl6-datepicker-range-presets-calendar': presets?.length
+            })}
             data-testid={`${testId}-range-calendar`}
             cssConfig={cssConfig.pickerCssConfig}
             onClick={onClickHandler}
@@ -274,17 +279,19 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
           </CalendarContainer>
         )}
         suffixIcon={date?.some(date => date !== null) && !disabled && !readonly
-          ? (<ActionButton
-              testId={`${testId}-calendar-clear-icon`}
-              mode="filled"
-              onClick={(event) => {
-                destroyMask()
-                setDate([null, null])
-                handleOnChange(null)
-                wrapperRef.current?.querySelector('input')?.focus()
-                event.stopPropagation()
-              }}
-            />)
+          ? (
+              <ActionButton
+                testId={`${testId}-calendar-clear-icon`}
+                mode="filled"
+                onClick={(event) => {
+                  destroyMask()
+                  setDate([null, null])
+                  handleOnChange(null)
+                  wrapperRef.current?.querySelector('input')?.focus()
+                  event.stopPropagation()
+                }}
+              />
+            )
           : <CalendarIcon testId={`${testId}-calendar-icon`} />}
         superNextIcon={<ArrowDoubleRightIcon testId={testId} />}
         superPrevIcon={<ArrowDoubleLeftIcon testId={testId} />}

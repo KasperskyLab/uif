@@ -4,7 +4,13 @@ import { Badge } from '@src/badge'
 import { Dropdown } from '@src/dropdown'
 import { Indicator } from '@src/indicator'
 import classnames from 'classnames'
-import React, { FC, KeyboardEvent, MouseEvent, useRef, useState } from 'react'
+import React, {
+  FC,
+  KeyboardEvent,
+  MouseEvent,
+  useRef,
+  useState
+} from 'react'
 
 import { Menu2 } from '@kaspersky/hexa-ui-icons/16'
 
@@ -54,7 +60,7 @@ const AnchorView: FC<AnchorViewProps> = (props: AnchorViewProps) => {
   }
 
   const handleDropdownLinkClick =
-    (link: AnchorLinkProps) => (event: {domEvent: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>}) => {
+    (link: AnchorLinkProps) => (event: { domEvent: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement> }) => {
       handleClick(event.domEvent as MouseEvent<HTMLElement>, link)
     }
 
@@ -117,6 +123,9 @@ const AnchorView: FC<AnchorViewProps> = (props: AnchorViewProps) => {
   )
 }
 
+/**
+ * @deprecated use AnchorNavigation instead
+ */
 export const Anchor: FC<AnchorProps> = (rawProps: AnchorProps) => {
   const themedProps = useThemedAnchor(rawProps)
   const props = useTestAttribute(themedProps)

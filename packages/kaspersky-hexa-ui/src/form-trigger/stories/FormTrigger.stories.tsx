@@ -8,7 +8,7 @@ import { FormTrigger } from '../FormTrigger'
 import { FormTriggerProps, FormTriggerType } from '../types'
 
 const meta: Meta<FormTriggerProps> = {
-  title: 'Hexa UI Components/Form trigger',
+  title: 'Other/Form trigger',
   component: FormTrigger,
   args: {
     title: 'Kaspersky Security Network',

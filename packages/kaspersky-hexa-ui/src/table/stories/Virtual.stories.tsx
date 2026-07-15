@@ -24,7 +24,8 @@ const meta: Meta<ITableProps> = {
   title: 'Hexa UI Components/Table/Virtual',
   component: Table,
   args: {
-    useDragDrop: false
+    useDragDrop: false,
+    borderedStyle: false
   },
   parameters: {
     docs: {
@@ -35,7 +36,7 @@ const meta: Meta<ITableProps> = {
 }
 export default meta
 
-type row = BasicRowType & { index?: number}
+type row = BasicRowType & { index?: number }
 
 const columns = [
   {
@@ -113,7 +114,7 @@ const message = (
   <SectionMessage closable={false} mode="info">
     <P>
       @kaspersky/hexa-ui provides <StyledTag>useVT</StyledTag> hook for virtualization. It is <StyledTag>virtualizedtableforantd4</StyledTag> with
-      few fixes under the hood. For usage details please 
+      few fixes under the hood. For usage details please
       reference <Link href="https://github.com/wubostc/virtualized-table-for-antd" target="_blank">virtualizedtableforantd4</Link>.
     </P>
   </SectionMessage>
@@ -126,27 +127,29 @@ export const Basic: Story = {
     const [vt, , vtRef] = useVT(() => ({ scroll: { y: TABLE_BODY_HEIGHT } }), [])
     const [dataSource, setDataSource] = useState<TableRecord[]>(data)
 
-    return <Wrapper>
-      {message}
-      <StyledText>Selected: {selected.length}</StyledText>
-      <Space gap={8}>
-        <Button onClick={() => vtRef.current.scrollToIndex(0)}>Scroll to Top</Button>
-        <Button onClick={() => vtRef.current.scrollTo(-1)}>Scroll to Bottom</Button>
-      </Space>
-      <Table
-        {...args}
-        dataSource={dataSource}
-        onDragEnd={setDataSource}
-        columns={columns}
-        components={vt}
-        pagination={false}
-        rowSelection={{
-          selectedRowKeys: selected,
-          onChange: setSelected
-        }}
-        scroll={{ y: TABLE_BODY_HEIGHT }}
-      />
-    </Wrapper>
+    return (
+      <Wrapper>
+        {message}
+        <StyledText>Selected: {selected.length}</StyledText>
+        <Space gap={8}>
+          <Button onClick={() => vtRef.current.scrollToIndex(0)}>Scroll to Top</Button>
+          <Button onClick={() => vtRef.current.scrollTo(-1)}>Scroll to Bottom</Button>
+        </Space>
+        <Table
+          {...args}
+          dataSource={dataSource}
+          onDragEnd={setDataSource}
+          columns={columns}
+          components={vt}
+          pagination={false}
+          rowSelection={{
+            selectedRowKeys: selected,
+            onChange: setSelected
+          }}
+          scroll={{ y: TABLE_BODY_HEIGHT }}
+        />
+      </Wrapper>
+    )
   }
 }
 
@@ -171,30 +174,32 @@ export const Fetch: Story = {
           loadMore()
         }
       },
-      scroll: { y: TABLE_BODY_HEIGHT } 
+      scroll: { y: TABLE_BODY_HEIGHT }
     }), [loadMore])
 
-    return <Wrapper>
-      {message}
-      <StyledText>Selected: {selected.length}</StyledText>
-      <Space gap={8}>
-        <Button onClick={() => vtRef.current.scrollToIndex(0)}>Scroll to Top</Button>
-        <Button onClick={() => vtRef.current.scrollTo(-1)}>Scroll to Bottom</Button>
-      </Space>
-      <Table
-        {...args}
-        dataSource={dataSource}
-        onDragEnd={setDataSource}
-        columns={columns}
-        components={vt}
-        loading={loading}
-        pagination={false}
-        rowSelection={{
-          selectedRowKeys: selected,
-          onChange: setSelected
-        }}
-        scroll={{ y: TABLE_BODY_HEIGHT }}
-      />
-    </Wrapper>
+    return (
+      <Wrapper>
+        {message}
+        <StyledText>Selected: {selected.length}</StyledText>
+        <Space gap={8}>
+          <Button onClick={() => vtRef.current.scrollToIndex(0)}>Scroll to Top</Button>
+          <Button onClick={() => vtRef.current.scrollTo(-1)}>Scroll to Bottom</Button>
+        </Space>
+        <Table
+          {...args}
+          dataSource={dataSource}
+          onDragEnd={setDataSource}
+          columns={columns}
+          components={vt}
+          loading={loading}
+          pagination={false}
+          rowSelection={{
+            selectedRowKeys: selected,
+            onChange: setSelected
+          }}
+          scroll={{ y: TABLE_BODY_HEIGHT }}
+        />
+      </Wrapper>
+    )
   }
 }

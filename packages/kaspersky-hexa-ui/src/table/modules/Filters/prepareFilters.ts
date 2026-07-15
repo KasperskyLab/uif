@@ -1,17 +1,26 @@
-import { TableColumn } from '../../types'
+import { TableColumn, TableRecord } from '../../types'
 
-import { getFiltersForColumn, getPredicate, isFilterConfig, isFilterFromColumn, isGroup, parseDate } from './helpers'
+import {
+  getFiltersForColumn,
+  getPredicate,
+  isFilterConfig,
+  isFilterFromColumn,
+  isGroup,
+  parseDate
+} from './helpers'
 import { FilterType, UnitedFilter } from './types'
 
-type PreparingFunction = (filterItems: UnitedFilter[], columns: TableColumn[]) => UnitedFilter[]
+type PreparingFunction = <T extends TableRecord = TableRecord>(
+  filterItems: UnitedFilter<T>[],
+  columns: TableColumn<T>[]
+) => UnitedFilter<T>[]
 
 const removeNonExistingColumns: PreparingFunction = (filterItems, columns) => (
   filterItems.filter(item => (
-    isGroup(item)
+    isGroup(item) && item.id.startsWith('column.')
       ? columns
-        .map(column => `column.${column.dataIndex}`)
-        .filter(Boolean)
-        .includes(item.id)
+          .map(column => `column.${column.key}`)
+          .includes(item.id)
       : true
   ))
 )
@@ -51,14 +60,17 @@ const getFiltersWithPredicates: PreparingFunction = (filterItems, columns) => (
           return columnFilter
         })
         .filter(item => item !== null)
-      
-      return { ...filterItem, items: itemsWithPredicate}
+
+      return { ...filterItem, items: itemsWithPredicate }
     }
     return filterItem
   })
 )
 
-export const prepareFilters: PreparingFunction = (filterItems, columns) => (
+export const prepareFilters = <T extends TableRecord = TableRecord> (
+  filterItems: UnitedFilter<T>[],
+  columns: TableColumn<T>[]
+): UnitedFilter<T>[] => (
   [
     removeNonExistingColumns,
     getFiltersWithCorrectDate,

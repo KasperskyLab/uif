@@ -14,25 +14,27 @@ type EmptyDashStory = StoryObj<ITableProps & DashRowControls>
 const dataSource = generateDataSource(20)
 
 export const EmptyCellDash: EmptyDashStory = {
-  render: (args) => <Wrapper>
-    <Table
-      {...args}
-      columns={[
-        {
-          title: 'table.column.name',
-          key: 'name',
-          hasEmptyCellDash: args.nameEmptyDash,
-          dataIndex: 'name'
-        },
-        {
-          title: 'table.column2.name',
-          key: 'description',
-          hasEmptyCellDash: args.descriptionEmptyDash,
-          dataIndex: 'description'
-        }
-      ]}
-    />
-  </Wrapper>,
+  render: (args) => (
+    <Wrapper>
+      <Table
+        {...args}
+        columns={[
+          {
+            title: 'table.column.name',
+            key: 'name',
+            hasEmptyCellDash: args.nameEmptyDash,
+            dataIndex: 'name'
+          },
+          {
+            title: 'table.column2.name',
+            key: 'description',
+            hasEmptyCellDash: args.descriptionEmptyDash,
+            dataIndex: 'description'
+          }
+        ]}
+      />
+    </Wrapper>
+  ),
   argTypes: {
     nameEmptyDash: genArgType('Empty Dash in name column', 'boolean'),
     descriptionEmptyDash: genArgType('Empty Dash in description column', 'boolean')

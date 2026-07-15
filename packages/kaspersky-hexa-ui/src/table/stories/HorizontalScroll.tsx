@@ -6,28 +6,43 @@ import { TableColumn } from '../types'
 
 import { BasicTableStory, Story } from './_commonConstants'
 
-const createColumn = (name: string, width?: number, show = true, hideColumnAvailable = true) => ({
+type StoryColumn = {
+  name: string,
+  width?: number,
+  show?: boolean,
+  minWidth?: number,
+  hideColumnAvailable?: boolean
+}
+
+const createColumn = ({
+  name,
+  width,
+  show = true,
+  hideColumnAvailable,
+  minWidth
+}: StoryColumn) => ({
   key: name,
   title: name,
   dataIndex: name,
-  width: `${width}%`,
+  width,
+  minWidth,
   show,
   hideColumnAvailable,
-  groupingAvailable: true
+  groupingAvailable: true,
+  hasEmptyCellDash: true
 })
 
 export const columns = [
-  createColumn('name', 19, true, false),
-  createColumn('country', 13),
-  createColumn('numberrange', 10),
-  createColumn('city', 17),
-  createColumn('date', 18),
-  createColumn('isSortable', 10),
-  createColumn('sorter', 10),
-  createColumn('sorterIsSortable', 10)
+  createColumn({ name: 'name', width: 190, hideColumnAvailable: false }),
+  createColumn({ name: 'country', width: 190, minWidth: 50 }),
+  createColumn({ name: 'city', width: 270, minWidth: 240 }),
+  createColumn({ name: 'date', width: 180 }),
+  createColumn({ name: 'isSortable', width: 150 }),
+  createColumn({ name: 'sorter', width: 150 }),
+  createColumn({ name: 'sorterIsSortable', width: 150 })
 ]
 
-const dataSource = mockData.map((el, i) => {
+export const dataSource = mockData.map((el, i) => {
   return {
     ...el,
     date: i === 2 ? new Date().toDateString() : new Date(Number(i.toString() + '0000000000')).toDateString(),
@@ -39,14 +54,16 @@ const dataSource = mockData.map((el, i) => {
 
 export const HorizontalScroll: Story = {
   render: (args) => {
-    return <>
-      <SectionMessage mode="info">
-        <div>Проп таблицы resizingMode = &quot;scroll&quot;</div>
-        <div>Режим scroll используется для таблиц с большим количеством колонок и под капотом включает кастомный горизонтальный скроллбар</div>
-      </SectionMessage>
-      <BasicTableStory {...args} />
-    </>
-    
+    return (
+      <>
+        <SectionMessage mode="info">
+          <div>Проп таблицы resizingMode = &quot;scroll&quot;</div>
+          <div>Режим scroll используется для таблиц с большим количеством колонок и под капотом включает кастомный горизонтальный скроллбар</div>
+        </SectionMessage>
+        <BasicTableStory {...args} />
+      </>
+    )
+
   },
   args: {
     pagination: {
@@ -55,6 +72,10 @@ export const HorizontalScroll: Story = {
     },
     columns: columns as TableColumn[],
     dataSource,
-    resizingMode: 'scroll'
+    resizingMode: 'scroll',
+    afterColumn: true,
+    borderedStyle: false,
+    stickyHeader: 0,
+    stickyFooter: false
   }
 }

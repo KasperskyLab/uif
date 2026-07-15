@@ -17,14 +17,14 @@ import type { ToggleButtonGroupProps, ToggleButtonProps, ToggleButtonSize } from
 
 const elementOptions = {
   '-': null,
-  Placeholder: <Placeholder/>,
-  Plus: <Plus/>,
-  Settings: <Settings/>
+  Placeholder: <Placeholder />,
+  Plus: <Plus />,
+  Settings: <Settings />
 }
 
 const iconOptions = {
   '-': null,
-  Badge: <Badge count={1}/>
+  Badge: <Badge count={1} />
 }
 
 const baseMeta: Meta<ToggleButtonProps> = {
@@ -120,26 +120,25 @@ export const IconOnly: Story = {
       true
     )
   ),
-  argTypes: { 
-    text: { control: false }, 
-    size: { control: false }, 
-    iconBefore: { control: false }, 
+  argTypes: {
+    text: { control: false },
+    size: { control: false },
+    iconBefore: { control: false },
     elementAfter: { control: false }
   }
 }
 
 const ControllableToggleButtonGroup = (props: ToggleButtonGroupProps & { itemsSize?: ToggleButtonSize }) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(props.value || ['default'])
-  
-  const itemsWithSize = useMemo(() => 
+
+  const itemsWithSize = useMemo(() =>
     props.items.map(item => ({
       ...item,
       size: props.itemsSize || item.size || 'medium'
-    })), [props.items, props.itemsSize]
-  )
-  
+    })), [props.items, props.itemsSize])
+
   return (
-    <Space style={{width: '600px'}} gap="related">
+    <Space style={{ width: '600px' }} gap="related">
       <ToggleButtonGroup
         {...props}
         items={itemsWithSize}
@@ -158,39 +157,39 @@ export const ButtonGroupWithControls: StoryGroup = {
     disabled: false,
     loading: false,
     itemsSize: 'medium',
-    testId: 'toggle-button-group', 
+    testId: 'toggle-button-group',
     value: ['one'],
     items: [
-      { 
-        text: 'One', 
-        mode: 'marina', 
-        iconBefore: <Placeholder />, 
+      {
+        text: 'One',
+        mode: 'marina',
+        iconBefore: <Placeholder />,
         value: 'one'
       },
-      { 
-        text: 'Two', 
-        mode: 'red', 
-        iconBefore: <Placeholder />, 
-        elementAfter: <Badge count={1} />, 
+      {
+        text: 'Two',
+        mode: 'red',
+        iconBefore: <Placeholder />,
+        elementAfter: <Badge count={1} />,
         value: 'two'
       },
-      { 
-        text: 'Three', 
-        mode: 'orange', 
-        iconBefore: <Placeholder />, 
-        disabled: true, 
+      {
+        text: 'Three',
+        mode: 'orange',
+        iconBefore: <Placeholder />,
+        disabled: true,
         value: 'three'
       },
-      { 
-        text: 'Four', 
-        mode: 'violet', 
-        elementAfter: <Badge count={32} />, 
+      {
+        text: 'Four',
+        mode: 'violet',
+        elementAfter: <Badge count={32} />,
         value: 'four'
       },
       {
-        text: 'long '.repeat(50), 
-        mode: 'violet', 
-        elementAfter: <Badge count={32} />, 
+        text: 'long '.repeat(50),
+        mode: 'violet',
+        elementAfter: <Badge count={32} />,
         value: 'five'
       }
     ]

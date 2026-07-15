@@ -1,7 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 
-import { Breadcrumbs, ITEMS_AFTER_COLLAPSE, ITEMS_BEFORE_COLLAPSE, MAX_ITEMS, SEPARATOR } from '../Breadcrumbs'
+import {
+  Breadcrumbs,
+  ITEMS_AFTER_COLLAPSE,
+  ITEMS_BEFORE_COLLAPSE,
+  MAX_ITEMS,
+  SEPARATOR
+} from '../Breadcrumbs'
 import { generateRoutes } from '../helpers'
 import { BreadcrumbsProps } from '../types'
 

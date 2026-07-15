@@ -9,7 +9,13 @@ import styled from 'styled-components'
 import { Menu3 } from '@kaspersky/hexa-ui-icons/16'
 
 import { breadcrumbsCss, StyledBreadcrumbsSeparator, StyledDropdownMenuItem } from './breadcrumbsCss'
-import { BreadcrumbsCssConfig, BreadcrumbsItemProps, BreadcrumbsProps, BreadcrumbsViewProps, Route } from './types'
+import {
+  BreadcrumbsCssConfig,
+  BreadcrumbsItemProps,
+  BreadcrumbsProps,
+  BreadcrumbsViewProps,
+  Route
+} from './types'
 import { useThemedBreadcrumbs } from './useThemedBreadcrumbs'
 
 export const MAX_ITEMS = 5
@@ -27,10 +33,10 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = (rawProps: BreadcrumbsProps) =>
   return <BreadcrumbsView {...props} />
 }
 
-const BreadcrumbsItem = ({ route, isLastItem, size, cssConfig }: BreadcrumbsItemProps) => (
+export const BreadcrumbsItem = ({ route, isLastItem, size, cssConfig }: BreadcrumbsItemProps) => (
   <>
     {size === 'medium' && isLastItem
-      ? <Text type={size === 'medium' ? 'BTM3' : 'BTM4' }>{route.name}</Text>
+      ? <Text type={size === 'medium' ? 'BTM3' : 'BTM4'}>{route.name}</Text>
       : <BreadcrumbsItemLink route={route} />
     }
     {!isLastItem && <BreadcrumbsSeparator cssConfig={cssConfig} />}
@@ -55,20 +61,19 @@ const BreadcrumbsView = ({
   <StyledBreadcrumbs cssConfig={cssConfig} {...testAttributes} {...rest}>
     {routes.length <= MAX_ITEMS
       ? routes.map((route, index, { length }) =>
-        <BreadcrumbsItem route={route} key={route.url} isLastItem={length - 1 === index} cssConfig={cssConfig} size={size} />
-      )
-      : <>
-          {routes.slice(0, ITEMS_BEFORE_COLLAPSE).map((route) =>
-            <BreadcrumbsItem key={route.url} route={route} cssConfig={cssConfig} size={size} />
-          )}
-          <Dropdown overlay={routesToDropdownOverlay(routes, cssConfig)}>
-            <ActionButton icon={<Menu3 />} size={size === 'medium' ? 'large' : 'medium' } />
-          </Dropdown>
-          <BreadcrumbsSeparator cssConfig={cssConfig} />
-          {routes.slice(-ITEMS_AFTER_COLLAPSE).map((route, index, { length }) =>
-            <BreadcrumbsItem key={route.url} route={route} isLastItem={length - 1 === index} cssConfig={cssConfig} size={size} />
-          )}
-        </>
+          <BreadcrumbsItem route={route} key={route.url} isLastItem={length - 1 === index} cssConfig={cssConfig} size={size} />)
+      : (
+          <>
+            {routes.slice(0, ITEMS_BEFORE_COLLAPSE).map((route) =>
+              <BreadcrumbsItem key={route.url} route={route} cssConfig={cssConfig} size={size} />)}
+            <Dropdown overlay={routesToDropdownOverlay(routes, cssConfig)}>
+              <ActionButton icon={<Menu3 />} size={size === 'medium' ? 'large' : 'medium'} />
+            </Dropdown>
+            <BreadcrumbsSeparator cssConfig={cssConfig} />
+            {routes.slice(-ITEMS_AFTER_COLLAPSE).map((route, index, { length }) =>
+              <BreadcrumbsItem key={route.url} route={route} isLastItem={length - 1 === index} cssConfig={cssConfig} size={size} />)}
+          </>
+        )
     }
   </StyledBreadcrumbs>
 )

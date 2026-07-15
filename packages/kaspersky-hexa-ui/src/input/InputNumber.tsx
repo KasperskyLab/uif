@@ -1,7 +1,7 @@
 import { useGlobalStyles } from '@helpers/hooks/useGlobalStyles'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { InputNumber as AntdInputNumber } from 'antd'
-import React, { FC, useState } from 'react'
+import AntdInputNumber from 'antd/es/input-number'
+import React, { FC, useCallback } from 'react'
 import styled from 'styled-components'
 
 import { ArrowDownMicro, ArrowUpMicro } from '@kaspersky/hexa-ui-icons/16'
@@ -18,12 +18,62 @@ const StyledInputNumber = styled(AntdInputNumber).withConfig({
   ${inputNumberStyles}
 `
 
+const isInRange = (value: string, min?: number, max?: number): boolean => {
+  if (value === '') return true
+  if (value === '-') {
+    return (min !== undefined && min >= 0) ? false : true
+  }
+
+  const num = Number(value)
+  if (isNaN(num)) return false
+
+  if (min !== undefined && num < min) return false
+  if (max !== undefined && num > max) return false
+  return true
+}
+
+const useHandleKeyDown = ({ min, max, integerOnly }: Pick<TextboxNumberProps, 'min' | 'max' | 'integerOnly'>) =>
+  useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowedKeys = [
+      'Enter',
+      'Backspace',
+      'Delete',
+      'ArrowLeft',
+      'ArrowRight',
+      'ArrowUp',
+      'ArrowDown',
+      'Home',
+      'End',
+      'Tab',
+      'Escape'
+    ]
+
+    if (
+      allowedKeys.includes(event.key) ||
+      event.ctrlKey ||
+      event.metaKey ||
+      event.altKey ||
+      event.key.length > 1
+    ) return
+
+    const keyValidators: Record<string, RegExp> = {
+      'true': /^-?\d*$/,
+      'false': /^-?\d*\.?\d*$/
+    }
+    const currentValue = (event.target as HTMLInputElement).value + event.key
+
+    if (!keyValidators[String(integerOnly)].test(currentValue) || !isInRange(currentValue, min, max)) {
+      event.preventDefault()
+    }
+  }, [integerOnly, max, min])
+
 export const InputNumber: FC<TextboxNumberProps> = (props: TextboxNumberProps) => {
   const {
     onChange,
     controls,
     value,
     min,
+    max,
     testAttributes,
     allowEmpty = false,
     integerOnly = false,
@@ -34,14 +84,15 @@ export const InputNumber: FC<TextboxNumberProps> = (props: TextboxNumberProps) =
 
   return (
     <StyledInputNumber
-      upHandler={controls?.upIcon || <ArrowUpMicro/>}
-      downHandler={controls?.downIcon || <ArrowDownMicro/>}
+      upHandler={controls?.upIcon || <ArrowUpMicro />}
+      downHandler={controls?.downIcon || <ArrowDownMicro />}
       {...testAttributes}
       {...rest}
       onChange={value => {
         onChange?.(value as TextboxNumberProps['value'])
       }}
       min={min}
+      max={max}
       value={value}
       formatter={value => {
         let result: TextboxNumberProps['value']
@@ -52,15 +103,7 @@ export const InputNumber: FC<TextboxNumberProps> = (props: TextboxNumberProps) =
         }
         return result
       }}
-      onKeyPress={(event) => {
-        const keyValidators: Record<string, RegExp> = {
-          'true': /\d|-/,
-          'false': /\d|[.]|-/
-        }
-        if (!keyValidators[String(integerOnly)].test(event.key)) {
-          event.preventDefault()
-        }
-      }}
+      onKeyDown={useHandleKeyDown({ min, max, integerOnly })}
     />
   )
 }

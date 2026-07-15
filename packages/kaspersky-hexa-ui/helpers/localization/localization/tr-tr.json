@@ -87,7 +87,7 @@
       "total": "Toplam {{count}}",
       "selected": "Seçilen {{count}}",
       "page": "sayfa",
-      "goto": "Şuraya git"
+      "goto": "Kaspersky lisanslarına git"
     },
     "search": {
       "raw": "Ara",
@@ -100,6 +100,11 @@
         "sorting": "Sırala",
         "filters": "Filtrele",
         "resetFilters": "Filtreyi sıfırla"
+      },
+      "selectAll": {
+        "selectAll": "Tümünü seç",
+        "selectCurrentPage": "Geçerli sayfada tümünü seç",
+        "deselectAll": "Tümünü sıfırla"
       },
       "columnsSettings": {
         "header": "Tablo ayarları",
@@ -124,10 +129,15 @@
           "add": "Ekle",
           "clearAll": "Tümünü temizle",
           "property": "Özellik",
+          "attribute": "Öznitelik",
           "condition": "Koşul",
           "from": "başlangıç",
           "to": "-",
-          "value": "Değer"
+          "value": "Değer",
+          "validation": {
+            "emptyValue": "Filtreleme değerini belirtin",
+            "duplicateFilters": "Duplicate filters. Ensure each filter is unique."
+          }
         },
         "columnHideIsUnavailable": "Sütunlar gizlenememektedir"
       },

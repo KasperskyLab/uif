@@ -21,6 +21,8 @@ export const TextTag = forwardRef<HTMLParagraphElement, TextProps>(({
     {
       ref,
       className: cn(className, 'kl6-text'),
+      $color: color,
+      $themedColor: themedColor,
       ...testAttributes,
       ...rest
     }

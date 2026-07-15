@@ -1,0 +1,100 @@
+import { ArgTypes, Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Chip } from '../Chip'
+import * as ChipStories from './Chip.stories'
+import { chipDesignPropPresentation } from './Chip.design.properties'
+
+<Meta of={ChipStories} name="Chip Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Chip"
+  description='**Chip** — компактный интерактивный элемент с меткой, опциональной иконкой и счётчиком'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Chip** предназначен для отображения выбранных фильтров, тегов или других компактных меток с возможностью закрытия. В основе лежит Ant Design Tag с темизацией Hexa UI. Компонент поддерживает размеры `medium` и `large`, метку **label**, иконку **icon**, числовой счётчик **counter** через **Badge**, обрезку длинного текста через **truncationWidth**, состояние **disabled**, а также настройку через **theme** и **onClose**."
+    />
+
+    <DocExampleBlock
+      title="label"
+      description="Текстовая метка chip"
+      code='
+    <Chip label="Label" />
+    <Chip label="Selected filter" />'
+    />
+
+    <DocExampleBlock
+      title="size"
+      description="Размер chip. Доступные значения: `medium`, `large`. По умолчанию — `medium`."
+      code='
+    <Chip label="medium" size="medium" />
+    <Chip label="large" size="large" />'
+    />
+
+    <DocExampleBlock
+      title="icon"
+      description="Иконка перед меткой. Передаётся как ReactElement из @kaspersky/hexa-ui-icons/16 — например Plus или Settings."
+      code='
+    <Chip label="Label" icon={<Plus />} />
+    <Chip label="With icon" icon={<Settings />} counter={5} />'
+    />
+
+    <DocExampleBlock
+      title="counter"
+      description="Числовой счётчик справа от метки. Отображается через **Badge** с **mode** `neutral`. При значении больше 99 показывается `+99`."
+      code='
+    <Chip label="Label" counter={5} />
+    <Chip label="Label" counter={9999} />'
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключённый chip не реагирует на закрытие: клик по кнопке закрытия блокируется. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='
+    <Chip label="Label" disabled />'
+    />
+
+    <DocExampleBlock
+      title="truncationWidth"
+      description="Максимальная ширина метки в пикселях. При превышении текст обрезается с многоточием через TextReducer."
+      code='
+    <Chip label="Short label" />
+    <Chip label="label long long long long" truncationWidth={150} icon={<Plus />} counter={5} />'
+    />
+
+    <DocExampleBlock
+      title="onClose"
+      description="Callback при закрытии chip. Компонент всегда closable; после закрытия получает класс ant-tag-hidden."
+      code='
+    <Chip label="Label" onClose={() => console.log("closed")} />'
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+      <Text type="H3">Правила использования</Text>
+      <Text color="secondary" type="BTR3">
+        Раздел зарезервирован под правила использования. Содержимое будет добавлено в следующих релизах.
+      </Text>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(chipDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={ChipStories} />
+    <AutodocArgsTable component={Chip}/>
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

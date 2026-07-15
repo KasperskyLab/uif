@@ -101,6 +101,9 @@
         "filters": "Сүзгі",
         "resetFilters": "Сүзгіні қалпына келтіру"
       },
+      "contextMenu": {
+        "selected": "Таңдалған: {{count}}"
+      },
       "selectAll": {
         "selectAll": "Барлығын таңдау",
         "selectCurrentPage": "Ағымдағы беттегінің барлығын таңдау",
@@ -129,22 +132,24 @@
           "add": "Қосу",
           "clearAll": "Барлығын тазалау",
           "property": "Сипат",
+          "attribute": "Атрибут",
           "condition": "Шарт",
           "from": "бастап",
           "to": "дейін",
           "value": "Мән",
           "validation": {
             "emptyValue": "Сүзгілеу мәнін көрсетіңіз",
-            "duplicateFilters": "Сүзгілер қайталанған. Әрбір сүзгі бірегей екеніне көз жеткізіңіз"
+            "duplicateFilters": "Сүзгілер қайталанған. Әрбір сүзгі бірегей екеніне көз жеткізіңіз."
           }
         },
-        "columnHideIsUnavailable": "Бағанды ​​жасыру мүмкін емес"
+        "columnHideIsUnavailable": "Бағанды ​​жасыру мүмкін емес",
+        "onlyForFiltering": "Бұл баған тек сүзгілеуге арналған"
       },
       "filterOperation": {
         "⊆": "Құрамы",
         "⊄": "Қамтымайды",
         "cont_and": "Қамтиды (ЖӘНЕ)",
-        "cont_or": "Қамтиды (НЕМЕСЕ)",
+        "cont_or": "Is one of",
         "ncont_or": "Қамтымайды",
         "*=": "Тұрақты өрнек",
         "empty": "Бос",
@@ -216,7 +221,11 @@
       "term": "Мерзім",
       "dayLeft": "{{count}} күн қалды",
       "daysLeft": "{{count}} күн қалды",
-      "termDays": "{{count}} күн"
+      "termDays": "{{count}} күн",
+      "statuses": {
+        "valid": "Белсенді",
+        "expired": "Мерзімі біткен"
+      }
     },
     "input": {
       "password": {

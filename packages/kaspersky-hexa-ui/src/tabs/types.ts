@@ -2,7 +2,7 @@ import { Focus } from '@design-system/tokens/focus'
 import { Theme } from '@design-system/types/Theme'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 import { IndicatorMode } from '@src/indicator'
-import { TabPaneProps } from 'antd'
+import type { TabPaneProps } from 'antd'
 import {
   CSSProperties,
   FC,
@@ -59,7 +59,7 @@ export type TabsProps = TabsThemeProps & PropsWithChildren<{
   activeKey?: string,
   /** Initial active TabPane's key, if activeKey is not set */
   defaultActiveKey?: string,
-  /** Callback executed when active tab is changed 
+  /** Callback executed when active tab is changed
   * If `false` is returned, tab transition will be prevented
   */
   onChange?: (activeKey: string) => void | boolean | Promise<void | boolean>,

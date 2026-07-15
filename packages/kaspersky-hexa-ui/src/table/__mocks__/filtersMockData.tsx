@@ -5,6 +5,7 @@ import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import { FilterType, TableColumn } from '..'
 import { FilterApi, TableCustomFilterFunction } from '../modules/Filters'
+import { isGroup } from '../modules/Filters/helpers'
 import { TableDataSourceFunction } from '../types'
 
 export const groups = [
@@ -54,32 +55,32 @@ export const createMockDataSourceFunction = (dataSource: MockRow[]): TableDataSo
     sorting
   }) => {
     let processedData = [...dataSource]
-    
+
     if (params?.searchString) {
       processedData = applySearch(processedData, params.searchString)
     }
-    
+
     if (params?.filters && params.filters.length > 0) {
       // use your filter system instead of FilterApi
-      const filterApi = new FilterApi({ predefinedFilters: params.filters, columns: tableColumns })
+      const filterApi = new FilterApi({ defaultFilters: params.filters, columns: tableColumns })
       processedData = filterApi.filterRows(processedData) as MockRow[]
     }
-    
+
     if (sorting) {
       const sortField = (sorting.field || sorting.attribute) as MockRowFields
       if (sortField) {
         processedData = applySorting(processedData, sortField, sorting.isAsc)
       }
     }
-    
+
     if (params?.groupBy) {
       processedData = applyGrouping(processedData, params.groupBy as MockRowFields)
     }
-    
+
     const totalCount = processedData.length
     const startIndex = page * pageSize
     const endIndex = startIndex + pageSize
-    
+
     const rows = processedData.slice(startIndex, endIndex)
 
     return {
@@ -89,10 +90,9 @@ export const createMockDataSourceFunction = (dataSource: MockRow[]): TableDataSo
   }
 }
 
-
 const applySearch = (data: MockRow[], searchString?: string): MockRow[] => {
   if (!searchString?.trim()) return data
-  
+
   const searchLower = searchString.toLowerCase().trim()
   return data.filter(item => (
     Object.values(item).some(value => (
@@ -107,11 +107,11 @@ const applySorting = (data: MockRow[], sortField: MockRowFields, isAsc: boolean)
   return [...data].sort((a, b) => {
     const aValue = a[sortField]
     const bValue = b[sortField]
-    
+
     if (aValue == null && bValue == null) return 0
     if (aValue == null) return isAsc ? -1 : 1
     if (bValue == null) return isAsc ? 1 : -1
-    
+
     const comparison = aValue < bValue ? -1 : aValue > bValue ? 1 : 0
     return isAsc ? comparison : -comparison
   })
@@ -121,17 +121,17 @@ const applyGrouping = (data: MockRow[], groupBy: MockRowFields): MockRow[] => {
   return [...data].sort((a, b) => {
     const aGroupValue = a[groupBy] || ''
     const bGroupValue = b[groupBy] || ''
-    
+
     if (aGroupValue < bGroupValue) return -1
     if (aGroupValue > bGroupValue) return 1
     return 0
   })
 }
 
-export const mockCustomFilterFunction: TableCustomFilterFunction = (rows, filters, renderList, { rowMatchesFilter }) => {
-  const filteredRows = rows.filter(row => 
-    filters.every(filter => rowMatchesFilter(row, filter))
-  )
+export const mockCustomFilterFunction: TableCustomFilterFunction = (rows, filters, renderList, { rowMatchesFilter, rowMatchesGroup }) => {
+  const filteredRows = rows.filter(row => (
+    filters.every(filter => isGroup(filter) ? rowMatchesGroup(row, filter) : rowMatchesFilter(row, filter))
+  ))
   renderList(filteredRows)
 }
 
@@ -149,6 +149,10 @@ export const tableColumns: TableColumn[] = [
       {
         name: 'Should contain "Evgenija"',
         filter: row => !!row.fullname.match(/Evgenija/g)
+      },
+      {
+        name: 'Should start with E',
+        filter: row => !!row.fullname.match(/^E.*$/g)
       }
     ],
     isSortable: true,
@@ -158,7 +162,7 @@ export const tableColumns: TableColumn[] = [
     ...createColumn('group'),
     filterType: {
       type: FilterType.Enum,
-      getAvailableOptions: async () => groups.map(group => ({ value: group.toLowerCase(), label: <>{group}</> }))
+      getAvailableOptions: async () => groups.map(group => ({ value: group, label: <>{group}</> }))
     },
     groupingAvailable: true,
     width: 100
@@ -191,7 +195,11 @@ export const tableColumns: TableColumn[] = [
   },
   {
     ...createColumn('isTrainee'),
-    filterType: { type: FilterType.Boolean },
+    filterType: {
+      type: FilterType.Boolean,
+      onStateName: 'Yes',
+      offStateName: 'No'
+    },
     groupingAvailable: true,
     render: function IsTraineeCell (value) {
       return value ? 'Yes' : 'No'

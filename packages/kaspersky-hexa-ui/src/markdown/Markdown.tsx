@@ -26,7 +26,9 @@ export const Markdown = ({
     instance.renderer.rules.link_open = function (tokens, idx, options, env, rules) {
       const linkOpenToken = tokens[idx]
       const tokenHtmlAttributes = fromPairs(linkOpenToken.attrs)
-      if (tokenHtmlAttributes.href && tokenHtmlAttributes.href.includes('#/')) {
+      const href = tokenHtmlAttributes.href
+      // In-page fragment links (`#section`) and hash-router links (`.../#/path`) must stay in the same tab.
+      if (href && (href.startsWith('#') || href.includes('#/'))) {
         return defaultRender(tokens, idx, options, env, rules)
       }
       const aIndex = linkOpenToken.attrIndex('target')

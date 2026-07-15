@@ -9,15 +9,15 @@ export const ScheduleTimeColumn: FC = () => {
     return `${i.toString().padStart(2, '0')}:00`
   })
 
-  return (<TimeContainer>
-    {
-      timeTitle.map((time, index) => {
-        return <TimeCell key={index} >
+  return (
+    <TimeContainer>
+      {timeTitle.map((time, index) => (
+        <TimeCell key={index} >
           <Text type="BTR5" themedColor="secondary2-solid">
             {time}
           </Text>
         </TimeCell>
-      })
-    }
-  </TimeContainer>)
+      ))}
+    </TimeContainer>
+  )
 }

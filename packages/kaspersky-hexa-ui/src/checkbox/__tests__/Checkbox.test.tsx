@@ -1,5 +1,11 @@
 import { Textbox } from '@src/input'
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor
+} from '@testing-library/react'
 import React from 'react'
 
 import { Checkbox } from '../Checkbox'
@@ -15,7 +21,7 @@ const getCheckbox = () => screen.getByRole('checkbox')
 
 describe('Checkbox', () => {
   test('should render', () => {
-    const { container } = render(<Checkbox{...defaultProps} testId="test-id"/>)
+    const { container } = render(<Checkbox{...defaultProps} testId="test-id" />)
 
     expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })

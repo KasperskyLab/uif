@@ -11,7 +11,7 @@ import { TextDiffProps } from './types'
 
 const meta: Meta<TextDiffProps> = {
   component: TextDiffComponent,
-  title: 'Hexa UI Components/Text diff',
+  title: 'Hexa UI Components/TextDiff',
   argTypes: {
     textType: {
       options: Object.keys(textLevels),

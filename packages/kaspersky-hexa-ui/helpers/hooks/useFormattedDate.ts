@@ -2,7 +2,7 @@ import dateFnsGenerateConfig from 'rc-picker/lib/generate/dateFns'
 
 import useLocaleOptions from './useLocaleOptions'
 
-const useFormattedDate = ()=> {
+const useFormattedDate = () => {
   const { format, locale } = useLocaleOptions(false)
 
   const originFormat = dateFnsGenerateConfig.locale.format
@@ -10,7 +10,7 @@ const useFormattedDate = ()=> {
     if (!date) return ''
     return originFormat(locale.lang.locale, date, format)
   }
-  
+
   return {
     getFormattedDate
   }

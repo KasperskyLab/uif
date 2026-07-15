@@ -3,7 +3,6 @@ import { ComponentsConfig } from '@design-system/css-configs/types'
 import { effects } from '@kaspersky/hexa-ui-core/colors/js'
 
 import { card, cardSize } from './card'
-import { checkbox } from './checkbox'
 import { codeViewer } from './codeViewer'
 import { input } from './input'
 import { link, linkSize } from './link'
@@ -12,7 +11,6 @@ import { lockGroup } from './lockGroup'
 import { picker } from './picker'
 import { placeholder, placeholderSize } from './placeholder'
 import { progressBar, progressBarSize } from './progressBar'
-import { radio } from './radio'
 import { segmentedButton, segmentedButtonSize } from './segmentedButton'
 import { select } from './select'
 import { statusCard, statusCardSize } from './statusCard'
@@ -28,9 +26,6 @@ export const COMPONENTS_CONFIG: ComponentsConfig = {
     card: {
       colors: card(),
       sizes: cardSize
-    },
-    checkbox: {
-      colors: checkbox({ effects })
     },
     codeViewer: {
       colors: codeViewer({ effects })
@@ -58,9 +53,6 @@ export const COMPONENTS_CONFIG: ComponentsConfig = {
     progressBar: {
       colors: progressBar(),
       sizes: progressBarSize
-    },
-    radio: {
-      colors: radio({ effects })
     },
     segmentedButton: {
       colors: segmentedButton({ effects }),

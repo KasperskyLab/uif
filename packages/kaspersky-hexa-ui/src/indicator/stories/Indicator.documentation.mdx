@@ -1,0 +1,173 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Indicator } from '../Indicator'
+import * as IndicatorStories from './Indicator.stories'
+
+<Meta of={IndicatorStories} name="Indicator Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Indicator"
+  description='**Indicator** — точечный индикатор для отображения статуса или состояния'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Indicator** — компактный кружок 8×8 px для обозначения статуса или состояния элемента интерфейса: активность, новизна, прогресс, приоритет, результат операции и т.д. Настраиваются **mode**, **border**, **borderBackground**, **theme** и **className**."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Семантический цветовой режим индикатора. Доступные значения: `accent`, `not-active`, `new`, `update`, `inProgress`, `resolved`, `inIncident`, `high`, `critical`, `medium`, `info`, `positive`, `low`. По умолчанию — `accent`. Неподдерживаемое значение заменяется на `accent`, в консоль выводится предупреждение."
+      code='
+    <Indicator mode="accent" />
+    <Indicator mode="not-active" />
+    <Indicator mode="new" />
+    <Indicator mode="update" />
+    <Indicator mode="inProgress" />
+    <Indicator mode="resolved" />
+    <Indicator mode="inIncident" />
+    <Indicator mode="high" />
+    <Indicator mode="critical" />
+    <Indicator mode="medium" />
+    <Indicator mode="info" />
+    <Indicator mode="positive" />
+    <Indicator mode="low" />'
+    />
+
+    <DocExampleBlock
+      title="border"
+      description="Показывать контрастную границу вокруг индикатора. Доступные значения: `true`, `false`. По умолчанию — `false`. При `true` вокруг индикатора появляется граница толщиной 2px для лучшей видимости на сложных или светлых фонах. Цвет границы можно переопределить через **borderBackground**."
+      code={`
+    <div style={{backgroundColor:"#aeaeae4f", padding:"4px 10px 4px", borderRadius:"8px"}}>
+      <Indicator mode="accent" border={false} />
+    </div>
+    <div style={{backgroundColor:"#aeaeae4f", padding:"6px 8px 2px", borderRadius:"8px"}}>
+      <Indicator mode="accent" border={true} />
+    </div>`}
+    />
+
+    <DocExampleBlock
+      title="borderBackground"
+      description="Цвет границы при **border**=`true`. По умолчанию используется цвет границы из палитры выбранного **mode**. Позволяет подстроить контраст под конкретный фон."
+      code={`
+    <div style={{backgroundColor:"#aeaeae4f", padding:"6px 10px 2px", borderRadius:"8px"}}>
+        <Indicator mode="not-active" border={true} borderBackground="#ffffff" />
+    </div>
+    <div style={{backgroundColor:"#aeaeae4f", padding:"6px 10px 2px", borderRadius:"8px"}}>
+      <Indicator mode="not-active" border={true} borderBackground="#d31272" />
+    </div>
+    `}
+    />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Indicator** — компактный цветовой маркер для вторичной информации: статус задачи, приоритет, наличие обновлений, активность пользователя. Размещайте рядом с элементом, состояние которого он передаёт: иконкой, подписью, строкой таблицы, вкладкой или аватаром.
+
+Если статус требует развёрнутого пояснения, взаимодействия или формирует основное содержание экрана, используйте **Alert**, **Badge** или **Tag**. Цветовой маркер всегда сопровождайте текстовой подписью — цвет не должен быть единственным способом передать значение."
+    />
+
+    <DocExampleBlock
+      title="Индикация статусов"
+      description="Используйте для отображения текущего статуса задачи или инцидента: `new` (новый), `resolved` (закрыт), `inProgress` (в работе). Индикатор помогает быстро считывать состояние объекта в списках задач, тикетов и таблицах."
+      codeBlock="hidden"
+      code={`
+<Space gap={"dependent"} >
+  <Space gap={"dependent"} ><Indicator mode="new" />— new</Space>
+  <Space gap={"dependent"} ><Indicator mode="resolved" />— resolved</Space>
+  <Space gap={"dependent"} ><Indicator mode="inProgress" />— inProgress</Space>
+</Space>`}
+    />
+
+    <DocExampleBlock
+      title="Отображение приоритета"
+      description='Используйте для отображения приоритета задачи или объекта: `low` (низкий), `medium` (средний), `high` (высокий), `critical` (критический). Индикатор помогает быстро считывать важность объекта в списках задач, тикетов и таблицах.'
+      codeBlock="hidden"
+      code={`
+<Space gap={"dependent"} >
+  <Space gap={"dependent"} ><Indicator mode="low" />— low</Space>
+  <Space gap={"dependent"} ><Indicator mode="medium" />— medium</Space>
+  <Space gap={"dependent"} ><Indicator mode="high" />— high</Space>
+  <Space gap={"dependent"} ><Indicator mode="critical" />— critical</Space>
+</Space>
+`}
+    />
+
+    <DocExampleBlock
+      title="Отображение результата или состояния"
+      description="Используйте для отображения семантического состояния объекта: `positive` (успешное состояние), `critical` (ошибка или критичное состояние), `info`. Например, `positive` может обозначать успешное выполнение задачи, `critical` — наличие ошибки или критической проблемы."
+      codeBlock="hidden"
+      code={`
+<Space gap={"dependent"} >
+  <Space gap={"dependent"} ><Indicator mode="positive" />— успешный результат</Space>
+  <Space gap={"dependent"} ><Indicator mode="critical" />— ошибка</Space>
+  <Divider />
+  <Space gap={"dependent"} ><Indicator mode="positive" />— включено</Space>
+  <Space gap={"dependent"} ><Indicator mode="critical" />— выключено</Space>
+  <Divider />
+  <Space gap={"dependent"} ><Indicator mode="positive" />— включено</Space>
+  <Space gap={"dependent"} ><Indicator mode="low" />— выключено</Space>
+  <Space gap={"dependent"} ><Indicator mode="critical" />— ошибка</Space>
+</Space>`}
+/>
+
+    <DocExampleBlock
+      title="Группа индикаторов в строке"
+      description="Не используйте несколько **Indicator** подряд для отображения разных состояний одного объекта."
+      mode="dont"
+      codeBlock="hidden"
+      code={`
+<Space gap={16}>
+  <Indicator mode="info" />
+  <Indicator mode="critical" />
+  <Indicator mode="high" />
+</Space>`}
+    />
+
+    <DocExampleBlock
+      description="Если элемент содержит несколько атрибутов (статус, приоритет, категория), выберите один основной **mode**, а остальную информацию отображайте через **Tag**, **Badge** или отдельные колонки таблицы."
+      codeBlock="hidden"
+      code={`
+<Space gap={8} align="center">
+  <Indicator mode="critical" />
+  <Tag mode="red" outlined label="High" />
+  <Badge count={3} mode="critical" />
+</Space>`}
+    />
+
+    <DocExampleBlock
+      title="Используйте индикатор с подписью состояния"
+      description="Для слабовидящих и пользователей с нарушением цветового восприятия чистый цветовой маркер бесполезен: пользователь не считает значение. Размещайте **Indicator** рядом с подписью статуса (`In progress`, `High priority`). Принцип WCAG 1.4.1: цвет не должен быть единственным сигналом."
+      codeBlock="hidden"
+      code={`
+<Space gap={8} align="center">
+  <Indicator mode="critical" />
+  <Text type="BTM3">Critical</Text>
+</Space>`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+      <Text type="H3">Дизайн</Text>
+      <Text type="BTR3">
+        Раздел зарезервирован под дизайн-гайдлайны. Содержимое будет добавлено в следующих релизах.
+      </Text>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={IndicatorStories} />
+    <AutodocArgsTable components={Indicator} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

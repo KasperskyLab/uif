@@ -65,31 +65,31 @@ export type FieldSetComponents = FieldSetInputLikeComponents | FieldSetLabelLike
 type GetComponentName<T extends FieldSetComponents> = T
 
 export type FieldSetControlConfig =
-  ({ component: GetComponentName<'textbox'> } & TextboxProps)
-  | ({ component: GetComponentName<'textbox-masked'> } & TextboxMaskedProps)
-  | ({ component: GetComponentName<'textbox-number'> } & TextboxNumberProps)
-  | ({ component: GetComponentName<'textbox-password'> } & TextboxPasswordProps)
-  | ({ component: GetComponentName<'textbox-textarea'> } & TextboxTextareaProps)
-  | ({ component: GetComponentName<'select'> } & SelectProps)
-  | ({ component: GetComponentName<'search'> } & SearchProps)
-  | ({ component: GetComponentName<'calendar'> } & CalendarProps)
-  | ({ component: GetComponentName<'range-picker'> } & RangePickerProps)
-  | ({ component: GetComponentName<'time-input'> } & TimeInputProps)
-  | ({ component: GetComponentName<'code-viewer'> } & CodeViewerProps<any>)
-  | ({ component: GetComponentName<'button'> } & ButtonProps)
-  | ({ component: GetComponentName<'split-button'> } & SplitButtonProps)
-  | ({ component: GetComponentName<'segmented-button'> } & SegmentedButtonProps)
-  | ({ component: GetComponentName<'toggle-button-group'> } & ToggleButtonGroupProps)
-  | ({ component: GetComponentName<'checkbox'> } & CheckboxProps)
-  | ({ component: GetComponentName<'checkbox-group'> } & CheckboxGroupProps)
-  | ({ component: GetComponentName<'radio'> } & RadioProps)
-  | ({ component: GetComponentName<'toggle'> } & ToggleProps)
-  | ({ component: GetComponentName<'link'> } & LinkProps)
-  | ({ component: GetComponentName<'text'> } & TextProps)
-  | ({ component: GetComponentName<'status'> } & StatusProps)
-  | ({ component: GetComponentName<'tag-group'> } & TagGroupProps)
-  | ({ component: GetComponentName<'status-group'> } & StatusGroupProps)
-  | ({ component: GetComponentName<'uploader'> } & UploaderProps)
+  ({ component: GetComponentName<'textbox'> } & TextboxProps) |
+  ({ component: GetComponentName<'textbox-masked'> } & TextboxMaskedProps) |
+  ({ component: GetComponentName<'textbox-number'> } & TextboxNumberProps) |
+  ({ component: GetComponentName<'textbox-password'> } & TextboxPasswordProps) |
+  ({ component: GetComponentName<'textbox-textarea'> } & TextboxTextareaProps) |
+  ({ component: GetComponentName<'select'> } & SelectProps) |
+  ({ component: GetComponentName<'search'> } & SearchProps) |
+  ({ component: GetComponentName<'calendar'> } & CalendarProps) |
+  ({ component: GetComponentName<'range-picker'> } & RangePickerProps) |
+  ({ component: GetComponentName<'time-input'> } & TimeInputProps) |
+  ({ component: GetComponentName<'code-viewer'> } & CodeViewerProps<any>) |
+  ({ component: GetComponentName<'button'> } & ButtonProps) |
+  ({ component: GetComponentName<'split-button'> } & SplitButtonProps) |
+  ({ component: GetComponentName<'segmented-button'> } & SegmentedButtonProps) |
+  ({ component: GetComponentName<'toggle-button-group'> } & ToggleButtonGroupProps) |
+  ({ component: GetComponentName<'checkbox'> } & CheckboxProps) |
+  ({ component: GetComponentName<'checkbox-group'> } & CheckboxGroupProps) |
+  ({ component: GetComponentName<'radio'> } & RadioProps) |
+  ({ component: GetComponentName<'toggle'> } & ToggleProps) |
+  ({ component: GetComponentName<'link'> } & LinkProps) |
+  ({ component: GetComponentName<'text'> } & TextProps) |
+  ({ component: GetComponentName<'status'> } & StatusProps) |
+  ({ component: GetComponentName<'tag-group'> } & TagGroupProps) |
+  ({ component: GetComponentName<'status-group'> } & StatusGroupProps) |
+  ({ component: GetComponentName<'uploader'> } & UploaderProps)
 
 export type FieldSetItemControl = ReactElement | FieldSetControlConfig
 

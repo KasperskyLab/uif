@@ -43,7 +43,7 @@ const legend = {
   notSelected: 'Запрещено'
 }
 export default {
-  title: 'Hexa UI Components/WeeklySchedule',
+  title: 'Other/WeeklySchedule',
   component: WeeklySchedule,
   parameters: {
     badges: [badges.stable, badges.missingDesign],

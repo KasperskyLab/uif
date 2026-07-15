@@ -1,0 +1,143 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { HorizontalNav } from '../HorizontalNav'
+import * as HorizontalNavStories from './HorizontalNav.stories'
+
+<Meta of={HorizontalNavStories} name="HorizontalNav Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="HorizontalNav"
+  description='**HorizontalNav** — горизонтальная панель переключения между разделами'
+/>
+
+<Tabs defaultActiveKey="description" destroyInactiveTabPane>
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**HorizontalNav** отображает ряд кнопок-пунктов навигации в одну строку. Пункты задаются массивом **items**; на уровне компонента настраиваются **activeKey** и **borderless**. У каждого пункта — **label**, **selected**, **disabled**, **componentsAfter** и **onClick**."
+    />
+
+    <DocExampleBlock
+      title="items"
+      description="Массив объектов **HorizontalNavItemProps** — конфигурация пунктов навигации. Если не задан, панель не отображает пункты."
+      code='
+    <HorizontalNav
+      items={[
+        { key: "one", label: "One" },
+        { key: "two", label: "Two" },
+        { key: "three", label: "Three", selected: true },
+        { key: "four", label: "Four" }
+      ]}
+    />'
+    />
+
+    <DocExampleBlock
+      title="activeKey"
+      description="Ключ активного пункта в контролируемом режиме. Если задан, подсветка определяется только этим значением; при клике компонент не меняет выделение сам — обновляйте **activeKey** в родителе через **onClick** на пунктах. Если не задан, активный пункт берётся из **selected** при инициализации и обновляется внутренним состоянием при клике."
+      code={`
+function App() {
+  const [activeKey, setActiveKey] = React.useState('two')
+  const items = [
+    { key: 'one', label: 'One', onClick: () => setActiveKey('one') },
+    { key: 'two', label: 'Two', onClick: () => setActiveKey('two') },
+    { key: 'three', label: 'Three', onClick: () => setActiveKey('three') }
+  ]
+  return <HorizontalNav activeKey={activeKey} items={items} />
+}`}
+    />
+
+    <DocExampleBlock
+      title="borderless"
+      description="Убирает нижнюю границу под панелью навигации. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='
+    <HorizontalNav borderless items={[
+      { key: "one", label: "One" },
+      { key: "two", label: "Two" },
+      { key: "three", label: "Three" }
+    ]} />'
+    />
+
+    <DocExampleBlock
+      title="label"
+      description="Текстовая подпись пункта навигации."
+      code='
+    <HorizontalNav items={[
+      { key: "one", label: "Первый" },
+      { key: "two", label: "Второй" }
+    ]} />'
+    />
+
+    <DocExampleBlock
+      title="selected"
+      description="Начальное выделение пункта, когда **activeKey** не задан. При клике по другому пункту внутреннее состояние обновляется. По умолчанию — `false`."
+      code='
+    <HorizontalNav items={[
+      { key: "one", label: "One" },
+      { key: "two", label: "Two", selected: true },
+      { key: "three", label: "Three" }
+    ]} />'
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключает пункт: визуально приглушён и не реагирует на клик; **onClick** не вызывается. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code='
+    <HorizontalNav items={[
+      { key: "one", label: "One" },
+      { key: "two", label: "Two" },
+      { key: "three", label: "Three", disabled: true }
+    ]} />'
+    />
+
+    <DocExampleBlock
+      title="onClick"
+      description="Обработчик клика по пункту. Не вызывается, если у пункта **disabled**=`true`."
+      code='
+    <HorizontalNav items={[
+      { key: "one", label: "One", onClick: () => alert("clicked: one") },
+      { key: "two", label: "Two", onClick: () => alert("clicked: two") }
+    ]} />'
+    />
+
+    <DocExampleBlock
+      title="componentsAfter"
+      description="Массив **ReactNode**, отображаемых справа от **label** внутри пункта: бейджи, индикаторы, иконки."
+      code='
+    <HorizontalNav items={[
+      { key: "one", label: "One", componentsAfter: [<Badge key="b" mode="neutral" text="9" />] },
+      { key: "two", label: "Two", componentsAfter: [<Indicator key="i" />] }
+    ]} />'
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**HorizontalNav** — компактная строка переключателей между равнозначными разделами внутри экрана: подразделы карточки, вкладки настроек, этапы процесса, состояния объекта. Размещают в верхней части блока контента, когда нужно быстро сменить контекст без иерархии.
+
+Для разделов с собственным контентом под каждой вкладкой и сворачиванием непомещающихся пунктов используйте **Tabs**. Для глобальной навигации по продукту — **Sidebar** или **Menu**. Длинные подписи и крупные дополнительные элементы в строке снижают компактность панели."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+      <Text type="H3">Дизайн</Text>
+      <Text color="secondary" type="BTR3">
+        Раздел зарезервирован под дизайн-гайдлайны. Содержимое будет добавлено в следующих релизах.
+      </Text>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={HorizontalNavStories} />
+    <AutodocArgsTable components={HorizontalNav} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

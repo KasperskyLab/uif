@@ -7,10 +7,13 @@ import { P } from '@src/typography'
 import { Meta } from '@storybook/react'
 import React, { useState } from 'react'
 
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
+
 import { FilterConfig, Table } from '..'
 import MetaData from '../__meta__/meta.json'
 import { generatedData, mockCustomFilterFunction, tableColumns } from '../__mocks__/filtersMockData'
-import { FilterGroup, FilterOperation, FilterType } from '../modules/Filters'
+import { FilterGroup, FilterOperation, FilterType, TextFilter } from '../modules/Filters'
+import { modifyColumns } from '../test-utils/helpers'
 import { ITableProps, TableColumn } from '../types'
 
 import { Story, Wrapper } from './_commonConstants'
@@ -19,9 +22,10 @@ const meta: Meta<ITableProps> = {
   title: 'Hexa UI Components/Table/Filters',
   component: Table,
   args: {
-    columns: tableColumns as TableColumn[],
+    columns: tableColumns,
     dataSource: generatedData,
     filterVersion: 1,
+    enableNestedFilters: false,
     useFiltersSidebar: true,
     toolbar: {
       showFilterSidebar: true
@@ -30,7 +34,9 @@ const meta: Meta<ITableProps> = {
     onFiltersChange: val => console.log('onFiltersChange', val),
     onFilterChange: val => console.log('onFilterChange', val),
     onDropdownFiltersChange: val => console.log('onDropdownFiltersChange', val),
-    onSidebarFiltersChange: val => console.log('onSidebarFiltersChange', val)
+    onSidebarFiltersChange: val => console.log('onSidebarFiltersChange', val),
+    borderedStyle: false,
+    testId: 'tableTestId'
   },
   argTypes: {
     filterVersion: {
@@ -44,10 +50,14 @@ const meta: Meta<ITableProps> = {
           v2 - add the following operations to v1 filters:
             text filter - Regexp, Empty, Not empty;
             number filter - ≥, ≤, Empty, Not empty;
-            enum filter - Contains (AND), Contains (OR), Doesn't contain, Regexp.
+            enum filter - Contains (AND), Contains (OR), Doesn't contain, Regexp
           `
         }
       }
+    },
+    enableNestedFilters: {
+      control: 'boolean',
+      description: 'Enable nested OR filtering'
     },
     storageMergeFiltersMode: {
       control: 'radio',
@@ -64,7 +74,7 @@ const meta: Meta<ITableProps> = {
     }
   },
   decorators: [
-    (Story, context) => <Wrapper><Story {...context}/></Wrapper>
+    (Story, context) => <Wrapper><Story {...context} /></Wrapper>
   ],
   tags: ['!autodocs']
 }
@@ -108,28 +118,32 @@ const columnFilter2: FilterGroup = {
 }
 
 export const Filters: Story = {
-  render: args => <>
-    <SectionMessage closable={false} mode="info" style={{ marginBottom: 16 }}>
-      <P>
-        На данный момент <Tag>Contains (AND)</Tag> фильтрация на клиентской стороне не поддерживается. Используйте серверную фильтрацию.
-      </P>
-    </SectionMessage>
-    <Table {...args} />
-  </>
+  render: args => (
+    <>
+      <SectionMessage closable={false} mode="info" style={{ marginBottom: 16 }}>
+        <P>
+          На данный момент <Tag>Contains (AND)</Tag> фильтрация на клиентской стороне не поддерживается. Используйте серверную фильтрацию.
+        </P>
+      </SectionMessage>
+      <Table {...args} />
+    </>
+  )
 }
 
-export const PredefinedFilters: Story = {
-  render: args => <>
-    <SectionMessage closable={false} mode="info" style={{ marginBottom: 16 }}>
-      <P>
-        `@deprecated defaultSidebarFilters` overrides `@deprecated defaultFiltersConfig`, 
-        `predefinedFilters` overrides both. Also `predefinedFilters` overrides `@deprecated initialFilters`.
-      </P>
-    </SectionMessage>
-    <Table {...args} />
-  </>,
+export const DefaultFilters: Story = {
+  render: args => (
+    <>
+      <SectionMessage closable={false} mode="info" style={{ marginBottom: 16 }}>
+        <P>
+          `@deprecated defaultSidebarFilters` overrides `@deprecated defaultFiltersConfig`,
+          `defaultFilters` overrides both. Also `defaultFilters` overrides `@deprecated initialFilters`.
+        </P>
+      </SectionMessage>
+      <Table {...args} />
+    </>
+  ),
   args: {
-    predefinedFilters: [
+    defaultFilters: [
       sidebarFilter1,
       sidebarFilter2,
       columnFilter1,
@@ -146,12 +160,14 @@ export const PredefinedFilters: Story = {
 }
 
 export const ExternalFilters: Story = {
-  render: args => <>
-    <SectionMessage closable={false} mode="info" style={{ marginBottom: 16 }}>
-      <P>`externalFilters` overrides `appliedFilters` and `sidebarFilters`.</P>
-    </SectionMessage>
-    <Table {...args} />
-  </>,
+  render: args => (
+    <>
+      <SectionMessage closable={false} mode="info" style={{ marginBottom: 16 }}>
+        <P>`externalFilters` overrides `appliedFilters` and `sidebarFilters`.</P>
+      </SectionMessage>
+      <Table {...args} />
+    </>
+  ),
   args: {
     externalFilters: [
       sidebarFilter1,
@@ -185,18 +201,48 @@ export const CustomFilterFunction: Story = {
   }
 }
 
+export const ShowEnumFiltersInColumn: Story = {
+  args: {
+    columns: modifyColumns(tableColumns, 'group', { showEnumFiltersInColumn: true }) as TableColumn[]
+  }
+}
+
+const randomFilter: TextFilter = {
+  name: 'fullname',
+  type: FilterType.Text,
+  condition: FilterOperation.cont,
+  value: 'a'
+}
+
+export const CustomFilterSidebarButtons: Story = {
+  args: {
+    getFiltersSidebarToolbarButtons: async (params) => {
+      console.debug('params', params)
+
+      return [{
+        children: 'Custom button',
+        testId: 'custom button',
+        iconBefore: <Placeholder />,
+        onClick: () => params.setSidebarFilters([randomFilter])
+      }]
+    }
+  }
+}
+
 export const DataSourceChanged: Story = {
   render: (args) => {
     const [dataSource, setDataSource] = useState(args.dataSource)
-    return <>
-      <Button onClick={() => setDataSource(args.dataSource?.slice(50))}>
-        Change data source
-      </Button>
-      <Table {...args} dataSource={dataSource} />
-    </>
+    return (
+      <>
+        <Button onClick={() => setDataSource(args.dataSource?.slice(50))}>
+          Change data source
+        </Button>
+        <Table {...args} dataSource={dataSource} />
+      </>
+    )
   },
   args: {
-    predefinedFilters: [sidebarFilter1]
+    defaultFilters: [sidebarFilter1]
   },
   name: '[dev] What if dataSource changed with filters applied?'
 }

@@ -8,7 +8,7 @@ import { StatusNoThreadSolid, StatusOkSolid } from '@kaspersky/hexa-ui-icons/16'
 import { ValidationRule } from './types'
 import styles from './ValidationRules.module.scss'
 
-export function ValidationRules ({ rules = [] }: {rules?: ValidationRule[]}) {
+export function ValidationRules ({ rules = [] }: { rules?: ValidationRule[] }) {
   return (
     <Space gap="related">
       {rules.map((rule) => (

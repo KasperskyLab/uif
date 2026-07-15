@@ -1,11 +1,6 @@
-import { getFromProps } from '@helpers/getFromProps'
 import { css } from 'styled-components'
 
-import { RadioCssConfig } from './types'
-
-const fromRadioProps = getFromProps<RadioCssConfig>()
-
-export const getInternalRadioCss = (fromProps: any) => css`
+export const getInternalRadioCss = () => css`
   // enabled
   .ant-radio-wrapper {
     display: flex;
@@ -15,7 +10,7 @@ export const getInternalRadioCss = (fromProps: any) => css`
     padding: 0;
     margin: 0;
 
-    color: ${fromProps('enabled.color')};
+    color: var(--radio--text--base--enabled);
     white-space: unset;
 
     & > span + span {
@@ -27,8 +22,8 @@ export const getInternalRadioCss = (fromProps: any) => css`
   .ant-radio-inner {
     width: calc(14px);
     height: calc(14px);
-    background-color: ${fromProps('enabled.background')};
-    border-color: ${fromProps('enabled.border')};
+    background-color: var(--radio--bg--base--enabled);
+    border-color: var(--radio--border--base--enabled);
 
     &::after {
       transform: scale(calc(0.5));
@@ -39,12 +34,12 @@ export const getInternalRadioCss = (fromProps: any) => css`
       transition: opacity 0.1s ease-in-out !important;
       left: 50%;
       top: 50%;
-      background-color: ${fromProps('enabled.dotColor')};
+      background-color: var(--radio--icon--base--enabled_selected);
     }
   }
   
   .ant-radio-checked .ant-radio-inner::after {
-    background-color: ${fromProps('enabled.dotColor')};
+    background-color: var(--radio--icon--base--enabled_selected);
   }
 
   .ant-radio-checked::after {
@@ -54,11 +49,11 @@ export const getInternalRadioCss = (fromProps: any) => css`
   // hover
   .ant-radio-wrapper:hover {
     .ant-radio-inner {
-      border-color: ${fromProps('hover.border')};
-      background-color: ${fromProps('hover.background')};
+      border-color: var(--radio--border--base--hover);
+      background-color: var(--radio--bg--base--hover);
       
       &::after {
-        background-color: ${fromProps('hover.dotColor')};
+        background-color: var(--radio--icon--base--hover_selected);
       }
     }
   }
@@ -66,25 +61,25 @@ export const getInternalRadioCss = (fromProps: any) => css`
   // active
   .ant-radio-wrapper:active, .ant-radio-wrapper:hover:active {
     .ant-radio-inner {
-      border-color: ${fromProps('active.border')};
-      background-color: ${fromProps('active.background')};
+      border-color: var(--radio--border--base--active);
+      background-color: var(--radio--bg--base--active);
 
       &::after {
-        background-color: ${fromProps('active.dotColor')};
+        background-color: var(--radio--icon--base--active_selected);
       }
     }
   }
   
   // focus
   && .ant-radio-input:focus + .ant-radio-inner {
-    border-color: ${fromProps('enabled.border')};
+    border-color: var(--radio--border--base--enabled);
     outline: none;
     box-shadow: none;
   }
   && .ant-radio-input:focus-visible + .ant-radio-inner {
-    border-color: ${fromProps('enabled.border')};
+    border-color: var(--radio--border--base--enabled);
     outline: none;
-    box-shadow: ${fromProps('focus.boxShadow')};
+    box-shadow: 0px 0px 0px 2px var(--focus--stroke);
   }
   
   // disabled
@@ -92,14 +87,14 @@ export const getInternalRadioCss = (fromProps: any) => css`
     &, &:hover, &:active, &:focus {
       &.ant-radio-wrapper-disabled {
         span {
-          color: ${fromProps('disabled.color')}
+          color: var(--radio--text--base--disabled);
         }
         .ant-radio-inner {
-          border-color: ${fromProps('disabled.border')} !important;
-          background-color: ${fromProps('disabled.background')};
+          border-color: var(--radio--border--base--disabled) !important;
+          background-color: var(--radio--bg--base--disabled);
 
           &::after {
-            background-color: ${fromProps('disabled.dotColor')};
+            background-color: var(--radio--icon--base--disabled_selected);
           }
         }
       }
@@ -107,7 +102,7 @@ export const getInternalRadioCss = (fromProps: any) => css`
   }
 `
 
-export const getRadioCss = (fromProps: any) => css`
+export const getRadioCss = () => css`
   display: flex;
   flex-direction: row;
   gap: 12px;
@@ -132,14 +127,14 @@ export const getRadioCss = (fromProps: any) => css`
           cursor: default;
         }
         span {
-          color: ${fromProps('readonly.color')}
+          color: var(--radio--text--base--readonly);
         }
         .ant-radio-inner {
-          border-color: ${fromProps('readonly.border')} !important;
-          background-color: ${fromProps('readonly.background')};
+          border-color: var(--radio--border--base--readonly) !important;
+          background-color: var(--radio--bg--base--readonly);
 
           &::after {
-            background-color: ${fromProps('readonly.dotColor')};
+            background-color: var(--radio--icon--base--readonly_selected);
           }
         }
       }
@@ -150,19 +145,19 @@ export const getRadioCss = (fromProps: any) => css`
   &.kl-radio-invalid .ant-radio-wrapper:not(.ant-radio-wrapper-disabled) {
     &, &:hover, &:active, &:focus {
       .ant-radio-inner {
-        border-color: ${fromProps('invalid.border')};
+        border-color: var(--radio--border--danger--enabled);
 
         &::after {
-          background-color: ${fromProps('invalid.dotColor')};
+          background-color: var(--radio--icon--danger--enabled_selected);
         }
       }
       .ant-radio-inner {
-        background-color: ${fromProps('enabled.background')};
+        background-color: var(--radio--bg--base--enabled);
       }
     }
   }
   
-  ${getInternalRadioCss(fromRadioProps)}
+  ${getInternalRadioCss()}
 `
 
-export const radioCss = getRadioCss(fromRadioProps)
+export const radioCss = getRadioCss()

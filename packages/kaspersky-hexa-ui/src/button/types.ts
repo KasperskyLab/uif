@@ -38,6 +38,8 @@ export type ButtonProps = BaseThemedButtonProps & {
   disabled?: boolean,
   /** Loading state */
   loading?: boolean,
+  /** Loading state second */
+  loadingSecond?: boolean,
   /** Css class */
   className?: string,
   /** Icon before text */

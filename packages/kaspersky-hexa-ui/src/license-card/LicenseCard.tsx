@@ -25,7 +25,7 @@ export const LicenseCard = ({
   term,
   iconBefore,
   elementAfter,
-  minWidth='auto',
+  minWidth = 'auto',
   actions,
   mode = 'valid',
   theme,
@@ -35,15 +35,18 @@ export const LicenseCard = ({
   rightSideClassName,
   style,
   compact = false,
+  statusSection = true,
+  validitySection = true,
+  licenseKeyStatus,
   ...props
-}: LicenseCardProps) =>{
+}: LicenseCardProps) => {
   const { testAttributes } = useTestAttribute(props)
   const { t } = useTranslation()
   const { getFormattedDate } = useFormattedDate()
-  
-  const fieldConfig: {labelKey: string, control: ReactElement, show: boolean}[]= [
+
+  const fieldConfig: { labelKey: string, control: ReactElement, show: boolean }[]= [
     {
-      control: <RenderDaysRemaining mode={mode} daysRemaining={daysRemaining}/>, 
+      control: <RenderDaysRemaining mode={mode} daysRemaining={daysRemaining} />,
       labelKey:'licenseCard.remaining',
       show: shouldShowRemainingField(mode)
     },
@@ -64,6 +67,103 @@ export const LicenseCard = ({
     }
   ]
 
+  const sections: React.ReactElement[] = []
+
+  if (statusSection) {
+    sections.push(
+      <div className={cn(
+        styles.licenseCardContentRow,
+        compact && styles['licenseCardContentRow--compact']
+      )}>
+        <Field
+          control={<Status {...statusToProps(mode, licenseKeyStatus, t)} />}
+          label={compact ? undefined : t('licenseCard.status')!}
+          labelPosition="before"
+          gridLayout={
+            !compact
+              ? {
+                  firstCol: '4fr',
+                  secondCol: '8fr'
+                }
+              : undefined
+          }
+          className="kl6-field-label-position-before"
+        />
+        <Field
+          control={(
+            <div className={styles.licenseCardFieldNumber}>
+              <Text className={styles.licenseCardFieldKey}>
+                {licenseNumber}
+              </Text>
+              <ActionButton
+                icon={<Copy />}
+                size="large"
+                onClick={() => copyLicenseKey(licenseNumber)}
+              />
+            </div>
+          )}
+          labelPosition="before"
+          label={compact ? undefined : t('licenseCard.number')!}
+          gridLayout={
+            !compact
+              ? {
+                  firstCol: '4fr',
+                  secondCol: '8fr'
+                }
+              : undefined
+          }
+          className="kl6-field-label-position-before"
+        />
+      </div>
+    )
+  }
+
+  if (validitySection) {
+    sections.push(
+      <div className={cn(
+        styles.licenseRow,
+        compact && styles['licenseRow--compact']
+      )}>
+        {fieldConfig
+          .filter((row) => row.show)
+          .map((item) => (
+            <Field
+              key={item.labelKey}
+              control={item.control}
+              label={t(item.labelKey) ?? undefined}
+              labelPosition={compact ? 'top' : 'before'}
+              gridLayout={
+                !compact
+                  ? {
+                      firstCol: '4fr',
+                      secondCol: '8fr'
+                    }
+                  : undefined
+              }
+              className={
+                !compact
+                  ? 'kl6-field-label-position-before'
+                  : undefined
+              }
+            />
+          ))}
+      </div>
+    )
+  }
+
+  if (children || actions) {
+    sections.push(
+      <>
+        {children}
+        {actions && (
+          <div className={styles.licenseCardActions}>
+            {actions}
+          </div>
+        )}
+      </>
+    )
+  }
+
   return (
     <div
       className={cn(
@@ -71,16 +171,16 @@ export const LicenseCard = ({
         styles.licenseCard,
         styles[mode]
       )}
-      style={{ 
+      style={{
         '--license-card-min-width': minWidth ? `${minWidth}px` : '600px',
-        ...style 
+        ...style
       }}
       {...testAttributes}
     >
       <div className={styles.licenseCardHeader}>
         <div className={styles.licenseCardHeaderBlock}>
           {iconBefore && (
-            <span 
+            <span
               className={cn(leftSideClassName, {
                 [styles.iconExpired]: mode === 'expired',
                 [styles.iconDisabled]: mode === 'finished',
@@ -90,85 +190,21 @@ export const LicenseCard = ({
               {iconBefore}
             </span>
           )}
-          <Text type="H5">{title}</Text>
+          <Text className={styles.licenseCardHeaderText} type="H5">{title}</Text>
         </div>
         {compact && elementAfter && (<span className={rightSideClassName}>{elementAfter}</span>)}
       </div>
       <div
         className={cn(
-          styles.licenseCardContent, compact && styles['licenseCardContent--compact']
+          styles.licenseCardContent,
+          compact && styles['licenseCardContent--compact']
         )}>
-        <div className={cn(
-          styles.licenseCardContentRow, compact && styles['licenseCardContentRow--compact']
-        )}>
-          <Field
-            control={<Status {...statusToProps(mode)}/>}
-            label={compact ? undefined : t('licenseCard.status')!}
-            labelPosition="before"
-            gridLayout={
-              !compact
-                ? {
-                    firstCol: '4fr',
-                    secondCol: '8fr'
-                  }
-                : undefined
-            }
-          />
-          <Field
-            control={
-              <div className={styles.licenseCardFieldNumber}>
-                <div className={styles.licenseCardFieldKey}>
-                  {licenseNumber}
-                </div>
-                <ActionButton
-                  icon={<Copy />}
-                  size="large"
-                  onClick={() => copyLicenseKey(licenseNumber)}
-                />
-              </div>
-            }
-            labelPosition="before"
-            label={compact ? undefined : t('licenseCard.number')!}
-            gridLayout={
-              !compact
-                ? {
-                    firstCol: '4fr',
-                    secondCol: '8fr'
-                  }
-                : undefined
-            }
-          />
-        </div>
-        <Divider/>
-        <div className={cn(
-          styles.licenseRow, compact && styles['licenseRow--compact']
-        )}>
-          {fieldConfig
-            .filter((row) => row.show)
-            .map((item) => (
-              <Field
-                key={item.labelKey}
-                control={item.control}
-                label={t(item.labelKey) ?? undefined}
-                labelPosition={compact ? 'top' : 'before'}
-                gridLayout={
-                  !compact
-                    ? {
-                        firstCol: '4fr',
-                        secondCol: '8fr'
-                      }
-                    : undefined
-                }
-              />
-            ))}
-        </div>
-        {(children || actions) && <Divider/>}
-        {children}
-        {actions && (
-          <div className={styles.licenseCardActions}>
-            {actions}
-          </div>
-        )}
+        {sections.map((section, index) => (
+          <React.Fragment key={index}>
+            {section}
+            {index < sections.length - 1 && <Divider />}
+          </React.Fragment>
+        ))}
       </div>
     </div>
   )

@@ -80,8 +80,7 @@ export const codeViewerCss = css<{
     }
 
     .cm-gutters {
-      background: ${fromProps('enabled.background')};
-      ${(props) => props.readonly && 'background: transparent;'}
+      ${(props) => !props.readonly && `background: ${fromProps('enabled.background')(props)};`}
       padding-right: 28px;
       border: none;
       position: relative;
@@ -113,13 +112,13 @@ export const codeViewerCss = css<{
   
           .cm-lint-marker-warning {
             ${(props) => `content: url(${reactSvgComponentToMarkupString(StatusWarningSolid, {
-    style: { color: fromProps('warningIconColor')(props) }
-  })});`}
+              style: { color: fromProps('warningIconColor')(props) }
+            })});`}
           }
           .cm-lint-marker-error {
             ${(props) => `content: url(${reactSvgComponentToMarkupString(StatusDangerSolid1, {
-    style: { color: fromProps('errorIconColor')(props) }
-  })});`}
+              style: { color: fromProps('errorIconColor')(props) }
+            })});`}
           }
         }
       }

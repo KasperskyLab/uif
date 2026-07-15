@@ -1,8 +1,11 @@
 import { Theme } from '@design-system/types'
 
-export type ToViewProps<BaseType, CssConfig, ToExclude = ''> = Omit<BaseType, keyof ToExclude> & { cssConfig: CssConfig, testAttributes?: TestingAttributes }
+export type ToViewProps<BaseType, CssConfig, ToExclude = ''> = Omit<BaseType, keyof ToExclude> & {
+  cssConfig: CssConfig,
+  testAttributes?: TestingAttributes
+}
 
-export type TestingProps = {
+export interface TestingProps {
   /** Actual identifier for autotesting, will be passed to HTML attribute data-testid */
   testId?: string,
   /** @deprecated Use 'testId' prop instead. Identifier for backward compatibility in autotesting, will be passed to HTML attribute kl-id */

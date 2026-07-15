@@ -1,0 +1,113 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Textbox } from '../Textbox'
+import { textboxDesignPropPresentation } from './Textbox.design.properties'
+import * as TextboxStories from './Textbox.stories'
+
+<Meta of={TextboxStories} name="Textbox Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Textbox"
+  description="**Textbox** — однострочное поле текстового ввода на базе Ant Design Input"
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Textbox** принимает и отображает однострочный текст. Реализован на Ant Design Input с темизацией Hexa UI. Доступны варианты **Textbox.Password**, **Textbox.Number**, **Textbox.Masked** и **Textbox.Textarea** (отдельный раздел документации). Настраиваются **disabled**, **readOnly**, **validationStatus**, **placeholder**, **showClearButton**, **value**, **prefix** и **suffix**."
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключает поле: ввод и фокус недоступны. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<Textbox disabled placeholder="Placeholder" />`}
+    />
+
+    <DocExampleBlock
+      title="readOnly"
+      description="Режим только для чтения: значение отображается, но не редактируется. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<Textbox value="Только чтение" readOnly />`}
+    />
+
+    <DocExampleBlock
+      title="validationStatus"
+      description="Визуальный статус валидации поля. Доступные значения: `default`, `error`, `success`. По умолчанию — `default`."
+      code={`<Textbox validationStatus="default" placeholder="Placeholder" />
+<Textbox validationStatus="error" placeholder="Placeholder" />
+<Textbox validationStatus="success" placeholder="Placeholder" />`}
+    />
+
+    <DocExampleBlock
+      title="placeholder"
+      description="Подсказка, отображаемая в пустом поле, когда **value** не задано."
+      code={`<Textbox placeholder="Введите текст" />`}
+    />
+
+    <DocExampleBlock
+      title="showClearButton"
+      description="Показывает кнопку очистки справа, когда поле не пустое и не в состояниях **disabled** или **readOnly**. Доступные значения: `true`, `false`. По умолчанию — `false`."
+      code={`<Textbox showClearButton value="Текст" />`}
+    />
+
+    <DocExampleBlock
+      title="value"
+      description="Контролируемое значение поля. Изменения передаются через **onChange**."
+      code={`<Textbox value="Текст" />`}
+    />
+
+    <DocExampleBlock
+      title="onChange"
+      description="Вызывается при изменении текста в поле. Передаёт новую строку."
+      code={`<Textbox onChange={(value) => alert(value)} />`}
+    />
+
+    <DocExampleBlock
+      title="onClearClick"
+      description="Обработчик нажатия на кнопку очистки при **showClearButton**. Если не задан, значение сбрасывается в пустую строку."
+      code={`<Textbox showClearButton value="Текст" onClearClick={() => alert('cleared')} />`}
+    />
+
+    <DocExampleBlock
+      title="prefix и suffix"
+      description="Произвольное содержимое слева (**prefix**) и справа (**suffix**) от поля ввода — иконки, единицы измерения и другие элементы."
+      code={`<Textbox prefix="@" placeholder="username" />
+<Textbox suffix="₽" placeholder="0" />`}
+    />
+
+    <DocExampleBlock
+      title="autoFocus"
+      description="При монтировании переводит фокус в поле ввода. Доступные значения: `true`, `false`."
+      code={`<Textbox autoFocus placeholder="Placeholder" />`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Textbox** — базовый способ ввода короткого текста в форме, фильтре, панели настроек или диалоге: имя, адрес, комментарий в одну строку, числовое или маскированное значение через специализированные варианты. Обычно размещают внутри **Field** с подписью и сообщением валидации.
+
+Для многострочного текста используйте **Textarea**. Для поиска с выпадающим списком результатов — **Search**. Для выбора даты и времени — **DatePicker** и **TimeInput**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(textboxDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={TextboxStories} />
+    <AutodocArgsTable components={Textbox} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

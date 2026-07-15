@@ -110,6 +110,7 @@ const PanelCSS = css`
     align-items: center;
     user-select: none;
     z-index: 1;
+    transform: translate(0);
     
 
     &:before {

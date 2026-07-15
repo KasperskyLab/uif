@@ -1,30 +1,27 @@
-import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { badges } from '@sb/badges'
+import { buildStoryArgTypes, getControlsInclude } from '@sb/components/Documentation'
 import { withMeta } from '@sb/components/Meta'
-import { sbHideControls } from '@sb/helpers'
 import { Meta, StoryObj } from '@storybook/react'
-import React, { useCallback, useState } from 'react'
-
-import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
+import React from 'react'
 
 import MetaData from '../__meta__/meta.json'
-import { Breadcrumbs } from '../Breadcrumbs'
+import { Breadcrumbs as BreadcrumbsComponent } from '../Breadcrumbs'
 import { generateRoutes } from '../helpers'
-import { BreadcrumbsProps, Route } from '../types'
+import { BreadcrumbsProps } from '../types'
 
-const storyRoutes = generateRoutes()
+import {
+  breadcrumbsPropPresentation,
+  defaultArgs
+} from './Breadcrumbs.controls'
 
-const meta: Meta<BreadcrumbsProps> = {
-  title: 'Hexa UI Components/Breadcrumbs',
-  component: Breadcrumbs,
-  argTypes: {
-    ...sbHideControls(['theme'])
-  },
+type StoryBreadcrumbsProps = Omit<BreadcrumbsProps, 'routes'> & typeof defaultArgs
+
+export const breadcrumbsStorySettings: Meta<StoryBreadcrumbsProps> = {
+  argTypes: buildStoryArgTypes(breadcrumbsPropPresentation),
   args: {
+    ...defaultArgs,
     testId: 'breadcrumbs-test-id',
-    klId: 'breadcrumbs-kl-id',
-    size: 'medium',
-    routes: storyRoutes
+    klId: 'breadcrumbs-kl-id'
   },
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
@@ -34,31 +31,34 @@ const meta: Meta<BreadcrumbsProps> = {
     design: MetaData.pixsoView
   }
 }
+
+const meta = {
+  title: 'Hexa UI Components/Breadcrumbs',
+  // @ts-expect-error Playground adds story-only controls and maps them in render
+  component: BreadcrumbsComponent,
+  tags: ['!autodocs'],
+  includeStories: ['Playground'],
+  excludeStories: ['breadcrumbsStorySettings'],
+  ...breadcrumbsStorySettings
+} satisfies Meta<StoryBreadcrumbsProps>
+
 export default meta
 
-type Story = StoryObj<BreadcrumbsProps>
+type Story = StoryObj<StoryBreadcrumbsProps>
 
-export const WithMoreButton: Story = {}
-
-export const WithRouting: Story = {
-  render: (args) => {
-    const [routes, setRoutes] = useState<Route[]>(storyRoutes)
-
-    const onClickHandler = useCallback((i) => {
-      setRoutes((routes) => args.size === 'medium' ? routes.slice(0, i + 1) : routes.slice(0, i))
-    }, [args.size])
-
-    return (
-      <Breadcrumbs
-        {...args}
-        routes={routes.map((route, i) => ({ ...route, onClick: () => onClickHandler(i) }))}
-      />
-    )
-  }
-}
-
-type PaletteStory = StoryObj<ThemedPaletteProps>
-export const ColorTokens: PaletteStory = {
-  args: { source: componentColors.breadcrumbs },
-  render: args => <ThemedPalette {...args} />
+export const Playground: Story = {
+  name: 'Playground',
+  parameters: {
+    controls: {
+      include: getControlsInclude(breadcrumbsPropPresentation),
+      sort: 'none'
+    }
+  },
+  render: ({ routeCount, size, ...rest }) => (
+    <BreadcrumbsComponent
+      {...rest}
+      size={size}
+      routes={generateRoutes(routeCount)}
+    />
+  )
 }

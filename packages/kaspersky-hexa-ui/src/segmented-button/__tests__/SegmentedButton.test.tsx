@@ -1,4 +1,3 @@
-import { Icon } from '@src/icon'
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React, { FC, useState } from 'react'
@@ -34,12 +33,7 @@ const defaultItems: SegmentedButtonOption[] = [
     value: 'red',
     mode: 'red',
     componentsBefore: [
-      <Icon
-        name="Placeholder"
-        size="medium"
-        key="icon"
-        klId="test-icon-before"
-      />
+      <Placeholder klId="test-icon-before" key="icon" />
     ]
   },
   {
@@ -47,12 +41,7 @@ const defaultItems: SegmentedButtonOption[] = [
     value: 'orange',
     mode: 'orange',
     componentsAfter: [
-      <Icon
-        name="Placeholder"
-        size="medium"
-        key="icon"
-        klId="test-icon-after"
-      />
+      <Placeholder klId="test-icon-after" key="icon" />
     ]
   },
   {

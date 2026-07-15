@@ -4,7 +4,7 @@ import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbHideControls } from '@sb/helpers'
 import { Meta, StoryObj } from '@storybook/react'
-import { TreeSelect as TreeSelectAntd } from 'antd'
+import TreeSelectAntd from 'antd/es/tree-select'
 import React, { useState } from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'

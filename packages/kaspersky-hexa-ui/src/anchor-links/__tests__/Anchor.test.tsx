@@ -17,7 +17,7 @@ const defaultProps: AnchorProps = {
 
 describe('Anchor', () => {
   test('should render', () => {
-    render(<Anchor {...defaultProps}/>)
+    render(<Anchor {...defaultProps} />)
     expect(screen.getByText('Link 1')).toBeInTheDocument()
     expect(screen.getByText('Link 2')).toBeInTheDocument()
   })

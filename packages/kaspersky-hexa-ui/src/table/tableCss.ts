@@ -1,5 +1,4 @@
 import { getTextSizes } from '@design-system/tokens'
-import { getFromInnerProps, getFromProps } from '@helpers/getFromProps'
 import styled, { css } from 'styled-components'
 
 import { TextTypes } from '@kaspersky/hexa-ui-core/typography/js'
@@ -7,11 +6,7 @@ import { TextTypes } from '@kaspersky/hexa-ui-core/typography/js'
 import { getCheckboxCss } from '../checkbox/checkboxCss'
 import { getInternalRadioCss } from '../radio/radioCss'
 
-import { TableCssConfig, TableViewProps } from './types'
-
-export const fromTableProps = getFromProps<TableCssConfig, TableViewProps>()
-const fromCheckboxProps = getFromInnerProps<TableCssConfig>('checkbox')
-const fromRadioProps = getFromInnerProps<TableCssConfig>('radio')
+import { ITableProps } from './types'
 
 const tableSizes = {
   headSizes: getTextSizes(TextTypes.BTM3),
@@ -21,17 +16,33 @@ const tableSizes = {
   }
 }
 
-const getRowModeCss = (props: Pick<TableCssProps, 'rowMode'>) => {
-  const { rowMode = 'standard' } = props
-  return rowMode === 'standard'
-    ? css`
-      height: 40px;
-      padding: 10px 8px 9px 8px;
-    `
-    : css`
-      height: 28px;
-      padding: 4px 8px 3px 8px;
-    `
+const getRowModeCss = (props: Pick<TableCssProps, 'rowMode' | 'borderedStyle'>) => {
+  const { rowMode = 'standard', borderedStyle } = props
+  return borderedStyle
+    ? rowMode === 'standard'
+      ? css`
+          padding: var(--spacing--padding_m);
+        `
+      : css`
+          padding: var(--spacing--padding_s) var(--spacing--padding_m) var(--spacing--padding_s) var(--spacing--padding_m);
+      `
+    : rowMode === 'standard'
+      ? css`
+          height: 40px;
+          padding: 10px var(--spacing--padding_m) 9px var(--spacing--padding_m);
+
+          &:first-child {
+            padding-left: 0;
+          }
+        `
+      : css`
+          height: 28px;
+          padding: 4px var(--spacing--padding_m) 3px var(--spacing--padding_m);
+
+          &:first-child {
+            padding-left: 0;
+          }
+        `
 }
 
 const getThCss = (props: Pick<TableCssProps, 'stickyHeader' | 'resizingMode' | 'rowMode'>) => {
@@ -61,21 +72,18 @@ const scrollableResizingCss = css`
     & table {
       width: max-content;
       min-width: 100%;
-      
-      thead.ant-table-thead {
-        background: ${fromTableProps('cell.enabled.background')};
-      }
     }
   }
 `
 
 const tableValidationCss = css`
-  outline: 1px solid ${fromTableProps('validation.outline')};
+  outline: 1px solid var(--input_text--border--error);
 `
 
 export const tableCssProps = [
-  'cssConfig',
+  'rowSelection',
   'resizingMode',
+  'borderedStyle',
   'useDragDrop',
   'scroll',
   'rowMode',
@@ -84,24 +92,136 @@ export const tableCssProps = [
   'columnVerticalAlign'
 ] as const
 
-export type TableCssProps = Pick<TableViewProps, typeof tableCssProps[number]>
+export type TableCssProps = Pick<ITableProps, typeof tableCssProps[number]>
+
+export const tableWithBordersCss = css`
+  border-collapse: collapse;
+
+  td.ant-table-cell,
+  th {
+    border: 1px solid var(--border--neutral--medium);
+    border-collapse: collapse;
+    height: unset;
+
+    &:first-child {
+      .ant-checkbox-wrapper {
+        gap: unset;
+      }
+
+      .ant-dropdown-trigger {
+        width: unset;
+      }
+    }
+  }
+
+  tr.ant-table-measure-row + tr > td {
+    border-top: none;
+  }
+
+  .ant-table-thead.ant-table-thead > tr > th {
+    color: var(--fg--neutral--primary);
+    border: 1px solid var(--border--neutral--medium);
+
+    font-family: var(--text--bts4--font-family);
+    font-size: var(--text--bts4--font-size);
+    line-height: var(--text--bts4--line-height);
+    font-weight: var(--text--bts4--font-weight);
+    font-style: var(--text--bts4--font-style);
+    letter-spacing: var(--text--bts4--letter-spacing);
+
+    &:first-child {
+      padding: var(--spacing--padding_m) var(--spacing--padding_m);
+    }
+
+    &:after {
+      display: none;
+    }
+
+    &:has(.kl6-table-dropdown) {
+      padding: 0;
+    }
+  }
+
+  thead:empty ~ tbody td.ant-table-cell {
+    border-top: none;
+  }
+
+  .kl6-table-dropdown {
+    padding: var(--spacing--padding_m);
+  }
+
+  .hexa-ui-placeholder {
+    background: transparent;
+  }
+
+  .drag-handle {
+    left: -33px;
+  }
+
+  .ant-table-selection-column + .ant-table-cell-with-append .drag-handle {
+    left: -60px;
+  }
+
+  .ant-table-selection-column {
+    width: unset;
+    min-width: unset;
+  }
+
+  col {
+    &.ant-table-selection-col {
+      min-width: 30px;
+      width: 30px;
+    }
+  }
+`
 
 export const tableCss = css<TableCssProps>`
   .ant-table {
-    background-color: ${fromTableProps('root.background')};
-    color: ${fromTableProps('root.color')};
+    background-color: var(--table_row--bg--base);
+    color: var(--table_cell--text--enabled);
+
+    table col:not([style]) {
+      min-width: 100px;
+
+      &.ant-table-selection-col {
+        min-width: 30px;
+        width: 30px;
+      }
+    }
+
+    .table-with-borders & table {
+      ${tableWithBordersCss}
+    }
+
+    .table-col-after &,
+    &.table-col-after {
+      .ant-table-thead > tr:after,
+      .ant-table-tbody > tr:after {
+        content: '';
+        display: table-cell;
+        transition: background 0.3s;
+      }
+    }
+
+    .ant-table-thead > tr:after {
+      border-bottom: 1px solid var(--table_cell_header--border);
+    }
+
+    .ant-table-tbody > tr:after {
+      border-bottom: 1px solid var(--table_row--border);
+    }
 
     .ant-table-thead > tr > th {
-        background-color: ${fromTableProps('root.background')};
+        background-color: var(--table_row--bg--base);
         padding: 10px 8px;
-        
+
         &:has(.kl6-table-dropdown) {
           padding: 0 8px;
         }
 
         border-bottom: none;
         color: inherit;
-        
+
         font-family: ${tableSizes.headSizes.fontFamily};
         font-size: ${tableSizes.headSizes.fontSize};
         line-height: ${tableSizes.headSizes.lineHeight};
@@ -111,7 +231,7 @@ export const tableCss = css<TableCssProps>`
 
         &::after {
           content: "";
-          border-bottom: 1px solid ${fromTableProps('headCell.enabled.border')};
+          border-bottom: 1px solid var(--table_cell_header--border);
           position: absolute;
           left: 8px;
           bottom: 0;
@@ -133,12 +253,7 @@ export const tableCss = css<TableCssProps>`
 
     .ant-table-tbody > tr > td {
       padding: 8px;
-      max-width: 100px;
-
-      :not(.ant-table-selection-column) {
-        min-width: 100px;
-      }
-
+      max-width: 100px; // это стиль убирать нельзя, без него ломается ресайз колонок в консоли
       font-family: ${tableSizes.cellSizes.fontFamily};
       font-size: ${tableSizes.cellSizes.fontSize};
       line-height: ${tableSizes.cellSizes.lineHeight};
@@ -147,9 +262,10 @@ export const tableCss = css<TableCssProps>`
       letter-spacing: ${tableSizes.cellSizes.letterSpacing};
       position: static;
 
-      border-bottom-color: ${fromTableProps('cell.enabled.border')};
-      
-      tr:last-child td {
+      border-bottom-color: var(--table_row--border);
+
+      tr:last-child td,
+      tr:last-child:after {
         border-bottom: none;
       }
 
@@ -161,7 +277,7 @@ export const tableCss = css<TableCssProps>`
     &.ant-table-small .ant-table-tbody .ant-table-wrapper:only-child .ant-table {
       margin: 0;
     }
-    
+
     .ant-table-footer {
       color: unset;
       background: unset;
@@ -171,7 +287,7 @@ export const tableCss = css<TableCssProps>`
   .ant-spin-container.ant-spin-blur {
     overflow: inherit;
   }
-  
+
   &.table-draggable {
     .ant-table-header, .ant-table-body {
       padding-left: ${tableSizes.dragHandler.size}px;
@@ -193,25 +309,25 @@ export const tableCss = css<TableCssProps>`
       display: inline-block;
       position: relative;
       top: 3px;
-      left: -${tableSizes.dragHandler.size}px;
+      left: calc(-12px - ${tableSizes.dragHandler.size}px);
       width: ${tableSizes.dragHandler.size}px;
       opacity: 0;
       text-align: center;
       transition: opacity .1s;
 
       &:hover {
-        opacity: 1;
+        opacity: var(--drag-handle-hover-opacity, 1);
         transition: opacity .1s;
       }
     }
 
     tr:hover .drag-handle {
-      opacity: 1;
+      opacity: var(--drag-handle-hover-opacity, 1);
       transition: opacity .1s;
     }
 
     &.table-row-selection .drag-handle {
-      left: calc(-38px - ${tableSizes.dragHandler.size}px);
+      left: calc(-54px - ${tableSizes.dragHandler.size}px);
     }
   }
 
@@ -223,24 +339,27 @@ export const tableCss = css<TableCssProps>`
     position: relative;
   }
 
-  .ant-table-tbody > tr.ant-table-row > td {
-    background-color: var(--table_row--bg--base);
+  .ant-table-tbody > tr.ant-table-row > td,
+  .ant-table-tbody > tr.ant-table-row:after,
+  .ant-table-tbody > tr.ant-table-row .expandable-gradient::after {
+    background-color: var(--bg--neutral--level_0);
   }
 
   .ant-table-tbody > tr.ant-table-placeholder:hover > td {
-    background-color: transparent;
+    background-color: var(--table_row--bg--hover, transparent);
   }
 
-  .ant-table-tbody > tr.ant-table-row:hover > td {
-    background-color: ${fromTableProps('cell.hover.background')};
-  }
-
-  .ant-table-tbody > tr.ant-table-row:hover [data-expandable-gradient]::after,
-  .ant-table-tbody > tr.ant-table-row.ant-table-row-selected:hover [data-expandable-gradient]::after {
+  .ant-table-tbody > tr.ant-table-row:hover > td,
+  .ant-table-tbody > tr.ant-table-row:hover:after {
     background-color: var(--table_row--bg--hover);
   }
 
-  .ant-table-tbody > tr.ant-table-row.ant-table-row-selected [data-expandable-gradient]::after {
+  .ant-table-tbody > tr.ant-table-row:hover .expandable-gradient::after,
+  .ant-table-tbody > tr.ant-table-row.ant-table-row-selected:hover .expandable-gradient::after {
+    background-color: var(--table_row--bg--hover);
+  }
+
+  .ant-table-tbody > tr.ant-table-row.ant-table-row-selected .expandable-gradient::after {
     background-color: var(--table_row--bg--selected);
   }
 
@@ -248,8 +367,9 @@ export const tableCss = css<TableCssProps>`
     border-right: none !important;
   }
 
-  .ant-table-tbody > tr.ant-table-row-selected > td {
-    background-color: ${fromTableProps('cell.selected.background')};
+  .ant-table-tbody > tr.ant-table-row-selected > td,
+  .ant-table-tbody > tr.ant-table-row-selected:after {
+    background-color: var(--table_row--bg--selected);
   }
 
   .resizing-handle-container {
@@ -267,12 +387,12 @@ export const tableCss = css<TableCssProps>`
     .resizing-handle {
       opacity: 0;
       width: 1px;
-      background: ${fromTableProps('resize.hover')};
+      background: var(--table_cell_header--dragger--hover);
       height: 100%;
     }
 
     &:active .resizing-handle {
-      background-color: ${fromTableProps('resize.active')};
+      background-color: var(--table_cell_header--dragger--active);
     }
 
     &:hover .resizing-handle {
@@ -289,11 +409,12 @@ export const tableCss = css<TableCssProps>`
   }
 
   .ant-checkbox-wrapper {
-    ${getCheckboxCss(fromCheckboxProps)}
+    ${getCheckboxCss()}
+    width: auto;
   }
 
-  ${getInternalRadioCss(fromRadioProps)}
-  
+  ${getInternalRadioCss()}
+
   .ant-radio-wrapper {
     justify-content: center;
     &:not(.kl-radio-button-group) {
@@ -313,75 +434,65 @@ export const tableCss = css<TableCssProps>`
     }
 
     .hexa-ui-ellipsis {
-      display: inline-grid;
+      display: table;
+      table-layout: fixed;
+      width: 100%;
     }
 
-    && td.ant-table-cell {
+    .ant-table-cell-with-append .hexa-ui-ellipsis,
+    .ant-table-cell-with-append .hexa-ui-expandable {
+      display: inline-grid;
+      width: auto;
+    }
+
+    .ant-table-tbody > tr > td.ant-table-cell {
       vertical-align: ${({ columnVerticalAlign }) => columnVerticalAlign || 'top'};
       ${props => getRowModeCss(props)}
       &:has(.ant-select), &:has(.ant-input) {
         padding: 4px 8px;
       }
     }
-
-    .ant-table-thead th:not(.ant-table-selection-column) {
-      min-width: 100px;
+    // The style is needed if the cell contains a field.
+    td.ant-table-cell .kl6-field-control-wrapper .kl6-field-control-box {
+      min-width: inherit;
     }
 
     .kl-components-expandable-icon.icon {
-      color: ${fromTableProps('expandable.icon')};
-    }
-
-    .ant-table-thead > tr > th,
-    && .ant-table-tbody > tr > td {
-      &.ant-table-cell-with-append {
-        white-space: nowrap;
-      }
-
-      &:first-child {
-        padding-left: 0;
-      }
-
-      &:last-child {
-        padding-right: 0;
-      }
+      color: var(--action_button--icon--ghost--enabled);
     }
 
     ${props => props.useDragDrop
-    ? `.drag-handle {
+      ? `.drag-handle {
           &:hover {
             cursor: grab
           }
         }`
-    : ''}
+      : ''}
 
-    .ant-table-tbody > tr.ant-table-row.group-title-row:hover {
-      background: ${fromTableProps('cell.enabled.background')};
+    .ant-table-tbody > tr.ant-table-row.group-title-row {
+      > td.ant-table-selection-column {
+        position: relative;
 
-      &:hover {
-        background: ${fromTableProps('cell.enabled.background')};
-      }
-    }
-
-    .ant-table-tbody > tr.ant-table-row.group-title-row > td.ant-table-selection-column {
-      position: relative; 
-
-      label {
-        opacity: 0;
-        pointer-events: none;
+        > label {
+          opacity: 0;
+          pointer-events: none;
+        }
       }
 
-      &:hover {
-        background: ${fromTableProps('cell.enabled.background')};
+      &.group-title-row-expandable {
+        .group-title-item {
+          cursor: pointer;
+        }
+        .kl-components-expandable-icon {
+          display: none;
+        }
       }
-    }
 
-    .ant-table-tbody > tr.ant-table-row:hover > td.group-title {
-      background: ${fromTableProps('cell.enabled.background')};
-    }
-
-    .ant-table-tbody > tr.ant-table-row.group-title-row:hover > td {
-      background: ${fromTableProps('cell.enabled.background')};
+      &:not(.group-title-row-expandable):hover {
+        > td, &::after {
+          background-color: var(--table_row--bg--base);
+        }
+      }
     }
 
     .ant-table-tbody {
@@ -402,20 +513,42 @@ export const tableCss = css<TableCssProps>`
         );
       }
 
-      .table-bg-diagonal & > tr.row-table-bg-pattern.ant-table-row td {
+      .table-bg-diagonal & > tr.row-table-bg-pattern.ant-table-row td,
+      .table-bg-diagonal & > tr.row-table-bg-pattern.ant-table-row:after {
         mix-blend-mode: var(--bg-mode);
       }
     }
+
+    && .ant-table-thead > tr > th,
+    && .ant-table-tbody > tr > td {
+      &.ant-table-cell-with-append {
+        white-space: nowrap;
+      }
+
+      &,
+      &.ant-table-cell {
+        &:first-child {
+          .ant-dropdown-trigger {
+            width: unset;
+          }
+
+          .table-with-borders & {
+            padding-left: 8px;
+          }
+        }
+      }
+
+      &:last-child {
+        padding-right: 0;
+        min-width: 100px;
+      }
+    }
+
     ${props => props.resizingMode === 'scroll' ? scrollableResizingCss : ''}
-    
+
     ${({ isValid }) => isValid === false ? tableValidationCss : ''}
   }
 
-  col.ant-table-selection-col, .ant-table-selection-column  {
-    width: 30px;
-    min-width: 22px;
-  }
-  
   .ant-empty,
   .ant-empty-normal {
     color: var(--text-color);
@@ -423,7 +556,7 @@ export const tableCss = css<TableCssProps>`
 
   .ant-table-cell-fix-left,
   .ant-table-cell-fix-right {
-    background-color: ${fromTableProps('root.background')};
+    background-color: var(--table_row--bg--base);
   }
 
   .ant-table-cell-fix-left-last::after {
@@ -432,9 +565,10 @@ export const tableCss = css<TableCssProps>`
   }
 
   ${({ scroll }) => scroll?.y
-    ? css`
+      ? css`
         .ant-table-body {
           overflow-y: auto !important;
+          overscroll-behavior: none;
         }
 
 
@@ -444,11 +578,11 @@ export const tableCss = css<TableCssProps>`
           }
         }
       `
-    : ''
-}
+      : ''
+  }
 `
 
-export const scrollableContainerCss = css<Pick<TableViewProps, 'resizingMode'>>`
+export const scrollableContainerCss = css<Pick<ITableProps, 'resizingMode'>>`
   &.table-height-full {
     display: flex;
     flex-direction: column;
@@ -480,6 +614,7 @@ export const scrollableContainerCss = css<Pick<TableViewProps, 'resizingMode'>>`
     ? `
     width: 100%;
     overflow-x: auto;
+    overscroll-behavior-x: none;
     ::-webkit-scrollbar {
       display: none;
     }
@@ -491,10 +626,7 @@ export const scrollableContainerCss = css<Pick<TableViewProps, 'resizingMode'>>`
 export const rowDraggingContainerCss = css<TableCssProps>`
   .row-dragging {
     background: var(--table-row-hover-bg);
-  }
-
-  .row-dragging td {
-    padding: 8px 0px 8px 28px;
+    z-index: 9999;
   }
 
   .row-dragging .drag-handle {
@@ -502,7 +634,7 @@ export const rowDraggingContainerCss = css<TableCssProps>`
   }
 
   .ant-checkbox-wrapper {
-    ${getCheckboxCss(fromCheckboxProps)}
+    ${getCheckboxCss()}
   }
 `
 

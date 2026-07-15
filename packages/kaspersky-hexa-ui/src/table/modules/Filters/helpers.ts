@@ -4,13 +4,15 @@ import isEqual from 'lodash/isEqual'
 import moment from 'moment'
 import { v4 as uuid } from 'uuid'
 
-import { ColumnFilter, TableColumn } from '../../types'
+import { ColumnFilter, EnumFilterType, TableColumn, TableRecord } from '../../types'
+import { getEnumOption } from '../SidebarFilters/filters'
 import { InvalidFilter } from '../SidebarFilters/items/types'
 
 import {
   ActiveFilter,
   DateTimeFilterValue,
   DateTimeRange,
+  EnumFilterInternal,
   EnumOption,
   EnumOptionsMap,
   FilterConfig,
@@ -20,18 +22,30 @@ import {
   FilterGroup,
   FilterOperation,
   FilterType,
+  LegacyEnumOption,
+  SidebarFilter,
+  SidebarFilterGroupInternal,
+  SidebarFilterInternal,
   UnitedFilter,
   UnitedFilterInternal
 } from './types'
 
 export type ParseDateFunction = (date: DateInputValue | string | number | undefined) => number
 
+const normalizeToSecond = (value: number): number => Math.floor(value / 1000) * 1000
+
 export const parseDate: ParseDateFunction = (date) => {
-  if (typeof date === 'number') return date
+  if (typeof date === 'number') {
+    return normalizeToSecond(date)
+  }
+
   if (date === null || date === undefined) return NaN
+
   if (typeof date === 'string') {
     const parsedDate = Date.parse(date)
-    if (!isNaN(parsedDate)) return parsedDate
+    if (!isNaN(parsedDate)) {
+      return normalizeToSecond(parsedDate)
+    }
 
     try {
       return parse(date, 'dd.MM.yyyy HH:mm:ss', new Date()).getTime()
@@ -39,13 +53,18 @@ export const parseDate: ParseDateFunction = (date) => {
       return NaN
     }
   }
-  return date.getTime()
+
+  if (date instanceof Date) {
+    return normalizeToSecond(date.getTime())
+  }
+
+  return NaN
 }
 
 export const convertToDate = (date: DateInputValue | number | undefined): DateInputValue => {
   try {
     if (!date) {
-      return null 
+      return null
     } else if (date instanceof Date) {
       return date
     } else {
@@ -69,7 +88,10 @@ export const parseEnumValue = (value: any): any => {
   return isNaN(+value) ? value : +value
 }
 
-export const convertColumnFiltersToFilterFromColumn = (columnFilter: ColumnFilter, columnName: string): FilterFromColumn => ({
+export const convertColumnFiltersToFilterFromColumn = <T extends TableRecord = TableRecord> (
+  columnFilter: ColumnFilter<T>,
+  columnName: string
+): FilterFromColumn<T> => ({
   name: columnName,
   filterName: columnFilter.name,
   predicate: columnFilter.filter
@@ -89,7 +111,7 @@ export const convertActiveFilterToFilterFromColumn = (activeFilter: ActiveFilter
   return filters
 }
 
-export const getPredicate = (filterName: string, filters: ColumnFilter[] = []): FilterFunction | void => {
+export const getPredicate = <T extends TableRecord = TableRecord> (filterName: string, filters: ColumnFilter<T>[] = []): FilterFunction<T> | void => {
   const predicate = filters.find(f => f.name === filterName)?.filter
   if (!predicate) {
     console.warn(`${prefix} Can't find filter function ${filterName}`)
@@ -98,34 +120,49 @@ export const getPredicate = (filterName: string, filters: ColumnFilter[] = []): 
   return predicate
 }
 
-export const getFiltersForColumn = (dataIndex: string, allColumns: TableColumn[]) => {
-  return allColumns.find(c => c.dataIndex === dataIndex)!.filters
+export const getFiltersForColumn = <T extends TableRecord = TableRecord> (key: string, allColumns: TableColumn<T>[]) => {
+  return allColumns.find(c => c.key === key)!.filters
 }
 
-export const getEnumOptions = async (
-  columns: TableColumn[]
+export const resolveEnumOptions = async (
+  getAvailableOptions: EnumFilterType['getAvailableOptions'],
+  getAvailableValues: EnumFilterType['getAvailableValues'],
+  key: TableColumn['key']
+): Promise<EnumOption[] | null> => {
+  try {
+    let rawOptions: (EnumOption | LegacyEnumOption)[] = []
+
+    if (getAvailableOptions) {
+      rawOptions = await getAvailableOptions()
+    } else if (getAvailableValues) {
+      rawOptions = await getAvailableValues()
+    } else {
+      return null
+    }
+    return rawOptions.map(getEnumOption).filter(option => option !== null)
+  } catch (error) {
+    console.error(`${prefix} Error loading enum options in columns ${key}`, error)
+  }
+
+  return null
+}
+
+export const getEnumOptionsMap = async (
+  columns: Pick<TableColumn, 'key' | 'filterType' | 'filterName'>[]
 ): Promise<EnumOptionsMap> => {
   const enumOptionsMap: Record<string, EnumOption[]> = {}
 
   for (const column of columns) {
-    if (!column.dataIndex) continue
-    
+    const filterName = column.filterName || column.key
     if (column.filterType?.type === FilterType.Enum) {
-      try {
-        let options: EnumOption[] = []
+      const options = await resolveEnumOptions(
+        column.filterType.getAvailableOptions,
+        column.filterType.getAvailableValues,
+        filterName
+      )
 
-        if (column.filterType.getAvailableOptions) {
-          options = await column.filterType.getAvailableOptions()
-        } else if (column.filterType.getAvailableValues) {
-          options = (await column.filterType.getAvailableValues()).map(item => ({
-            value: item,
-            label: String(item)
-          }))
-        }
-
-        enumOptionsMap[column.dataIndex as string] = options
-      } catch (error) {
-        console.error(`${prefix} Error loading enum options for column ${column.dataIndex}:`, error)
+      if (options) {
+        enumOptionsMap[filterName] = options
       }
     }
   }
@@ -133,13 +170,27 @@ export const getEnumOptions = async (
   return enumOptionsMap
 }
 
-
-export const isFilter = (item: UnitedFilter, withPredicate: boolean = true): item is FilterConfig | FilterFromColumn => (
-  isFilterConfig(item) || isFilterFromColumn(item, withPredicate) 
+const isEnumFilter = <T extends TableRecord = TableRecord> (filter: UnitedFilter<T>): filter is EnumFilterInternal => (
+  isFilterConfigInternal(filter) && filter.type === FilterType.Enum
 )
 
-export const isFilterConfig = (item: UnitedFilter): item is FilterConfig => (
-  item && 
+export const getEnumFilters = <T extends TableRecord = TableRecord> (filters?: UnitedFilter<T>[]) => (
+  filters?.filter(isEnumFilter) || []
+)
+
+export const getNotEnumFilters = <T extends TableRecord = TableRecord> (filters?: (UnitedFilter<T> | UnitedFilterInternal<T>)[]) => (
+  filters?.filter(filter => isFilterConfig(filter) && filter.type !== FilterType.Enum) || []
+)
+
+export const isFilter = <T extends TableRecord = TableRecord> (
+  item: UnitedFilter<T>,
+  withPredicate: boolean = true
+): item is FilterConfig | FilterFromColumn<T> => (
+  isFilterConfig(item) || isFilterFromColumn(item, withPredicate)
+)
+
+export const isFilterConfig = <T extends TableRecord = TableRecord> (item: UnitedFilter<T>): item is FilterConfig | FilterConfigInternal => (
+  item &&
   !('items' in item) &&
   !('predicate' in item) &&
   'name' in item &&
@@ -148,22 +199,33 @@ export const isFilterConfig = (item: UnitedFilter): item is FilterConfig => (
   'value' in item
 )
 
-export const isFilterConfigInternal = (item: UnitedFilter): item is FilterConfigInternal =>
+export const isFilterConfigInternal = <T extends TableRecord = TableRecord> (item: UnitedFilter<T>): item is FilterConfigInternal =>
   isFilterConfig(item) && 'id' in item
 
-export const isFilterFromColumn = (item: UnitedFilter, withPredicate: boolean = true): item is FilterFromColumn => (
-  item && 
+export const isFilterFromColumn = <T extends TableRecord = TableRecord> (
+  item: UnitedFilter<T>,
+  withPredicate: boolean = true
+): item is FilterFromColumn<T> => (
+  item &&
   !('items' in item) &&
   (withPredicate ? 'predicate' in item : true) &&
   'name' in item &&
   'filterName' in item
 )
 
-export const isGroup = (item: UnitedFilter): item is FilterGroup => (
-  item && 'items' in item && 'id' in item 
+export const isGroup = <T extends TableRecord = TableRecord> (item: UnitedFilter<T>): item is FilterGroup<T> => (
+  item && 'items' in item
 )
 
-export const isSameItem = (a: UnitedFilter, b: UnitedFilter): boolean => {
+export const isSidebarGroupInternal = <T extends TableRecord = TableRecord> (item: UnitedFilter<T>): item is SidebarFilterGroupInternal<T> => (
+  item && 'items' in item && 'id' in item
+)
+
+export const isSidebarFilter = <T extends TableRecord = TableRecord> (item: UnitedFilter<T>): item is SidebarFilter<T> =>
+  // @ts-expect-error according to the filterItems type the filter doesn't have id, but column filters always have id
+  (isFilterConfig(item) || isFilterConfigInternal(item) || isGroup(item) || isSidebarGroupInternal(item)) && !item.id?.startsWith('column.')
+
+export const isSameItem = <T extends TableRecord = TableRecord> (a: UnitedFilter<T>, b: UnitedFilter<T>): boolean => {
   if (isFilterConfig(a) && isFilterConfig(b)) {
     return (
       a.name === b.name &&
@@ -171,7 +233,7 @@ export const isSameItem = (a: UnitedFilter, b: UnitedFilter): boolean => {
       a.condition === b.condition &&
       isEqual(a.value, b.value) &&
       a.attribute === b.attribute
-    ) 
+    )
   } else if (isFilterFromColumn(a) && isFilterFromColumn(b)) {
     return a.filterName === b.filterName && a.name === b.name
   } else if (isGroup(a) && isGroup(b)) {
@@ -182,8 +244,8 @@ export const isSameItem = (a: UnitedFilter, b: UnitedFilter): boolean => {
 
 export const prefix = '[hexa-ui][Filters]:'
 
-type AssertCorrectFilter = {
-  filters: UnitedFilter[] | UnitedFilter,
+type AssertCorrectFilter<T extends TableRecord = TableRecord> = {
+  filters: UnitedFilter<T>[] | UnitedFilter<T>,
   message: string,
   shouldThrowError?: boolean,
   withPredicate?: boolean
@@ -199,15 +261,15 @@ const throwError = ({
   console.warn(message)
 }
 
-export const assertCorrectFilters = ({
+export const assertCorrectFilters = <T extends TableRecord = TableRecord> ({
   filters,
   message,
   shouldThrowError = false,
   withPredicate
-}: AssertCorrectFilter) => {
+}: AssertCorrectFilter<T>) => {
   let isCorrect = true
 
-  const validateFilter = (filter: UnitedFilter): boolean => {
+  const validateFilter = (filter: UnitedFilter<T>): boolean => {
     if (isGroup(filter)) {
       return filter.items.every(validateFilter)
     }
@@ -225,7 +287,7 @@ export const assertCorrectFilters = ({
   }
 }
 
-export const checkHasColumnFilters = (columns?: TableColumn[]): boolean => (
+export const checkHasColumnFilters = <T extends TableRecord = TableRecord> (columns?: TableColumn<T>[]): boolean => (
   columns?.some(column => column?.filters?.length) ?? false
 )
 
@@ -239,7 +301,7 @@ export const isRangeValue = (value: DateTimeFilterValue): value is DateTimeRange
   value !== null && typeof value === 'object' && 'from' in value
 )
 
-export const addId = (filterItems: UnitedFilter[]): UnitedFilterInternal[] => (
+export const addId = <T extends TableRecord = TableRecord> (filterItems: SidebarFilter<T>[]): SidebarFilterInternal<T>[] => (
   filterItems.map(item => {
     if (isGroup(item)) {
       return {
@@ -258,9 +320,9 @@ export const addId = (filterItems: UnitedFilter[]): UnitedFilterInternal[] => (
   })
 )
 
-export const removeId = (filterItems: UnitedFilterInternal[]): UnitedFilter[] => (
+export const removeId = <T extends TableRecord = TableRecord> (filterItems: SidebarFilterInternal<T>[]): SidebarFilter<T>[] => (
   filterItems.map(item => {
-    if (isGroup(item)) {
+    if (isSidebarGroupInternal(item)) {
       return {
         ...item,
         items: removeId(item.items)
@@ -281,7 +343,7 @@ export const isEmptyValue = (value: any) => {
   return value === undefined || value === null || value === ''
 }
 
-export const validate = (filters: FilterConfigInternal[]): InvalidFilter[] => {
+export const validate = <T extends TableRecord = TableRecord> (filters: SidebarFilterInternal<T>[]): InvalidFilter[] => {
   const validators = [
     (filters: FilterConfigInternal[]) => {
       const invalidFilters: InvalidFilter[] = []
@@ -319,7 +381,24 @@ export const validate = (filters: FilterConfigInternal[]): InvalidFilter[] => {
     }
   ]
 
-  return validators.reduce((acc, validator) => {
-    return [...acc, ...validator(filters)]
-  }, [] as InvalidFilter[])
+  const validateLevel = (items: SidebarFilterInternal<T>[]): InvalidFilter[] => {
+    let invalidFilters: InvalidFilter[] = []
+
+    const currentLevelFilters = items.filter(isFilterConfigInternal)
+    if (currentLevelFilters.length > 0) {
+      invalidFilters = validators.reduce((acc, validator) => acc.concat(validator(currentLevelFilters)), invalidFilters)
+    }
+
+    items.filter(isSidebarGroupInternal).forEach(item => {
+      invalidFilters = invalidFilters.concat(validateLevel(item.items))
+    })
+
+    return invalidFilters
+  }
+
+  return validateLevel(filters)
 }
+
+export const findColumnByName = <T extends TableRecord = TableRecord> (columns: TableColumn<T>[], name: string) => (
+  columns.find(column => column.filterName === name || column.key === name)
+)

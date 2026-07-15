@@ -70,7 +70,7 @@ describe('Severity ', () => {
   test('render without l18n', () => {
     const enSeverityTextStatus = localization['en-us'].translation.severity.positive
     const mode = 'positive'
-    const { getByTestId } = render(<DefaultSeverity mode={mode} klId={klId}/>)
+    const { getByTestId } = render(<DefaultSeverity mode={mode} klId={klId} />)
 
     const { result } = renderHook(() => useTranslation())
     const locText = result.current.t(severityTextLocalization[mode])

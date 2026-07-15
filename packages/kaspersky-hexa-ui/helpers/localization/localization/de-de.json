@@ -87,7 +87,7 @@
       "total": "Gesamt {{count}}",
       "selected": "Ausgewählt {{count}}",
       "page": "Seite",
-      "goto": "Gehe zu"
+      "goto": "Zu Seite"
     },
     "search": {
       "raw": "Suchen",
@@ -100,6 +100,14 @@
         "sorting": "Sortieren",
         "filters": "Filter",
         "resetFilters": "Filter zurücksetzen"
+      },
+      "contextMenu": {
+        "selected": "Ausgewählt {{count}}"
+      },
+      "selectAll": {
+        "selectAll": "Alle auswählen",
+        "selectCurrentPage": "Alle auf aktueller Seite auswählen",
+        "deselectAll": "Alle zurücksetzen"
       },
       "columnsSettings": {
         "header": "Tabelleneinstellungen",
@@ -124,12 +132,18 @@
           "add": "Hinzufügen",
           "clearAll": "Alle zurücksetzen",
           "property": "Eigenschaft",
+          "attribute": "Attribute",
           "condition": "Bedingung",
           "from": "von",
           "to": "bis",
-          "value": "Wert"
+          "value": "Wert",
+          "validation": {
+            "emptyValue": "Geben Sie den Wert des Filters an",
+            "duplicateFilters": "Der Filter ist mehrfach vorhanden. Stellen Sie sicher, dass jeder Filter eindeutig ist."
+          }
         },
-        "columnHideIsUnavailable": "Das Verbergen der Spalten ist nicht verfügbar"
+        "columnHideIsUnavailable": "Das Verbergen der Spalten ist nicht verfügbar",
+        "onlyForFiltering": "Diese Spalte dient nur der Filterung"
       },
       "filterOperation": {
         "⊆": "Enthält",
@@ -207,7 +221,11 @@
       "term": "Zeitraum",
       "dayLeft": "{{count}} Tag verbleibend",
       "daysLeft": "{{count}} Tage verbleibend",
-      "termDays": "{{count}} Tage"
+      "termDays": "{{count}} Tage",
+      "statuses": {
+        "valid": "Aktiv",
+        "expired": "Abgelaufen"
+      }
     },
     "input": {
       "password": {

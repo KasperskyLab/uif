@@ -1,0 +1,130 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { SectionMessage } from '../SectionMessage'
+import * as SectionMessageStories from './SectionMessage.stories'
+import { sectionMessageDesignPropPresentation } from './SectionMessage.design.properties'
+
+<Meta of={SectionMessageStories} name="SectionMessage Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="SectionMessage"
+  description='**SectionMessage** — статичное инлайн-уведомление с иконкой статуса для привлечения внимания к контенту, требующему действий'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**SectionMessage** отображает важное сообщение в потоке страницы: слева — иконка по **mode**, справа — опциональный заголовок (**title**) и содержимое (**children**). Поддерживает до двух ссылок-действий (**actions**), кнопку закрытия (**closable**) и механизм сворачивания содержимого (**expandable**). Семантика задаётся **mode** (`info`, `success`, `warning`, `error`). Ширина задаётся через **width** или 100% родительского контейнера."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Семантический вариант уведомления. По умолчанию — `info`. Доступные значения: `info`, `success`, `warning`, `error`. Нераспознанное значение заменяется на `info` с предупреждением в консоли."
+      code='
+    <SectionMessage mode="info">Информационное сообщение</SectionMessage>
+    <SectionMessage mode="success">Успешное сообщение</SectionMessage>
+    <SectionMessage mode="warning">Предупреждение</SectionMessage>
+    <SectionMessage mode="error">Ошибка</SectionMessage>'
+    />
+
+    <DocExampleBlock
+      title="title"
+      description="Заголовок сообщения. Отображается над содержимым. Если **title** не передан, заголовок не рендерится."
+      code='
+    <SectionMessage mode="info" title="Title">Текст сообщения</SectionMessage>
+    <SectionMessage mode="info">Без заголовка</SectionMessage>'
+    />
+
+    <DocExampleBlock
+      title="children"
+      description="Содержимое сообщения: текст или произвольная разметка."
+      code='
+    <SectionMessage mode="info" title="Title">Текст сообщения</SectionMessage>
+    <SectionMessage mode="info" title="Title">
+      <Text type="BTR3">Многострочное содержимое с произвольной разметкой</Text>
+    </SectionMessage>'
+    />
+
+    <DocExampleBlock
+      title="actions"
+      description="Необязательный набор из одного или двух действий: ключи **FIRST_ACTION** и **SECOND_ACTION**. Каждое действие рендерится как **Link** с **text** и **onClick**."
+      code='
+    <SectionMessage
+      mode="info"
+      title="Title"
+      actions={{
+        FIRST_ACTION: { text: "Action 1", onClick: () => alert("Action 1") },
+        SECOND_ACTION: { text: "Action 2", onClick: () => alert("Action 2") }
+      }}
+    >
+      Текст сообщения
+    </SectionMessage>'
+    />
+
+    <DocExampleBlock
+      title="closable"
+      description="Показывает кнопку закрытия. Доступные значения: `true`, `false`. По умолчанию — `true`. После клика компонент скрывается."
+      code='<SectionMessage mode="info" title="Title" closable>Закрываемое сообщение</SectionMessage>'
+    />
+
+    <DocExampleBlock
+      title="onClose"
+      description="Необязательный колбэк при закрытии через **closable**. Вызывается перед скрытием компонента."
+      code='<SectionMessage mode="info" closable onClose={() => alert("closed")}>Сообщение</SectionMessage>'
+    />
+
+    <DocExampleBlock
+      title="expandable"
+      description="Показывает кнопку сворачивания / разворачивания содержимого. Доступные значения: `true`, `false`. По умолчанию — `false`. Используется совместно с **defaultExpanded**."
+      code='
+    <SectionMessage mode="info" title="Title" expandable defaultExpanded>
+      Разворачиваемое содержимое
+    </SectionMessage>'
+    />
+
+    <DocExampleBlock
+      title="defaultExpanded"
+      description="Начальное состояние сворачивания. Доступные значения: `true`, `false`. По умолчанию — `true`. Применяется только совместно с **expandable**."
+      code='
+    <SectionMessage mode="info" title="Title" expandable defaultExpanded={false}>
+      Это содержимое скрыто по умолчанию
+    </SectionMessage>'
+    />
+
+    <DocExampleBlock
+      title="width"
+      description="Ширина блока в пикселях (`number` или `string`). Без **width** SectionMessage занимает 100% ширины родительского контейнера."
+      code='<SectionMessage mode="info" title="Title" width={480}>Сообщение с фиксированной шириной</SectionMessage>'
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**SectionMessage** предназначен для акцентирования внимания на важной информации внутри контента страницы: ограничения, предупреждения, статусы объектов, призывы к действию. Компонент остаётся в макете постоянно и не исчезает автоматически — используйте его для сообщений, которые должны оставаться видимыми до явного закрытия или изменения состояния.
+
+Для краткой обратной связи после действий пользователя с автоматическим исчезновением используйте **Notification**. Для уведомлений на уровне всей страницы (ограничения лицензии, системные статусы) используйте **Alert**. **SectionMessage** лучше подходит для уведомлений внутри отдельных секций формы, карточки или панели."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(sectionMessageDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={SectionMessageStories} />
+    <AutodocArgsTable components={SectionMessage} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

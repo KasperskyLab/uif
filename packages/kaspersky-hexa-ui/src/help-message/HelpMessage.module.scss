@@ -1,0 +1,52 @@
+@use "sass:map";
+
+$help-message-tokens: (
+  common: (
+    text: var(--fg--neutral--secondary),
+    icon: var(--common--info--enabled)
+  ),
+  error: (
+    text: var(--common--danger--enabled),
+    icon: var(--common--danger--enabled)
+  ),
+  warning: (
+    text: var(--common--warning--enabled),
+    icon: var(--fg--warning--muted)
+  ),
+  success: (
+    text: var(--common--success--enabled),
+    icon: var(--common--success--enabled)
+  )
+);
+
+
+.helpMessage.helpMessage {
+  white-space: pre-wrap;
+  color: var(--fg--neutral--primary);
+  
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: self-start;
+
+  .icon {
+    margin-top: 2px;
+  }
+
+  &:not(:has(.icon)) {
+    grid-template-columns: 1fr;
+  }
+
+  .text {
+    color: inherit;
+  }
+
+  @each $mode, $tokens in $help-message-tokens {
+    &.small.#{$mode} .text {
+      color: map.get($tokens, text);
+    }
+  
+    &.#{$mode} .icon {
+      color: map.get($tokens, icon);
+    }
+  }
+}

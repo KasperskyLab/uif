@@ -8,7 +8,14 @@ import { useTranslation } from 'react-i18next'
 
 import { UploadUrlProps, UploadUrlViewProps } from './types'
 import { useThemedUpload } from './useThemedUpload'
-import { Column, Row, StyledUrlUploader, UploadHeading, UploadText, Wrapper } from './Wrappers'
+import {
+  Column,
+  Row,
+  StyledUrlUploader,
+  UploadHeading,
+  UploadText,
+  Wrapper
+} from './Wrappers'
 
 const UploadUrlView: FC<UploadUrlViewProps> = ({ cssConfig: config, ...props }: UploadUrlViewProps) => {
   const { t } = useTranslation()
@@ -82,7 +89,7 @@ const UploadUrlView: FC<UploadUrlViewProps> = ({ cssConfig: config, ...props }: 
                   themedColor={config.error.color}
                   config={config}
                   disabled={disabled}>
-                  { errorTitle || t('upload.errorTitle')}
+                  {errorTitle || t('upload.errorTitle')}
                 </UploadHeading>
               </Column>
               <Column>
@@ -92,13 +99,13 @@ const UploadUrlView: FC<UploadUrlViewProps> = ({ cssConfig: config, ...props }: 
                   themedColor={config.normal.textSecondaryColor}
                   config={config}
                   disabled={disabled}>
-                  { errorDescription || t('upload.errorDescription', { file: value }) }
+                  {errorDescription || t('upload.errorDescription', { file: value })}
                 </UploadText>
               </Column>
             </Row>
             <Row>
-              { errorButtons && errorButtons.map((props, pos) =>
-                <Button key={pos} {...props} text={t(props.text as string) as string} disabled={disabled} />) }
+              {errorButtons && errorButtons.map((props, pos) =>
+                <Button key={pos} {...props} text={t(props.text as string) as string} disabled={disabled} />)}
             </Row>
           </Wrapper>
         ),
@@ -113,7 +120,7 @@ const UploadUrlView: FC<UploadUrlViewProps> = ({ cssConfig: config, ...props }: 
                   themedColor={config.normal.textPrimaryColor}
                   config={config}
                   disabled={disabled}>
-                  { loadingTitle || t('upload.loadingTitle', { value: percent })}
+                  {loadingTitle || t('upload.loadingTitle', { value: percent })}
                 </UploadHeading>
                 <UploadText
                   className="upload-text-secondary"
@@ -121,13 +128,13 @@ const UploadUrlView: FC<UploadUrlViewProps> = ({ cssConfig: config, ...props }: 
                   type="BTR3"
                   config={config}
                   disabled={disabled}>
-                  { loadingDescription || t('upload.loadingDescription', { file: value })}
+                  {loadingDescription || t('upload.loadingDescription', { file: value })}
                 </UploadText>
               </Column>
             </Row>
             <Row>
-              { loadingButtons && loadingButtons.map((props, pos) =>
-                <Button key={pos} {...props} text={t(props.text as string) as string} disabled={disabled} />) }
+              {loadingButtons && loadingButtons.map((props, pos) =>
+                <Button key={pos} {...props} text={t(props.text as string) as string} disabled={disabled} />)}
             </Row>
           </Wrapper>
         ),
@@ -140,7 +147,7 @@ const UploadUrlView: FC<UploadUrlViewProps> = ({ cssConfig: config, ...props }: 
                 themedColor={config.success.color}
                 config={config}
                 disabled={disabled}>
-                { successTitle || t('upload.successTitle')}
+                {successTitle || t('upload.successTitle')}
               </UploadHeading>
               <Column>
                 <UploadText
@@ -149,13 +156,13 @@ const UploadUrlView: FC<UploadUrlViewProps> = ({ cssConfig: config, ...props }: 
                   type="BTR3"
                   config={config}
                   disabled={disabled}>
-                  { loadingDescription || t('upload.loadingDescription', { file: value })}
+                  {loadingDescription || t('upload.loadingDescription', { file: value })}
                 </UploadText>
               </Column>
             </Row>
             <Column>
-              <Row>{ successButtons && successButtons.map((props, pos) =>
-                <Button key={pos} {...props} text={t(props.text as string) as string} disabled={disabled} />) }</Row>
+              <Row>{successButtons && successButtons.map((props, pos) =>
+                <Button key={pos} {...props} text={t(props.text as string) as string} disabled={disabled} />)}</Row>
             </Column>
           </Wrapper>
         ),
@@ -172,5 +179,5 @@ const UploadUrlView: FC<UploadUrlViewProps> = ({ cssConfig: config, ...props }: 
  */
 export const UploadUrl: FC<UploadUrlProps> = (rawProps: UploadUrlProps) => {
   const props = useThemedUpload(rawProps)
-  return <UploadUrlView {...props}/>
+  return <UploadUrlView {...props} />
 }

@@ -7,6 +7,7 @@ import React, {
   ReactElement,
   SetStateAction,
   useEffect,
+  useRef,
   useState
 } from 'react'
 
@@ -19,7 +20,8 @@ const findInColumnRender = function (
   render: renderFunction,
   cell: React.ReactNode,
   row: any,
-  pattern: string) {
+  pattern: string
+) {
   if (!render) {
     return false
   }
@@ -38,19 +40,21 @@ const findInColumnRender = function (
   return text.indexOf(pattern.toLowerCase()) >= 0
 }
 
-interface ISearchModuleProps {
-  setFilteredRows: (val: Record<string, unknown>[]) => void,
+interface ISearchModuleProps<T extends TableRecord = TableRecord> {
+  setFilteredRows: (val: T[]) => void,
   setExpandedRowKeys: (val: SetStateAction<Key[]>) => void,
-  dataSource?: readonly TableRecord[],
+  dataSource?: readonly T[],
   onSearch?: (searchString: string) => void,
-  onClientSearch?: (searchString: string, row: TableRecord, index: number) => boolean,
+  onClientSearch?: (searchString: string, row: T, index: number) => boolean,
   columns?: any[],
   tableContainer?: HTMLDivElement | null,
   collapsibleSearch?: boolean,
   enableSearchHighlighting?: boolean
 }
 
-const SearchModule = ({
+const escapeRegexp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+const SearchModule = <T extends TableRecord = TableRecord>({
   setFilteredRows,
   setExpandedRowKeys,
   dataSource = [],
@@ -60,12 +64,13 @@ const SearchModule = ({
   tableContainer,
   collapsibleSearch = false,
   enableSearchHighlighting
-}: ISearchModuleProps): ReactElement => {
+}: ISearchModuleProps<T>): ReactElement => {
   const [searchValue, setSearchValue] = useState('')
+  const highlightTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
 
   const highlightResult = () => {
     // Starting the highlighting after mounting a new data source
-    setTimeout(() => {
+    highlightTimeoutRef.current = setTimeout(() => {
       const table = tableContainer
       if (table) {
         const markInstance = new Mark(table.querySelector('tbody') as HTMLElement)
@@ -81,6 +86,12 @@ const SearchModule = ({
     }, 0)
   }
 
+  useEffect(() => () => {
+    if (highlightTimeoutRef.current) {
+      clearTimeout(highlightTimeoutRef.current)
+    }
+  }, [])
+
   const columnsRenders = columns?.reduce(
     (result, column) => {
       if (result[column.dataIndex]) {
@@ -91,7 +102,8 @@ const SearchModule = ({
 
       return result
     },
-    [])
+    []
+  )
 
   const filterValues = (value?: string) => {
     const valueToSearch = value ?? searchValue
@@ -108,14 +120,14 @@ const SearchModule = ({
     let filteredRows = []
 
     if (valueToSearch.length > 0) {
-      const filterRows = (currentLevelRows: readonly TableRecord[]) => {
-        const currentLevelFilteredRows: TableRecord[] = []
+      const filterRows = (currentLevelRows: readonly T[]) => {
+        const currentLevelFilteredRows: T[] = []
         currentLevelRows.forEach((currentLevelRow) => {
           const row = { ...currentLevelRow }
           let isPassFilter = false
           for (const key in row) {
             if (row[key] && typeof row[key] === 'string') {
-              const parts = row[key].split(new RegExp(`(${valueToSearch})`, 'gi'))
+              const parts = row[key].split(new RegExp(`(${escapeRegexp(valueToSearch)})`, 'gi'))
 
               if (parts.length > 1) {
                 isPassFilter = true
@@ -126,14 +138,15 @@ const SearchModule = ({
                   .reduce(
                     (result: boolean, render: renderFunction) =>
                       result || findInColumnRender(render, row[key], row, searchValue),
-                    false)
+                    false
+                  )
 
                 isPassFilter = isPassFilter || res
               }
             }
           }
           if (row.children) {
-            row.children = filterRows(row.children)
+            row.children = filterRows(row.children as T[])
             if (!isPassFilter && row.children.length > 0) {
               setExpandedRowKeys((oldKeys) => [...oldKeys, row.key])
               isPassFilter = true
@@ -147,9 +160,11 @@ const SearchModule = ({
       }
       filteredRows = filterRows(dataSource)
     } else {
-      filteredRows.push(...dataSource)
+      filteredRows = dataSource as T[]
     }
     enableSearchHighlighting && highlightResult()
+
+    // TODO: переделать логику с выставлением данных в useEffect, заменить на однокоммитные операции (useMemo) #10082646
     setFilteredRows(filteredRows)
   }
 

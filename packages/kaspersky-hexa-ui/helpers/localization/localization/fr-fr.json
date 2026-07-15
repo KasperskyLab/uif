@@ -87,7 +87,7 @@
       "total": "Total {{count}}",
       "selected": "Sélectionné {{count}}",
       "page": "page",
-      "goto": "Accéder à"
+      "goto": "Accéder à la page"
     },
     "search": {
       "raw": "Recherche",
@@ -100,6 +100,14 @@
         "sorting": "Trier",
         "filters": "Filtrer",
         "resetFilters": "Réinitialiser le filtre"
+      },
+      "contextMenu": {
+        "selected": "Sélectionné(s) : {{count}}"
+      },
+      "selectAll": {
+        "selectAll": "Tout sélectionner",
+        "selectCurrentPage": "Tout sélectionner sur la page actuelle",
+        "deselectAll": "Tout réinitialiser"
       },
       "columnsSettings": {
         "header": "Paramètres du tableau",
@@ -124,18 +132,24 @@
           "add": "Ajouter",
           "clearAll": "Tout effacer",
           "property": "Propriété",
+          "attribute": "Attribut",
           "condition": "Condition ",
           "from": "de",
           "to": "à ",
-          "value": "Valeur"
+          "value": "Valeur",
+          "validation": {
+            "emptyValue": "Indiquer la valeur de filtrage",
+            "duplicateFilters": "Filtres en double. Assurez-vous que chaque filtre est unique."
+          }
         },
-        "columnHideIsUnavailable": "Le masquage des colonnes n'est pas disponible"
+        "columnHideIsUnavailable": "Le masquage des colonnes n'est pas disponible",
+        "onlyForFiltering": "Cette colonne sert uniquement au filtrage"
       },
       "filterOperation": {
         "⊆": "Contient",
         "⊄": "Ne contient pas",
         "cont_and": "Contient (ET)",
-        "cont_or": "Contient (OU)",
+        "cont_or": "Is one of",
         "ncont_or": "Ne contient pas",
         "*=": "Regexp",
         "empty": "Vide",
@@ -207,7 +221,11 @@
       "term": "Durée",
       "dayLeft": "{{count}} jour restant",
       "daysLeft": "{{count}} jours restants",
-      "termDays": "{{count}} jours"
+      "termDays": "{{count}} jours",
+      "statuses": {
+        "valid": "Actif",
+        "expired": "Expiré"
+      }
     },
     "input": {
       "password": {

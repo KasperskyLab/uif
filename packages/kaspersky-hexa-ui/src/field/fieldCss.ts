@@ -91,10 +91,10 @@ export const fieldCss = css<FieldViewProps>`
       align-items: center;
       gap: 8px;
       ${({ controlWidth }) => (
-    controlWidth
-      ? `width: ${controlWidth}px; flex: none;`
-      : `min-width: ${FIELD_CONTROL_MIN_WIDTH};`
-  )}
+        controlWidth
+          ? `width: ${controlWidth}px; flex: none;`
+          : `min-width: ${FIELD_CONTROL_MIN_WIDTH};`
+      )}
 
       .kl6-field-control-additional {
         width: 16px;
@@ -190,8 +190,8 @@ export const fieldCss = css<FieldViewProps>`
     &.kl6-field-label-type-full {
       .kl6-field-label + .kl6-field-control-wrapper {
         max-width: ${({ controlWidth }) => (
-    controlWidth || `calc(${FIELD_MAX_WIDTH} - ${FIELD_LABEL_DEFAULT_WIDTH})`
-  )};
+          controlWidth || `calc(${FIELD_MAX_WIDTH} - ${FIELD_LABEL_DEFAULT_WIDTH})`
+        )};
       }
     }
     &:has(${inputLikeControlSelector}) .kl6-field-label {

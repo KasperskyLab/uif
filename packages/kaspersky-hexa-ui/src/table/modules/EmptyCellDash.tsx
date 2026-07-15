@@ -3,27 +3,35 @@ import React, { useMemo } from 'react'
 
 import { TableRecord } from '../types'
 
-import { TableModule } from './index'
+import { TableComponent } from './index'
 
 /* Default view of empty cells when hasEmptyCellDash true */
-const EmptyDashComponent = () => <Text className="hexa-ui-empty-dash-cell" data-hexa-empty-dash>&#x2014;</Text>
+export const EmptyDashComponent = () => <Text className="hexa-ui-empty-dash-cell" data-hexa-empty-dash>&#x2014;</Text>
 
-export const EmptyCellDash: TableModule = Component => ({ columns = [], ...props }) => {
+export const EmptyCellDash = <T extends TableRecord = TableRecord>(
+  Component: TableComponent<T>
+): TableComponent<T> => function EmptyCellDashModule ({
+  columns = [],
+  ...props
+}) {
   const processedColumns = useMemo(() => columns.map((col) => {
     if (col.hasEmptyCellDash) {
       return {
         ...col,
-        render: (value: any, record: TableRecord, index: number) => {
+        render: (value: any, record: T, index: number) => {
+          const isNotEmpty = value !== undefined && value !== null && String(value).trim() !== ''
           if (col.render) return col.render(value, record, index) || <EmptyDashComponent />
-          return value || <EmptyDashComponent />
+          return isNotEmpty ? value : <EmptyDashComponent />
         }
       }
     }
     return col
   }), [columns])
 
-  return <Component
-    {...props}
-    columns={processedColumns}
-  />
+  return (
+    <Component
+      {...props}
+      columns={processedColumns}
+    />
+  )
 }

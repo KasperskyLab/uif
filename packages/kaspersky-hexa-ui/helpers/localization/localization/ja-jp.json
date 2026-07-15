@@ -87,7 +87,7 @@
       "total": "合計 {{count}}",
       "selected": "選択済み {{count}}",
       "page": "ページ",
-      "goto": "移動"
+      "goto": "ページを開く"
     },
     "search": {
       "raw": "検索",
@@ -100,6 +100,14 @@
         "sorting": "並べ替え",
         "filters": "フィルター",
         "resetFilters": "フィルターのリセット"
+      },
+      "contextMenu": {
+        "selected": "選択済み： {{count}}"
+      },
+      "selectAll": {
+        "selectAll": "すべて選択",
+        "selectCurrentPage": "現在のページをすべて選択",
+        "deselectAll": "すべてリセット"
       },
       "columnsSettings": {
         "header": "表の設定",
@@ -124,12 +132,18 @@
           "add": "追加",
           "clearAll": "すべてクリア",
           "property": "プロパティ",
+          "attribute": "属性",
           "condition": "条件",
           "from": "開始",
           "to": "終了",
-          "value": "値"
+          "value": "値",
+          "validation": {
+            "emptyValue": "フィルター値を指定してください",
+            "duplicateFilters": "フィルターが重複しています。各フィルターが一意であることを確認してください。"
+          }
         },
-        "columnHideIsUnavailable": "列を非表示にすることはできません"
+        "columnHideIsUnavailable": "列を非表示にすることはできません",
+        "onlyForFiltering": "この列はフィルタリング専用です"
       },
       "filterOperation": {
         "⊆": "次を含む",
@@ -207,7 +221,11 @@
       "term": "期間",
       "dayLeft": "残り {{count}} 日",
       "daysLeft": "残り {{count}} 日",
-      "termDays": "{{count}} 日"
+      "termDays": "{{count}} 日",
+      "statuses": {
+        "valid": "現在のライセンス",
+        "expired": "期限切れ"
+      }
     },
     "input": {
       "password": {

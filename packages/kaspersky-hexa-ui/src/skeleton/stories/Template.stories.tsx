@@ -43,7 +43,7 @@ export const SkeletonTemplateTitle = {
   render: () => (
     <SkeletonTemplate>
       <SkeletonComponent size={SizeType.Medium} />
-      <SkeletonComponent size={SizeType.Small}/>
+      <SkeletonComponent size={SizeType.Small} />
     </SkeletonTemplate>
   ),
   argTypes: {},
@@ -53,19 +53,19 @@ export const SkeletonTemplateTitle = {
 export const SkeletonTemplateForm = {
   render: () => (
     <SkeletonTemplate>
-      <SkeletonComponent size={SizeType.Medium}/>
-      <SkeletonComponent size={SizeType.Small}/>
-      <SkeletonComponent size={SizeType.Large} flexWidth={true}/>
-      <SkeletonComponent size={SizeType.Large} flexWidth={true}/>
-      <SkeletonComponent size={SizeType.Large} flexWidth={true}/>
-      <SkeletonComponent size={SizeType.Medium}/>
-      <SkeletonComponent size={SizeType.Large} flexWidth={true}/>
-      <SkeletonComponent size={SizeType.Large} flexWidth={true}/>
-      <SkeletonComponent size={SizeType.Large} flexWidth={true}/>
-      <SkeletonComponent size={SizeType.Medium}/>
-      <SkeletonComponent size={SizeType.Large} flexWidth={true}/>
-      <SkeletonComponent size={SizeType.Large} flexWidth={true}/>
-      <SkeletonComponent size={SizeType.Large} flexWidth={true}/>
+      <SkeletonComponent size={SizeType.Medium} />
+      <SkeletonComponent size={SizeType.Small} />
+      <SkeletonComponent size={SizeType.Large} flexWidth={true} />
+      <SkeletonComponent size={SizeType.Large} flexWidth={true} />
+      <SkeletonComponent size={SizeType.Large} flexWidth={true} />
+      <SkeletonComponent size={SizeType.Medium} />
+      <SkeletonComponent size={SizeType.Large} flexWidth={true} />
+      <SkeletonComponent size={SizeType.Large} flexWidth={true} />
+      <SkeletonComponent size={SizeType.Large} flexWidth={true} />
+      <SkeletonComponent size={SizeType.Medium} />
+      <SkeletonComponent size={SizeType.Large} flexWidth={true} />
+      <SkeletonComponent size={SizeType.Large} flexWidth={true} />
+      <SkeletonComponent size={SizeType.Large} flexWidth={true} />
     </SkeletonTemplate>
   ),
   argTypes: {},
@@ -74,14 +74,14 @@ export const SkeletonTemplateForm = {
 
 export const SkeletonTemplateWidget = {
   render: () => (
-    <SkeletonTemplate style={ { width: 568 } }>
+    <SkeletonTemplate style={{ width: 568 }}>
       <Space gap={16} direction="vertical">
-        <SkeletonComponent size="flex" style={ { height: 188 } }/>
+        <SkeletonComponent size="flex" style={{ height: 188 }} />
         <Space gap={8}>
-          <SkeletonComponent size="flex" style={ { height: 20, width: 80 } }/>
-          <SkeletonComponent size="flex" style={ { height: 20, width: 80 } }/>
-          <SkeletonComponent size="flex" style={ { height: 20, width: 80 } }/>
-          <SkeletonComponent size="flex" style={ { height: 20, width: 80 } }/>
+          <SkeletonComponent size="flex" style={{ height: 20, width: 80 }} />
+          <SkeletonComponent size="flex" style={{ height: 20, width: 80 }} />
+          <SkeletonComponent size="flex" style={{ height: 20, width: 80 }} />
+          <SkeletonComponent size="flex" style={{ height: 20, width: 80 }} />
         </Space>
       </Space>
 
@@ -93,25 +93,29 @@ export const SkeletonTemplateWidget = {
 
 export const SkeletonTemplateTable = {
   render: () => (
-    <SkeletonTemplate style={ { width: 1018 } }>
+    <SkeletonTemplate style={{ width: 1018 }}>
       <Space gap={8} direction="vertical">
         {
           [...Array(12).keys()].map(row => {
-            return <Space gap={8} wrap="nowrap" key={`skeleton-table-row-${row}`}>
-              {
-                [...Array(5).keys()].map(cell => {
-                  return <SkeletonComponent
-                    size={SizeType.Large}
-                    flexWidth={true}
-                    key={`skeleton-table-cell-${row}${cell}`}
-                    style={ cell === 0
-                      ? { width: 20, flex: 'none' }
-                      : {}
-                    }
-                  />
-                })
-              }
-            </Space>
+            return (
+              <Space gap={8} wrap="nowrap" key={`skeleton-table-row-${row}`}>
+                {
+                  [...Array(5).keys()].map(cell => {
+                    return (
+                      <SkeletonComponent
+                        size={SizeType.Large}
+                        flexWidth={true}
+                        key={`skeleton-table-cell-${row}${cell}`}
+                        style={cell === 0
+                          ? { width: 20, flex: 'none' }
+                          : {}
+                        }
+                      />
+                    )
+                  })
+                }
+              </Space>
+            )
           })
         }
       </Space>

@@ -127,6 +127,7 @@ const policiesColumns: TableColumn[] = [
     width: 220,
     isSortable: true,
     show: true,
+    onlyForFiltering: true,
     hideColumnAvailable: true,
     expandableText: true,
     title: 'Modified'
@@ -378,7 +379,7 @@ const meta: Meta<ITableProps> = {
   args: {
     columns: policiesColumns,
     dataSource: policiesDataSource,
-    groupBy: 'product',
+    defaultGroupBy: 'product',
     toolbar: {
       showColumns: true,
       showGrouping: true,
@@ -394,7 +395,8 @@ const meta: Meta<ITableProps> = {
     rowSelection: {},
     stickyHeader: 40,
     storageKey: 'policy-table',
-    useFiltersSidebar: true
+    useFiltersSidebar: true,
+    borderedStyle: false
   },
   parameters: {
     badges: [badges.stable],
@@ -407,8 +409,8 @@ const meta: Meta<ITableProps> = {
   },
   decorators: [(Story, context) => (
     <Wrapper>
-      <Story {...context}/>
-      <div style={{ height: 1000 }}/>
+      <Story {...context} />
+      <div style={{ height: 1000 }} />
     </Wrapper>
   )]
 }
@@ -440,5 +442,3 @@ export const WithLateDataSource: Story = {
     )
   }
 }
-
-

@@ -2,7 +2,13 @@ import { Focus } from '@design-system/tokens/focus'
 import { SizingType, Theme } from '@design-system/types'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 import { TooltipProps } from '@src/tooltip'
-import { FC, HTMLAttributes, MouseEvent, ReactNode, RefAttributes } from 'react'
+import {
+  FC,
+  HTMLAttributes,
+  MouseEvent,
+  ReactNode,
+  RefAttributes
+} from 'react'
 
 import { ToGroupProps } from '../helpers/Group'
 

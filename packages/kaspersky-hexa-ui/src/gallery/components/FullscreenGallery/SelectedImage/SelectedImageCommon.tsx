@@ -1,5 +1,4 @@
 import { Button } from '@src/button'
-import { Icon } from '@src/icon'
 import { Loader } from '@src/loader'
 import { Tooltip } from '@src/tooltip'
 import React, {
@@ -9,6 +8,7 @@ import React, {
 import styled from 'styled-components'
 
 import { colors } from '@kaspersky/hexa-ui-core/colors/js'
+import { Add, FileSad } from '@kaspersky/hexa-ui-icons/24'
 
 export const Container = styled.div`
   display: flex;
@@ -73,7 +73,7 @@ export const SelectedImageFailure = memo(({
 }: SelectedImageFailureProps) => {
   return (
     <LoaderContainer>
-      <Icon size="medium" name="FileSad" color={colors.cg200} />
+      <FileSad color={colors.cg200} />
       <FailureText>
         {imageLoadingFailureText || 'Failed to load content'}
       </FailureText>
@@ -122,7 +122,7 @@ export const ControlPanel = memo(
         <Tooltip text={zoomInText}>
           <Button
             mode="tertiary"
-            iconBefore={<Icon size="medium" name="Add" />}
+            iconBefore={<Add />}
             onClick={handleZoomIn}
             theme="dark"
           />

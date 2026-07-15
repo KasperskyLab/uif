@@ -1,7 +1,7 @@
-import { ReactNode } from 'react'
+import React from 'react'
 
 import { REACT_SERVICE_PARAMS, READONLY_COLUMNS } from '../modules/constants'
-import { TableColumn } from '../types'
+import { TableColumn, TableRecord } from '../types'
 
 export const extractText = function (
   jsx: { props?: any, children?: any } | string,
@@ -34,8 +34,8 @@ export const extractText = function (
   return resultText.join(joinPattern)
 }
 
-export const isColumnReadonly = (
-  column: TableColumn
+export const isColumnReadonly = <T extends TableRecord = TableRecord>(
+  column: TableColumn<T>
 ): boolean => READONLY_COLUMNS.includes(column)
 
 export const isReactServiceParam = (key: string) => REACT_SERVICE_PARAMS.includes(key)
@@ -58,12 +58,12 @@ export const safeWidth = (
   return undefined // todo: проставить дефолтное значене
 }
 
-type TypeSafeColumn = Omit<TableColumn, 'sorter' | 'filters'>
+export type TypeSafeColumn<T extends TableRecord = TableRecord> = Omit<TableColumn<T>, 'sorter' | 'filters'>
 
-export const safeColumns = (
-  columns: TableColumn[],
+export const safeColumns = <T extends TableRecord = TableRecord>(
+  columns: TableColumn<T>[],
   baseValue: number
-): TypeSafeColumn[] =>
+): TypeSafeColumn<T>[] =>
   columns.map(({ sorter: _sorter, filters: _filters, ...col }) => {
     return {
       ...col,
@@ -82,3 +82,22 @@ export const findParentForClassName = (el: HTMLElement, className: string) => {
   }
   return node
 }
+
+export const flattenDataSource = <T extends TableRecord = TableRecord>(items: T[]): T[] =>
+  items.flatMap(x => [x, ...(x.children ? flattenDataSource(x.children as T[]) : [])])
+
+export const checkExpandableGrouping = (columns: Pick<TableColumn, 'expandableGrouping'>[]) =>
+  columns.some(({ expandableGrouping }) => expandableGrouping)
+
+export const checkExpandableRows = (rows: TableRecord[]) =>
+  rows.some(({ children }) => Array.isArray(children))
+
+export const findColumn = <T extends TableRecord = TableRecord>(columns: TableColumn<T>[], dataIndex: TableColumn<T>['dataIndex']) =>
+  columns.find(column => column.dataIndex === dataIndex)
+
+export const isRenderCellObject = (node: unknown): node is { children: React.ReactNode, props?: Record<string, unknown> } => (
+  Boolean(node) &&
+  typeof node === 'object' &&
+  !React.isValidElement(node) &&
+  'children' in (node as Record<string, unknown>)
+)

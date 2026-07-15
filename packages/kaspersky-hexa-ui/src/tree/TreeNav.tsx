@@ -1,4 +1,4 @@
-import { TreeNodeProps } from 'antd'
+import type { TreeNodeProps } from 'antd'
 import React from 'react'
 
 import { Spinner, Tree, TreeNodeCheckIcon } from './Tree'

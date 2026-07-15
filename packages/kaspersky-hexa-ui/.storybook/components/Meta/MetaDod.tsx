@@ -15,7 +15,7 @@ export const MetaDod: FC<MetaDodProps> = ({ list }: MetaDodProps) => {
 
   return (
     <Grid layout={{ cols: ['repeat(2, 240px)'] }}>
-      {metaDodKeys.map(key =>
+      {metaDodKeys.map(key => (
         <GridItem key={key}>
           <Space size={8}>
             {list[key]
@@ -26,7 +26,7 @@ export const MetaDod: FC<MetaDodProps> = ({ list }: MetaDodProps) => {
             </Text>
           </Space>
         </GridItem>
-      )}
+      ))}
     </Grid>
   )
 }

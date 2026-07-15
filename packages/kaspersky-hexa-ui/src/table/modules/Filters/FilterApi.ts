@@ -10,6 +10,7 @@ import {
   isFilterConfig,
   isFilterFromColumn,
   isGroup,
+  isSidebarFilter,
   parseDate,
   parseEnumValue,
   prefix
@@ -26,48 +27,52 @@ import {
   TableCustomFilterFunction
 } from './types'
 
-type FilterApiConstructor = FiltersStateManagerConstructor & {
-  customFilterFunction?: ITableProps['customFilterFunction'],
-  predefinedFilters?: ITableProps['predefinedFilters']
-  columns: TableColumn[]
+type FilterApiConstructor<T extends TableRecord = TableRecord> = FiltersStateManagerConstructor & {
+  customFilterFunction?: ITableProps<T>['customFilterFunction'],
+  defaultFilters?: ITableProps<T>['defaultFilters']
+  enableNestedFilters?: ITableProps<T>['enableNestedFilters']
+  columns: TableColumn<T>[]
 }
 
-export class FilterApi extends FiltersStateManager {
+export class FilterApi<T extends TableRecord = TableRecord> extends FiltersStateManager<T> {
   enumOptionsMap: EnumOptionsMap = {}
-  customFilterFunction: TableCustomFilterFunction | undefined
+  customFilterFunction: TableCustomFilterFunction<T> | undefined
+  enableNestedFilters: boolean
 
   constructor ({
     columns,
     customFilterFunction,
-    predefinedFilters,
+    defaultFilters,
+    enableNestedFilters = false,
     ...rest
-  }: FilterApiConstructor) {
+  }: FilterApiConstructor<T>) {
     super(rest)
+    this.enableNestedFilters = enableNestedFilters
     this.initColumnGroups(columns)
-    if (predefinedFilters) this.initPredefinedFilters(prepareFilters(predefinedFilters, columns))
+    if (defaultFilters) this.initDefaultFilters(prepareFilters(defaultFilters, columns))
     if (customFilterFunction) this.customFilterFunction = customFilterFunction
+
+    console.log(`${prefix} FilterApi initialized`)
   }
 
-  initColumnGroups (columns: TableColumn[]) {
+  initColumnGroups (columns: TableColumn<T>[]) {
     columns.forEach(column => {
-      if (column.dataIndex !== undefined && column.dataIndex !== null) {
-        const groupId = `column.${column.dataIndex}`
+      if (column.key !== undefined && column.key !== null) {
+        const groupId = `column.${column.key}`
         if (!this.isGroupExists(groupId)) {
           this.createGroup({ id: groupId, logicOperation: column.filterType?.logicOperation })
         }
       } else {
-        console.warn(`${prefix} Column should have dataIndex. Column: ${column}`)
+        console.warn(`${prefix} Column should have key. Column: ${column}`)
       }
     })
-
-    console.log(`${prefix} FilterApi initialized`)
   }
 
   public setEnumOptionsMap (options: EnumOptionsMap) {
     this.enumOptionsMap = options
   }
 
-  public filterRows (rows: TableRecord[]): TableRecord[] {
+  public filterRows (rows: T[]): T[] {
     if (this.customFilterFunction) {
       return this.filterRowsWithCustomFunction(rows)
     }
@@ -75,29 +80,30 @@ export class FilterApi extends FiltersStateManager {
     return rows.filter((row) => this.rowMatchesGroup(row, this.rootGroup))
   }
 
-  private filterRowsWithCustomFunction (rows: TableRecord[]): TableRecord[] {
+  private filterRowsWithCustomFunction (rows: T[]): T[] {
     if (!this.customFilterFunction) return rows
 
-    const filters: FilterConfig[] = this.rootGroup.items.filter(isFilterConfig)
+    const filters = this.rootGroup.items.filter(this.enableNestedFilters ? isSidebarFilter : isFilterConfig)
 
-    let filteredRows: TableRecord[] = []
-    const setFilteredRows = (newRows: TableRecord[]) => {
+    let filteredRows: T[] = []
+    const setFilteredRows = (newRows: T[]) => {
       filteredRows = newRows
     }
 
     this.customFilterFunction(rows, filters, setFilteredRows, {
       isMatch: this.isMatch.bind(this),
       parseDate,
-      rowMatchesFilter: this.rowMatchesFilter.bind(this)
+      rowMatchesFilter: this.rowMatchesFilter.bind(this),
+      rowMatchesGroup: this.rowMatchesGroup.bind(this)
     })
 
     return filteredRows
   }
 
-  private rowMatchesFilter (row: TableRecord, filter: FilterConfig): boolean {
+  private rowMatchesFilter (row: T, filter: FilterConfig, translateFn?: (key: string) => string): boolean {
     const { name, value, type = FilterType.Text, condition = FilterOperation.eq, attribute } = filter
     let filterValue = value
-    let fieldValue = get(row, attribute ? `${name}.${attribute.name}` : name)
+    let fieldValue: any = get(row, attribute ? `${name}.${attribute.name}` : name)
 
     if (
       isEmptyValue(fieldValue) &&
@@ -111,10 +117,12 @@ export class FilterApi extends FiltersStateManager {
       fieldValue = fieldValue.text
     }
 
+    fieldValue = translateFn?.(fieldValue) || fieldValue
+
     if (condition === FilterOperation.empty) {
       return isEmptyValue(fieldValue)
     }
-    
+
     if (condition === FilterOperation.nempty) {
       return !isEmptyValue(fieldValue)
     }
@@ -142,19 +150,25 @@ export class FilterApi extends FiltersStateManager {
       default:
         assertUnreachable(type, '[hexa-ui]: Incorrect filter operation')
     }
-    return this.isMatch({ type, condition, filterName: name, filterValue, fieldValue })
+    return this.isMatch({
+      type,
+      condition,
+      filterName: name,
+      filterValue,
+      fieldValue
+    })
   }
 
-  private rowMatchesGroup (row: TableRecord, group: FilterGroup): boolean {
+  private rowMatchesGroup (row: T, group: FilterGroup<T>, translateFn?: (key: string) => string): boolean {
     if (group.items.length === 0) return true
 
     const results = group.items.map(item => {
       if (isFilterConfig(item)) {
-        return this.rowMatchesFilter(row, item)
+        return this.rowMatchesFilter(row, item, translateFn)
       } else if (isFilterFromColumn(item)) {
         return item.predicate!(row)
       } else if (isGroup(item)) {
-        return this.rowMatchesGroup(row, item)
+        return this.rowMatchesGroup(row, item, translateFn)
       }
       console.warn(`${prefix} Incorrect filter item. It filters out as if this filter doesn't exist.
         \n Filter item: ${item}`)
@@ -170,7 +184,7 @@ export class FilterApi extends FiltersStateManager {
     if (condition === FilterOperation.empty) {
       return isEmptyValue(fieldValue)
     }
-    
+
     if (condition === FilterOperation.nempty) {
       return !this.isMatch({ ...params, condition: FilterOperation.empty })
     }
@@ -200,18 +214,16 @@ export class FilterApi extends FiltersStateManager {
         result = filterValue.from <= fieldValue && fieldValue <= filterValue.to
         break
       case FilterType.DateTime:
+      {
+        const normalizedField = parseDate(fieldValue)
+        if (isNaN(normalizedField)) {
+          return condition === FilterOperation.neq
+        }
+
         if (condition === FilterOperation.eq) {
-          const from = new Date(filterValue)
-          from.setHours(0, 0, 0, 0)
-
-          const to = new Date(filterValue)
-          to.setHours(23, 59, 59, 999)
-
-          return this.isMatch({
-            ...params,
-            condition: FilterOperation.range,
-            filterValue: { from: parseDate(from), to: parseDate(to) }
-          })
+          const target = parseDate(filterValue)
+          if (isNaN(target)) return false
+          return normalizedField === target
         }
 
         if (condition === FilterOperation.neq) {
@@ -219,7 +231,10 @@ export class FilterApi extends FiltersStateManager {
         }
 
         if (condition === FilterOperation.range) {
-          return filterValue.from <= fieldValue && fieldValue <= filterValue.to
+          const from = parseDate(filterValue.from)
+          const to = parseDate(filterValue.to)
+          if (isNaN(from) || isNaN(to)) return false
+          return from <= normalizedField && normalizedField <= to
         }
 
         if (condition === FilterOperation.nrange) {
@@ -227,6 +242,7 @@ export class FilterApi extends FiltersStateManager {
         }
 
         return this.isMatch({ ...params, type: FilterType.Number })
+      }
       case FilterType.IP:
         result = filterValue.ipFrom <= fieldValue && fieldValue <= filterValue.ipTo
         break

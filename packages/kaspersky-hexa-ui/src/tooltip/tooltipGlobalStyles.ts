@@ -6,9 +6,10 @@ import { TooltipCssConfig } from './types'
 
 const ARROW_SIZE = 7
 const ROTATE_WIDTH = 6.5
+const MAX_WIDTH = 320
 
-/** 
- * Note: default values of CSS variables can be removed when the issue with backward compatibility is resolved 
+/**
+ * Note: default values of CSS variables can be removed when the issue with backward compatibility is resolved
  * See more - Pull Request 1639376: [graph] fix: skip using hexa-ui css vars to maintain compatibility with ksc 14.x
 */
 export const getTooltipGlobalStyles = (cssConfig: TooltipCssConfig, rootHashClass: string): string => {
@@ -22,6 +23,7 @@ export const getTooltipGlobalStyles = (cssConfig: TooltipCssConfig, rootHashClas
       box-shadow: 0px 8px 12px 0px var(--elevation--medium--2, ${cssConfig.boxShadow}),
         0px 0px 1px 0px var(--elevation--medium--1, ${cssConfig.boxShadowLine});
       ${textConfig};
+      max-width: ${MAX_WIDTH}px;
   }
 
   .${rootHashClass} .ant-tooltip-arrow:before {

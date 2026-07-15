@@ -8,6 +8,10 @@ import React, { ReactElement } from 'react'
 import { ElementAfter, ElementBefore } from './types'
 
 export const getMappedElement = (element: ElementBefore | ElementAfter): ReactElement => {
+  if (React.isValidElement(element)) return element
+
+  if (!(typeof element === 'object' && element && 'component' in element)) return <></>
+
   switch (element.component) {
     case 'checkbox': {
       const { component, ...props } = element

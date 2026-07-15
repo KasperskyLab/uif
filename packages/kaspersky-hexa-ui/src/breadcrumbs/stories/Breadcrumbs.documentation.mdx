@@ -1,0 +1,142 @@
+import { ArgTypes, Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Space } from '@src/space'
+import { Text } from '@src/typography'
+
+import { Breadcrumbs, BreadcrumbsItem } from '../Breadcrumbs'
+import { breadcrumbsDesignPropPresentation, breadcrumbsItemDesignPropPresentation } from './Breadcrumbs.design.properties'
+import * as BreadcrumbsStories from './Breadcrumbs.stories'
+
+<Meta of={BreadcrumbsStories} name="Breadcrumbs Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Breadcrumbs"
+  description='**Breadcrumbs** — цепочка навигации по иерархии разделов, показывающая путь от корня до текущей страницы'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Breadcrumbs** отображает путь пользователя в виде цепочки ссылок с разделителем «/». Пункты задаются массивом `routes`; настраиваются **size**, **theme**, **className** и **style**. Отдельный пункт можно отключить (**disabled**) или обработать клик через **onClick**. При более чем пяти пунктах часть цепочки сворачивается в выпадающее меню."
+    />
+
+    <DocExampleBlock
+      title="routes"
+      description="Массив пунктов навигации. По умолчанию — пустой массив. 
+      В каждом пункте обязательно поле `name`. Поля `url`, **disabled** и **onClick** — опциональны."
+      code={`
+<Breadcrumbs
+  routes={[
+    { name: 'Home', url: '#/' },
+    { name: 'Products', url: '#/products' },
+    { name: 'Endpoint Security', url: '#/products/endpoint' },
+    { name: 'Policies' }
+  ]}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="size"
+      description="Размер типографики и отступов. Доступные значения: `medium`, `small`. По умолчанию — `medium`. В `medium` последний пункт — текст текущей страницы (BTM3), остальные — ссылки. В `small` все пункты отображаются как ссылки (BTM4)."
+      previewDirection='vertical'
+      code={`
+<Breadcrumbs
+  size="medium"
+  routes={[
+    { name: 'Section 1', url: '#/section-1' },
+    { name: 'Section 2', url: '#/section-2' },
+    { name: 'Current page' }
+  ]}
+/>
+
+<Breadcrumbs
+  size="small"
+  routes={[
+    { name: 'Section 1', url: '#/section-1' },
+    { name: 'Section 2', url: '#/section-2' },
+    { name: 'Current page', url: '#/current' }
+  ]}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="disabled"
+      description="Отключает пункт цепочки: ссылка не реагирует на клик и отображается в disabled-состоянии. Задаётся как `disabled: true` в элементе массива `routes`."
+      code={`
+<Breadcrumbs
+  routes={[
+    { name: 'Home', url: '#/' },
+    { name: 'Unavailable section', url: '#/unavailable', disabled: true },
+    { name: 'Current page' }
+  ]}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="onClick"
+      description="Обработчик клика по пункту. Передаётся в элемент массива `routes` и пробрасывается в **Link** — например, для обновления цепочки или дополнительной логики при переходе."
+      code={`
+<Breadcrumbs
+  routes={[
+    { name: 'Home', url: '#/', onClick: () => alert('Navigate to Home') },
+    { name: 'Products', url: '#/products', onClick: () => alert('Navigate to Products') },
+    { name: 'Current page' }
+  ]}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="Сворачивание длинной цепочки"
+      description="Если пунктов больше пяти, отображаются первый пункт, кнопка с выпадающим меню (⋯) и два последних. В меню перечислены все пункты `routes`; последний подсвечивается как selected."
+      code={`
+<Breadcrumbs
+  routes={[
+    { name: 'Level 1', url: '#/1' },
+    { name: 'Level 2', url: '#/2' },
+    { name: 'Level 3', url: '#/3', disabled: true },
+    { name: 'Level 4', url: '#/4' },
+    { name: 'Level 5', url: '#/5' },
+    { name: 'Level 6', url: '#/6' },
+    { name: 'Current page' }
+  ]}
+/>`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Breadcrumbs** — дополнительная навигация по иерархии разделов: путь от корня продукта или раздела до текущей страницы. Размещайте в шапке страницы над заголовком или в верхней части контентной области, когда пользователю важно понимать контекст и быстро вернуться на уровень выше.
+
+Для переключения между несвязанными представлениями одного экрана используйте **Tabs**. Для навигации по секциям длинной страницы — **AnchorNavigation**. Для глобального меню приложения — **Sidebar** или другие паттерны верхнего уровня, а не цепочку «хлебных крошек»."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Space direction="vertical" gap={40} align="start">
+      <Space direction="vertical" gap={0} align="start">
+        <Text type="H3">breadcrumbs</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(breadcrumbsDesignPropPresentation)} />
+      </Space>
+
+      <Space direction="vertical" gap={0} align="start">
+        <Text type="H3">breadcrumbs item</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(breadcrumbsItemDesignPropPresentation)} />
+      </Space>
+    </Space>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={BreadcrumbsStories} />
+    <AutodocArgsTable components={[Breadcrumbs, BreadcrumbsItem]}/>
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

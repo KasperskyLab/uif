@@ -1,5 +1,5 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { Spin as SpinAntd } from 'antd'
+import SpinAntd from 'antd/es/spin'
 import cn from 'classnames'
 import React, { FC } from 'react'
 import styled from 'styled-components'

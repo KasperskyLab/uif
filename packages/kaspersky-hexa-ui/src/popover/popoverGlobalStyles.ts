@@ -12,7 +12,9 @@ type ExtraPropsType = {
 }
 
 export const getPopoverGlobalStyles = (
-  cssConfig: PopoverCssConfig, rootHashClass: string, extraProps?: ExtraPropsType
+  cssConfig: PopoverCssConfig,
+  rootHashClass: string,
+  extraProps?: ExtraPropsType
 ): string => {
   const textConfig = convertToCssString(getTextSizes(TextTypes.BTR3))
 

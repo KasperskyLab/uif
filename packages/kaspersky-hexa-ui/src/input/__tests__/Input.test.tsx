@@ -21,7 +21,7 @@ describe('Input - Textbox - Basic ', () => {
     const { getByTestId } = render(
       <Textbox.Masked
         klId={klId}
-        maskOptions={ {
+        maskOptions={{
           mask: Date,
           lazy: false,
           overwrite: true,
@@ -39,7 +39,7 @@ describe('Input - Textbox - Basic ', () => {
     const { getByTestId } = render(
       <Textbox.Masked
         klId={klId}
-        maskOptions={ {
+        maskOptions={{
           mask: Number,
           lazy: false,
           overwrite: true,
@@ -57,7 +57,7 @@ describe('Input - Textbox - Basic ', () => {
     const { getByTestId } = render(
       <Textbox.Masked
         klId={klId}
-        maskOptions={ undefined }
+        maskOptions={undefined}
       />
     )
     const inputNone = getByTestId(klId)
@@ -72,7 +72,7 @@ describe('Input - Textbox - Basic ', () => {
     const { getByTestId } = render(
       <Textbox.Masked
         klId={klId}
-        maskOptions={ {
+        maskOptions={{
           mask: '+7 (000) 000-00-00',
           lazy: false,
           overwrite: true,
@@ -90,7 +90,7 @@ describe('Input - Textbox - Basic ', () => {
     const { getByTestId } = render(
       <Textbox.Masked
         klId={klId}
-        maskOptions={ {
+        maskOptions={{
           mask: '{#}000[aaa]/NIC-`*[**]',
           lazy: false,
           overwrite: true,
@@ -108,7 +108,7 @@ describe('Input - Textbox - Basic ', () => {
     const { getByTestId } = render(
       <Textbox.Masked
         klId={klId}
-        maskOptions={ {
+        maskOptions={{
           mask: 'NUM.NUM.NUM.NUM',
           blocks: {
             NUM: {
@@ -128,7 +128,7 @@ describe('Input - Textbox - Basic ', () => {
     const { getByTestId } = render(
       <Textbox.Masked
         klId={klId}
-        maskOptions={ {
+        maskOptions={{
           mask: 'MACAD:MACAD:MACAD:MACAD',
           blocks: {
             MACAD: { mask: /^[0-9a-f]{1,2}$/ }
@@ -182,14 +182,31 @@ describe('Input - Textbox - Number ', () => {
     expect(textboxNumber).toHaveValue('444')
   })
 
-  test('should prevent non-integer input when integerOnly is true', async () => {
+  test('should prevent non-integer input when integerOnly is true', () => {
     const { getByTestId } = render(<Textbox.Number integerOnly klId={klId} />)
 
     const textboxNumber = getByTestId(klId)
-    await userEvent.clear(textboxNumber)
-    await userEvent.type(textboxNumber, '1.')
-    await userEvent.click(document.body)
+    userEvent.clear(textboxNumber)
+    userEvent.type(textboxNumber, '1.')
     expect(textboxNumber).toHaveValue('1')
+  })
+
+  test('should prevent negative input when min is set to 0', () => {
+    const { getByTestId } = render(<Textbox.Number min={0} klId={klId} />)
+
+    const textboxNumber = getByTestId(klId)
+    userEvent.clear(textboxNumber)
+    userEvent.type(textboxNumber, '-1')
+    expect(textboxNumber).toHaveValue('1')
+  })
+
+  test('should prevent positive input when max is set to 0', () => {
+    const { getByTestId } = render(<Textbox.Number max={0} klId={klId} />)
+
+    const textboxNumber = getByTestId(klId)
+    userEvent.clear(textboxNumber)
+    userEvent.type(textboxNumber, '1')
+    expect(textboxNumber).toHaveValue('')
   })
 })
 

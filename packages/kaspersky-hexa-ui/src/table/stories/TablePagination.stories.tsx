@@ -1,12 +1,13 @@
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
+import { Button } from '@src/button'
 import { Checkbox } from '@src/checkbox'
 import MetaData from '@src/table/__meta__/meta.json'
 import { Meta } from '@storybook/react'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { ITableProps, Table } from '../index'
+import { ITableProps, Table, TableRecord } from '../index'
 
 import {
   basicArgTypes,
@@ -20,7 +21,6 @@ import {
 
 const defaultPagination = {
   current: 2,
-  pageSize: 20,
   jumper: false,
   simple: false
 }
@@ -31,7 +31,8 @@ const meta: Meta<ITableProps> = {
   args: {
     pagination: defaultPagination,
     dataSource: basicDataSource,
-    columns: basicTwoColumns
+    columns: basicTwoColumns,
+    borderedStyle: false
   },
   argTypes: {
     pagination: basicArgTypes
@@ -118,11 +119,7 @@ export const PaginationHideOnSinglePage: Story = {
 export const WithStickyPagination: Story = {
   render: BasicTableStory.bind({}),
   args: {
-    stickyFooter: true,
-    pagination: {
-      ...defaultPagination,
-      pageSize: 20
-    }
+    stickyFooter: true
   }
 }
 
@@ -217,4 +214,51 @@ export const SelectedRowsMemorization: Story = {
       </Wrapper>
     )
   }
+}
+
+export const ExternalControllablePagination: Story = {
+  render: ({ dataSource, ...args }) => {
+    const [page, setPage] = useState<number>(1)
+    const [pageSize, setPageSize] = useState<number>(20)
+    const [data, setData] = useState<TableRecord[]>(dataSource!)
+
+    const handlePageSizeChange = (_: number, newSize: number) => {
+      setPageSize(newSize)
+      setPage(1)
+    }
+
+    const paginatedData: TableRecord[] = useMemo(() => {
+      const startIndex = (page - 1) * pageSize
+      const endIndex = startIndex + pageSize
+      return data.slice(startIndex, endIndex)
+    }, [data, page, pageSize])
+
+    const paginationProps = {
+      total: data.length,
+      current: page,
+      showSizeChanger: true,
+      pageSize,
+      onChange: setPage,
+      isServerPagination: true,
+      onShowSizeChange: handlePageSizeChange
+    }
+
+    return (
+      <>
+        <Button onClick={() => setData(prev => [...prev, {
+          name: 'Value new1',
+          description: 'Description new1',
+          key: 'new1',
+          details: {
+            city: 'city-new1',
+            email: 'email-new1'
+          }
+        }])}>
+          Add row
+        </Button>
+        <Table {...args} dataSource={paginatedData} pagination={paginationProps} />
+      </>
+    )
+  },
+  name: '[dev] External controllable pagination'
 }

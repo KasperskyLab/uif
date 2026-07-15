@@ -90,8 +90,8 @@
       "goto": "Vai alla pagina"
     },
     "search": {
-      "raw": "Ricerca",
-      "dotted": "Ricerca..."
+      "raw": "Cerca",
+      "dotted": "Cerca..."
     },
     "table": {
       "columnDropdown": {
@@ -100,6 +100,9 @@
         "sorting": "Ordina",
         "filters": "Filtro",
         "resetFilters": "Reimposta filtro"
+      },
+      "contextMenu": {
+        "selected": "Selezionato/i: {{count}}"
       },
       "selectAll": {
         "selectAll": "Seleziona tutto",
@@ -129,22 +132,24 @@
           "add": "Aggiungi",
           "clearAll": "Cancella tutto",
           "property": "Proprietà",
+          "attribute": "Attributo",
           "condition": "Condizione",
           "from": "da",
           "to": "a",
           "value": "Valore",
           "validation": {
             "emptyValue": "Specificare il valore di filtraggio",
-            "duplicateFilters": "Filtri duplicati. Verificare che ogni filtro sia univoco"
+            "duplicateFilters": "Filtri duplicati. Verificare che ogni filtro sia univoco."
           }
         },
-        "columnHideIsUnavailable": "Non è possibile nascondere le colonne"
+        "columnHideIsUnavailable": "Non è possibile nascondere le colonne",
+        "onlyForFiltering": "Questa colonna serve solo per il filtraggio"
       },
       "filterOperation": {
         "⊆": "Contiene",
         "⊄": "Non contiene",
         "cont_and": "Contiene (AND)",
-        "cont_or": "Contiene (OR)",
+        "cont_or": "Is one of",
         "ncont_or": "Non contiene",
         "*=": "Regexp",
         "empty": "Vuoto",
@@ -216,7 +221,11 @@
       "term": "Termine",
       "dayLeft": "{{count}} giorno rimasto",
       "daysLeft": "{{count}} giorni rimasti",
-      "termDays": "{{count}} giorni"
+      "termDays": "{{count}} giorni",
+      "statuses": {
+        "valid": "Attiva",
+        "expired": "Scaduto"
+      }
     },
     "input": {
       "password": {

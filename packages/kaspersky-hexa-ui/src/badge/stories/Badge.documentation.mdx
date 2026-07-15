@@ -1,0 +1,126 @@
+import { ArgTypes, Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Badge } from '../Badge'
+import * as BadgeStories from './Badge.stories'
+import { badgeDesignPropPresentation } from './Badge.design.properties'
+
+<Meta of={BadgeStories} name="Badge Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Badge"
+  description='**Badge** — компактный индикатор счётчика или короткой текстовой метки в интерфейсе'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Badge** отображает число (**count**) или текст (**text**): уведомления, статусы, метки. Настраиваются **mode**, **size**, **overflowCount**, **showZero**, **theme** и **className**. При **count**=0 badge скрывается, если не задан **showZero**."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Семантический цветовой режим. Доступные значения: `neutral`, `info`, `new`, `update`, `in-progress`, `resolved`, `positive`, `accent`, `low`, `medium`, `high`, `in-incident`, `critical`, `neutral_transparent`, `critical_transparent`. По умолчанию — `neutral`. Неподдерживаемое значение заменяется на `neutral`, в консоль выводится предупреждение."
+      code='
+    <Badge mode="neutral" text="neutral" />
+    <Badge mode="info" text="info" />
+    <Badge mode="new" text="new" />
+    <Badge mode="update" text="update" />
+    <Badge mode="in-progress" text="in-progress" />
+    <Badge mode="resolved" text="resolved" />
+    <Badge mode="positive" text="positive" />
+    <Badge mode="accent" text="accent" />
+    <Badge mode="low" text="low" />
+    <Badge mode="medium" text="medium" />
+    <Badge mode="high" text="high" />
+    <Badge mode="in-incident" text="in-incident" />
+    <Badge mode="critical" text="critical" />
+    <Badge mode="neutral_transparent" text="neutral_transparent" size="large" />
+    <Badge mode="critical_transparent" text="critical_transparent" size="large" />'
+    />
+
+    <DocExampleBlock
+      title="size"
+      description="Размер badge. Доступные значения: `medium`, `large`. По умолчанию — `medium`. `large` допустим только для **mode** `neutral_transparent` и `critical_transparent`; для остальных режимов в типах задан `medium`. Если передан **size**=`large` без **mode**, используется `neutral_transparent`."
+      code='
+    <Badge mode="info" size="medium" text="medium" />
+    <Badge mode="neutral_transparent" size="medium" text="medium" />
+    <Badge mode="critical_transparent" size="medium" text="medium" />
+    <Badge mode="neutral_transparent" size="large" text="large" />
+    <Badge mode="critical_transparent" size="large" text="large" />'
+    />
+
+    <DocExampleBlock
+      title="count"
+      description="Число внутри badge. При **count**=0 badge скрывается, если **showZero** не задан. Игнорируется, если задан **text**."
+      code='
+    <Badge count={1} />
+    <Badge count={12} />
+    <Badge count={0} />'
+    />
+
+    <DocExampleBlock
+      title="text"
+      description="Текстовая метка вместо числа. Имеет приоритет над **count**: при одновременной передаче отображается **text**."
+      code='
+    <Badge text="Badge text" />
+    <Badge text="New" mode="new" />
+    <Badge text="Label" count={99} />'
+    />
+
+    <DocExampleBlock
+      title="overflowCount"
+      description="Верхняя граница для **count**. По умолчанию — `99`. Если **count** больше **overflowCount**, отображается значение вида +99 (с плюсом и числом **overflowCount**)."
+      code='
+    <Badge count={10} overflowCount={9} />
+    <Badge count={100} overflowCount={99} />
+    <Badge count={1000} overflowCount={999} />'
+    />
+
+    <DocExampleBlock
+      title="showZero"
+      description="Показывает badge при **count**=0. Доступные значения: `true`, `false`. По умолчанию — `false`. Без **showZero** при нуле badge скрыт."
+      code='
+    <Badge count={0} />
+    <Badge count={0} showZero />'
+    />
+
+    <DocExampleBlock
+      title="title"
+      description="Устаревший HTML-атрибут **title** для нативной подсказки при наведении. Для кастомной подсказки оберните badge в **Tooltip** — отдельного пропа tooltip у компонента нет."
+      code={`
+  <Tooltip text="3 new notifications">
+    <span><Badge count={3} mode="info" /></span>
+  </Tooltip>`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Badge** — компактная метка для количества, статуса или короткой подписи рядом с элементом интерфейса: иконкой меню, вкладкой, строкой таблицы, аватаром. Используйте для вторичной информации, которая не требует отдельного блока контента.
+
+Для важных сообщений на уровне страницы или раздела используйте **Alert**, а не **Badge**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(badgeDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={BadgeStories} />
+    <AutodocArgsTable components={Badge}/>
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

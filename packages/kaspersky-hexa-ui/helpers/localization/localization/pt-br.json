@@ -95,11 +95,14 @@
     },
     "table": {
       "columnDropdown": {
-        "ascending": "Ascendente",
-        "descending": "Descendente",
+        "ascending": "Crescente",
+        "descending": "Decrescente",
         "sorting": "Ordenar",
         "filters": "Filtro",
         "resetFilters": "Redefinir filtros"
+      },
+      "contextMenu": {
+        "selected": "Selecionado: {{count}}"
       },
       "selectAll": {
         "selectAll": "Selecionar tudo",
@@ -129,22 +132,24 @@
           "add": "Adicionar",
           "clearAll": "Limpar tudo",
           "property": "Propriedade",
+          "attribute": "Atributos",
           "condition": "Condição",
           "from": "de",
           "to": "até",
           "value": "Valor",
           "validation": {
             "emptyValue": "Especificar o valor de filtragem",
-            "duplicateFilters": "Filtros duplicados. Verificar se que cada filtro é único"
+            "duplicateFilters": "Filtros duplicados. Verificar se que cada filtro é único."
           }
         },
-        "columnHideIsUnavailable": "A ocultação de colunas não está disponível"
+        "columnHideIsUnavailable": "A ocultação de colunas não está disponível",
+        "onlyForFiltering": "Esta coluna é destinada somente para filtragem"
       },
       "filterOperation": {
         "⊆": "Contém",
         "⊄": "Não contém",
         "cont_and": "Contém (E)",
-        "cont_or": "Contém (OU)",
+        "cont_or": "Is one of",
         "ncont_or": "Não contém",
         "*=": "Regexp",
         "empty": "Vazio",
@@ -216,7 +221,11 @@
       "term": "Termo",
       "dayLeft": "Falta {{count}} dia",
       "daysLeft": "Faltam {{count}} dias",
-      "termDays": "{{count}} dias"
+      "termDays": "{{count}} dias",
+      "statuses": {
+        "valid": "Ativo",
+        "expired": "Expirado"
+      }
     },
     "input": {
       "password": {

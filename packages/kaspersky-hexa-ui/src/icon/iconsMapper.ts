@@ -1,14 +1,13 @@
 import { SizingType } from '@design-system/types'
-import { IconsPackageNames } from '@src/icon'
 import { IconPackSizes } from '@src/icon/types'
 
 export interface MappedObjectInterface {
   size: IconPackSizes,
-  key: IconsPackageNames,
+  key: string,
   color?: string
 }
 
-export const iconsMapper: Record<Exclude<SizingType, 'extraLarge'>, {[key: string] :MappedObjectInterface}> = {
+export const iconsMapper: Record<Exclude<SizingType, 'extraLarge'>, { [key: string]: MappedObjectInterface }> = {
   extraSmall: {
     Add: {
       size: 16,

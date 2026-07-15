@@ -1,17 +1,12 @@
 import { Button } from '@src/button'
-import buttonStyles from '@src/button/Button.module.scss'
+import buttonStyles from '../button/Button.module.scss'
 import { Indicator } from '@src/indicator'
-import { Textbox } from '@src/input'
-import { Search } from '@src/search'
-import { searchCss } from '@src/search/searchCss'
 import { Space } from '@src/space'
 import styled, { css } from 'styled-components'
 
 import { ToolbarBlockSide } from './types'
 
 export const ToolbarButton = styled(Button)``
-
-export const ToolbarSearch = styled(Search)``
 
 export const ButtonIndicator = styled(Indicator)`
   position: absolute;
@@ -71,13 +66,24 @@ export const toolbarCss = css<StyledToolbarProps>`
     z-index: 2;
   }
 
-  &&& ${ToolbarSearch}, &&& .ant-input-affix-wrapper {
+  &&& .ant-input-affix-wrapper{
     width: 300px;
     color: var(--toolbar_search--text--placeholder_enabled);
-    background-color: var(--toolbar_search--bg--enabled);
     border-color: transparent;
-  }
+    margin-right: 4px;
+    margin-left: -15px;
 
+    &.hexa-ui-collapsible-search {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+
+    &.hexa-ui-collapsible-search-hidden {
+      opacity: 0;
+      width: 0px;
+    }
+  }
+  
   &&& ${ToolbarButton}, .ant-btn {
     border-radius: 8px;
     &, &:focus {
@@ -96,6 +102,62 @@ export const toolbarCss = css<StyledToolbarProps>`
       }
     }
   }
+  
+  .toolbar-search-toggle-button,
+  .hexa-ui-toolbar-toggle-button {
+    border: none;
+    border-radius: 8px;
+    background: none;
+    color: var(--fg--neutral--primary);
+    cursor: pointer;
+
+    input:checked + .hexa-ui-toggle-button.hexa-ui-toggle-button {
+      background-color: var(--bg--neutral--level_4);
+      color: var(--fg--neutral--primary);
+    }
+
+    &:hover {
+      background-color: var(--bg--neutral--level_3_hover);
+    }
+
+    &:hover input:checked + .hexa-ui-toggle-button.hexa-ui-toggle-button {
+      background-color: var(--bg--neutral--level_3_hover);
+      color: var(--fg--neutral--primary);
+    }
+  }
+
+  .hexa-ui-toolbar-toggle-button {
+
+    .hexa-ui-toggle-button {
+      padding: 0 12px; 
+    }
+
+    input:checked + .hexa-ui-toggle-button .hexa-ui-toggle-button-text.hexa-ui-toggle-button-text {
+      color: var(--fg--neutral--primary);
+    }
+
+    &:hover {
+      background-color: var(--bg--neutral--level_3_hover);
+
+      input:checked + .hexa-ui-toggle-button.hexa-ui-toggle-button {
+        background-color: var(--bg--neutral--level_4_hover);
+
+        &:active {
+          background-color: var(--bg--neutral--level_4_active);
+        }
+      }
+    }
+
+    &:active {
+      background-color: var(--bg--neutral--level_3_active);
+    }
+
+    input:disabled + .hexa-ui-toggle-button {
+        &, &:hover, &:active, &:focus {
+          background-color: var(--toolbar--bg);
+        }
+    }
+  }
 `
 
 type StyledBlockProps = {
@@ -110,8 +172,9 @@ export const StyledBlock = styled(Space)<StyledBlockProps>`
   ${({ $side, $autoDropdown }) => $autoDropdown ? '' : `${$side}: 4px;`}
   ${({ $side, $autoDropdown }) => $side === 'left' && $autoDropdown && 'min-width: 0;'}
   ${({ $side, $autoDropdown }) => $autoDropdown && `
-  flex-grow: ${$side === 'left' ? 1 : 'initial'};
-  flex-shrink: ${$side === 'right' ? 0 : 'initial'};
+    flex-grow: ${$side === 'left' ? 1 : 'initial'};
+    flex-shrink: ${$side === 'right' ? 0 : 'initial'};
+    ${$side === 'left' ? 'overflow: hidden;' : ''}
   `}
 
   ${({ $oneElement, $oneElementSelector }) => $oneElement && `
@@ -133,7 +196,6 @@ export const ToolbarItemWrap = styled.div<ToolbarItemWrapProps>`
   min-height: 100%;
   display: flex;
   align-items: center;
-  transition: opacity .2s;
   ${({ $isHidden }) => $isHidden && 'opacity: 0; pointer-events: none;'}
 `
 
@@ -142,69 +204,6 @@ export const AutoDropdownPart = styled.div<ToolbarItemWrapProps>`
   flex-shrink: 0;
   position: absolute;
   right: 0;
-`
-
-type StyledSearchProps = {
-  $visible?: boolean
-}
-
-export const StyledSearch = styled.div<StyledSearchProps>`
-  position: relative;
-  padding: 6px 12px;
-  background-color: var(--toolbar_search--bg--enabled);
-  color: var(--toolbar_search--text--placeholder_enabled);
-  border-radius: 8px;
-  cursor: pointer;
-  height: 32px;
-  display: flex;
-  align-items: center;
-
-  &:hover {
-    background-color: var(--toolbar_search--bg--hover);
-  }
-  &:focus-visible {
-    box-shadow: 0px 0px 0px 2px var(--focus--stroke);
-    outline: none;
-  }
-
-  ${(props) => props.$visible && css`
-    background-color: transparent;
-    border-top-left-radius: unset;
-    border-bottom-left-radius: unset;
-    * {
-      z-index: 1;
-    }
-    &:focus-visible {
-      box-shadow: none;
-    }
-  `}
-`
-
-export const StyledTextbox = styled(Textbox)<StyledSearchProps>`
-  ${searchCss}
-
-  &&&&.ant-input {
-    background-color: var(--toolbar_search--bg--enabled);
-    border-color: transparent;
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 300px;
-    padding-right: 32px;
-    opacity: 0;
-    transform: scaleX(0);
-    transform-origin: 300px center;
-    transition: all 0.3s, transform 150ms ease;
-    
-    ${(props) => props.$visible && css`
-      transform: scaleX(1);
-      opacity: 1;
-     
-      &:hover:not(:focus-within) {
-        border-color: var(--toolbar_search--border--hover);
-      }
-    `}
-  }
 `
 
 export const DropdownTriggerIconsWrapper = styled.div``

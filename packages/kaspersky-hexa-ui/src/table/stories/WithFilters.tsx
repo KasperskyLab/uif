@@ -1,11 +1,11 @@
 import { Table } from '@src/table'
 import React, { useState } from 'react'
 
-import { TableInternalFilterItemsTagProps } from '../types'
+import { ITableProps, TableInternalFilterItemsTagProps } from '../types'
 
 import { basicDataSource, basicTwoColumns, Story } from './_commonConstants'
 
-const StoryComponent = () => {
+const StoryComponent = (args: Partial<ITableProps>) => {
   const value_1 = 'Value 1 '.repeat(50)
   const [filterBtns, setFilterBtns] = useState([value_1, 'Value 2', 'Value 3'])
 
@@ -26,6 +26,7 @@ const StoryComponent = () => {
         toolbar={{ showSearch: true }}
         dataSource={filterBtns.length > 0 ? getFilteredData() : basicDataSource}
         columns={basicTwoColumns}
+        borderedStyle={args.borderedStyle}
         filterItems={{ items, clearLinkText: 'Reset', onClear: () => setFilterBtns([]) }}
       />
     </div>

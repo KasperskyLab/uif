@@ -34,6 +34,9 @@ export type IndicatorThemeProps = {
 export type IndicatorProps = {
   /** Show border */
   border?: boolean
+  /** Change border color if border={true} */
+  borderBackground?: string
+  className?: string
 } & IndicatorThemeProps & TestingProps
 
 export type IndicatorViewProps = ToViewProps<IndicatorProps, IndicatorCssConfig, IndicatorThemeProps>

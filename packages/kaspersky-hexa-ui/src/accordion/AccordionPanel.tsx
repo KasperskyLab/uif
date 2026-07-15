@@ -14,6 +14,7 @@ export const AccordionPanel: FC<AccordionPanelProps> = memo(({
   title,
   tagBefore,
   indicator,
+  elementBefore,
   tagAfter,
   additionalText,
   elementAfter,
@@ -60,6 +61,11 @@ export const AccordionPanel: FC<AccordionPanelProps> = memo(({
             border: false,
             className: styles['accordion-header-indicator']
           })
+        )}
+        {elementBefore && (
+          <div className={styles['accordion-header-element-before']}>
+            {elementBefore}
+          </div>
         )}
         {title && (
           <Text className={styles['accordion-header-title']}>

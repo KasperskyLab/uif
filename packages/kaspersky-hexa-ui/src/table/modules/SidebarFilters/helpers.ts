@@ -1,16 +1,22 @@
 import { assertUnreachable } from '@helpers/typesHelpers'
-import { TableFilterVersion } from '@src/table/types'
 
-import { FilterOperation, FilterType } from '../Filters'
-import { isFilterConfig, parseDate } from '../Filters/helpers'
-import { DateRangeFilter, DateRangeFilterValue, DateTimeFilter, FilterConfigInternal, UnitedFilterInternal, WithId } from '../Filters/types'
+import { TableFilterVersion, TableRecord } from '../../types'
+import { FilterConfigInternal, FilterGroupInternal, FilterOperation, FilterType } from '../Filters'
+import { isFilterConfigInternal, parseDate } from '../Filters/helpers'
+import {
+  DateRangeFilter,
+  DateRangeFilterValue,
+  DateTimeFilter,
+  SidebarFilterInternal,
+  WithId
+} from '../Filters/types'
 
 export const getFilterOperations = (filterType: FilterType, filterVersion: TableFilterVersion): FilterOperation[] => {
   function applyForV2 (operation: FilterOperation): FilterOperation | null {
     if (filterVersion !== 2) {
       return null
     }
-  
+
     return operation
   }
 
@@ -72,9 +78,9 @@ export const getFilterOperations = (filterType: FilterType, filterVersion: Table
   }
 }
 
-const getDateFrom = <T,>(date?: T): T | number => date || parseDate(new Date(new Date().setHours(0, 0, 0, 0)))
+const getDateFrom = <T>(date?: T): T | number => date || parseDate(new Date(new Date().setHours(0, 0, 0, 0)))
 
-const getDateTo = <T,>(date?: T): T | number => date || parseDate(new Date(new Date().setHours(23, 59, 59, 999)))
+const getDateTo = <T>(date?: T): T | number => date || parseDate(new Date(new Date().setHours(23, 59, 59, 999)))
 
 export const getDefaultDateTimeFilter = (filter: WithId<DateTimeFilter>): WithId<DateTimeFilter> => {
   if (filter.value === null || typeof filter.value === 'number')
@@ -102,15 +108,28 @@ export const getDefaultDateRangeFilter = (filter: WithId<DateRangeFilter>): With
   }
 }
 
-export const addDefaultDates = (filters: FilterConfigInternal[]): FilterConfigInternal[] => (
+export const addDefaultDates = <T extends TableRecord = TableRecord> (filters: SidebarFilterInternal<T>[]): SidebarFilterInternal<T>[] => (
   filters.map(filter => {
-    if (filter.type === FilterType.DateRange)
-      return getDefaultDateRangeFilter(filter)
+    if (isFilterConfigInternal(filter)) {
+      if (filter.type === FilterType.DateRange)
+        return getDefaultDateRangeFilter(filter)
 
-    if (filter.type === FilterType.DateTime) {
-      return getDefaultDateTimeFilter(filter)
+      if (filter.type === FilterType.DateTime) {
+        return getDefaultDateTimeFilter(filter)
+      }
+
+      return filter
+    } else {
+      return { ...filter, items: addDefaultDates(filter.items) }
     }
-
-    return filter
   })
 )
+
+export const getFilterConfigFromGroup = <T extends TableRecord = TableRecord> (filter: FilterGroupInternal<T> | FilterConfigInternal) => {
+  if (isFilterConfigInternal(filter)) {
+    return filter
+  }
+  if (filter.items.length && isFilterConfigInternal(filter.items[0])) {
+    return filter.items[0]
+  }
+}

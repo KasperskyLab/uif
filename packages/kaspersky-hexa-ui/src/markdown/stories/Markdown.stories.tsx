@@ -66,7 +66,7 @@ function helloWorld() {
 }
 
 const meta: Meta<MarkdownProps> = {
-  title: 'Hexa UI Components/Markdown',
+  title: 'Other/Markdown',
   component: Markdown,
   argTypes: {
     ...sbHideControls(['theme', 'as', 'forwardedAs'])

@@ -1,4 +1,4 @@
-import { Input } from 'antd'
+import Input from 'antd/es/input'
 import classnames from 'classnames'
 import React, { ReactElement } from 'react'
 import styled from 'styled-components'

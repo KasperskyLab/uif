@@ -10,8 +10,6 @@ import { SelectCssConfig } from './types'
 const fromProps = getFromProps<SelectCssConfig>()
 
 const selectTextSizes = getTextSizes(textLevels.BTR3)
-const optionLineHeight = selectTextSizes.lineHeight
-const optionCheckboxColumnWidth = '18px'
 
 function encodeForCSS (content: string) {
   return content.replace(/"/g, '\\"').replace(/\n/g, '\\A')
@@ -83,16 +81,6 @@ export const selectCss = css<SelectCssProps>`
   &.ant-select-multiple {
     .ant-select-selector {
       padding: 0 64px 0 12px;
-    }
-
-    .kl-components-tag-text:has(svg) {
-      padding-left: 18px;
-      position: relative;
-
-      svg {
-        position: absolute;
-        left: 0px;        
-      }
     }
 
     .ant-select-selection-search {
@@ -269,16 +257,10 @@ const dropdownCss = css<DropdownStylesProps>`
   .ant-select-item-option {
     color: ${fromProps('enabled.option.color')};
     position: relative;
-    padding-inline-end: 30px;
+    padding-inline-end: 12px;
 
     .ant-select-item-option-state {
-      color: ${fromProps('enabled.option.color')} !important;
-      position: absolute;
-      height: 16px;
-      width: 16px;
-      top: 50%;
-      right: 13px;
-      transform: translateY(-50%);
+      display: none;
     }
 
     .ant-select-item-option-content {
@@ -286,21 +268,8 @@ const dropdownCss = css<DropdownStylesProps>`
       align-items: center;
 
       .dropdown-v6-multi-checkbox {
-        margin-right: 0;
+        margin-right: 5px;
       }
-    }
-
-    .kl6-select-option-content {
-      display: flex;
-      min-width: 0;
-      width: 100%;
-    }
-
-    .kl6-select-option-text {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      flex: 1;
     }
 
     .ant-select-item-option-content > span {
@@ -379,64 +348,6 @@ const dropdownCss = css<DropdownStylesProps>`
   }
 
   ${props => props.isMultiSelect && css`
-    .ant-select-item-option-state {
-      display: none;
-    }
-
-    .kl6-select-option-content {
-      display: grid;
-      grid-template-columns: ${optionCheckboxColumnWidth} 1fr;
-      column-gap: 5px;
-      align-items: start;
-    }
-
-    .kl6-select-option-checkbox-cell {
-      width: ${optionCheckboxColumnWidth};
-      height: ${optionLineHeight};
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .dropdown-v6-multi-checkbox {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .dropdown-v6-multi-checkbox .kl6-checkbox-wrapper {
-      display: flex;
-      align-items: center;
-      height: 100%;
-    }
-
-    .dropdown-v6-multi-checkbox-unchecked.ant-checkbox-wrapper,
-    .dropdown-v6-multi-checkbox-checked.ant-checkbox-wrapper {
-      align-items: center;
-      line-height: 1;
-
-      .ant-checkbox {
-        top: 0;
-      }
-    }
-
-    .dropdown-v6-multi-checkbox .ant-checkbox-wrapper + .ant-checkbox-wrapper {
-      margin-left: 0;
-    }
-
-    .ant-select-item-option.ant-select-item-option-selected
-      .dropdown-v6-multi-checkbox > .kl6-checkbox-wrapper:first-child {
-      display: none;
-    }
-
-    .ant-select-item-option:not(.ant-select-item-option-selected)
-      .dropdown-v6-multi-checkbox > .kl6-checkbox-wrapper:last-child {
-      display: none;
-    }
-    
     .ant-select-item:not([label]) {
       &:not(.ant-select-item-option-selected) {
         background: ${fromProps('selected.option.background')};
@@ -499,4 +410,19 @@ export const StyledErrorWrapper = styled.div<{ cssConfig: SelectCssConfig }>`
 
 export const OptionDescription = styled.span<{ cssConfig: SelectCssConfig }>`
   color: ${fromProps('enabled.option.description')};
+`
+
+export const OptionContent = styled.div`
+  display: flex;
+  width: 100%;
+`
+
+export const OptionTextContent = styled.div<{ reservedSpace?: number }>`
+  display: flex;
+  flex-direction: column;
+
+  ${props => props.reservedSpace
+      ? `width: calc(100% - ${props.reservedSpace}px)`
+      : 'width: 100%'
+  }
 `

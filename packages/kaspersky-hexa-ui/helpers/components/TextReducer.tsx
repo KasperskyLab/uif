@@ -1,4 +1,6 @@
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import useTextReducer from '@helpers/hooks/useTextReducer'
+import { TestingProps } from '@helpers/typesHelpers'
 import { Tooltip, TooltipProps } from '@src/tooltip'
 import React, { ReactNode, useRef, VFC } from 'react'
 import styled from 'styled-components'
@@ -18,18 +20,21 @@ export const TooltipWrapper = styled.div<{ lineClamp?: number }>`
   `}
 `
 
-export const StyledContainer = styled.div<{ truncationWidth?: number }>`
-  ${props => {
-    const width = props.truncationWidth
-    return typeof width === 'number' && width > 0 
-      ? `max-width: ${width}px;`
-      : 'flex: 1 1 auto; min-width: 0;'
-  }}
+export const StyledContainer = styled.div<{ truncationWidth?: number, stretch?: boolean }>`
+  ${({ truncationWidth, stretch }) => (
+    typeof truncationWidth === 'number' && truncationWidth > 0
+      ? `max-width: ${truncationWidth}px;`
+      : `
+        min-width: 0;
+        ${stretch && 'flex: 1 1 auto;'}
+      `
+  )}
 `
 
-export type TextReducerProps = Pick<TooltipProps, 'placement'> & {
+export type TextReducerProps = Pick<TooltipProps, 'placement'> & TestingProps & {
   children?: ReactNode,
   lineClamp?: number,
+  stretch?: boolean,
   /** Custom tooltip text */
   tooltip?: ReactNode
   truncationWidth?: number
@@ -39,21 +44,26 @@ export type TextReducerProps = Pick<TooltipProps, 'placement'> & {
 export const TextReducer: VFC<TextReducerProps> = ({
   children,
   lineClamp,
+  stretch = true,
   tooltip,
   truncationWidth,
   placement,
-  className
+  className,
+  ...props
 }: TextReducerProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { ref, hasOverflow } = useTextReducer({ containerRef })
+  const { testAttributes } = useTestAttribute(props)
 
   return (
-    <StyledContainer className={className} ref={containerRef} truncationWidth={truncationWidth}>
+    <StyledContainer className={className} ref={containerRef} truncationWidth={truncationWidth} stretch={stretch} {...testAttributes}>
       {
         hasOverflow
-          ? <Tooltip text={tooltip ?? children} placement={placement}>
-              <TooltipWrapper ref={ref} lineClamp={lineClamp}>{children}</TooltipWrapper>
-            </Tooltip>
+          ? (
+              <Tooltip text={tooltip ?? children} placement={placement}>
+                <TooltipWrapper ref={ref} lineClamp={lineClamp}>{children}</TooltipWrapper>
+              </Tooltip>
+            )
           : <TooltipWrapper ref={ref} lineClamp={lineClamp}>{children}</TooltipWrapper>
       }
     </StyledContainer>

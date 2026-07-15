@@ -31,9 +31,9 @@ export const StyledRow: FC<React.HTMLAttributes<HTMLDivElement> & {
   selected,
   truncateText,
   ...props
-}) =>
-  <div 
-    {...props} 
+}) => (
+  <div
+    {...props}
     className={cn(
       props.className,
       styles.row,
@@ -45,6 +45,7 @@ export const StyledRow: FC<React.HTMLAttributes<HTMLDivElement> & {
     )}
     style={{ ...props.style, '--left-offset': leftOffset }}
   />
+)
 
 export const StyledRowText: FC<TextProps> = props =>
   <Text {...props} className={styles.rowText} />
@@ -52,21 +53,22 @@ export const StyledRowText: FC<TextProps> = props =>
 export const StyledRowTextCol: FC<React.HTMLAttributes<HTMLDivElement>> = props =>
   <div {...props} className={styles.rowTextCol} />
 
-export const SubmenuRow: FC<RowViewProps> = ({
+export const SubmenuRow: FC<RowViewProps & { hasChildren: boolean }> = ({
   row,
   truncateText,
   selected,
   collapsible,
   onCollapsibleClick,
-  onClick
+  onClick,
+  hasChildren
 }) => {
   const handleClick = row?.disabled ? undefined : onClick
-  
+
   return (
     <StyledRow
       className="hexa-ui-submenu-row"
       disabled={row?.disabled}
-      leftOffset={8 + (row?.level || 0) * 20 + (row?.extraLeftPadding || 0)}
+      leftOffset={8 + row.level * 20 + (hasChildren || row.level > 0 ? row.extraLeftPadding : 0)}
       onClick={handleClick}
       onKeyDown={e => e.key === 'Enter' ? handleClick?.() : undefined}
       selected={selected}
@@ -86,7 +88,7 @@ export const SubmenuRow: FC<RowViewProps> = ({
       {row.iconBefore && <StyledRowBlock>{row.iconBefore}</StyledRowBlock>}
       <StyledRowTextCol>
         <StyledRowText>
-          <TextWithTruncation truncate={truncateText} text={row.text} />
+          {typeof row.text ==='string' ? <TextWithTruncation truncate={truncateText} text={row.text} /> : row.text}
         </StyledRowText>
         {row.description && (
           <Text
@@ -103,11 +105,11 @@ export const SubmenuRow: FC<RowViewProps> = ({
           ? <StyledRowBlock><Badge {...row.notification} /></StyledRowBlock>
           : <StyledRowBlock><Indicator {...row.notification} /></StyledRowBlock>
       )}
-      {row.action &&
+      {row.action && (
         <StyledRowBlock>
           <ActionButton onClick={row.action?.onClick} icon={row.action?.icon} />
         </StyledRowBlock>
-      }
+      )}
       {row.hoverElementAfter && (
         <HoverRowBlock onClick={e => e.stopPropagation()}>
           {row.hoverElementAfter}
@@ -120,7 +122,7 @@ export const SubmenuRow: FC<RowViewProps> = ({
 export const SubmenuTitle: FC<TitleProps & { testAttributes: TestingAttributes }> = (props) => (
   <div className={styles.title} {...props.testAttributes}>
     <Text className={styles.titleText} type="BTR4">
-      <TextReducer>{props.text}</TextReducer>
+      {typeof props.text ==='string' ? <TextReducer>{props.text}</TextReducer> : props.text}
     </Text>
     {props.action && <ActionButton icon={props.action?.icon} onClick={props.action?.onClick} />}
   </div>

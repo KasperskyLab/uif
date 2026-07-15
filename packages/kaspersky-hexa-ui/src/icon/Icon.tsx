@@ -1,38 +1,19 @@
 import { Context } from '@helpers/context'
+import { getIconPackFromWindows } from '@helpers/getIconPackFrowWindows'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { shouldForwardProp } from '@helpers/shouldForwardProp'
 import { wrapperSpanCss } from '@src/icon/IconCss'
 import React, { ForwardedRef, forwardRef, useContext } from 'react'
 import styled from 'styled-components'
 
-import Icons12Pack from '@kaspersky/hexa-ui-icons/12'
-import Icons16Pack, { StatusQuestionOutline } from '@kaspersky/hexa-ui-icons/16'
-import Icons24Pack from '@kaspersky/hexa-ui-icons/24'
-import Icons32Pack from '@kaspersky/hexa-ui-icons/32'
-import Icons48Pack from '@kaspersky/hexa-ui-icons/48'
-import Icons8Pack from '@kaspersky/hexa-ui-icons/8'
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import { iconsMapper, MappedObjectInterface } from './iconsMapper'
 import { DeprecatedIconSizes, IconPackSizes, IconProps } from './types'
 import { useThemedIcon } from './useThemedIcon'
 
-const AllIcons = {
-  Icons8Pack,
-  Icons12Pack,
-  Icons16Pack,
-  Icons24Pack,
-  Icons32Pack,
-  Icons48Pack
-}
-
-export type IconsPackageNames = keyof typeof Icons8Pack
-  | keyof typeof Icons12Pack
-  | keyof typeof Icons16Pack
-  | keyof typeof Icons24Pack
-  | keyof typeof Icons48Pack
-
 /**
- * @deprecated Use IconResolver instead
+ * @deprecated Use Icon as ReactNode instead
  */
 export const Icon = (rawProps: IconProps): JSX.Element => {
   const themedProps = useThemedIcon(rawProps)
@@ -44,10 +25,13 @@ export const StyledSpan = styled.span.withConfig({ shouldForwardProp })`
   ${wrapperSpanCss}
 `
 
-function getPackageIcon (size: DeprecatedIconSizes | IconPackSizes, key: IconsPackageNames) {
+function getPackageIcon (size: DeprecatedIconSizes | IconPackSizes, key: string) {
   let IconByKey
   let packageSize: IconPackSizes
-  if (size as IconsPackageNames) {
+
+  if (typeof size === 'number') {
+    IconByKey = getIconPackFromWindows(size)?.[key]
+  } else {
     switch (size) {
       case 'extraSmall':
         packageSize = 8
@@ -64,14 +48,13 @@ function getPackageIcon (size: DeprecatedIconSizes | IconPackSizes, key: IconsPa
       default:
         packageSize = 24
     }
-    IconByKey = (AllIcons?.[`Icons${packageSize}Pack`] as any)?.[key]
+
+    IconByKey = getIconPackFromWindows(packageSize)?.[key]
+
     // extraSmall size mapped in 2 sizes 12 and 8
     if (!IconByKey && size === 'extraSmall') {
-      packageSize = 12
-      IconByKey = (AllIcons?.[`Icons${packageSize}Pack`] as any)?.[key]
+      IconByKey = getIconPackFromWindows(12)?.[key]
     }
-  } else {
-    IconByKey = (AllIcons?.[`Icons${size as IconPackSizes}Pack`] as any)?.[key]
   }
   return IconByKey ?? undefined
 }
@@ -100,8 +83,7 @@ const IconView = forwardRef<HTMLSpanElement, IconProps>((props: IconProps, ref: 
       colorFromMapper = mappedIcon?.color
     } else {
       console.warn(`@kaspersky/hexa-ui-icons: did not found ${props.name} in size ${props.size}`)
-      IconToDisplay = StatusQuestionOutline
-      colorFromMapper = 'pink'
+      IconToDisplay = Placeholder
     }
   }
   return (
@@ -118,7 +100,7 @@ const IconView = forwardRef<HTMLSpanElement, IconProps>((props: IconProps, ref: 
     >
       {TagName
         ? <TagName size={size} name={name} />
-        : <IconToDisplay color={colorFromMapper ?? iconColor ?? color ?? themedColor}/>
+        : <IconToDisplay color={colorFromMapper ?? iconColor ?? color ?? themedColor} />
       }
     </StyledSpan>
   )

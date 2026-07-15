@@ -4,7 +4,8 @@ import { ChevronIcon, ClearIcon, EmptyData, SearchIcon } from '@src/select/helpe
 import { maxTagPlaceholder } from '@src/select/Select'
 import { Tag } from '@src/tag'
 import { TreeNodeCheckIcon } from '@src/tree/Tree'
-import { TreeNodeProps, TreeSelect as TreeSelectAntd, TreeSelectProps as TreeSelectAntdProps } from 'antd'
+import TreeSelectAntd from 'antd/es/tree-select'
+import type { TreeNodeProps, TreeSelectProps as TreeSelectAntdProps } from 'antd'
 import cn from 'classnames'
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -51,11 +52,11 @@ const TreeSelectComponent: FC<TreeSelectProps> = (props: TreeSelectProps) => {
   )
   const [search, setSearch] = useState<string>(searchValue ?? '')
 
-  useEffect(()=>{
+  useEffect(() => {
     setSearch(searchValue ?? '')
-  },[searchValue])
+  }, [searchValue])
 
-  const handleSearchChange = (query: string) =>{
+  const handleSearchChange = (query: string) => {
     setSearch(query)
     props.onSearch?.(query)
   }
@@ -77,8 +78,8 @@ const TreeSelectComponent: FC<TreeSelectProps> = (props: TreeSelectProps) => {
       notFoundContent={<EmptyData />}
       suffixIcon={
         props.showSearch
-          ? (!search ? <SearchIcon/> : null)
-          : <ChevronIcon/>
+          ? (!search ? <SearchIcon /> : null)
+          : <ChevronIcon />
       }
       switcherIcon={<ArrowDownSolid />}
       tagRender={props => <Tag {...props} disabled={disabled} />}

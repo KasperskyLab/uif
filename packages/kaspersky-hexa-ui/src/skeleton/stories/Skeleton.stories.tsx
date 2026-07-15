@@ -75,7 +75,7 @@ export const Size = {
           <SkeletonComponent
             {...rest}
             size={size}
-            style={ size === 'flex'
+            style={size === 'flex'
               ? { height: 120, width: 640 }
               : {}
             }

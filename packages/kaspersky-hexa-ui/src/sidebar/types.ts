@@ -1,6 +1,6 @@
 import { Size, Theme } from '@design-system/types'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
-import { DrawerProps } from 'antd'
+import type { DrawerProps } from 'antd'
 import { KeyboardEvent, MouseEvent, PropsWithChildren, ReactNode } from 'react'
 
 export type SidebarSize = `${Exclude<Size, Size.ExtraLarge>}`
@@ -42,6 +42,8 @@ export type SidebarProps = PropsWithChildren<{
   footerLeft?: ReactNode,
   /** The footerLeft of the Sidebar */
   footerRight?: ReactNode,
+  /** The node where Sidebar will be put  */
+  getContainer?: DrawerProps['getContainer'],
   /** Whether to show mask or not */
   mask?: boolean,
   /** The title of the Sidebar */
@@ -73,7 +75,11 @@ export type SidebarProps = PropsWithChildren<{
   /** Number of not truncated lines, see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/line-clamp */
   titleLineClamp?: number,
   /** Remove padding from content */
-  noPaddingContent?: boolean
+  noPaddingContent?: boolean,
+  /** Specific testId for close button, is needed for autotests */
+  closeTestId?: string,
+  /** Callback after the animation ends when switching drawers */
+  afterVisibleChange?: DrawerProps['afterVisibleChange']
 }> & SidebarThemeProps & TestingProps
 
 export type SidebarViewProps = ToViewProps<SidebarProps, SidebarCssConfig, SidebarThemeProps>

@@ -47,7 +47,7 @@ export const modal = ({ colors, effects }: ComponentThemeContext): Record<ModalM
 
 export const modalSize: Record<ModalSize, ModalSizeConfig> = {
   [Size.Small]: {
-    width: '560px',
+    width: 'var(--modal-minwidth--desktop)',
     top: '120px'
   },
   [Size.Large]: {

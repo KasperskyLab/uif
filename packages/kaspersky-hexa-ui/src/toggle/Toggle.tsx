@@ -1,8 +1,15 @@
 import { AdditionalContent } from '@helpers/components/AdditionalContent'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { FormLabel } from '@src/form-label'
-import { Switch as SwitchAntd } from 'antd'
-import React, { Children, cloneElement, FC, isValidElement, useEffect, useState } from 'react'
+import SwitchAntd from 'antd/es/switch'
+import React, {
+  Children,
+  cloneElement,
+  FC,
+  isValidElement,
+  useEffect,
+  useState
+} from 'react'
 import styled from 'styled-components'
 
 import { toggleCss, ToggleWrapper } from './toggleCss'
@@ -60,22 +67,22 @@ const ToggleView: FC<ToggleViewProps> = ({
           {...rest}
         />
         {typeof children === 'string'
-          ? <FormLabel
-              onClick={ () => !disabled && !readonly && toggleValue(!isChecked, new MouseEvent('click')) }
-              className="toggle-label"
-              disabled={disabled}
-              required={required}
-              tooltip={tooltip}
-            >
-              {children}
-            </FormLabel>
-          : Children
-            .map(children, child =>
-              isValidElement(child)
-                // @ts-ignore
-                ? cloneElement(child, { onClick: () => !disabled && toggleValue(!isChecked, new MouseEvent('click')) })
-                : child
+          ? (
+              <FormLabel
+                onClick={() => !disabled && !readonly && toggleValue(!isChecked, new MouseEvent('click'))}
+                className="toggle-label"
+                disabled={disabled}
+                required={required}
+                tooltip={tooltip}
+              >
+                {children}
+              </FormLabel>
             )
+          : Children
+              .map(children, child =>
+                isValidElement(child)
+                  ? cloneElement<any>(child, { onClick: () => !disabled && toggleValue(!isChecked, new MouseEvent('click')) })
+                  : child)
         }
       </ToggleWrapper>
       <AdditionalContent

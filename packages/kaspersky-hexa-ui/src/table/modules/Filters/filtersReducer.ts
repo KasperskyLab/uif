@@ -2,8 +2,8 @@ import { TableRecord } from '../../types'
 
 import { FilterApi } from './FilterApi'
 
-export type FilterState = {
-  filterApi: FilterApi | null
+export type FilterState<T extends TableRecord = TableRecord> = {
+  filterApi: FilterApi<T> | null
   filteredRows?: any[]
   init: {
     externalFiltersInit?: boolean,
@@ -18,17 +18,17 @@ export const SET_FILTERED_ROWS = 'SET_FILTERED_ROWS' as const
 export const INIT_EXTERNAL_FILTERS = 'INIT_EXTERNAL_FILTERS' as const
 export const INIT_ACTIVE_FILTERS = 'INIT_ACTIVE_FILTERS' as const
 export const INIT_SAVED_FILTERS = 'INIT_SAVED_FILTERS' as const
-export const INIT_ALL = 'INIT_ALL' 
+export const INIT_ALL = 'INIT_ALL'
 
-type FilterAction = 
-  | { type: typeof SET_FILTER_API, api: FilterApi }
-  | { type: typeof SET_FILTERED_ROWS, rows?: TableRecord[] }
-  | { type: typeof INIT_EXTERNAL_FILTERS, value: boolean }
-  | { type: typeof INIT_ACTIVE_FILTERS, value: boolean }
-  | { type: typeof INIT_SAVED_FILTERS, value: boolean }
-  | { type: typeof INIT_ALL }
+type FilterAction<T extends TableRecord = TableRecord> =
+  { type: typeof SET_FILTER_API, api: FilterApi<T> } |
+  { type: typeof SET_FILTERED_ROWS, rows?: T[] } |
+  { type: typeof INIT_EXTERNAL_FILTERS, value: boolean } |
+  { type: typeof INIT_ACTIVE_FILTERS, value: boolean } |
+  { type: typeof INIT_SAVED_FILTERS, value: boolean } |
+  { type: typeof INIT_ALL }
 
-export function filterReducer (state: FilterState, action: FilterAction): FilterState {
+export function filterReducer<T extends TableRecord = TableRecord> (state: FilterState<T>, action: FilterAction<T>): FilterState<T> {
   switch (action.type) {
     case SET_FILTER_API:
       return { ...state, filterApi: action.api }

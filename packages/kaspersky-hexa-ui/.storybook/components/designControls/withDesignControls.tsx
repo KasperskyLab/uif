@@ -1,39 +1,15 @@
-import { Components, designControlsConfig } from '@helpers/resolveDesignControls'
-import { Meta } from '@storybook/react'
-import merge from 'lodash/merge'
+import { Meta } from '@storybook/react-vite'
 
 interface withDesignControlsArguments<ComponentProps> {
-  componentName: Components['type'],
-  meta: Meta<ComponentProps>,
+  componentName: string,
+  meta: Meta<ComponentProps>
   designArgs?: Partial<Record<keyof ComponentProps, unknown>>
 }
 
 export function withDesignControls<ComponentProps> ({
-  componentName,
-  meta,
-  designArgs = {}
+  meta
 }: withDesignControlsArguments<ComponentProps>): Meta<ComponentProps> {
-  const showDesignControls = localStorage.getItem('showDesignControls') === 'true'
-
-  if (showDesignControls) {
-    const designControls = designControlsConfig[componentName]
-
-    const keys = Object.keys(designControls)
-
-    return {
-      ...meta,
-      argTypes: merge(meta.argTypes || {}, designControls),
-      args: sortObjectByKeyOrder(keys, merge(meta.args || {}, designArgs)),
-      parameters: {
-        ...meta.parameters,
-        controls: {
-          ...meta.parameters?.controls,
-          include: keys,
-          sort: 'none'
-        }
-      }
-    }
-  }
+  const declaredOrder = Object.keys(meta.argTypes || {})
 
   return {
     ...meta,
@@ -41,19 +17,25 @@ export function withDesignControls<ComponentProps> ({
       ...meta.parameters,
       controls: {
         ...meta.parameters?.controls,
-        sort: 'alpha'
+        sort: buildControlsSort(declaredOrder)
       }
     }
   }
 }
 
-function sortObjectByKeyOrder<T extends Record<string, unknown>> (order: string[], obj: T): T {
-  const otherKeys = Object.keys(obj).filter(x => !order.includes(x))
-  const out: any = {}
+function buildControlsSort (order: string[]) {
+  const orderIndex = new Map(order.map((key, index) => [key, index]))
 
-  for (const key of [...order, ...otherKeys]) {
-    out[key] = obj[key]
+  return (a: any, b: any) => {
+    const nameA = String(a?.[0] ?? '')
+    const nameB = String(b?.[0] ?? '')
+    const rankA = orderIndex.get(nameA) ?? Number.MAX_SAFE_INTEGER
+    const rankB = orderIndex.get(nameB) ?? Number.MAX_SAFE_INTEGER
+
+    if (rankA !== rankB) {
+      return rankA - rankB
+    }
+
+    return nameA.localeCompare(nameB)
   }
-
-  return out as T
 }

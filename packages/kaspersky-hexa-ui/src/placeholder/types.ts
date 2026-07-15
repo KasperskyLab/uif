@@ -1,7 +1,9 @@
 import { Theme } from '@design-system/types'
+import { Gap } from '@helpers/getGapStyle'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 import { ButtonProps } from '@src/button'
 import { LinkProps } from '@src/link'
+import { ReactNode } from 'react'
 
 export const placeholderModes = ['base', 'filled'] as const
 
@@ -22,8 +24,8 @@ export type PlaceholderColorConfig = {
 export type PlaceholderSizeConfig = {
   imageSize: number,
   padding: number,
-  gap: number,
-  titleGap: number
+  gap: Gap,
+  titleGap: Gap
 }
 
 export type PlaceholderCssConfig = PlaceholderColorConfig & PlaceholderSizeConfig
@@ -37,19 +39,36 @@ export type PlaceholderThemeProps = {
   mode?: PlaceholderMode
 }
 
-export const placeholderImageVariants = ['error403', 'error404', 'error503', 'noData', 'success', 'failed', 'warning', 'notChecked'] as const
+export const placeholderImageVariants = [
+  'error403',
+  'error404',
+  'error503',
+  'noData',
+  'success',
+  'failed',
+  'warning',
+  'notChecked',
+  'noLicense',
+  'notFound',
+  'configurationExport',
+  'preparing',
+  'noAccess',
+  'deleting',
+  'unavailable',
+  'onMaintenance'
+] as const
 
 export type PlaceholderImageVariant = typeof placeholderImageVariants[number]
 
 export type PlaceholderProps = {
   /** Title */
-  title: string,
+  title?: string,
   /** Description text */
-  description?: string,
+  description?: ReactNode,
   /** Image */
   image?: PlaceholderImageVariant,
   /** Action buttons */
-  actionButtons?: ButtonProps[],
+  actionButtons?: ButtonProps[] | React.ReactNode,
   /** Action links */
   actionLinks?: LinkProps[],
   /** Description Text alignment */

@@ -1,20 +1,18 @@
 import { AdditionalContent } from '@helpers/components/AdditionalContent'
 import { usePopupConfig } from '@helpers/components/PopupConfigProvider'
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useId } from '@helpers/hooks/useId'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { FormLabel } from '@src/form-label'
-import { Radio as RadioAntd } from 'antd'
+import RadioAntd from 'antd/es/radio'
 import cn from 'classnames'
 import React, { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { radioCss } from './radioCss'
-import { RadioOption, RadioProps, RadioViewProps } from './types'
-import { useThemedRadio } from './useThemedRadio'
+import { RadioOption, RadioProps } from './types'
 
-const StyledRadioGroup = styled(RadioAntd.Group).withConfig({
-  shouldForwardProp: prop => !['cssConfig'].includes(prop)
-})`${radioCss}`
+const StyledRadioGroup = styled(RadioAntd.Group)`${radioCss}`
 
 export const Radio: FC<RadioProps> = (rawProps: RadioProps) => {
   try {
@@ -22,30 +20,25 @@ export const Radio: FC<RadioProps> = (rawProps: RadioProps) => {
   } catch (error) {
     console.error(error)
   }
-  const props: RadioViewProps = useThemedRadio(rawProps)
-  const { testAttributes } = useTestAttribute(props)
-  return <RadioView role="radioList" testAttributes={testAttributes} {...props}/>
-}
 
-export const RadioView: FC<RadioViewProps> = ({
-  vertical,
-  invalid,
-  disabled,
-  readonly,
-  options,
-  value,
-  className,
-  testId,
-  theme,
-  testAttributes,
-  getPopupContainer,
-  ...rest
-}: RadioViewProps) => {
+  const {
+    vertical,
+    invalid,
+    disabled,
+    readonly,
+    options,
+    value,
+    className,
+    theme,
+    testAttributes,
+    getPopupContainer,
+    ...rest
+  } = useTestAttribute(rawProps)
   const id = useId()
-  const newClassName = useMemo(() => cn(className, {
+  const newClassName = useMemo(() => cn(getClassNameWithTheme(className, theme), {
     'kl-radio-invalid': invalid,
     'ant-radio-vertical': vertical
-  }), [vertical, invalid, className])
+  }), [vertical, invalid, className, theme])
 
   const config = usePopupConfig()
 
@@ -54,6 +47,7 @@ export const RadioView: FC<RadioViewProps> = ({
       className={newClassName}
       value={value}
       disabled={disabled || readonly}
+      role="radioList"
       {...testAttributes}
       {...rest}
     >
@@ -65,7 +59,7 @@ export const RadioView: FC<RadioViewProps> = ({
             <RadioAntd
               id={optionId}
               value={option.value}
-              data-testid={`${testId}-${option.value}`}
+              data-testid={`${rawProps.testId}-${option.value}`}
               disabled={option.disabled || option.readonly}
               className={cn(className, {
                 'kl-radio-readonly': (option.readonly && !disabled) || readonly,
@@ -73,21 +67,23 @@ export const RadioView: FC<RadioViewProps> = ({
               })}
             >
               {typeof option.label === 'string'
-                ? <FormLabel
-                    testId={`${testId}-${option.value}-label`}
-                    required={option.required}
-                    tooltip={option.tooltip}
-                    disabled={option.disabled}
-                    theme={theme}
-                    htmlFor={optionId}
-                    getPopupContainer={
-                      getPopupContainer ??
+                ? (
+                    <FormLabel
+                      testId={`${rawProps.testId}-${option.value}-label`}
+                      required={option.required}
+                      tooltip={option.tooltip}
+                      disabled={option.disabled}
+                      theme={theme}
+                      htmlFor={optionId}
+                      getPopupContainer={
+                        getPopupContainer ??
                       config.getPopupContainer ??
                       (triggerNode => config.usePortal ? document.body : triggerNode.parentElement!)
-                    }
-                  >
-                    {option.label}
-                  </FormLabel>
+                      }
+                    >
+                      {option.label}
+                    </FormLabel>
+                  )
                 : option.label
               }
             </RadioAntd>

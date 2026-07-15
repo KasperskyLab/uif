@@ -5,7 +5,13 @@ import classnames from 'classnames'
 import React, { ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { Lock2, StatusInfoOutline, StatusWarningOutline, StatusWarningSolid, Unlock2 } from '@kaspersky/hexa-ui-icons/16'
+import {
+  Lock2,
+  StatusInfoOutline,
+  StatusWarningOutline,
+  StatusWarningSolid,
+  Unlock2
+} from '@kaspersky/hexa-ui-icons/16'
 
 import { ActionButton } from '../action-button'
 import { Popover } from '../popover'
@@ -23,11 +29,11 @@ const StyledContainer = styled.div.withConfig({ shouldForwardProp })`
 
 const LockIcon = ({ isLockStatusNotDefined, isLockClosed }: ILockIconProps) => {
   if (isLockStatusNotDefined) {
-    return <StatusWarningOutline className="lock-group-control-icon"/>
+    return <StatusWarningOutline className="lock-group-control-icon" />
   }
   return isLockClosed
-    ? <Lock2 className="lock-group-control-icon"/>
-    : <Unlock2 className="lock-group-control-icon"/>
+    ? <Lock2 className="lock-group-control-icon" />
+    : <Unlock2 className="lock-group-control-icon" />
 }
 
 const statusIconMap: Record<StatusIcon, React.FC> = {
@@ -53,6 +59,7 @@ export const LockGroup = (rawProps: LockGroupProps & React.ComponentProps<typeof
     title,
     titleLevel = 'H6',
     titleTags = [],
+    titleElementAfter,
     isChildrenOutlined = false,
     testAttributes,
     statusIcon,
@@ -83,67 +90,72 @@ export const LockGroup = (rawProps: LockGroupProps & React.ComponentProps<typeof
 
   const StatusIconComponent = statusIcon ? statusIconMap[statusIcon] : StatusWarningSolid
 
-  return <StyledContainer
-    {...testAttributes}
-    {...restProps}
-  >
-    <div className={lockGroupClass} {...generateTestId('lock-group-')}>
-      {!isStandalone && (
-        <div className="lock-group-caption">
-          {title && (
-            <div className="lock-group-caption__title">
-              <Text {...generateTestId('lock-group-title-')} type={titleLevel}>{title}</Text>
-            </div>
-          )}
-          {titleTags && titleTags.length > 0 && (
-            <div className="lock-group-caption__tags">
-              {titleTags.map((titleTag, index) => (
-                <Tag key={index} mode="neutral" outlined>{titleTag}</Tag>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-      {!isHideControl && (
-        <div className="lock-group-control" {...generateTestId('lock-group-control-')}>
-          {statusIcon && <Tooltip text={statusTooltip}>
-            <StatusIconComponent color={`var(--icon--status--status${statusIcon})`} className="lock-group-status-icon" />
-          </Tooltip>}
-          {!isHideLock && <LockIcon isLockClosed={isLockClosed} isLockStatusNotDefined={isLockStatusNotDefined} />}
-          {statusText && (
-            <Text
-              klId = {rawProps.klId && 'lock-group-status-text-' + rawProps.klId}
-              testId = {rawProps.testId && 'lock-group-status-text-' + rawProps.testId}
-              type="BTR3"
-              className="lock-group-control-label">
-              {statusText}
-            </Text>
-          )}
-          <Toggle
-            klId = {rawProps.klId && 'lock-group-toggle-' + rawProps.klId}
-            testId = {rawProps.testId && 'lock-group-toggle-' + rawProps.testId}
-            disabled={isLockDisabled || isLockStatusNotDefined}
-            onChange={onLockChange}
-            checked={isLockClosed}/>
-          {informationText && (
-            <Popover placement="bottomLeft" content={informationText}>
-              <ActionButton interactive={false} icon={<StatusInfoOutline className="information-text-icon" />} />
-            </Popover>
-          )}
-        </div>
-      )}
-    </div>
-    {(!isStandalone && !!children) && (
-      <div className={lockGroupChildrenClass}>
-        {isGroupDisabled
-          ? React.Children.map(children, (child) => {
-            return React.isValidElement(child)
-            // @ts-ignore
-              ? React.cloneElement(child, { disabled: true })
-              : child
-          })
-          : children}
+  return (
+    <StyledContainer
+      {...testAttributes}
+      {...restProps}
+    >
+      <div className={lockGroupClass} {...generateTestId('lock-group-')}>
+        {!isStandalone && (
+          <div className="lock-group-caption">
+            {title && (
+              <div className="lock-group-caption__title">
+                <Text {...generateTestId('lock-group-title-')} type={titleLevel}>{title}</Text>
+              </div>
+            )}
+            {titleTags && titleTags.length > 0 && (
+              <div className="lock-group-caption__tags">
+                {titleTags.map((titleTag, index) => (
+                  <Tag key={index} mode="neutral" outlined>{titleTag}</Tag>
+                ))}
+              </div>
+            )}
+            {titleElementAfter}
+          </div>
+        )}
+        {!isHideControl && (
+          <div className="lock-group-control" {...generateTestId('lock-group-control-')}>
+            {statusIcon && (
+              <Tooltip text={statusTooltip}>
+                <StatusIconComponent color={`var(--icon--status--status${statusIcon})`} className="lock-group-status-icon" />
+              </Tooltip>
+            )}
+            {!isHideLock && <LockIcon isLockClosed={isLockClosed} isLockStatusNotDefined={isLockStatusNotDefined} />}
+            {statusText && (
+              <Text
+                klId = {rawProps.klId && 'lock-group-status-text-' + rawProps.klId}
+                testId = {rawProps.testId && 'lock-group-status-text-' + rawProps.testId}
+                type="BTR3"
+                className="lock-group-control-label">
+                {statusText}
+              </Text>
+            )}
+            <Toggle
+              klId = {rawProps.klId && 'lock-group-toggle-' + rawProps.klId}
+              testId = {rawProps.testId && 'lock-group-toggle-' + rawProps.testId}
+              disabled={isLockDisabled || isLockStatusNotDefined}
+              onChange={onLockChange}
+              checked={isLockClosed} />
+            {informationText && (
+              <Popover placement="bottomLeft" content={informationText}>
+                <ActionButton interactive={false} icon={<StatusInfoOutline className="information-text-icon" />} />
+              </Popover>
+            )}
+          </div>
+        )}
       </div>
-    )}
-  </StyledContainer>
+      {(!isStandalone && !!children) && (
+        <div className={lockGroupChildrenClass}>
+          {isGroupDisabled
+            ? React.Children.map(children, (child) => {
+                return React.isValidElement(child)
+                  // @ts-expect-error некорректные типы у ReactElements
+                  ? React.cloneElement(child, { disabled: true })
+                  : child
+              })
+            : children}
+        </div>
+      )}
+    </StyledContainer>
+  )
 }

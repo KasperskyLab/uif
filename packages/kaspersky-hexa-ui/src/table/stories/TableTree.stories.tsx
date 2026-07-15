@@ -7,6 +7,7 @@ import { Meta } from '@storybook/react'
 import React, { useEffect, useState } from 'react'
 
 import { ITableProps, Table } from '../index'
+import { modifyColumns } from '../test-utils/helpers'
 
 import {
   basicArgTypes,
@@ -48,9 +49,9 @@ const meta: Meta<ITableProps> = {
     dataSource: patchKeys(basicTreeDataSource),
     columns,
     pagination: {
-      pageSize: 5,
       showSizeChanger: true
-    }
+    },
+    borderedStyle: false
   },
   argTypes: {
     columns: basicArgTypes.columns,
@@ -71,10 +72,25 @@ export default meta
 
 export const Tree: Story = {
   render: (args) => {
-    return <>
-      <TableTreeInfo />
-      <BasicTableStory {...args} />
-    </>
+    return (
+      <>
+        <TableTreeInfo />
+        <BasicTableStory {...args} />
+      </>
+    )
+  }
+}
+
+export const TreeWithBuiltInRowSelection: Story = {
+  args: {
+    rowSelection: {
+      builtInRowSelection: true,
+      processSelection: console.debug
+    },
+    columns: modifyColumns(columns, 'name', {
+      render: (value, row) => <div style={{ width: '100%' }}>{value}</div>,
+      expandableText: true
+    })
   }
 }
 

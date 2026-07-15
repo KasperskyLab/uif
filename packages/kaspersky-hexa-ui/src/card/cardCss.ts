@@ -1,11 +1,19 @@
 import { getTextSizes } from '@design-system/tokens'
 import { getFromProps } from '@helpers/getFromProps'
 import { ActionButton } from '@src/action-button'
+import { scrollbarCss } from '@src/scrollbar/browser/scrollbarCss'
+import { ScrollbarCssConfig } from '@src/scrollbar/types'
 import styled, { css } from 'styled-components'
 
 import { textLevels } from '@kaspersky/hexa-ui-core/typography/js'
 
-import { CardCssConfig } from './types'
+import { CardCssConfig, CardSize } from './types'
+
+type ScrollableContentProps = {
+  $isScrollable: boolean
+  cssConfig: ScrollbarCssConfig
+  $size: CardSize
+}
 
 const fromProps = getFromProps<CardCssConfig>()
 
@@ -45,6 +53,22 @@ export const CardActions = styled.div`
   }
 `
 
+export const ScrollableContent = styled.div.withConfig({
+  shouldForwardProp: (prop) => !['$isScrollable', 'cssConfig'].includes(prop)
+})<ScrollableContentProps>`
+  ${({ $isScrollable }) => $isScrollable && css`
+    overflow: auto;
+  `}
+
+  ${({ $isScrollable, cssConfig, $size }) =>
+    $isScrollable &&
+    cssConfig &&
+    css`
+      ${scrollbarCss}
+      margin-inline-end: ${$size === 'medium' ? '-15px' : '-19px'};
+    `}
+`
+
 export const cardCss = css<{
   cssConfig: CardCssConfig,
   draggable?: boolean,
@@ -57,6 +81,16 @@ export const cardCss = css<{
   background: ${fromProps('enabled.background')};
   color: ${fromProps('enabled.color')};
   border: 1px solid ${fromProps('enabled.border')};
+  display: flex;
+  gap: var(--spacing--gap_grouped);
+  flex-direction: column;
+  
+  &.hexa-ui-card-scrollable {
+    display: flex;
+    flex: 1 1 auto;
+    max-height: var(--max-height);
+    flex-direction: column;
+  }
 
   ${(props) => props.draggable && 'margin-left: 16px;'}
 

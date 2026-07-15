@@ -1,13 +1,18 @@
 import get from 'lodash/get'
 
-import { CustomSorter, DefaultSorter, TableRecord } from '../../types'
+import { CustomSorter, TableRecord } from '../../types'
 
 type TDate = {
   type: string,
   value: string
 }
 
-export const defaultSortFunction: DefaultSorter = <T extends Record<string, unknown | any>>(rows: T[], field: keyof T, isAsc: boolean, attribute: string): T[] => {
+export const defaultSortFunction = <T extends TableRecord = TableRecord>(
+  rows: T[],
+  field: keyof T,
+  isAsc: boolean,
+  attribute: string
+): T[] => {
   return [...(rows).sort((rowA, rowB) => {
     let parseValue = (v: any) => (typeof v === 'string') ? v.toUpperCase() : v
 
@@ -32,6 +37,6 @@ export const defaultSortFunction: DefaultSorter = <T extends Record<string, unkn
   })]
 }
 
-export const customSortFunctionWrapper = (data: TableRecord[], sorter: CustomSorter, isAsc: boolean): TableRecord[] => {
+export const customSortFunctionWrapper = <T extends TableRecord = TableRecord>(data: T[], sorter: CustomSorter<T>, isAsc: boolean): T[] => {
   return [...data.sort((a, b) => sorter(a, b, isAsc))]
 }

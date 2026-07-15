@@ -1,4 +1,6 @@
 import { Button } from '@src/button'
+import { Text } from '@src/typography'
+import { TextReducer } from '@helpers/index'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -6,19 +8,28 @@ import { listCss } from './pickerCss'
 import { CalendarProps, RangePickerProps } from './types'
 
 const StyledList = styled.div`${listCss}`
+const MAX_PRESETS = 9
+
+const PresetItem = ({ title }: { title: string }) => (
+  <Button size="small" mode="tertiary">
+    <TextReducer tooltip={title}>
+      <Text type="BTR4">
+        {title}
+      </Text>
+    </TextReducer>
+  </Button>
+)
 
 export const PresetsRangePicker: React.FC<Pick<RangePickerProps, 'presets' | 'onChange'>> = ({
   presets,
-  onChange,
-  children
+  onChange
 }) => (
   <StyledList>
-    {presets?.map(({ title, value }, index) => (
+    {presets?.slice(0, MAX_PRESETS).map(({ title, value }, index) => (
       <li key={index} onClick={() => onChange?.(value)}>
-        {typeof title === 'string' ? <Button mode="tertiary">{title}</Button> : title}
+        {typeof title === 'string' ? <PresetItem title={title} /> : title}
       </li>
     ))}
-    <div>{children}</div>
   </StyledList>
 )
 
@@ -27,10 +38,10 @@ export const PresetsCalendar: React.FC<Pick<CalendarProps, 'presets' | 'onChange
   onChange
 }) => (
   <StyledList>
-    {presets?.map(({ title, value }, index) =>
+    {presets?.slice(0, MAX_PRESETS).map(({ title, value }, index) => (
       <li key={index} onClick={() => onChange?.(new Date(value), value.toString())}>
-        {typeof title === 'string' ? <Button mode="tertiary" size="small" >{title}</Button> : title}
+        {typeof title === 'string' ? <PresetItem title={title} /> : title}
       </li>
-    )}
+    ))}
   </StyledList>
 )

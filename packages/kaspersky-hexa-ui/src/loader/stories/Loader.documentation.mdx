@@ -1,0 +1,94 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Loader } from '../Loader'
+import * as LoaderStories from '../Loader.stories'
+import { loaderDesignPropPresentation } from './Loader.design.properties'
+
+<Meta of={LoaderStories} name="Loader Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="Loader"
+  description='**Loader** — анимированный индикатор загрузки с опциональной текстовой подписью"'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**Loader** показывает, что операция или контент ещё загружается: анимированный спиннер и при необходимости подпись (**tip**). Настраиваются **mode**, **size**, **spinning**, **centered** и **delay**."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Цветовой режим индикатора. Доступные значения: `default`, `inverted`. По умолчанию — `default`. Режим `inverted` используйте на тёмном или инвертированном фоне."
+      code={`<Loader mode="default" />
+<Loader mode="inverted" />`}
+    />
+
+    <DocExampleBlock
+      title="size"
+      description="Размер спиннера и типографики подписи. Доступные значения: `extraSmall`, `small`, `medium`, `large`, `extraLarge`. По умолчанию — `small`."
+      code={`<Loader size="extraSmall" />
+<Loader size="small" />
+<Loader size="medium" />
+<Loader size="large" />
+<Loader size="extraLarge" />`}
+    />
+
+    <DocExampleBlock
+      title="spinning"
+      description="Управляет видимостью индикатора. Доступные значения: `true`, `false`. По умолчанию — `true`. При `false` спиннер скрыт."
+      code={`<Loader spinning />
+<Loader spinning={false} />`}
+    />
+
+    <DocExampleBlock
+      title="centered"
+      description="Центрирует индикатор внутри родительского контейнера. Доступные значения: `true`, `false`. По умолчанию — `false`. Родителю нужна заданная высота или область с позиционированием."
+      code={`<div style={{ height: 200, position: 'relative', border: '1px dashed #ccc' }}>
+  <Loader centered />
+</div>`}
+    />
+
+    <DocExampleBlock
+      title="tip"
+      description="Текстовая подпись рядом с индикатором. Необязательный `ReactNode`. Без **tip** отображается только спиннер."
+      code='<Loader tip="Loading..." />'
+    />
+
+    <DocExampleBlock
+      title="delay"
+      description="Задержка в миллисекундах перед показом индикатора — снижает мигание при быстрых операциях. Необязательное число; без **delay** индикатор появляется сразу."
+      code='<Loader delay={500} tip="Loading..." />'
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**Loader** сообщает пользователю, что данные или процесс ещё не готовы: загрузка страницы или секции, выполнение запроса, инициализация приложения. Размещайте индикатор в области, содержимое которой временно недоступно, или по центру экрана и панели при полной блокировке контента.
+
+Для загрузки внутри кнопки или поля ввода используйте встроенное состояние loading у **Button** и других интерактивных компонентов, а не отдельный **Loader**. Для компактной точечной индикации статуса без блокировки области — **Indicator**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(loaderDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={LoaderStories} />
+    <AutodocArgsTable components={Loader} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

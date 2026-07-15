@@ -25,6 +25,7 @@ export const Search: FC<SearchProps> = (props: SearchProps) => {
     suffix,
     searchIconTestId,
     testId,
+    showClearButton = true,
     klId,
     ...rest
   } = props
@@ -42,25 +43,17 @@ export const Search: FC<SearchProps> = (props: SearchProps) => {
           componentId: 'icon-search'
         }
 
-    return (
-      value && value.length
-        ? <ActionButton
-            testId="search-clear"
-            klId="clear"
-            onClick={onClearClick}
-            mode="filled"
-          />
-        : !prefix && (suffix || <IconSearch {...iconSearchTestProps} />)
-    )
-  }, [value, prefix, suffix, onClearClick])
+    return !prefix && (suffix || <IconSearch {...iconSearchTestProps} />)
+  }, [prefix, suffix, searchIconTestId])
 
   const SearchTextbox = (
     <StyledTextbox
       placeholder={localizedPlaceholder}
       value={value}
       prefix={prefix}
-      allowClear={false}
       suffix={newSuffix}
+      showClearButton={true}
+      onClearClick={onClearClick}
       {...testAttributes}
       {...rest}
     />
@@ -68,14 +61,16 @@ export const Search: FC<SearchProps> = (props: SearchProps) => {
 
   return (
     children || dropdownOverlay
-      ? <Dropdown
-          klId={`${klId}-dropdown`}
-          testId={`${testId}-dropdown'`}
-          overlay={children as ReactElement || dropdownOverlay}
-          trigger={['click']}
-        >
-          {SearchTextbox}
-        </Dropdown>
+      ? (
+          <Dropdown
+            klId={`${klId}-dropdown`}
+            testId={`${testId}-dropdown'`}
+            overlay={children as ReactElement || dropdownOverlay}
+            trigger={['click']}
+          >
+            {SearchTextbox}
+          </Dropdown>
+        )
       : SearchTextbox
   )
 }

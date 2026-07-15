@@ -11,13 +11,13 @@ const AnchorLinkView: FC<AnchorLinkViewProps> = (props: AnchorLinkViewProps) => 
 
   return (
     <StyledAnchorLink
-      title={
+      title={(
         <AnchorLinkContent
           title={title}
           counter={counter}
           hasNotification={hasNotification}
         />
-      }
+      )}
       {...testAttributes}
       {...rest}
     />

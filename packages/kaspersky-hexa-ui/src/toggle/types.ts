@@ -34,8 +34,6 @@ export type ToggleProps = Omit<SwitchProps, 'size'> & WithAdditionalContent<{
   children?: ReactNode,
   /** Custom class name */
   className?: string,
-  /** Icon */
-  icon?: ReactNode,
   /** Disabled state */
   disabled?: boolean,
   /** Readonly state */

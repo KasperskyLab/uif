@@ -6,7 +6,7 @@ import React from 'react'
 
 import {
   Delete,
-  Edit, 
+  Edit,
   Placeholder,
   PlusM,
   SettingsGear,
@@ -37,7 +37,6 @@ export const navUserItems: NavItemData[] = [
     isRoot: true,
     state: 'settings',
     weight: 100,
-    
     items: [
       {
         key: 'Account',
@@ -146,14 +145,14 @@ export const tableDataSource = [
 ]
 
 export const tableToolbarButtons: ToolbarItems[] = [
-  { 
+  {
     key: 'create',
     iconBefore: <PlusM />,
     label: 'Create',
     onClick: () => clickHandler('create'),
     type: 'button'
   },
-  { 
+  {
     key: 'edit',
     disabled: true,
     iconBefore: <Edit />,
@@ -161,12 +160,12 @@ export const tableToolbarButtons: ToolbarItems[] = [
     onClick: () => clickHandler('edit'),
     type: 'button'
   },
-  { 
+  {
     key: 'delete',
     children: (
-      <Button 
+      <Button
         disabled
-        iconBefore={<Delete />} 
+        iconBefore={<Delete />}
         mode="tertiary"
         onClick={() => clickHandler('delete')}
       >Delete</Button>
@@ -176,27 +175,27 @@ export const tableToolbarButtons: ToolbarItems[] = [
 ]
 
 export const gridItems = [
-  { 
+  {
     description: 'Сканирует все файлы, которые открываются, сохраняются или выполняются.',
     title: 'Защита файлов от угроз'
   },
-  { 
+  {
     description: 'Отслеживает действия приложений в системе и регулирует их активность в зависимости от статуса.',
     title: 'Предотвращение вторжений на хосте'
   },
-  { 
+  {
     description: 'Предотвращает подключение зараженных USB-устройств, имитирующих клавиатуру, к компьютеру.',
     title: 'Предотвращение атак USB'
   },
-  { 
+  {
     description: 'Что делать, когда съемный диск подключен к компьютеру.',
     title: 'Сканирование съемных дисков'
   },
-  { 
+  {
     description: 'Позволяет сканировать объекты, полученные от сторонних приложений через интерфейс сканирования антивирусного ПО (AMSI).',
     title: 'Защита AMSI'
   },
-  { 
+  {
     description: 'Анализирует поведение приложений и обнаруживает сложные угрозы, такие как программное обеспечение-вымогатель.',
     title: 'Анализ поведения'
   }

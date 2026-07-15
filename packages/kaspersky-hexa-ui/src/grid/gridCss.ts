@@ -15,10 +15,10 @@ export const gridCss = css<GridCssProps>`
   ${({ rows }) => rows ? `grid-template-rows: ${rows.join(' ')};` : ''}
   ${({ areas }) => areas ? `grid-template-areas: "${areas.map(a => a.join(' ')).join('" "')}";` : ''}
   ${({ withPadding }) => withPadding
-    ? `padding: ${GRID_PADDING};
-      box-sizing: content-box;`
-    : ''
-}
+      ? `padding: ${GRID_PADDING};
+    box-sizing: content-box;`
+      : ''
+  }
   ${({ gridType }) => {
     switch (gridType) {
       case 'fix':

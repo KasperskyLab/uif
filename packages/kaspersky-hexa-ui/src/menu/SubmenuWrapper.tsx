@@ -11,7 +11,9 @@ export const MenuSubmenuWrapper = styled('div')`
 `
 
 export const SubmenuWrapper = ({ items, active }: MenuSubmenuProps) => {
-  return <MenuSubmenuWrapper className={cn({ 'submenu-active': active })}>
-    { items.length && <SubmenuComponent items={items} /> }
-  </MenuSubmenuWrapper>
+  return (
+    <MenuSubmenuWrapper className={cn({ 'submenu-active': active })}>
+      {items.length && <SubmenuComponent items={items} />}
+    </MenuSubmenuWrapper>
+  )
 }

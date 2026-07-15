@@ -1,0 +1,187 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { codeCompareDesignPropPresentation } from './CodeCompare.design.properties'
+import { Text } from '@src/typography'
+
+import { CodeCompare } from '../CodeCompare'
+import * as CodeCompareStories from './CodeCompare.stories'
+import { codeCompareDocumentationScope } from './codeCompareDocScope'
+
+<Meta of={CodeCompareStories} name="CodeCompare Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="CodeCompare"
+  description='**CodeCompare** — сравнение двух версий текста (код, конфигурация) с выбором ревизий и построчным diff'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**CodeCompare** показывает различия между двумя текстовыми версиями: в шапке — два селекта с подписью и описанием версии, между ними — иконка смены, справа — переключатель режима diff (если тексты различаются). Тело строится на **react-diff-view**: подсветка добавлений и удалений, счётчик изменений, сворачивание и разворачивание длинных фрагментов. Настраиваются списки версий (**options**, **rightOptions**), выбранные ревизии (**oldVersion**, **newVersion**), тексты (**oldValue**, **newValue**), начальный режим **compareMode**, состояние загрузки **loading** и колбэк **onVersionChange**."
+    />
+
+    <DocExampleBlock
+      title="options"
+      description="Обязательный проп. Список версий для селектов в шапке. Каждый элемент — объект с обязательными **value** (идентификатор) и **label** (подпись в списке), опционально **description** (вторая строка под подписью). Левый селект не показывает версию, совпадающую с **newVersion**; правый — с **oldVersion** (источник правого списка — **rightOptions** или **options**)."
+      scope={codeCompareDocumentationScope}
+      code={`
+<CodeCompare
+  options={codeCompareStoryVersions}
+  oldVersion={codeCompareStoryVersions[0]}
+  newVersion={codeCompareStoryVersions[1]}
+  oldValue={codeCompareStoryOldValue}
+  newValue={codeCompareStoryNewValue}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="rightOptions"
+      scope={codeCompareDocumentationScope}
+      description="Отдельный список версий только для правого селекта. Если не задан, используется **options**. Фильтрация по выбранной **oldVersion** такая же, как у общего списка."
+      code={`
+<CodeCompare
+  options={codeCompareStoryLeftVersions}
+  rightOptions={codeCompareStoryRightVersions}
+  oldVersion={codeCompareStoryLeftVersions[2]}
+  newVersion={codeCompareStoryRightVersions[1]}
+  oldValue={codeCompareStoryRightOldValue}
+  newValue={codeCompareStoryRightNewValue}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="oldVersion и newVersion"
+      scope={codeCompareDocumentationScope}
+      description="Выбранные ревизии в левом и правом селектах — элементы из **options** (или **rightOptions** для правого). Без выбора в селектах показываются плейсхолдеры (тексты из i18n). Смена версии вызывает **onVersionChange**."
+      code={`
+<CodeCompare
+  options={codeCompareStoryVersions}
+  oldVersion={codeCompareStoryVersions[0]}
+  newVersion={codeCompareStoryVersions[1]}
+  oldValue={codeCompareStoryOldValue}
+  newValue={codeCompareStoryNewValue}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="oldValue и newValue"
+      scope={codeCompareDocumentationScope}
+      description="Строки для сравнения. Если **oldValue** или **newValue** — `undefined`, область diff не рендерится, у индикатора загрузки показывается подсказка ожидания данных. Если обе строки пустые — **SectionMessage** с сообщением об отсутствии содержимого. Если строки совпадают — **SectionMessage** «изменений нет», кнопка режима diff скрыта. При различии отображается diff с подсветкой строк."
+      previewDirection="vertical"
+      code={`
+<CodeCompare
+  options={codeCompareStoryVersions}
+  oldVersion={codeCompareStoryVersions[0]}
+  newVersion={codeCompareStoryVersions[1]}
+  oldValue={codeCompareStoryOldValue}
+  newValue={codeCompareStoryNewValue}
+/>
+<CodeCompare
+  options={codeCompareStoryVersions}
+  oldVersion={codeCompareStoryVersions[0]}
+  newVersion={codeCompareStoryVersions[6]}
+  oldValue={codeCompareStoryEqualValue}
+  newValue={codeCompareStoryEqualValue}
+/>`}
+    />
+
+    <DocExampleBlock
+      title="compareMode"
+      scope={codeCompareDocumentationScope}
+      description="Начальный режим отображения diff из **react-diff-view**. Доступные значения: `split` (две колонки), `unified` (одна колонка). По умолчанию — `split`. После монтирования режим хранится во внутреннем состоянии; пользователь может переключить `split` / `unified` в меню настроек в шапке, если тексты различаются."
+      previewDirection="vertical"
+      code={`
+<CodeCompare
+  options={codeCompareStoryVersions}
+  oldVersion={codeCompareStoryVersions[0]}
+  newVersion={codeCompareStoryVersions[8]}
+  oldValue={codeCompareStoryOldValue}
+  newValue={codeCompareStoryCompareModeNewValue}
+  compareMode="unified"
+/>
+<CodeCompare
+  options={codeCompareStoryVersions}
+  oldVersion={codeCompareStoryVersions[0]}
+  newVersion={codeCompareStoryVersions[8]}
+  oldValue={codeCompareStoryOldValue}
+  newValue={codeCompareStoryCompareModeNewValue}
+  compareMode="split"
+/>`}
+    />
+
+    <DocExampleBlock
+      title="loading"
+      scope={codeCompareDocumentationScope}
+      description="Показывает индикатор загрузки поверх области сравнения. Доступные значения: `true`, `false`. По умолчанию — `false`. Задержка появления спиннера — 1000 ms. Подсказка у спиннера при незагруженных **oldValue** / **newValue** (`undefined`) сохраняется."
+      code={`
+<CodeCompare
+  options={codeCompareStoryVersions}
+  oldVersion={codeCompareStoryVersions[0]}
+  newVersion={codeCompareStoryVersions[1]}
+  oldValue={codeCompareStoryOldValue}
+  newValue={codeCompareStoryNewValue}
+  loading
+/>`}
+    />
+
+    <DocExampleBlock
+      title="onVersionChange"
+      scope={codeCompareDocumentationScope}
+      description="Колбэк при смене версии в левом или правом селекте: `(leftVersion?, rightVersion?)`. Родитель подставляет **oldValue** и **newValue** по выбранным ревизиям."
+      code={`
+function App() {
+  const [oldVersion, setOldVersion] = React.useState(codeCompareStoryVersions[0])
+  const [newVersion, setNewVersion] = React.useState(codeCompareStoryVersions[1])
+  const [oldValue, setOldValue] = React.useState(codeCompareStoryCodeByVersion[0])
+  const [newValue, setNewValue] = React.useState(codeCompareStoryCodeByVersion[1])
+
+  const handleVersionChange = (left, right) => {
+    alert('left: ' + (left?.value ?? '—') + ', right: ' + (right?.value ?? '—'))
+    setOldVersion(left)
+    setNewVersion(right)
+    setOldValue(left ? codeCompareStoryCodeByVersion[left.value] : undefined)
+    setNewValue(right ? codeCompareStoryCodeByVersion[right.value] : undefined)
+  }
+
+  return (
+    <CodeCompare
+      options={codeCompareStoryVersions}
+      oldVersion={oldVersion}
+      newVersion={newVersion}
+      oldValue={oldValue}
+      newValue={newValue}
+      onVersionChange={handleVersionChange}
+    />
+  )
+}`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**CodeCompare** применяют там, где пользователю нужно увидеть, что изменилось между двумя сохранёнными версиями: история правок скрипта или политики, сравнение конфигураций, аудит изменений в боковой панели или на отдельной вкладке деталей. Компонент рассчитан на осмысленный построчный diff, а не на краткое уведомление об ошибке.
+
+Для короткого статуса без выбора ревизий и без построчного разбора используйте **SectionMessage** или **Alert**. Если нужен только список версий без визуального сравнения — достаточно **Select** и связанного контента; **CodeCompare** объединяет выбор ревизий и diff в одном блоке."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Text type="H3">Properties в Pixso</Text>
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(codeCompareDesignPropPresentation)} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={CodeCompareStories} />
+    <AutodocArgsTable components={CodeCompare}/>
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

@@ -1,5 +1,4 @@
 import { MakeRequired } from '@helpers/typesHelpers'
-import { updatePersistentStorage } from '@src/table/helpers/persistentStorage/persistentStorage'
 import React, {
   FC,
   useEffect,
@@ -8,17 +7,24 @@ import React, {
   useState
 } from 'react'
 
-import { TableModule } from '..'
-import { getActiveFilters, ITableProps, TableRecord, useTableContext } from '../../'
+import { TableComponent } from '..'
+import {
+  getActiveFilters,
+  ITableProps,
+  TableRecord,
+  useTableContext
+} from '../../'
+import { useRefMethod } from '../../context/TableContext'
+import { updatePersistentStorage } from '../../helpers/persistentStorage/persistentStorage'
 
 import { FilterApi } from './FilterApi'
-import { 
-  filterReducer, 
-  INIT_ACTIVE_FILTERS, 
-  INIT_ALL, 
-  INIT_EXTERNAL_FILTERS, 
-  INIT_SAVED_FILTERS, 
-  SET_FILTER_API, 
+import {
+  filterReducer,
+  INIT_ACTIVE_FILTERS,
+  INIT_ALL,
+  INIT_EXTERNAL_FILTERS,
+  INIT_SAVED_FILTERS,
+  SET_FILTER_API,
   SET_FILTERED_ROWS
 } from './filtersReducer'
 import { loadFiltersFromStorage } from './filtersSaving'
@@ -26,14 +32,19 @@ import { mergeFilterStructures } from './filterUtils'
 import {
   checkHasColumnFilters,
   convertActiveFilterToFilterFromColumn,
-  getEnumOptions,
+  getEnumOptionsMap,
   isGroup,
   prefix
 } from './helpers'
 import { prepareFilters } from './prepareFilters'
-import { EnumOption, FilterFromColumn } from './types'
+import { FilterFromColumn, UnitedFilter } from './types'
 
-export const Filters: TableModule = Component => function FiltersModuleCallback ({ columns, ...props }) {
+export const Filters = <T extends TableRecord = TableRecord> (
+  Component: TableComponent<T>
+): TableComponent<T> => function FiltersModuleCallback ({
+  columns,
+  ...props
+}) {
   if (!columns) {
     return <Component {...props} />
   }
@@ -42,10 +53,11 @@ export const Filters: TableModule = Component => function FiltersModuleCallback 
     return <Component {...props} columns={columns} />
   }
 
-  return <FiltersModule Component={Component} {...props} columns={columns} />
+  return <FiltersModule<T> Component={Component} {...props} columns={columns} />
 }
 
-function FiltersModule ({
+function FiltersModule<T extends TableRecord = TableRecord> ({
+  defaultFilters: defaultFiltersProps,
   defaultFiltersConfig,
   defaultSidebarFilters,
   initialFilters,
@@ -64,8 +76,8 @@ function FiltersModule ({
   columns,
   Component,
   ...rest
-}: MakeRequired<ITableProps, 'columns'> & { Component: FC<ITableProps> }) {
-  const { updateContext } = useTableContext()
+}: MakeRequired<ITableProps<T>, 'columns'> & { Component: FC<ITableProps<T>> }) {
+  const { updateContext, enableNestedFilters } = useTableContext<T>()
   const [{
     filterApi,
     filteredRows,
@@ -75,19 +87,46 @@ function FiltersModule ({
       savedFiltersInit,
       allInit
     }
-  }, dispatch] = useReducer(filterReducer, {
+  }, dispatch] = useReducer(filterReducer<T>, {
     filterApi: null,
     filteredRows: dataSource,
     init: {}
   })
 
-  const mutableDataSource = useRef<TableRecord[] | undefined>(dataSource)
+  const mutableDataSource = useRef<T[] | undefined>(dataSource)
+  const [reinitFilterApiTrigger, setReinitFilterApiTrigger] = useState(false)
+
+  const resolvedStorageKey = storageKey || saveFilters?.storageKey
+
+  const defaultFilters = defaultFiltersProps ?? predefinedFilters ?? defaultSidebarFilters ?? defaultFiltersConfig
+  const defaultFiltersAppliedRef = useRef(Boolean(defaultFilters))
 
   useEffect(() => {
-    const defaultFilters = predefinedFilters || defaultSidebarFilters || defaultFiltersConfig || []
-    const api = new FilterApi({ predefinedFilters: defaultFilters, columns, customFilterFunction })
+    const api = new FilterApi<T>({ defaultFilters: defaultFilters, columns, customFilterFunction, enableNestedFilters })
     dispatch({ type: SET_FILTER_API, api })
   }, [])
+
+  const trigger = () => {
+    if (!filterApi || storageMergeFiltersMode === 'merge') return
+
+    filterApi.setExternalFilters([])
+    setReinitFilterApiTrigger(prev => !prev)
+  }
+
+  useRefMethod('reinitFilterApi', trigger, [filterApi, storageMergeFiltersMode])
+
+  useEffect(() => {
+    // Apply default filters exactly once, when they are first available as an array. If they were present at
+    // construction time the FilterApi constructor already applied them, so this effect is a no-op then. If they
+    // arrive later (undefined -> array), it applies them here. Any subsequent change is ignored — defaultFilters is
+    // meant for the initial render only.
+    if (!filterApi || defaultFiltersAppliedRef.current || !defaultFilters) return
+
+    defaultFiltersAppliedRef.current = true
+    filterApi.initDefaultFilters(prepareFilters(defaultFilters, columns))
+    // 'columns' shouldn't be included in deps, because we expect to apply default filters only once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterApi, reinitFilterApiTrigger, defaultFilters])
 
   useEffect(() => {
     if (!filterApi) return
@@ -95,16 +134,17 @@ function FiltersModule ({
     if (externalFilters) {
       filterApi.setExternalFilters(prepareFilters(externalFilters, columns))
       filterApi.initColumnGroups(columns)
-    } else if (externalSidebarFilters) { 
+    } else if (externalSidebarFilters) {
       filterApi.setExternalSidebarFilters(externalSidebarFilters)
     }
     if (!externalFiltersInit) dispatch({ type: INIT_EXTERNAL_FILTERS, value: true })
-  }, [filterApi, externalFilters, externalSidebarFilters])
+  }, [filterApi, externalFilters, externalSidebarFilters, reinitFilterApiTrigger])
 
   useEffect(() => {
     if (!filterApi) return
 
     const activeFilters = appliedFilters || initialFilters
+    const defaultFilters = defaultFiltersProps ?? predefinedFilters
     if (!externalFilters && activeFilters) {
       const filtersFromColumn = convertActiveFilterToFilterFromColumn(activeFilters)
         .reduce<Record<string, FilterFromColumn[]>>((acc, filter) => {
@@ -112,13 +152,13 @@ function FiltersModule ({
           acc[filter.name].push(filter)
           return acc
         }, {})
-          
-      columns.forEach(column => {
-        if (column.dataIndex !== undefined && column.dataIndex !== null) {
-          const filtersToApply = filtersFromColumn[column.dataIndex]
-          const groupId = `column.${column.dataIndex}`
 
-          if (predefinedFilters?.filter(isGroup).find(filter => filter.id === `column.${column.dataIndex}`)) {
+      columns.forEach(column => {
+        if (column.key !== undefined && column.key !== null) {
+          const filtersToApply = filtersFromColumn[column.key]
+          const groupId = `column.${column.key}`
+
+          if (defaultFilters?.filter(isGroup).find(filter => filter.id === `column.${column.key}`)) {
             return
           }
 
@@ -128,17 +168,15 @@ function FiltersModule ({
             filterApi.resetFilters(groupId)
           }
         } else {
-          console.warn(`${prefix} Column should have dataIndex. Column: ${column}`)
+          console.warn(`${prefix} Column should have key. Column: ${column}`)
         }
       })
-    } 
-    dispatch({ type: INIT_ACTIVE_FILTERS, value: true })
-  }, [filterApi, externalFilters, initialFilters, appliedFilters])
+    }
+    if (!activeFiltersInit) dispatch({ type: INIT_ACTIVE_FILTERS, value: true })
+  }, [filterApi, externalFilters, initialFilters, appliedFilters, reinitFilterApiTrigger])
 
   useEffect(() => {
     if (!filterApi || !activeFiltersInit || !externalFiltersInit) return
-    const resolvedStorageKey = storageKey || saveFilters?.storageKey
-
     if (resolvedStorageKey && storageMergeFiltersMode === 'merge') {
       const newFilters = mergeFilterStructures(
         filterApi.getRootGroupFilters(),
@@ -146,8 +184,9 @@ function FiltersModule ({
       )
       filterApi.setExternalFilters(newFilters)
     }
-    dispatch({ type: INIT_SAVED_FILTERS, value: true })
-  }, [filterApi, saveFilters, activeFiltersInit, externalFiltersInit])
+
+    if (!savedFiltersInit) dispatch({ type: INIT_SAVED_FILTERS, value: true })
+  }, [filterApi, saveFilters, activeFiltersInit, externalFiltersInit, reinitFilterApiTrigger, resolvedStorageKey])
 
   useEffect(() => {
     if (!filterApi) return
@@ -167,7 +206,7 @@ function FiltersModule ({
 
   useEffect(() => {
     if (!filterApi || !allInit) return
-    
+
     setFilteredRowsCallback()
     if (!isServerFiltering) {
       return filterApi.subscribe(setFilteredRowsCallback)
@@ -184,11 +223,11 @@ function FiltersModule ({
 
     const onFiltersChangeSubscribe = onFiltersChange
       ? filterApi.subscribe(() => {
-        const filters = filterApi.getRootGroupFilters()
-        onFiltersChange(filters)
-      })
+          const filters = filterApi.getRootGroupFilters()
+          onFiltersChange(filters)
+        })
       : undefined
-    
+
     const onFilterChangeCallback = () => {
       const filters = filterApi.getRootGroupFilters()
       onFilterChange?.(getActiveFilters(filters))
@@ -205,7 +244,6 @@ function FiltersModule ({
   }, [filterApi, allInit])
 
   useEffect(() => {
-    const resolvedStorageKey = storageKey || saveFilters?.storageKey
     if (!filterApi || !allInit || !resolvedStorageKey) return
 
     const saveFiltersCallback = () => {
@@ -213,35 +251,32 @@ function FiltersModule ({
       updatePersistentStorage({
         storageKey: resolvedStorageKey,
         featureKey: 'filters',
-        updatedValue: filtersToSave
+        updatedValue: filtersToSave as UnitedFilter[]
       })
     }
     saveFiltersCallback()
     return filterApi.subscribe(saveFiltersCallback)
-  }, [filterApi, allInit])
-
-  const [enumOptionsMap, setEnumOptionsMap] = useState<Record<string, EnumOption[]>>({})
+  }, [filterApi, allInit, resolvedStorageKey])
 
   useEffect(() => {
-    if (!filterApi || !allInit) return
-    const initEnumOptions = async () => {
-      const options = await getEnumOptions(columns)
-      
-      setEnumOptionsMap(options)
+    if (!filterApi || !allInit || !columns.length) return
+    const initEnumOptionsMap = async () => {
+      const options = await getEnumOptionsMap(columns)
+
       filterApi.setEnumOptionsMap(options)
     }
 
-    initEnumOptions()
-  }, [filterApi, allInit, columns])
+    initEnumOptionsMap()
+  }, [filterApi, allInit, columns, reinitFilterApiTrigger])
 
   useEffect(() => {
     updateContext({
-      filterApi: allInit ? filterApi : null,
-      enumOptionsMap
+      filterApi: allInit ? filterApi : null
     })
-  }, [filterApi, allInit, enumOptionsMap, updateContext])
+  }, [filterApi, allInit, updateContext])
 
+  // TODO: переделать логику с выставлением данных в useEffect, заменить на однокоммитные операции (useMemo) #10082646
   return (
-    <Component {...rest} dataSource={filteredRows} columns={columns} storageKey={storageKey} />
+    <Component {...rest} dataSource={isServerFiltering ? dataSource : filteredRows} columns={columns} storageKey={storageKey} />
   )
 }

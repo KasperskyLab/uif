@@ -10,7 +10,7 @@ import { Search } from '@src/search'
 import { Tag } from '@src/tag'
 import { Toggle } from '@src/toggle'
 import { Meta, StoryObj } from '@storybook/react'
-import { Layout } from 'antd'
+import Layout from 'antd/es/layout'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
@@ -44,19 +44,19 @@ const centerElementOverlay: DropdownItemProps[] = [
     type: 'action',
     children: 'Go to Portal',
     // eslint-disable-next-line react/jsx-key
-    componentsBefore: [ <ArrowTurnOver /> ]
+    componentsBefore: [<ArrowTurnOver />]
   }
 ]
 
 const defaultAccountMenuOverlay: DropdownItemProps[] = [
   {
     children: 'Account settings',
-    componentsBefore: [ <Settings21 key="account-settings-icon" /> ]
+    componentsBefore: [<Settings21 key="account-settings-icon" />]
   },
   {
     type: 'submenu',
     title: 'English',
-    componentsBefore: [ <Web key="language-icon" /> ],
+    componentsBefore: [<Web key="language-icon" />],
     children: [
       { children: 'English' },
       { children: 'Русский' },
@@ -70,8 +70,8 @@ const defaultAccountMenuOverlay: DropdownItemProps[] = [
   },
   {
     children: 'Dark mode',
-    componentsBefore: [ <Moon key="mode-icon" /> ],
-    componentsAfter: [ <Toggle key="mode-toggle" /> ]
+    componentsBefore: [<Moon key="mode-icon" />],
+    componentsAfter: [<Toggle key="mode-toggle" />]
   },
   {
     type: 'divider',
@@ -79,7 +79,7 @@ const defaultAccountMenuOverlay: DropdownItemProps[] = [
   },
   {
     children: 'Log out',
-    componentsBefore: [ <SignOut key="logout-icon" /> ]
+    componentsBefore: [<SignOut key="logout-icon" />]
   },
   {
     title: '© 2025 AO Kaspersky Lab',
@@ -109,13 +109,13 @@ function getUserWorkStatusMenuItems (onClick?: (info: any) => void): DropdownIte
       children: [
         {
           key: UserWorkStatuses.AVAILABLE,
-          componentsBefore: [ userStatusIcons[UserWorkStatuses.AVAILABLE] ],
+          componentsBefore: [userStatusIcons[UserWorkStatuses.AVAILABLE]],
           children: 'Available',
           onClick
         },
         {
           key: UserWorkStatuses.BUSY,
-          componentsBefore: [ userStatusIcons[UserWorkStatuses.BUSY] ],
+          componentsBefore: [userStatusIcons[UserWorkStatuses.BUSY]],
           children: 'Busy',
           onClick
         }
@@ -157,7 +157,7 @@ const storySettings: Meta<TopNavigationProps> = {
 
 const meta: Meta<TopNavigationProps> = {
   component: TopNavigationComponent,
-  title: 'Hexa UI Components/Top Navigation',
+  title: 'Hexa UI Components/TopNavigation',
   ...withDesignControls<TopNavigationProps>({
     componentName: 'topNavigation',
     meta: storySettings

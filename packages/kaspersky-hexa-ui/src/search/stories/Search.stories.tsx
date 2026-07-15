@@ -1,115 +1,87 @@
-import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
-import { validationStatuses } from '@helpers/typesHelpers'
 import { badges } from '@sb/badges'
-import { withMeta } from '@sb/components/Meta'
-import { sbHideControls } from '@sb/helpers'
-import { Locale } from '@src/locale'
-import { Search } from '@src/search'
-import { Text } from '@src/typography'
+import { buildStoryArgTypes, getControlsInclude } from '@sb/components/Documentation'
 import { Meta, StoryObj } from '@storybook/react'
-import { Empty } from 'antd'
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
-import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-
 import MetaData from '../__meta__/meta.json'
+import { Search } from '../Search'
 import { SearchProps } from '../types'
+
+import { defaultArgs, searchPropPresentation } from './Search.controls'
 
 const Wrapper = styled.div`
   width: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
 `
 
-const meta: Meta<SearchProps> = {
-  title: 'Hexa UI Components/Inputs/Search',
-  component: Search,
-  argTypes: {
-    placeholder: { description: 'Placeholder text' },
-    className: { description: 'Textbox class name' },
-    prefix: { description: 'Component before text' },
-    suffix: { description: 'Component after text' },
-    validationStatus: {
-      control: { type: 'radio' },
-      options: validationStatuses
-    },
-    ...sbHideControls(['maskOptions', 'theme', 'size', 'prefix', 'suffix', 'dropdownOverlay'])
-  },
+export const searchStorySettings: Meta<SearchProps> = {
+  argTypes: buildStoryArgTypes(searchPropPresentation),
   args: {
-    disabled: false,
-    placeholder: 'Search...',
+    ...defaultArgs,
     testId: 'search-test-id',
-    klId: 'search-kl-id',
-    validationStatus: 'default'
+    klId: 'search-kl-id'
   },
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
-    docs: {
-      page: withMeta(MetaData)
-    },
     design: MetaData.pixsoView
-  }
+  },
+  decorators: [
+    (Story, context) => (
+      <Wrapper>
+        <Story {...context} />
+      </Wrapper>
+    )
+  ]
 }
+
+const meta: Meta<SearchProps> = {
+  title: 'Hexa UI Components/Search',
+  component: Search,
+  tags: ['!autodocs'],
+  includeStories: ['Playground'],
+  excludeStories: ['searchStorySettings'],
+  ...searchStorySettings
+}
+
 export default meta
 
 type Story = StoryObj<SearchProps>
 
-export const Basic: Story = {
-  render: (args: SearchProps) => {
-    const [value, setValue] = useState('')
-    return (
-      <Wrapper>
-        <Search
-          {...args}
-          onChange={(value) => setValue(value as string)}
-          onClearClick={() => setValue('')}
-          value={value}
-        />
-      </Wrapper>
-    )
-  }
-}
+const SearchPlayground: React.FC<SearchProps> = ({
+  value: valueProp,
+  onChange,
+  onClearClick,
+  ...rest
+}) => {
+  const [value, setValue] = React.useState(valueProp ?? '')
 
-const EmptyData = () => {
+  React.useEffect(() => {
+    setValue(valueProp ?? '')
+  }, [valueProp])
+
   return (
-    <Empty
-      image={Empty.PRESENTED_IMAGE_SIMPLE}
-      className="ant-empty-small"
-      description={(
-        <Text type="BTR3">
-          <Locale localizationKey="common.empty" />
-        </Text>
-      )}
-      style={{ width: '276px', margin: '8px 0' }}
+    <Search
+      {...rest}
+      value={value}
+      onChange={(newValue) => {
+        setValue(newValue as string)
+        onChange?.(newValue)
+      }}
+      onClearClick={() => {
+        setValue('')
+        onClearClick?.()
+      }}
     />
   )
 }
 
-const SearchResultsMock = Array.from({ length: 10 }).map((_, index) => ({ children: `result ${index}` }))
-
-export const WithResult: Story = {
-  render: (props: SearchProps) => {
-    const [value, setValue] = useState('')
-    const overlay = SearchResultsMock.filter((item) => item.children.indexOf(value) >= 0)
-
-    return (
-      <Wrapper>
-        <Search
-          {...props}
-          onChange={(value) => setValue(value as string)}
-          onClearClick={() => setValue('')}
-          value={value}
-          dropdownOverlay={overlay.length ? overlay : [{ children: <EmptyData /> }] }
-        />
-      </Wrapper>
-    )
+export const Playground: Story = {
+  name: 'Playground',
+  render: (args) => <SearchPlayground {...args} />,
+  parameters: {
+    controls: {
+      include: getControlsInclude(searchPropPresentation),
+      sort: 'none'
+    }
   }
-}
-
-type PaletteStory = StoryObj<ThemedPaletteProps>
-export const ColorTokens: PaletteStory = {
-  args: { source: componentColors.input_search },
-  render: args => <ThemedPalette {...args} />
 }

@@ -19,17 +19,18 @@ const defaultPanelProps = {
 
 const getAccordionFirstPanel = () => screen.getByRole('button')
 
-const DefaultAccordion = (props: Partial<AccordionProps>, panelProps: Partial<AccordionPanelProps>) =>
+const DefaultAccordion = (props: Partial<AccordionProps>, panelProps: Partial<AccordionPanelProps>) => (
   <Accordion
     {...props}
   >
     <AccordionPanel
-      { ...defaultPanelProps}
-      { ...panelProps }
+      {...defaultPanelProps}
+      {...panelProps}
     >
       <Text>Text for test</Text>
     </AccordionPanel>
   </Accordion>
+)
 
 describe('Accordion', () => {
   test('should render', () => {
@@ -48,7 +49,7 @@ describe('Accordion', () => {
     const handleClick = jest.fn()
     render(
       <Accordion {...defaultProps} onChange={handleClick}>
-        <AccordionPanel { ...defaultPanelProps}>
+        <AccordionPanel {...defaultPanelProps}>
           <Text>Text for test</Text>
         </AccordionPanel>
       </Accordion>

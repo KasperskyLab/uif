@@ -1,7 +1,13 @@
 import { showDeprecationWarn } from '@helpers/showDeprecationWarn'
 import { useThemedComponent } from '@helpers/useThemedComponent'
 
-import { BadgeCssConfig, badgeModes, BadgeProps, BadgeThemeProps, BadgeViewProps } from './types'
+import {
+  BadgeCssConfig,
+  badgeModes,
+  BadgeProps,
+  BadgeThemeProps,
+  BadgeViewProps
+} from './types'
 
 export const useThemedBadge = (props: BadgeProps): BadgeViewProps => {
   let newMode = props.mode || 'neutral'

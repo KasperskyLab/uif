@@ -1,7 +1,9 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { Select } from '@src/select'
+import { DEFAULT_TABLE_PAGE_SIZE, DEFAULT_TABLE_PAGE_SIZE_OPTIONS } from '@src/table/types'
 import { Text } from '@src/typography'
-import { Pagination as PaginationAntd, PaginationProps as PaginationAntdProps } from 'antd'
+import PaginationAntd from 'antd/es/pagination'
+import type { PaginationProps as PaginationAntdProps } from 'antd'
 import { SelectValue } from 'antd/es/select'
 import { TFunction } from 'i18next'
 import React, { FC, useEffect, useMemo } from 'react'
@@ -27,8 +29,8 @@ const StyledPagination = styled(PaginationAntd).withConfig({
 const StyledSelect = styled(Select)`${selectCss}`
 
 const icons = {
-  nextIcon: <ArrowRight/>,
-  prevIcon: <ArrowLeft/>,
+  nextIcon: <ArrowRight />,
+  prevIcon: <ArrowLeft />,
   jumpNextIcon: <>...</>,
   jumpPrevIcon: <>...</>
 }
@@ -48,8 +50,8 @@ const CURSOR_PAGINATION_MIN_PAGE_COUNT = 8
 
 const PaginationView: FC<PaginationViewProps> = ({
   current = 1,
-  pageSize = 10,
-  pageSizeOptions = ['10', '20', '50', '100'],
+  pageSize = DEFAULT_TABLE_PAGE_SIZE,
+  pageSizeOptions = DEFAULT_TABLE_PAGE_SIZE_OPTIONS,
   total = 0,
   totalRoot,
   selected = 0,

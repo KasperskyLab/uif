@@ -1,1 +1,0 @@
-export { CasbTable } from './CasbTable'

@@ -49,7 +49,7 @@ describe('Pagination', () => {
 
   test('should correctly set pageSize', () => {
     const total = 40
-    const pageSize = 10
+    const pageSize = 20
     const numberOfPages = Math.ceil(total / pageSize)
 
     const { container } = render(<DefaultPagination total={total} pageSize={pageSize} />)
@@ -74,7 +74,7 @@ describe('Pagination', () => {
   })
 
   test('should correctly set pageSizeOptions', async () => {
-    const pageSizeOptions = ['10', '20']
+    const pageSizeOptions = ['20', '50']
     const { container } = render(<DefaultPagination pageSizeOptions={pageSizeOptions} showSizeChanger />)
 
     act(() => {
@@ -130,7 +130,7 @@ describe('Pagination', () => {
         fireEvent.mouseDown(select)
       }
     })
-    const secondOption = container.querySelectorAll('.ant-select-item')?.[1] as HTMLDivElement
+    const secondOption = container.querySelectorAll('.ant-select-item')?.[0] as HTMLDivElement
     secondOption.click()
 
     expect(onShowSizeChange).toHaveBeenCalledTimes(1)
@@ -138,13 +138,13 @@ describe('Pagination', () => {
 
   test('should render summary by default', () => {
     const total = 10
-    render(<DefaultPagination total={total}/>)
+    render(<DefaultPagination total={total} />)
     expect(screen.getByText(getSummaryRegex(total))).toBeInTheDocument()
   })
 
   test('should not render summary if it is in simple mode', () => {
     const total = 10
-    render(<DefaultPagination total={10} simple={true}/>)
+    render(<DefaultPagination total={10} simple={true} />)
     expect(screen.queryByText(getSummaryRegex(total))).not.toBeInTheDocument()
   })
 
@@ -154,12 +154,12 @@ describe('Pagination', () => {
     const totalAndSelectedRegex = new RegExp(`total ${total} / selected 0`, 'i')
 
     test('should show selected value by default', () => {
-      render(<DefaultPagination total={100}/>)
+      render(<DefaultPagination total={100} />)
       expect(screen.getByText(totalAndSelectedRegex)).toBeInTheDocument()
     })
 
     test('should not show selected value if selection is not possible', () => {
-      render(<DefaultPagination total={100} showSelected={false}/>)
+      render(<DefaultPagination total={100} showSelected={false} />)
       expect(screen.getByText(totalRegex)).toBeInTheDocument()
       expect(screen.queryByText(totalAndSelectedRegex)).not.toBeInTheDocument()
     })

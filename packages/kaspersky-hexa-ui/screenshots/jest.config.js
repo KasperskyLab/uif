@@ -1,5 +1,5 @@
 module.exports = {
   testRegex: './*\\.test\\.tsx$',
-  setupFilesAfterEnv: ['./setupTests.js'],
+  setupFilesAfterEnv: ['./setupTests.ts'],
   transform: { '\\.tsx?$': 'ts-jest', '\\.jsx?$': 'babel-jest' }
 }

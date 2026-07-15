@@ -19,14 +19,16 @@ type TopNavigationPartProps = PropsWithChildren<{
 }>
 
 const TopNavigationPart = ({ children, className }: TopNavigationPartProps): JSX.Element => {
-  return <Space
-    gap={8}
-    width="unset"
-    wrap="nowrap"
-    className={className}
-  >
-    {children}
-  </Space>
+  return (
+    <Space
+      gap={8}
+      width="unset"
+      wrap="nowrap"
+      className={className}
+    >
+      {children}
+    </Space>
+  )
 }
 
 export const TopNavigation = ({
@@ -44,57 +46,59 @@ export const TopNavigation = ({
 }: TopNavigationProps): JSX.Element => {
   const { testAttributes, ...rest } = useTestAttribute(props)
 
-  return <header
-    {...testAttributes}
-    {...rest}
-    className={cn(
-      getClassNameWithTheme(className, theme),
-      styles.header
-    )}
-  >
-    <Space gap={24} justify="space-between" height="100%" wrap="nowrap">
-      <TopNavigationPart>
-        {logo}
-        <Link href={titleLinkURL}>
-          <Text type="BTM3">{title}</Text>
-        </Link>
-      </TopNavigationPart>
-      <TopNavigationPart
-        className={cn(
-          styles.headerCenterPart,
-          elementCentered?.type === 'horizontalNavigation' && elementCentered?.horizontalNavigationConfig && styles.horizontalNav
-        )}
-      >
-        {elementCentered?.type === 'button' && elementCentered?.buttonConfig && (
-          <CenterButton
-            {...elementCentered.buttonConfig}
-            {...getChildTestProps('header-center-element', testAttributes)}
-          />
-        )}
-        {elementCentered?.type === 'horizontalNavigation' && elementCentered?.horizontalNavigationConfig && (
-          <HorizontalNav
-            borderless
-            {...elementCentered.horizontalNavigationConfig}
-            {...getChildTestProps('header-center-element', testAttributes)}
-          />
-        )}
-      </TopNavigationPart>
-      <TopNavigationPart>
-        {contentRight}
-        {notificationButtonProps &&
+  return (
+    <header
+      {...testAttributes}
+      {...rest}
+      className={cn(
+        getClassNameWithTheme(className, theme),
+        styles.header
+      )}
+    >
+      <Space gap={24} justify="space-between" height="100%" wrap="nowrap">
+        <TopNavigationPart>
+          {logo}
+          <Link href={titleLinkURL}>
+            <Text type="BTM3">{title}</Text>
+          </Link>
+        </TopNavigationPart>
+        <TopNavigationPart
+          className={cn(
+            styles.headerCenterPart,
+            elementCentered?.type === 'horizontalNavigation' && elementCentered?.horizontalNavigationConfig && styles.horizontalNav
+          )}
+        >
+          {elementCentered?.type === 'button' && elementCentered?.buttonConfig && (
+            <CenterButton
+              {...elementCentered.buttonConfig}
+              {...getChildTestProps('header-center-element', testAttributes)}
+            />
+          )}
+          {elementCentered?.type === 'horizontalNavigation' && elementCentered?.horizontalNavigationConfig && (
+            <HorizontalNav
+              borderless
+              {...elementCentered.horizontalNavigationConfig}
+              {...getChildTestProps('header-center-element', testAttributes)}
+            />
+          )}
+        </TopNavigationPart>
+        <TopNavigationPart>
+          {contentRight}
+          {notificationButtonProps && (
             <NotificationButton
               indicator={notificationIndicator}
               {...notificationButtonProps}
               {...getChildTestProps('notification-button', testAttributes)}
             />
-        }
-        {accountMenuProps && (
-          <AccountMenu
-            {...accountMenuProps}
-            {...getChildTestProps('account-menu', testAttributes)}
-          />
-        )}
-      </TopNavigationPart>
-    </Space>
-  </header>
+          )}
+          {accountMenuProps && (
+            <AccountMenu
+              {...accountMenuProps}
+              {...getChildTestProps('account-menu', testAttributes)}
+            />
+          )}
+        </TopNavigationPart>
+      </Space>
+    </header>
+  )
 }

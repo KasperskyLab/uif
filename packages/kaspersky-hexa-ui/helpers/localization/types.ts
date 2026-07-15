@@ -68,4 +68,4 @@ export interface ResourceLanguage {
   [namespace: string]: ResourceKey
 }
 
-export type ResourceKey = string| {[key: string]: any} | any
+export type ResourceKey = string| { [key: string]: any } | any

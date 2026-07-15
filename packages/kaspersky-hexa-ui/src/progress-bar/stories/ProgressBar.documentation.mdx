@@ -1,0 +1,115 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Space } from '@src/space'
+import { Text } from '@src/typography'
+
+import { ProgressBar } from '../ProgressBar'
+import * as ProgressBarStories from './ProgressBar.stories'
+import {
+  progressBarDesignPropPresentation,
+  progressBarModeDesignPropPresentation
+} from './ProgressBar.design.properties'
+
+<Meta of={ProgressBarStories} name="ProgressBar Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="ProgressBar"
+  description='**ProgressBar** — горизонтальная полоса для отображения прогресса выполнения процесса или количественного показателя'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**ProgressBar** показывает долю выполненного действия в виде заполненной полосы на фоновой дорожке. Настраиваются **mode**, **size**, **track**, **background** и **width**."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Семантический цвет активной полосы. Доступные значения: `critical`, `warning`, `success`, `accent`, `neutralBold`, `neutralSubtle`, `orange`, `grass`, `violet`, `purple`, `coldgray`. По умолчанию — `critical`."
+      previewDirection='vertical'
+      previewGap={8}
+      code='
+    <ProgressBar mode="critical" track={50} width={200} />
+    <ProgressBar mode="warning" track={50} width={200} />
+    <ProgressBar mode="success" track={50} width={200} />
+    <ProgressBar mode="accent" track={50} width={200} />
+    <ProgressBar mode="neutralBold" track={50} width={200} />
+    <ProgressBar mode="neutralSubtle" track={50} width={200} />'
+    />
+
+    <DocExampleBlock
+      title="size"
+      previewDirection='vertical'
+      description="Высота полосы прогресса. Доступные значения: `small`, `medium`, `large`. По умолчанию — `medium`."
+      code='
+    <ProgressBar size="small" track={50} width={200} />
+    <ProgressBar size="medium" track={50} width={200} />
+    <ProgressBar size="large" track={50} width={200} />'
+    />
+
+    <DocExampleBlock
+      title="track"
+      description="Заполнение активной полосы в процентах от 0 до 100. По умолчанию — `0`. Значения вне диапазона трактуются как `0`."
+      code='
+    <ProgressBar track={0} width={200} />
+    <ProgressBar track={25} width={200} />
+    <ProgressBar track={50} width={200} />
+    <ProgressBar track={100} width={200} />'
+    />
+
+    <DocExampleBlock
+      title="background"
+      description="Управляет видимостью фоновой дорожки под активной полосой. Доступные значения: `true`, `false`. По умолчанию — `true`. При `false` фон прозрачный, видна только активная полоса."
+      code='
+    <ProgressBar background track={50} width={200} />
+    <ProgressBar background={false} track={50} width={200} />'
+    />
+
+    <DocExampleBlock
+      title="width"
+      description="Ширина полосы в пикселях. Необязательное число; без **width** компонент занимает 100% ширины родительского контейнера."
+      code={`
+    <ProgressBar track={50} width={200} />
+    <div style={{ width: 320 }}>
+      <ProgressBar track={50} />
+    </div>`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**ProgressBar** показывает, насколько выполнен процесс с известной длительностью или целевым объёмом: загрузка файла, прохождение шагов мастера, заполнение квоты, достижение цели на дашборде. Размещайте полосу рядом с контекстом операции — под заголовком секции, внутри карточки задачи или в строке таблицы, где пользователь оценивает прогресс.
+
+Для неопределённого ожидания без измеримого процента используйте **Loader**. Для компактной точечной индикации статуса без шкалы заполнения — **Indicator**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Space direction="vertical" gap={40} align="start">
+      <Space direction="vertical" gap={16} align="start">
+        <Text type="H3">progress bar</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(progressBarDesignPropPresentation)} />
+      </Space>
+
+      <Space direction="vertical" gap={16} align="start">
+        <Text type="H3">progress bar / mode</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(progressBarModeDesignPropPresentation)} />
+      </Space>
+    </Space>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={ProgressBarStories} />
+    <AutodocArgsTable components={ProgressBar} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

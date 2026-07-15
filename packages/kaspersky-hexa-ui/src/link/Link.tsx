@@ -9,16 +9,17 @@ import { IconWrapper, StyledLink, TextWrapper } from './linkCss'
 import { LinkProps, LinkViewProps } from './types'
 import { useThemedLink } from './useThemedLink'
 
-export const Link = forwardRef<HTMLAnchorElement, PropsWithChildren<LinkProps>>((rawProps, ref)
-  : ReactElement<LinkProps> => {
+export const Link = forwardRef<HTMLAnchorElement, PropsWithChildren<LinkProps>>((rawProps, ref): ReactElement<LinkProps> => {
   const themedProps = useThemedLink(rawProps)
   const props = useTestAttribute(themedProps)
   const { disabled, decoration, isTooltipVisible = true } = props
 
   return !disabled && decoration === 'icon' && isTooltipVisible
-    ? <Tooltip text={props.href}>
-        <LinkView ref={ref} {...props} />
-      </Tooltip>
+    ? (
+        <Tooltip text={props.href}>
+          <LinkView ref={ref} {...props} />
+        </Tooltip>
+      )
     : <LinkView ref={ref} {...props} />
 })
 

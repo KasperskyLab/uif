@@ -95,12 +95,16 @@ const InformationCardView: FC<InformationCardViewProps> = ({
             </Description>
           )}
         </Header>
-        {children && <div className={contentClassName}>
-          {children}
-        </div>}
-        {footer && <Footer className={footerClassName}>
-          {footer}
-        </Footer>}
+        {children && (
+          <div className={contentClassName}>
+            {children}
+          </div>
+        )}
+        {footer && (
+          <Footer className={footerClassName}>
+            {footer}
+          </Footer>
+        )}
       </Content>
     )
   }

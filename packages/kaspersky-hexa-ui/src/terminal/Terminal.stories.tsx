@@ -22,7 +22,7 @@ const meta: Meta<TerminalProps> = {
   decorators: [
     (Story, context) => (
       <StoryColumn style={{ minWidth: '100px', maxWidth: '400px' }}>
-        <Story {...context}/>
+        <Story {...context} />
       </StoryColumn>
     )
   ],

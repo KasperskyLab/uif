@@ -5,10 +5,11 @@ export const resizeThrottle = (callback: () => void, delay: number) => {
   let timer: ReturnType<typeof setTimeout> | null = null
   let rafId: number | null = null
 
-  return () => {
+  const run = () => {
     if (timer) clearTimeout(timer)
 
     timer = setTimeout(() => {
+      timer = null
       if (rafId !== null) return
 
       rafId = requestAnimationFrame(() => {
@@ -17,6 +18,15 @@ export const resizeThrottle = (callback: () => void, delay: number) => {
       })
     }, delay)
   }
+
+  const cancel = () => {
+    if (timer) clearTimeout(timer)
+    if (rafId !== null) cancelAnimationFrame(rafId)
+    timer = null
+    rafId = null
+  }
+
+  return { run, cancel }
 }
 
 export const useResizeObserver = (ref: RefObject<Element>, delay = 150): DOMRect | undefined => {
@@ -35,13 +45,14 @@ export const useResizeObserver = (ref: RefObject<Element>, delay = 150): DOMRect
     update()
 
     const resizeObserver = new ResizeObserver(() => {
-      throttledUpdate()
+      throttledUpdate.run()
     })
 
     resizeObserver.observe(element)
 
     return () => {
       resizeObserver.disconnect()
+      throttledUpdate.cancel()
     }
   }, [ref, delay])
 

@@ -20,7 +20,7 @@ const StyledSpace = styled(Space)`
   }
 `
 
-export const Group = <T, >({ items, Component, orientation = 'horizontal', align = 'center'}: GroupProps<T>): JSX.Element => (
+export const Group = <T,>({ items, Component, orientation = 'horizontal', align = 'center' }: GroupProps<T>): JSX.Element => (
   <StyledSpace direction={orientation} gap={4} align={align}>
     {items.map((item, index: number) => {
       if (React.isValidElement(item)) {

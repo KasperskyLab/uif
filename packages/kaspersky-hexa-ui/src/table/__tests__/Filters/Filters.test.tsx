@@ -1,11 +1,27 @@
 import { localization } from '@helpers/localization'
-import { ITableProps } from '@src/table'
-import { fireEvent, render, screen } from '@testing-library/react'
-import React from 'react'
+import { ITableProps, TableRef } from '@src/table'
+import { isFilterConfig } from '@src/table/modules/Filters/helpers'
+import {
+  addFilter,
+  applyFilters,
+  getFilterChip,
+  modifyColumns,
+  openFiltersSidebar
+} from '@src/table/test-utils/helpers'
+import {
+  configure,
+  fireEvent,
+  render,
+  screen,
+  waitFor
+} from '@testing-library/react'
+import React, { MutableRefObject } from 'react'
 import { act } from 'react-dom/test-utils'
 
+import { generatedData, tableColumns } from '../../__mocks__/filtersMockData'
 import mockData from '../../__mocks__/table-mock-data.json'
-import { FilterOperation, FilterType } from '../../modules/Filters/types'
+import { FilterApi } from '../../modules/Filters/FilterApi'
+import { FilterOperation, FilterType, NumberFilter, UnitedFilter } from '../../modules/Filters/types'
 import { columns } from '../../stories/_commonConstants'
 import { Table } from '../../test-utils/shared'
 
@@ -16,7 +32,7 @@ const defaultProps = {
   dataSource: mockData,
   columns,
   pagination: {
-    pageSize: 5
+    pageSize: 20
   },
   toolbar: {
     showFilterSidebar: true
@@ -30,21 +46,6 @@ const getTotalRowsNumber = () => {
   if (!totalSummary) return -1
   const match = totalSummary.match(/Total (\d+)/)
   return match && parseInt(match[1])
-}
-
-const openFiltersSidebar = (container: HTMLElement) => {
-  const toolbarFilterButton = container.querySelector('[data-testid="table-filter-sidebar"]') as HTMLButtonElement
-  fireEvent.click(toolbarFilterButton)
-}
-
-const applyFilters = () => {
-  const applyButton = screen.getByText('Apply')
-  fireEvent.click(applyButton)
-}
-
-const addFilter = () => {
-  const addFilterButton = screen.getByText('Add')
-  fireEvent.click(addFilterButton)
 }
 
 const cancelFiltering = () => {
@@ -62,6 +63,14 @@ describe('Table filters module', () => {
     const container = render(<DefaultTable />).container as HTMLDivElement
     expect(container.querySelector(`[kl-id="${defaultProps.klId}"]`)).toBeInTheDocument()
     expect(container.querySelector(`[data-testid="${defaultProps.testId}"]`)).toBeInTheDocument()
+  })
+
+  it('should render filters sidebar with correct test id', () => {
+    configure({ testIdAttribute: 'data-testid' })
+    const container = render(<DefaultTable />).container as HTMLDivElement
+    openFiltersSidebar(container)
+    const filtersSidebar = screen.getByTestId(`${defaultProps.testId}-filters-sidebar`)
+    expect(filtersSidebar).toBeInTheDocument()
   })
 
   it('should have initial size of dataSource without filters', () => {
@@ -129,6 +138,31 @@ describe('Table filters module', () => {
     expect(screen.getByTitle(pageCount)).toBeTruthy()
     expect(screen.queryByTitle(pageCount + 1)).toBeNull()
     expect(getTotalRowsNumber()).toBe(expectedRowsCount)
+  })
+
+  it('should hide condition select when filter item is boolean', () => {
+    const { container } = render(
+      <DefaultTable
+        dataSource={generatedData}
+        columns={tableColumns}
+        defaultFilters={[
+          {
+            name: 'isTrainee',
+            condition: FilterOperation.eq,
+            type: FilterType.Boolean,
+            value: true
+          }
+        ]}
+      />
+    )
+
+    openFiltersSidebar(container)
+
+    const sidebarFilter = screen.queryByRole('filter')!
+    expect(sidebarFilter).toBeInTheDocument()
+
+    const conditionSelect = sidebarFilter.querySelector('[data-testid="filter-item-condition-select-0"]')
+    expect(conditionSelect).not.toBeInTheDocument()
   })
 
   it('should clear all filters', () => {
@@ -352,8 +386,31 @@ describe('Table filters module', () => {
     ])
   })
 
+  it('should call onFiltersChange with filter with custom column filter name (column.filterName)', async () => {
+    const onFiltersChange = jest.fn()
+    const { container } = render(
+      <DefaultTable
+        columns={modifyColumns(columns, 'name', { filterName: 'fullname' })}
+        onFiltersChange={onFiltersChange}
+      />
+    )
+
+    openFiltersSidebar(container)
+    await act(async () => { addFilter() })
+    changeFilterValue(0, 'Test name')
+
+    applyFilters()
+
+    await waitFor(() => {
+      const lastCall: UnitedFilter[] = onFiltersChange.mock.lastCall[0]
+      const filter = lastCall.find(el => isFilterConfig(el))
+      expect(filter?.value).toBe('Test name')
+      expect(filter?.name).toBe('fullname')
+    })
+  })
+
   it('should disable filtering when there are duplicate filters', async () => {
-    const { container, queryAllByText} = render(<DefaultTable />)
+    const { container, queryAllByText } = render(<DefaultTable />)
 
     openFiltersSidebar(container)
 
@@ -372,8 +429,8 @@ describe('Table filters module', () => {
         .columnsSettings
         .filtering
         .validation
-        .duplicateFilters
-      ))
+        .duplicateFilters)
+    )
       .toHaveLength(2)
 
     cancelFiltering()
@@ -382,7 +439,7 @@ describe('Table filters module', () => {
   })
 
   it('should disable filtering when there are empty filters', async () => {
-    const { container, queryAllByText} = render(<DefaultTable />)
+    const { container, queryAllByText } = render(<DefaultTable />)
 
     openFiltersSidebar(container)
 
@@ -397,12 +454,107 @@ describe('Table filters module', () => {
         .columnsSettings
         .filtering
         .validation
-        .emptyValue
-      ))
+        .emptyValue)
+    )
       .toHaveLength(1)
 
     cancelFiltering()
 
     expect(getTotalRowsNumber()).toBe(100)
+  })
+
+  it('should reinit FilterApi by ref.current.reinitFilterApi()', async () => {
+    configure({ testIdAttribute: 'data-testid' })
+    const predefinedFilter: NumberFilter = {
+      name: 'age',
+      type: FilterType.Number,
+      condition: FilterOperation.gt,
+      value: 1
+    }
+    const ref: MutableRefObject<TableRef | null> = { current: null }
+    render(<Table {...defaultProps as ITableProps} defaultFilters={[predefinedFilter]} ref={ref} />)
+
+    const chip = getFilterChip(predefinedFilter.name, predefinedFilter.condition, predefinedFilter.value!)
+    expect(chip).toBeInTheDocument()
+
+    fireEvent.click(chip?.querySelector('.ant-tag-close-icon')!)
+
+    expect(chip).not.toBeInTheDocument()
+
+    await ref.current?.reinitFilterApi?.()
+
+    waitFor(() => {
+      expect(getFilterChip(predefinedFilter.name, predefinedFilter.condition, predefinedFilter.value!)).toBeInTheDocument()
+    })
+  })
+
+  it('should apply defaultFilters that appeared after being initially undefined', async () => {
+    configure({ testIdAttribute: 'data-testid' })
+    const defaultFilter: NumberFilter = {
+      name: 'age',
+      type: FilterType.Number,
+      condition: FilterOperation.gt,
+      value: 1
+    }
+
+    const { rerender } = render(<Table {...defaultProps as ITableProps} defaultFilters={undefined} />)
+
+    expect(getFilterChip(defaultFilter.name, defaultFilter.condition, defaultFilter.value!)).not.toBeInTheDocument()
+
+    rerender(<Table {...defaultProps as ITableProps} defaultFilters={[defaultFilter]} />)
+
+    await waitFor(() => {
+      expect(getFilterChip(defaultFilter.name, defaultFilter.condition, defaultFilter.value!)).toBeInTheDocument()
+    })
+  })
+
+  it('should apply defaultFilters only once even if they toggle undefined <-> array afterwards', async () => {
+    const initDefaultFilters = jest.spyOn(FilterApi.prototype, 'initDefaultFilters')
+
+    const defaultFilter: NumberFilter = {
+      name: 'age',
+      type: FilterType.Number,
+      condition: FilterOperation.gt,
+      value: 1
+    }
+
+    const { rerender } = render(<Table {...defaultProps as ITableProps} defaultFilters={undefined} />)
+    expect(initDefaultFilters).not.toHaveBeenCalled()
+
+    rerender(<Table {...defaultProps as ITableProps} defaultFilters={[defaultFilter]} />)
+    await waitFor(() => expect(initDefaultFilters).toHaveBeenCalledTimes(1))
+
+    rerender(<Table {...defaultProps as ITableProps} defaultFilters={undefined} />)
+    rerender(<Table {...defaultProps as ITableProps} defaultFilters={[defaultFilter]} />)
+
+    expect(initDefaultFilters).toHaveBeenCalledTimes(1)
+
+    initDefaultFilters.mockRestore()
+  })
+
+  it('should render custom sidebar toolbar buttons', async () => {
+    configure({ testIdAttribute: 'data-testid' })
+
+    const customButtonTestId = 'custom-button'
+    const onClick = jest.fn()
+    const getFiltersSidebarToolbarButtons: ITableProps['getFiltersSidebarToolbarButtons'] = async () => {
+      return [{
+        children: 'Custom button',
+        testId: customButtonTestId,
+        onClick: onClick
+      }]
+    }
+
+    const { container } = render(
+      <Table {...defaultProps as ITableProps} getFiltersSidebarToolbarButtons={getFiltersSidebarToolbarButtons} />
+    )
+
+    await openFiltersSidebar(container)
+
+    const customButton = await screen.findByTestId(customButtonTestId)
+    expect(customButton).toBeInTheDocument()
+
+    fireEvent.click(customButton)
+    expect(onClick).toHaveBeenCalled()
   })
 })

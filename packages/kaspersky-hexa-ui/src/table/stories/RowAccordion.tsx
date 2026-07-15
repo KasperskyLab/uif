@@ -1,7 +1,13 @@
 import { Text } from '@src/typography'
 import React from 'react'
 
-import { basicArgTypes, basicDataSource, BasicTableStory, genArgType, Story } from './_commonConstants'
+import {
+  basicArgTypes,
+  basicDataSource,
+  BasicTableStory,
+  genArgType,
+  Story
+} from './_commonConstants'
 
 const dataSource = [
   ...basicDataSource.slice(0, 3),

@@ -3,10 +3,11 @@ import cn from 'classnames'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
+import { Tooltip } from '../tooltip'
+
 import { segmentedButtonItemCss } from './segmentedButtonCss'
 import { SegmentedButtonItemProps, SegmentedButtonItemViewProps } from './types'
 import { useThemedSegmentedButton } from './useThemedSegmentedButton'
-import { Tooltip } from '../tooltip'
 
 const StyledSegmentedButtonItem = styled.div.withConfig({
   shouldForwardProp: (prop) => !['cssConfig', 'type'].includes(prop)
@@ -43,12 +44,10 @@ const SegmentedButtonItemView: FC<SegmentedButtonItemViewProps> = (props) => {
   const button = (
     <StyledSegmentedButtonItem
       cssConfig={cssConfig}
-      className={cn(className,
-        'SegmentedButtonItem',
-        {
-          'kl6-segmentedButton-item-disabled': disabled,
-          'kl6-segmentedButton-item-checked': isChecked
-        })}
+      className={cn(className, 'SegmentedButtonItem', {
+        'kl6-segmentedButton-item-disabled': disabled,
+        'kl6-segmentedButton-item-checked': isChecked
+      })}
       type={rest.type}
       data-checked={isChecked}
       data-value={value}

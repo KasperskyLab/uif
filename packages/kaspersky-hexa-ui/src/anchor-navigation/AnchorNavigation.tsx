@@ -17,13 +17,17 @@ import {
   NavigationItemProps,
   NavigationProps
 } from './types'
-import { flatten, getScrollParent, getStickyStyle } from './utils'
+import {
+  flatten,
+  getElementTopInScrollContainer,
+  getScrollParent,
+  getStickyStyle,
+  scrollToAnchorSection
+} from './utils'
 
-const scrollTo = (id: string) => {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-}
+const ACTIVE_SECTION_OFFSET = 24
 
-function NavigationItem ({
+export function NavigationItem ({
   item,
   level,
   onClick,
@@ -51,7 +55,7 @@ function NavigationItem ({
   )
 }
 
-function Navigation ({
+export function Navigation ({
   items,
   style,
   title
@@ -82,14 +86,14 @@ function Navigation ({
       if (isAtBottom && flatItems.length > 0) {
         currentId = flatItems[flatItems.length - 1].id
       } else {
-        const probeY = scrollY + viewportHeight * 0.2
+        const probeY = scrollY + ACTIVE_SECTION_OFFSET
         currentId = flatItems[0]?.id
 
         for (const item of flatItems) {
           const block = document.getElementById(item.id)
           if (!block) continue
 
-          const top = block.offsetTop
+          const top = getElementTopInScrollContainer(block, scrollElement)
 
           if (top <= probeY) {
             currentId = item.id
@@ -140,7 +144,7 @@ function Navigation ({
           level={level}
           onClick={() => {
             isScrollTriggeredByNavClick.current = true
-            scrollTo(item.id)
+            scrollToAnchorSection(item.id, ACTIVE_SECTION_OFFSET)
           }}
           selected={item.id === selected}
         />

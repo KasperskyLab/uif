@@ -7,7 +7,7 @@ export type GenericObject = {
 
 type Join<
   Left extends Key | undefined,
-  Right extends Key | undefined,
+  Right extends Key | undefined
 > = Left extends string | number
   ? Right extends string | number
     ? `${Left}.${Right}`
@@ -18,7 +18,7 @@ type Join<
 
 export type NestedPaths<
   T extends GenericObject,
-  Path extends Key | undefined = undefined,
+  Path extends Key | undefined = undefined
 > = {
   [K in keyof T]: T[K] extends Key | undefined
     ? Join<Path, K>

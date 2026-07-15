@@ -1,13 +1,22 @@
-import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { Empty, Table as AntTable } from 'antd'
+import { getChildTestAttr, useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import Empty from 'antd/es/empty'
+import AntTable from 'antd/es/table'
 import cn from 'classnames'
-import React, { FC, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import React, {
+  ComponentType,
+  RefAttributes,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
+import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
 import { Loader } from '../loader'
 import { Locale } from '../locale'
 
-import { useTableContext } from './context/TableContext'
 import { safeColumns } from './helpers/common'
 import {
   ObservableScrollableContainer,
@@ -16,19 +25,24 @@ import {
   TableStickyHeader,
   useSyncTableScroll
 } from './helpers/stickyHeader'
+import { toggleHorizontalScrollbarVisibility } from './helpers/toggleHorizontalScrollbarVisibility'
 import { useTableModules } from './modules'
 import { CustomScrollContainer } from './modules/CustomScrollContainer'
 import { StyledTableContainer } from './modules/ExpandableRows'
 import { rowDraggingContainerCss, tableCss, TableCssProps } from './tableCss'
-import { ITableProps, TableRecord } from './types'
+import {
+  ITableProps,
+  TableRecord,
+  TableRef,
+  TableRowSelection
+} from './types'
 
-const StyledTable = styled(AntTable).withConfig<TableCssProps>({
-  shouldForwardProp: prop => !['cssConfig'].includes(prop)
-})`
+const StyledTable = styled(AntTable)`
   ${tableCss}
 `
 
 const RowDraggingContainer = styled.div`
+  ${tableCss}
   ${rowDraggingContainerCss}
 `
 
@@ -41,11 +55,12 @@ const EmptyData = () => {
   )
 }
 
-export const Table: FC<ITableProps> = props => {
-  const { cssConfig } = useTableContext()
-  const { expandableConfig } = useTableModules(props)
+export const Table: <T extends TableRecord = TableRecord>(
+  props: ITableProps<T> & RefAttributes<TableRef>
+) => JSX.Element | null = <T extends TableRecord = TableRecord>(props: ITableProps<T> & RefAttributes<TableRef>) => {
+  const { expandableConfig } = useTableModules<T>(props)
   const { testAttributes } = useTestAttribute(props)
-  const tableRef = useRef<HTMLTableElement>(null)
+  const tableRef = useRef<HTMLTableElement & TableRef>(null)
   const [tableWidth, setTableWidth] = useState<number>(0)
 
   const scrollableContainerRef = useRef<HTMLDivElement>(null)
@@ -63,11 +78,12 @@ export const Table: FC<ITableProps> = props => {
     const tableBody = scrollableContainerRef.current?.querySelector('.ant-table') as HTMLElement
     if (!tableBody) return
 
-    const observer = new ResizeObserver(() => (
+    const observer = new ResizeObserver(() => {
       recalculateStickyHeaderWidth({ tableBody, horizontalScrollbarRef, stickyHeaderRef })
-    ))
+      toggleHorizontalScrollbarVisibility(horizontalScrollbarRef)
+    })
     observer.observe(tableBody)
-    return () => observer.unobserve(tableBody)
+    return () => observer.disconnect()
   }, [])
 
   const hasDataSource = !!props.dataSource?.length
@@ -77,6 +93,7 @@ export const Table: FC<ITableProps> = props => {
     if (!tableBody) return
 
     recalculateStickyHeaderWidth({ tableBody, horizontalScrollbarRef, stickyHeaderRef })
+    toggleHorizontalScrollbarVisibility(horizontalScrollbarRef)
   }, [hasDataSource])
 
   useEffect(() => {
@@ -87,7 +104,8 @@ export const Table: FC<ITableProps> = props => {
 
   const {
     loaderProps = { indicator: <Loader /> },
-    loading,
+    loading: loadingProp,
+    isInited = false,
     expandable,
     emptyText = EmptyData,
     showSorterTooltip = false,
@@ -100,11 +118,14 @@ export const Table: FC<ITableProps> = props => {
     isValid,
     fullHeight,
     resizingMode,
+    afterColumn,
+    borderedStyle,
     useDragDrop,
     scroll,
     rowMode,
     stickyHeader,
     columnVerticalAlign,
+    onPatchedColumnsChange,
     ...tableProps
   } = props
 
@@ -118,24 +139,23 @@ export const Table: FC<ITableProps> = props => {
 
   const columns = useMemo(() => {
     if (props.columns) {
-      return safeColumns(props.columns, tableWidth)
+      return safeColumns<T>(props.columns, tableWidth)
     }
     return []
   }, [props.columns, tableWidth])
-
-  if (!cssConfig) return null
 
   useEffect(() => {
     const el = scrollableContainerRef.current?.querySelector('.ant-table-body')
     if (el) {
       el.scrollLeft -= 1
     }
-  }, [columns?.length])
+  }, [columns.length])
 
   const tableCssProps: TableCssProps = {
-    cssConfig,
+    rowSelection: rowSelection as TableRowSelection, // т.к. эти пропы используются только в css, то нам не обязательно знать тип
     resizingMode,
     useDragDrop,
+    borderedStyle,
     scroll,
     rowMode,
     stickyHeader,
@@ -143,67 +163,91 @@ export const Table: FC<ITableProps> = props => {
     columnVerticalAlign
   }
 
-  const rowDraggingContainer = useDragDrop
-    ? <RowDraggingContainer {...tableCssProps} className="row-dragging-container" />
-    : ''
+  useEffect(() => {
+    onPatchedColumnsChange?.(columns)
+  }, [columns])
 
-  return <>
-    {
-      stickyHeader !== undefined
-        ? (
-            <TableStickyHeader
-              {...tableCssProps}
-              ref={stickyHeaderRef}
-              className={STICKY_HEADER_CLASS}
-            >
-              <div className="ant-table ant-table-small" />
-            </TableStickyHeader>
-          )
-        : null
-    }
-    <ObservableScrollableContainer
-      ref={scrollableContainerRef}
-      className={cn(
-        'table-scrolling-wrapper',
-        { 'table-height-full': fullHeight },
-        { 'table-bg-diagonal': backgroundPattern === 'diagonal' }
-      )}
-      resizingMode={resizingMode}
-      {...testAttributes}
-    >
-      <StyledTableContainer
-        hasSelectionColumn={Boolean(rowSelection)}
-        $previewTableWidth={previewTableWidth ?? scrollableContainerRef.current?.offsetWidth}
-      >
-        <StyledTable
-          {...tableProps}
+  const rowDraggingContainer = useDragDrop
+    ? createPortal(
+        <RowDraggingContainer
           {...tableCssProps}
-          ref={tableRef}
-          columns={columns}
-          rowSelection={rowSelection}
-          rowClassName={(record: TableRecord, index, indent) => (
-            cn(
-              { 'row-table-bg-pattern': !!record._blendedBackground },
-              typeof rowClassName === 'string' ? rowClassName : rowClassName?.(record, index, indent)
+          className={cn('table-draggable', { 'table-row-selection': !!rowSelection })}
+        >
+          <div className="ant-table ant-table-small">
+            <table>
+              <tbody className="ant-table-tbody row-dragging-container" />
+            </table>
+          </div>
+        </RowDraggingContainer>,
+        document.body
+      )
+    : null
+
+  return (
+    <>
+      {
+        stickyHeader !== undefined
+          ? (
+              <TableStickyHeader
+                {...tableCssProps}
+                ref={stickyHeaderRef}
+                className={STICKY_HEADER_CLASS}
+              >
+                <div
+                  className={cn('ant-table', 'ant-table-small', { 'table-col-after': afterColumn })}
+                  {...getChildTestAttr('sticky-header', testAttributes)}
+                />
+              </TableStickyHeader>
             )
-          )}
-          expandable={expandableConfig}
-          kl-id={klId}
-          loading={loading && loaderProps}
-          locale={{ emptyText: loading ? <></> : emptyText }}
-          showSorterTooltip={showSorterTooltip}
-          size="small"
-        />
-        {rowDraggingContainer}
-      </StyledTableContainer>
-    </ObservableScrollableContainer>
-    {/* TODO: подумать над заменой скролла на наш компонент  */}
-    <CustomScrollContainer
-      ref={horizontalScrollbarRef}
-      className="table-horizontal-scrollbar"
-      stickyScrollbarOffset={props.stickyScrollbarOffset}
-    >
-      <div className="table-horizontal-filler" />
-    </CustomScrollContainer>
-  </>
+          : null
+      }
+      <ObservableScrollableContainer
+        ref={scrollableContainerRef}
+        className={cn(
+          'table-scrolling-wrapper',
+          { 'table-height-full': fullHeight },
+          { 'table-bg-diagonal': backgroundPattern === 'diagonal' },
+          { 'table-col-after': afterColumn },
+          { 'table-with-borders': borderedStyle }
+        )}
+        resizingMode={resizingMode}
+        afterColumn={afterColumn}
+        columns={columns}
+        {...testAttributes}
+      >
+        <StyledTableContainer
+          hasSelectionColumn={Boolean(rowSelection)}
+          borderedStyle={borderedStyle}
+          $previewTableWidth={previewTableWidth ?? scrollableContainerRef.current?.offsetWidth}
+        >
+          <StyledTable<ComponentType<ITableProps<T>>>
+            {...tableProps}
+            {...tableCssProps}
+            ref={tableRef}
+            columns={columns}
+            rowClassName={(record, index, indent) => (
+              cn(
+                { 'row-table-bg-pattern': !!record._blendedBackground },
+                typeof rowClassName === 'string' ? rowClassName : rowClassName?.(record, index, indent)
+              )
+            )}
+            expandable={expandableConfig}
+            loading={(loadingProp || !isInited) && loaderProps}
+            locale={{ emptyText: !isInited ? <></> : emptyText }}
+            showSorterTooltip={showSorterTooltip}
+            size="small"
+          />
+          {rowDraggingContainer}
+        </StyledTableContainer>
+      </ObservableScrollableContainer>
+      {/* TODO: подумать над заменой скролла на наш компонент  */}
+      <CustomScrollContainer
+        ref={horizontalScrollbarRef}
+        className="table-horizontal-scrollbar"
+        stickyScrollbarOffset={props.stickyScrollbarOffset}
+      >
+        <div className="table-horizontal-filler" />
+      </CustomScrollContainer>
+    </>
+  )
 }

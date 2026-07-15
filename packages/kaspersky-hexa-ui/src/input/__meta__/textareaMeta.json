@@ -1,0 +1,18 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": true,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": true,
+    "apiTable": true,
+    "storybook": true,
+    "designLink": true,
+    "pixsoView": true
+  },
+  "component": "Textarea",
+  "description": "Многострочное поле текстового ввода. Основано на [TextArea](https://ant.design/components/input/#Input.TextArea) из библиотеки Antd",
+  "usage": "Используется для ввода и редактирования многострочного текста",
+  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?page-id=53702:192725",
+  "pixsoView": "https://pixso.net/app/design/QbTU8a3RxeUIyRn0KZUIbQ?page-id=0:1"
+}

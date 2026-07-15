@@ -1,0 +1,70 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { HelpMessage } from '../HelpMessage'
+import * as HelpMessageStories from './HelpMessage.stories'
+
+<Meta of={HelpMessageStories} name="HelpMessage Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="HelpMessage"
+  description='**HelpMessage** — текстовый компонент для вспомогательной информации и обратной связи под полями ввода и другими элементами интерфейса'
+/>
+
+<Tabs defaultActiveKey="description" destroyInactiveTabPane>
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**HelpMessage** выводит короткий текст под полем ввода, в форме или рядом с элементом управления. Семантика сообщения задаётся **mode**, содержимое — **text**. Компонент построен на **Text** с типографикой `BTR4` и темизацией Hexa UI."
+    />
+
+    <DocExampleBlock
+      title="mode"
+      description="Цветовой вариант сообщения. Доступные значения: `error`, `warning`, `success`, `common`. По умолчанию — `common`."
+      previewDirection="vertical"
+      code='
+    <HelpMessage mode="error" text="Error message" />
+    <HelpMessage mode="warning" text="Warning message" />
+    <HelpMessage mode="success" text="Success message" />
+    <HelpMessage mode="common" text="Common message" />'
+    />
+
+    <DocExampleBlock
+      title="text"
+      description="Отображаемый текст сообщения. Принимает строку или ReactNode."
+      code={`
+<HelpMessage text="Helper text for the field" />
+<HelpMessage text={<><Placeholder /> Helper text with icon</>} />`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**HelpMessage** — вспомогательный текст под полем ввода, в форме или рядом с элементом управления: подсказка по формату, результат валидации, статус сохранения или нейтральное пояснение. Используйте там, где нужна короткая обратная связь без перехвата фокуса.
+
+Для важных сообщений на уровне страницы или раздела применяйте **Alert**, а не **HelpMessage**."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+      <Text type="H3">Дизайн</Text>
+      <Text type="BTR3">
+        Раздел зарезервирован под дизайн-гайдлайны. Содержимое будет добавлено в следующих релизах.
+      </Text>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={HelpMessageStories} />
+    <AutodocArgsTable components={HelpMessage} />
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

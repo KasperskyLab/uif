@@ -6,7 +6,8 @@ import Tag from '../Tag'
 import { TagGroupProps } from '../types'
 
 const meta: Meta<TagGroupProps> = {
-  title: 'Hexa UI Components/Tag/Group',
+  title: 'Hexa UI Components/Tag/Stories/Group',
+  tags: ['!autodocs'],
   component: Tag.Group,
   argTypes: {
     orientation: {

@@ -1,8 +1,8 @@
+import { generateId } from '@helpers/generateId'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import cn from 'classnames'
 import React, { FC, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
-import { v4 as uuid } from 'uuid'
 
 import { segmentedButtonCss } from './segmentedButtonCss'
 import { SegmentedButtonItem } from './SegmentedButtonItem'
@@ -30,7 +30,7 @@ export const SegmentedButton: FC<SegmentedButtonProps> = (props) => {
     isStretch,
     style
   } = props
-  const optionsGroupId = useMemo(() => uuid(), [])
+  const optionsGroupId = useMemo(() => generateId(), [])
   const { testAttributes } = useTestAttribute(props)
   const isTypeCheckbox = type === 'checkbox'
   const isTypeRadio = type === 'radio'
@@ -49,7 +49,7 @@ export const SegmentedButton: FC<SegmentedButtonProps> = (props) => {
 
   const mappedItems: SegmentedButtonOptionMapped[] = useMemo(() => items.map(item => ({
     ...item,
-    id: uuid(),
+    id: generateId(),
     name: optionsGroupId
   })), [items, type, optionsGroupId])
 
@@ -73,10 +73,10 @@ export const SegmentedButton: FC<SegmentedButtonProps> = (props) => {
             selectedValues={value}
             onChange={onItemClick}
             theme={theme}
-            mode={ type === 'radio' ? TYPE_RADIO_MODE : item.mode || mode }
+            mode={type === 'radio' ? TYPE_RADIO_MODE : item.mode || mode}
             size={size}
             {...item}
-            disabled={ disabled || item.disabled }
+            disabled={disabled || item.disabled}
           />
         ))
       }

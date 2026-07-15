@@ -1,0 +1,180 @@
+import { ArgTypes, Description, Meta } from '@storybook/addon-docs/blocks'
+import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import { Space } from '@src/space'
+import { Text } from '@src/typography'
+
+import { AnchorNavigation, Navigation, NavigationItem } from '../AnchorNavigation'
+import * as AnchorNavigationStories from './AnchorNavigation.stories'
+import {
+  anchorNavigationDesignPropPresentation,
+  navigationItemDesignPropPresentation
+} from './AnchorNavigation.design.properties'
+
+<Meta of={AnchorNavigationStories} name="AnchorNavigation Docs" />
+
+<DocPageLayout>
+
+<DocPageHeader
+  title="AnchorNavigation"
+  description='**AnchorNavigation** — навигация по разделам одной страницы с автоматической подсветкой активного блока при прокрутке'
+/>
+
+<Tabs defaultActiveKey="description">
+  <Tabs.TabPane tab="Описание" key="description">
+
+    <DocExampleBlock
+      title="Описание компонента"
+      description="**AnchorNavigation** отображает длинный контент слева и фиксированную навигацию справа (256 px). Пункты задаются массивом **items**; каждый ***id*** должен совпадать с ***id*** соответствующего блока в **children**. При прокрутке активный пункт подсвечивается автоматически; клик или Enter по пункту плавно прокручивает к разделу. Панель навигации sticky и подстраивается под ближайший scrollable-родитель (например, **Sidebar**). Дополнительно настраиваются **title**, **className** и **style**."
+    />
+
+    <DocExampleBlock
+      title="items"
+      description="Обязательный проп. Массив пунктов навигации. Каждый элемент содержит ***id*** (совпадает с ***id*** блока контента), **label** (подпись в навигации), опционально **children** (вложенные пункты) и **elementAfter** (узел справа от подписи). Длинные **label** обрезаются многоточием после двух строк (**TextReducer** с **lineClamp**=`2`). При пустом массиве панель навигации не рендерится."
+      code={`
+<AnchorNavigation
+  items={[
+    { id: 'overview', label: 'Overview' },
+    { id: 'details', label: 'Details' },
+    { id: 'settings', label: 'Settings' }
+  ]}
+>
+<div style={{ width:"400px" }}>
+  <Text id="overview" type="BTS4">Overview</Text>
+  <Text id="details" type="BTS4">Details</Text>
+  <Text id="settings" type="BTS4">Settings</Text>
+</div>
+</AnchorNavigation>`}
+    />
+
+    <DocExampleBlock
+      title="children"
+      description="Обязательный проп. Контент страницы слева от навигации. Блоки разделов должны иметь ***id***, совпадающие с ***id*** пунктов **items**, чтобы работали прокрутка и автоматическая подсветка."
+      code={`
+<AnchorNavigation items={[{ id: 'section-1', label: 'Section 1' }]}>
+<div style={{ width:"400px" }}>
+  <H6 id="section-1">Section 1</H6>
+  <p>Section content</p>
+</div>
+</AnchorNavigation>`}
+    />
+
+    <DocExampleBlock
+      title="children в items"
+      description="Вложенные уровни навигации задаются полем **children** у пункта **items**. Каждый уровень смещён вправо на 20 px относительно родителя (базовый отступ — 8 px)."
+      code={`
+<AnchorNavigation
+items={[
+    {
+      id: 'section-1',
+      label: 'Section 1',
+      children: [{ id: 'section-1-1', label: 'Section 1.1' }]
+    },
+    {
+      id: 'section-2',
+      label: 'Section 2',
+      children: [
+        { id: 'section-2-1', label: 'Section 2.1' },
+        {
+        id: 'section-2-2',
+        label: 'Section 2.2',
+        children: [{ id: 'section-2-2-1', label: 'Section 2.2.1' }]
+        }
+      ]
+    }
+]}
+>
+<div style={{ width:"400px" }}>
+  <H4 id="section-1">Section 1</H4>
+    <H5 id="section-1-1">Section 1.1</H5>
+      <P>Content</P>
+  <H4 id="section-2">Section 2</H4>
+    <H5 id="section-2-1">Section 2.1</H5>
+      <P>Content</P>
+  <H5 id="section-2-2">Section 2.2</H5>
+      <H6 id="section-2-2-1">Section 2.2.1</H6>
+        <P>Content</P>
+</div>
+</AnchorNavigation>`}
+    />
+
+    <DocExampleBlock
+      title="elementAfter"
+      description="Необязательный React-узел справа от **label** пункта — например, **Badge** со счётчиком или меткой. Всплывающие элементы внутри **elementAfter** рендерятся в контейнер родительского пункта навигации."
+      code={`
+<AnchorNavigation
+  items={[
+    {
+      id: 'alerts',
+      label: 'Alerts',
+      elementAfter: <Badge mode="critical" count={3} />
+    },
+    {
+      id: 'updates',
+      label: 'Updates',
+      elementAfter: <Badge mode="resolved" text="new" />
+    }
+  ]}
+>
+<div style={{ width:"400px" }}>
+  <H6 id="alerts">Alerts</H6>
+  <P>Content</P>
+  <H6 id="updates">Updates</H6>
+  <P>Content</P>
+</div>
+</AnchorNavigation>`}
+    />
+
+    <DocExampleBlock
+      title="title"
+      description="Заголовок над списком пунктов навигации. Рендерится как **Text** с типом **BTM3**. Без **title** заголовок не отображается."
+      code={`
+<AnchorNavigation
+  title="Page Content"
+  items={[
+    { id: 'overview', label: 'Overview' },
+    { id: 'details', label: 'Details' }
+  ]}
+>
+<div style={{ width:"400px" }}>
+  <H6 id="overview">Overview</H6>
+  <P>Content</P>
+  <H6 id="details">Details</H6>
+  <P>Content</P>
+</div>
+</AnchorNavigation>`}
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Правила использования" key="howtouse">
+
+    <DocExampleBlock
+      title="Правила использования"
+      description="**AnchorNavigation** — карта длинной страницы или формы с несколькими логическими разделами: настройки продукта, документация, пошаговые блоки в боковой панели. Помогает понять структуру контента и быстро перейти к нужному разделу, не теряя ориентир при прокрутке.
+
+Для переключения между несвязанными представлениями одного экрана используйте **Tabs**. Для глобальной навигации по приложению — пункты меню в **Sidebar** или другие паттерны верхнего уровня, а не якорную навигацию по секциям страницы."
+    />
+
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайнеру" key="design">
+    <Space direction="vertical" gap={40} align="start">
+      <Space direction="vertical" gap={0} align="start">
+        <Text type="H3">anchor navigation</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(anchorNavigationDesignPropPresentation)} />
+      </Space>
+
+      <Space direction="vertical" gap={0} align="start">
+        <Text type="H3">anchor navigation item</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(navigationItemDesignPropPresentation)} />
+      </Space>
+    </Space>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Properties" key="properties">
+    <Description of={AnchorNavigationStories} />
+    <AutodocArgsTable components={[AnchorNavigation, Navigation, NavigationItem]}/>
+  </Tabs.TabPane>
+</Tabs>
+
+</DocPageLayout>

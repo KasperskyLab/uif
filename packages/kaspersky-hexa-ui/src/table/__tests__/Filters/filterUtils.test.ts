@@ -7,7 +7,13 @@ const createFilter = ({
   condition = FilterOperation.eq,
   type = FilterType.Number,
   attribute
-}: Partial<FilterConfig>): FilterConfig => ({ name, value, condition, type, attribute }) as FilterConfig
+}: Partial<FilterConfig>): FilterConfig => ({
+  name,
+  value,
+  condition,
+  type,
+  attribute
+}) as FilterConfig
 
 describe('mergeFilterStructures', () => {
   const filterA = createFilter({ name: 'A', value: 1 })
@@ -108,12 +114,11 @@ describe('mergeFilterStructures', () => {
 
     it('should correctly merge group properties and items', () => {
       const result = mergeFilterStructures(
-        { ...group1, label: 'Old', logicOperation: 'AND' },
-        { ...group1, label: 'New', logicOperation: 'OR', items: [filterE] }
+        { ...group1, logicOperation: 'AND' },
+        { ...group1, logicOperation: 'OR', items: [filterE] }
       )
       expect(result).toEqual({
         ...group1,
-        label: 'New',
         logicOperation: 'OR',
         items: [filterD, filterE]
       })
@@ -132,7 +137,7 @@ describe('mergeFilterStructures', () => {
     })
 
     it('should throw when merging array with group', () => {
-      // @ts-ignore test should throw error, so types is incorrect
+      // @ts-expect-error test should throw error, so types is incorrect
       expect(() => mergeFilterStructures([filterA], group1)).toThrow('Cannot merge array with group directly')
     })
   })

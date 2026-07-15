@@ -13,9 +13,16 @@ import { Text, TextProps } from '../text'
 import { TextDocs } from './TextDocs'
 
 const defaultTypes = [
-  'BTR2', 'BTR3', 'BTR4', 'BTR5',
-  'BTM2', 'BTM3', 'BTM4', 'BTM5',
-  'MTR3', 'MTR4'
+  'BTR2',
+  'BTR3',
+  'BTR4',
+  'BTR5',
+  'BTM2',
+  'BTM3',
+  'BTM4',
+  'BTM5',
+  'MTR3',
+  'MTR4'
 ]
 
 const defaultATColor = {
@@ -55,7 +62,7 @@ const meta: Meta<TextProps> = {
   decorators: [
     (Story, context) => (
       <Space gap={16} direction="vertical">
-        <Story {...context}/>
+        <Story {...context} />
       </Space>
     )
   ]
