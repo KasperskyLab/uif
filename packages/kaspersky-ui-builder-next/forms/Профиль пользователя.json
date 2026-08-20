@@ -1,0 +1,183 @@
+{
+  "id": "user-profile",
+  "name": "Профиль пользователя",
+  "schemaVersion": 1,
+  "settings": {
+    "showInNav": true,
+    "rootForm": false,
+    "ignoreValidationOnDomainSave": false,
+    "buildType": "any",
+    "dataSource": {
+      "type": "manual"
+    },
+    "dataSave": {
+      "type": "manual"
+    },
+    "useCachedData": false,
+    "disableChangeTracking": false,
+    "isParentEntity": false,
+    "progressIndicatorFunction": {
+      "enabled": false
+    },
+    "keepOpenOnDomainSave": false,
+    "showSaveAndCloseButton": false,
+    "onInitialize": {
+      "enabled": false
+    },
+    "afterRender": {
+      "enabled": false
+    },
+    "onClose": {
+      "enabled": false
+    },
+    "displayType": "default",
+    "hideActionBarOnFormChange": false,
+    "actionBarButtons": {
+      "enabled": false
+    },
+    "title": "Профиль пользователя",
+    "author": "Form team"
+  },
+  "elements": [
+    {
+      "id": "profile-grid",
+      "type": "Grid",
+      "props": {},
+      "meta": {
+        "buildType": "any"
+      },
+      "state": {
+        "visible": true,
+        "disabled": false,
+        "readOnly": false,
+        "loading": false,
+        "invalid": false
+      },
+      "style": {
+        "nestingLevel": "none",
+        "marginTop": "none",
+        "marginBottom": "none",
+        "marginRight": "none",
+        "labelPosition": "left",
+        "labelType": "default",
+        "controlWidth": 0,
+        "tooltipWidth": 0,
+        "cssClass": ""
+      },
+      "children": [
+        {
+          "id": "user-name",
+          "type": "Textbox",
+          "props": {
+            "value": "",
+            "showClearButton": true
+          },
+          "meta": {
+            "buildType": "any"
+          },
+          "style": {
+            "nestingLevel": "none",
+            "marginTop": "none",
+            "marginBottom": "none",
+            "marginRight": "none",
+            "labelPosition": "left",
+            "labelType": "default",
+            "controlWidth": 0,
+            "tooltipWidth": 0,
+            "cssClass": ""
+          },
+          "state": {
+            "visible": true,
+            "disabled": false,
+            "readOnly": false,
+            "loading": false,
+            "invalid": false
+          }
+        },
+        {
+          "id": "user-role",
+          "type": "Select",
+          "props": {
+            "allowClear": true
+          },
+          "meta": {
+            "buildType": "any"
+          },
+          "state": {
+            "visible": true,
+            "disabled": false,
+            "readOnly": false,
+            "loading": false,
+            "invalid": false
+          },
+          "style": {
+            "nestingLevel": "none",
+            "marginTop": "none",
+            "marginBottom": "none",
+            "marginRight": "none",
+            "labelPosition": "left",
+            "labelType": "default",
+            "controlWidth": 0,
+            "tooltipWidth": 0,
+            "cssClass": ""
+          }
+        },
+        {
+          "id": "is-active",
+          "type": "Toggle",
+          "props": {},
+          "meta": {
+            "buildType": "any"
+          },
+          "state": {
+            "visible": true,
+            "disabled": false,
+            "readOnly": false,
+            "loading": false,
+            "invalid": false
+          },
+          "style": {
+            "nestingLevel": "none",
+            "marginTop": "none",
+            "marginBottom": "none",
+            "marginRight": "none",
+            "labelPosition": "left",
+            "labelType": "default",
+            "controlWidth": 0,
+            "tooltipWidth": 0,
+            "cssClass": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "save-button",
+      "type": "Button",
+      "props": {
+        "text": "Сохранить",
+        "mode": "primary"
+      },
+      "meta": {
+        "buildType": "any"
+      },
+      "state": {
+        "visible": true,
+        "disabled": false,
+        "readOnly": false,
+        "loading": false,
+        "invalid": false
+      },
+      "style": {
+        "nestingLevel": "none",
+        "marginTop": "none",
+        "marginBottom": "none",
+        "marginRight": "none",
+        "labelPosition": "left",
+        "labelType": "default",
+        "controlWidth": 0,
+        "tooltipWidth": 0,
+        "cssClass": ""
+      }
+    }
+  ]
+}

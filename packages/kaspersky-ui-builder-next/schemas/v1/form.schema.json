@@ -1,0 +1,639 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://form-builder.local/schemas/v1/form.schema.json",
+  "title": "Form schema v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "schemaVersion", "elements"],
+  "properties": {
+    "id": { "$ref": "#/$defs/nonEmptyString" },
+    "name": { "$ref": "#/$defs/nonEmptyString" },
+    "schemaVersion": { "const": 1 },
+    "elements": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/schemaNode" }
+    },
+    "settings": { "$ref": "#/$defs/formSettings" }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nullableString": {
+      "type": ["string", "null"]
+    },
+    "buildType": {
+      "enum": ["any", "A", "typeB"]
+    },
+    "functionReference": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "key"],
+          "properties": {
+            "type": { "const": "runtime" },
+            "key": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "filePath"],
+          "properties": {
+            "type": { "const": "file" },
+            "filePath": { "$ref": "#/$defs/nonEmptyString" },
+            "exportName": { "$ref": "#/$defs/nullableString" }
+          }
+        }
+      ]
+    },
+    "toggleableFunction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "function": { "$ref": "#/$defs/functionReference" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "enabled": { "const": true } },
+            "required": ["enabled"]
+          },
+          "then": { "required": ["function"] }
+        }
+      ]
+    },
+    "serverParametersSource": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "object"],
+          "properties": {
+            "type": { "const": "object" },
+            "object": { "$ref": "#/$defs/nullableString" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "function"],
+          "properties": {
+            "type": { "const": "handler" },
+            "function": { "$ref": "#/$defs/functionReference" }
+          }
+        }
+      ]
+    },
+    "serverMethodConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["methodName", "parametersSource"],
+      "properties": {
+        "methodName": { "$ref": "#/$defs/nonEmptyString" },
+        "parametersSource": { "$ref": "#/$defs/serverParametersSource" }
+      }
+    },
+    "formDataSource": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": { "type": { "const": "manual" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "function"],
+          "properties": {
+            "type": { "const": "handler" },
+            "function": { "$ref": "#/$defs/functionReference" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "server"],
+          "properties": {
+            "type": { "const": "server" },
+            "server": { "$ref": "#/$defs/serverMethodConfig" }
+          }
+        }
+      ]
+    },
+    "formDataSave": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": { "type": { "const": "manual" } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "server"],
+          "properties": {
+            "type": { "const": "server" },
+            "server": { "$ref": "#/$defs/serverMethodConfig" }
+          }
+        }
+      ]
+    },
+    "actionBarButtonsOverride": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "okButtonTitle": { "$ref": "#/$defs/nullableString" },
+        "saveButtonTitle": { "$ref": "#/$defs/nullableString" },
+        "cancelButtonTitle": { "$ref": "#/$defs/nullableString" }
+      }
+    },
+    "formSettings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "helpId": { "$ref": "#/$defs/nullableString" },
+        "title": { "$ref": "#/$defs/nullableString" },
+        "modeAddTitle": { "$ref": "#/$defs/nullableString" },
+        "modeEditTitle": { "$ref": "#/$defs/nullableString" },
+        "showInNav": { "type": "boolean" },
+        "rootForm": { "type": "boolean" },
+        "ignoreValidationOnDomainSave": { "type": "boolean" },
+        "objectType": { "type": ["string", "null"], "enum": ["type1", "type2", "type3", null] },
+        "domain": { "$ref": "#/$defs/nullableString" },
+        "buildType": { "$ref": "#/$defs/buildType" },
+        "author": { "$ref": "#/$defs/nullableString" },
+        "dataSource": { "$ref": "#/$defs/formDataSource" },
+        "dataSave": { "$ref": "#/$defs/formDataSave" },
+        "useCachedData": { "type": "boolean" },
+        "disableChangeTracking": { "type": "boolean" },
+        "isParentEntity": { "type": "boolean" },
+        "progressIndicatorFunction": { "$ref": "#/$defs/toggleableFunction" },
+        "keepOpenOnDomainSave": { "type": "boolean" },
+        "showSaveAndCloseButton": { "type": "boolean" },
+        "onInitialize": { "$ref": "#/$defs/toggleableFunction" },
+        "afterRender": { "$ref": "#/$defs/toggleableFunction" },
+        "onClose": { "$ref": "#/$defs/toggleableFunction" },
+        "displayType": { "enum": ["default", "details", "flyout", "modal"] },
+        "parentFormId": { "$ref": "#/$defs/nullableString" },
+        "hideActionBarOnFormChange": { "type": "boolean" },
+        "actionBarButtons": { "$ref": "#/$defs/actionBarButtonsOverride" }
+      }
+    },
+    "elementState": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "visible": { "type": "boolean" },
+        "disabled": { "type": "boolean" },
+        "readOnly": { "type": "boolean" },
+        "loading": { "type": "boolean" },
+        "invalid": { "type": "boolean" }
+      }
+    },
+    "valueCast": {
+      "enum": ["none", "string", "int", "number", "bool", "date"]
+    },
+    "valueSource": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "value", "cast"],
+          "properties": {
+            "type": { "const": "simpleValue" },
+            "value": { "type": ["string", "null"] },
+            "cast": { "$ref": "#/$defs/valueCast" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "function"],
+          "properties": {
+            "type": { "const": "fileFunction" },
+            "function": {
+              "allOf": [
+                { "$ref": "#/$defs/functionReference" },
+                { "type": "object", "properties": { "type": { "const": "file" } } }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "getter", "initializeOnly", "setter"],
+          "properties": {
+            "type": { "const": "functionHandler" },
+            "getter": { "$ref": "#/$defs/functionReference" },
+            "initializeOnly": { "type": "boolean" },
+            "setter": { "$ref": "#/$defs/functionReference" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "propertyName", "cast", "patchFromContextBeforeDisplay", "patchBeforeSaveToContext"],
+          "properties": {
+            "type": { "const": "modelProperty" },
+            "propertyName": { "type": ["string", "null"] },
+            "cast": { "$ref": "#/$defs/valueCast" },
+            "patchFromContextBeforeDisplay": { "type": "boolean" },
+            "patchBeforeSaveToContext": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "key"],
+          "properties": {
+            "type": { "const": "runtimeVariable" },
+            "key": { "type": ["string", "null"] }
+          }
+        }
+      ]
+    },
+    "valueEvents": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "afterValueChange": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["function"],
+          "properties": { "function": { "$ref": "#/$defs/functionReference" } }
+        },
+        "hideActionBarOnChange": { "type": "boolean" }
+      }
+    },
+    "valueModelInteraction": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "ignoreModelChangesAfterInitialization": { "type": "boolean" },
+        "suppressControlChangeHighlight": { "type": "boolean" }
+      }
+    },
+    "elementValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source"],
+      "properties": {
+        "source": { "$ref": "#/$defs/valueSource" },
+        "events": { "$ref": "#/$defs/valueEvents" },
+        "modelInteraction": { "$ref": "#/$defs/valueModelInteraction" }
+      }
+    },
+    "nestingLevel": {
+      "enum": ["none", "related", "grouped", "section", "separated", "space1", "space2", "space3", "checkboxWidth", "toggleWidth", "labelWidth"]
+    },
+    "verticalMargin": {
+      "enum": ["none", "related", "grouped", "section", "separated", "space1", "space2", "space3", "negative1", "negative2", "negative3"]
+    },
+    "rightMargin": {
+      "enum": ["none", "related", "grouped", "section", "separated", "space1", "space2", "space3"]
+    },
+    "elementStyle": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "nestingLevel": { "$ref": "#/$defs/nestingLevel" },
+        "marginBottom": { "$ref": "#/$defs/verticalMargin" },
+        "marginTop": { "$ref": "#/$defs/verticalMargin" },
+        "marginRight": { "$ref": "#/$defs/rightMargin" },
+        "labelPosition": { "enum": ["left", "top", "right"] },
+        "labelType": { "enum": ["default", "full", "stretch"] },
+        "controlWidth": { "type": "number", "minimum": 0 },
+        "tooltipWidth": { "type": "number", "minimum": 0 },
+        "cssClass": { "$ref": "#/$defs/nullableString" }
+      }
+    },
+    "conditionSource": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "elementId"],
+          "properties": {
+            "type": { "const": "element" },
+            "elementId": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "key"],
+          "properties": {
+            "type": { "const": "runtime" },
+            "key": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "path"],
+          "properties": {
+            "type": { "const": "model" },
+            "path": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "function"],
+          "properties": {
+            "type": { "const": "function" },
+            "function": { "$ref": "#/$defs/functionReference" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "expression"],
+          "properties": {
+            "type": { "const": "modelExpression" },
+            "expression": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        }
+      ]
+    },
+    "conditionOperand": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "value"],
+          "properties": {
+            "type": { "const": "literal" },
+            "value": true
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "source"],
+          "properties": {
+            "type": { "const": "source" },
+            "source": { "$ref": "#/$defs/conditionSource" }
+          }
+        }
+      ]
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source"],
+      "properties": {
+        "source": { "$ref": "#/$defs/conditionSource" },
+        "operator": { "enum": ["truthy", "falsy", "eq", "neq", "gt", "gte", "lt", "lte", "includes", "empty", "notEmpty"] },
+        "operand": { "$ref": "#/$defs/conditionOperand" },
+        "cast": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source", "operand"],
+          "properties": {
+            "source": { "$ref": "#/$defs/valueCast" },
+            "operand": { "$ref": "#/$defs/valueCast" }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "operator": { "enum": ["eq", "neq", "gt", "gte", "lt", "lte", "includes"] } },
+            "required": ["operator"]
+          },
+          "then": { "required": ["operand"] }
+        },
+        {
+          "if": {
+            "properties": { "operator": { "enum": ["truthy", "falsy", "empty", "notEmpty"] } },
+            "required": ["operator"]
+          },
+          "then": { "not": { "required": ["operand"] } }
+        }
+      ]
+    },
+    "conditionGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["combinator", "conditions"],
+      "properties": {
+        "combinator": { "enum": ["AND", "OR"] },
+        "conditions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/conditionExpression" }
+        }
+      }
+    },
+    "conditionExpression": {
+      "oneOf": [
+        { "$ref": "#/$defs/condition" },
+        { "$ref": "#/$defs/conditionGroup" }
+      ]
+    },
+    "elementDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "property", "value", "condition"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "property": { "enum": ["visible", "disabled", "readOnly", "loading"] },
+        "value": { "type": "boolean" },
+        "condition": { "$ref": "#/$defs/conditionExpression" }
+      }
+    },
+    "validationType": {
+      "enum": ["Date", "Email", "Integer", "Number", "Float number", "IPv4", "IPv6", "MAC address", "Path", "Range", "String", "Proxy", "Host name", "Net bios name", "Not empty", "Length", "Group", "RangeEnum", "IPv4Mask", "IPv6Mask", "ipv4SubnetMask", "ipv6SubnetMask", "Ignore special chars", "Ignore special chars (v2)", "Ignore special chars (v3)", "Ignore special chars (v4)", "Password", "Ignore first or last spaces", "URL Input", "URL http Input", "Port", "Custom function", "Equality", "Not equal"]
+    },
+    "rangeConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": { "const": "range" },
+        "from": {
+          "anyOf": [
+            { "type": "number" },
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        },
+        "to": {
+          "anyOf": [
+            { "type": "number" },
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "lengthConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "operator", "value"],
+      "properties": {
+        "kind": { "const": "length" },
+        "operator": { "enum": [">", ">=", "<=", "<", "="] },
+        "value": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "rangeEnumConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "allowEmpty"],
+      "properties": {
+        "kind": { "const": "rangeEnum" },
+        "from": {
+          "anyOf": [
+            { "type": "number" },
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        },
+        "to": {
+          "anyOf": [
+            { "type": "number" },
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        },
+        "allowEmpty": { "type": "boolean" }
+      }
+    },
+    "customFunctionConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "function"],
+      "properties": {
+        "kind": { "const": "customFunction" },
+        "function": { "$ref": "#/$defs/functionReference" }
+      }
+    },
+    "equalityConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "equals"],
+      "properties": {
+        "kind": { "const": "equality" },
+        "equals": { "type": ["string", "null"] }
+      }
+    },
+    "notEqualConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "notEquals"],
+      "properties": {
+        "kind": { "const": "notEqual" },
+        "notEquals": { "type": ["string", "null"] }
+      }
+    },
+    "validationConfig": {
+      "oneOf": [
+        { "$ref": "#/$defs/rangeConfig" },
+        { "$ref": "#/$defs/lengthConfig" },
+        { "$ref": "#/$defs/rangeEnumConfig" },
+        { "$ref": "#/$defs/customFunctionConfig" },
+        { "$ref": "#/$defs/equalityConfig" },
+        { "$ref": "#/$defs/notEqualConfig" }
+      ]
+    },
+    "validationRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "type"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "name": { "$ref": "#/$defs/validationType" },
+        "type": { "$ref": "#/$defs/validationType" },
+        "enabled": { "type": "boolean" },
+        "message": { "$ref": "#/$defs/nullableString" },
+        "config": { "$ref": "#/$defs/validationConfig" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "Range" } }, "required": ["type"] },
+          "then": { "properties": { "config": { "$ref": "#/$defs/rangeConfig" } }, "required": ["config"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "Length" } }, "required": ["type"] },
+          "then": { "properties": { "config": { "$ref": "#/$defs/lengthConfig" } }, "required": ["config"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "RangeEnum" } }, "required": ["type"] },
+          "then": { "properties": { "config": { "$ref": "#/$defs/rangeEnumConfig" } }, "required": ["config"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "Custom function" } }, "required": ["type"] },
+          "then": { "properties": { "config": { "$ref": "#/$defs/customFunctionConfig" } }, "required": ["config"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "Equality" } }, "required": ["type"] },
+          "then": { "properties": { "config": { "$ref": "#/$defs/equalityConfig" } }, "required": ["config"] }
+        },
+        {
+          "if": { "properties": { "type": { "const": "Not equal" } }, "required": ["type"] },
+          "then": { "properties": { "config": { "$ref": "#/$defs/notEqualConfig" } }, "required": ["config"] }
+        }
+      ]
+    },
+    "elementMeta": {
+      "type": "object",
+      "required": ["buildType"],
+      "properties": {
+        "buildType": { "$ref": "#/$defs/buildType" }
+      },
+      "additionalProperties": true
+    },
+    "schemaNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "props", "meta"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "alias": { "$ref": "#/$defs/nullableString" },
+        "helpId": { "$ref": "#/$defs/nullableString" },
+        "type": { "$ref": "#/$defs/nonEmptyString" },
+        "props": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "lockId": { "$ref": "#/$defs/nullableString" },
+        "accordionId": { "$ref": "#/$defs/nullableString" },
+        "state": { "$ref": "#/$defs/elementState" },
+        "value": { "$ref": "#/$defs/elementValue" },
+        "style": { "$ref": "#/$defs/elementStyle" },
+        "meta": { "$ref": "#/$defs/elementMeta" },
+        "validation": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/validationRule" }
+        },
+        "dependencies": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/elementDependency" }
+        },
+        "children": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/schemaNode" }
+        }
+      }
+    }
+  }
+}

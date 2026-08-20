@@ -1,0 +1,7 @@
+{
+  "id": "network-settings",
+  "name": "Сетевые настройки",
+  "schemaVersion": 1,
+  "settings": { "title": "Сетевые настройки", "showInNav": false, "buildType": "any", "dataSource": { "type": "manual" }, "dataSave": { "type": "manual" }, "displayType": "details" },
+  "elements": []
+}

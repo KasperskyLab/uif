@@ -1,0 +1,75 @@
+{
+  "id": "full-form",
+  "name": "Full form",
+  "schemaVersion": 1,
+  "settings": {
+    "title": "Full form",
+    "showInNav": false,
+    "rootForm": false,
+    "ignoreValidationOnDomainSave": false,
+    "buildType": "any",
+    "dataSource": { "type": "manual" },
+    "dataSave": { "type": "manual" },
+    "useCachedData": false,
+    "disableChangeTracking": false,
+    "isParentEntity": false,
+    "progressIndicatorFunction": { "enabled": false },
+    "keepOpenOnDomainSave": false,
+    "showSaveAndCloseButton": false,
+    "onInitialize": { "enabled": false },
+    "afterRender": { "enabled": false },
+    "onClose": { "enabled": false },
+    "displayType": "default",
+    "hideActionBarOnFormChange": false,
+    "actionBarButtons": { "enabled": false }
+  },
+  "elements": [
+    {
+      "id": "full-input",
+      "alias": "primaryInput",
+      "helpId": "full-input-help",
+      "type": "Textbox",
+      "props": { "value": "example" },
+      "state": {
+        "visible": true,
+        "disabled": false,
+        "readOnly": false,
+        "loading": false,
+        "invalid": false
+      },
+      "style": {
+        "nestingLevel": "none",
+        "marginTop": "none",
+        "marginBottom": "none",
+        "marginRight": "none",
+        "labelPosition": "left",
+        "labelType": "default",
+        "controlWidth": 0,
+        "tooltipWidth": 0,
+        "cssClass": ""
+      },
+      "meta": { "buildType": "any", "entity": "text" },
+      "validation": [
+        {
+          "id": "required-rule",
+          "name": "Not empty",
+          "type": "Not empty",
+          "enabled": true
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "visibility-dependency",
+          "property": "visible",
+          "value": true,
+          "condition": {
+            "source": { "type": "model", "path": "enabled" },
+            "operator": "eq",
+            "operand": { "type": "literal", "value": true },
+            "cast": { "source": "bool", "operand": "bool" }
+          }
+        }
+      ]
+    }
+  ]
+}

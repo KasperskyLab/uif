@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://form-builder.local/schemas/palette.schema.json",
+  "title": "Component palette manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "paletteVersion", "package", "components"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "paletteVersion": { "type": "string", "minLength": 1 },
+    "package": { "$ref": "#/$defs/packageReference" },
+    "categoryOrder": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "components": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/component" }
+    }
+  },
+  "$defs": {
+    "packageReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "versionRange"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "versionRange": { "type": "string", "minLength": 1 }
+      }
+    },
+    "elementMeta": {
+      "type": "object",
+      "required": ["buildType"],
+      "properties": {
+        "buildType": { "enum": ["any", "A", "typeB"] }
+      },
+      "additionalProperties": true
+    },
+    "preview": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "labelProp": { "type": "string", "minLength": 1 },
+        "valueProp": { "type": "string", "minLength": 1 },
+        "icon": { "type": "string", "minLength": 1 }
+      }
+    },
+    "editorOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "label"],
+      "properties": {
+        "value": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "number" },
+            { "type": "boolean" }
+          ]
+        },
+        "label": { "type": "string" }
+      }
+    },
+    "propEditorOverride": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "editor": {
+          "enum": ["text", "number", "checkbox", "select", "multiselect", "json", "function", "iconSelect", "hidden"]
+        },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "options": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/editorOption" }
+        }
+      }
+    },
+    "propsConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "include": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "exclude": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "overrides": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/propEditorOverride" }
+        }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "exportName", "propsType", "title", "acceptsChildren"],
+      "properties": {
+        "type": { "type": "string", "minLength": 1 },
+        "exportName": { "type": "string", "minLength": 1 },
+        "exportPath": { "type": "string" },
+        "propsType": { "type": "string", "minLength": 1 },
+        "propsTypePath": { "type": "string" },
+        "title": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "keywords": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "category": { "type": "string" },
+        "order": { "type": "number" },
+        "icon": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["stable", "experimental", "deprecated"] },
+        "deprecatedMessage": { "type": "string" },
+        "since": { "type": "string", "minLength": 1 },
+        "until": { "type": "string", "minLength": 1 },
+        "acceptsChildren": { "type": "boolean" },
+        "deniedChildren": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "defaultProps": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "defaultMeta": { "$ref": "#/$defs/elementMeta" },
+        "preview": { "$ref": "#/$defs/preview" },
+        "props": { "$ref": "#/$defs/propsConfig" },
+        "meta": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}

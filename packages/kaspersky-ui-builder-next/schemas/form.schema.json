@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://form-builder.local/schemas/form.schema.json",
+  "title": "Form schema",
+  "description": "Version dispatcher for form schemas",
+  "oneOf": [
+    {
+      "$ref": "./v1/form.schema.json"
+    }
+  ]
+}
