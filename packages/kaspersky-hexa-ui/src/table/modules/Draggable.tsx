@@ -1,6 +1,11 @@
-import cn from 'classnames'
 import isEqual from 'lodash/isEqual'
-import React, { useEffect, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import {
   SortableContainer as sortableContainer,
   SortableElement as sortableElement,
@@ -10,9 +15,11 @@ import {
 
 import { DragDrop } from '@kaspersky/hexa-ui-icons/16'
 
-import { EmptyDashComponent } from '../modules/EmptyCellDash'
+import { ITableProps, TableRecord } from '..'
 
-import { TableModule } from './index'
+import { TableComponent } from './index'
+
+export const DND_COLUMN_KEY = 'dnd'
 
 const DragHandle = sortableHandle(() => (
   <span className="drag-handle-container">
@@ -68,109 +75,118 @@ const setDragHandleHoverHidden = (isHidden: boolean, body: HTMLElement) => {
   }
 }
 
-export const DraggableTable: TableModule = (Component) => function DraggableModule (props: any) {
-  const rowsRef = React.useRef(props.dataSource ? [...props.dataSource] : [])
-  const [columns, setColumns] = useState([...props.columns])
-  const [components, setComponents] = useState({ ...props.components })
+export const DraggableTable = <T extends TableRecord = TableRecord> (
+  Component: TableComponent<T>
+): TableComponent<T> => function DraggableTableModule (props) {
+  const rowsRef = useRef<T[]>(props.dataSource ? [...props.dataSource] : [])
+  const [columns, setColumns] = useState(props.columns)
 
-  // TODO: переделать логику с выставлением данных в useEffect, заменить на однокоммитные операции (useMemo) #10082646
+  const onDragStartRef = useRef(props.onDragStart)
+  onDragStartRef.current = props.onDragStart
+  const onDragEndRef = useRef(props.onDragEnd)
+  onDragEndRef.current = props.onDragEnd
+
   useEffect(() => {
     if (
       props.useDragDrop &&
       props.dataSource &&
       !isEqual(props.dataSource, rowsRef.current)
     ) {
-      const newRows = [...props.dataSource]
-      newRows.forEach((row, index) => {
-        row.index = index
-      })
-      rowsRef.current = newRows
+      rowsRef.current = props.dataSource.map((row: any, index: number) => ({ ...row, index }))
     }
   }, [props.dataSource, props.useDragDrop])
 
   useEffect(() => {
-    if (props.useDragDrop && props.columns.length) {
-      const firstColumn = props.columns[0]
+    if (props.useDragDrop && props.columns?.length) {
       setColumns([
         {
-          ...firstColumn,
-          render: (text: string, record: any, index: number) => (
-            <>
-              <DragHandle />
-              {firstColumn.render
-                ? firstColumn.render(text, record, index)
-                : firstColumn.hasEmptyCellDash && (text === undefined || text === null || String(text).trim() === '')
-                  ? <EmptyDashComponent />
-                  : text
-              }
-            </>
-          )
+          title: '',
+          key: DND_COLUMN_KEY,
+          dataIndex: DND_COLUMN_KEY,
+          width: 0,
+          resizing: {
+            disabled: true
+          },
+          render: (_, row: TableRecord) => (
+            !row._disabled && !row._outOfDndContext && <DragHandle />
+          ),
+          onCell: () => ({
+            className: 'hexa-ui-dnd-column'
+          })
         },
-        ...props.columns.slice(1)
+        ...props.columns
       ])
     }
   }, [props.useDragDrop, props.columns])
 
-  useEffect(() => {
-    if (props.useDragDrop) {
-      const helperContainer = document.querySelector('.row-dragging-container') as HTMLElement
-      const body = document.body
+  const onSortStart = useCallback(({ node }: SortStart) => {
+    const body = document.body
+    body.style.userSelect = 'none'
+    const helper = document.querySelector('.row-dragging') as HTMLElement
+    setDragHandleHoverHidden(true, body)
 
-      const onSortStart = ({ node }: SortStart) => {
-        body.style.userSelect = 'none'
-        const helper = document.querySelector('.row-dragging') as HTMLElement
-        setDragHandleHoverHidden(true, body)
+    if (!helper) return
+    syncDraggingRowLayout(node as HTMLElement, helper)
 
-        if (!helper) return
-        syncDraggingRowLayout(node as HTMLElement, helper)
+    onDragStartRef.current?.(rowsRef.current)
+  }, [])
 
-        props.onDragStart?.(rowsRef.current)
+  const onSortEnd = useCallback(({ oldIndex, newIndex }: any) => {
+    const body = document.body
+    body.style.userSelect = 'auto'
+    const newRows = arrayMove(rowsRef.current, oldIndex, newIndex)
+    rowsRef.current = newRows
+    setDragHandleHoverHidden(false, body)
 
-      }
+    onDragEndRef.current?.(newRows)
+  }, [])
 
-      const onSortEnd = ({ oldIndex, newIndex }: any) => {
-        body.style.userSelect = 'auto'
-        const newRows = arrayMove(rowsRef.current, oldIndex, newIndex)
-        rowsRef.current = newRows
-        setDragHandleHoverHidden(false, body)
+  const components = useMemo<ITableProps<T>['components']>(() => {
+    if (!props.useDragDrop) return props.components
 
-        props.onDragEnd?.(newRows)
-      }
+    // any in original type from rc-table
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const DraggableContainer = (containerProps: any) => (
+      <SortableContainer
+        useDragHandle
+        disableAutoscroll
+        helperClass="row-dragging"
+        onSortStart={onSortStart}
+        onSortEnd={onSortEnd}
+        helperContainer={document.querySelector('.row-dragging-container') as HTMLElement}
+        axis="y"
+        lockAxis="y"
+        {...containerProps}
+      />
+    )
 
-      const DraggableContainer = (props: any) => (
-        <SortableContainer
-          useDragHandle
-          disableAutoscroll
-          helperClass="row-dragging"
-          onSortStart={onSortStart}
-          onSortEnd={onSortEnd}
-          helperContainer={helperContainer}
-          axis="y"
-          lockAxis="y"
-          {...props}
-        />
+    // any in original type from rc-table
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const DraggableBodyRow = (rowProps: any) => {
+      const index = rowsRef.current.findIndex(
+        (x) => x.key === rowProps['data-row-key']
       )
 
-      const DraggableBodyRow = (props: any) => {
-        const index = rowsRef.current.findIndex(
-          (x) => x.key === props['data-row-key']
-        )
+      const isDisabled = rowsRef.current[index]._disabled
 
-        return <SortableItem index={index} {...props} />
+      if (rowsRef.current[index]._outOfDndContext) {
+        return <tr {...rowProps} />
       }
 
-      setComponents({
-        body: {
-          wrapper: DraggableContainer,
-          row: DraggableBodyRow
-        }
-      })
+      return <SortableItem disabled={isDisabled} index={index} {...rowProps} />
+    }
 
-      return () => {
-        body.style.userSelect = 'auto'
+    return {
+      body: {
+        wrapper: DraggableContainer,
+        row: DraggableBodyRow
       }
     }
-  }, [rowsRef, props.useDragDrop])
+  }, [props.useDragDrop, props.components, onSortStart, onSortEnd])
+
+  useEffect(() => () => {
+    document.body.style.userSelect = 'auto'
+  }, [])
 
   if (props.useDragDrop) {
     return (
@@ -179,7 +195,7 @@ export const DraggableTable: TableModule = (Component) => function DraggableModu
         dataSource={rowsRef.current}
         columns={columns}
         components={components}
-        className={cn(props.className, 'table-draggable', { 'table-row-selection': !!props.rowSelection })}
+        className={props.className}
       />
     )
   } else {

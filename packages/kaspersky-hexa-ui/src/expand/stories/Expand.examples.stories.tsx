@@ -5,7 +5,7 @@ import React from 'react'
 
 import { Expand as ExpandComponent } from '../Expand'
 import { expandMockText } from './expandStoryData'
-import { expandStorySettings } from '../Expand.stories'
+import { expandStorySettings } from './Expand.stories'
 import { ExpandProps } from '../types'
 
 const meta: Meta<typeof ExpandComponent> = {

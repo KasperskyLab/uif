@@ -1,4 +1,5 @@
 import { TextReducer } from '@helpers/components/TextReducer'
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { getChildTestProps, useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { ActionButton } from '@src/action-button'
 import { ActionButtonProps } from '@src/action-button/types'
@@ -7,63 +8,49 @@ import { Text } from '@src/typography'
 import AntdTag from 'antd/es/tag'
 import cn from 'classnames'
 import React, { FC } from 'react'
-import styled from 'styled-components'
 
 import { StatusDangerSolid1 } from '@kaspersky/hexa-ui-icons/16'
 import { Close } from '@kaspersky/hexa-ui-icons/8'
 
 import { Group } from '../helpers/Group'
 
-import { tagCss } from './tagCss'
-import { TagProps, TagVariants, TagViewProps } from './types'
-import { useThemedTag } from './useThemedTag'
-
-const StyledTag = styled(AntdTag).withConfig({
-  shouldForwardProp: (prop) => !['cssConfig', 'interactive', 'truncation', 'outlined'].includes(prop)
-})`
-  ${tagCss}
-`
-
-export const Tag: FC<TagProps> & TagVariants = (rawProps: TagProps) => {
-  const themedProps = useThemedTag(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <TagView {...props} />
-}
+import styles from './Tag.module.scss'
+import { tagModes, TagProps, TagVariants } from './types'
 
 const DEFAULT_TRUNCATION_SYMBOL = '...'
 const MAX_CHARS_LIMIT = 50
 
-const TagView: FC<TagViewProps> = ({
-  children,
-  icon,
-  cssConfig,
-  label,
-  onClose,
-  className,
-  closable,
-  invalid,
-  outlined,
-  ref,
-  testAttributes,
-  isResponsive,
-  ...rest
-}: TagViewProps) => {
+export const Tag: FC<TagProps> & TagVariants = (rawProps: TagProps) => {
   const {
-    mode: tagMode,
-    size,
+    children,
+    icon,
+    label,
+    onClose,
+    className,
+    closable,
+    invalid,
+    outlined,
+    isResponsive,
+    mode: rawMode = 'neutral',
+    size = 'medium',
+    theme,
     disabled,
     readOnly,
     interactive,
     truncation = {},
-    onClick
-  } = rest
+    onClick,
+    testAttributes,
+    ...rest
+  } = useTestAttribute(rawProps)
+
+  const mode = tagModes.includes(rawMode) ? rawMode : 'neutral'
 
   const isActiveTagState = !readOnly && !disabled && !invalid
   const isInteractive = isActiveTagState && (interactive || onClick)
   const isUninteractive = (!isActiveTagState || !interactive) && !onClick
 
   const { maxChars, truncationSymbol = DEFAULT_TRUNCATION_SYMBOL, tooltipPosition } = truncation
-  const actionButtonMode: ActionButtonProps['mode'] = !outlined && tagMode !== 'neutral' ? 'ghostInverted' : 'ghost'
+  const actionButtonMode: ActionButtonProps['mode'] = !outlined && mode !== 'neutral' ? 'ghostInverted' : 'ghost'
 
   const content = children || label
   const effectiveMaxChars = maxChars && maxChars <= MAX_CHARS_LIMIT ? maxChars : MAX_CHARS_LIMIT
@@ -78,7 +65,7 @@ const TagView: FC<TagViewProps> = ({
     <>
       {icon &&
         React.cloneElement(icon as React.ReactElement, {
-          className: 'kl-components-tag-icon'
+          className: cn('kl-components-tag-icon', (icon as React.ReactElement).props?.className)
         })}
       <Text type="BTM4" className="kl-components-tag-text">
         {displayedContent}
@@ -102,23 +89,33 @@ const TagView: FC<TagViewProps> = ({
     </>
   )
 
-  const tagClasses = cn(className, {
-    invalid: invalid,
-    interactive: isInteractive,
-    uninteractive: isUninteractive
-  })
+  const tagClasses = cn(
+    getClassNameWithTheme(className, theme),
+    'hexa-ui-tag',
+    styles.tag,
+    styles[size],
+    styles[mode],
+    {
+      [styles.outlined]: outlined,
+      [styles.invalid]: invalid,
+      [styles.interactive]: isInteractive,
+      [styles.uninteractive]: isUninteractive,
+      [styles.disabled]: disabled,
+      [styles.readOnly]: readOnly
+    }
+  )
 
   const Component = (
-    <StyledTag
+    <AntdTag
       onMouseDown={(e) => { e.stopPropagation() }}
-      cssConfig={cssConfig}
+      onClick={onClick}
       tabIndex={interactive ? 0 : undefined}
       className={tagClasses}
-      outlined={outlined}
       {...testAttributes}
-      {...rest}>
+      {...rest}
+    >
       {tagContent}
-    </StyledTag>
+    </AntdTag>
   )
 
   if (isBeyondMaxChars) {

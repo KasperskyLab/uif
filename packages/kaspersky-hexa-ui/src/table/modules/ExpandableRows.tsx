@@ -36,7 +36,7 @@ const getPaddingConfig = (hasRowSelection: boolean) =>
       }
     : {
         row: {
-          icon: 12
+          icon: 0
         },
         'group-row-w-space': {
           icon: 20
@@ -54,34 +54,25 @@ const getIndentCss = ({
 }) => {
   const selector = `.ant-table-row-level-${index}${rowClassName ? `.${rowClassName}` : ''}`
   const SPACER = 16
+  const DEFAULT_CELL_PADDING = 8
 
   const levelIndent = index * SPACER
 
   const paddingConfig = getPaddingConfig(hasSelectionColumn)
   const className = rowClassName ?? 'row'
 
-  return hasSelectionColumn
-    ? `
-        ${selector} {
-          td:nth-child(1) > .kl-components-expandable-icon {
-            transform: translateX(${paddingConfig[className]!.icon + levelIndent}px) !important;
-          }
-          td:nth-child(2) {
-            padding-left: ${paddingConfig[className]!.text! + levelIndent}px !important;
-          }
-        }
-      `
-    : `
-       ${selector} .ant-table-cell-with-append {
-        padding-left: ${paddingConfig[className]!.icon + levelIndent}px !important;
-      }
-    `
+  return `
+    ${selector} .ant-table-cell-with-append {
+      padding-left: ${paddingConfig[className]!.icon + levelIndent + DEFAULT_CELL_PADDING}px !important;
+    }
+  `
 }
 
 export const StyledTableContainer = styled.div<{
   hasSelectionColumn: boolean,
   $previewTableWidth?: number,
-  borderedStyle?: boolean
+  borderedStyle?: boolean,
+  useDragDrop?: boolean
 }>`
   .table-height-full & {
     display: flex;
@@ -185,9 +176,16 @@ export const defaultExpandConfig: ITableProps['expandable'] = {
   )
 }
 
-export const getDefaultExpandConfig = <T extends TableRecord> (): ITableProps<T>['expandable'] => (
-  { ...defaultExpandConfig } as ITableProps<T>['expandable']
-)
+export const getDefaultExpandConfig = <T extends TableRecord> ({ hasRowSelection, useDragDrop }: {
+  hasRowSelection?: boolean,
+  useDragDrop?: boolean
+}): ITableProps<T>['expandable'] => {
+  const hasDNDCol = useDragDrop ? 1 : 0
+  return {
+    ...defaultExpandConfig,
+    expandIconColumnIndex: (hasRowSelection ? 2 : 0) + hasDNDCol
+  } as ITableProps<T>['expandable']
+}
 
 export const ExpandableRows = <T extends TableRecord = TableRecord> (
   Component: TableComponent<T>
@@ -197,14 +195,14 @@ export const ExpandableRows = <T extends TableRecord = TableRecord> (
   useEffect(() => {
     const { dataSource: rows = [] } = props
     setHasChildren(checkExpandableRows(rows))
-  }, [props.dataSource])
+  }, [props.dataSource, props.useDragDrop])
 
   if (hasChildren) {
     return (
       <StyledTableContainer hasSelectionColumn={Boolean(rowSelection)} borderedStyle={borderedStyle} >
         <Component
           expandable={{
-            ...getDefaultExpandConfig<T>(),
+            ...getDefaultExpandConfig<T>({}),
             ...expandable
           }}
           {...props} />

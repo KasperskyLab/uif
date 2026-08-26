@@ -8,7 +8,7 @@ import { convertToDate, parseDate } from '../../Filters/helpers'
 import { DateItemProps } from './types'
 
 export const DateItem: FC<DateItemProps> = ({ filter, onChange, validationStatus }) => {
-  const { dateFormat } = useTableContext()
+  const dateFormat = useTableContext(state => state.dateFormat)
 
   const handleFromChange = useCallback((date: DateInputValue) => {
     const from = date !== null

@@ -1,0 +1,413 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Textbox } from '@src/input'
+import { Tag } from '@src/tag'
+import { Text } from '@src/typography'
+
+import { LockGroup } from '../LockGroup'
+import * as LockGroupStories from './LockGroup.stories'
+import { lockGroupDesignPropPresentation } from './LockGroup.design.properties'
+
+<Meta of={LockGroupStories} name="LockGroup Docs" />
+
+<DocPageLayout>
+
+  <DocPageHeader title="LockGroup" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **LockGroup** — группа связанных настроек с индикатором их доступности для редактирования
+
+          Используйте LockGroup, когда в интерфейсе нужно показать зависимость связанных настроек от общего статуса и дать пользователю возможность изменить его. Компонент помогает собрать такую настройку, её пояснение и зависимые элементы в единый понятный блок.
+
+          Для самостоятельных полей без общей зависимости выбирайте обычные элементы формы. Если настройка влияет на другие элементы, размещайте их рядом с LockGroup, чтобы пользователь мог сразу увидеть область действия выбранного статуса."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**LockGroup** показывает статус настройки и управляет её доступностью для редактирования. В обычном режиме содержит заголовок, блок управления с замком и переключателем, а также дочерние элементы. Настраиваются **title**, **titleLevel**, **statusText**, **informationText**, **statusIcon**, видимость частей и состояния замка и группы."
+      />
+
+      <DocExampleBlock
+        title="title"
+        description="**title** задаёт содержимое заголовка."
+        code={`
+          function App() {
+            const [isLockClosed, setIsLockClosed] = React.useState(false)
+
+            return (
+              <div style={{ width: '100%' }}>
+                <LockGroup
+                  title="Заголовок блока"
+                  isLockClosed={isLockClosed}
+                  onLockChange={setIsLockClosed}
+                />
+              </div>
+            )
+          }
+        `}
+
+      />
+
+      <DocExampleBlock
+        title="titleLevel"
+        description="**titleLevel** выбирает типографику заголовка: `H6`, `H5` или `H4`; по умолчанию — `H6`."
+        previewGap="24"
+        previewDirection="vertical"
+        code={`
+          function App() {
+            const [h6IsLockClosed, setH6IsLockClosed] = React.useState(false)
+            const [h5IsLockClosed, setH5IsLockClosed] = React.useState(false)
+            const [h4IsLockClosed, setH4IsLockClosed] = React.useState(false)
+
+            return (
+              <>
+                <div style={{ width: '100%' }}>
+                  <LockGroup
+                    title="Заголовок H6"
+                    titleLevel="H6"
+                    isLockClosed={h6IsLockClosed}
+                    onLockChange={setH6IsLockClosed}
+                  />
+                </div>
+                <div style={{ width: '100%' }}>
+                  <LockGroup
+                    title="Заголовок H5"
+                    titleLevel="H5"
+                    isLockClosed={h5IsLockClosed}
+                    onLockChange={setH5IsLockClosed}
+                  />
+                </div>
+                <div style={{ width: '100%' }}>
+                  <LockGroup
+                    title="Заголовок H4"
+                    titleLevel="H4"
+                    isLockClosed={h4IsLockClosed}
+                    onLockChange={setH4IsLockClosed}
+                  />
+                </div>
+              </>
+            )
+          }
+        `}
+      />
+
+      <DocExampleBlock
+        title="titleElementAfter"
+        description="**titleElementAfter** отображает произвольный элемент после области заголовка."
+        code={`
+          function App() {
+            const [isLockClosed, setIsLockClosed] = React.useState(false)
+
+            return (
+              <div style={{ width: '100%' }}>
+                <LockGroup
+                  title="Поддерживаемые ОС"
+                  titleElementAfter={
+                    <Space>
+                      <Tag>BolgenOS</Tag>
+                      <Tag>MacOS</Tag>
+                    </Space>
+                  }
+                  isLockClosed={isLockClosed}
+                  onLockChange={setIsLockClosed}
+                />
+              </div>
+            )
+          }
+        `}
+      />
+
+      <DocExampleBlock
+        title="children"
+        description="**children** принимает ReactNode и отображает связанные с замком элементы под заголовком и блоком управления. При **isStandalone**=`true` дочерние элементы не рендерятся."
+        code={`
+          function App() {
+            const [isLockClosed, setIsLockClosed] = React.useState(false)
+
+            return (
+              <div style={{ width: '100%' }}>
+                <LockGroup
+                  title="Связанные настройки"
+                  isLockClosed={isLockClosed}
+                  onLockChange={setIsLockClosed}
+                >
+                  <Textbox value="12345" />
+                </LockGroup>
+              </div>
+            )
+          }
+        `}
+      />
+
+      <DocExampleBlock
+        title="statusText"
+        description="**statusText** выводится рядом с переключателем."
+        code={`
+          function App() {
+            const [isLockClosed, setIsLockClosed] = React.useState(false)
+
+            return (
+              <div style={{ width: '100%' }}>
+                <LockGroup
+                  title="Настройки"
+                  statusText="Требуется внимание"
+                  isLockClosed={isLockClosed}
+                  onLockChange={setIsLockClosed}
+                />
+              </div>
+            )
+          }
+        `}
+      />
+
+      <DocExampleBlock
+        title="statusIcon и statusTooltip"
+        description="**statusIcon** добавляет иконку статуса `warning`, а **statusTooltip** передаёт ей текст подсказки. Без **statusIcon** иконка статуса не отображается."
+        code={`
+          function App() {
+            const [isLockClosed, setIsLockClosed] = React.useState(false)
+
+            return (
+              <div style={{ width: '100%' }}>
+                <LockGroup
+                  statusIcon="warning"
+                  title="Настройки"
+                  statusTooltip="Проверьте связанные настройки"
+                  isLockClosed={isLockClosed}
+                  onLockChange={setIsLockClosed}
+                />
+              </div>
+            )
+          }
+        `}
+
+      />
+
+      <DocExampleBlock
+        title="informationText"
+        description="**informationText** добавляет рядом с переключателем иконку информации с Popover. В проп можно передать текст, React-элемент или компонент."
+        code={`
+          function App() {
+            const [isLockClosed, setIsLockClosed] = React.useState(false)
+
+            return (
+              <div style={{ width: '100%' }}>
+                <LockGroup
+                  title="Настройки"
+                  informationText="Изменение влияет на связанные элементы"
+                  isLockClosed={isLockClosed}
+                  onLockChange={setIsLockClosed}
+                />
+              </div>
+            )
+          }
+        `}
+      />
+
+      <DocExampleBlock
+        title="isLockClosed"
+        description="**isLockClosed** определяет, закрыт ли замок и включён ли переключатель."
+        previewDirection="vertical"
+        previewGap="24"
+        code={`
+          function App() {
+            const [firstIsLockClosed, setFirstIsLockClosed] = React.useState(true)
+            const [secondIsLockClosed, setSecondIsLockClosed] = React.useState(false)
+
+            return (
+              <>
+                <div style={{ width: '100%' }}>
+                  <LockGroup
+                    title="Настройки"
+                    isLockClosed={firstIsLockClosed}
+                    onLockChange={setFirstIsLockClosed}
+                  />
+                </div>
+                <div style={{ width: '100%' }}>
+                  <LockGroup
+                    title="Настройки"
+                    isLockClosed={secondIsLockClosed}
+                    onLockChange={setSecondIsLockClosed}
+                  />
+                </div>
+              </>
+            )
+          }
+        `}
+
+      />
+
+      <DocExampleBlock
+        title="onLockChange"
+        description="**onLockChange** вызывается при изменении переключателя и получает новое значение `boolean`."
+        code={`
+          function App() {
+            const [isLockClosed, setIsLockClosed] = React.useState(false)
+
+            return (
+              <div style={{ width: '100%' }}>
+                <LockGroup
+                  title="Настройки"
+                  isLockClosed={isLockClosed}
+                  onLockChange={setIsLockClosed}
+                />
+              </div>
+            )
+          }
+        `}
+
+      />
+
+      <DocExampleBlock
+        title="isLockDisabled"
+        description="**isLockDisabled**=`true` блокирует переключатель."
+        code={`
+          <div style={{ width: '100%' }}>
+            <LockGroup title="Недоступная настройка" isLockDisabled />
+          </div>
+        `}
+      />
+
+      <DocExampleBlock
+        title="isLockStatusNotDefined"
+        description="При **isLockStatusNotDefined**=`true` вместо замка отображается иконка неопределённого статуса, а переключатель блокируется."
+        code={`
+          <div style={{ width: '100%' }}>
+            <LockGroup title="Статус не определён" isLockStatusNotDefined />
+          </div>
+        `}
+      />
+
+      <DocExampleBlock
+        title="isGroupDisabled"
+        description="**isGroupDisabled** передаёт дочерним React-элементам значение **disabled**=`true`. Используйте, чтобы отключить связанные с замком элементы управления."
+        code={`
+          function App() {
+            const [isLockClosed, setIsLockClosed] = React.useState(false)
+
+            return (
+              <div style={{ width: '100%' }}>
+                <LockGroup
+                  title="Настройка"
+                  isGroupDisabled
+                  isLockClosed={isLockClosed}
+                  onLockChange={setIsLockClosed}
+                >
+                  <Textbox value="12345" />
+                </LockGroup>
+              </div>
+            )
+          }
+        `}
+      />
+
+      <DocExampleBlock
+        title="isHideLock"
+        description="**isHideLock** скрывает иконку замка."
+        code={`
+          <div style={{ width: '100%' }}>
+            <LockGroup title="Без иконки замка" isHideLock />
+          </div>
+        `}
+      />
+
+      <DocExampleBlock
+        title="isHideControl"
+        description="**isHideControl** скрывает весь блок статуса и переключатель."
+        code={`
+          <div style={{ width: '100%' }}>
+            <LockGroup title="Только заголовок" isHideControl />
+          </div>
+        `}
+      />
+
+      <DocExampleBlock
+        title="isStandalone"
+        description="При **isStandalone**=`true` отображается только блок управления замком без заголовка и дочерних элементов."
+        code={`
+          function App() {
+            const [isLockClosed, setIsLockClosed] = React.useState(false)
+
+            return (
+              <div style={{ width: '100%' }}>
+                <LockGroup
+                  isStandalone
+                  isLockClosed={isLockClosed}
+                  onLockChange={setIsLockClosed}
+                />
+              </div>
+            )
+          }
+        `}
+      />
+
+      <DocExampleBlock
+        title="isChildrenOutlined"
+        description="**isChildrenOutlined** добавляет рамку вокруг области дочерних элементов."
+        code={`
+          function App() {
+            const [isLockClosed, setIsLockClosed] = React.useState(false)
+
+            return (
+              <div style={{ width: '100%' }}>
+                <LockGroup
+                  title="Связанные настройки"
+                  isChildrenOutlined
+                  isLockClosed={isLockClosed}
+                  onLockChange={setIsLockClosed}
+                >
+                  <Textbox value="12345" />
+                </LockGroup>
+              </div>
+            )
+          }
+        `}
+
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={LockGroupStories} />
+      <AutodocArgsTable components={LockGroup} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=112315:393028)"
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(lockGroupDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="LockGroup" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

@@ -1,0 +1,136 @@
+@use '../../../design-system/tokens/typography.module.scss' as *;
+
+.block {
+  margin-bottom: 32px;
+
+  &:has(+ section[data-without-title]) {
+    margin-bottom: 16px;
+  }
+}
+
+.description {
+  padding: 4px 0 8px 0;
+  text-align: left;
+
+  a {
+    color: var(--common--accent--enabled);
+  }
+
+  a:hover {
+    color: var(--common--accent--hover);
+  }
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing--gap_related);
+  text-align: left;
+}
+
+.columnsPair {
+  grid-template-columns: 1fr 1fr;
+
+  @media (max-width: 720px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.columnsWithHeader {
+  margin-top: 16px;
+}
+
+.column {
+  --doc-rules-accent: var(--icon--status--statuspositive);
+  --doc-rules-icon-bg: var(--bg--success_subtle--enabled);
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing--gap_grouped);
+  min-width: 0;
+  padding: var(--spacing--gap_grouped);
+  overflow: hidden;
+  border: 1px solid var(--border--neutral--medium);
+  border-left: 4px solid var(--doc-rules-accent);
+  border-radius: 4px 4px 4px 0px;
+  background-color: var(--bg--neutral--level_0);
+  
+
+  & section {
+    margin-bottom: 0;
+  }
+}
+
+.dont {
+  --doc-rules-accent: var(--icon--status--statuscritical);
+  --doc-rules-icon-bg: var(--bg--danger_subtle--enabled);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--spacing--gap_related);
+}
+
+.headerIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--doc-rules-icon-bg);
+  color: var(--doc-rules-accent);
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing--gap_related);
+  width: 100%;
+  text-align: left;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--spacing--gap_dependent);
+  width: 100%;
+  text-align: left;
+}
+
+.bullet {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: var(--text--btr3--line-height);
+  color: var(--doc-rules-accent);
+}
+
+.itemText {
+  min-width: 0;
+  flex: 1;
+  text-align: left;
+  @include apply-font-styles(btr3);
+
+  p {
+    margin: 0;
+    text-align: left;
+    @include apply-font-styles(btr3);
+  }
+
+  a {
+    color: var(--common--accent--enabled);
+  }
+
+  a:hover {
+    color: var(--common--accent--hover);
+  }
+}

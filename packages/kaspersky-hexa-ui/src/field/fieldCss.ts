@@ -128,6 +128,7 @@ export const fieldCss = css<FieldViewProps>`
 
   // Label positions
   &.kl6-field-label-position-before {
+    align-items: flex-start;
     .kl6-field-label {
       padding-right: 16px;
     }

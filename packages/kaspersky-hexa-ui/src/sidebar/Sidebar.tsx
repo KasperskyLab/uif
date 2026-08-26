@@ -145,6 +145,7 @@ export const Sidebar = forwardRef<SidebarHandle, SidebarProps>((rawProps, ref) =
         handleVisibleChange(visible)
         afterVisibleChange?.(visible)
       }}
+      destroyOnClose={destroyOnClose}
       title={(
         <SidebarHeader
           title={title}

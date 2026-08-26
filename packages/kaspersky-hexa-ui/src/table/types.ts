@@ -14,8 +14,8 @@ import { ReactElement, ReactNode, RefAttributes } from 'react'
 
 import {
   ActiveFilter,
+  CustomFilterOperations,
   EnumOption,
-  ExtractFilterConditions,
   FilterAttributes,
   FilterConfig,
   FilterFunction,
@@ -46,6 +46,7 @@ export type TableRecord = {
   _selectionDisabled?: boolean,
   /* This prop turns on specific background pattern for the row */
   _blendedBackground?: boolean,
+  _outOfDndContext?: boolean,
   children?: TableRecord[]
 }
 
@@ -127,7 +128,16 @@ export type EnumFilterType = {
    * ])
    * ```
    */
-  getAvailableOptions?: () => Promise<EnumOption[]>
+  getAvailableOptions?: () => Promise<EnumOption[]>,
+  /**
+   * By default the search is performed on the `dataLabel` value, which is taken from the option's `label`.
+   * You can override `dataLabel` on each `EnumOption` to define what text should be searched.
+   * To fully override the search behavior, provide a `customSearchFunction` instead.
+   */
+  search?: {
+    enabled?: boolean,
+    customSearchFunction?: (searchValue: string, options: EnumOption[]) => EnumOption[];
+  }
 } & SharedFilterType<FilterType.Enum>
 
 export type BooleanFilterType = {
@@ -167,7 +177,7 @@ type SharedFilterType<TFilterType extends FilterType = FilterType> = {
    * ]
    * ```
    */
-  operations?: ExtractFilterConditions<TFilterType>,
+  operations?: CustomFilterOperations<TFilterType>,
   /** Logic operation for multiple filters */
   logicOperation?: FilterLogicOperation,
 }
@@ -378,11 +388,15 @@ export type ITableProps<T extends TableRecord = TableRecord> = Omit<
   stickyHeader?: number,
   stickyScrollbarOffset?: number,
   stickyFooter?: boolean,
+  /** Sticky selection column, available only with resizingMode: scroll */
+  stickySelection?: boolean,
   toolbar?: TableToolbarProps,
   /** Search is done from the product side. For example, when using server-side filtering */
   onSearch?: (searchString: string) => void,
   /** Custom search using internal state of the component for filtered data */
   onClientSearch?: (searchString: string, row: T, index: number) => boolean,
+  /** List of record fields to which the client search should be applied. */
+  clientSearchFields?: (keyof T)[]
   groupTitleRender?: (data: string) => ReactNode,
   resizingMode?: TableResizingMode,
   /** render :after as last column to compensate width in case table-width < screen-width */

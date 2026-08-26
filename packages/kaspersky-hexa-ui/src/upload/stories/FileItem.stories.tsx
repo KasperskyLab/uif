@@ -8,7 +8,7 @@ import MetaData from '../__meta__/meta.json'
 import { FileItem, FileItemProps } from '../UploadList/FileItem'
 
 const meta: Meta<FileItemProps> = {
-  title: 'Hexa UI Components/Upload/File Item',
+  title: 'Hexa UI Components/Uploader/Stories',
   component: FileItem,
   tags: ['!autodocs'],
   ...withDesignControls<FileItemProps>({

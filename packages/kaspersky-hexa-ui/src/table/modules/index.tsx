@@ -26,9 +26,13 @@ import { VirtualTanstack as Virtual } from './Virtual'
 export type TableComponent<T extends TableRecord = TableRecord> = FC<ITableProps<T> & React.RefAttributes<TableRef>>
 export type TableModule<T extends TableRecord = TableRecord> = (Component: TableComponent<T>) => TableComponent<T>
 
-export const composeWithModules = (Component: TableComponent, modules: TableModule[]) => {
+export type GenericTableComponent = <T extends TableRecord = TableRecord>(
+  props: ITableProps<T> & React.RefAttributes<TableRef>
+) => JSX.Element | null
+
+export const composeWithModules = (Component: TableComponent, modules: TableModule[]): GenericTableComponent => {
   const TableWithModules = modules.reduce((Component, module) => module(Component), Component)
-  return TableContextProvider(TableWithModules)
+  return TableContextProvider(TableWithModules) as unknown as GenericTableComponent
 }
 
 /**

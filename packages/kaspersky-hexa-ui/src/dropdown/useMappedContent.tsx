@@ -29,6 +29,8 @@ const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
       icon,
       componentsAfter,
       componentsBefore,
+      selected,
+      interactive,
       children,
       ...props
     }: DropdownItemProps): ReactNode | ReactNode[] => {
@@ -40,7 +42,6 @@ const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
               key={key}
               title={(
                 <DropdownItemInner
-                  type={type}
                   description={description}
                   tooltip={tooltip}
                   componentsBefore={componentsBefore}
@@ -94,7 +95,8 @@ const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
               {...testAttributes}
               className={cn(rest.className, {
                 [styles.dropdownItemAction]: type === 'action',
-                [styles.dropdownItemCustom]: typeof children !== 'string'
+                [styles.dropdownItemCustom]: typeof children !== 'string' && !interactive?.baseStyles,
+                'ant-dropdown-menu-item-selected': selected
               })}
             >
               {children}
@@ -152,7 +154,7 @@ export const useMappedContent = ({
     } else {
       return React.cloneElement(overlay, { onSelect: onOverlaySelect })
     }
-  }, [overlay, loading, klId, testId, overlayClassName, onOverlaySelect, selectedItemsKeys])
+  }, [overlay, loading, klId, testId, overlayClassName, onOverlaySelect, selectedItemsKeys, footer, header])
 
   return { overlay: content, overlayClassName, ...rest }
 }

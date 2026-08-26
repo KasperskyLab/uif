@@ -17,6 +17,7 @@ type GetRightElementsProps<T extends TableRecord> =
     ITableProps<T>,
     'toolbar' |
     'dataSource' |
+    'clientSearchFields' |
     'columns' |
     'onSearch' |
     'onClientSearch' |
@@ -33,6 +34,7 @@ type GetRightElementsProps<T extends TableRecord> =
 export const getRightElements = <T extends TableRecord>({
   toolbar,
   dataSource,
+  clientSearchFields,
   columns,
   table,
   filterApi,
@@ -57,10 +59,12 @@ export const getRightElements = <T extends TableRecord>({
         dataSource={dataSource}
         onSearch={onSearch}
         onClientSearch={onClientSearch}
+        clientSearchFields={clientSearchFields}
         columns={columns}
         tableContainer={table}
         enableSearchHighlighting={enableSearchHighlighting}
         collapsibleSearch={toolbar.collapsibleSearch}
+        placeholder={toolbar.searchPlaceholder}
       />
     )
   }

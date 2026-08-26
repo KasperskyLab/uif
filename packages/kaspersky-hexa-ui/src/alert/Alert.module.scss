@@ -1,0 +1,80 @@
+@use "sass:map";
+@use '../../design-system/tokens/typography.module.scss';
+
+$modes-tokens: (
+  error: (
+    background: var(--bg--danger_subtle--enabled),
+    accent: var(--common--danger--enabled)
+  ),
+  warning: (
+    background: var(--bg--warning_subtle--enabled),
+    accent: var(--common--warning--enabled)
+  ),
+  success: (
+    background: var(--bg--success_subtle--enabled),
+    accent: var(--common--success--enabled)
+  ),
+  info: (
+    background: var(--bg--info_subtle--enabled),
+    accent: var(--common--info--enabled)
+  )
+);
+
+@mixin apply-mode($mode) {
+  $tokens: map.get($modes-tokens, $mode);
+
+  border-bottom: 1px solid map.get($tokens, accent);
+  background: map.get($tokens, background);
+
+  .icon svg {
+    color: map.get($tokens, accent);
+  }
+}
+
+.alert {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px 11px 16px;
+  align-items: start;
+  position: relative;
+  font-stretch: normal;
+  margin: 0;
+  @extend .btr3;
+  width: var(--alert--width, 100%);
+  color: var(--foreground--primary);
+
+  .icon {
+    min-width: 16px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .actionsSeparator {
+    min-width: max-content;
+
+    &:global(.alert-action-separator):after {
+      display: block;
+      content: '';
+      width: 1px;
+      height: 20px;
+      background: var(--border--neutral--bold);
+    }
+  }
+
+  &.info {
+    @include apply-mode(info);
+  }
+
+  &.success {
+    @include apply-mode(success);
+  }
+
+  &.warning {
+    @include apply-mode(warning);
+  }
+
+  &.error {
+    @include apply-mode(error);
+  }
+}

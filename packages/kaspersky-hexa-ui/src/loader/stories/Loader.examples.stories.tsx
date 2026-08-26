@@ -8,7 +8,7 @@ import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
 
 import { Loader } from '../Loader'
 import { LoaderMode, LoaderProps, LoaderSize } from '../types'
-import { loaderStorySettings } from '../Loader.stories'
+import { loaderStorySettings } from './Loader.stories'
 
 const meta: Meta<typeof Loader> = {
   title: 'Hexa UI Components/Loader/Stories',
@@ -56,7 +56,7 @@ export const Modes: Story = {
         {modes.map(mode => {
           return (
             <LoaderContainer key={mode} mode={mode}>
-              <Loader mode={mode} tip={`${mode} loader`} {...args} />
+              <Loader {...args} mode={mode} tip={`${mode} loader`} />
             </LoaderContainer>
           )
         })}

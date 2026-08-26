@@ -59,12 +59,18 @@ export type DropdownProps = {
   className?: string,
   /** Set max height for dropdownMenu in pixels */
   popupMaxHeight?: number,
+  /** Set max width for dropdownMenu in pixels */
+  popupMaxWidth?: number,
   /** To set the container of the dropdown menu */
   getPopupContainer?: RcDropdownProps['getPopupContainer'],
   /** React children */
   children?: ReactNode,
   /** Shorthand getPopupContainer={() => document.body} */
-  usePortal?: boolean
+  usePortal?: boolean,
+  /** Close dropdown on scroll outside of dropdown overlay */
+  closeOnScroll?: boolean,
+  /** Close dropdown when browser window loses focus */
+  closeOnWindowBlur?: boolean
 } & DropdownThemeProps & TestingProps
 
 export type DropdownVariants = {
@@ -86,6 +92,7 @@ type DropdownItemBaseProps = {
   tooltip?: string,
   componentsBefore?: ReactNode[],
   componentsAfter?: ReactNode[],
+  /** @deprecated No effect */
   truncateItemWidth?: number,
 }
 
@@ -100,7 +107,10 @@ export type DropdownItemToggleProps = DropdownItemBaseProps & {
 export type DropdownItemInnerProps = DropdownItemStandardProps | DropdownItemToggleProps
 
 export type DropdownItemProps = Omit<MenuItemProps, 'type' | 'title' | 'children' | 'itemIcon' | 'extra'> & DropdownItemInnerProps & {
-  title?: ReactNode
+  title?: ReactNode,
+  /** Enables interactive styles for children elements */
+  interactive?: { baseStyles?: boolean },
+  selected?: boolean
 } & DropdownThemeProps & TestingProps
 
 export type DropdownItemActionsProps = {

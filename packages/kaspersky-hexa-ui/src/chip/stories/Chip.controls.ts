@@ -39,15 +39,15 @@ export const chipPropPresentation: PropPresentationMap = {
   },
   icon: {
     control: 'select',
-    description: 'Иконка перед меткой. Если не передана, иконка отображаться не будет.',
+    description: 'Иконка перед лейблом. Если не передана, иконка отображаться не будет.',
     options: [...chipIconOptions]
   },
   counter: {
     control: 'number',
-    description: 'Числовой счётчик справа от метки. Отображается через Badge с mode neutral.'
+    description: 'Числовой счётчик справа от лейбла. Отображается через Badge.'
   },
   truncationWidth: {
     control: 'number',
-    description: 'Максимальная ширина метки в пикселях. При превышении текст обрезается с многоточием.'
+    description: 'Максимальная ширина лейбла в пикселях. При превышении текст обрезается с многоточием.'
   }
 }

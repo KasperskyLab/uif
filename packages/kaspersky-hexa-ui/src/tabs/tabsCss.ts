@@ -110,6 +110,10 @@ const leftTabsCss = css`
   ${StyledTabPaneText} {
     width: 100%;
   }
+
+  .hexa-ui-indicator {
+    position: static;
+  }
 `
 
 export const tabsCss = css<{

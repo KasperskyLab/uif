@@ -76,7 +76,7 @@ export type EditorExampleMode = 'dont'
 
 export type EditorProps = {
   code: string
-  /** Служебный код для react-live: выполняется в preview, но не показывается в редакторе */
+  /** Служебный код для react-live: выполняется в preview, но не показывается в редакторе. Может содержать stateful App для интерактивного примера. */
   setupCode?: string
   /** Минимальная высота preview, px */
   minHeight?: number

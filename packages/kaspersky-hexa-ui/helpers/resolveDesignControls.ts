@@ -1,3 +1,4 @@
+import { validationStatuses } from '@helpers/typesHelpers'
 import { HorizontalNavProps } from '@src/horizontal-nav/types'
 import { LicenseCardProps } from '@src/license-card'
 import { LoadingOverlayProps } from '@src/loading-overlay'
@@ -69,6 +70,11 @@ export const sharedPropConfig: Record<string, SharedPropConfig> = {
     control: { type: 'boolean' },
     group: 'appearance'
   },
+  readOnly: {
+    description: 'Состояние "Только для чтения"',
+    control: { type: 'boolean' },
+    group: 'appearance'
+  },
   loading: {
     description: 'Состояние загрузки',
     control: { type: 'boolean' },
@@ -92,6 +98,12 @@ export const sharedPropConfig: Record<string, SharedPropConfig> = {
   tooltip: {
     description: 'Тултип',
     control: false
+  },
+  validationStatus: {
+    description: 'Визуальный статус валидации поля',
+    control: 'select',
+    options: [...validationStatuses],
+    group: 'appearance'
   },
   className: {
     description: 'Пользовательский CSS-класс для переопределения внешнего вида.',
@@ -134,18 +146,6 @@ export const sharedPropConfig: Record<string, SharedPropConfig> = {
   },
   klId: {
     description: 'Legacy autotest identifier mapped to kl-id. Use testId instead.',
-    control: false,
-    group: 'technical',
-    deprecated: true
-  },
-  componentId: {
-    description: 'Deprecated autotest identifier. Use testId instead.',
-    control: false,
-    group: 'technical',
-    deprecated: true
-  },
-  dataTestId: {
-    description: 'Deprecated autotest identifier. Use testId instead.',
     control: false,
     group: 'technical',
     deprecated: true

@@ -18,7 +18,7 @@ const meta: Meta<ITableProps> = {
   component: Table,
   args: {
     columns: tableColumns as TableColumn[],
-    dataSourceFunction: createMockDataSourceFunction(generatedData),
+    dataSourceFunction: createMockDataSourceFunction(generatedData, tableColumns),
     useFiltersSidebar: true,
     toolbar: {
       showFilterSidebar: true

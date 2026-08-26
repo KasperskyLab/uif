@@ -4,6 +4,7 @@ import { CheckboxGroupProps, CheckboxProps } from '@src/checkbox/types'
 import { CodeViewerProps } from '@src/code-viewer/types'
 import { CalendarProps, RangePickerProps } from '@src/datepicker/types'
 import { FieldProps } from '@src/field/types'
+import { HelpMessageProps } from '@src/help-message'
 import {
   TextboxMaskedProps,
   TextboxNumberProps,
@@ -41,7 +42,8 @@ export const fieldSetInputLikeComponentsArray = [
   'split-button',
   'uploader',
   'segmented-button',
-  'toggle-button-group'
+  'toggle-button-group',
+  'help-message'
 ] as const
 
 export type FieldSetInputLikeComponents = (typeof fieldSetInputLikeComponentsArray)[number]
@@ -89,7 +91,8 @@ export type FieldSetControlConfig =
   ({ component: GetComponentName<'status'> } & StatusProps) |
   ({ component: GetComponentName<'tag-group'> } & TagGroupProps) |
   ({ component: GetComponentName<'status-group'> } & StatusGroupProps) |
-  ({ component: GetComponentName<'uploader'> } & UploaderProps)
+  ({ component: GetComponentName<'uploader'> } & UploaderProps) |
+  ({ component: GetComponentName<'help-message'> } & Omit<HelpMessageProps, 'size'>)
 
 export type FieldSetItemControl = ReactElement | FieldSetControlConfig
 

@@ -144,9 +144,3 @@ export const defaultDropdownOverlay: DropdownItemProps[] = [
     ]
   }
 ]
-
-export const simpleDropdownOverlay: DropdownItemProps[] = [
-  { children: 'Option 1', description: 'Some description' },
-  { children: 'Option 2' },
-  { children: 'Option 3', disabled: true }
-]

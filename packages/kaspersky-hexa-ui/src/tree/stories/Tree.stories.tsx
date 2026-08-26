@@ -169,7 +169,7 @@ export const TreeListLoadDataAsynchronously: Story<typeof TreeList> = {
   parameters: {
     actions: { argTypesRegex: '^(on.*|loadData)' },
     controls: {
-      exclude: /(componentId|componentType|dataTestId|theme|treeData)/
+      exclude: /(componentType|theme|treeData)/
     }
   }
 }
@@ -182,7 +182,7 @@ export const TreeNavBasic: Story<typeof TreeNav> = {
   },
   parameters: {
     controls: {
-      exclude: /(componentId|componentType|mode|theme)/
+      exclude: /(componentType|mode|theme)/
     }
   }
 }
@@ -219,7 +219,7 @@ export const TreeNavMultipleChoiceWithALotOfData: Story<typeof TreeNav> = {
   },
   parameters: {
     controls: {
-      exclude: /(componentId|componentType|defaultExpandedKeys|mode|theme|treeData)/
+      exclude: /(componentType|defaultExpandedKeys|mode|theme|treeData)/
     }
   }
 }
@@ -234,7 +234,7 @@ export const TreeNavLoadDataAsynchronously: Story<typeof TreeNav> = {
   parameters: {
     actions: { argTypesRegex: '^(on.*|loadData)' },
     controls: {
-      exclude: /(componentId|componentType|dataTestId|mode|theme|treeData)/
+      exclude: /(componentType|mode|theme|treeData)/
     }
   }
 }
@@ -298,7 +298,7 @@ export const TreeNavWithIconsInPanel: Story<typeof TreeNav> = {
   parameters: {
     actions: { argTypesRegex: '^(on.*)' },
     controls: {
-      exclude: /(componentId|componentType|mode|theme)/
+      exclude: /(componentType|mode|theme)/
     }
   }
 }

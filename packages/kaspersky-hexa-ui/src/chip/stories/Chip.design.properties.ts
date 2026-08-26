@@ -14,12 +14,12 @@ export const chipDesignPropPresentation: PropPresentationMap = {
     type: 'false | true'
   },
   IconBefore: {
-    description: 'Отображение иконки перед меткой',
+    description: 'Отображение иконки перед лейблом',
     type: 'Boolean',
     defaultValue: 'false'
   },
   counter: {
-    description: 'Отображение числового счётчика справа от метки',
+    description: 'Отображение числового счётчика справа от лейбла',
     type: 'Boolean',
     defaultValue: 'false'
   },
@@ -31,7 +31,7 @@ export const chipDesignPropPresentation: PropPresentationMap = {
   },
   iconBefore_: {
     label: '🔄 iconBefore',
-    description: 'Слот для иконки перед меткой. Слот можно заменить любой иконкой размером 16 px',
+    description: 'Слот для иконки перед лейблом. Слот можно заменить любой иконкой размером 16 px',
     type: 'Instance Swap'
   }
 }

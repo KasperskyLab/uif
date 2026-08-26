@@ -1,12 +1,5 @@
-import { Focus } from '@design-system/tokens/focus'
 import { Theme } from '@design-system/types'
-import { ToViewProps } from '@helpers/typesHelpers'
-import { Text } from '@src/typography'
-import { ComponentProps } from 'react'
-
-export type ExpandableTextColorConfig = Focus
-
-export type ExpandableTextCssConfig = ExpandableTextColorConfig
+import { TextProps } from '@src/typography'
 
 export type ExpandableTextThemeProps = {
   /** Custom theme */
@@ -19,14 +12,5 @@ type SafeExpandableTextProps = ExpandableTextThemeProps & {
   /** Function-trigger when text expanded */
   onExpand?: (expanded: boolean) => void
 }
-export type ExpandableTextProps = ComponentProps<typeof Text> & SafeExpandableTextProps
 
-export type ExpandableTextViewProps =
-  ComponentProps<typeof Text> &
-  ToViewProps<SafeExpandableTextProps, ExpandableTextCssConfig, ExpandableTextThemeProps>
-
-export type StyledTextProps = {
-  expanded: boolean,
-  clipped: boolean,
-  cssConfig: ExpandableTextCssConfig
-}
+export type ExpandableTextProps = TextProps & SafeExpandableTextProps

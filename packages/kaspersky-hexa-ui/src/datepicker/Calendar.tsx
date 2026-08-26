@@ -63,8 +63,6 @@ export const Calendar: VFC<CalendarProps> = (rawProps) => {
   return (<CalendarView {...themedProps} testAttributes={testAttributes} />)
 }
 
-let maskObject: any
-
 const CalendarViewComponent: VFC<CalendarViewProps> = ({
   presets,
   disabled,
@@ -93,6 +91,10 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
   const pickerRef = useRef<HTMLDivElement>(null)
   const lastSelectedDateRef = useRef<DateInputValue>(null)
 
+  const maskRef = useRef<any>(null)
+  const resetPositionTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+  const parseTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+
   const localeOptions = useLocaleOptions(showTime)
 
   const maskOptions: IMask.MaskedDateOptions = useMemo(() => {
@@ -100,7 +102,8 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
   }, [localLocale, format])
 
   const destroyMask = () => {
-    maskObject?.destroy()
+    maskRef.current?.destroy()
+    maskRef.current = null
     setIsMaskApply(false)
   }
 
@@ -139,8 +142,8 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
   }
 
   const resetCalendarDropdownDatePosition = () => {
-    setTimeout(() => {
-      setDynamicKey(!dynamicKey)
+    resetPositionTimeoutRef.current = setTimeout(() => {
+      setDynamicKey((prev) => !prev)
     }, 500)
   }
 
@@ -169,6 +172,13 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
     destroyMask()
   }, [maskOptions])
 
+  useEffect(() => () => {
+    maskRef.current?.destroy()
+    maskRef.current = null
+    if (resetPositionTimeoutRef.current) clearTimeout(resetPositionTimeoutRef.current)
+    if (parseTimeoutRef.current) clearTimeout(parseTimeoutRef.current)
+  }, [])
+
   const handleOnChange = (newDate: DateInputValue) => {
     onChange?.(newDate, newDate?.toDateString() ?? '')
   }
@@ -178,7 +188,7 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
     const currentValue = currentTarget.value
 
     if (!isMaskApply) {
-      maskObject = IMask(
+      maskRef.current = IMask(
         e.currentTarget,
         maskOptions
       )
@@ -187,7 +197,7 @@ const CalendarViewComponent: VFC<CalendarViewProps> = ({
 
     const inputWhenLastSymbolStand = currentValue.split(DIGITAL_SYMBOL_IN_PLACEHOLDERS).length === 2
     if (isDigital(e.key) && inputWhenLastSymbolStand) {
-      setTimeout(() => {
+      parseTimeoutRef.current = setTimeout(() => {
         const result = maskOptions?.parse?.(currentTarget.value)
         if (result) {
           const newResult = prepareDateValue(result)

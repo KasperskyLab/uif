@@ -4,6 +4,8 @@ import React, { FC } from 'react'
 
 import { IVersionOption } from '../types'
 
+// Replace after
+// https://hqrndtfs.avp.ru/tfs/DefaultCollection/Corp-SecurityCenter/_workitems/edit/8531048
 export const SelectWithDescription: FC<SelectProps<IVersionOption>> = ({ onChange, options, ...props }) => {
   const handleChange: SelectProps['onChange'] = (value, option) => {
     const selectedValue = options?.find((option) => option.value === value)

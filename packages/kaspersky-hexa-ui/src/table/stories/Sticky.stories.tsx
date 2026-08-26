@@ -7,12 +7,12 @@ import { ToolbarItems } from '@src/toolbar/types'
 import { Meta } from '@storybook/react'
 import React from 'react'
 
-import { ITableProps, Table } from '..'
-import { generatedData, tableColumns } from '../__mocks__/filtersMockData'
+import { Table } from '..'
+import { generatedData, tableColumns, TableMockProps, TableMockStory } from '../__mocks__/filtersMockData'
 
-import { basicArgTypes, BasicTableStory, Story } from './_commonConstants'
+import { basicArgTypes, BasicTableStory } from './_commonConstants'
 
-const meta: Meta<ITableProps> = {
+const meta: Meta<TableMockProps> = {
   title: 'Hexa UI Components/Table/Sticky',
   component: Table,
   args: {
@@ -61,7 +61,7 @@ const itemsToolbar: ToolbarItems[] = [
   }
 ]
 
-export const StickyHeader: Story = {
+export const StickyHeader: TableMockStory = {
   render: BasicTableStory.bind({}),
   args: {
     stickyHeader: 0,
@@ -69,7 +69,7 @@ export const StickyHeader: Story = {
   }
 }
 
-export const StickyToolbar: Story = {
+export const StickyToolbar: TableMockStory = {
   render: BasicTableStory.bind({}),
   args: {
     stickyHeader: undefined,
@@ -81,7 +81,7 @@ export const StickyToolbar: Story = {
   }
 }
 
-export const StickyFooter: Story = {
+export const StickyFooter: TableMockStory = {
   render: BasicTableStory.bind({}),
   args: {
     stickyFooter: true,
@@ -95,7 +95,7 @@ export const StickyFooter: Story = {
   }
 }
 
-export const StickyFooterWithScroll: Story = {
+export const StickyFooterWithScroll: TableMockStory = {
   render: BasicTableStory.bind({}),
   args: {
     columns: tableColumns.map(col => ({ ...col, width: 200 })),
@@ -107,11 +107,12 @@ export const StickyFooterWithScroll: Story = {
       showGrouping: true,
       showSettingsSearch: true
     },
-    borderedStyle: false
+    borderedStyle: false,
+    stickySelection: false
   }
 }
 
-export const StickyHeaderWithToolbarAndFooter: Story = {
+export const StickyHeaderWithToolbarAndFooter: TableMockStory = {
   render: BasicTableStory.bind({}),
   args: {
     stickyFooter: true,
@@ -127,7 +128,7 @@ export const StickyHeaderWithToolbarAndFooter: Story = {
   }
 }
 
-export const WithinScrollableContainer: Story = {
+export const WithinScrollableContainer: TableMockStory = {
   render: (args) => (
     <StoryColumn>
       <ScrollableContainer>

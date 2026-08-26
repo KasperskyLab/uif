@@ -34,12 +34,12 @@ const baseItems = [
 ]
 
 const meta: Meta<typeof HorizontalNavComponent> = {
-  title: 'Hexa UI Components/HorizontalNav/Stories',
+  title: 'Other/HorizontalNav/Stories',
   component: HorizontalNavComponent,
   tags: ['!autodocs'],
   parameters: {
     controls: {
-      exclude: /(componentId|componentType|theme|klId|dataTestId)/
+      exclude: /(componentType|theme|klId)/
     }
   }
 }
@@ -72,7 +72,7 @@ export const Borderless: Story = {
   },
   parameters: {
     controls: {
-      exclude: /(borderless|componentId|componentType|theme|klId|dataTestId)/
+      exclude: /(borderless|componentType|theme|klId)/
     }
   }
 }

@@ -14,7 +14,13 @@ import {
   TableColumn,
   TableRecord
 } from '../../types'
-import { EnumOption, FilterApi, FilterConfig, FilterType } from '../Filters'
+import {
+  EnumOption,
+  FilterApi,
+  FilterConfig,
+  FilterOperation,
+  FilterType
+} from '../Filters'
 import {
   convertColumnFiltersToFilterFromColumn,
   getEnumFilters,
@@ -74,6 +80,56 @@ const TitleLine = styled.div`
   }
 `
 
+const removeValueFromEnumFilter = <T extends TableRecord = TableRecord> (
+  filterApi: FilterApi<T>,
+  { filterName, value }: { filterName: string, value: EnumOption['value'] }
+): void => {
+  const enumFilter = getEnumFilters(filterApi.getRootGroupFilters())
+    .filter(filter => filter.name === filterName)[0]
+
+  if (!enumFilter) return
+
+  const filterValue = enumFilter.value
+
+  if (Array.isArray(filterValue)) {
+    const newValue = filterValue.filter(item => item !== value)
+
+    if (newValue.length) {
+      if (newValue.length === 1) {
+        filterApi.updateFilter(enumFilter, { value: newValue[0], condition: FilterOperation.eq })
+      } else {
+        filterApi.updateFilter(enumFilter, { value: newValue })
+      }
+    } else {
+      filterApi.removeFilter(enumFilter)
+    }
+  } else {
+    filterApi.removeFilter(enumFilter)
+  }
+}
+
+const addValueToEnumFilter = <T extends TableRecord = TableRecord> (
+  filterApi: FilterApi<T>,
+  { filterName, value }: { filterName: string, value: EnumOption['value'] }
+): void => {
+  const enumFiltersForThisColumn = getEnumFilters(filterApi.getRootGroupFilters())
+    .filter(filter => filter.name === filterName)
+
+  if (!enumFiltersForThisColumn?.length) {
+    filterApi.addFilter(createEnumFilter(filterName, value))
+    return
+  }
+
+  const enumFilter = enumFiltersForThisColumn[0]
+  const filterValue = enumFilter.value
+
+  if (Array.isArray(filterValue)) {
+    filterApi.updateFilter(enumFilter, { value: [...filterValue, value] })
+  } else {
+    filterApi.updateFilter(enumFilter, { value: [filterValue, value], condition: FilterOperation.cont_or })
+  }
+}
+
 type DropdownColumnTitleProps<T extends TableRecord = TableRecord> = Pick<
   TableColumn<T>,
   'title' |
@@ -90,6 +146,7 @@ type DropdownColumnTitleProps<T extends TableRecord = TableRecord> = Pick<
 > & {
   columnKey: string,
   filterApi?: FilterApi<T> | null,
+  hasMultichoiceEnumFilter: boolean,
   enumOptionsGetter: EnumFilterType['getAvailableOptions']
   activeSorting: ActiveSorting<T>,
   setActiveSorting: SetState<ActiveSorting<T>>
@@ -109,6 +166,7 @@ export const DropdownColumnTitle = function DropdownColumnTitleComponent <T exte
   showEnumFiltersInColumn,
   filterApi,
   enumOptionsGetter,
+  hasMultichoiceEnumFilter,
   onDropdownFiltersChange,
   activeSorting,
   setActiveSorting,
@@ -151,7 +209,7 @@ export const DropdownColumnTitle = function DropdownColumnTitleComponent <T exte
           isUserDefined: true
         }
 
-        const isChecked = filterGroupItems
+        const isChecked = !!filterGroupItems
           ?.filter(filter => isSameItem(filter, filterFromColumn))
           .length
 
@@ -186,13 +244,13 @@ export const DropdownColumnTitle = function DropdownColumnTitleComponent <T exte
         const item: DropdownItemProps = {
           testId: itemTestId,
           klId: itemKlId,
+          interactive: { baseStyles: true },
+          selected: isChecked,
           key,
-          className: cn({ 'ant-dropdown-menu-item-selected': !allowMultipleFilters && isChecked }),
           onClick: !allowMultipleFilters ? onClick : undefined,
           children: allowMultipleFilters ? (
             <FilterRow
-              allowMultipleFilters={allowMultipleFilters}
-              isChecked={!!isChecked}
+              isChecked={isChecked}
               onClick={onClick}
               elementBefore={availableFilter.elementBefore}
               name={availableFilter.name}
@@ -211,29 +269,48 @@ export const DropdownColumnTitle = function DropdownColumnTitleComponent <T exte
   const enumFilters: DropdownItemProps[] | false = useMemo(() => {
     if (filterItems || !filterApi || !showEnumFiltersInColumn || !enumOptions) return false
 
-    return enumOptions.map(option => {
-      const enumFilter = getEnumFilter(filterName, option.value, filters)
+    const buildItem = (option: EnumOption): DropdownItemProps => {
+      let isChecked: boolean
+      let onClick: () => void
 
-      const onClick = () => {
-        if (enumFilter) {
-          filterApi.removeFilter(enumFilter)
-        } else {
-          const newFilter = createEnumFilter(filterName, option.value)
+      if (hasMultichoiceEnumFilter) {
+        const enumFiltersForThisColumn = getEnumFilters(filters).filter(filter => filter.name === filterName)
+        isChecked = enumFiltersForThisColumn
+          .filter(filter => filter.condition === FilterOperation.eq || filter.condition === FilterOperation.cont_or)
+          .some(filter => Array.from([filter.value]).flat().includes(option.value))
 
-          if (allowMultipleFilters) {
-            filterApi.addFilter(newFilter)
+        onClick = () => {
+          if (isChecked) {
+            removeValueFromEnumFilter(filterApi, { filterName, value: option.value })
           } else {
-            if (!filters) return
+            addValueToEnumFilter(filterApi, { filterName, value: option.value })
+          }
+        }
+      } else {
+        const enumFilter = getEnumFilter(filterName, option.value, filters)
+        isChecked = !!enumFilter
 
-            const filtersWithoutThisColumn = filters.filter(filter => (
-              isFilterConfig(filter) && !(filter.name === filterName && filter.type === FilterType.Enum)
-            ))
+        onClick = () => {
+          if (enumFilter) {
+            filterApi.removeFilter(enumFilter)
+          } else {
+            const newFilter = createEnumFilter(filterName, option.value)
 
-            const newFilters = [
-              ...filtersWithoutThisColumn,
-              newFilter
-            ]
-            filterApi.setExternalSidebarFilters(newFilters as FilterConfig[])
+            if (allowMultipleFilters) {
+              filterApi.addFilter(newFilter)
+            } else {
+              if (!filters) return
+
+              const filtersWithoutThisColumn = filters.filter(filter => (
+                isFilterConfig(filter) && !(filter.name === filterName && filter.type === FilterType.Enum)
+              ))
+
+              const newFilters = [
+                ...filtersWithoutThisColumn,
+                newFilter
+              ]
+              filterApi.setExternalSidebarFilters(newFilters as FilterConfig[])
+            }
           }
         }
       }
@@ -241,24 +318,35 @@ export const DropdownColumnTitle = function DropdownColumnTitleComponent <T exte
       const postfix = `${TEST_ID_PREFIX}-${filterName}-enum-filter-${option.value}`
       const itemTestId = getStringWithCondition(postfix, testId)
 
-      const item: DropdownItemProps = {
+      const shouldRenderCheckbox = hasMultichoiceEnumFilter || allowMultipleFilters
+
+      return {
         testId: itemTestId,
         key: itemTestId,
-        className: cn({ 'ant-dropdown-menu-item-selected': !allowMultipleFilters && !!enumFilter }),
-        onClick: !allowMultipleFilters ? onClick : undefined,
-        children: allowMultipleFilters ? (
+        selected: !shouldRenderCheckbox && isChecked,
+        interactive: { baseStyles: true },
+        onClick: !shouldRenderCheckbox ? onClick : undefined,
+        children: shouldRenderCheckbox ? (
           <FilterRow
-            allowMultipleFilters={allowMultipleFilters}
-            isChecked={!!enumFilter}
+            isChecked={isChecked}
             onClick={onClick}
             name={option.label}
           />
         ) : option.label
       }
+    }
 
-      return item
+    const buildGroup = (option: EnumOption): DropdownItemProps => ({
+      title: option.label,
+      type: 'group',
+      key: `${option.label ?? 'group'}:${option.value}`,
+      children: option.options!.map(buildItem)
     })
-  }, [filterApi, filterName, filters, filterItems, enumOptions])
+
+    return enumOptions.map(option => (
+      option.options?.length ? buildGroup(option) : buildItem(option)
+    ))
+  }, [filterApi, filterName, filters, filterItems, enumOptions, hasMultichoiceEnumFilter])
 
   let sortIcon: null | React.ReactElement = null
   const filterIcon = showFilterIcon ?? (
@@ -296,7 +384,7 @@ export const DropdownColumnTitle = function DropdownColumnTitleComponent <T exte
             testId: getStringWithCondition(postfix, testId),
             klId: getStringWithCondition(postfix, klId),
             key: postfix,
-            className: cn({ 'ant-dropdown-menu-item-selected': isSortingSelected }),
+            selected: isSortingSelected,
             onClick: () => {
               setActiveSorting({
                 field,
@@ -325,7 +413,7 @@ export const DropdownColumnTitle = function DropdownColumnTitleComponent <T exte
                 type: 'submenu',
                 testId: getStringWithCondition(postfixField, testId),
                 klId: getStringWithCondition(postfixField, klId),
-                className: cn({ 'ant-dropdown-menu-item-selected': isSelected }),
+                selected: isSelected,
                 title: label,
                 children: getSortingOptions(TEST_ID_PREFIX, field, attribute)
               }
@@ -380,11 +468,13 @@ export const DropdownColumnTitle = function DropdownColumnTitleComponent <T exte
   return (
     <Dropdown
       popupMaxHeight={370}
+      popupMaxWidth={300}
       trigger={['click']}
       onVisibleChange={open => setDropdownOpened(open)}
       visible={dropdownOpened}
       selectedItemsKeys={[]}
       overlay={overlay}
+      overlayStyle={{ minWidth: 'fit-content' }}
       footer={footer}
       testId={getStringWithCondition(`${TEST_ID_PREFIX}-${columnKey}-popup`, testId)}
       klId={getStringWithCondition(`${TEST_ID_PREFIX}-${columnKey}-popup`, klId)}

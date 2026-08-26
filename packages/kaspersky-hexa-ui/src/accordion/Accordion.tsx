@@ -12,8 +12,8 @@ import { AccordionProps } from './types'
 export const Accordion: FC<AccordionProps> = memo(({
   className,
   disabled,
-  expandIconPosition = 'right',
-  withBorder = true,
+  expandIconPosition,
+  withBorder,
   ...rawProps
 }) => {
   const { testAttributes, ...props } = useTestAttribute(rawProps)
@@ -35,5 +35,10 @@ export const Accordion: FC<AccordionProps> = memo(({
     </div>
   )
 })
+
+Accordion.defaultProps = {
+  expandIconPosition: 'right',
+  withBorder: true
+}
 
 Accordion.displayName = 'Accordion'

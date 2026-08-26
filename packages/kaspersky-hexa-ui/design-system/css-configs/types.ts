@@ -11,7 +11,6 @@ import { SegmentedButtonColorConfig, SegmentedButtonMode, SegmentedButtonSize, S
 import { SelectColorConfig } from '@src/select/types'
 import { StatusCardColorConfig, StatusCardMode, StatusCardSize, StatusCardSizeConfig } from '@src/status-card/types'
 import { TabsColorConfig } from '@src/tabs/types'
-import { ToggleColorConfig } from '@src/toggle/types'
 import { TreeColorConfig } from '@src/tree/types'
 import { TreeSelectColorConfig } from '@src/tree-select/types'
 import { UploaderCssConfig } from '@src/upload/types'
@@ -62,7 +61,6 @@ export type ComponentsConfig = {
     tabs: { colors: TabsColorConfig },
     tree: { colors: TreeColorConfig },
     treeSelect: { colors: TreeSelectColorConfig },
-    toggle: { colors: ToggleColorConfig },
     upload: ComponentConfig<UploaderCssConfig>
   }
 }

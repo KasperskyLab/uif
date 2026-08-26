@@ -1,20 +1,22 @@
+import { PopupConfigProvider } from '@helpers/components/PopupConfigProvider'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
+import { Button } from '@src/button'
 import { Notification, openNotification } from '@src/notification'
 import { SectionMessage } from '@src/section-message'
+import { Space } from '@src/space'
+import { Toggle } from '@src/toggle'
 import { Meta } from '@storybook/react'
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import { Table } from '..'
 import MetaData from '../__meta__/meta.json'
-import { generatedData, tableColumns } from '../__mocks__/filtersMockData'
-import { ITableProps } from '../types'
+import { generatedData, tableColumns, TableMockProps, TableMockStory } from '../__mocks__/filtersMockData'
+import { TableToolbarProps } from '../types'
 
-import { mockGetLeftItems, Story, Wrapper } from './_commonConstants'
-import { Button } from '@src/button/Button'
-import { Space, TableToolbarProps } from '@src/index'
+import { mockGetLeftItems, Wrapper } from './_commonConstants'
 
-const meta: Meta<ITableProps> = {
+const meta: Meta<TableMockProps> = {
   title: 'Hexa UI Components/Table/Toolbar',
   component: Table,
   args: {
@@ -51,7 +53,7 @@ const dropdownImportExport: TableToolbarProps['importExportButton'] = {
   buttonExportText: 'Export items'
 }
 
-export const WithToolbar: Story = {
+export const WithToolbar: TableMockStory = {
   render: (args) => {
     const [importExportButton, setImportExportButton] = useState<Required<TableToolbarProps>['importExportButton']>(dropdownImportExport)
 
@@ -90,7 +92,9 @@ export const WithToolbar: Story = {
           <Button onClick={onClickChangeImportExportProp} mode="primary">
             Set importExportButton prop to {importExportButton?.dropdown ? '"button" mode with loading and tooltip' : '"dropdown" mode'}
           </Button>
-          <Table {...args} toolbar={{ ...args.toolbar, importExportButton }} />
+          <PopupConfigProvider usePortal>
+            <Table {...args} toolbar={{ ...args.toolbar, importExportButton }} />
+          </PopupConfigProvider>
         </Space>
       </>
     )
@@ -106,6 +110,15 @@ export const WithToolbar: Story = {
       onRefresh: () => openNotification({ mode: 'success', description: 'Table refreshed' }),
       importExportButton: dropdownImportExport,
       left: [
+        {
+          type: 'children',
+          key: 'toggle-with-tooltip',
+          children: (
+            <Toggle tooltip="Toggle tooltip">
+              Toggle
+            </Toggle>
+          )
+        },
         {
           type: 'button',
           key: '1',
@@ -182,7 +195,7 @@ export const WithToolbar: Story = {
   }
 }
 
-export const GetLeftItems: Story = {
+export const GetLeftItems: TableMockStory = {
   args: {
     toolbar: {
       showFilterSidebar: true,

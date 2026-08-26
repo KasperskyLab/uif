@@ -1,14 +1,16 @@
 import { Pagination, PaginationProps } from '@src/pagination'
-import { render } from '@testing-library/react'
-import React from 'react'
 
-import { rowsCount, Table } from '../test-utils/shared'
+import { generatedData, tableColumns } from '../__mocks__/filtersMockData'
+import { getTotalRowCount } from '../helpers/getTotalRowCount'
+import { TableTestingClass } from '../test-utils/TableTestingClass'
 
 jest.mock('@src/pagination', () => {
   return {
     Pagination: jest.fn(() => null)
   }
 })
+
+const rowsCount = getTotalRowCount(generatedData)
 
 const getPaginationParamsToCheck = (propsToCheck: Partial<PaginationProps>) => {
   return {
@@ -17,24 +19,25 @@ const getPaginationParamsToCheck = (propsToCheck: Partial<PaginationProps>) => {
   }
 }
 
-describe('Table pagination module', () => {
-  const klId = 'table-pagination'
+const defaultProps = {
+  columns: tableColumns,
+  dataSource: generatedData
+}
 
+describe('Table pagination module', () => {
   it('should render by default', () => {
-    const { container } = render(<Table />)
-    expect(container.querySelector(`[kl-id="${klId}"]`)).toBeInTheDocument()
+    const table = TableTestingClass.render(defaultProps)
+    expect(table.pagination.getRoot()).toBeInTheDocument()
   })
 
   it('should not render if it is disabled', () => {
-    const { container } = render(<Table pagination={false} />)
-    expect(
-      container.querySelector(`[kl-id="${klId}"]`)
-    ).not.toBeInTheDocument()
+    const table = TableTestingClass.render({ ...defaultProps, pagination: false })
+    expect(table.pagination.getRoot()).not.toBeInTheDocument()
   })
 
   describe('when called Pagination component', () => {
     it('should set correct default props', () => {
-      render(<Table />)
+      TableTestingClass.render(defaultProps)
 
       const { props, context } = getPaginationParamsToCheck({
         simple: false,
@@ -45,7 +48,7 @@ describe('Table pagination module', () => {
     })
 
     it('should set prop \'simple\' to true if it is specified in config', () => {
-      render(<Table pagination={{ simple: true }} />)
+      TableTestingClass.render({ ...defaultProps, pagination: { simple: true } })
 
       const { props, context } = getPaginationParamsToCheck({
         simple: true
@@ -54,7 +57,7 @@ describe('Table pagination module', () => {
     })
 
     it('should set prop \'showSelected\' to true if selection is possible', () => {
-      render(<Table rowSelection={{}} />)
+      TableTestingClass.render({ ...defaultProps, rowSelection: {} })
 
       const { props, context } = getPaginationParamsToCheck({
         showSelected: true
@@ -63,7 +66,7 @@ describe('Table pagination module', () => {
     })
 
     it('should set prop \'showSizeChanger\' to true if it is specified in config', () => {
-      render(<Table pagination={{ showSizeChanger: true }} />)
+      TableTestingClass.render({ ...defaultProps, pagination: { showSizeChanger: true } })
 
       const { props, context } = getPaginationParamsToCheck({
         showSizeChanger: true
@@ -72,7 +75,7 @@ describe('Table pagination module', () => {
     })
 
     it('should set prop \'showSizeChanger\' to false if pagination is simple', () => {
-      render(<Table pagination={{ simple: true, showSizeChanger: true }} />)
+      TableTestingClass.render({ ...defaultProps, pagination: { simple: true, showSizeChanger: true } })
 
       const { props, context } = getPaginationParamsToCheck({
         simple: true,

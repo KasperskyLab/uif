@@ -148,7 +148,7 @@ export const getCheckboxCss = () => css`
   &.ant-checkbox-wrapper-disabled, .ant-checkbox-disabled {
     cursor: not-allowed;
   }
-  .ant-checkbox-disabled {
+    .ant-checkbox-disabled {
     + span {
       color: var(--checkbox--text--base--disabled);
       cursor: default;
@@ -179,14 +179,6 @@ export const getCheckboxCss = () => css`
     cursor: default;
   }
   &.kl6-checkbox-readonly .ant-checkbox-disabled {
-    + span {
-      color: var(--checkbox--text--base--readonly);
-      cursor: default;
-      & .form-label > span {
-        cursor: default;
-        color: var(--checkbox--text--base--readonly);
-      }
-    }
     .ant-checkbox-inner {
       background-color: var(--checkbox--bg--base--readonly) !important;
       border-color: transparent !important;

@@ -9,9 +9,15 @@ type StateProps = {
   color: string
 }
 
+type VisitedStateProps = {
+  enabled: StateProps,
+  hover: StateProps,
+  active: StateProps
+}
+
 export type LinkColorConfig = Focus & {
   enabled: StateProps,
-  visited: StateProps,
+  visited: VisitedStateProps,
   hover: StateProps,
   active: StateProps,
   disabled: StateProps
@@ -31,7 +37,7 @@ export type LinkThemeProps = {
 
 export type LinkCssConfig = LinkColorConfig & LinkSizeConfig
 
-export type LinkSize = 'medium' | 'large' | 'noSize'
+export type LinkSize = 'small' | 'medium' | 'large' | 'noSize'
 
 export type LinkDecorationType = 'icon' | 'none'
 

@@ -1,4 +1,3 @@
-import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { PopupConfigProvider } from '@helpers/components/PopupConfigProvider'
 import { ContentContainer, ScrollableContainer } from '@sb/components/ScrollableContainer'
 import { StoryColumn } from '@sb/StoryComponents'
@@ -10,26 +9,14 @@ import { Space } from '@src/space'
 import { Text } from '@src/typography'
 import { Meta, StoryObj } from '@storybook/react'
 import React, { CSSProperties, useRef, useState } from 'react'
-import styled from 'styled-components'
 
-import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { Menu3, Placeholder, Plus } from '@kaspersky/hexa-ui-icons/16'
+import { Placeholder, Plus } from '@kaspersky/hexa-ui-icons/16'
 
 import { Dropdown } from '../Dropdown'
 import { DropdownItemProps, DropdownProps } from '../types'
 
 import { dropdownStorySettings } from './Dropdown.stories'
-import { defaultDropdownOverlay, dropdownPlacements } from './dropdownStoryFixtures'
-
-const DropdownsContainer = styled.div`
-  min-height: 80vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 48px;
-`
+import { defaultDropdownOverlay } from './dropdownStoryFixtures'
 
 const viewItems: SegmentedButtonOption[] = [
   { text: 'custom item', value: 'custom' },
@@ -71,14 +58,11 @@ export default meta
 
 type Story = StoryObj<DropdownProps>
 
-export const Basic: Story = {
+export const Overlay: Story = {
   render: (args: DropdownProps) => (
     <StoryColumn>
       <Dropdown {...args}>
         <Button>Json overlay</Button>
-      </Dropdown>
-      <Dropdown {...args}>
-        <Text>Click on span</Text>
       </Dropdown>
       <Dropdown
         {...args}
@@ -189,52 +173,6 @@ export const Basic: Story = {
   }
 }
 
-export const Hover: Story = {
-  args: {
-    overlay: defaultDropdownOverlay,
-    trigger: ['hover'],
-    children: <Button text="Hover" />
-  }
-}
-
-export const Disabled: Story = {
-  args: {
-    overlay: defaultDropdownOverlay,
-    disabled: true,
-    children: <Button text="Disabled" />
-  }
-}
-
-export const Placements: Story = {
-  render: (args: DropdownProps) => (
-    <DropdownsContainer>
-      {dropdownPlacements.map((placement) => (
-        <Dropdown
-          key={placement}
-          {...args}
-          placement={placement}
-        >
-          <Button>{placement}</Button>
-        </Dropdown>
-      ))}
-    </DropdownsContainer>
-  ),
-  args: {
-    overlay: defaultDropdownOverlay,
-    trigger: ['click']
-  },
-  parameters: {
-    layout: 'centered'
-  }
-}
-
-export const ContextMenu: Story = {
-  args: {
-    overlay: defaultDropdownOverlay,
-    children: <Button mode="tertiary" iconBefore={<Menu3 />} />
-  }
-}
-
 export const WithinScrollableContainer: Story = {
   render: (args: DropdownProps) => (
     <ScrollableContainer>
@@ -270,14 +208,6 @@ export const WithStickyHeaderAndFooter: Story = {
   }
 }
 
-export const WithPopupMaxHeight: Story = {
-  args: {
-    overlay: defaultDropdownOverlay,
-    popupMaxHeight: 200,
-    children: <Button text="Open" />
-  }
-}
-
 export const CustomPopupContainer: Story = {
   render: (args: DropdownProps) => {
     const containerRef = useRef<HTMLDivElement | null>(null)
@@ -310,10 +240,4 @@ export const CustomPopupContainer: Story = {
     children: <Button>Click</Button>,
     trigger: ['click']
   }
-}
-
-type PaletteStory = StoryObj<ThemedPaletteProps>
-export const ColorTokens: PaletteStory = {
-  args: { source: { dropdown: componentColors.dropdown, dropdown_item: componentColors.dropdown_item } },
-  render: args => <ThemedPalette {...args} />
 }

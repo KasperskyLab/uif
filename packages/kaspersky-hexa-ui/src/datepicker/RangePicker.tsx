@@ -39,8 +39,6 @@ import {
 } from './types'
 import { useThemedPicker } from './useThemedPicker'
 
-const maskObject: any[] = []
-
 const { RangePicker: AntdRangePicker } = DatePicker
 
 const StyledRangePicker = styled(AntdRangePicker as any).withConfig<
@@ -93,11 +91,14 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
   const calendarRef = useRef<HTMLDivElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
+  const maskRef = useRef<any[]>([])
+  const parseTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+
   const localeOptions = useLocaleOptions(showTime)
 
   const applyMaskForInputs = (inputs: HTMLElement[]) => {
     inputs.forEach((el, i) => {
-      maskObject[i] = IMask(
+      maskRef.current[i] = IMask(
         el,
         maskOptions
       )
@@ -105,9 +106,10 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
   }
 
   const destroyMask = () => {
-    maskObject?.forEach((el) => {
-      el?.destroy()
+    maskRef.current.forEach((mask) => {
+      mask?.destroy()
     })
+    maskRef.current = []
     setIsMaskApply(false)
   }
 
@@ -186,6 +188,12 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
     setIsMaskApply(false)
   }, [maskOptions])
 
+  useEffect(() => () => {
+    maskRef.current.forEach((mask) => mask?.destroy())
+    maskRef.current = []
+    if (parseTimeoutRef.current) clearTimeout(parseTimeoutRef.current)
+  }, [])
+
   const handleOnChange = (newDate: RangeDateInputValue) => {
     onChange?.(newDate)
   }
@@ -201,7 +209,7 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
     }
 
     if (isDigital(e.key) && currentValue.split(DIGITAL_SYMBOL_IN_PLACEHOLDERS).length === 2) {
-      setTimeout(() => {
+      parseTimeoutRef.current = setTimeout(() => {
         const inputNumber = [...rangeInputs].indexOf(currentTarget)
         const result = maskOptions?.parse?.(currentTarget.value)
         Array.isArray(date) && (date[inputNumber] = result || null)

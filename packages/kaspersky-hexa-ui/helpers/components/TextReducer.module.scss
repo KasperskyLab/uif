@@ -1,0 +1,27 @@
+.container {
+  min-width: 0;
+}
+
+.wrapper {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+  white-space-collapse: preserve;
+  white-space: nowrap;
+}
+
+.stretch {
+  flex: 1 1 auto;
+}
+
+.truncated {
+  max-width: var(--reducer-max-width);
+}
+
+.clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  -webkit-line-clamp: var(--reducer-line-clamp);
+  line-clamp: var(--reducer-line-clamp);
+}

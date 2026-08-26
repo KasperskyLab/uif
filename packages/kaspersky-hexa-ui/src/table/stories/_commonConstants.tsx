@@ -1,6 +1,11 @@
 import { SBArgType, SBArgTypeControl } from '@sb/helpers'
-import { Locale } from '@src/locale'
-import { FilterOperation, FilterType, Table, TableColumn } from '@src/table'
+import {
+  FilterOperation,
+  FilterType,
+  Table,
+  TableColumn,
+  TableRecord
+} from '@src/table'
 import { ITableProps } from '@src/table/types'
 import { ToolbarItems } from '@src/toolbar'
 import { StoryObj } from '@storybook/react'
@@ -15,7 +20,7 @@ export const Wrapper = styled.div`
 `
 
 // Stories helpers
-export const BasicTableStory = (args: ITableProps) => {
+export const BasicTableStory = <T extends TableRecord = TableRecord> (args: ITableProps<T>) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[] | undefined>(args.rowSelection?.selectedRowKeys)
 
   const onChange = (newSelectedRowKeys: React.Key[]) => {
@@ -89,6 +94,7 @@ export const basicArgTypes = {
     options: ['max', 'last', 'scroll']
   },
   stickyHeader: genArgType('Intend from top in px. Set undefined if sticky is not needed', 'number', 'undefined'),
+  stickySelection: genArgType('Stick selection column, available only with resizingMode: scroll', 'boolean', 'false'),
   loading: genArgType('Is table loading', 'boolean', 'false'),
   loaderProps: genArgType('loaderProps.indicator - custom loader component<br/>loaderProps.delay - delay to show loader'),
   pagination: {
@@ -124,7 +130,8 @@ export const basicArgTypes = {
     ...genArgType('Row mode', 'radio', 'standard'),
     options: ['standard', 'compact']
   },
-  disabled: genArgType('If rowSelection is disabled', 'boolean', 'false')
+  disabled: genArgType('If rowSelection is disabled', 'boolean', 'false'),
+  afterColumn: genArgType('Add fake column to compensate short cols with wide screen', 'boolean', 'true')
 }
 
 // Data
@@ -144,7 +151,7 @@ export const basicTwoColumns = [
 ]
 
 export const generateDataSource = (length: number) => (
-  Array.from({ length }, (_, index): BasicRowType & { key: number, details?: { city: string, email: string } } => ({
+  Array.from({ length }, (_, index): BasicRowType & { key: number | string, details?: { city: string, email: string } } => ({
     name: `Value ${index + 1}`,
     description: `Description ${index + 1}`,
     key: index + 1,
@@ -197,39 +204,46 @@ export const basicTreeDataSource: BasicTreeRowType[] = [
   {
     name: 'John Doe',
     description: 'Nice guy',
-    age: 34
+    age: 34,
+    key: 1
   },
   {
     name: 'Jane Doe',
     description: 'Cool girl',
-    age: 33
+    age: 33,
+    key: 2
   },
   {
     name: 'James Doe',
     description: 'Noble man',
     age: 65,
+    key: 3,
     children: [
       {
         name: 'Mary Sue',
         description: 'Dubious character',
         age: 41,
+        key: 31,
         children: [{
           name: 'Dirk Gently',
           description: 'Best detective',
-          age: 15
+          age: 15,
+          key: 311
         }]
       },
       {
         name: 'John Snow',
         description: 'Knows nothing',
-        age: 45
+        age: 45,
+        key: 32
       }
     ]
   },
   {
     name: 'Judy Doe',
     description: 'Great person',
-    age: 38
+    age: 38,
+    key: 4
   }
 ]
 
@@ -238,11 +252,17 @@ export type Story = StoryObj<ITableProps>
 
 export type BasicRowType = { name: string, description: string }
 
-export type BasicTreeRowType = Omit<BasicRowType, 'name'> & { name: React.ReactNode, age: number, children?: BasicTreeRowType[] }
+export type BasicTreeRowType = Omit<BasicRowType, 'name'> & {
+  key?: number | string,
+  name: React.ReactNode,
+  age: number,
+  children?: BasicTreeRowType[]
+}
 
 const mockCreateColumn = (name: string, width?: number, show = true, hideColumnAvailable = true) => ({
   key: name,
-  title: <Locale localizationKey={`table.columnsSettings.columnTitles.${name}`} />,
+  // Plain key: the LocalizeColumnTitles module runs string titles through t()
+  title: `table.columnsSettings.columnTitles.${name}`,
   dataIndex: name,
   width: `${width}%`,
   show,
@@ -277,7 +297,18 @@ export const legacyCountries = [
   'Australia'
 ]
 
-export const columns: TableColumn[] = [
+export type TableRow = {
+  name?: string,
+  email?: string,
+  country?: string,
+  age?: string | number,
+  currency?: string,
+  address?: string,
+  company?: string,
+  city?: string,
+}
+
+export const columns: TableColumn<TableRow>[] = [
   mockCreateColumn('name', 19, true, false),
   {
     ...mockCreateColumn('country', 13),

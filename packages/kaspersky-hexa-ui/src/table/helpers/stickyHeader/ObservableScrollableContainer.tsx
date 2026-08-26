@@ -7,10 +7,10 @@ import styled, { css } from 'styled-components'
 import { useResizableColumnsContext } from './ResizableColumnsContext'
 
 type ScrollableContainerCssProps<T extends TableRecord = TableRecord> =
-  Pick<ITableProps<T>, 'className' | 'resizingMode' | 'afterColumn'> & { columns: Pick<TableColumn, 'minWidth'>[] }
+  Pick<ITableProps<T>, 'className' | 'resizingMode' | 'afterColumn' | 'useDragDrop'> & { columns: Pick<TableColumn, 'minWidth'>[] }
 
 export const ScrollableContainer = styled.div.withConfig<Omit<ScrollableContainerCssProps, 'columns'>>({
-  shouldForwardProp: prop => !['resizingMode', 'afterColumn'].includes(prop)
+  shouldForwardProp: prop => !['resizingMode', 'afterColumn', 'useDragDrop'].includes(prop)
 })`
   &.table-height-full {
     display: flex;
@@ -77,11 +77,13 @@ export const ObservableScrollableContainer = forwardRef(
     props: ScrollableContainerCssProps<T> & { children: ReactNode },
     ref: React.Ref<HTMLDivElement>
   ) {
-    const { afterColumn, columns } = props
+    const { afterColumn, columns, useDragDrop } = props
     const containerRef = useRef<HTMLDivElement | null>(null)
     useImperativeHandle(ref, () => containerRef.current as HTMLDivElement)
 
     const { setOverflow, hasRowSelection } = useResizableColumnsContext()
+    const plusDNDcol = useDragDrop ? 1 : 0
+    const plusSelection = hasRowSelection ? 1 : 0
 
     useEffect(() => {
       const colGroup = containerRef.current?.querySelector('table colgroup')
@@ -89,11 +91,12 @@ export const ObservableScrollableContainer = forwardRef(
 
       columns?.forEach((column, index) => {
         const { minWidth } = column
-        const colGroupIndex = hasRowSelection ? index + 1 : index
+        const colGroupIndex = index + plusSelection + plusDNDcol
         const colGroupElement = colGroup.childNodes[colGroupIndex] as HTMLElement | undefined
-        minWidth && colGroupElement && (colGroupElement.style.minWidth = `${minWidth}px`)
+
+        minWidth && colGroupElement && colGroupElement.style.setProperty('min-width', `${minWidth}px`)
       })
-    }, [])
+    }, [useDragDrop, hasRowSelection])
 
     useEffect(() => {
       if (!containerRef.current) return

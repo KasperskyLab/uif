@@ -3,7 +3,7 @@ import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHe
 import { Space } from '@src/space'
 import { Text } from '@src/typography'
 
-import { AnchorNavigation, Navigation, NavigationItem } from '../AnchorNavigation'
+import { AnchorNavigation } from '../AnchorNavigation'
 import * as AnchorNavigationStories from './AnchorNavigation.stories'
 import {
   anchorNavigationDesignPropPresentation,
@@ -14,16 +14,24 @@ import {
 
 <DocPageLayout>
 
-<DocPageHeader
-  title="AnchorNavigation"
-  description='**AnchorNavigation** — навигация по разделам одной страницы с автоматической подсветкой активного блока при прокрутке'
-/>
+<DocPageHeader checkUIF title="AnchorNavigation" />
 
 <Tabs defaultActiveKey="description">
   <Tabs.TabPane tab="Описание" key="description">
 
+<DocExampleBlock
+      description="**AnchorNavigation** — навигация по разделам одной страницы с автоматической подсветкой активного блока при прокрутке
+
+**AnchorNavigation** — карта длинной страницы или формы с несколькими логическими разделами: настройки продукта, документация, пошаговые блоки в боковой панели. Помогает понять структуру контента и быстро перейти к нужному разделу, не теряя ориентир при прокрутке.
+
+Для переключения между несвязанными представлениями одного экрана используйте **Tabs**. Для глобальной навигации по приложению — пункты меню в **Sidebar** или другие паттерны верхнего уровня, а не якорную навигацию по секциям страницы."
+    />
+
+  </Tabs.TabPane>
+  <Tabs.TabPane tab="Структура" key="composition">
+
     <DocExampleBlock
-      title="Описание компонента"
+      
       description="**AnchorNavigation** отображает длинный контент слева и фиксированную навигацию справа (256 px). Пункты задаются массивом **items**; каждый ***id*** должен совпадать с ***id*** соответствующего блока в **children**. При прокрутке активный пункт подсвечивается автоматически; клик или Enter по пункту плавно прокручивает к разделу. Панель навигации sticky и подстраивается под ближайший scrollable-родитель (например, **Sidebar**). Дополнительно настраиваются **title**, **className** и **style**."
     />
 
@@ -146,34 +154,29 @@ items={[
 
   </Tabs.TabPane>
 
-  <Tabs.TabPane tab="Правила использования" key="howtouse">
-
-    <DocExampleBlock
-      title="Правила использования"
-      description="**AnchorNavigation** — карта длинной страницы или формы с несколькими логическими разделами: настройки продукта, документация, пошаговые блоки в боковой панели. Помогает понять структуру контента и быстро перейти к нужному разделу, не теряя ориентир при прокрутке.
-
-Для переключения между несвязанными представлениями одного экрана используйте **Tabs**. Для глобальной навигации по приложению — пункты меню в **Sidebar** или другие паттерны верхнего уровня, а не якорную навигацию по секциям страницы."
-    />
-
-  </Tabs.TabPane>
-
-  <Tabs.TabPane tab="Дизайнеру" key="design">
-    <Space direction="vertical" gap={40} align="start">
-      <Space direction="vertical" gap={0} align="start">
-        <Text type="H3">anchor navigation</Text>
-        <DocumentationArgsTable rows={buildPresentationOnlyRows(anchorNavigationDesignPropPresentation)} />
-      </Space>
-
-      <Space direction="vertical" gap={0} align="start">
-        <Text type="H3">anchor navigation item</Text>
-        <DocumentationArgsTable rows={buildPresentationOnlyRows(navigationItemDesignPropPresentation)} />
-      </Space>
-    </Space>
-  </Tabs.TabPane>
 
   <Tabs.TabPane tab="Properties" key="properties">
     <Description of={AnchorNavigationStories} />
-    <AutodocArgsTable components={[AnchorNavigation, Navigation, NavigationItem]}/>
+    <AutodocArgsTable components={AnchorNavigation} />
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайн" key="design">
+    <DocExampleBlock
+      title="Компонент в Pixso"
+      titleSize='H5'
+      description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=1411:200989)"
+    />
+    <Space direction="vertical" gap={32} align="start">
+      <Space direction="vertical" gap={8} align="start">
+        <Text type="H3">Anchor navigation</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(anchorNavigationDesignPropPresentation)} />
+      </Space>
+
+      <Space direction="vertical" gap={8} align="start">
+        <Text type="H3">Anchor navigation item</Text>
+        <DocumentationArgsTable rows={buildPresentationOnlyRows(navigationItemDesignPropPresentation)} />
+      </Space>
+    </Space>
   </Tabs.TabPane>
 </Tabs>
 

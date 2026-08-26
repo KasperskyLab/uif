@@ -20,7 +20,8 @@ import {
   DropdownToggle
 } from './wrappers'
 
-const getPopupMaxHeight = (popupMaxHeight: number | undefined) => popupMaxHeight && (popupMaxHeight > 100 ? popupMaxHeight : 100)
+const MIN_HEIGHT = 100
+const MAX_WIDTH = 600
 
 const getPlacement = (placement: Placement): RcDropdownProps['placement'] => {
   if (placement === 'topCenter' || placement === 'bottomCenter') {
@@ -41,16 +42,20 @@ export const Dropdown: FC<DropdownProps> & DropdownVariants = (rawProps: Dropdow
     trigger,
     disabled,
     popupMaxHeight,
+    popupMaxWidth,
     children,
     getPopupContainer,
     usePortal,
+    closeOnScroll,
+    closeOnWindowBlur,
     ...rest
   } = rawProps
 
   const [visible, setVisible] = useMergedState(false, { value: rawVisible })
   const config = usePopupConfig({ usePortal: true })
 
-  const dropdownMaxHeight = useMemo(() => getPopupMaxHeight(popupMaxHeight), [popupMaxHeight])
+  const dropdownMaxHeight = popupMaxHeight && Math.max(popupMaxHeight, MIN_HEIGHT)
+  const dropdownMaxWidth = popupMaxWidth && Math.min(popupMaxWidth, MAX_WIDTH)
 
   const handleOverlaySelect: RcMenuProps['onSelect'] = (info) => {
     setVisible(false)
@@ -59,7 +64,8 @@ export const Dropdown: FC<DropdownProps> & DropdownVariants = (rawProps: Dropdow
 
   const overlayClassName = cn(
     rawOverlayClassName,
-    dropdownMaxHeight && styles.dropdownMaxHeight
+    dropdownMaxHeight && styles.dropdownMaxHeight,
+    dropdownMaxWidth && styles.dropdownMaxWidth
   )
   const rootOverlayClassName = cn(
     styles.dropdownOverlay,
@@ -72,22 +78,25 @@ export const Dropdown: FC<DropdownProps> & DropdownVariants = (rawProps: Dropdow
 
   useEffect(() => {
     setDropdownAttributes()
-  }, [dropdownMaxHeight])
+  }, [dropdownMaxHeight, dropdownMaxWidth])
 
   const setDropdownAttributes = useCallback(() => {
     setTimeout(() => {
       const dropdowns: NodeListOf<HTMLElement> = document.querySelectorAll('.ant-dropdown')
       dropdowns.forEach(d => {
         const currentMinWidth = Number(d.style.getPropertyValue('min-width').split('px')[0])
-        if (currentMinWidth > 600) {
+        if (currentMinWidth > MAX_WIDTH) {
           d.style.setProperty('min-width', '600px')
         }
         if (dropdownMaxHeight) {
           d.style.setProperty('--dropdown-max-height', `${dropdownMaxHeight}px`)
         }
+        if (dropdownMaxWidth) {
+          d.style.setProperty('--dropdown-max-width', `${dropdownMaxWidth}px`)
+        }
       })
     }, 0)
-  }, [dropdownMaxHeight])
+  }, [dropdownMaxHeight, dropdownMaxWidth])
 
   const focusOnFirstItem = useCallback(() => {
     setTimeout(() => {
@@ -102,6 +111,31 @@ export const Dropdown: FC<DropdownProps> & DropdownVariants = (rawProps: Dropdow
     setVisible(opened)
     rawOnVisibleChange?.(opened)
   }, [focusOnFirstItem, setDropdownAttributes, setVisible, rawOnVisibleChange])
+
+  const closeDropdown = useCallback(() => {
+    setVisible(false),
+    rawOnVisibleChange?.(false)
+  }, [setVisible, rawOnVisibleChange])
+
+  useEffect(() => {
+    if (!visible) return
+
+    const handleScroll = (event: Event) => {
+      const target = event.target
+
+      if (target instanceof Element && target.closest('.ant-dropdown')) return
+
+      closeDropdown()
+    }
+
+    if (closeOnScroll) window.addEventListener('scroll', handleScroll, true)
+    if (closeOnWindowBlur) window.addEventListener('blur', closeDropdown)
+
+    return () => {
+      if (closeOnScroll) window.removeEventListener('scroll', handleScroll, true)
+      if (closeOnWindowBlur) window.removeEventListener('blur', closeDropdown)
+    }
+  }, [visible, closeOnScroll, closeOnWindowBlur, closeDropdown])
 
   const child = React.Children.only(
     !isObject(children) ? <span className={styles.dropdownChildren}>{children}</span> : children

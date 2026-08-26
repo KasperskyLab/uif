@@ -1,6 +1,6 @@
 # Storybook Playground Controls
 
-Документ описывает, как в `kl-hexa-ui` формируется набор пропов для вкладки `Playground`, как задаётся порядок controls и какими способами скрывать ненужные пропы.
+Документ описывает, как в `hexa-ui` формируется набор пропов для вкладки `Playground`, как задаётся порядок controls и какими способами скрывать ненужные пропы.
 
 ## Где настраивается Playground
 
@@ -167,7 +167,7 @@ export const componentStorySettings: Meta<ComponentProps> = {
 
 ```tsx
 controls: {
-  exclude: /(componentType|componentId|dataTestId|klId|theme)/
+  exclude: /(componentType|klId|theme)/
 }
 ```
 

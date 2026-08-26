@@ -1,35 +1,11 @@
+import { useOverflowObserver } from '@helpers/hooks/useOverflowObserver'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import useTextReducer from '@helpers/hooks/useTextReducer'
 import { TestingProps } from '@helpers/typesHelpers'
 import { Tooltip, TooltipProps } from '@src/tooltip'
-import React, { ReactNode, useRef, VFC } from 'react'
-import styled from 'styled-components'
+import cn from 'classnames'
+import React, { CSSProperties, ReactNode, useRef, VFC } from 'react'
 
-export const TooltipWrapper = styled.div<{ lineClamp?: number }>`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: keep-all;
-  white-space-collapse: preserve;
-  
-  ${props => typeof props.lineClamp === 'number' && props.lineClamp > 1 ? `
-    display: -webkit-box;
-    -webkit-line-clamp: ${props.lineClamp};
-    -webkit-box-orient: vertical;
-  ` : `
-    white-space: nowrap;
-  `}
-`
-
-export const StyledContainer = styled.div<{ truncationWidth?: number, stretch?: boolean }>`
-  ${({ truncationWidth, stretch }) => (
-    typeof truncationWidth === 'number' && truncationWidth > 0
-      ? `max-width: ${truncationWidth}px;`
-      : `
-        min-width: 0;
-        ${stretch && 'flex: 1 1 auto;'}
-      `
-  )}
-`
+import styles from './TextReducer.module.scss'
 
 export type TextReducerProps = Pick<TooltipProps, 'placement'> & TestingProps & {
   children?: ReactNode,
@@ -41,6 +17,8 @@ export type TextReducerProps = Pick<TooltipProps, 'placement'> & TestingProps & 
   className?: string
 }
 
+const measureEllipsis = (el: HTMLElement): boolean => el.offsetWidth < el.scrollWidth || el.offsetHeight < el.scrollHeight
+
 export const TextReducer: VFC<TextReducerProps> = ({
   children,
   lineClamp,
@@ -51,21 +29,36 @@ export const TextReducer: VFC<TextReducerProps> = ({
   className,
   ...props
 }: TextReducerProps) => {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const { ref, hasOverflow } = useTextReducer({ containerRef })
+  const ref = useRef<HTMLDivElement>(null)
+  const [hasOverflow] = useOverflowObserver(ref, measureEllipsis)
   const { testAttributes } = useTestAttribute(props)
 
+  const truncated = typeof truncationWidth === 'number' && truncationWidth > 0
+  const clamp = typeof lineClamp === 'number' && lineClamp > 1
+
+  const containerStyle = truncated ? { '--reducer-max-width': `${truncationWidth}px` } as CSSProperties : undefined
+  const wrapperStyle = clamp ? { '--reducer-line-clamp': lineClamp } as CSSProperties : undefined
+
+  const wrapper = (
+    <div ref={ref} className={cn(styles.wrapper, { [styles.clamp]: clamp })} style={wrapperStyle}>
+      {children}
+    </div>
+  )
+
   return (
-    <StyledContainer className={className} ref={containerRef} truncationWidth={truncationWidth} stretch={stretch} {...testAttributes}>
+    <div
+      className={cn(className, styles.container, {
+        [styles.stretch]: !truncated && stretch,
+        [styles.truncated]: truncated
+      })}
+      style={containerStyle}
+      {...testAttributes}
+    >
       {
         hasOverflow
-          ? (
-              <Tooltip text={tooltip ?? children} placement={placement}>
-                <TooltipWrapper ref={ref} lineClamp={lineClamp}>{children}</TooltipWrapper>
-              </Tooltip>
-            )
-          : <TooltipWrapper ref={ref} lineClamp={lineClamp}>{children}</TooltipWrapper>
+          ? <Tooltip text={tooltip ?? children} placement={placement}>{wrapper}</Tooltip>
+          : wrapper
       }
-    </StyledContainer>
+    </div>
   )
 }

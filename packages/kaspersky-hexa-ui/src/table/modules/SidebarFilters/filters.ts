@@ -42,7 +42,13 @@ export const getEnumOption = (
 
   return {
     label: value.label,
-    value: value.value
+    value: value.value,
+    dataLabel: value.dataLabel,
+    ...(Array.isArray(value.options) && {
+      options: value.options
+        .map((el: EnumOption | LegacyEnumOption) => getEnumOption(el))
+        .filter((el): el is EnumOption => el !== null)
+    })
   }
 }
 
@@ -60,11 +66,10 @@ export const getNewFilter = async <T extends TableRecord = TableRecord>(
   }
 
   const attributes = column.filterAttributes
-  if (attributes && attributes[0]?.name) {
-    const resultAttribute = attributes.find(el => el.name === attribute) || attributes[0]
+  const resultAttribute = attributes?.find(el => el.name === attribute) || attributes?.[0]
+  if (resultAttribute?.name) {
     resultFilter.attribute = {
-      name: resultAttribute.name,
-      getAvailableOptions: resultAttribute.filter?.getAvailableOptions!
+      name: resultAttribute.name
     }
     resultFilter.type = resultAttribute.filter.type as FilterConfigInternal['type']
   }
@@ -72,9 +77,10 @@ export const getNewFilter = async <T extends TableRecord = TableRecord>(
   switch (resultFilter.type) {
     case FilterType.Enum: {
       const enumFilter = resultFilter as EnumFilter & { id: string }
-      const getter = enumFilter?.attribute?.getAvailableOptions || (column.filterType as EnumFilterType)?.getAvailableOptions
+      const getter = resultAttribute?.filter?.getAvailableOptions || (column.filterType as EnumFilterType)?.getAvailableOptions
       const availableOptions = await resolveEnumOptions(getter, undefined, column.key)
-      const defaultEnumValue = availableOptions?.[0]
+      const firstOption = availableOptions?.[0]
+      const defaultEnumValue = firstOption?.options?.length ? firstOption.options[0] : firstOption
 
       return {
         ...enumFilter,

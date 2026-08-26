@@ -1,122 +1,73 @@
 import { badges } from '@sb/badges'
-import { withDesignControls } from '@sb/components/designControls'
-import { withMeta } from '@sb/components/Meta'
-import { SBArgType } from '@sb/helpers'
+import { buildStoryArgTypes, getControlsInclude } from '@sb/components/Documentation'
 import { Textbox } from '@src/input'
-import { Popover } from '@src/popover'
-import { Space } from '@src/space'
-import { Tag } from '@src/tag'
 import { Meta, StoryObj } from '@storybook/react'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { textLevels } from '@kaspersky/hexa-ui-core/typography/js'
-
-import { Text } from '../../typography'
 import MetaData from '../__meta__/meta.json'
 import { LockGroup as LockGroupComponent } from '../LockGroup'
-import { LockGroupProps, statusIcons } from '../types'
+import { LockGroupProps } from '../types'
+
+import { defaultArgs, lockGroupPropPresentation, lockGroupStatusIconOptions } from './LockGroup.controls'
 
 const Wrapper = styled.div`
   width: 100%;
 `
 
-const titleLevels = {
-  options: Object.keys(textLevels).filter(level => ['H6', 'H5', 'H4'].includes(level)),
-  control: { type: 'inline-radio' }
-} as SBArgType
-
-const meta: Meta<LockGroupProps> = {
-  title: 'Hexa UI Components/LockGroup',
-  component: LockGroupComponent,
-  ...withDesignControls<LockGroupProps>({
-    componentName: 'lockGroup',
-    meta: {
-      args: {
-        title: 'Title',
-        titleLevel: 'H6',
-        statusIcon: 'warning',
-        statusTooltip: 'Attention'
-      },
-      argTypes: {
-        titleLevel: { ...titleLevels },
-        title: {
-          control: 'text'
-        },
-        statusText: {
-          control: 'text'
-        },
-        informationText: {
-          control: 'text'
-        },
-        statusIcon: {
-          control: 'select',
-          options: [...statusIcons, null]
-        }
-      },
-      parameters: {
-        badges: [badges.stable],
-        docs: {
-          page: withMeta(MetaData)
-        },
-        design: MetaData.pixsoView
-      }
-    }
-  })
+type LockGroupStoryProps = Omit<LockGroupProps, 'statusIcon'> & {
+  statusIcon: typeof lockGroupStatusIconOptions[number]
 }
+
+const lockGroupStorySettings: Meta<LockGroupStoryProps> = {
+  argTypes: buildStoryArgTypes(lockGroupPropPresentation),
+  args: defaultArgs,
+  parameters: {
+    badges: [badges.stable],
+    design: MetaData.pixsoView
+  }
+}
+
+const meta: Meta<LockGroupStoryProps> = {
+  title: 'Hexa UI Components/LockGroup',
+  component: LockGroupComponent as React.ComponentType<LockGroupStoryProps>,
+  tags: ['!autodocs'],
+  includeStories: ['Playground'],
+  excludeStories: ['lockGroupStorySettings'],
+  ...lockGroupStorySettings
+}
+
 export default meta
 
-type Story = StoryObj<LockGroupProps>
+type Story = StoryObj<LockGroupStoryProps>
 
-const StoryDefaultRender = (args: LockGroupProps) => {
-  const [isLockClosed, setIsLockClosed] = useState(false)
-  const [textValue, setTextValue] = useState('12345')
+export const Playground: Story = {
+  name: 'Playground',
+  render: ({ statusIcon, ...args }) => {
+    const [isLockClosed, setIsLockClosed] = useState(false)
+    const [textValue, setTextValue] = useState('12345')
 
-  useEffect(() => {
-    setIsLockClosed(!!args.isLockClosed)
-  }, [args.isLockClosed])
+    useEffect(() => {
+      setIsLockClosed(!!args.isLockClosed)
+    }, [args.isLockClosed])
 
-  return (
-    <Wrapper>
-      <LockGroupComponent
-        {...args}
-        isLockClosed={isLockClosed}
-        onLockChange={(checked) => setIsLockClosed(checked)}
-      >
-        <Textbox value={textValue} onChange={value => setTextValue(String(value))} />
-      </LockGroupComponent>
-    </Wrapper>
-  )
-}
-
-export const LockGroup: Story = {
-  render: StoryDefaultRender.bind({}),
-  args: {
-    title: 'Title',
-    isGroupDisabled: false,
-    isLockDisabled: false,
-    statusText: 'statusText'
-  }
-}
-
-export const WithInformationText: Story = {
-  render: StoryDefaultRender.bind({}),
-  args: {
-    informationText: () => <Text>Information text with <a>Information link</a></Text>
-  }
-}
-
-export const ElementAfter: Story = {
-  render: StoryDefaultRender.bind({}),
-  args: {
-    titleElementAfter: (
-      <Space gap="dependent">
-        <Tag>Windows</Tag>
-        <Tag>Mac</Tag>
-        <Popover content={<>Some content</>}>
-          <Tag>Linux (Overwritten)</Tag>
-        </Popover>
-      </Space>
+    return (
+      <Wrapper>
+        <LockGroupComponent
+          {...args}
+          isLockClosed={isLockClosed}
+          onLockChange={setIsLockClosed}
+          statusIcon={statusIcon === 'none' ? undefined : statusIcon}
+        >
+          <Textbox value={textValue} onChange={value => setTextValue(String(value))} />
+        </LockGroupComponent>
+      </Wrapper>
     )
+  },
+  parameters: {
+    controls: {
+      include: getControlsInclude(lockGroupPropPresentation),
+      sort: 'none'
+    }
   }
 }

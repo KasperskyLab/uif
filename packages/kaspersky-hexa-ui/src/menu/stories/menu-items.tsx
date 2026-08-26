@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { Badge } from '@src/badge'
 import { Indicator } from '@src/indicator'
 import { ItemDivider, NavItemData } from '@src/menu/types'
@@ -556,6 +557,44 @@ export const navItems: Record<string, unknown>[] = [
     isRoot: true,
     submenuItems: mockedItemsWithoutContent,
     lineClamp: 2
+  },
+  {
+    key: 'Links',
+    isCaption: true,
+    isRoot: true
+  },
+  {
+    state: 'kaspersky',
+    weight: 900,
+    icon: Placeholder,
+    key: 'Kaspersky',
+    isRoot: true,
+    href: 'https://www.kaspersky.ru/',
+    target: '_blank'
+  },
+  {
+    state: 'search-engines',
+    weight: 1000,
+    icon: Placeholder,
+    key: 'Search engines',
+    klId: 'navigation.search-engines',
+    isRoot: true,
+    items: [
+      {
+        state: 'google',
+        key: 'Google',
+        klId: 'navigation.google',
+        href: 'https://www.google.com/',
+        target: '_blank'
+      },
+      {
+        state: 'duckduckgo',
+        key: 'DuckDuckGo',
+        klId: 'navigation.duckduckgo',
+        href: 'https://duckduckgo.com/',
+        target: '_blank'
+      }
+    ]
   }
 ]
 

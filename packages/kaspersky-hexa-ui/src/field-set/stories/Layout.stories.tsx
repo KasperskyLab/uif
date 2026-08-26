@@ -199,7 +199,7 @@ const items3: FieldSetItem[] = [
 
 const souceCodeLink = (
   <Link
-    href="https://github.com/KasperskyLab/uif/blob/master/packages/kaspersky-hexa-ui/src/field-set/stories/Layout.stories.tsx"
+    href="https://hqrndtfs.avp.ru/tfs/DefaultCollection/Monorepo/_git/Monorepo?path=%2Fproduct%2Fosmp%2Fweb%2Fpackages%2Fpackages%2Fkl-hexa-ui%2Fsrc%2Ffield-set%2Fstories%2FLayout.stories.tsx"
     target="_blank"
     text="Source code"
   />

@@ -1,0 +1,90 @@
+@use '../../design-system/tokens/typography.module.scss' as *;
+
+$arrow-size: 7px;
+$rotate-width: 6.5px;
+$max-width: 320px;
+
+.tooltip {
+  :global(.ant-tooltip-inner) {
+    border-radius: 8px;
+    padding: 8px 12px;
+    background-color: var(--bg--neutral--inverted);
+    color: var(--fg--neutral_inverted--primary);
+    box-shadow:
+      0px 8px 12px 0px var(--elevation--shadow_drop),
+      0px 0px 1px 0px var(--elevation--shadow_contour);
+    @include apply-font-styles(btr4);
+    max-width: $max-width;
+  }
+
+  :global(.ant-tooltip-arrow:before) {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    margin: auto;
+    content: '';
+    pointer-events: auto;
+    background-color: var(--bg--neutral--inverted);
+    width: $arrow-size;
+    height: $arrow-size;
+  }
+
+  &:global(.ant-tooltip-placement-top),
+  &:global(.ant-tooltip-placement-topLeft),
+  &:global(.ant-tooltip-placement-topRight) {
+    :global(.ant-tooltip-arrow) {
+      bottom: -5px !important;
+      transform: translateX(-50%);
+    }
+
+    :global(.ant-tooltip-arrow:before) {
+      border-bottom-right-radius: 2px;
+      transform: translateY(-$rotate-width) rotate(45deg);
+    }
+  }
+
+  &:global(.ant-tooltip-placement-right),
+  &:global(.ant-tooltip-placement-rightTop),
+  &:global(.ant-tooltip-placement-rightBottom) {
+    :global(.ant-tooltip-arrow) {
+      left: -5px !important;
+      transform: translateY(-50%);
+    }
+
+    :global(.ant-tooltip-arrow:before) {
+      border-bottom-left-radius: 2px;
+      transform: translateX($rotate-width) rotate(45deg);
+    }
+  }
+
+  &:global(.ant-tooltip-placement-bottom),
+  &:global(.ant-tooltip-placement-bottomLeft),
+  &:global(.ant-tooltip-placement-bottomRight) {
+    :global(.ant-tooltip-arrow) {
+      top: -5px !important;
+      transform: translateX(-50%);
+    }
+
+    :global(.ant-tooltip-arrow:before) {
+      border-top-left-radius: 2px;
+      transform: translateY($rotate-width) rotate(45deg);
+    }
+  }
+
+  &:global(.ant-tooltip-placement-left),
+  &:global(.ant-tooltip-placement-leftTop),
+  &:global(.ant-tooltip-placement-leftBottom) {
+    :global(.ant-tooltip-arrow) {
+      right: -5px !important;
+      transform: translateY(-50%);
+    }
+
+    :global(.ant-tooltip-arrow:before) {
+      border-top-right-radius: 2px;
+      transform: translateX(-$rotate-width) rotate(45deg);
+    }
+  }
+}

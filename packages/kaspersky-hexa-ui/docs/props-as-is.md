@@ -1,6 +1,6 @@
 # Работа с пропсами в Storybook: текущее состояние
 
-Документ описывает, как сейчас устроена работа с пропсами в `kl-hexa-ui` для Storybook `Controls` и документационных вкладок **Properties** и **autodoc**.
+Документ описывает, как сейчас устроена работа с пропсами в `hexa-ui` для Storybook `Controls` и документационных вкладок **Properties** и **autodoc**.
 
 ## Основные участники
 
@@ -77,7 +77,7 @@ Storybook извлекает типы и JSDoc из TypeScript через `react
 На примере `button`:
 
 - обычные пропы (`mode`, `size`, `text`, `iconBefore`, `isPressed`, `onClick`, `testId`, …) — общая таблица Properties и Controls, если не скрыты фильтрами;
-- deprecated-пропы (`klId`, `dataTestId`, …) — отдельная секция Properties;
+- deprecated-пропы (`klId`, …) — отдельная секция Properties;
 - descriptions частично берутся из `sharedPropConfig` через `extendPropPresentation`;
 - `control: false` исключает проп из Controls (`getControlsInclude`).
 
@@ -255,7 +255,7 @@ resolveComponent → React-компонент для docgen
 
 Файл `.storybook/components/Documentation/docgenProbes.tsx` экспортирует `TestingPropsProbe` — минимальный React-компонент с `interface TestingPropsProbeProps` и JSDoc (тексты синхронизированы с `helpers/typesHelpers.ts` → `TestingProps`).
 
-`extractArgTypes(TestingPropsProbe)` добавляет `testId`, `klId`, `componentId`, `dataTestId`, `componentType`, если их нет в предыдущих слоях.
+`extractArgTypes(TestingPropsProbe)` добавляет `testId`, `klId`, `componentType`, если их нет в предыдущих слоях.
 
 Probe живёт только в `.storybook`, **не в `src`**.
 

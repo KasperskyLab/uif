@@ -86,10 +86,11 @@ export const Select = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   }), [onLoadMore])
   const isMultiSelect = props.mode === 'multiple' || props.mode === 'tags'
 
-  function renderOption (option: OptionType) {
+  function renderOption (props: OptionType) {
+    const { testAttributes, ...option } = useTestAttribute(props)
     if (option.options) {
       return (
-        <RcOptGroup key={option.value} label={option.label}>
+        <RcOptGroup key={option.value} label={option.label} {...testAttributes}>
           {option.options.map(renderOption)}
         </RcOptGroup>
       )
@@ -102,6 +103,7 @@ export const Select = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
     return (
       <RcOption
+        {...testAttributes}
         {...option}
         key={option.value}
         data-value={option.value}

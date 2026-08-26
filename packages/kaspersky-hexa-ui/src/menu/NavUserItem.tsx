@@ -1,9 +1,9 @@
 import { Theme } from '@design-system/types'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { useLocalization } from '@helpers/localization/useLocalization'
 import { Tooltip } from '@src/tooltip'
 import cn from 'classnames'
 import React, { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { productColors } from '@kaspersky/hexa-ui-core/colors/js'
@@ -49,7 +49,8 @@ const NavUserItemComponent = ({
   menuState
 }: NavItemProps) => {
   const { setMenuActiveItem } = useContext(MenuContext)
-  const localizedUserStatus = userStatus && useLocalization(`menu.navUserItem.userProps.status.${userStatus}`)
+  const { t } = useTranslation()
+  const localizedUserStatus = userStatus && t(`menu.navUserItem.userProps.status.${userStatus}`)
   const StatusIcon = getStatusIcon(userStatus, theme)
   const NavItemIcon = StatusIcon || icon
   const {
@@ -58,10 +59,10 @@ const NavUserItemComponent = ({
     collapseAll
   } = menuState
 
-  const itemClick = () => {
+  const itemClick = (e: React.MouseEvent<HTMLElement>) => {
     updateNavState({ activateItem: state })
     setMenuActiveItem && setMenuActiveItem(state as string)
-    onClick && onClick()
+    onClick && onClick(e)
     minimized && collapseAll()
   }
 

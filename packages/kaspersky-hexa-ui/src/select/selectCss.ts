@@ -289,6 +289,10 @@ const dropdownCss = css<DropdownStylesProps>`
     }
   }
 
+  .ant-select-item-option-grouped {
+    padding-left: 12px;
+  }
+
   .rc-virtual-list {
     & ::-webkit-scrollbar {
       -webkit-appearance: none;

@@ -1,7 +1,7 @@
 import { THEME_CONFIG } from '@design-system/theme'
 import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { Key, TreeCheckEvent } from '@src/tree'
+import { Key, TreeCheckEvent, TreeCommonProps } from '@src/tree'
 import debounce from 'lodash/debounce'
 import isEmpty from 'lodash/isEmpty'
 import React, {
@@ -93,13 +93,14 @@ export const TenantFilter: FC<TenantFilterProps> = ({
 
   const debouncedApplyHandler = useMemo(() => debounce(applyTenantsFilter, 2000), [applyTenantsFilter])
 
-  const onCheckTree = (_: Key[], event: TreeCheckEvent) => {
+  const onCheckTree: TreeCommonProps['onCheck'] = (_, event) => {
     const checkedKeys = new Set(treeCheckedKeys)
     const checkedNode = event.node
-    const nodeChildren = treeDataMap.get(checkedNode.key)?.children
+    const nodeKey = String(checkedNode.key)
+    const nodeChildren = treeDataMap.get(nodeKey)?.children
     const action = checkedNode.checked ? 'delete' : 'add'
 
-    checkedKeys[action](checkedNode.key)
+    checkedKeys[action](nodeKey)
 
     if (nodeChildren && nodeChildren?.length > 0) {
       processChildren(nodeChildren, checkedKeys, action)
@@ -139,8 +140,8 @@ export const TenantFilter: FC<TenantFilterProps> = ({
     }
   }
 
-  const onExpand = (newExpandedKeys: string[]) => {
-    setExpandedKeys(newExpandedKeys)
+  const onExpand: TreeCommonProps['onExpand'] = (newExpandedKeys) => {
+    setExpandedKeys(newExpandedKeys as string[])
     setAutoExpandParent(false)
   }
 

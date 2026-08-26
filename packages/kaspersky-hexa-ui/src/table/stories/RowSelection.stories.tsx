@@ -5,14 +5,20 @@ import { Button } from '@src/button'
 import { Field } from '@src/field'
 import { SectionMessage } from '@src/section-message'
 import { SegmentedButton } from '@src/segmented-button'
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta } from '@storybook/react'
 import React, { useRef, useState } from 'react'
 
 import { Table, TableRecord, TableRef } from '..'
 import MetaData from '../__meta__/meta.json'
-import { createMockDataSourceFunction, generatedData, tableColumns } from '../__mocks__/filtersMockData'
+import {
+  createMockDataSourceFunction,
+  generatedData,
+  tableColumns,
+  TableMockProps,
+  TableMockStory
+} from '../__mocks__/filtersMockData'
 import { GetLeftItems } from '../modules/ToolbarIntegration'
-import { ITableProps, TableRowSelection, TableRowSelectionData } from '../types'
+import { TableRowSelection, TableRowSelectionData } from '../types'
 
 import { Wrapper } from './_commonConstants'
 import RowSelectionDocs from './docs/RowSelectionDocs.md'
@@ -22,7 +28,7 @@ const defaultRowSelection: TableRowSelection = {
   processSelection: selection => console.debug('selection', selection)
 }
 
-const meta: Meta<ITableProps> = {
+const meta: Meta<TableMockProps> = {
   title: 'Hexa UI Components/Table/Row selection',
   component: Table,
   args: {
@@ -44,11 +50,9 @@ const meta: Meta<ITableProps> = {
 }
 export default meta
 
-type Story = StoryObj<ITableProps>
+export const RowSelection: TableMockStory = {}
 
-export const RowSelection: Story = {}
-
-export const ServerPaginationSelection: Story = {
+export const ServerPaginationSelection: TableMockStory = {
   render: (args) => {
     const [selection, setSelection] = useState<Partial<TableRowSelectionData>>({})
 
@@ -74,26 +78,26 @@ export const ServerPaginationSelection: Story = {
   },
   args: {
     dataSource: undefined,
-    dataSourceFunction: createMockDataSourceFunction(generatedData)
+    dataSourceFunction: createMockDataSourceFunction(generatedData, tableColumns)
   }
 }
 
-export const GetPreselectedRows: Story = {
+export const GetPreselectedRows: TableMockStory = {
   args: {
     rowSelection: {
       ...defaultRowSelection,
-      getPreselectedRows: async (rows) => rows.filter((_, index) => index % 5 === 4).map(row => row.key)
+      getPreselectedRows: async (rows) => rows.filter((_, index) => index % 5 === 4).map(row => row.key as string)
     }
   }
 }
 
-export const PreselectedRowsInData: Story = {
+export const PreselectedRowsInData: TableMockStory = {
   args: {
     dataSource: generatedData.map((row, index) => ({ ...row, _selected: index % 3 === 2 }))
   }
 }
 
-export const WithoutSelectAll: Story = {
+export const WithoutSelectAll: TableMockStory = {
   args: {
     rowSelection: {
       ...defaultRowSelection,
@@ -102,7 +106,7 @@ export const WithoutSelectAll: Story = {
   }
 }
 
-export const WithDisabledRows: Story = {
+export const WithDisabledRows: TableMockStory = {
   args: {
     dataSource: generatedData.map((row, index) => (
       index % 5 === 0
@@ -111,7 +115,7 @@ export const WithDisabledRows: Story = {
   }
 }
 
-export const SingleRowSelection: Story = {
+export const SingleRowSelection: TableMockStory = {
   args: {
     rowSelection: {
       ...defaultRowSelection,
@@ -120,7 +124,7 @@ export const SingleRowSelection: Story = {
   }
 }
 
-export const ResetSelectionViaRef: Story = {
+export const ResetSelectionViaRef: TableMockStory = {
   render: (props) => {
     const tableRef = useRef<TableRef>(null)
     return (
@@ -161,7 +165,7 @@ const getSelectionToolbarItems: GetLeftItems = ({ selectedRowKeys, isSelectedAll
   ]
 }
 
-export const SelectionInToolbar: Story = {
+export const SelectionInToolbar: TableMockStory = {
   args: {
     toolbar: {
       showSearch: true,
@@ -177,7 +181,7 @@ const segmentedButtonItems: { text: RowSelectionType, value: RowSelectionType }[
   { text: 'checkbox', value: 'checkbox' }
 ]
 
-export const AntdControlledRowSelection: Story = {
+export const AntdControlledRowSelection: TableMockStory = {
   render: (args) => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
     const [selectionMode, setSelectionMode] = useState<RowSelectionType[]>(['checkbox'])

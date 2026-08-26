@@ -10,10 +10,6 @@ export interface TestingProps {
   testId?: string,
   /** @deprecated Use 'testId' prop instead. Identifier for backward compatibility in autotesting, will be passed to HTML attribute kl-id */
   klId?: string,
-  /** @deprecated Use 'testId' prop instead */
-  componentId?: string,
-  /** @deprecated Use 'testId' prop instead */
-  dataTestId?: string,
   componentType?: string
 }
 

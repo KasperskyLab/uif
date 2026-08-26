@@ -1,7 +1,7 @@
 import { ButtonProps } from '@src/button'
 import { TableColumn, TableRecord } from '@src/table'
 
-import { ExtractFilterConditions, FilterConfigInternal, FilterType, SidebarFilterInternal } from '../Filters'
+import { CustomFilterOperations, FilterConfigInternal, FilterType, SidebarFilterInternal } from '../Filters'
 
 import { FilterValidation, InvalidFilter } from './items/types'
 
@@ -23,7 +23,7 @@ export type FilterItemProps<T extends TableRecord = TableRecord> = {
 export type FilterItemConditionProps<T extends TableRecord = TableRecord> = {
   index: number,
   filter: FilterConfigInternal,
-  operations: ExtractFilterConditions<FilterType>
+  operations: CustomFilterOperations<FilterType>
 } & Pick<SidebarFilterHandler<T>, 'handleFilterChange'>
 
 export type FilterItemRowProps<T extends TableRecord = TableRecord> = {

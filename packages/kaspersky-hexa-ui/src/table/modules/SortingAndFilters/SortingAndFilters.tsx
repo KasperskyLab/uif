@@ -5,11 +5,11 @@ import React, {
   useState
 } from 'react'
 
-import { useTableContext } from '../../context/TableContext'
-import { isColumnReadonly } from '../../helpers/common'
+import { useTableContext, useTableUpdate } from '../../context/TableContext'
+import { isColumnReadonly, isColumnVisible } from '../../helpers/common'
 import { getPersistentStorageValue, updatePersistentStorage } from '../../helpers/persistentStorage'
 import { TableColumn, TableRecord } from '../../types'
-import { FilterType } from '../Filters'
+import { FilterOperation, FilterType } from '../Filters'
 import { useInitTableSorters } from '../hooks/useInitTableSorters'
 import { TableComponent } from '../index'
 
@@ -41,7 +41,12 @@ export const SortingAndFilters = <T extends TableRecord = TableRecord> (
     return <Component {...props} columns={columns} dataSource={dataSource} storageKey={storageKey} />
   }
 
-  const { filterApi, pagination, updateContext } = useTableContext<T>()
+  const { filterApi, useDataSourceFunction, filterVersion } = useTableContext(state => ({
+    filterApi: state.filterApi,
+    useDataSourceFunction: state.useDataSourceFunction,
+    filterVersion: state.filterVersion
+  }))
+  const updateContext = useTableUpdate<T>()
 
   const initialSorting: ActiveSorting = props.initialSorting || EMPTY_OBJ
 
@@ -71,9 +76,14 @@ export const SortingAndFilters = <T extends TableRecord = TableRecord> (
 
   const processedColumns = useMemo(() => (
     columns.map((column, index): TableColumn<T> => {
-      if (!hasFiltersOrSorting(column) || isColumnReadonly(column)) {
+      if (!isColumnVisible(column) || !hasFiltersOrSorting(column) || isColumnReadonly(column)) {
         return column
       }
+
+      const hasMultichoiceEnumFilter = column.filterType?.type === FilterType.Enum && (
+        column.filterType.operations?.map(item => item.operation).includes(FilterOperation.cont_or) ||
+        !column.filterType.operations && filterVersion === 2
+      )
 
       return {
         ...column,
@@ -101,20 +111,21 @@ export const SortingAndFilters = <T extends TableRecord = TableRecord> (
               setActiveSorting={setExternalSorting || setActiveSorting}
               showFilterIcon={column.showFilterIcon}
               enumOptionsGetter={column.filterType?.type === FilterType.Enum ? column?.filterType?.getAvailableOptions : undefined}
+              hasMultichoiceEnumFilter={hasMultichoiceEnumFilter}
             />
       }
     })
-  ), [filterApi, columns, activeSorting])
+  ), [filterApi, columns, activeSorting, filterVersion])
 
   const preparedData = useMemo(() => {
-    const shouldSort = 'field' in (sortingWithExternal) && !isDefaultSortDisabled && !pagination.useDataSourceFunction
+    const shouldSort = 'field' in (sortingWithExternal) && !isDefaultSortDisabled && !useDataSourceFunction
 
-    let resultDataSource = dataSource
+    let resultDataSource = [...dataSource]
 
     if (shouldSort) {
       const field = sortingWithExternal.columnServerField || sortingWithExternal.columnId || sortingWithExternal.field
       const attribute = sortingWithExternal.attribute
-      const sortWithNestedItems = (data: T[]) => {
+      const sortWithNestedItems = (data: T[]): T[] => {
         if (!field) {
           return data
         }
@@ -137,12 +148,11 @@ export const SortingAndFilters = <T extends TableRecord = TableRecord> (
             )
           : sortFunction(data, field as string, isAsc, attribute as string)
 
-        sortedData.forEach((item) => {
-          if (item._hasChildren) {
-            item.children = sortWithNestedItems(item.children as T[])
-          }
-        })
-        return sortedData
+        return sortedData.map((item) => (
+          item._hasChildren
+            ? { ...item, children: sortWithNestedItems(item.children as T[]) }
+            : item
+        ))
       }
 
       resultDataSource = sortWithNestedItems(resultDataSource)

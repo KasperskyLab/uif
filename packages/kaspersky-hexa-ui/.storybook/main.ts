@@ -20,6 +20,9 @@ const config: StorybookConfig = {
     '@storybook/addon-docs',
     '@storybook/addon-links'
   ],
+  core: {
+    disableTelemetry: true
+  },
   refs: {
     icons: {
       title: 'Icons',
@@ -68,13 +71,13 @@ const config: StorybookConfig = {
 
     config.plugins = config.plugins || []
     config.plugins.push({
-      name: 'hexa-raw-md',
-      enforce: 'pre',
-      transform (code, id) {
-        if (id.split('?')[0].endsWith('.md')) {
-          return { code: `export default ${JSON.stringify(code)}`, map: null }
+        name: 'hexa-raw-md',
+        enforce: 'pre',
+        transform (code, id) {
+          if (id.split('?')[0].endsWith('.md')) {
+            return { code: `export default ${JSON.stringify(code)}`, map: null }
+          }
         }
-      }
     })
 
     config.optimizeDeps = {

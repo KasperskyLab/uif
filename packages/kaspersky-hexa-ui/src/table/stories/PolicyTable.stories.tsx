@@ -396,7 +396,8 @@ const meta: Meta<ITableProps> = {
     stickyHeader: 40,
     storageKey: 'policy-table',
     useFiltersSidebar: true,
-    borderedStyle: false
+    borderedStyle: false,
+    stickySelection: false
   },
   parameters: {
     badges: [badges.stable],

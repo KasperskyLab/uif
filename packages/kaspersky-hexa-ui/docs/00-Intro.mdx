@@ -1,25 +1,51 @@
 import { Meta } from '@storybook/addon-docs/blocks'
+import { Link, Text } from '@kaspersky/hexa-ui'
+import { DocPageLayout } from '@sb/components/Documentation'
 
 <Meta title="Intro" />
 
-## О дизайн-системе
+<DocPageLayout>
 
-Hexa UI - дизайн-система, созданная с целью унификации визуального дизайна, проектирования и разработки пользовательских интерфейсов в Лаборатории Касперского.
+<div className="skip-toc">
 
-Команда состоит из двух групп.
+<Text type='H3' htmlTag='h3'>
+Дизайн-система Hexa UI
+</Text>
 
-_Дизайн:_
+<Text type='BTR3' htmlTag='p'>Hexa UI — дизайн-система, созданная с целью унификации визуального дизайна, проектирования и разработки пользовательских интерфейсов в Лаборатории Касперского.<br /><br /></Text>
 
-Команда дизайн-системы B2B направления, являющаяся частью DRO. 
 
-_Разработка:_
 
-Команда разработки, являющаяся частью UIF - технологической платформы для построения пользовательских интерфейсов и веб-сервисов.
-Подробнее можно прочитать [здесь](https://github.com/KasperskyLab/uif/blob/master/README.md).
+<Text type='H6' htmlTag='h6'>Дизайн</Text>
+<Text type='BTR3'htmlTag='p'>
+Команда дизайн-системы B2B-направления, являющаяся частью DRO.
+</Text>
 
-Под капотом используются `styled-components` и `antd`.
+<Text type='H6' htmlTag='h6'>Разработка</Text>
+<Text type='BTR3'>
+Команда разработки, являющаяся частью UIF — технологической платформы для построения пользовательских интерфейсов и веб-сервисов.<br />
+Подробнее можно прочитать <Link href='https://confluence.kaspersky.com/pages/viewpage.action?pageId=779781746'>здесь</Link>.
+  </Text>
 
-## Контакты
+<Text type='BTR3' htmlTag='p'>
+Под капотом используются <code>styled-components</code> и <code>antd</code>.<br /><br />
+</Text>
 
-- Pavel Vostrikov - ответственный за разработку, [почта](mailto:pavel.vostrikov@kaspersky.com)
 
+<Text type='H4' htmlTag='h4'>Контакты</Text>
+
+<ul>
+  <li>
+    <Text type='BTR3'>Дизайн: </Text>
+    <Link href='mailto:Alexey.Goreminsky@kaspersky.com'>Alexey Goreminsky</Link>
+  </li>
+  <li>
+    <Text type='BTR3'>Разработка: </Text>
+    <Link href='mailto:Platon.Yasev@kaspersky.com'>Platon Yasev</Link>
+  </li>
+
+</ul>
+
+</div>
+
+</DocPageLayout>

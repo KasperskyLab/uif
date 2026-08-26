@@ -1,9 +1,9 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { useLocalization } from '@helpers/localization/useLocalization'
 import { ActionButton } from '@src/action-button'
 import { Dropdown } from '@src/dropdown'
 import { Textbox } from '@src/input'
 import React, { FC, ReactElement, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { IconSearch } from './IconSearch'
@@ -23,7 +23,7 @@ export const Search: FC<SearchProps> = (props: SearchProps) => {
     onClearClick,
     prefix,
     suffix,
-    searchIconTestId,
+    searchIconTestId = 'search-icon',
     testId,
     showClearButton = true,
     klId,
@@ -31,19 +31,10 @@ export const Search: FC<SearchProps> = (props: SearchProps) => {
   } = props
 
   const { testAttributes } = useTestAttribute(props)
-  const localizedPlaceholder = useLocalization(placeholder)
+  const { t } = useTranslation()
+  const localizedPlaceholder = t(placeholder)
   const newSuffix = useMemo(() => {
-    const iconSearchTestProps = searchIconTestId
-      ? {
-          testId: searchIconTestId,
-          klId: searchIconTestId
-        }
-      : {
-          testId: 'search-icon',
-          componentId: 'icon-search'
-        }
-
-    return !prefix && (suffix || <IconSearch {...iconSearchTestProps} />)
+    return !prefix && (suffix || <IconSearch klId={searchIconTestId} testId={searchIconTestId} />)
   }, [prefix, suffix, searchIconTestId])
 
   const SearchTextbox = (

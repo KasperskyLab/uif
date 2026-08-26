@@ -1,5 +1,6 @@
 import { ThemeProvider, useTheme } from '@design-system/theme'
 import { themeColors } from '@design-system/tokens'
+import { ThemeKey } from '@design-system/types'
 import { AnchorNavigation } from '@src/anchor-navigation'
 import type { AnchorItem } from '@src/anchor-navigation/types'
 import React, {
@@ -28,6 +29,11 @@ const DocsPageOverrides = createGlobalStyle<{
   $mutedColor: string
   $codeBg: string
 }>`
+  html:has(.hexa-docs-content),
+  body:has(.hexa-docs-content) {
+    background: ${({ $background }) => $background} !important;
+  }
+
   .sbdocs-wrapper:has(.hexa-docs-content) {
     padding: 0 !important;
     background: ${({ $background }) => $background} !important;
@@ -49,30 +55,34 @@ const DocsPageOverrides = createGlobalStyle<{
     max-width: 1200px !important;
   }
 
-  .sbdocs-wrapper:has(.hexa-docs-content) .docblock-argstable {
+  .hexa-docs-page {
+    background: ${({ $background }) => $background};
+  }
+
+  .sbdocs-wrapper:has(.hexa-docs-content) :is(.docblock-argstable, .sb-argstableBlock) {
     color: ${({ $color }) => $color} !important;
   }
 
-  .sbdocs-wrapper:has(.hexa-docs-content) .docblock-argstable thead th {
+  .sbdocs-wrapper:has(.hexa-docs-content) :is(.docblock-argstable, .sb-argstableBlock) thead th {
     color: ${({ $mutedColor }) => $mutedColor} !important;
     border-bottom-color: ${({ $border }) => $border} !important;
   }
 
-  .sbdocs-wrapper:has(.hexa-docs-content) .docblock-argstable tbody tr {
+  .sbdocs-wrapper:has(.hexa-docs-content) :is(.docblock-argstable, .sb-argstableBlock) tbody tr {
     border-top-color: ${({ $border }) => $border} !important;
   }
 
-  .sbdocs-wrapper:has(.hexa-docs-content) .docblock-argstable tbody td {
+  .sbdocs-wrapper:has(.hexa-docs-content) :is(.docblock-argstable, .sb-argstableBlock) tbody td {
     background: ${({ $surface }) => $surface} !important;
     color: ${({ $color }) => $color} !important;
     border-bottom-color: ${({ $border }) => $border} !important;
   }
 
-  .sbdocs-wrapper:has(.hexa-docs-content) .docblock-argstable tbody td:first-child {
+  .sbdocs-wrapper:has(.hexa-docs-content) :is(.docblock-argstable, .sb-argstableBlock) tbody td:first-child {
     font-weight: 600;
   }
 
-  .sbdocs-wrapper:has(.hexa-docs-content) .docblock-argstable code {
+  .sbdocs-wrapper:has(.hexa-docs-content) :is(.docblock-argstable, .sb-argstableBlock) code {
     background: ${({ $codeBg }) => $codeBg} !important;
     color: ${({ $color }) => $color} !important;
     border-color: ${({ $border }) => $border} !important;
@@ -91,7 +101,7 @@ const DocsPageOverrides = createGlobalStyle<{
     margin: 0px 1px;
   }
 
-  .sbdocs-wrapper:has(.hexa-docs-content) .docblock-argstable a {
+  .sbdocs-wrapper:has(.hexa-docs-content) :is(.docblock-argstable, .sb-argstableBlock) a {
     color: ${themeColors.elements['accent-link'].dark} !important;
   }
 
@@ -189,14 +199,15 @@ export type DocPageLayoutProps = PropsWithChildren<{
   title?: string
 }>
 
-const getActiveTocRoot = (root: HTMLElement): HTMLElement => (
-  root.querySelector<HTMLElement>('.ant-tabs-tabpane-active') ?? root
+export const getActiveTocRoot = (root: HTMLElement): HTMLElement => (
+  Array.from(root.querySelectorAll<HTMLElement>('.ant-tabs-tabpane-active'))
+    .find((pane) => !pane.parentElement?.closest('.ant-tabs-tabpane')) ?? root
 )
 
 /** Canvas documentation layout with TOC on the right. */
 export const DocPageLayout: React.FC<DocPageLayoutProps> = ({
   children,
-  title = 'Contents'
+  title
 }) => {
   const theme = useTheme()
   const docsThemeKey = useStorybookThemeKey(theme.key)
@@ -280,15 +291,18 @@ export const DocPageLayout: React.FC<DocPageLayoutProps> = ({
 
   return (
     <ThemeProvider theme={docsThemeKey}>
-      <StyledAnchorNavigation className="hexa-docs-page" items={items} title={title}>
+      <StyledAnchorNavigation
+        className={`hexa-docs-page ${docsThemeKey === ThemeKey.Dark ? 'theme-dark' : 'theme-light'}`}
+        items={items}
+        title={title}>
         <DocsPageOverrides
-          $background={themeColors.bg.base[docsThemeKey]}
-          $color={themeColors['text-icons-elements'].primary[docsThemeKey]}
+          $background="var(--bg--neutral--level_0)"
+          $color="var(--fg--neutral--primary)"
           $surface={themeColors.bg.alternative[docsThemeKey]}
           $surfaceAlt={themeColors.bg.alternative2[docsThemeKey]}
           $border={themeColors.elements['separator-bold-solid'][docsThemeKey]}
-          $mutedColor={themeColors['text-icons-elements']['secondary-solid'][docsThemeKey]}
-          $codeBg={themeColors.bg.alternative2[docsThemeKey]}
+          $mutedColor="var(--fg--neutral--secondary)"
+          $codeBg="var(--bg--neutral--level_2)"
         />
         <Content ref={contentRef} className="hexa-docs-content sb-unstyled">
           {children}

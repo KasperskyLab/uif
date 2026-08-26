@@ -46,6 +46,16 @@ const componentEntries = fg.sync('src/*/index.ts', {
   absolute: false
 })
 
+const removeMdxFormatterScripts = contents => {
+  const manifest = JSON.parse(contents.toString())
+
+  delete manifest.scripts['test:format:mdx']
+  delete manifest.scripts['format:mdx']
+  delete manifest.scripts['format:mdx:check']
+
+  return `${JSON.stringify(manifest, null, 2)}\n`
+}
+
 export default defineConfig([
   {
     input: [
@@ -62,6 +72,11 @@ export default defineConfig([
         preserveModules: true
       }
     ],
+    // Keep style-inject as a bare import instead of bundling it into
+    // esm/node_modules. A bundled nested node_modules only survives under
+    // hoisting linkers (npm/Yarn 1); Yarn Berry/PnP and pnpm relocate or
+    // omit it, breaking the hardcoded relative path in generated *.scss.js.
+    external: ['style-inject'],
     plugins: [
       cleaner({
         targets: [
@@ -98,11 +113,18 @@ export default defineConfig([
       }),
       json(),
       postcss({
-        inject: true,
+        // Emit a bare `import styleInject from 'style-inject'` so resolution
+        // is handled by the consumer's package manager (works with npm, any
+        // Yarn including Berry/PnP, and pnpm) instead of a hardcoded relative
+        // path into a bundled node_modules.
+        inject: (cssVariableName) => `\nimport styleInject from 'style-inject';\nstyleInject(${cssVariableName});`,
         modules: {
           generateScopedName: `[name]__[local]___[hash:base64:5]${pkg.version}`
         },
-        extensions: ['.css']
+        extensions: ['.css'],
+        use: {
+          sass: { silenceDeprecations: ['legacy-js-api'] }
+        }
       }),
       peerDepsExternal(),
       resolveAlias(),
@@ -113,7 +135,8 @@ export default defineConfig([
         targets: [
           {
             src: './package.json',
-            dest: './esm'
+            dest: './esm',
+            transform: removeMdxFormatterScripts
           }
         ]
       })

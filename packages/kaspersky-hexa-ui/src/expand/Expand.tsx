@@ -1,9 +1,9 @@
 import { getChildTestProps, useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { useLocalization } from '@helpers/localization/useLocalization'
 import { useResizeObserver } from '@helpers/useResizeObserver'
 import { ActionButton } from '@src/action-button'
 import cn from 'classnames'
 import React, { useLayoutEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { ArrowDown1, ArrowUp1 } from '@kaspersky/hexa-ui-icons/16'
@@ -20,18 +20,20 @@ const DEFAULT_COLLAPSED_LINES = 64
 export const Expand = ({
   collapsedHeight = DEFAULT_COLLAPSED_LINES,
   children,
-  textToExpand = useLocalization('expand.toExpand'),
-  textToCollapse = useLocalization('expand.toCollapse'),
+  textToExpand,
+  textToCollapse,
   className,
   testId,
   klId,
-  componentId,
   componentType
 }: ExpandProps): JSX.Element => {
   const [collapsed, setCollapsed] = useState(true)
-  const { testAttributes } = useTestAttribute({ testId, klId, componentId, componentType })
+  const { t } = useTranslation()
+  const { testAttributes } = useTestAttribute({ testId, klId, componentType })
   const collapsedCSS = collapsed ? { maxHeight: `${collapsedHeight}px` } : {}
-  const actionButtonText = collapsed ? textToExpand : textToCollapse
+  const actionButtonText = collapsed
+    ? textToExpand ?? t('expand.toExpand')
+    : textToCollapse ?? t('expand.toCollapse')
   const actionButtonIcon = collapsed ? <ArrowDown1 /> : <ArrowUp1 />
   const textRef = useRef<HTMLDivElement | null>(null)
   const [visible, setVisible] = useState(false)

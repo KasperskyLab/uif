@@ -143,6 +143,13 @@ export const FileWrapper = styled(Space).attrs({ gap: 8, width: 'initial', wrap:
   `}
 
   ${props => props.$done && !props.$disabled && `
+    &:active {
+      background-color: ${cssConfig.active.background};
+      border-color: ${cssConfig.active.border};
+    }
+  `}
+
+  ${props => props.$done && !props.$disabled && props.onClick && `
     &:not(:hover) .download-icon {
       display: none;
     }
@@ -153,11 +160,6 @@ export const FileWrapper = styled(Space).attrs({ gap: 8, width: 'initial', wrap:
       .file-icon {
         display: none;
       }
-    }
-
-    &:active {
-      background-color: ${cssConfig.active.background};
-      border-color: ${cssConfig.active.border};
     }
   `}
 

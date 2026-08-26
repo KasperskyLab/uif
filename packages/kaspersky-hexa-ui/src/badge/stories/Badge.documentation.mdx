@@ -10,16 +10,118 @@ import { badgeDesignPropPresentation } from './Badge.design.properties'
 
 <DocPageLayout>
 
-<DocPageHeader
-  title="Badge"
-  description='**Badge** — компактный индикатор счётчика или короткой текстовой метки в интерфейсе'
+<DocPageHeader checkUIF title="Badge" />
+
+<Tabs>
+  <Tabs.TabPane tab="Описание" key="description">
+<DocExampleBlock
+      description="**Badge** — компактная метка для количества, статуса или короткой подписи рядом с элементом интерфейса: иконкой меню, вкладкой, строкой таблицы, аватаром. Используйте для вторичной информации, которая не требует отдельного блока контента.
+
+Для важных сообщений на уровне страницы или раздела используйте **Alert**, а не **Badge**."
+    />
+    <DocExampleBlock
+  title="Счётчик уведомлений"
+  description="Используется для отображения количества уведомлений, сообщений или объектов рядом с иконкой или элементом управления.
+
+`overflowCount` ограничивает максимальное отображаемое значение (например, +99)."
+  previewGap={24}
+  codeBlock="hidden"
+  code={`
+<Space gap={24}>
+  <Badge count={1} />
+  <Badge count={12} />
+  <Badge count={105} overflowCount={99} />
+</Space>`}
+/>
+<DocExampleBlock
+  title="Текстовая метка / статус"
+  description="Если задан **text**, Badge отображается как короткая текстовая метка или статус.
+
+**text** имеет приоритет над **count** — при наличии текста счётчик не отображается."
+  previewGap={24}
+  codeBlock="hidden"
+  code={`
+<Space gap={16}>
+  <Badge text="NEW" mode="new" />
+  <Badge text="UPDATE" mode="update" />
+  <Badge text="INFO" mode="info" />
+</Space>`}
+/>
+<DocExampleBlock
+  title="Размер large только для transparent"
+  description="**size=large** поддерживается только для `neutralTransparent` и `criticalTransparent`.
+
+Для остальных режимов используется **size=medium**."
+  previewGap={24}
+  codeBlock="hidden"
+  code={`
+<Space gap={16}>
+  <Badge mode="neutral_transparent" size="large" text="Label" />
+  <Badge mode="critical_transparent" size="large" text="Warning" />
+</Space>`}
+/>
+<DocExampleBlock
+  title="Семантика mode"
+  description="Выбирайте `mode` в соответствии со смыслом события:
+
+`positive`, `resolved` — успешные состояния
+
+`ritical`, `inIncident` — ошибки и инциденты
+
+`low`, `medium`, `high` — приоритеты
+
+`info`, `new`, `update` — нейтральные уведомления и изменения
+
+Не используйте `critical` как декоративный акцент — это сигнал ошибки или тревоги."
+  previewGap={16}
+  codeBlock="hidden"
+  code={`
+<Space gap={16}>
+  <Badge mode="positive" count={1} />
+  <Badge mode="critical" count={1} />
+  <Badge mode="high" count={1} />
+  <Badge mode="info" count={1} />
+</Space>`}
+/>
+<DocExampleBlock
+  title="Badge внутри других компонентов"
+  description="Badge может использоваться рядом с текстом, иконкой или элементом навигации для отображения количества уведомлений или дополнительного статуса.
+
+Часто применяется в tab navigation, списках и navigation item."
+  previewGap={8}
+  codeBlock="hidden"
+  code={`
+<Tabs defaultActiveKey="messages">
+  <Tabs.TabPane
+    tab={
+      <span>
+        Сообщения
+      </span>
+    }
+    key="messages"
+  />
+
+  <Tabs.TabPane
+    tab={
+      <span>
+        Задачи <Badge count={12} mode="accent" />
+      </span>
+    }
+    key="tasks"
+  />
+
+  <Tabs.TabPane
+    tab="Архив"
+    key="archive"
+  />
+</Tabs>`}
 />
 
-<Tabs defaultActiveKey="description">
-  <Tabs.TabPane tab="Описание" key="description">
+  </Tabs.TabPane>
+  <Tabs.TabPane tab="Структура" key="composition">
 
     <DocExampleBlock
-      title="Описание компонента"
+      
       description="**Badge** отображает число (**count**) или текст (**text**): уведомления, статусы, метки. Настраиваются **mode**, **size**, **overflowCount**, **showZero**, **theme** и **className**. При **count**=0 badge скрывается, если не задан **showZero**."
     />
 
@@ -59,9 +161,9 @@ import { badgeDesignPropPresentation } from './Badge.design.properties'
       title="count"
       description="Число внутри badge. При **count**=0 badge скрывается, если **showZero** не задан. Игнорируется, если задан **text**."
       code='
-    <Badge count={1} />
-    <Badge count={12} />
-    <Badge count={0} />'
+    <Badge count={10} />
+    <Badge count={0} />
+    <Badge count={99} text="Text" />'
     />
 
     <DocExampleBlock
@@ -69,17 +171,15 @@ import { badgeDesignPropPresentation } from './Badge.design.properties'
       description="Текстовая метка вместо числа. Имеет приоритет над **count**: при одновременной передаче отображается **text**."
       code='
     <Badge text="Badge text" />
-    <Badge text="New" mode="new" />
-    <Badge text="Label" count={99} />'
+    <Badge text="Badge text" count={99} />'
     />
 
     <DocExampleBlock
       title="overflowCount"
-      description="Верхняя граница для **count**. По умолчанию — `99`. Если **count** больше **overflowCount**, отображается значение вида +99 (с плюсом и числом **overflowCount**)."
+      description="Верхняя граница для **count**. По умолчанию — `99`. Если **count** больше **overflowCount**, отображается значение вида 99+ (с числом **overflowCount** и плюсом)."
       code='
-    <Badge count={10} overflowCount={9} />
     <Badge count={100} overflowCount={99} />
-    <Badge count={1000} overflowCount={999} />'
+    <Badge count={1000} overflowCount={999} mode="critical" />'
     />
 
     <DocExampleBlock
@@ -101,25 +201,19 @@ import { badgeDesignPropPresentation } from './Badge.design.properties'
 
   </Tabs.TabPane>
 
-  <Tabs.TabPane tab="Правила использования" key="howtouse">
-
-    <DocExampleBlock
-      title="Правила использования"
-      description="**Badge** — компактная метка для количества, статуса или короткой подписи рядом с элементом интерфейса: иконкой меню, вкладкой, строкой таблицы, аватаром. Используйте для вторичной информации, которая не требует отдельного блока контента.
-
-Для важных сообщений на уровне страницы или раздела используйте **Alert**, а не **Badge**."
-    />
-
-  </Tabs.TabPane>
-
-  <Tabs.TabPane tab="Дизайнеру" key="design">
-    <Text type="H3">Properties в Pixso</Text>
-    <DocumentationArgsTable rows={buildPresentationOnlyRows(badgeDesignPropPresentation)} />
-  </Tabs.TabPane>
 
   <Tabs.TabPane tab="Properties" key="properties">
-    <Description of={BadgeStories} />
     <AutodocArgsTable components={Badge}/>
+  </Tabs.TabPane>
+
+  <Tabs.TabPane tab="Дизайн" key="design">
+    <DocExampleBlock
+      title="Компонент в Pixso"
+      titleSize='H5'
+      description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=53944:188107)"
+    />
+
+    <DocumentationArgsTable rows={buildPresentationOnlyRows(badgeDesignPropPresentation)} />
   </Tabs.TabPane>
 </Tabs>
 

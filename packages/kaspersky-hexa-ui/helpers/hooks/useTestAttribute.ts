@@ -1,7 +1,7 @@
 import { TestingAttributes, TestingProps } from '@helpers/typesHelpers'
 
 export const useTestAttribute = <P>(props: P & TestingProps): P & { testAttributes: TestingAttributes } => {
-  const { testId, klId, componentId, componentType, ...rest } = props
+  const { testId, klId, componentType, ...rest } = props
 
   return {
     testAttributes: {

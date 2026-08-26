@@ -1,8 +1,9 @@
 import { Button } from '@src/button'
-import buttonStyles from '../button/Button.module.scss'
 import { Indicator } from '@src/indicator'
 import { Space } from '@src/space'
 import styled, { css } from 'styled-components'
+
+import buttonStyles from '../button/Button.module.scss'
 
 import { ToolbarBlockSide } from './types'
 
@@ -33,9 +34,10 @@ export const toolbarCss = css<StyledToolbarProps>`
   display: flex;
   align-items: center;
   height: 40px;
+  justify-content: flex-end;
   z-index: 1;
   padding: 4px;
-  gap: ${props => props.$autoDropdown ? 24 : 64}px;
+  gap: var(--spacing--gap_related);
   background: var(--toolbar--bg);
   border-radius: 8px;
   width: 100%;
@@ -71,7 +73,6 @@ export const toolbarCss = css<StyledToolbarProps>`
     color: var(--toolbar_search--text--placeholder_enabled);
     border-color: transparent;
     margin-right: 4px;
-    margin-left: -15px;
 
     &.hexa-ui-collapsible-search {
       transform: scaleX(1);
@@ -80,7 +81,10 @@ export const toolbarCss = css<StyledToolbarProps>`
 
     &.hexa-ui-collapsible-search-hidden {
       opacity: 0;
-      width: 0px;
+      width: 0;
+      padding: 0;
+      border: 0;
+      margin-right: -4px;
     }
   }
   

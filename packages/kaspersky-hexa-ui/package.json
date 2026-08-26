@@ -1,8 +1,8 @@
 {
   "name": "@kaspersky/hexa-ui",
   "author": "AO Kaspersky Lab",
-  "version": "6.387.4",
-  "description": "Kaspersky Hexa UI Design System UI Kit",
+  "version": "6.420.0",
+   "description": "Kaspersky Hexa UI Design System UI Kit",
   "license": "Apache-2.0",
   "homepage": "https://github.com/KasperskyLab/uif#readme",
   "repository": "KasperskyLab/uif",
@@ -38,7 +38,9 @@
     "./design-system/theme/themes/light/colors": "./design-system/theme/themes/light/colors.js"
   },
   "scripts": {
-    "build": "npm i && rollup -c --bundleConfigAsCjs && gulp removeUndesiredCode",
+    "build": "npm i && rollup -c --bundleConfigAsCjs && gulp removeUndesiredCode && npm run bundle-size:check",
+    "bundle-size:check": "node bundle-size-checker/bench.mjs --check",
+    "bundle-size:update": "node bundle-size-checker/bench.mjs --update",
     "release": "npm run build && gulp deploy",
     "build-publish": "npm run build && cd ./esm && npm publish",
     "lint": "npm run lint-es && npm run lint-ts",
@@ -47,8 +49,8 @@
     "lint-ts": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "storybook:ci": "storybook dev -p 6006 --ci",
-    "build-storybook": "storybook build -o storybook/hexa-ui",
-    "test": "npm run lint && jest --transformIgnorePatterns --maxWorkers=1 --forceExit --logHeapUsage",
+    "build-storybook": "storybook build",
+    "test": "npm run lint && jest --transformIgnorePatterns --maxWorkers=1 --forceExit --logHeapUsage && npm run test:changelog",
     "test:only": "jest --transformIgnorePatterns --maxWorkers=1 --forceExit --logHeapUsage",
     "test:watch": "jest --watch",
     "jest:screenshots": "jest --runInBand --useStderr --verbose -i -c screenshots/jest.config.js",
@@ -76,9 +78,6 @@
       "react-dom": "^17.x"
     }
   },
-  "bundleDependencies": [
-    "style-inject"
-  ],
   "dependencies": {
     "@codemirror/commands": "6.7.1",
     "@codemirror/lang-html": "6.4.9",
@@ -103,7 +102,7 @@
     "classnames": "2.3.1",
     "clipboard-copy": "4.0.1",
     "date-fns": "2.30.0",
-    "dompurify": "3.4.11",
+    "dompurify": "3.4.13",
     "hotkeys-js": "3.8.7",
     "i18next": "22.5.1",
     "i18next-browser-languagedetector": "7.1.0",
@@ -132,12 +131,13 @@
     "style-inject": "0.3.0",
     "styled-components": "5.3.3",
     "unidiff": "1.0.4",
+    "use-sync-external-store": "1.6.0",
     "uuid": "9.0.0"
   },
   "devDependencies": {
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
-    "@kaspersky/dev-tools": "3.9.2",
+    "@kaspersky/dev-tools": "3.11.0",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-replace": "6.0.2",
     "@rollup/plugin-typescript": "12.1.2",
@@ -167,6 +167,7 @@
     "conventional-changelog-cli": "5.0.0",
     "del": "6.0.0",
     "dotenv": "16.0.0",
+    "esbuild": "0.25.8",
     "eslint": "9.39.2",
     "fast-glob": "3.3.3",
     "gulp": "5.0.1",
@@ -182,6 +183,7 @@
     "less-loader": "10.2.0",
     "lint-staged": "12.3.4",
     "prism-react-renderer": "2.4.1",
+    "prettier": "3.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-live": "3.2.0",

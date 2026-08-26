@@ -47,7 +47,15 @@ export const StyledLink = styled.a.withConfig({
   }
 
   &&.kl-components-link_visited:visited {
-    color: ${fromProps('visited.color')};
+    color: ${fromProps('visited.enabled.color')};
+  }
+
+  &&.kl-components-link_visited:visited:hover {
+    color: ${fromProps('visited.hover.color')};
+  }
+
+  &&.kl-components-link_visited:visited:active {
+    color: ${fromProps('visited.active.color')};
   }
 
   &&&.kl-components-link_disabled {

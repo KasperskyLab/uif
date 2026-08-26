@@ -696,7 +696,6 @@ const VTable: React.ForwardRefRenderFunction<RefObject, VTableProps> = (props, r
     return () => {
       el.removeEventListener('scroll', scroll_hook as any)
 
-      ctx.vt_state = e_VT_STATE.INIT
       if (ctx.HND_RAF) {
         clearTimeout(ctx.HND_RAF)
         ctx.HND_RAF = 0

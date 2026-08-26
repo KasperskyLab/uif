@@ -1,0 +1,173 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Space } from '@src/space'
+import { Text } from '@src/typography'
+
+import { Skeleton, SkeletonTemplate } from '../Skeleton'
+import * as SkeletonStories from './Skeleton.stories'
+import { skeletonDesignPropPresentation } from './Skeleton.design.properties'
+
+<Meta of={SkeletonStories} name="Skeleton Docs" />
+
+<DocPageLayout>
+
+  <DocPageHeader title="Skeleton" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **Skeleton** — анимированная заглушка, обозначающая загрузку будущего содержимого
+
+          **Skeleton** применяют в областях, где содержимое появится вскоре после загрузки: в карточках, формах, таблицах и виджетах. Подбирайте форму и размеры заглушек под будущую композицию, чтобы интерфейс сохранял структуру и не менялся резко при появлении данных.
+
+          Используйте заглушки для предсказуемой загрузки контента, а для отображения состояния действия или ожидания короткой операции выбирайте соответствующие индикаторы Hexa UI."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**Skeleton** временно заменяет ещё не загруженный контент и помогает сохранить ожидаемую структуру интерфейса. Настраиваются **size** и **flexWidth**."
+      />
+
+      <DocExampleBlock
+        title="size"
+        description="Задаёт размер заглушки. Доступны `small` высотой 20 px, `medium` высотой 24 px, `large` высотой 32 px и `flex` для произвольного размера."
+        code={`
+          <Skeleton size="small" />
+          <Skeleton size="medium" />
+          <Skeleton size="large" />
+          <Skeleton size="flex" style={{ height: 120 }} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="flexWidth"
+        description="При значении `true` заглушка занимает доступную ширину контейнера и может растягиваться внутри flex-раскладки."
+        code={`
+          <div style={{ display: 'flex', width: 320 }}>
+            <Skeleton size="large" flexWidth />
+          </div>
+        `}
+      />
+
+      <DocExampleBlock
+        title="Шаблон заголовка"
+        description="Две заглушки для заголовка и короткой строки текста."
+        code={`
+          <SkeletonTemplate>
+            <Skeleton size="medium" />
+            <Skeleton size="small" />
+          </SkeletonTemplate>
+        `}
+        scope={{ Skeleton, SkeletonTemplate }}
+      />
+
+      <DocExampleBlock
+        title="Шаблон формы"
+        description="Последовательность заглушек для формы с полями разной ширины."
+        code={`
+          <SkeletonTemplate>
+            <Skeleton size="medium" />
+            <Skeleton size="small" />
+            <Skeleton size="large" flexWidth />
+            <Skeleton size="large" flexWidth />
+            <Skeleton size="large" flexWidth />
+            <Skeleton size="medium" />
+            <Skeleton size="large" flexWidth />
+            <Skeleton size="large" flexWidth />
+            <Skeleton size="large" flexWidth />
+          </SkeletonTemplate>
+        `}
+        maxCodeLines={10}
+        scope={{ Skeleton, SkeletonTemplate }}
+      />
+
+      <DocExampleBlock
+        title="Шаблон виджета"
+        description="Компоновка для виджета с крупной областью и набором компактных элементов."
+        code={`
+          <SkeletonTemplate style={{ width: 568 }}>
+            <Space gap={16} direction="vertical">
+              <Skeleton size="flex" style={{ height: 188 }} />
+              <Space gap={8}>
+                <Skeleton size="flex" style={{ height: 20, width: 80 }} />
+                <Skeleton size="flex" style={{ height: 20, width: 80 }} />
+                <Skeleton size="flex" style={{ height: 20, width: 80 }} />
+                <Skeleton size="flex" style={{ height: 20, width: 80 }} />
+              </Space>
+            </Space>
+          </SkeletonTemplate>
+        `}
+        maxCodeLines={10}
+        scope={{ Skeleton, SkeletonTemplate, Space }}
+      />
+
+      <DocExampleBlock
+        title="Шаблон таблицы"
+        description="Сетка заглушек для строк и ячеек таблицы."
+        code={`
+          <SkeletonTemplate style={{ width: 1018 }}>
+            <Space gap={8} direction="vertical">
+              {[...Array(12).keys()].map((row) => (
+                <Space gap={8} wrap="nowrap" key={row}>
+                  {[...Array(5).keys()].map((cell) => (
+                    <Skeleton
+                      size="large"
+                      flexWidth
+                      key={cell}
+                      style={cell === 0 ? { width: 20, flex: 'none' } : {}}
+                    />
+                  ))}
+                </Space>
+              ))}
+            </Space>
+          </SkeletonTemplate>
+        `}
+        maxCodeLines={10}
+        scope={{ Skeleton, SkeletonTemplate, Space }}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={SkeletonStories} />
+      <AutodocArgsTable components={Skeleton} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=132212:196691)"
+      />
+
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(skeletonDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Skeleton" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

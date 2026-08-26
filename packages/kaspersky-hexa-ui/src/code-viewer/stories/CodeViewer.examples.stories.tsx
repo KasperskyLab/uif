@@ -23,7 +23,7 @@ import {
   tsxExample,
   xmlExample,
   yaraExample
-} from './examples'
+} from './CodeViewerDocExamples'
 
 type Languages = {
   yara: [],

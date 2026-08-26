@@ -105,7 +105,7 @@ export function FileItem ({
     <FileWrapper $disabled={disabled} $done className={className} onClick={disabled ? undefined : onDownload}>
       <Space gap={8} wrap="nowrap" style={{ overflow: 'hidden' }}>
         <File className="file-icon" />
-        {!disabled && <Download2 className="download-icon" />}
+        {!disabled && onDownload && <Download2 className="download-icon" />}
         <FileName truncateName={truncateName}>{name}</FileName>
       </Space>
       <Space gap={8}>

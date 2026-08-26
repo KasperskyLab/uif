@@ -3,23 +3,18 @@ import { effects } from '@kaspersky/hexa-ui-core/colors/js'
 import { ThemeConfig, ThemeKey } from '../../../types'
 import { COMMON_THEME } from '../common-theme'
 
-import { alert } from './alert'
 import { anchor } from './anchor'
 import { badge, badgeSize } from './badge'
 import { breadcrumbs, breadcrumbsSize } from './breadcrumbs'
 import { chip, chipSize } from './chip'
 import { colors } from './colors'
 import { divider } from './divider'
-import { expandableText } from './expandableText'
 import { field } from './field'
-import { formLabel } from './formLabel'
 import { icon } from './icon'
 import { indicator } from './indicator'
 import { informationCard, informationCardSize } from './informationCard'
 import { keyValue } from './keyValue'
-import { loader, loaderSize } from './loader'
 import { menu } from './menu'
-import { modal, modalSize } from './modal'
 import { notification } from './notification'
 import { pagination } from './pagination'
 import { popover } from './popover'
@@ -29,8 +24,6 @@ import { segmentedControl, segmentedControlSize } from './segmentedControl'
 import { severity } from './severity'
 import { sidebar, sidebarSize } from './sidebar'
 import { status } from './status'
-import { tag, tagSize } from './tag'
-import { tooltip } from './tooltip'
 import { upload } from './upload'
 import { weeklySchedule } from './weeklySchedule'
 
@@ -56,16 +49,9 @@ export const LIGHT_THEME: ThemeConfig = {
       colors: sidebar({ colors, effects }),
       sizes: sidebarSize
     },
-    tag: {
-      colors: tag({ colors, effects }),
-      sizes: tagSize
-    },
     chip: {
       colors: chip({ colors, effects }),
       sizes: chipSize
-    },
-    expandableText: {
-      colors: expandableText({ colors, effects })
     },
     scrollbar: {
       colors: scrollbar({ colors, effects })
@@ -80,16 +66,9 @@ export const LIGHT_THEME: ThemeConfig = {
     divider: {
       colors: divider({ colors, effects })
     },
-    loader: {
-      colors: loader({ colors, effects }),
-      sizes: loaderSize
-    },
     notification: {
       colors: notification({ colors, effects }),
       sizes: undefined
-    },
-    alert: {
-      colors: alert({ colors, effects })
     },
     sectionMessage: {
       colors: sectionMessage({ colors, effects })
@@ -104,17 +83,9 @@ export const LIGHT_THEME: ThemeConfig = {
       colors: field({ colors, effects })
     },
     pagination: { colors: pagination({ colors, effects }) },
-    tooltip: { colors: tooltip({ colors, effects }) },
-    modal: {
-      colors: modal({ colors, effects }),
-      sizes: modalSize
-    },
     keyValue: { colors: keyValue({ colors, effects }) },
     anchors: { colors: anchor({ colors, effects }) },
     icon: icon({ colors, effects }),
-    formLabel: {
-      colors: formLabel({ colors, effects })
-    },
     popover: {
       colors: popover({ colors, effects })
     },

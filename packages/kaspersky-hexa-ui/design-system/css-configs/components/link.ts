@@ -7,24 +7,37 @@ import { TextTypes } from '@kaspersky/hexa-ui-core/typography/js'
 
 export const link = ({ effects }: ComponentContext): LinkColorConfig => ({
   enabled: {
-    color: 'var(--link--default--text--enabled)'
+    color: 'var(--common--accent--enabled)'
   },
   visited: {
-    color: 'var(--link--visited--text--enabled)'
+    enabled: {
+      color: 'var(--common--violet--enabled)'
+    },
+    hover: {
+      color: 'var(--common--violet--hover)'
+    },
+    active: {
+      color: 'var(--common--violet--active)'
+    }
   },
   hover: {
-    color: 'var(--link--default--text--hover)'
+    color: 'var(--common--accent--hover)'
   },
   active: {
-    color: 'var(--link--default--text--active)'
+    color: 'var(--common--accent--active)'
   },
   disabled: {
-    color: 'var(--link--default--text--disabled)'
+    color: 'var(--fg--neutral--tertiary)'
   },
   ...focus({ effects })
 })
 
 export const linkSize: Record<LinkSize | 'noSize', LinkSizeConfig> = {
+  small: {
+    borderRadius: '4px',
+    borderWidth: '4px',
+    ...getTextSizes(TextTypes.BTM4)
+  },
   medium: {
     borderRadius: '4px',
     borderWidth: '4px',

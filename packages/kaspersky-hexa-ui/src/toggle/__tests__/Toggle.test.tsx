@@ -38,6 +38,23 @@ describe('Toggle', () => {
     expect(getToggleSwitch()).toBeDisabled()
   })
 
+  test('should be loading with loading prop', () => {
+    const handleChange = jest.fn()
+    render(
+      <Toggle loading onChange={handleChange}>
+        {defaultProps.text}
+      </Toggle>
+    )
+
+    expect(
+      getToggleSwitch().querySelector('.ant-switch-loading-icon')
+    ).toBeInTheDocument()
+    expect(getToggleSwitch()).toBeDisabled()
+
+    userEvent.click(screen.getByText(defaultProps.text))
+    expect(handleChange).not.toHaveBeenCalled()
+  })
+
   test('should render description', () => {
     const description = 'some description'
     render(<Toggle description={description}>{defaultProps.text}</Toggle>)

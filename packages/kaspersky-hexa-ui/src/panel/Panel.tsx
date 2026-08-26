@@ -22,7 +22,6 @@ export const Panel = ({
   className,
   testId,
   klId,
-  componentId,
   componentType,
   resizeHandle = 'left',
   resizable = false,
@@ -39,7 +38,7 @@ export const Panel = ({
   onResize
 }: PanelProps): JSX.Element => {
   const [hidden, setHidden] = useState(!open)
-  const { testAttributes } = useTestAttribute({ testId, klId, componentId, componentType })
+  const { testAttributes } = useTestAttribute({ testId, klId, componentType })
   const panelRef = useRef<HTMLDivElement | null>(null)
 
   const direction = ['left', 'right'].includes(resizeHandle) ? DIRECTIONS.VERTICAL : DIRECTIONS.HORIZONTAL

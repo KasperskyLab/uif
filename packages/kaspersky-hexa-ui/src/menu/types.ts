@@ -2,7 +2,13 @@ import { Theme } from '@design-system/types'
 import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
 import { SubmenuItemProps } from '@src/submenu'
 import type { SiderProps as AntSiderProps } from 'antd'
-import { Dispatch, PropsWithChildren, ReactNode, SetStateAction } from 'react'
+import {
+  Dispatch,
+  HTMLAttributeAnchorTarget,
+  PropsWithChildren,
+  ReactNode,
+  SetStateAction
+} from 'react'
 
 export type UserStatus = 'available' | 'unavailable'
 
@@ -27,7 +33,8 @@ export type NavItemData = {
   icon?: any,
   klId?: string,
   items?: NavItemData[],
-  onClick?: () => void,
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void,
+  onToggle?: (itemState: string) => void,
   condition?: <T>(state: T) => boolean,
   path?: string[],
   additionalElements?: ReactNode,
@@ -48,7 +55,11 @@ export type NavItemData = {
   canBeAddedAsFav?: boolean,
   skipActivation?: boolean,
   /** Number of lines after which the content will be clamped */
-  lineClamp?: number
+  lineClamp?: number,
+  /** Link */
+  href?: string,
+  /** Same as 'target' <a> attribute */
+  target?: HTMLAttributeAnchorTarget
 }
 
 type UserProps = {
