@@ -21,18 +21,7 @@ export default defineConfig([
   configs.eslint.react,
   configs.eslint.typescript,
   globalIgnores(['node_modules/**/*', '_build/**/*']),
-  {
-    files: ['client/**/*.{js,jsx,ts,tsx}'],
-    languageOptions: {
-      parserOptions: { project: 'client/tsconfig.json' }
-    }
-  },
-  {
-    files: ['server/**/*.{js,ts}'],
-    languageOptions: {
-      parserOptions: { project: 'server/tsconfig.json' }
-    }
-  }
+  // + per-dir блоки: { files: ['client/**/*.{js,jsx,ts,tsx}'], languageOptions: { parserOptions: { project: 'client/tsconfig.json' } } }
 ])
 ```
 
@@ -53,9 +42,67 @@ Provides `utils/get-node-options.js` for handling different Node.js versions:
 ```
 
 ## Key Entrypoints
+- `src/index.js` - CJS entry (babel + jest configs, utils); `src/index.mjs` - ESM entry (eslint configs)
 - `src/configs/eslint/` - ESLint configurations
 - `src/utils/get-node-options.js` - Node version compatibility
 - `lib/` - Built output
+
+## Подводные камни (side-effects — читать обязательно)
+- **NODE_OPTIONS вычисляется на ЗАГРУЗКЕ модуля** из `process.version` (`src/utils/get-node-options.js:1-10`).
+  Сравнение версий СТРОКОВОЕ (`version > 'v15'`) — лексикографика сломается на Node 100+ (`'v100' < 'v15'`).
+- **Jest-конфиги фиксируют окружение на ЗАГРУЗКЕ.** `rootDir: process.cwd()` (`src/configs/jest/plugins/config.js:5`,
+  `src/configs/jest/applications/config.js:5`) — зависит от каталога запуска jest. При `process.env.CI`
+  (plugins:89, applications:103) в репортеры дописывается jest-junit, пишущий `./client_report.xml` /
+  `./server_report.xml` / `./e2e_report.xml` в cwd.
+- **COLLECT_COVERAGE трактуется по-разному:** plugins требует строго строку `'true'`
+  (`src/configs/jest/plugins/config.js:83`), applications — любое truthy-значение
+  (`src/configs/jest/applications/config.js:96`).
+- **`configs.jest({product})` читает `process.argv[2]` позиционно** (`src/configs/jest/helpers/command-line-parser.js:2-3`):
+  тип тестов (`client|server|e2e|mnemon`) обязан идти СРАЗУ после `jest`; неизвестное значение молча падает в `common`.
+- **`toInstrument` кэширует babel-конфиг на уровне модуля** (`src/utils/to-instrument.js:4`): `IS_COVERAGE_BUILD`
+  читается один раз при первом вызове и мутирует общий конфиг (`unshift` istanbul, :10-15) — менять env после
+  первого вызова бесполезно; конфиг один на `instrumentClient` и `instrumentServer`.
+- **`initFeatureRegistry` читает файл флагов на КАЖДУЮ проверку** (`fs.readFileSync`,
+  `src/utils/feature-registry.js:8`), без кэша. Логирует через недекларированный глобал `runtime.logger`
+  (:11, :18) — вне plugin-runtime сам `catch` бросит ReferenceError.
+- **`jsonPatcher` нереентерабелен:** модульная переменная `envSectionName` перезаписывается каждым вызовом
+  (`src/utils/json-patcher.js:2,5`) — конкурентные вызовы с разными `buildTarget` мешают друг другу.
+- **json-patchers переписывают `./client/ui/*.json` НА МЕСТЕ** (`fs.writeFileSync`:
+  `src/utils/json-patchers/replace-cssclasses-with-offsets.js:187`, `set-ui-component-v6-lib.js:109`);
+  путь относителен cwd; `--only`/`--exclude` читаются из `process.argv` (`json-patchers/helpers.js:7`).
+  Баг: v6-патчер проверяет маркер `offsets`, а записывает `v6` (`set-ui-component-v6-lib.js:88` vs `:94`).
+- **`removeUndesiredFontFamily` рекурсивно перезаписывает файлы** (SimSun→Arial,
+  `src/utils/remove-undesired-font-family.js:16`); все ошибки глотаются в `console.error` (:19, :24) —
+  промис всегда резолвится «успешно».
+- **`buildUi` мутирует входные данные:** `prepareElements` переприсваивает `elem.elements`
+  (`src/utils/build-ui.js:103`), `applyHelpTopics` дописывает поля в элементы (:115-134).
+
+### Shared TypeScript Configs
+Пакет раздаёт три базовые конфигурации: `common`, `client`, `node`. Лежат в
+`src/configs/typescript/`, попадают в `lib/` при сборке (`resolveJsonModule` + `src/**/*.json`
+в `include`, см. tsconfig.json) и **открыты через `exports`** записью `"./lib/configs/*"`.
+
+Правильная форма подключения — пакетная, она не зависит от того, где физически лежит
+`node_modules`:
+
+```json
+{ "extends": "@kaspersky/dev-tools/lib/configs/typescript/common.tsconfig.json" }
+```
+
+**Не использовать** путь внутрь собственного `node_modules`:
+
+```json
+{ "extends": "./node_modules/@kaspersky/dev-tools/lib/configs/typescript/common.tsconfig.json" }
+```
+
+Он ломается, как только зависимости поднимаются в общий каталог (npm workspaces): пакет уезжает
+в корень, и путь перестаёт существовать (`TS5083`). Исторически такая форма использовалась в 45
+файлах `tsconfig*.json` 42 проектов — как обход отсутствующей записи в `exports`; см.
+[спеку](../../../.ai/specs/cross-zone/kl-dev-tools-exports-configs.md).
+
+**Переводить потребителя на пакетную форму можно только после того, как он поднял `@kaspersky/dev-tools`
+до версии с этой записью** — на более старых версиях `exports` её не содержит и подключение упадёт
+с `ERR_PACKAGE_PATH_NOT_EXPORTED`.
 
 ## Build System
 - **Output**: `lib/` directory
@@ -63,9 +110,7 @@ Provides `utils/get-node-options.js` for handling different Node.js versions:
 - **TypeScript**: tsconfig.json
 
 ## Local Commands
-```bash
-# TODO: verify commands from package.json
-```
+`yarn test` (jest), `yarn lint` / `yarn lint:fix` (eslint), `tsc` on prepublish (см. package.json).
 
 ## ESLint Migration Guide (v2 → v3)
 
@@ -76,14 +121,7 @@ Provides `utils/get-node-options.js` for handling different Node.js versions:
 4. Define `files` parameter and import base configs
 
 ### VSCode Auto-Fix Setup
-Add to `.vscode/settings.json`:
-```json
-{
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  }
-}
-```
+In `.vscode/settings.json`: `"editor.codeActionsOnSave": { "source.fixAll.eslint": true }`
 
 ## Adding New ESLint Configs
 New configs go in `/src/configs/eslint/`:
@@ -94,21 +132,12 @@ New configs go in `/src/configs/eslint/`:
 ## FAQ
 
 ### ESLint Not Working in IDE
-1. Restart IDE after updating `@kaspersky/dev-tools`
-2. Check for missing modules in ESLint output
-3. Delete `node_modules` and reinstall
-4. Verify `eslint.config.mjs` syntax
-5. Ensure `parserOptions.project` is set for TypeScript
+Перезапустить IDE после обновления `@kaspersky/dev-tools`; проверить missing modules в ESLint output; переустановить
+`node_modules`; проверить синтаксис `eslint.config.mjs` и `parserOptions.project` для TypeScript.
 
 ### NODE_OPTIONS Issues
-For Node 17+ with webpack/TS:
-```bash
-NODE_OPTIONS="--openssl-legacy-provider --no-experimental-fetch"
-```
-
-For Node 23+, remove `--no-experimental-fetch`.
-
-Use `get-node-options.js` script for automatic handling.
+Node 17+: `NODE_OPTIONS="--openssl-legacy-provider --no-experimental-fetch"`; Node 23+ — без
+`--no-experimental-fetch`. Автоматика: `get-node-options.js` (см. «Подводные камни»).
 
 ## Dependencies
 See `package.json` for bundled ESLint plugins and configs.
@@ -125,8 +154,4 @@ See `package.json` for bundled ESLint plugins and configs.
 - Migration utilities
 
 ## Checklist for New Features
-- [ ] Update this AGENTS.md if architecture changes
-- [ ] Add documentation for new ESLint configs
-- [ ] Update migration guide if breaking changes
-- [ ] Document new Node.js version handling
-- [ ] Update bundled plugins list
+- [ ] Update this AGENTS.md (architecture, side-effects с file:line, migration guide, bundled plugins)
