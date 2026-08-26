@@ -15,3 +15,5 @@ rollup.config.js
 svgr.config.js
 templateIcons.js
 tsconfig.json
+
+AGENTS.md
