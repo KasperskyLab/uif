@@ -1,4 +1,10 @@
-import { RefObject, useLayoutEffect, useState } from 'react'
+import {
+  RefObject,
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState
+} from 'react'
 // eslint-disable-next-line camelcase
 import { unstable_batchedUpdates } from 'react-dom'
 import ResizeObserver from 'resize-observer-polyfill'
@@ -30,6 +36,23 @@ export const resizeThrottle = (callback: () => void, delay: number) => {
 
   return { run, cancel }
 }
+
+/**
+ * A ResizeObserver notification hands back a fresh DOMRect even when the box did
+ * not move or change size, and anything that perturbs layout (opening a drawer, a
+ * scrollbar appearing) notifies every observed element at once. Storing that new
+ * object unconditionally turned one such notification into a state update per
+ * observed element — measured at ~3,700 updates per commit on a large table.
+ * Keeping the previous rect when the geometry is identical makes those
+ * notifications free while still reacting to real resizes.
+ */
+const sameRect = (a: DOMRect | undefined, b: DOMRect): boolean => (
+  !!a &&
+  a.width === b.width &&
+  a.height === b.height &&
+  a.top === b.top &&
+  a.left === b.left
+)
 
 type ResizeSubscriber = {
   onResize: (rect: DOMRect) => void,
@@ -108,23 +131,53 @@ const getSharedObserver = (): InstanceType<typeof ResizeObserver> => {
 
 export const useResizeObserver = (ref: RefObject<Element>, delay = 150): DOMRect | undefined => {
   const [dimensions, setDimensions] = useState<DOMRect>()
+  const measure = useCallback((rect: DOMRect) => {
+    setDimensions(previous => (sameRect(previous, rect) ? previous : rect))
+  }, [])
+  const observed = useRef<Element | null>(null)
 
+  // Deliberately no dependency array. The node behind `ref` can be replaced while
+  // this component stays mounted (TextReducer swaps its wrapper between the plain
+  // and the Tooltip-wrapped branch; the table rebuilds cell DOM on a column
+  // change), and React cannot express "ref.current changed" as a dependency.
+  // Keying the effect on `[ref, delay]` meant the subscription was made once and
+  // never refreshed: `subscribers` kept the dead node alive and the live one was
+  // never observed. The body below is an identity check on every render; real
+  // work happens only when the node actually changes.
   useLayoutEffect(() => {
     const element = ref.current
+
+    if (element === observed.current) {
+      if (element) {
+        const current = subscribers.get(element)
+        if (current && current.delay !== delay) current.delay = delay
+      }
+      return
+    }
+
+    if (observed.current) {
+      subscribers.delete(observed.current)
+      dirtyElements.delete(observed.current)
+      sharedObserver?.unobserve(observed.current)
+    }
+
+    observed.current = element
     if (!element) return
 
     // Initial measurement — synchronous, before the first paint (as before: to avoid flicker).
-    setDimensions(element.getBoundingClientRect())
-
-    subscribers.set(element, { onResize: setDimensions, delay })
+    measure(element.getBoundingClientRect())
+    subscribers.set(element, { onResize: measure, delay })
     getSharedObserver().observe(element)
+  })
 
-    return () => {
-      subscribers.delete(element)
-      dirtyElements.delete(element)
-      sharedObserver?.unobserve(element)
-    }
-  }, [ref, delay])
+  useLayoutEffect(() => () => {
+    const element = observed.current
+    if (!element) return
+    subscribers.delete(element)
+    dirtyElements.delete(element)
+    sharedObserver?.unobserve(element)
+    observed.current = null
+  }, [])
 
   return dimensions
 }

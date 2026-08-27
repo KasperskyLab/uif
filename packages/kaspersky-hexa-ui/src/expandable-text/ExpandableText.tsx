@@ -33,9 +33,15 @@ export function ExpandableText (rawProps: ExpandableTextProps): JSX.Element {
     const { current: element } = ref
     if (!element) return
 
-    element.title = clipped
+    const title = clipped
       ? props.altText ?? typeof props.children === 'string' ? String(props.children) : ''
       : ''
+
+    // Writing an attribute invalidates layout. With one of these per cell, an
+    // unconditional write interleaved with the offsetWidth reads that measure
+    // clipping, so every cell forced its own reflow. Assigning only on a real
+    // change lets the whole batch share one layout pass.
+    if (element.title !== title) element.title = title
 
     if (!clipped) {
       setExpanded(false)
@@ -82,7 +88,10 @@ export function ExpandableText (rawProps: ExpandableTextProps): JSX.Element {
       {...props}
     >
       <div className={styles.innerTextWrapper}>{props.children}</div>
-      <TextExpander onClick={expand} className="hexa-ui-expander" />
+      {/* EXPERIMENT: mount the expander only when the text is actually clipped.
+          It is position:absolute + visibility:hidden until then, so it never
+          contributed to layout — only to node and listener count. */}
+      {clipped && <TextExpander onClick={expand} className="hexa-ui-expander" />}
     </Text>
   )
 }

@@ -2,6 +2,7 @@ import { ITableProps, TableRecord } from '@src/table'
 import { Toolbar } from '@src/toolbar'
 import { ToolbarItemKey, ToolbarItems } from '@src/toolbar/types'
 import React, {
+  useCallback,
   Dispatch,
   Key,
   ReactNode,
@@ -117,6 +118,18 @@ export const ToolbarIntegration = <T extends TableRecord = TableRecord> (
   const [table, setTable] = useState(null as HTMLDivElement | null)
   const [customActions, setCustomActions] = useState<ToolbarItems<ToolbarItemKey>[]>([])
 
+  // These three used to be inline arrows. Every render handed the table a new
+  // identity for each, and the table passes them straight down, so any toolbar
+  // state change re-rendered the whole body instead of just the toolbar.
+  const closeColumnsSelector = useCallback(() => setOpenColumnsSelector(false), [])
+  const closeFilterSidebar = useCallback(() => setOpenFilterSidebar(false), [])
+  const handleExpand = useCallback((expanded: boolean, newRow: { key?: Key, [propName: string]: any }) => {
+    const newRowId = newRow.key
+    setExpandedRowKeys(current => (expanded && newRowId
+      ? [...current, newRowId]
+      : current.filter(key => key !== newRowId)))
+  }, [])
+
   const predefinedActions = getRightElements({
     toolbar: props.toolbar,
     dataSource: props.dataSource,
@@ -173,19 +186,12 @@ export const ToolbarIntegration = <T extends TableRecord = TableRecord> (
           <Component
             {...props}
             showColumnsSelector={openColumnsSelector}
-            onCloseColumnsSelector={() => setOpenColumnsSelector(false)}
+            onCloseColumnsSelector={closeColumnsSelector}
             showFilterSidebar={openFilterSidebar}
-            onCloseFilterSidebar={() => setOpenFilterSidebar(false)}
+            onCloseFilterSidebar={closeFilterSidebar}
             dataSource={filteredRows}
             expandedRowKeys={expandedRowKeys}
-            onExpand={(expanded, newRow: { key?: Key, [propName: string]: any }) => {
-              const newRowId = newRow.key
-              if (expanded && newRowId) {
-                setExpandedRowKeys([...expandedRowKeys, newRowId])
-              } else {
-                setExpandedRowKeys([...expandedRowKeys].filter(key => key !== newRowId))
-              }
-            }}
+            onExpand={handleExpand}
           />
         </div>
       </StyledTableContainer>

@@ -1,8 +1,10 @@
 import { getChildTestAttr, useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import Empty from 'antd/es/empty'
 import AntTable from 'antd/es/table'
+import HoverContext from 'rc-table/es/context/HoverContext'
 import cn from 'classnames'
 import React, {
+  useCallback,
   ComponentType,
   RefAttributes,
   useEffect,
@@ -38,6 +40,58 @@ import {
   TableRef,
   TableRowSelection
 } from './types'
+
+/**
+ * rc-table rebuilds its HoverContext value on every pointer move between rows, and
+ * every body cell consumes that context, so a single hover re-renders the whole
+ * body. Measured on a 100x40 table: 26,558 fibers and ~7 MB allocated per hover,
+ * which outruns the collector and shows up as heap/node/listener growth from mouse
+ * movement alone.
+ *
+ * The only thing that context produces is the `ant-table-cell-row-hover` class, and
+ * this design system never styles it — row hover is a plain `:hover` rule in
+ * tableCss.ts. Freezing the context for the body turns the JS hover path into a
+ * no-op and leaves the visual hover untouched.
+ */
+/**
+ * Upstream modules rebuild the row array on notifications that did not actually
+ * change which records are shown (a filter subscription firing, a toolbar action,
+ * a sidebar opening). rc-table memoises its entire body on the data identity, so
+ * each of those rebuilt-but-identical arrays re-rendered every cell. Holding on to
+ * the previous array when the rows are element-wise the same makes those
+ * notifications cost nothing.
+ */
+const useStableRows = <T,>(rows?: readonly T[]): readonly T[] | undefined => {
+  const previous = useRef(rows)
+
+  const unchanged = previous.current === rows || (
+    !!previous.current && !!rows &&
+    previous.current.length === rows.length &&
+    previous.current.every((row, i) => row === rows[i])
+  )
+
+  if (!unchanged) previous.current = rows
+  return previous.current
+}
+
+const FROZEN_HOVER = { startRow: -1, endRow: -1, onHover: () => undefined }
+
+const useComponentsWithoutJsHover = <T extends TableRecord>(components?: ITableProps<T>['components']) => useMemo(() => {
+  const body = components?.body
+
+  // A function body is a custom scroll body (virtual tables); it renders its own
+  // rows and must not be wrapped.
+  if (typeof body === 'function') return components
+
+  const BaseWrapper = body?.wrapper ?? 'tbody'
+  const Wrapper = (wrapperProps: Record<string, unknown>) => (
+    <HoverContext.Provider value={FROZEN_HOVER}>
+      <BaseWrapper {...wrapperProps} />
+    </HoverContext.Provider>
+  )
+
+  return { ...components, body: { ...body, wrapper: Wrapper } }
+}, [components])
 
 const StyledTable = styled(AntTable)`
   ${tableCss}
@@ -205,6 +259,16 @@ export const Table: <T extends TableRecord = TableRecord>(
       )
     : null
 
+  // Built once instead of per render: rc-table hands rowClassName down to every row,
+  // so a fresh identity here re-renders the whole body on any unrelated state change.
+  const mergedRowClassName = useCallback((record: T, index: number, indent: number) => cn(
+    { 'row-table-bg-pattern': !!record._blendedBackground },
+    typeof rowClassName === 'string' ? rowClassName : rowClassName?.(record, index, indent)
+  ), [rowClassName])
+
+  const stableRows = useStableRows(tableProps.dataSource)
+  const componentsWithoutJsHover = useComponentsWithoutJsHover(tableProps.components)
+
   return (
     <>
       {
@@ -256,6 +320,8 @@ export const Table: <T extends TableRecord = TableRecord>(
           <StyledTable<ComponentType<ITableProps<T>>>
             {...tableProps}
             {...tableCssProps}
+            components={componentsWithoutJsHover}
+            dataSource={stableRows as ITableProps<T>['dataSource']}
             className={cn(
               tableProps.className,
               { 'table-height-full': fullHeight },
@@ -265,12 +331,7 @@ export const Table: <T extends TableRecord = TableRecord>(
             )}
             ref={tableRef}
             columns={columns}
-            rowClassName={(record, index, indent) => (
-              cn(
-                { 'row-table-bg-pattern': !!record._blendedBackground },
-                typeof rowClassName === 'string' ? rowClassName : rowClassName?.(record, index, indent)
-              )
-            )}
+            rowClassName={mergedRowClassName}
             expandable={expandableConfig}
             loading={(loadingProp || !isInited) && loaderProps}
             locale={{ emptyText: !isInited ? <></> : emptyText }}

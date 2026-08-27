@@ -52,6 +52,10 @@ describe('ExpandableText', () => {
 
       expect(root).not.toHaveClass('expandable-text-clipped')
       expect(root).toHaveAttribute('data-hide', 'true')
+      // The arrow was previously always rendered and merely hidden with CSS; it is
+      // absolutely positioned, so keeping it out of the DOM costs nothing visually
+      // and saves a button plus an icon per cell.
+      expect(container.querySelector('.hexa-ui-expander')).not.toBeInTheDocument()
     })
 
     it('should apply clipped class when text is truncated', () => {

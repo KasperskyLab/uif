@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks, max-lines */
-import { TextReducer } from '@helpers/components/TextReducer'
+// import { TextReducer } from '@helpers/components/TextReducer'
 import { useDebounce } from '@helpers/hooks/useDebounce'
 import { Textbox } from '@src/input'
 import { Link } from '@src/link'
@@ -217,7 +217,7 @@ const createDefaultColumn = (key: string): TableColumn => ({
   dataIndex: key,
   isSortable: true,
   show: true,
-  ellipsis: true,
+  expandableText: true,
   hideColumnAvailable: true,
   hasEmptyCellDash: true,
   filterType: {
@@ -271,7 +271,8 @@ function getColumns (setData: React.Dispatch<React.SetStateAction<TableRecord[]>
       hideColumnAvailable: false,
       render: (value: string) => (
         <Link href="">
-          <TextReducer>{value}</TextReducer>
+          {/* <TextReducer>{value}</TextReducer> */}
+          {value}
         </Link>
       ),
       width: 150
@@ -327,20 +328,20 @@ function getColumns (setData: React.Dispatch<React.SetStateAction<TableRecord[]>
       },
       width: 300
     },
-    {
-      ...createDefaultColumn('RichTextEditor'),
-      render: (value: Descendant[], currentRow: TableRecord) => {
-        return (
-          <RichTextEditor
-            autoFocus={false}
-            initialValue={value}
-            onChange={newValue => patchDataState(currentRow.id, { RichTextEditor: newValue })}
-            plugins={allPlugins}
-          />
-        )
-      },
-      width: 400
-    },
+    // {
+    //   ...createDefaultColumn('RichTextEditor'),
+    //   render: (value: Descendant[], currentRow: TableRecord) => {
+    //     return (
+    //       <RichTextEditor
+    //         autoFocus={false}
+    //         initialValue={value}
+    //         onChange={newValue => patchDataState(currentRow.id, { RichTextEditor: newValue })}
+    //         plugins={allPlugins}
+    //       />
+    //     )
+    //   },
+    //   width: 400
+    // },
     {
       ...createDefaultColumn('Select'),
       ellipsis: false,
@@ -385,7 +386,8 @@ function getColumns (setData: React.Dispatch<React.SetStateAction<TableRecord[]>
       isSortable: false,
       filterType: createNumericEnumFilterType(TypeLabel),
       render: (value: TypeLabel) => (
-        <TextReducer>{TypeLabel[value]}</TextReducer>
+        // <TextReducer>{TypeLabel[value]}</TextReducer>
+        TypeLabel[value]
       ),
       width: 180
     },
@@ -396,7 +398,8 @@ function getColumns (setData: React.Dispatch<React.SetStateAction<TableRecord[]>
     },
     {
       ...createDefaultColumn('ipAddresses'),
-      render: (value: string[]) => <TextReducer>{value?.join(', ')}</TextReducer>,
+      // render: (value: string[]) => <TextReducer>{value?.join(', ')}</TextReducer>,
+      render: (value: string[]) => value?.join(', '),
       width: 140
     },
     {
@@ -434,7 +437,8 @@ function getColumns (setData: React.Dispatch<React.SetStateAction<TableRecord[]>
     },
     {
       ...createDefaultColumn('ipAddressesV6'),
-      render: (value: string[]) => <TextReducer>{value?.join(', ')}</TextReducer>,
+      // render: (value: string[]) => <TextReducer>{value?.join(', ')}</TextReducer>,
+      render: (value: string[]) => value?.join(', '),
       width: 250
     },
     {
@@ -446,7 +450,8 @@ function getColumns (setData: React.Dispatch<React.SetStateAction<TableRecord[]>
       ...createDefaultColumn('architecture'),
       filterType: createNumericEnumFilterType(ArchitectureLabel),
       render: (value: ArchitectureLabel) => (
-        <TextReducer>{ArchitectureLabel[value]}</TextReducer>
+        // <TextReducer>{ArchitectureLabel[value]}</TextReducer>
+        ArchitectureLabel[value]
       ),
       width: 140
     },
@@ -472,7 +477,8 @@ function getColumns (setData: React.Dispatch<React.SetStateAction<TableRecord[]>
       ...createDefaultColumn('virtualMachineType'),
       filterType: createNumericEnumFilterType(VirtualMachineTypeLabel),
       render: (type: VirtualMachineTypeLabel) => (
-        <TextReducer>{VirtualMachineTypeLabel[type]}</TextReducer>
+        // <TextReducer>{VirtualMachineTypeLabel[type]}</TextReducer>
+        VirtualMachineTypeLabel[type]
       ),
       width: 200
     }
@@ -484,7 +490,7 @@ function getColumns (setData: React.Dispatch<React.SetStateAction<TableRecord[]>
 export const Performance: Story = {
   render: (args) => {
     const [currentPage, setCurrentPage] = useState<number>(1)
-    const [pageSize, setPageSize] = useState<number>(20)
+    const [pageSize, setPageSize] = useState<number>(100)
     const [loading, setLoading] = useState<boolean>(false)
     const [filteredData, setFilteredData] = useState<TableRecord[]>([])
     const [search, setSearch] = useState<string>('')

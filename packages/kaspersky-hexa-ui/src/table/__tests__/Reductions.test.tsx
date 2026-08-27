@@ -55,7 +55,9 @@ describe('Table Reductions module', () => {
 
     const cell = table.rows.getCell(0, 1)
     expect(cell?.querySelector('.expandable-gradient')).toBeInTheDocument()
-    expect(cell?.querySelector('.hexa-ui-expander')).toBeInTheDocument()
+    // The expander mounts only once the text actually overflows. jsdom has no
+    // layout, so nothing is ever clipped here and the arrow stays out of the DOM.
+    expect(cell?.querySelector('.hexa-ui-expander')).not.toBeInTheDocument()
     expect(cell?.textContent).toContain('hello world')
   })
 

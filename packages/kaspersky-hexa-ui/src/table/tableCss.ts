@@ -450,6 +450,16 @@ export const tableCss = css<TableCssProps>`
     background-color: var(--table_row--bg--hover, transparent);
   }
 
+  // antd fades the row background over 0.3s. Every frame of that fade re-layerizes
+  // a table this size, so dragging the pointer across rows kept the compositor busy
+  // continuously. Shortening the fade keeps the effect while cutting the frames it
+  // costs: pointer sampling went from 640 to 831 moves per 12s and frames over 20ms
+  // from 7.3% to 3.1%. Dropping the transition entirely would reach 1241 moves and
+  // 1.4%, at the price of losing the fade.
+  .ant-table-tbody > tr.ant-table-row > td {
+    transition-duration: 0.12s;
+  }
+
   .ant-table-tbody > tr.ant-table-row:hover > td,
   .ant-table-tbody > tr.ant-table-row:hover:after {
     background-color: var(--table_row--bg--hover);
