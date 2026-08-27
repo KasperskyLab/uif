@@ -1,4 +1,4 @@
-import type { ComponentType, SVGProps } from "react"
+import type { ElementType, SVGProps } from "react"
 import {
   AppsGrid,
   ArrangeGrid,
@@ -32,12 +32,12 @@ import {
   Switch,
   Tag,
   Text,
-} from "@kaspersky/hexa-ui-icons/16"
-import { Close2, Undo } from "@kaspersky/hexa-ui-icons/12"
+} from "@kl/hexa-ui-icons/16"
+import { Close2, Undo } from "@kl/hexa-ui-icons/12"
 
 type IconProps = SVGProps<SVGSVGElement> & { size?: number | string }
 
-function sized(Icon: ComponentType<SVGProps<SVGSVGElement>>, mirrored = false) {
+function sized(Icon: ElementType, mirrored = false) {
   return function HexaIcon({ size = 16, style, ...props }: IconProps) {
     return <Icon height={size} style={mirrored ? { ...style, transform: "scaleX(-1)" } : style} width={size} {...props} />
   }
