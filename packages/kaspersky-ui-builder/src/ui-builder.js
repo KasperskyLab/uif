@@ -40,7 +40,7 @@ uiBuilder.setup({
     forms: UI_BUILDER_FORMS_PATH,
     projectRoot: path.join(__dirname)
   },
-  port: 7000,
+  port: 7005,
   pluginId: undefined,
   customFields: {
     form: [buildTypeField],

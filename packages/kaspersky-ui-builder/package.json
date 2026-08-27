@@ -22,7 +22,8 @@
     "prepublishOnly": "npm run build && npm run test",
     "postpublish": "gulp clear-lib-folder",
     "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix"
+    "lint:fix": "eslint ./src --fix",
+    "dev": "NODE_OPTIONS=--openssl-legacy-provider gulp && node lib/ui-builder.js"
   },
   "devDependencies": {
     "@babel/helper-regex": "7.10.5",

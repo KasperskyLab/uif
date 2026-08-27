@@ -1,0 +1,454 @@
+{
+  "state": {
+    "id": {
+      "input": "NRlE@Ff17"
+    },
+    "topicId": {
+      "input": ""
+    },
+    "name": {
+      "input": "test1"
+    },
+    "title": {
+      "input": "test1"
+    },
+    "navigationChecked": {},
+    "rootForm": {},
+    "ignoreDomainValidation": {},
+    "objectType": {
+      "slct": ""
+    },
+    "domain": {
+      "input": ""
+    },
+    "author": {
+      "input": ""
+    },
+    "dataSource": {
+      "dsType": "",
+      "serverFunctionName": "",
+      "params": "",
+      "parsedParams": "",
+      "paramsSourceType": "static",
+      "paramsHandler": ""
+    },
+    "dataSaveAction": {
+      "dsType": "",
+      "serverFunctionName": "",
+      "params": "",
+      "parsedParams": "",
+      "paramsSourceType": "static",
+      "paramsHandler": ""
+    },
+    "useCache": {},
+    "isInSilentChangeMode": {},
+    "modelTrackerIsOff": {},
+    "isParentEntity": {},
+    "actionBarAssistantBootstrapper": {
+      "fncName": null
+    },
+    "ignoreFormCloseOnDomainSave": {},
+    "init": {
+      "fncName": null
+    },
+    "onRendered": {
+      "fncName": null
+    },
+    "onDispose": {
+      "fncName": null
+    },
+    "parentFormId": {
+      "slct": ""
+    },
+    "prop": {
+      "input": ""
+    },
+    "buildType": {
+      "slct": "any"
+    },
+    "type": {
+      "slct": "ui-sequence"
+    },
+    "version": {
+      "slct": ""
+    }
+  },
+  "name": "test1",
+  "id": "NRlE@Ff17",
+  "json": {
+    "elements": [
+      {
+        "type": "password-input",
+        "id": "DRR$WJcMwm",
+        "lock": null,
+        "accordion": null,
+        "style": {
+          "indent": 0,
+          "offsetBottom": 0,
+          "offsetTop": 0,
+          "offsetAfter": 0,
+          "labelPos": 0,
+          "width": 0,
+          "customClass": ""
+        },
+        "dependencies": [],
+        "buildType": "any",
+        "componentLibrary": "riot",
+        "scope": "NRlE@Ff17"
+      },
+      {
+        "type": "time-input",
+        "id": "V6kg2GkVz$",
+        "lock": null,
+        "accordion": null,
+        "style": {
+          "indent": 0,
+          "offsetBottom": 0,
+          "offsetTop": 0,
+          "offsetAfter": 0,
+          "labelPos": 0,
+          "customClass": ""
+        },
+        "dependencies": [],
+        "buildType": "any",
+        "componentLibrary": "riot",
+        "scope": "NRlE@Ff17"
+      },
+      {
+        "type": "toggle",
+        "id": "YIPJvNpwYU",
+        "lock": null,
+        "accordion": null,
+        "style": {
+          "indent": 0,
+          "offsetBottom": 0,
+          "offsetTop": 0,
+          "offsetAfter": 0,
+          "customClass": ""
+        },
+        "dependencies": [],
+        "buildType": "any",
+        "componentLibrary": "riot",
+        "scope": "NRlE@Ff17"
+      },
+      {
+        "type": "text",
+        "id": "YzMghIMBof",
+        "accordion": null,
+        "style": {
+          "indent": 0,
+          "offsetBottom": 0,
+          "offsetTop": 0,
+          "offsetAfter": 0,
+          "customClass": ""
+        },
+        "dependencies": [],
+        "buildType": "any",
+        "componentLibrary": "riot",
+        "scope": "NRlE@Ff17"
+      },
+      {
+        "type": "auto-tree",
+        "id": "ThZ4Vi8ziW",
+        "customActionsResolver": null,
+        "actionsStateResolver": null,
+        "selectionSyncEnvVarName": null,
+        "childRowResolver": null,
+        "lock": null,
+        "accordion": null,
+        "style": {
+          "indent": 0,
+          "offsetBottom": 0,
+          "offsetTop": 0,
+          "offsetAfter": 0,
+          "customClass": ""
+        },
+        "dependencies": [],
+        "buildType": "any",
+        "componentLibrary": "riot",
+        "scope": "NRlE@Ff17"
+      }
+    ]
+  },
+  "elements": [
+    {
+      "type": 8,
+      "id": "DRR$WJcMwm",
+      "state": {
+        "id": {
+          "input": "DRR$WJcMwm"
+        },
+        "title": {
+          "input": ""
+        },
+        "alias": {
+          "input": ""
+        },
+        "topicId": {
+          "input": ""
+        },
+        "value": {
+          "slct": 0,
+          "simpleValue": "",
+          "contextPropName": "",
+          "valueType": "",
+          "afterReadPatchFncName": "",
+          "beforeSavePatchFncName": "",
+          "changeHandlerFncName": "",
+          "variableName": ""
+        },
+        "lock": {
+          "lockSource": null
+        },
+        "accordion": {
+          "accordionSource": null
+        },
+        "style": {
+          "indent": 0,
+          "offsetBottom": 0,
+          "offsetTop": 0,
+          "offsetAfter": 0,
+          "labelPos": 0,
+          "width": 0,
+          "customClass": "",
+          "state": 0
+        },
+        "prop": {
+          "input": ""
+        },
+        "buildType": {
+          "slct": "any"
+        },
+        "componentLibrary": {
+          "slct": "riot"
+        }
+      }
+    },
+    {
+      "type": 14,
+      "id": "V6kg2GkVz$",
+      "state": {
+        "id": {
+          "input": "V6kg2GkVz$"
+        },
+        "alias": {
+          "input": ""
+        },
+        "title": {
+          "input": ""
+        },
+        "topicId": {
+          "input": ""
+        },
+        "value": {
+          "slct": 0,
+          "simpleValue": "",
+          "contextPropName": "",
+          "valueType": "",
+          "afterReadPatchFncName": "",
+          "beforeSavePatchFncName": "",
+          "changeHandlerFncName": "",
+          "variableName": ""
+        },
+        "lock": {
+          "lockSource": null
+        },
+        "accordion": {
+          "accordionSource": null
+        },
+        "style": {
+          "indent": 0,
+          "offsetBottom": 0,
+          "offsetTop": 0,
+          "offsetAfter": 0,
+          "labelPos": 0,
+          "customClass": "",
+          "state": 0
+        },
+        "prop": {
+          "input": ""
+        },
+        "buildType": {
+          "slct": "any"
+        },
+        "componentLibrary": {
+          "slct": "riot"
+        }
+      }
+    },
+    {
+      "type": 5,
+      "id": "YIPJvNpwYU",
+      "state": {
+        "id": {
+          "input": "YIPJvNpwYU"
+        },
+        "alias": {
+          "input": ""
+        },
+        "title": {
+          "input": ""
+        },
+        "description": {
+          "input": ""
+        },
+        "topicId": {
+          "input": ""
+        },
+        "value": {
+          "slct": 0,
+          "simpleValue": "",
+          "contextPropName": "",
+          "valueType": "",
+          "afterReadPatchFncName": "",
+          "beforeSavePatchFncName": "",
+          "changeHandlerFncName": "",
+          "variableName": ""
+        },
+        "lock": {
+          "lockSource": null
+        },
+        "accordion": {
+          "accordionSource": null
+        },
+        "style": {
+          "indent": 0,
+          "offsetBottom": 0,
+          "offsetTop": 0,
+          "offsetAfter": 0,
+          "customClass": "",
+          "state": 0
+        },
+        "prop": {
+          "input": ""
+        },
+        "buildType": {
+          "slct": "any"
+        },
+        "componentLibrary": {
+          "slct": "riot"
+        }
+      }
+    },
+    {
+      "type": 13,
+      "id": "YzMghIMBof",
+      "state": {
+        "id": {
+          "input": "YzMghIMBof"
+        },
+        "alias": {
+          "input": ""
+        },
+        "topicId": {
+          "input": ""
+        },
+        "value": {
+          "slct": 0,
+          "simpleValue": "",
+          "contextPropName": "",
+          "valueType": "",
+          "afterReadPatchFncName": "",
+          "beforeSavePatchFncName": "",
+          "changeHandlerFncName": "",
+          "variableName": ""
+        },
+        "accordion": {
+          "accordionSource": null
+        },
+        "style": {
+          "indent": 0,
+          "offsetBottom": 0,
+          "offsetTop": 0,
+          "offsetAfter": 0,
+          "customClass": "",
+          "state": 0
+        },
+        "prop": {
+          "input": ""
+        },
+        "buildType": {
+          "slct": "any"
+        },
+        "componentLibrary": {
+          "slct": "riot"
+        }
+      }
+    },
+    {
+      "type": 32,
+      "id": "ThZ4Vi8ziW",
+      "state": {
+        "id": {
+          "input": "ThZ4Vi8ziW"
+        },
+        "topicId": {
+          "input": ""
+        },
+        "cacheEntries": {},
+        "hideSelectedEntriesCounter": {},
+        "value": {
+          "slct": 0,
+          "simpleValue": "",
+          "contextPropName": "",
+          "valueType": "",
+          "afterReadPatchFncName": "",
+          "beforeSavePatchFncName": "",
+          "changeHandlerFncName": "",
+          "variableName": ""
+        },
+        "customActionsResolver": {
+          "fncName": null
+        },
+        "actionsStateResolver": {
+          "fncName": null
+        },
+        "isInSingleSelectionMode": {},
+        "selectionSyncEnvVarName": {
+          "value": null
+        },
+        "childRowResolver": {
+          "fncName": null
+        },
+        "syncSelectToChildren": {},
+        "lock": {
+          "lockSource": null
+        },
+        "accordion": {
+          "accordionSource": null
+        },
+        "style": {
+          "indent": 0,
+          "offsetBottom": 0,
+          "offsetTop": 0,
+          "offsetAfter": 0,
+          "customClass": "",
+          "state": 0
+        },
+        "prop": {
+          "input": ""
+        },
+        "buildType": {
+          "slct": "any"
+        },
+        "componentLibrary": {
+          "slct": "riot"
+        },
+        "compact": {}
+      }
+    }
+  ],
+  "dataSource": {
+    "type": ""
+  },
+  "title": "test1",
+  "init": null,
+  "scope": "NRlE@Ff17",
+  "onRendered": null,
+  "onDispose": null,
+  "actionBarAssistantBootstrapper": null,
+  "customFields": {
+    "buildType": "any"
+  },
+  "js": {}
+}
