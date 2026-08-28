@@ -1,51 +1,14 @@
+// Only the text side lives here. Clipping, the toggle and the gradient come from
+// ExpandableContent.
 .expandableText {
-  word-break: break-all;
-  padding: 0;
-  position: relative;
-  display: block;
+  word-break: normal;
 
-  :global(.hexa-ui-expander) {
-    z-index: 2;
-    position: absolute;
-    top: 4px;
-    right: 0;
-    visibility: hidden;
+  &[data-expanded] {
+    word-break: break-all;
   }
 
-  &.expandableTextClipped {
-    padding-inline-end: 20px;
-
-    :global(.hexa-ui-expander) {
-      visibility: visible;
-    }
-  }
-
-  &.expandableTextExpanded {
-    overflow: visible;
-    white-space: normal;
-
-    :global(.hexa-ui-expander) {
-      transform: rotate(180deg);
-    }
-  }
-
-  &:not(.expandableTextExpanded) {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    word-break: normal;
-    max-width: 100%;
-    transition: all ease 50ms;
-    display: block;
-
-    :global(kl-auto-link > div) {
-      display: inline;
-    }
-  }
-
-  &:focus-visible {
-    box-shadow: 0px 0px 0px 2px var(--focus--stroke);
-    border-radius: var(--radius--xs);
-    outline: none;
+  :global(kl-auto-link > div) {
+    display: inline;
   }
 
   :global(.kl6-field),
@@ -59,41 +22,5 @@
   :global(.kl6-link > span) {
     white-space: inherit;
     word-break: inherit;
-  }
-}
-
-.innerTextWrapper {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.expandableGradient {
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0 0 0 auto;
-    width: 80px;
-    z-index: 1;
-    pointer-events: none;
-    background-color: var(--bg--neutral--level_0);
-    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #000 75%);
-    // No transition here on purpose. This pseudo-element carries a mask-image, and
-    // animating its background-color forces Blink to re-layerize the masked element
-    // on every frame. With one of these per clipped cell, moving the pointer across
-    // rows measured p95 frame 239ms and 10.9s of blocking time per 20s of movement;
-    // dropping the transition takes that to 22ms and 3.7s. The row background itself
-    // still animates (antd's own td transition), so the fade is not lost.
-    overflow: hidden;
-    text-overflow: clip;
-  }
-
-  &[data-hide]::after {
-    display: none;
-  }
-
-  .innerTextWrapper {
-    text-overflow: clip;
   }
 }

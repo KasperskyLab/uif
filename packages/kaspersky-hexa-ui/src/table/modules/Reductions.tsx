@@ -1,4 +1,5 @@
 import { TextReducer } from '@helpers/index'
+import { ExpandableContent } from '@src/expandable-text/ExpandableContent'
 import { ExpandableText } from '@src/expandable-text'
 import React, { useMemo } from 'react'
 
@@ -41,7 +42,7 @@ export const Reductions = <T extends TableRecord = TableRecord>(
 
             if (!column.render) {
               return expandableText
-                ? <ExpandableText useGradient className="hexa-ui-expandable">{value}</ExpandableText>
+                ? <ExpandableContent useGradient className="hexa-ui-expandable">{value}</ExpandableContent>
                 : <TextReducer className="hexa-ui-ellipsis">{value}</TextReducer>
             }
 
@@ -51,7 +52,7 @@ export const Reductions = <T extends TableRecord = TableRecord>(
             const tooltip = column.ellipsisTooltip ? column.ellipsisTooltip(value, record, index) : undefined
 
             const reducedNode = expandableText
-              ? <ExpandableText useGradient className="hexa-ui-expandable">{node}</ExpandableText>
+              ? <ExpandableContent useGradient className="hexa-ui-expandable">{node}</ExpandableContent>
               : <TextReducer tooltip={tooltip} className="hexa-ui-ellipsis">{node}</TextReducer>
 
             return isObject

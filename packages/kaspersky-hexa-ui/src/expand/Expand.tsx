@@ -1,8 +1,8 @@
 import { getChildTestProps, useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { useResizeObserver } from '@helpers/useResizeObserver'
+import { useWatchOverflow } from '@helpers/overflowWatcher'
 import { ActionButton } from '@src/action-button'
 import cn from 'classnames'
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -38,15 +38,25 @@ export const Expand = ({
   const textRef = useRef<HTMLDivElement | null>(null)
   const [visible, setVisible] = useState(false)
 
-  const textRect = useResizeObserver(textRef, 150)
+  // Measured in the shared observer's read phase rather than from a layout
+  // effect. The old shape kept a DOMRect in state purely as a "something
+  // changed" token — no field of it was ever read — and then took its own
+  // reading right after React had written to the DOM, which forces the engine
+  // to redo style and layout on the spot.
+  const collapsedHeightRef = useRef(collapsedHeight)
+  collapsedHeightRef.current = collapsedHeight
 
-  useLayoutEffect(() => {
-    const element = textRef.current
-    if (!element || !textRect) return
+  const measureOverflow = useCallback(
+    (element: Element) => element.scrollHeight > collapsedHeightRef.current,
+    []
+  )
+  const onMeasured = useCallback((next: boolean) => {
+    setVisible(current => (current === next ? current : next))
+  }, [])
 
-    const isOverflow = element.scrollHeight > collapsedHeight
-    setVisible(isOverflow)
-  }, [collapsedHeight, textRect])
+  // collapsedHeight is a prop, so a resize notification cannot tell us it moved;
+  // passing it as the remeasure key forces a fresh reading when it does.
+  useWatchOverflow(textRef, onMeasured, measureOverflow, collapsedHeight)
 
   return (
     <StyledExpander className={cn(

@@ -6,7 +6,7 @@ import { RadioOption } from '@src/radio'
 import { Search } from '@src/search'
 import { Sidebar } from '@src/sidebar'
 import { Space } from '@src/space'
-import { TableColumn, TableRecord, useTableUpdate } from '@src/table'
+import { TableColumn, TableRecord, useTableContext, useTableUpdate } from '@src/table'
 import { getTabsConfig } from '@src/table/helpers/getTabsConfig'
 import { getPersistentStorageValue, updatePersistentStorage } from '@src/table/helpers/persistentStorage'
 import { Tabs } from '@src/tabs'
@@ -123,6 +123,11 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
 
   const updateContext = useTableUpdate<T>()
 
+  // Subscribed to rather than received as a prop: as a prop the flag travelled
+  // through every module layer down into the table body, so opening this sidebar
+  // re-rendered all of it. Here only this component reacts.
+  const showColumnsSelector = useTableContext(state => state.showColumnsSelector)
+
   const setTableColumns = (nextColumns: TableColumn<T>[]) => {
     tableColumnsRef.current = nextColumns
     setTableColumnsState(nextColumns)
@@ -215,6 +220,9 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
   const closeColumnsSelector = () => {
     setDraftGroupBy(tableGroupBy)
     setDraftColumns(tableColumns)
+    // Closes through the store now that the flag lives there; the caller's own
+    // callback still fires, so the public prop keeps working.
+    updateContext({ showColumnsSelector: false })
     props.onCloseColumnsSelector?.()
     setSearchValue('')
   }
@@ -241,6 +249,7 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
     setTableGroupBy(draftGroupBy)
     props.onGroupByChange?.(draftGroupBy)
     props.onColumnsChange?.(draftColumns)
+    updateContext({ showColumnsSelector: false })
     props.onCloseColumnsSelector?.()
     setSearchValue('')
   }
@@ -299,7 +308,7 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
           <Sidebar
             size="extraSmall"
             onClose={closeColumnsSelector}
-            visible={props.showColumnsSelector}
+            visible={showColumnsSelector}
             title={title}
             subHeader={
               !hideTabsHeader && (

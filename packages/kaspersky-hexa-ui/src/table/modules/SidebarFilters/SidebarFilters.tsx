@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
 
 import { TableComponent } from '..'
-import { useTableContext } from '../../context/TableContext'
+import { useTableContext, useTableUpdate } from '../../context/TableContext'
 import { ITableProps, TableRecord } from '../../types'
 import { FilterApi, SidebarFilterGroupInternal, SidebarFilterInternal } from '../Filters'
 import {
@@ -59,7 +59,6 @@ export const SidebarFilters = <T extends TableRecord = TableRecord> (
           columns={columns}
           testId={rest.testId}
           onCloseFilterSidebar={rest.onCloseFilterSidebar}
-          showFilterSidebar={rest.showFilterSidebar}
           onSidebarFiltersChange={rest.onSidebarFiltersChange}
           getFiltersSidebarToolbarButtons={getFiltersSidebarToolbarButtons}
         />
@@ -75,7 +74,6 @@ type SidebarFiltersModuleProps<T extends TableRecord = TableRecord> = MakeRequir
     'columns' |
     'testId' |
     'onCloseFilterSidebar' |
-    'showFilterSidebar' |
     'onSidebarFiltersChange' |
     'getFiltersSidebarToolbarButtons'
   >,
@@ -86,7 +84,6 @@ type SidebarFiltersModuleProps<T extends TableRecord = TableRecord> = MakeRequir
 
 function SidebarFiltersModule<T extends TableRecord = TableRecord> ({
   onCloseFilterSidebar,
-  showFilterSidebar,
   onSidebarFiltersChange,
   getFiltersSidebarToolbarButtons,
   filterApi,
@@ -100,6 +97,19 @@ function SidebarFiltersModule<T extends TableRecord = TableRecord> ({
     setSorting: state.setSorting,
     enableNestedFilters: state.enableNestedFilters
   }))
+
+  // Subscribed to rather than received as a prop: as a prop the flag travelled
+  // through every module layer down into the table body, so opening this sidebar
+  // re-rendered all of it. Here only this component reacts.
+  const showFilterSidebar = useTableContext(state => state.showFilterSidebar)
+  const updateTableContext = useTableUpdate<T>()
+
+  // The sidebar closes itself through the store now that the flag lives there; the
+  // caller's own callback still fires, so the public prop keeps working.
+  const closeSidebar = useCallback(() => {
+    updateTableContext({ showFilterSidebar: false })
+    onCloseFilterSidebar?.()
+  }, [updateTableContext, onCloseFilterSidebar])
 
   const availableColumns = useMemo(() => {
     return (columns || []).filter(column => (
@@ -137,7 +147,7 @@ function SidebarFiltersModule<T extends TableRecord = TableRecord> ({
     /** @deprecated Only to support old contract */
     onSidebarFiltersChange?.(filtersWithoutId.filter(isFilterConfig))
     filterApi.setExternalSidebarFilters(filtersWithoutId)
-    onCloseFilterSidebar?.()
+    closeSidebar()
   }
 
   const handleRemove: SidebarFilterHandler<T>['handleRemove'] = useCallback((filterToRemove) => {
@@ -216,7 +226,7 @@ function SidebarFiltersModule<T extends TableRecord = TableRecord> ({
 
   const handleCancel = () => {
     setFilters(filtersForRestore)
-    onCloseFilterSidebar?.()
+    closeSidebar()
   }
 
   const handleClose = () => {

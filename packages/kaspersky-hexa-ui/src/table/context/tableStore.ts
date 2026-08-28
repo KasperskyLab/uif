@@ -33,6 +33,16 @@ export type TableContextProviderProps <T extends TableRecord = TableRecord>= {
   sorting: ActiveSorting<T>,
   setSorting: SetState<ActiveSorting<T>>,
   toolbarContext: GetLeftItemsProps<T>,
+  /**
+   * Whether the filters sidebar is open. Kept here rather than threaded through
+   * the module chain: it has exactly one consumer, but as a prop it passed
+   * through thirteen un-memoised module layers into antd's Table, so toggling it
+   * re-rendered the whole body — measured at 10,719 fibers for one click on a
+   * 100x40 table. Selector subscriptions mean only the sidebar re-renders now.
+   */
+  showFilterSidebar?: boolean,
+  /** Whether the column-settings sidebar is open. See showFilterSidebar. */
+  showColumnsSelector?: boolean,
 } & Pick<ITableProps<T>, 'useV3TestId' | 'filterVersion' | 'enableNestedFilters' | 'dateFormat'>
 
 export type UpdateTableContext<T extends TableRecord = TableRecord> =
@@ -52,6 +62,8 @@ export const getDefaultContextData = <T extends TableRecord = TableRecord>(): Ta
     shouldCountClientTotal: false
   },
   useDataSourceFunction: false,
+  showFilterSidebar: false,
+  showColumnsSelector: false,
   toolbarContext: {}
 })
 

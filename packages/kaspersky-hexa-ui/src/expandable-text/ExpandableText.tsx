@@ -1,97 +1,45 @@
 import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
-import { useOverflowObserver } from '@helpers/hooks/useOverflowObserver'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import { ExpandableContent } from './ExpandableContent'
 import { Text } from '@src/typography'
 import cn from 'classnames'
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React from 'react'
 
 import styles from './ExpandableText.module.scss'
-import { isEllipsisActive } from './helpers'
-import { TextExpander } from './TextExpander'
 import { ExpandableTextProps } from './types'
 
-export function ExpandableText (rawProps: ExpandableTextProps): JSX.Element {
-  const {
-    type = 'BTR3',
-    theme,
-    testAttributes,
-    onExpand,
-    useGradient = false,
-    className,
-    ...props
-  } = useTestAttribute(rawProps)
-  const ref = useRef<HTMLParagraphElement | null>(null)
-  const [expanded, setExpanded] = useState<boolean>(false)
-  const contentWidth = useRef<number>(0)
-
-  const [clipped, setClipped] = useOverflowObserver<HTMLParagraphElement>(ref, (element) => {
-    const child = element.childNodes[0] as HTMLElement | undefined
-    return child ? isEllipsisActive(child, contentWidth, expanded) : false
-  }, [contentWidth], 150)
-
-  useLayoutEffect(() => {
-    const { current: element } = ref
-    if (!element) return
-
-    const title = clipped
-      ? props.altText ?? typeof props.children === 'string' ? String(props.children) : ''
-      : ''
-
-    // Writing an attribute invalidates layout. With one of these per cell, an
-    // unconditional write interleaved with the offsetWidth reads that measure
-    // clipping, so every cell forced its own reflow. Assigning only on a real
-    // change lets the whole batch share one layout pass.
-    if (element.title !== title) element.title = title
-
-    if (!clipped) {
-      setExpanded(false)
-      onExpand?.(false)
-    }
-  }, [clipped, props.altText])
-
-  const expand = React.useCallback(() => {
-    if (expanded) {
-      setExpanded(false)
-      onExpand?.(false)
-      setClipped(true)
-      return
-    }
-
-    if (ref.current) {
-      contentWidth.current = ref.current.scrollWidth
-    }
-
-    setExpanded(true)
-    onExpand?.(true)
-  }, [expanded])
+/**
+ * ExpandableContent rendered as a typography element.
+ *
+ * All of the clipping, the toggle and the gradient live in ExpandableContent; what
+ * is added here is the text side of it — the typography root, word breaking, the
+ * native tooltip carrying the full value, and the nested rules for links and fields
+ * that end up inside a text cell.
+ */
+export function ExpandableText ({
+  type = 'BTR3',
+  theme,
+  altText,
+  onExpand,
+  useGradient = false,
+  className,
+  ...rawProps
+}: ExpandableTextProps): JSX.Element {
+  const { testAttributes, ...props } = useTestAttribute(rawProps)
 
   return (
-    <Text
-      className={cn(
-        styles.expandableText,
-        getClassNameWithTheme(className, theme),
-        {
-          'expandable-text-clipped': clipped,
-          'expandable-text-expanded': expanded,
-          'expandable-gradient': useGradient,
-          [styles.expandableTextClipped]: clipped,
-          [styles.expandableTextExpanded]: expanded,
-          [styles.expandableGradient]: useGradient
-        },
-        className
-      )}
-      ref={ref}
-      data-hide={expanded || !clipped ? true : undefined}
+    <ExpandableContent
+      {...props}
+      {...testAttributes}
+      as={Text}
       type={type}
       tabIndex={0}
-      {...testAttributes}
-      {...props}
-    >
-      <div className={styles.innerTextWrapper}>{props.children}</div>
-      {/* EXPERIMENT: mount the expander only when the text is actually clipped.
-          It is position:absolute + visibility:hidden until then, so it never
-          contributed to layout — only to node and listener count. */}
-      {clipped && <TextExpander onClick={expand} className="hexa-ui-expander" />}
-    </Text>
+      className={cn(styles.expandableText, getClassNameWithTheme(className, theme), className)}
+      clippedClassName="expandable-text-clipped"
+      expandedClassName="expandable-text-expanded"
+      clippedTitle={altText ?? (typeof props.children === 'string' ? props.children : undefined)}
+      useGradient={useGradient}
+      onExpand={onExpand}
+    />
   )
 }

@@ -27,8 +27,10 @@ type GetRightElementsProps<T extends TableRecord> =
     filterApi?: FilterApi<T> | null
     setFilteredRows: SetState<ITableProps<T>['dataSource']>
     setExpandedRowKeys: SetState<React.Key[]>
-    setOpenFilterSidebar: SetState<boolean>
-    setOpenColumnsSelector: SetState<boolean>
+    // Only ever called with a value; these write to the table store rather than
+    // to local state, so the functional form has nothing to update from.
+    setOpenFilterSidebar: (open: boolean) => void
+    setOpenColumnsSelector: (open: boolean) => void
   }
 
 export const getRightElements = <T extends TableRecord>({

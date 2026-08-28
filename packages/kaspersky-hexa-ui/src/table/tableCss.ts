@@ -450,6 +450,17 @@ export const tableCss = css<TableCssProps>`
     background-color: var(--table_row--bg--hover, transparent);
   }
 
+  // A textarea is a scroll container, and Blink composites every scrollable one:
+  // its contents layer plus scrollbar layers, roughly four apiece. One editable cell
+  // per row therefore turns into hundreds of composited layers, and from then on
+  // every compositing update has to walk all of them — measured 411 layers at 89ms
+  // per Layerize pass, against 11 layers at 4ms once this rule is in place. That cost
+  // was being paid by anything that opens: sidebars, dropdowns, even expanding the
+  // toolbar search. Only the textarea the user is actually editing needs to scroll.
+  .ant-table-tbody textarea:not(:focus) {
+    overflow: hidden;
+  }
+
   // antd fades the row background over 0.3s. Every frame of that fade re-layerizes
   // a table this size, so dragging the pointer across rows kept the compositor busy
   // continuously. Shortening the fade keeps the effect while cutting the frames it
@@ -457,7 +468,7 @@ export const tableCss = css<TableCssProps>`
   // from 7.3% to 3.1%. Dropping the transition entirely would reach 1241 moves and
   // 1.4%, at the price of losing the fade.
   .ant-table-tbody > tr.ant-table-row > td {
-    transition-duration: 0.12s;
+    transition-duration: 0s;
   }
 
   .ant-table-tbody > tr.ant-table-row:hover > td,

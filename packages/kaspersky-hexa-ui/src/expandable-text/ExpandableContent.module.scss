@@ -1,0 +1,58 @@
+.root {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  // The root is the clipper as well as the positioning context, so no inner
+  // wrapper element is needed to get an ellipsis.
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  // The toggle is an ActionButton, so the box itself — padding, border, transparent
+  // background, icon colour, cursor and the focus ring — comes from there. Only its
+  // placement inside the clipper belongs here.
+  :global(.hexa-ui-expander) {
+    z-index: 2;
+    position: absolute;
+    top: 4px;
+    right: 0;
+    justify-content: center;
+  }
+
+  &.clipped {
+    padding-inline-end: 20px;
+  }
+
+  &.expanded {
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+
+    :global(.hexa-ui-expander) {
+      transform: rotate(180deg);
+    }
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--focus--stroke);
+    border-radius: var(--radius--xs);
+    outline: none;
+  }
+}
+
+.gradient {
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 80px;
+    z-index: 1;
+    pointer-events: none;
+    background-color: var(--bg--neutral--level_0);
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #000 75%);
+  }
+
+  &[data-hide]::after {
+    display: none;
+  }
+}

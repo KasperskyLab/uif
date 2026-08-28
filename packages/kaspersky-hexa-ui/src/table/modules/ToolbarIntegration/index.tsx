@@ -113,16 +113,23 @@ export const ToolbarIntegration = <T extends TableRecord = TableRecord> (
   const getLeftItems = props.toolbar?.getLeftItems
   const [filteredRows, setFilteredRows] = useState(props.dataSource)
   const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([])
-  const [openColumnsSelector, setOpenColumnsSelector] = useState(false)
-  const [openFilterSidebar, setOpenFilterSidebar] = useState(false)
+  // The two sidebar flags live in the table store, not in local state. As props
+  // they travelled through thirteen module layers into antd's Table, so opening a
+  // sidebar re-rendered the entire body — 10,719 fibers for one click on a 100x40
+  // table. This module only ever writes them; the sidebars subscribe to their own
+  // flag and are the only things that re-render.
+  const updateContext = useTableUpdate<T>()
+  const setOpenColumnsSelector = useCallback(
+    (open: boolean) => updateContext({ showColumnsSelector: open }),
+    [updateContext]
+  )
+  const setOpenFilterSidebar = useCallback(
+    (open: boolean) => updateContext({ showFilterSidebar: open }),
+    [updateContext]
+  )
   const [table, setTable] = useState(null as HTMLDivElement | null)
   const [customActions, setCustomActions] = useState<ToolbarItems<ToolbarItemKey>[]>([])
 
-  // These three used to be inline arrows. Every render handed the table a new
-  // identity for each, and the table passes them straight down, so any toolbar
-  // state change re-rendered the whole body instead of just the toolbar.
-  const closeColumnsSelector = useCallback(() => setOpenColumnsSelector(false), [])
-  const closeFilterSidebar = useCallback(() => setOpenFilterSidebar(false), [])
   const handleExpand = useCallback((expanded: boolean, newRow: { key?: Key, [propName: string]: any }) => {
     const newRowId = newRow.key
     setExpandedRowKeys(current => (expanded && newRowId
@@ -185,10 +192,6 @@ export const ToolbarIntegration = <T extends TableRecord = TableRecord> (
         <div className="hexa-ui-table-ref" ref={tableRef}>
           <Component
             {...props}
-            showColumnsSelector={openColumnsSelector}
-            onCloseColumnsSelector={closeColumnsSelector}
-            showFilterSidebar={openFilterSidebar}
-            onCloseFilterSidebar={closeFilterSidebar}
             dataSource={filteredRows}
             expandedRowKeys={expandedRowKeys}
             onExpand={handleExpand}
