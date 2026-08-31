@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "generate:registry": "node scripts/generate-component-registry.mjs",
-    "check:palette": "node scripts/generate-component-registry.mjs",
+    "generate:registry": "node src/modules/component-registry/generate.mjs",
+    "check:palette": "node src/modules/component-registry/generate.mjs",
     "check:domain": "node --experimental-strip-types scripts/check-domain.mjs",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

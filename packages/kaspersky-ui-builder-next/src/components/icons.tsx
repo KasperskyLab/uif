@@ -32,8 +32,8 @@ import {
   Switch,
   Tag,
   Text,
-} from "@kl/hexa-ui-icons/16"
-import { Close2, Undo } from "@kl/hexa-ui-icons/12"
+} from "@kaspersky/hexa-ui-icons/16"
+import { Close2, Undo } from "@kaspersky/hexa-ui-icons/12"
 
 type IconProps = SVGProps<SVGSVGElement> & { size?: number | string }
 

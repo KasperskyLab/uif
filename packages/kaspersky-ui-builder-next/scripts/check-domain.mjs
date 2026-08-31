@@ -1,13 +1,13 @@
 import assert from "node:assert/strict"
 import fs from "node:fs"
 import Ajv2020 from "ajv/dist/2020.js"
-import { createEditorStore } from "../src/editor/editor-store.ts"
-import { validateFormSemantics } from "../src/domain/semantic-validator.ts"
-import { normalizeFormSchema } from "../src/domain/serialization.ts"
+import { createEditorStore } from "../src/modules/history-store/editor-store.ts"
+import { validateFormSemantics } from "../src/modules/semantic-validator/semantic-validator.ts"
+import { normalizeFormSchema } from "../src/modules/schema-builder/serialization.ts"
 
 const registry = JSON.parse(
   fs.readFileSync(
-    new URL("../src/generated/component-registry.json", import.meta.url),
+    new URL("../src/modules/component-registry/generated.json", import.meta.url),
     "utf8"
   )
 )
@@ -152,7 +152,78 @@ assert.equal(normalized.settings?.showInNav, false)
 assert.equal(normalized.elements[0].state?.visible, true)
 assert.equal(normalized.elements[0].style?.controlWidth, 0)
 assert.equal(normalized.elements[0].props.enabled, false)
-assert.equal(Object.hasOwn(normalized.elements[0].props, "options"), false)
+assert.deepEqual(normalized.elements[0].props.options, [])
 assert.deepEqual(normalized.elements[0].props.emptyObject, {})
 
+const runtimeFunction = { type: "runtime", key: "legacyHandler" }
+const legacy = {
+  ...form,
+  meta: { legacy: { navigationTitle: false, size: "wide", customFields: { values: [[], null, false] } } },
+  settings: {
+    objectType: "Device",
+    dataSave: { type: "handler", function: runtimeFunction },
+    customButtonsGetter: { enabled: true, function: runtimeFunction },
+    actionBarAssistantBootstrapper: { enabled: true, function: runtimeFunction },
+    actionBarGetButtonsHandler: { enabled: false },
+    actionBarEnableOverride: true,
+  },
+  elements: [node("legacy", "react-wrapper", {
+    props: { customParams: ' { "items": [] } ', items: [[], { empty: [] }] },
+    meta: { buildType: "any", legacy: { style: { width: "50%", offsetTop: -7 } } },
+    value: { source: {
+      type: "functionHandler", getter: runtimeFunction, setter: runtimeFunction, initializeOnly: true,
+    } },
+    dependencies: [{
+      id: "enabled", property: "enabled", value: true,
+      condition: { source: { type: "function", function: runtimeFunction }, operator: "truthy" },
+    }, {
+      id: "empty-array", property: "visible", value: true,
+      condition: { source: { type: "model", path: "items" }, operator: "eq", operand: { type: "literal", value: [] } },
+    }],
+    validation: [{
+      id: "legacy-rule", name: "Legacy", type: "Legacy",
+      config: { kind: "legacy", rule: { method: "range", params: { condition: ">", range: "-10--1", values: [] } } },
+    }],
+    children: [],
+  })],
+}
+const originalLegacy = structuredClone(legacy)
+const migrated = normalizeFormSchema(legacy, registry)
+assert.equal(validateMachineSchema(migrated), true, JSON.stringify(validateMachineSchema.errors))
+assert.deepEqual(legacy, originalLegacy)
+assert.deepEqual(migrated.meta, legacy.meta)
+assert.deepEqual(migrated.elements[0].props, legacy.elements[0].props)
+assert.deepEqual(migrated.elements[0].validation, legacy.elements[0].validation)
+assert.deepEqual(migrated.elements[0].dependencies, legacy.elements[0].dependencies)
+assert.equal(Object.hasOwn(migrated.elements[0], "children"), false)
+assert.deepEqual(normalizeFormSchema(migrated, registry), migrated)
+const legacyDiagnostics = validateFormSemantics(migrated, registry)
+assert.equal(legacyDiagnostics.some((entry) => entry.blocking), false)
+assert.equal(legacyDiagnostics.some((entry) => entry.code === "LEGACY_VALIDATION"), true)
+assert.equal(legacyDiagnostics.some((entry) => entry.code === "UNKNOWN_COMPONENT"), true)
+
+const saved = JSON.parse(JSON.stringify(migrated))
+assert.deepEqual(saved, migrated)
+for (const mutate of [
+  (candidate) => { delete candidate.elements[0].validation[0].config },
+  (candidate) => { candidate.elements[0].dependencies[0].condition.operand = { type: "literal", value: true } },
+  (candidate) => { candidate.elements[0].dependencies[0].property = "unknown" },
+  (candidate) => { delete candidate.settings.customButtonsGetter.function },
+]) {
+  const invalid = structuredClone(saved)
+  mutate(invalid)
+  assert.equal(validateMachineSchema(invalid), false)
+}
+// Normalized payloads must not share mutable objects with the input or defaults.
+migrated.elements[0].props.items.push("changed")
+migrated.meta.legacy.customFields.values.push("changed")
+migrated.settings.dataSave.function.key = "changed"
+assert.deepEqual(legacy, originalLegacy)
+const emptyStructural = normalizeFormSchema({ ...form, elements: [node("empty", "Textbox", {
+  children: [], validation: [], dependencies: [],
+})] }, registry)
+for (const key of ["children", "validation", "dependencies"]) {
+  assert.equal(Object.hasOwn(emptyStructural.elements[0], key), false)
+}
+assert.equal(validateMachineSchema(emptyStructural), true)
 console.log("Domain smoke checks passed")

@@ -13,7 +13,8 @@
       "type": "array",
       "items": { "$ref": "#/$defs/schemaNode" }
     },
-    "settings": { "$ref": "#/$defs/formSettings" }
+    "settings": { "$ref": "#/$defs/formSettings" },
+    "meta": { "type": "object", "additionalProperties": true }
   },
   "$defs": {
     "nonEmptyString": {
@@ -126,25 +127,7 @@
         }
       ]
     },
-    "formDataSave": {
-      "oneOf": [
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["type"],
-          "properties": { "type": { "const": "manual" } }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["type", "server"],
-          "properties": {
-            "type": { "const": "server" },
-            "server": { "$ref": "#/$defs/serverMethodConfig" }
-          }
-        }
-      ]
-    },
+    "formDataSave": { "$ref": "#/$defs/formDataSource" },
     "actionBarButtonsOverride": {
       "type": "object",
       "additionalProperties": false,
@@ -167,7 +150,7 @@
         "showInNav": { "type": "boolean" },
         "rootForm": { "type": "boolean" },
         "ignoreValidationOnDomainSave": { "type": "boolean" },
-        "objectType": { "type": ["string", "null"], "enum": ["type1", "type2", "type3", null] },
+        "objectType": { "$ref": "#/$defs/nullableString" },
         "domain": { "$ref": "#/$defs/nullableString" },
         "buildType": { "$ref": "#/$defs/buildType" },
         "author": { "$ref": "#/$defs/nullableString" },
@@ -185,6 +168,10 @@
         "displayType": { "enum": ["default", "details", "flyout", "modal"] },
         "parentFormId": { "$ref": "#/$defs/nullableString" },
         "hideActionBarOnFormChange": { "type": "boolean" },
+        "customButtonsGetter": { "$ref": "#/$defs/toggleableFunction" },
+        "actionBarAssistantBootstrapper": { "$ref": "#/$defs/toggleableFunction" },
+        "actionBarGetButtonsHandler": { "$ref": "#/$defs/toggleableFunction" },
+        "actionBarEnableOverride": { "type": "boolean" },
         "actionBarButtons": { "$ref": "#/$defs/actionBarButtonsOverride" }
       }
     },
@@ -452,13 +439,13 @@
       "required": ["id", "property", "value", "condition"],
       "properties": {
         "id": { "$ref": "#/$defs/nonEmptyString" },
-        "property": { "enum": ["visible", "disabled", "readOnly", "loading"] },
+        "property": { "enum": ["visible", "enabled", "disabled", "readOnly", "loading"] },
         "value": { "type": "boolean" },
         "condition": { "$ref": "#/$defs/conditionExpression" }
       }
     },
     "validationType": {
-      "enum": ["Date", "Email", "Integer", "Number", "Float number", "IPv4", "IPv6", "MAC address", "Path", "Range", "String", "Proxy", "Host name", "Net bios name", "Not empty", "Length", "Group", "RangeEnum", "IPv4Mask", "IPv6Mask", "ipv4SubnetMask", "ipv6SubnetMask", "Ignore special chars", "Ignore special chars (v2)", "Ignore special chars (v3)", "Ignore special chars (v4)", "Password", "Ignore first or last spaces", "URL Input", "URL http Input", "Port", "Custom function", "Equality", "Not equal"]
+      "enum": ["Legacy", "Date", "Email", "Integer", "Number", "Float number", "IPv4", "IPv6", "MAC address", "Path", "Range", "String", "Proxy", "Host name", "Net bios name", "Not empty", "Length", "Group", "RangeEnum", "IPv4Mask", "IPv6Mask", "ipv4SubnetMask", "ipv6SubnetMask", "Ignore special chars", "Ignore special chars (v2)", "Ignore special chars (v3)", "Ignore special chars (v4)", "Password", "Ignore first or last spaces", "URL Input", "URL http Input", "Port", "Custom function", "Equality", "Not equal"]
     },
     "rangeConfig": {
       "type": "object",
@@ -542,8 +529,18 @@
         "notEquals": { "type": ["string", "null"] }
       }
     },
+    "legacyValidationConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "rule"],
+      "properties": {
+        "kind": { "const": "legacy" },
+        "rule": { "type": "object", "additionalProperties": true }
+      }
+    },
     "validationConfig": {
       "oneOf": [
+        { "$ref": "#/$defs/legacyValidationConfig" },
         { "$ref": "#/$defs/rangeConfig" },
         { "$ref": "#/$defs/lengthConfig" },
         { "$ref": "#/$defs/rangeEnumConfig" },
@@ -565,6 +562,10 @@
         "config": { "$ref": "#/$defs/validationConfig" }
       },
       "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "Legacy" } }, "required": ["type"] },
+          "then": { "properties": { "config": { "$ref": "#/$defs/legacyValidationConfig" } }, "required": ["config"] }
+        },
         {
           "if": { "properties": { "type": { "const": "Range" } }, "required": ["type"] },
           "then": { "properties": { "config": { "$ref": "#/$defs/rangeConfig" } }, "required": ["config"] }

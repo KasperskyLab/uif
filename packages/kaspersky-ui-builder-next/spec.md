@@ -44,6 +44,10 @@ View отображает количество ошибок схемы как и
 
 ## Модули
 
+Реализации находятся в отдельных папках [`src/modules/`](./src/modules/README.md).
+Каждый модуль содержит README с назначением и основными файлами. Общие типы формы
+и диагностик вынесены в `schema-model`; App Shell связывает модули, а не реализует их логику.
+
 - **App Shell / Layout** — header, вкладки и трёхколоночный интерфейс.
 - **Forms Manager** — список, создание, открытие, закрытие и сохранение форм.
 - **Component Registry** — преобразование TypeScript-типов и метаданных UI-пакета в каталог компонентов.
@@ -88,6 +92,7 @@ interface FormSchema {
   schemaVersion: number;
   elements: SchemaNode[];
   settings?: FormSettings;
+  meta?: Record<string, unknown>;
 }
 
 interface SchemaNode {
@@ -222,7 +227,7 @@ type FunctionReference =
 Группы настроек используются только в UI Inspector как заголовки аккордеонов. Они не создают дополнительные уровни вложенности в JSON. Поля `id` и `name` находятся непосредственно в `FormSchema`, остальные настройки — в плоском объекте `settings`, кроме явно сложносоставных значений.
 
 ```ts
-type ObjectType = "type1" | "type2" | "type3";
+type ObjectType = string;
 type FormDisplayType = "default" | "details" | "flyout" | "modal";
 
 interface FormSettings {
@@ -255,6 +260,10 @@ interface FormSettings {
   parentFormId?: string;
 
   hideActionBarOnFormChange?: boolean;
+  customButtonsGetter?: ToggleableFunction;
+  actionBarAssistantBootstrapper?: ToggleableFunction;
+  actionBarGetButtonsHandler?: ToggleableFunction;
+  actionBarEnableOverride?: boolean;
   actionBarButtons?: ActionBarButtonsOverride;
 }
 
@@ -291,14 +300,7 @@ type FormDataSource =
       server: ServerMethodConfig;
     };
 
-type FormDataSave =
-  | {
-      type: "manual";
-    }
-  | {
-      type: "server";
-      server: ServerMethodConfig;
-    };
+type FormDataSave = FormDataSource;
 
 interface ActionBarButtonsOverride {
   enabled: boolean;
@@ -321,12 +323,12 @@ interface ActionBarButtonsOverride {
 | `showInNav` | Отображать форму в навигации | Чекбокс |
 | `rootForm` | Root форма | Чекбокс |
 | `ignoreValidationOnDomainSave` | Игнорировать валидацию формы при сохранении домена | Чекбокс |
-| `objectType` | Тип объекта | Необязательный select: `type1`, `type2`, `type3` |
+| `objectType` | Тип объекта | Необязательная строка |
 | `domain` | Домен | Текстовое поле |
 | `buildType` | Тип билда | Select: `any`, `A`, `typeB` |
 | `author` | Автор | Текстовое поле |
 
-Подписи значений `objectType`: `type1` — «Type1», `type2` — «Type2», `type3` — «Type3». Значение можно не выбирать.
+`objectType` допускает произвольное имя типа объекта.
 
 ### Данные
 
@@ -733,7 +735,7 @@ TypeScript определяет структуру и допустимые зн�
 ### Загрузка и проверка пакета
 
 - Билдер читает настроенный локальный `palette.json`, проверяет manifest и совместимость установленной версии `package.name` с `package.versionRange`, затем генерирует `ComponentDefinition[]`.
-- Текущий генератор запускается командой `npm run generate:registry` и сохраняет нормализованный результат в `src/generated/component-registry.json`.
+- Текущий генератор запускается командой `npm run generate:registry` и сохраняет нормализованный результат в `src/modules/component-registry/generated.json`.
 - Контракт локального manifest описан машинной схемой `schemas/palette.schema.json`.
 - Если пакет в будущем начнёт поставлять собственный `palette.json`, источник manifest выбирается настройкой билдера; контракт остаётся тем же.
 - Отсутствие `palette.json`, неподдерживаемая `schemaVersion`, повторяющийся `type`, отсутствующий `exportName`/`propsType` или ошибка генерации props делают соответствующий пакет либо компонент недоступным в палитре и отображаются как диагностическая ошибка.
@@ -782,7 +784,7 @@ TypeScript определяет структуру и допустимые зн�
 Динамические состояния задаются массивом `dependencies`. Имя `visibility` не используется; оно заменено на `visible`.
 
 ```ts
-type DependencyProperty = "visible" | "disabled" | "readOnly" | "loading";
+type DependencyProperty = "visible" | "enabled" | "disabled" | "readOnly" | "loading";
 type ConditionCombinator = "AND" | "OR";
 
 interface ElementDependency {
@@ -1057,6 +1059,7 @@ interface ValidationRule {
 }
 
 type ValidationType =
+  | "Legacy"
   | "Date"
   | "Email"
   | "Integer"
@@ -1095,6 +1098,7 @@ type ValidationType =
 type LengthOperator = ">" | ">=" | "<=" | "<" | "=";
 
 type ValidationConfig =
+  | { kind: "legacy"; rule: Record<string, unknown> }
   | { kind: "range"; from?: number | string; to?: number | string }
   | { kind: "length"; operator: LengthOperator; value: number }
   | {
@@ -1158,7 +1162,7 @@ interface ElementMeta {
 
 - JSON-редактор и загрузка формы используют `schemas/form.schema.json` как диспетчер и выполняют полную проверку Draft 2020-12 перед применением данных.
 - Ошибки JSON Schema преобразуются в общий `Diagnostic[]`, содержат JSON Pointer в `path` и, когда возможно, `elementId`; они отображаются во View и соответствующем Inspector.
-- Перед сериализацией форма проходит единый нормализатор: материализует defaults `settings`, `state`, `style`, `props` и `meta`, сохраняет `false`, `""`, `null` и составные объекты, но удаляет необязательные пустые массивы. Обязательный массив `elements` сохраняется даже пустым.
+- Перед сериализацией форма проходит единый нормализатор: материализует defaults `settings`, `state`, `style`, `props` и `meta`, сохраняет `false`, `""`, `null` и составные объекты, но удаляет только пустые структурные `children`, `validation`, `dependencies`. Массивы внутри props, мета и параметров сохраняются. Обязательный массив `elements` сохраняется даже пустым.
 - Эталонные минимальная и полная формы хранятся в `fixtures/forms/` и проверяются машинной схемой в domain checks.
 
 - Используется JSON Schema Draft 2020-12.
@@ -1193,3 +1197,12 @@ interface ElementMeta {
 - Undo/redo и dirty-state.
 - Сборка, валидация, импорт и экспорт JSON-схемы.
 - Сохранение через заменяемый persistence-адаптер.
+
+
+## Совместимость со старыми формами
+
+Дополнения к контракту v1 и правила переноса определены в [migration.md](./migration.md).
+Машиночитаемая схема и `src/modules/schema-model/form-schema.ts` включают открытый `objectType`,
+`FormSchema.meta`, зависимость `enabled`, вариант валидации `Legacy`, функции
+кнопок и общий контракт источника/сохранения данных с `handler`. Эти дополнения
+расширяют приведённые выше примеры типов без изменения schemaVersion.
