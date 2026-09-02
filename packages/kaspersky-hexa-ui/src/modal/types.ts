@@ -1,5 +1,5 @@
 import { Theme } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingProps } from '@helpers/typesHelpers'
 import { ButtonMode } from '@src/button/types'
 import type { ModalProps as AntdModalProps } from 'antd'
 import { MouseEventHandler, ReactNode } from 'react'
@@ -24,35 +24,11 @@ export enum ActionsMap {
 
 type ActionConfig = Partial<Record<keyof typeof ActionsMap, ActionType>>
 
-export type ModalColorConfig = {
-  background?: string,
-  border?: string,
-  color?: string,
-  boxShadow?: string,
-  icon?: string,
-  maskBackground?: string,
-  modeBorder: string
-}
-
-export type ModalSizeConfig = {
-  width?: string,
-  top?: string
-}
-
-export type ModalCssConfig = ModalColorConfig & ModalSizeConfig
-
 export type ModalMode = 'default' | 'warning' | 'error' | 'success' | 'ai'
 
 export type ModalSize = 'small' | 'large'
 
-export type ModalThemeProps = {
-  /** Custom theme */
-  theme?: Theme,
-  /** Color mode */
-  mode?: ModalMode,
-  /** Size */
-  size?: ModalSize
-}
+export type ModalPosition = 'left' | 'center' | 'right'
 
 type AntdModalPropsToOmit =
   'title' |
@@ -76,7 +52,13 @@ export type ModalProps = Omit<AntdModalProps, AntdModalPropsToOmit> & {
   /** Actions set, use the actions prop to let users act on the content in the modal */
   actions?: ActionConfig,
   /** More buttons for modal, need for backward compatibility with console Confirmation Popup */
-  customButtons?: ActionType[]
-} & ModalThemeProps & TestingProps
-
-export type ModalViewProps = ToViewProps<ModalProps, ModalCssConfig, Omit<ModalThemeProps, 'mode'>>
+  customButtons?: ActionType[],
+  /** Color mode */
+  mode?: ModalMode,
+  /** Size */
+  size?: ModalSize,
+  /** Custom theme */
+  theme?: Theme,
+  /** Enables dialog mode: no overlay, non-blocking, always small size, aligned to bottom with configurable horizontal position. */
+  dialog?: { position: ModalPosition }
+} & TestingProps

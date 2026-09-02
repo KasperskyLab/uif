@@ -105,7 +105,7 @@ export const PreviewPane = styled.div<{
   flex-direction: column;
   align-items: flex-start;
   position: relative;
-  z-index: 0;
+  z-index: 1;
   isolation: isolate;
   background-color: ${({ $mode }) =>
       $mode === 'dont'
@@ -115,6 +115,17 @@ export const PreviewPane = styled.div<{
   min-height: ${({ $minHeight }) => ($minHeight !== undefined ? `${$minHeight}px` : 'auto')};
   max-height: ${({ $maxHeight }) => ($maxHeight !== undefined ? `${$maxHeight}px` : 'none')};
   transition: background-color 0.2s ease;
+
+  .ant-modal-root,
+  .ant-modal-mask,
+  .ant-modal-wrap {
+    position: absolute;
+    inset: 0;
+  }
+
+  .ant-modal-wrap {
+    overflow: auto;
+  }
 `
 
 export const CodeToggleBar = styled.div`

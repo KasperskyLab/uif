@@ -39,6 +39,11 @@ export const Card: FC<CardProps> = (rawProps) => {
   return <CardView {...props} testId={themedProps.testId} klId={themedProps.klId} />
 }
 
+Card.defaultProps = {
+  mode: 'base',
+  size: 'medium'
+}
+
 const CardView: FC<CardViewProps> = ({
   style,
   children,

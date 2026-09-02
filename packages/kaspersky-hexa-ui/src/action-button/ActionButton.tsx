@@ -32,22 +32,21 @@ const ActionIcon = ({ size }: { size: ActionButtonSize }) => {
   }
 }
 
-export const ActionButton: FC<ActionButtonProps> = (rawProps) => {
-  const {
-    children,
-    className,
-    size = 'medium',
-    type = 'button',
-    mode = 'ghost',
-    interactive = true,
-    icon,
-    elementAfter,
-    noIcon = false,
-    testAttributes,
-    theme,
-    _wrapInSpan = false,
-    ...rest
-  } = useTestAttribute(rawProps)
+export const ActionButton: FC<ActionButtonProps> = ({
+  children,
+  className,
+  size = 'medium',
+  type = 'button',
+  mode = 'ghost',
+  interactive = true,
+  icon,
+  elementAfter,
+  noIcon = false,
+  theme,
+  _wrapInSpan = false,
+  ...rawProps
+}) => {
+  const { testAttributes, ...rest } = useTestAttribute(rawProps)
 
   const props = {
     className: cn(

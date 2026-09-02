@@ -1,0 +1,26 @@
+// Only the text side lives here. Clipping, the toggle and the gradient come from
+// ExpandableContent.
+.expandableText {
+  word-break: normal;
+
+  &[data-expanded] {
+    word-break: break-all;
+  }
+
+  :global(kl-auto-link > div) {
+    display: inline;
+  }
+
+  :global(.kl6-field),
+  :global(.kl6-field-control-wrapper),
+  :global(.kl6-field-control-box) {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  :global(.kl6-link),
+  :global(.kl6-link > span) {
+    white-space: inherit;
+    word-break: inherit;
+  }
+}

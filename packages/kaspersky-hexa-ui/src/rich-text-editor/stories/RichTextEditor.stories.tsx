@@ -1,81 +1,57 @@
 import { badges } from '@sb/badges'
-import { withMeta } from '@sb/components/Meta'
-import type { Meta, StoryObj } from '@storybook/react'
+import { buildStoryArgTypes, getControlsInclude } from '@sb/components/Documentation'
+import type { Meta } from '@storybook/react'
 import React from 'react'
 
 import MetaData from '../__meta__/meta.json'
 import { allPlugins } from '../index'
 import { RichTextEditorContainer as RichTextEditor } from '../RichTextEditorContainer'
 
-import {
-  initialValue,
-  initialValueEmpty,
-  longValue
-} from './richTextEditorData'
+import { Basic, Story, StoryRichTextEditorProps } from './helpers'
+import { componentPropPresentation, defaultArgs } from './RichTextEditor.controls'
+import { initialValue } from './richTextEditorData'
 
 const Container = ({ children }: { children?: React.ReactNode }) => (
   <div style={{ width: '100%' }}>{children}</div>
 )
 
-const meta = {
-  title: 'Hexa UI Components/RichTextEditor',
-  component: RichTextEditor,
-  parameters: {
-    badges: [badges.stable],
-    docs: {
-      page: withMeta(MetaData)
-    }
+export const richTextEditorStorySettings: Meta<StoryRichTextEditorProps> = {
+  argTypes: {
+    ...buildStoryArgTypes(componentPropPresentation)
   },
   args: {
-    placeholder: 'Начните вводить текст...',
-    plugins: allPlugins,
+    ...defaultArgs,
     initialValue,
-    readOnly: false,
+    plugins: allPlugins,
     testId: 'rich-text-editor'
   },
-  argTypes: {
-    onChange: { action: 'changed' },
-    onBlur: { action: 'blurred' },
-    onFocus: { action: 'focused' },
-    onHover: { action: 'hovered' }
+  parameters: {
+    badges: [badges.stable],
+    design: MetaData.pixsoView
   },
   decorators: [
     (Story, context) => <Container><Story {...context} /></Container>
-  ]
-} satisfies Meta<typeof RichTextEditor>
+  ],
+  render: Basic.bind({})
+}
+
+const meta = {
+  title: 'Hexa UI Components/RichTextEditor',
+  component: RichTextEditor,
+  tags: ['!autodocs'],
+  includeStories: ['Playground'],
+  excludeStories: ['richTextEditorStorySettings'],
+  ...richTextEditorStorySettings
+} satisfies Meta<StoryRichTextEditorProps>
 
 export default meta
 
-type Story = StoryObj<typeof RichTextEditor>
-
-export const RichTextEnabled: Story = {
-  args: {
-    enabled: true
-  }
-}
-
-export const ReadOnly: Story = {
-  args: {
-    readOnly: true
-  }
-}
-
-export const Empty: Story = {
-  args: {
-    initialValue: initialValueEmpty
-  }
-}
-
-export const CustomPlaceholder: Story = {
-  args: {
-    initialValue: initialValueEmpty,
-    placeholder: 'This is custom placeholder'
-  }
-}
-
-export const WithTextLimit: Story = {
-  args: {
-    initialValue: longValue,
-    limitTextSize: 60
+export const Playground: Story = {
+  name: 'Playground',
+  parameters: {
+    controls: {
+      include: getControlsInclude(componentPropPresentation),
+      sort: 'none'
+    }
   }
 }

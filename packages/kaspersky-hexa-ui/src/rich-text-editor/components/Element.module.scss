@@ -1,0 +1,13 @@
+.element {
+  color: var(--fg--neutral--primary);
+  font-family: 'Kaspersky Sans Text';
+  line-height: 20px;
+  
+  &.disabled {
+    color: var(--fg--neutral--tertiary);
+  }
+
+  &.readOnly {
+    color: var(--fg--neutral--muted);
+  }
+}

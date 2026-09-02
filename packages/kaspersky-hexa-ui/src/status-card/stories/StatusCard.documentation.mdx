@@ -1,0 +1,161 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { StatusCard } from '../StatusCard'
+import * as StatusCardStories from './StatusCard.stories'
+import { statusCardDesignPropPresentation } from './StatusCard.design.properties'
+
+<Meta of={StatusCardStories} name="StatusCard Docs" />
+
+<DocPageLayout>
+  <DocPageHeader
+    title="StatusCard"
+  />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **StatusCard** — карточка для заметного отображения статуса объекта, сообщения и связанных действий
+
+          Используйте StatusCard, когда результат, предупреждение или критическое состояние нужно выделить среди обычного контента и дополнить пояснением либо следующим действием. Карточка подходит для статуса устройства, лицензии, проверки, операции или процесса, который требует внимания пользователя.
+
+          Формулируйте заголовок как краткий итог, а описание используйте для существенной детали или следующего шага. Не применяйте StatusCard для обычной группировки контента: для этого выбирайте Card; для компактного статуса рядом с элементом — Status."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**StatusCard** объединяет иллюстрацию статуса, заголовок, описание, дополнительные элементы и действия в одном блоке. Внешний вид задают **mode**, **size** и **iconVariant**; содержимое — **title**, **description**, **children** и **actions**."
+
+      />
+
+      <DocExampleBlock
+        title="mode"
+        description="Обязательный проп. Семантический цветовой режим карточки. Доступные значения: `success`, `warning`, `critical`, `error`. По умолчанию — `critical`."
+        code={`
+          <StatusCard mode="success" title="Операция выполнена" />
+          <StatusCard mode="error" title="Операция не выполнена" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="size"
+        description="Размер иллюстрации и иконки статуса. Доступные значения: `small`, `medium`, `large`. По умолчанию — `medium`."
+        code={`
+          <StatusCard mode="success" size="small" title="Компактный статус" />
+          <StatusCard mode="success" size="large" title="Крупный статус" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="iconVariant"
+        description="Вариант иллюстрации статуса. Доступные значения: `default`, `shield`. По умолчанию — `default`."
+        code={`
+          <StatusCard
+            mode="success"
+            iconVariant="default"
+            title="Стандартная иллюстрация"
+          />
+          <StatusCard
+            mode="warning"
+            iconVariant="shield"
+            title="Иллюстрация со щитом"
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="title и description"
+        description="**title** задаёт заголовок карточки. **description** выводит под ним текст или произвольный React-узел. Если значение не передано, соответствующая область не отображается."
+        code={`
+          <StatusCard
+            mode="warning"
+            title="Требуется внимание"
+            description="Проверьте параметры перед продолжением"
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="image"
+        description="Управляет отображением иллюстрации статуса. По умолчанию — `true`."
+        code={`
+          <StatusCard mode="success" image={false} title="Статус без иллюстрации" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="actions"
+        description="Массив свойств Button для связанных действий. Каждое действие отображается как вторичная кнопка."
+        code={`
+          <StatusCard
+            mode="error"
+            title="Не удалось выполнить операцию"
+            actions={[{ text: 'Повторить', onClick: () => alert('Повторить') }]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="children"
+        description="Произвольное дополнительное содержимое, которое располагается под основной информацией карточки."
+        code={`
+          <StatusCard mode="success" title="Лицензия активна">
+            <span>Действует до 31 декабря</span>
+          </StatusCard>
+        `}
+      />
+
+      <DocExampleBlock
+        title="width"
+        description="Ширина карточки в пикселях. Если **width** не задан, компонент использует ширину родительского контейнера."
+        code={`
+          <StatusCard mode="success" width={480} title="Карточка фиксированной ширины" />
+        `}
+
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={StatusCardStories} />
+      <AutodocArgsTable components={StatusCard} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=114333:418421)"
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(statusCardDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="StatusCard" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

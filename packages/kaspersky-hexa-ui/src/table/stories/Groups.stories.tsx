@@ -111,8 +111,7 @@ const meta: Meta<ITableProps> = {
     },
     dataSource,
     columns,
-    groupBy: GROUP_BY,
-    borderedStyle: false
+    groupBy: GROUP_BY
   },
   argTypes: {
     groupBy: {
@@ -128,7 +127,8 @@ const meta: Meta<ITableProps> = {
   },
   decorators: [
     (Story, context) => <Space gap="grouped"><Story {...context} /></Space>
-  ]
+  ],
+  tags: ['!autodocs']
 }
 
 export default meta

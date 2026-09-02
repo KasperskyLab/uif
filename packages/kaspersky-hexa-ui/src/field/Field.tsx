@@ -1,68 +1,68 @@
-import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
+import { getChildTestProps, useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { ActionButton } from '@src/action-button'
 import { FormLabel } from '@src/form-label'
 import { HelpMessage } from '@src/help-message'
 import { Markdown } from '@src/markdown'
 import { Popover } from '@src/popover'
 import cn from 'classnames'
-import React, { FC } from 'react'
-import styled from 'styled-components'
+import React, { CSSProperties, FC } from 'react'
 
 import { Help, StatusInfoOutline } from '@kaspersky/hexa-ui-icons/16'
 
-import { fieldCss } from './fieldCss'
+import styles from './Field.module.scss'
+import { getGridStyle } from './getGridStyle'
 import { FieldProps } from './types'
-import { useThemedField } from './useThemedField'
 
-const StyledField = styled.div.withConfig({
-  shouldForwardProp: prop => !['cssConfig', 'labelType', 'controlWidth', 'gridLayout', 'gridPreset'].includes(prop)
-})`${fieldCss}`
-
-export const Field: FC<FieldProps> = (props: FieldProps) => {
-  const {
-    additionalComponent,
-    className,
-    control,
-    controlWidth,
-    cssConfig,
-    description,
-    getPopupContainer,
-    gridLayout,
-    gridPreset,
-    label,
-    labelPosition = 'top',
-    labelType = 'default',
-    message,
-    messageMode = 'error',
-    onHelpClick,
-    popoverPlacement,
-    popoverWidth,
-    required = false,
-    style,
-    testAttributes,
-    tooltip,
-    wrapperClassNames
-  } = useTestAttribute(useThemedField(props))
+export const Field: FC<FieldProps> = ({
+  additionalComponent,
+  className,
+  control,
+  controlWidth,
+  description,
+  getPopupContainer,
+  gridLayout,
+  gridPreset,
+  label,
+  labelPosition = 'top',
+  labelType = 'default',
+  message,
+  messageMode = 'error',
+  onHelpClick,
+  popoverPlacement,
+  popoverWidth,
+  required = false,
+  style,
+  theme,
+  tooltip,
+  wrapperClassNames,
+  ...props
+}: FieldProps) => {
+  const { testAttributes } = useTestAttribute(props)
   const getParentNode = (trigger: HTMLElement) => trigger.parentElement as HTMLElement
 
+  const isGrid = Boolean(gridLayout || gridPreset)
+  const rootStyle: CSSProperties = {
+    ...(isGrid ? getGridStyle({ gridLayout, gridPreset, controlWidth }) : {}),
+    ...(controlWidth ? { '--field-control-width': `${controlWidth}px` } : {}),
+    ...style
+  }
+
   return (
-    <StyledField
+    <div
       className={cn(
-        className,
+        getClassNameWithTheme(className, theme),
+        styles.field,
         'kl6-field',
         {
-          'kl6-field-grid-layout': gridLayout || gridPreset,
+          [styles.controlWidthFixed]: Boolean(controlWidth),
+          'kl6-field-grid-layout': isGrid,
           [`kl6-field-label-type-${labelType}`]: !gridLayout && !gridPreset && labelPosition === 'before',
           [`kl6-field-label-position-${labelPosition}`]: !gridLayout && !gridPreset,
           [`_label-${labelPosition}`]: !gridLayout && !gridPreset
         }
       )}
-      cssConfig={cssConfig}
-      labelType={labelType}
-      controlWidth={controlWidth}
-      gridLayout={gridLayout}
-      gridPreset={gridPreset}
-      style={style}
+      style={rootStyle}
       {...testAttributes}
     >
       {label && (
@@ -103,10 +103,21 @@ export const Field: FC<FieldProps> = (props: FieldProps) => {
             </div>
           )}
         </div>
-        {description && <HelpMessage text={<Markdown value={description} withoutTextStyle={true} />} />}
-        {message && <HelpMessage mode={messageMode} text={message} />}
+        {description && (
+          <HelpMessage
+            text={<Markdown value={description} withoutTextStyle />}
+            {...getChildTestProps('description', testAttributes)}
+          />
+        )}
+        {message && (
+          <HelpMessage
+            mode={messageMode}
+            text={message}
+            {...getChildTestProps('message', testAttributes)}
+          />
+        )}
         {additionalComponent}
       </div>
-    </StyledField>
+    </div>
   )
 }

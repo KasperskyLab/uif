@@ -48,7 +48,7 @@ export const Textarea: FC<TextboxTextareaProps> = forwardRef((props, ref) => {
   return (
     <StyledTextareaContainer
       cssConfig={cssConfig}
-      className={cn({
+      className={cn(className, {
         'kl6-textbox-textarea-has-counter': showCount
       })}
       disabled={disabled}

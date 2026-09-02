@@ -14,11 +14,11 @@ import { ITableProps, TableColumn } from '../types'
 import { Story, Wrapper } from './_commonConstants'
 
 const meta: Meta<ITableProps> = {
-  title: 'Hexa UI Components/Table/RefHandlers',
+  title: 'Hexa UI Components/Table/[DEV]/RefHandlers',
   component: Table,
   args: {
     columns: tableColumns as TableColumn[],
-    dataSourceFunction: createMockDataSourceFunction(generatedData),
+    dataSourceFunction: createMockDataSourceFunction(generatedData, tableColumns),
     useFiltersSidebar: true,
     toolbar: {
       showFilterSidebar: true
@@ -30,8 +30,7 @@ const meta: Meta<ITableProps> = {
       builtInRowSelection: true,
       processSelection: (args) => console.debug('processSelection', args)
     },
-    onDataSourceChange: (args) => console.debug('onDataSourceChange', args),
-    borderedStyle: false
+    onDataSourceChange: (args) => console.debug('onDataSourceChange', args)
   },
   parameters: {
     badges: [badges.stable],

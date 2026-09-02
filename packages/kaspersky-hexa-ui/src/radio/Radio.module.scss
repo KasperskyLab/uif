@@ -1,0 +1,210 @@
+// Control class: applied to every .ant-radio-wrapper (Radio options and the
+// Table row-selection radio via getCheckboxProps). Owns ALL painting; guarded
+// by .ant-radio-wrapper so it is inert if it ever lands on another element.
+.radio:global(.ant-radio-wrapper) {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  gap: 4px;
+  padding: 0;
+  margin: 0;
+
+  color: var(--fg--neutral--primary);
+  white-space: unset;
+
+  & > span + span {
+    padding: 0 0 0 4px;
+  }
+
+  // dot circle
+  :global(.ant-radio-inner) {
+    width: 14px;
+    height: 14px;
+    background-color: var(--bg--neutral--level_0);
+    border-color: var(--border--neutral--bold);
+
+    &::after {
+      transform: scale(0.5);
+      width: 16px;
+      height: 16px;
+      margin-top: -8px;
+      margin-left: -8px;
+      transition: opacity 0.1s ease-in-out !important;
+      left: 50%;
+      top: 50%;
+      background-color: transparent;
+    }
+  }
+
+  // checked: border stays neutral, only dot changes (override antd #1890ff)
+  :global(.ant-radio-checked) :global(.ant-radio-inner) {
+    &::after {
+      background-color: var(--common--accent--enabled);
+    }
+  }
+
+  :global(.ant-radio-checked)::after {
+    display: none;
+  }
+
+  // hover
+  &:hover :global(.ant-radio-inner),
+  :global(.ant-radio):hover :global(.ant-radio-inner) {
+    border-color: var(--common--accent--hover);
+
+    &::after {
+      background-color: var(--common--accent--hover);
+    }
+  }
+
+  &:hover :global(.ant-radio-checked) :global(.ant-radio-inner) {
+    &::after {
+      background-color: var(--common--accent--hover);
+    }
+  }
+
+  // active
+  &:active :global(.ant-radio-inner) {
+    border-color: var(--common--accent--active);
+
+    &::after {
+      background-color: var(--common--accent--active);
+    }
+  }
+
+  &:active :global(.ant-radio-checked) :global(.ant-radio-inner) {
+    &::after {
+      background-color: var(--common--accent--active);
+    }
+  }
+
+  // focus
+  :global(.ant-radio-input):focus + :global(.ant-radio-inner) {
+    outline: none;
+    box-shadow: none;
+  }
+
+  :global(.ant-radio-input):focus-visible + :global(.ant-radio-inner) {
+    outline: none;
+    box-shadow: 0px 0px 0px 2px var(--border--color--focus);
+  }
+
+  // disabled. antd задаёт border-color и background через !important
+  &:global(.ant-radio-wrapper-disabled) {
+    &, * {
+      cursor: default;
+    }
+
+    :global(.ant-radio-inner) {
+      background-color: var(--bg--neutral_transparent--level_2) !important;
+      border-color: var(--border--neutral--subtle_overlay) !important;
+
+      &::after {
+        background-color: var(--bg--neutral_transparent--level_3) !important;
+      }
+    }
+  }
+
+  // readonly: внутри это тот же disabled, поэтому та же борьба с !important
+  &:global(.kl-radio-readonly) {
+    &, * {
+      cursor: default;
+    }
+
+    :global(.ant-radio-inner) {
+      background-color: var(--bg--neutral_transparent--level_2) !important;
+      border-color: var(--border--neutral--subtle_overlay) !important;
+
+      &::after {
+        background-color: var(--bg--accent_subtle_level_1--active) !important;
+      }
+    }
+
+    :global(.ant-radio-checked) :global(.ant-radio-inner) {
+      background-color: var(--bg--accent_subtle_level_1--enabled) !important;
+    }
+  }
+
+  // invalid
+  &:global(.kl-radio-invalid):not(:global(.ant-radio-wrapper-disabled)):not(:global(.kl-radio-readonly)) {
+    :global(.ant-radio-inner) {
+      border-color: var(--common--danger--enabled);
+
+      &::after {
+        background-color: transparent;
+      }
+    }
+
+    :global(.ant-radio-checked) :global(.ant-radio-inner) {
+      border-color: var(--common--danger--enabled);
+
+      &::after {
+        background-color: var(--common--danger--enabled);
+      }
+    }
+
+    &:hover :global(.ant-radio-inner) {
+      border-color: var(--common--danger--hover);
+
+      &::after {
+        background-color: var(--common--danger--hover);
+      }
+    }
+
+    &:hover :global(.ant-radio-checked) :global(.ant-radio-inner) {
+      border-color: var(--common--danger--hover);
+
+      &::after {
+        background-color: var(--common--danger--hover);
+      }
+    }
+
+    &:active :global(.ant-radio-inner) {
+      border-color: var(--common--danger--active);
+
+      &::after {
+        background-color: var(--common--danger--active);
+      }
+    }
+
+    &:active :global(.ant-radio-checked) :global(.ant-radio-inner) {
+      border-color: var(--common--danger--active);
+
+      &::after {
+        background-color: var(--common--danger--active);
+      }
+    }
+  }
+
+  // invalid + readonly: от readonly отличается только danger-цветом точки и фона
+  &:global(.kl-radio-invalid):global(.kl-radio-readonly) {
+    :global(.ant-radio-inner) {
+      &::after {
+        background-color: var(--bg--danger_subtle_level_1--active) !important;
+      }
+    }
+
+    :global(.ant-radio-checked) :global(.ant-radio-inner) {
+      background-color: var(--bg--danger_subtle_level_1--enabled) !important;
+    }
+  }
+}
+
+// Group class: layout only, paints nothing.
+.radioGroup {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+
+  &:global(.ant-radio-vertical) {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  :global(.ant-radio) {
+    display: flex;
+    top: inherit;
+    height: 20px;
+    align-items: center;
+  }
+}

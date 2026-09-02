@@ -130,6 +130,7 @@
         },
         "filtering": {
           "add": "Agregar",
+          "addCondition": "Agregar condición",
           "clearAll": "Quitar selección a todo",
           "property": "Propiedad",
           "attribute": "Atributo",
@@ -137,10 +138,24 @@
           "from": "desde",
           "to": "hasta",
           "value": "Valor",
+          "operators": {
+            "or": "O",
+            "and": "Y"
+          },
+          "booleanFilter": {
+            "on": "ACTIVO",
+            "off": "Apagado"
+          },
           "validation": {
             "emptyValue": "Especifique el valor de filtrado",
             "duplicateFilters": "Duplique los filtros. Asegúrese de que cada filtro sea único."
           }
+        },
+        "resetSettingsModal": {
+          "content": "Todas las tareas se restablecerán a la configuración predeterminada",
+          "header": "¿Restablecer la configuración de las columnas?",
+          "firstButton": "Restablecer",
+          "secondButton": "Cancelar"
         },
         "columnHideIsUnavailable": "No es posible ocultar columnas",
         "onlyForFiltering": "Esta columna es solo para el filtrado"
@@ -149,7 +164,7 @@
         "⊆": "Contiene",
         "⊄": "No contiene",
         "cont_and": "Contiene (AND)",
-        "cont_or": "Is one of",
+        "cont_or": "Está entre",
         "ncont_or": "No contiene",
         "*=": "Regexp",
         "empty": "Vacío",
@@ -178,7 +193,8 @@
     "actionBar": {
       "unsavedChanges": "Cambios pendientes",
       "save": "Aplicar",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "resetSettings": "Restablecer configuración"
     },
     "textarea": {
       "wordsCount": "{{count}} de {{total}}"

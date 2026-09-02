@@ -75,6 +75,13 @@ export type TextboxProps = PropsWithChildren<Omit<ComponentProps<typeof Input>, 
   showClearButton?: boolean
 } & BaseTextboxProps>
 
+export type TextboxInternalProps = Omit<TextboxProps, 'onChange' | 'value'> & {
+  /** Handler */
+  onChange?: (value: string | number, mask?: IMaskInputProps) => void,
+  /** Controlled Value */
+  value?: string | number
+}
+
 export type TextboxViewProps = TextboxToViewProps<TextboxProps>
 
 export type TextboxVariants = {
@@ -140,8 +147,11 @@ export type TextboxPasswordProps = Omit<ComponentProps<typeof Input.Password>, T
 } & BaseTextboxProps
 
 // Textbox.Number
-export type TextboxNumberProps = Omit<ComponentProps<typeof AntdInputNumber>, TypesToOmit | 'controls' | 'min' | 'max'> & {
-  /** Handler  */
+export type TextboxNumberProps = Omit<
+  ComponentProps<typeof AntdInputNumber>,
+  TypesToOmit | 'controls' | 'min' | 'max' | 'prefix'
+> & {
+  /** The callback triggered when the value is changed */
   onChange?: (value: TextboxNumberProps['value']) => void,
   /** (optional) Icons for controls */
   controls?: boolean | undefined | any | {
@@ -158,6 +168,10 @@ export type TextboxNumberProps = Omit<ComponentProps<typeof AntdInputNumber>, Ty
   min?: number,
   /** The max value */
   max?: number
+  /** Prefix before the value */
+  prefix?: string,
+  /** Suffix after the value */
+  suffix?: string
 } & BaseTextboxProps
 
 // Textbox.Textarea

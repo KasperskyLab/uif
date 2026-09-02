@@ -1,4 +1,5 @@
 import { DIGITAL_SYMBOL_IN_PLACEHOLDERS } from '@design-system/tokens'
+import { useBodyDirection } from '@helpers/bodyDirection'
 import { RangeSeparator } from '@helpers/components/range-separator'
 import { WithGlobalStyles } from '@helpers/hocs/WithGlobalStyles'
 import useLocaleOptions from '@helpers/hooks/useLocaleOptions'
@@ -6,8 +7,14 @@ import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { generateDateIMaskOptions, prepareFormatForDateFNS } from '@helpers/imaskDateOptionsGenerator'
 import { ActionButton } from '@src/action-button'
 import { inputStyles } from '@src/input/inputCss'
+import ConfigProvider from 'antd/es/config-provider'
 import cn from 'classnames'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import { IMask } from 'react-imask'
 import styled from 'styled-components'
 
@@ -39,11 +46,9 @@ import {
 } from './types'
 import { useThemedPicker } from './useThemedPicker'
 
-const maskObject: any[] = []
-
 const { RangePicker: AntdRangePicker } = DatePicker
 
-const StyledRangePicker = styled(AntdRangePicker as any).withConfig<
+const StyledRangePicker = styled(AntdRangePicker).withConfig<
   RangePickerProps & { cssConfig: PickerInputCssConfig }
 >({ shouldForwardProp: (prop) => !['cssConfig'].includes(prop.toString()) })`
   ${inputStyles}
@@ -93,11 +98,16 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
   const calendarRef = useRef<HTMLDivElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
+  const maskRef = useRef<any[]>([])
+  const parseTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+
   const localeOptions = useLocaleOptions(showTime)
+
+  const { direction } = useBodyDirection()
 
   const applyMaskForInputs = (inputs: HTMLElement[]) => {
     inputs.forEach((el, i) => {
-      maskObject[i] = IMask(
+      maskRef.current[i] = IMask(
         el,
         maskOptions
       )
@@ -105,9 +115,10 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
   }
 
   const destroyMask = () => {
-    maskObject?.forEach((el) => {
-      el?.destroy()
+    maskRef.current.forEach((mask) => {
+      mask?.destroy()
     })
+    maskRef.current = []
     setIsMaskApply(false)
   }
 
@@ -186,6 +197,12 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
     setIsMaskApply(false)
   }, [maskOptions])
 
+  useEffect(() => () => {
+    maskRef.current.forEach((mask) => mask?.destroy())
+    maskRef.current = []
+    if (parseTimeoutRef.current) clearTimeout(parseTimeoutRef.current)
+  }, [])
+
   const handleOnChange = (newDate: RangeDateInputValue) => {
     onChange?.(newDate)
   }
@@ -201,7 +218,7 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
     }
 
     if (isDigital(e.key) && currentValue.split(DIGITAL_SYMBOL_IN_PLACEHOLDERS).length === 2) {
-      setTimeout(() => {
+      parseTimeoutRef.current = setTimeout(() => {
         const inputNumber = [...rangeInputs].indexOf(currentTarget)
         const result = maskOptions?.parse?.(currentTarget.value)
         Array.isArray(date) && (date[inputNumber] = result || null)
@@ -216,94 +233,101 @@ const RangePickerViewComponent: React.VFC<RangePickerViewProps> = ({
   }
 
   return (
-    <div ref={wrapperRef}>
-      <StyledRangePicker
-        ref={pickerRef}
-        {...testAttributes}
-        {...rest}
-        locale={localeOptions.locale}
-        separator={<RangeSeparator />}
-        cssConfig={cssConfig.inputCssConfig}
-        onKeyDown={handleKeyDown}
-        open={open ?? isOpen}
-        value={date}
-        disabled={disabled || readonly}
-        onOpenChange={(value: boolean) => {
-          onOpenChange?.(value)
-          setOpenState(value)
-        }}
-        onChange={(dates: RangeDateInputValue) => {
-          destroyMask()
-          setDate(dates)
-          handleOnChange(dates)
-          setIsDateValid(isValidDate(dates))
-        }}
-        onCalendarChange={(value: RangeDateInputValue) => {
-          if (value === null) {
+    <ConfigProvider direction={direction}>
+      <div ref={wrapperRef}>
+        <StyledRangePicker
+          ref={pickerRef}
+          {...testAttributes}
+          {...rest}
+          locale={localeOptions.locale}
+          separator={<RangeSeparator />}
+          cssConfig={cssConfig.inputCssConfig}
+          onKeyDown={handleKeyDown}
+          open={open ?? isOpen}
+          value={date}
+          disabled={disabled || readonly}
+          onOpenChange={(value: boolean) => {
+            onOpenChange?.(value)
+            setOpenState(value)
+          }}
+          onChange={(dates: RangeDateInputValue) => {
             destroyMask()
-            setDate([null, null])
-            handleOnChange(null)
-            return
+            setDate(dates)
+            handleOnChange(dates)
+            setIsDateValid(isValidDate(dates))
+          }}
+          onCalendarChange={(value: RangeDateInputValue) => {
+            if (value === null) {
+              destroyMask()
+              setDate([null, null])
+              handleOnChange(null)
+              return
+            }
+            onChange?.(value)
+            setDate(value)
+            setIsDateValid(isValidDate(value))
+          }}
+          renderExtraFooter={
+            presets
+              ? () => (
+                  <Presets
+                    presets={presets}
+                    onChange={(dates: RangeDateInputValue) => {
+                      setOpenState(false)
+                      destroyMask()
+                      setDate(dates)
+                      handleOnChange(dates)
+                    }}
+                  />
+                )
+              : undefined
           }
-          onChange?.(value)
-          setDate(value)
-          setIsDateValid(isValidDate(value))
-        }}
-        renderExtraFooter={
-          presets
-            ? () => (
-                <Presets
-                  presets={presets}
-                  onChange={(dates: RangeDateInputValue) => {
-                    setOpenState(false)
+          panelRender={(container: React.ReactNode) => (
+            <CalendarContainer
+              ref={calendarRef}
+              className={cn(
+                rest.className,
+                rest.dropdownClassName,
+                'kl6-datepicker-calendar',
+                {
+                  'kl6-datepicker-range-time-calendar': showTime,
+                  'kl6-datepicker-range-presets-calendar': presets?.length
+                }
+              )}
+              data-testid={`${testId}-range-calendar`}
+              cssConfig={cssConfig.pickerCssConfig}
+              onClick={onClickHandler}
+            >
+              {panelRender ? panelRender(container) : container}
+            </CalendarContainer>
+          )}
+          suffixIcon={date?.some(date => date !== null) && !disabled && !readonly
+            ? (
+                <ActionButton
+                  testId={`${testId}-calendar-clear-icon`}
+                  mode="filled"
+                  onClick={(event) => {
                     destroyMask()
-                    setDate(dates)
-                    handleOnChange(dates)
+                    setDate([null, null])
+                    handleOnChange(null)
+                    wrapperRef.current?.querySelector('input')?.focus()
+                    event.stopPropagation()
                   }}
                 />
               )
-            : undefined
-        }
-        panelRender={(container: HTMLElement) => (
-          <CalendarContainer
-            ref={calendarRef}
-            className={cn(rest.className, rest.dropdownClassName, 'kl6-datepicker-calendar', {
-              'kl6-datepicker-range-time-calendar': showTime,
-              'kl6-datepicker-range-presets-calendar': presets?.length
-            })}
-            data-testid={`${testId}-range-calendar`}
-            cssConfig={cssConfig.pickerCssConfig}
-            onClick={onClickHandler}
-          >
-            {panelRender ? panelRender(container) : container}
-          </CalendarContainer>
-        )}
-        suffixIcon={date?.some(date => date !== null) && !disabled && !readonly
-          ? (
-              <ActionButton
-                testId={`${testId}-calendar-clear-icon`}
-                mode="filled"
-                onClick={(event) => {
-                  destroyMask()
-                  setDate([null, null])
-                  handleOnChange(null)
-                  wrapperRef.current?.querySelector('input')?.focus()
-                  event.stopPropagation()
-                }}
-              />
-            )
-          : <CalendarIcon testId={`${testId}-calendar-icon`} />}
-        superNextIcon={<ArrowDoubleRightIcon testId={testId} />}
-        superPrevIcon={<ArrowDoubleLeftIcon testId={testId} />}
-        nextIcon={<ArrowRightMiniIcon testId={testId} />}
-        prevIcon={<ArrowLeftMiniIcon testId={testId} />}
-        allowClear={false}
-        placeholder={placeholder ?? [localeOptions.placeholder, localeOptions.placeholder]}
-        format={format ? prepareFormatForDateFNS(format) : localeOptions.format}
-        showTime={showTime}
-      />
-      <PickerGlobalCss cssConfig={cssConfig.pickerCssConfig} />
-    </div>
+            : <CalendarIcon testId={`${testId}-calendar-icon`} />}
+          superNextIcon={<ArrowDoubleRightIcon testId={testId} />}
+          superPrevIcon={<ArrowDoubleLeftIcon testId={testId} />}
+          nextIcon={<ArrowRightMiniIcon testId={testId} />}
+          prevIcon={<ArrowLeftMiniIcon testId={testId} />}
+          allowClear={false}
+          placeholder={placeholder ?? [localeOptions.placeholder, localeOptions.placeholder]}
+          format={format ? prepareFormatForDateFNS(format) : localeOptions.format}
+          showTime={showTime}
+        />
+        <PickerGlobalCss cssConfig={cssConfig.pickerCssConfig} />
+      </div>
+    </ConfigProvider>
   )
 }
 

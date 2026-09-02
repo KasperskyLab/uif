@@ -10,8 +10,7 @@ import React from 'react'
 
 import MetaData from '../__meta__/meta.json'
 import {
-  AnchorNavigation as AnchorNavigationComponent,
-  Navigation
+  AnchorNavigation as AnchorNavigationComponent
 } from '../AnchorNavigation'
 import { AnchorNavigationProps } from '../types'
 
@@ -34,7 +33,7 @@ const anchorNavigationControlsOrder = getControlsInclude(
 
 export const anchorNavigationStorySettings: Meta<StoryAnchorNavigationProps> = {
   argTypes: buildStoryArgTypesFromComponents(
-    [AnchorNavigationComponent, Navigation],
+    AnchorNavigationComponent,
     anchorNavigationPropPresentation
   ),
   parameters: {

@@ -75,6 +75,6 @@ describe('Chip', () => {
 
   test('should render chip with counter overflow', () => {
     const { container } = render(<DefaultChip counter={9999} />)
-    expect(getBadge(container)?.textContent).toEqual('+99')
+    expect(getBadge(container)?.textContent).toEqual('99+')
   })
 })

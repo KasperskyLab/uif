@@ -1,70 +1,458 @@
 import { Description, Meta } from '@storybook/addon-docs/blocks'
-import { AutodocArgsTable, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { FieldSet } from '@src/field-set'
+import { InputPassword } from '@src/input/InputPassword'
+import { SectionMessage } from '@src/section-message'
 import { Text } from '@src/typography'
 
 import { HelpMessage } from '../HelpMessage'
 import * as HelpMessageStories from './HelpMessage.stories'
+import { helpMessageDesignPropPresentation } from './HelpMessage.design.properties'
 
 <Meta of={HelpMessageStories} name="HelpMessage Docs" />
 
 <DocPageLayout>
 
-<DocPageHeader
-  title="HelpMessage"
-  description='**HelpMessage** — текстовый компонент для вспомогательной информации и обратной связи под полями ввода и другими элементами интерфейса'
-/>
+  <DocPageHeader title="HelpMessage" />
 
-<Tabs defaultActiveKey="description" destroyInactiveTabPane>
-  <Tabs.TabPane tab="Описание" key="description">
+  <Tabs defaultActiveKey="description" destroyInactiveTabPane>
 
-    <DocExampleBlock
-      title="Описание компонента"
-      description="**HelpMessage** выводит короткий текст под полем ввода, в форме или рядом с элементом управления. Семантика сообщения задаётся **mode**, содержимое — **text**. Компонент построен на **Text** с типографикой `BTR4` и темизацией Hexa UI."
-    />
+    <Tabs.TabPane tab="Описание" key="description">
 
-    <DocExampleBlock
-      title="mode"
-      description="Цветовой вариант сообщения. Доступные значения: `error`, `warning`, `success`, `common`. По умолчанию — `common`."
-      previewDirection="vertical"
-      code='
-    <HelpMessage mode="error" text="Error message" />
-    <HelpMessage mode="warning" text="Warning message" />
-    <HelpMessage mode="success" text="Success message" />
-    <HelpMessage mode="common" text="Common message" />'
-    />
+      <DocExampleBlock
+        title="Валидация внутри формы (Small)"
+        description="**HelpMessage** показывает короткое сообщение под полем ввода, рядом с группой полей или в секции формы. Используйте компонент, чтобы сообщить об ошибке, предупредить об ограничении, подтвердить успешное действие или дать дополнительную подсказку."
+      />
 
-    <DocExampleBlock
-      title="text"
-      description="Отображаемый текст сообщения. Принимает строку или ReactNode."
-      code={`
-<HelpMessage text="Helper text for the field" />
-<HelpMessage text={<><Placeholder /> Helper text with icon</>} />`}
-    />
+      <DocExampleBlock
+        description="Используйте **error**, чтобы показать ошибку валидации под полем формы. Текст должен объяснять проблему и подсказывать, как её исправить: «Пароль должен содержать не менее 8 символов»."
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ InputPassword, HelpMessage }}
+        code={`
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '8px 0',
+            }}
+          >
+            <div style={{ width: 360 }}>
+              <InputPassword value="123456" validationStatus="error" />
+              <HelpMessage
+                mode="error"
+                size="small"
+                text="Пароль должен содержать минимум 8 символов"
+              />
+            </div>
+          </div>
+        `}
+      />
 
-  </Tabs.TabPane>
+      <DocExampleBlock
+        description="Используйте **success**, чтобы подтвердить успешный результат: например, если поле прошло проверку, адрес электронной почты свободен или формат значения корректен. Показывайте такое сообщение, только когда оно помогает пользователю и снижает неопределённость. Не выводите **success** для каждого валидного поля: это создаёт визуальный шум."
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ InputPassword, HelpMessage }}
+        code={`
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '8px 0',
+            }}
+          >
+            <div style={{ width: 360 }}>
+              <InputPassword value="StrongPassword123" validationStatus="success" />
+              <HelpMessage mode="success" size="small" text="Все требования выполнены" />
+            </div>
+          </div>
+        `}
+      />
 
-  <Tabs.TabPane tab="Правила использования" key="howtouse">
+      <DocExampleBlock
+        description="Используйте **warning**, если действие доступно, но требует внимания пользователя: например, при слабом пароле, потенциальном конфликте или устаревшем значении."
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ InputPassword, HelpMessage }}
+        code={`
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '8px 0',
+            }}
+          >
+            <div style={{ width: 360 }}>
+              <InputPassword value="password123" validationStatus="warning" />
+              <HelpMessage
+                mode="warning"
+                size="small"
+                text="Пароль может быть недостаточно надёжным"
+              />
+            </div>
+          </div>
+        `}
+      />
 
-    <DocExampleBlock
-      title="Правила использования"
-      description="**HelpMessage** — вспомогательный текст под полем ввода, в форме или рядом с элементом управления: подсказка по формату, результат валидации, статус сохранения или нейтральное пояснение. Используйте там, где нужна короткая обратная связь без перехвата фокуса.
+      <DocExampleBlock
+        description="Используйте **common** для нейтральной подсказки: она может объяснять формат ввода, ограничения или дополнительные условия. Например: «Можно использовать только латинские буквы» или «Максимум — 500 символов»."
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ InputPassword, HelpMessage }}
+        code={`
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '8px 0',
+            }}
+          >
+            <div style={{ width: 360 }}>
+              <InputPassword placeholder="Введите пароль" />
+              <HelpMessage
+                mode="common"
+                size="small"
+                text="Используйте не менее 8 символов"
+              />
+            </div>
+          </div>
+        `}
+      />
 
-Для важных сообщений на уровне страницы или раздела применяйте **Alert**, а не **HelpMessage**."
-    />
+      <DocExampleBlock
+        title="Контекстные сообщения (Medium)"
+        description="HelpMessage можно показать в форме, секции или рядом с группой полей, чтобы сообщить о результате действия, предупредить об ограничении или дать дополнительную информацию. Используйте этот размер, если сообщение относится не к отдельному полю, а к группе настроек или разделу формы."
+      />
 
-  </Tabs.TabPane>
+      <DocExampleBlock
+        description="Используйте **error**, чтобы показать ошибку, относящуюся к форме, секции или группе полей. Сообщение должно объяснять проблему и при необходимости подсказывать, что делать дальше."
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ HelpMessage }}
+        code={`
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '8px 0',
+            }}
+          >
+            <div style={{ width: 560 }}>
+              <HelpMessage
+                mode="error"
+                size="medium"
+                text="Некоторые поля заполнены неверно"
+              />
+            </div>
+          </div>
+        `}
+      />
 
-  <Tabs.TabPane tab="Дизайнеру" key="design">
-      <Text type="H3">Дизайн</Text>
-      <Text type="BTR3">
-        Раздел зарезервирован под дизайн-гайдлайны. Содержимое будет добавлено в следующих релизах.
-      </Text>
-  </Tabs.TabPane>
+      <DocExampleBlock
+        description="Используйте **success**, чтобы подтвердить успешное завершение действия или изменение состояния. Показывайте такое сообщение, только когда оно помогает пользователю."
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ HelpMessage }}
+        code={`
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '8px 0',
+            }}
+          >
+            <div style={{ width: 560 }}>
+              <HelpMessage mode="success" size="medium" text="Изменения сохранены" />
+            </div>
+          </div>
+        `}
+      />
 
-  <Tabs.TabPane tab="Properties" key="properties">
-    <Description of={HelpMessageStories} />
-    <AutodocArgsTable components={HelpMessage} />
-  </Tabs.TabPane>
-</Tabs>
+      <DocExampleBlock
+        description="Используйте **warning**, если действие допустимо, но требует внимания пользователя или связано с ограничением, риском либо потенциальной проблемой."
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ HelpMessage }}
+        code={`
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '8px 0',
+            }}
+          >
+            <div style={{ width: 560 }}>
+              <HelpMessage mode="warning" size="medium" text="Доступно только чтение" />
+            </div>
+          </div>
+        `}
+      />
+
+      <DocExampleBlock
+        description="Используйте **common**, чтобы показать нейтральную информацию, рекомендацию или дополнительный контекст. Такое сообщение не связано с валидацией и не сообщает об ошибке, предупреждении или успешном действии."
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ HelpMessage }}
+        code={`
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '8px 0',
+            }}
+          >
+            <div style={{ width: 560 }}>
+              <HelpMessage
+                mode="common"
+                size="medium"
+                text="Данные обновляются каждые 15 минут"
+              />
+            </div>
+          </div>
+        `}
+      />
+
+      <DocExampleBlock
+        title="Выравнивание"
+        description="При отображении многострочного сообщения иконка выравнивается по верхнему краю первой строки текста."
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ HelpMessage }}
+        code={`
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              padding: '8px 0',
+            }}
+          >
+            <div style={{ width: 520 }}>
+              <HelpMessage
+                mode="error"
+                size="medium"
+                text="Укажите значение, которое будет применено к выбранному элементу. Оно должно быть в допустимом диапазоне и соответствовать нужному формату. После проверки изменения сохраняются автоматически. Если не знаете, какое значение указать, обратитесь к документации или администратору."
+              />
+            </div>
+          </div>
+        `}
+      />
+
+      <DocExampleBlock
+        title="Отображение"
+        description="
+          **size=medium** можно использовать самостоятельно или рядом с полем либо группой полей, чтобы показать дополнительную информацию.
+
+          Используйте этот размер, когда сообщение относится не к конкретному значению внутри поля, а к более широкому контексту: группе настроек, секции формы или связанному сценарию.
+
+          HelpMessage размера **medium** не подходит для сообщений валидации отдельного поля. Для ошибок, предупреждений и успешных состояний, связанных с таким полем, используйте **size=small**."
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ FieldSet, HelpMessage }}
+        code={`
+          <div style={{ width: 560 }}>
+            <FieldSet
+              items={[
+                {
+                  label: 'Country of origin of the number database',
+                  control: {
+                    component: 'select',
+                    options: [{ label: 'Kazakhstan (KZ)', value: 'kz' }],
+                    value: 'kz',
+                  },
+                },
+                {
+                  label: 'Mode',
+                  control: {
+                    component: 'select',
+                    options: [
+                      { label: 'Monitor calls and notify the user', value: 'monitor' },
+                    ],
+                    value: 'monitor',
+                  },
+                },
+                {
+                  control: (
+                    <HelpMessage
+                      mode="common"
+                      size="medium"
+                      text="Во время звонка пользователи будут получать всплывающие уведомления KES для Android с информацией о номере, его репутации и описании. Спам-звонки и звонки от возможных мошенников не блокируются."
+                    />
+                  ),
+                },
+              ]}
+            />
+          </div>
+        `}
+      />
+
+      <DocExampleBlock
+        title="Не используйте"
+        description="Не используйте **HelpMessage medium** для отображения критически важных сообщений уровня страницы или формы."
+        previewGap={8}
+        mode="dont"
+        codeBlock="hidden"
+        scope={{ HelpMessage }}
+        code={`
+          <div style={{ width: 640 }}>
+            <HelpMessage
+              mode="error"
+              size="medium"
+              text="Не удалось сохранить конфигурацию: соединение с сервером прервано. Проверьте подключение к сети и попробуйте снова."
+            />
+          </div>
+        `}
+      />
+
+      <DocExampleBlock
+        description="Для сообщений уровня страницы или формы используйте **SectionMessage**."
+        previewGap={8}
+        mode="success"
+        codeBlock="hidden"
+        scope={{ SectionMessage }}
+        code={`
+          <div style={{ width: 640 }}>
+            <SectionMessage
+              mode="error"
+              title="Не удалось сохранить конфигурацию"
+              closable
+            >
+              Не удалось сохранить конфигурацию: соединение с сервером прервано. Проверьте
+              подключение к сети и попробуйте снова.
+            </SectionMessage>
+          </div>
+        `}
+      />
+
+## Валидация внутри поля
+
+      <DocExampleBlock
+        description="Не используйте **medium** для отображения ошибок валидации внутри поля. Для таких сообщений используйте **HelpMessage small**."
+        previewGap={8}
+        mode="dont"
+        codeBlock="hidden"
+        scope={{ InputPassword, HelpMessage }}
+        code={`
+          <div style={{ width: 360 }}>
+            <InputPassword
+              size="medium"
+              placeholder="Введите пароль"
+              validationStatus="error"
+            />
+
+            <HelpMessage
+              mode="error"
+              size="medium"
+              text="Пароль не соответствует требованиям"
+            />
+          </div>
+        `}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**HelpMessage** выводит короткий текст под полем ввода, в форме или рядом с элементом управления. Семантика сообщения задаётся **mode**, содержимое — **text**. Компонент построен на **Text** с типографикой `BTR4` и темизацией Hexa UI."
+      />
+
+      <DocExampleBlock
+        title="mode"
+        description="Цветовой вариант сообщения. Доступные значения: `error`, `warning`, `success`, `common`. По умолчанию — `common`."
+        previewDirection="vertical"
+        code={`
+          <HelpMessage mode="error" text="Error message" />
+          <HelpMessage mode="warning" text="Warning message" />
+          <HelpMessage mode="success" text="Success message" />
+          <HelpMessage mode="common" text="Common message" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="size"
+        description="Определяет размер сообщения. По умолчанию — `small`: текст отображается с типографикой `BTR4` без иконки. При значении `medium` используется типографика `BTR3` и отображается иконка, соответствующая **mode**."
+        previewDirection="vertical"
+        previewGap={8}
+        code={`
+          <HelpMessage mode="error" text="Small error message" />
+          <HelpMessage mode="warning" text="Small warning message" />
+          <HelpMessage mode="success" text="Small success message" />
+          <HelpMessage mode="common" text="Small common message" />
+          <HelpMessage size="medium" mode="error" text="Medium error help message" />
+          <HelpMessage
+            size="medium"
+            mode="warning"
+            text="Medium warning help message"
+          />
+          <HelpMessage
+            size="medium"
+            mode="success"
+            text="Medium success help message"
+          />
+          <HelpMessage size="medium" mode="common" text="Medium common help message" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="text"
+        description="Отображаемый текст сообщения. Принимает строку или ReactNode."
+        code={`
+          <HelpMessage text="Helper text for the field" />
+          <HelpMessage
+            text={
+              <>
+                <Placeholder /> Helper text with icon
+              </>
+            }
+          />
+        `}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={HelpMessageStories} />
+      <AutodocArgsTable components={HelpMessage} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=76766:276996)"
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(helpMessageDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="HelpMessage" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
 
 </DocPageLayout>

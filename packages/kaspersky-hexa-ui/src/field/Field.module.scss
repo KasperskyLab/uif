@@ -1,0 +1,157 @@
+$field-max-width: 872px;
+$field-label-default-width: 235px;
+$field-control-min-width: 200px;
+
+.field {
+  width: 100%;
+  max-width: $field-max-width;
+  display: flex;
+
+  :global(.kl6-field-label) {
+    grid-area: label;
+  }
+
+  :global(.kl6-field-control-wrapper) {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    gap: 4px;
+    grid-area: control;
+
+    :global(.kl6-field-control-box) {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: $field-control-min-width;
+
+      :global(.kl6-field-control-additional) {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+
+        :global(.kl6-field-help-icon) {
+          color: var(--status--icon--low);
+        }
+      }
+    }
+  }
+
+  &#{&}:not(:has(> :global(.kl6-field-label))) :global(.kl6-field-control-wrapper) {
+    flex: 1;
+  }
+
+  
+  :global(.kl6-field-control-wrapper):has(
+    :global(.kl6-field-control-box > .kl6-checkbox-wrapper),
+    :global(.kl6-field-control-box > .ant-checkbox-group),
+    :global(.kl6-field-control-box > .ant-radio-group)
+  ) {
+    > :not(:global(.kl6-field-control-box)) {
+      margin-inline-start: 18px;
+    }
+  }
+
+  :global(.kl6-field-control-wrapper):has(> div > :global(.ant-toggle-wrapper) > :global(.form-label)) {
+    > :not(:global(.kl6-field-control-box)) {
+       margin-inline-start: 36px;
+    }
+  }
+
+  
+  &:global(.kl6-field-label-position-before) {
+    align-items: flex-start;
+    :global(.kl6-field-label) {
+      padding-inline-end: 16px;
+    }
+  }
+
+  &:global(.kl6-field-label-position-after) {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+
+    :global(.kl6-field-label) {
+      padding-inline-start: 16px;
+    }
+  }
+
+  &:global(.kl6-field-label-position-top) {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &:global(.kl6-field-label-position-before) {
+    &:global(.kl6-field-label-type-default) {
+      :global(.kl6-field-label) {
+        width: $field-label-default-width;
+      }
+      :global(.kl6-field-control-wrapper) {
+        flex: 1;
+        min-width: initial;
+      }
+    }
+
+    &:global(.kl6-field-label-type-full) {
+      :global(.kl6-field-label) {
+        flex: 1;
+        min-width: $field-label-default-width;
+      }
+      :global(.kl6-field-control-wrapper) {
+        flex: none;
+      }
+    }
+
+    &:global(.kl6-field-label-type-stretch) {
+      :global(.kl6-field-label) {
+        min-width: auto;
+      }
+      :global(.kl6-field-control-wrapper) {
+        flex: 1;
+      }
+    }
+  }
+
+  &:global(.kl6-field-grid-layout) {
+    display: grid;
+  }
+
+  &:global(.kl6-field-grid-layout),
+  &:global(.kl6-field-label-position-before),
+  &:global(.kl6-field-label-position-after) {
+    &:global(.kl6-field-label-type-default),
+    &:global(.kl6-field-label-type-full) {
+      :global(.kl6-field-label) + :global(.kl6-field-control-wrapper) {
+        max-width: var(--field-control-width, calc(#{$field-max-width} - #{$field-label-default-width}));
+      }
+    }
+
+    &:has(
+      :global(.kl6-field-control-box .ant-input),
+      :global(.kl6-field-control-box .ant-input-affix-wrapper),
+      :global(.kl6-field-control-box .ant-input-number),
+      :global(.kl6-field-control-box .ant-input-password),
+      :global(.kl6-field-control-box div > .kl-v6-textarea),
+      :global(.kl6-field-control-box div > .ant-select),
+      :global(.kl6-field-control-box div > .ant-picker),
+      :global(.kl6-field-control-box .ant-picker),
+      :global(.kl6-field-control-box .kl6-code-viewer),
+      :global(.kl6-field-control-box .ant-btn),
+      :global(.kl6-field-control-box .kl6-segmented-button),
+      :global(.kl6-field-control-box .hexa-upload),
+      :global(.kl6-field-control-box label[class*="toggleBtn"])
+    ) :global(.kl6-field-label) {
+      padding-top: 6px;
+    }
+  }
+
+  &.controlWidthFixed {
+    :global(.kl6-field-control-wrapper) :global(.kl6-field-control-box) {
+      min-width: 0;
+      width: var(--field-control-width);
+      flex: none;
+    }
+
+    :global(.kl6-field-control-wrapper) {
+      flex: none;
+    }
+  }
+}

@@ -1,0 +1,421 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Space } from '@src/space'
+import { Text } from '@src/typography'
+
+import { Button } from '../../button'
+import { SegmentedControl } from '../../segmented-control'
+
+import { Placeholder, PlusS } from '@kaspersky/hexa-ui-icons/16'
+
+import { GroupTabs, Tabs as TabsComponent } from '../Tabs'
+import * as TabsStories from './Tabs.stories'
+import {
+  tabItemDesignPropPresentation,
+  tabsDesignPropPresentation,
+} from './Tabs.design.properties'
+
+<Meta of={TabsStories} name="Tabs Docs" />
+
+<DocPageLayout>
+  <DocPageHeader title="Tabs" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        title="Описание"
+        description="**Tabs** — горизонтальная навигация между связанными разделами контента на одной странице. Компонент помогает быстро перейти к нужному разделу и сохранить контекст работы. В отличие от **SegmentedControl**, Tabs подходят для самостоятельных разделов с содержимым, а не для переключения между несколькими представлениями одного блока."
+      />
+
+      <DocExampleBlock
+        title="Когда использовать"
+        description="Используйте Tabs, когда нужно разделить связанный контент на равнозначные разделы: например, сведения об объекте, его настройки и историю изменений. Все разделы должны относиться к одной задаче, а пользователь — переходить между ними без смены страницы."
+      />
+
+      <DocExampleBlock
+        title="Когда не использовать"
+        description="Не используйте Tabs для последовательных шагов: вкладки не показывают порядок выполнения и прогресс. Для такого сценария выберите компонент пошаговой навигации. Не размещайте Tabs разных уровней друг за другом: пользователю сложно различить уровни навигации. Если под вкладками нужен второй набор переключателей, используйте **SegmentedControl**."
+      />
+
+      <DocExampleBlock
+        title="Информация и состояния"
+        description="
+          Выбранная вкладка показывает соответствующий раздел и остаётся активной до следующего переключения. Недоступная вкладка не переключает содержимое. Если список вкладок не помещается по ширине, скрытые вкладки доступны в меню «More», которое выравнивается по правому краю панели.
+
+          Добавляйте информационную иконку рядом с названием вкладки, когда короткой подписи недостаточно для понимания раздела. Иконка открывает тултип с кратким пояснением и не должна повторять название вкладки или скрывать важную информацию.
+
+          Добавляйте точку-индикатор, чтобы сообщить о несохранённых изменениях, предупреждении или критической ошибке в разделе. Используйте жёлтый индикатор для предупреждения, красный — для критической ошибки. Индикатор отображается рядом с меткой вкладки и не заменяет её.
+
+          Используйте бейдж-счётчик, чтобы показать количество вложенных элементов, например карточек, находящихся на вкладке. Счётчик дополняет название вкладки и не заменяет его." />
+
+      <DocExampleBlock
+        description="Каждая вкладка в примере показывает одно из состояний или дополнительных обозначений."
+        codeBlock="hidden"
+        code={`
+          <TabsComponent defaultActiveKey="active">
+            <TabsComponent.TabPane
+              tab={<TabsComponent.TabPaneHead text="Активная" />}
+              key="active"
+            ></TabsComponent.TabPane>
+            <TabsComponent.TabPane
+              tab={
+                <TabsComponent.TabPaneHead
+                  text="Справка"
+                  infoTooltip="Дополнительная информация о разделе"
+                />
+              }
+              key="info"
+            >
+              {' '}
+            </TabsComponent.TabPane>
+            <TabsComponent.TabPane
+              tab={
+                <TabsComponent.TabPaneHead
+                  text="Предупреждение"
+                  indicator
+                  indicatorMode="accent"
+                />
+              }
+              key="warning"
+            ></TabsComponent.TabPane>
+            <TabsComponent.TabPane
+              tab={
+                <TabsComponent.TabPaneHead
+                  text="Ошибка"
+                  indicator
+                  indicatorMode="critical"
+                />
+              }
+              key="error"
+            ></TabsComponent.TabPane>
+            <TabsComponent.TabPane
+              tab={<TabsComponent.TabPaneHead text="Счетчик" number={4} />}
+              key="counter"
+            ></TabsComponent.TabPane>
+          </TabsComponent>
+        `}
+        scope={{ TabsComponent }}
+      />
+
+      <DocExampleBlock
+        title="Недоступная вкладка"
+        description="Состояние `disabled` используйте, если раздел временно нельзя открыть. Всегда добавляйте к такой вкладке тултип: он объясняет причину недоступности и условие, после которого раздел станет доступен."
+        codeBlock="hidden"
+        code={`
+          <TabsComponent defaultActiveKey="general">
+            <TabsComponent.TabPane tab="Общее" key="general"></TabsComponent.TabPane>
+            <TabsComponent.TabPane
+              tab={
+                <TabsComponent.TabPaneHead
+                  text="Отчёты"
+                  disabledTooltip="Отчёты станут доступны после выбора периода"
+                />
+              }
+              key="reports"
+              disabled
+            >
+              Содержимое раздела
+            </TabsComponent.TabPane>
+          </TabsComponent>
+        `}
+        scope={{ TabsComponent }}
+      />
+
+      <DocExampleBlock
+        title="Размещение и композиция"
+        description="Размещайте горизонтальные Tabs над содержимым, которое они переключают. Обычно панель находится внутри контентной области с отступом от границ страницы, растягивается на доступную ширину и отделяется от контента линией. В шапке сайдбара Tabs могут доходить до границ страницы. Не размещайте два уровня Tabs друг за другом. Если под вкладками нужен второй уровень переключения, используйте **SegmentedControl**."
+      />
+
+      <DocExampleBlock
+        description="Не размещайте Tabs разных уровней друг за другом: два одинаковых ряда не показывают, какой уровень навигации сейчас выбран."
+      />
+
+      <DocExampleBlock
+        description="Если в разделе нужен второй уровень переключения, используйте **SegmentedControl**. Он показывает подчинённость выбора вкладке первого уровня."
+        minHeight={160}
+        codeBlock="hidden"
+        code={`
+          <TabsComponent defaultActiveKey="general">
+            <TabsComponent.TabPane tab="Общее" key="general">
+              <SegmentedControl
+                tabsData={[
+                  { name: 'profile', content: 'profile', text: 'Профиль' },
+                  {
+                    name: 'notifications',
+                    content: 'notifications',
+                    text: 'Уведомления',
+                  },
+                ]}
+                contentData={{
+                  profile: () => <div>Настройки профиля</div>,
+                  notifications: () => <div>Настройки уведомлений</div>,
+                }}
+              />
+            </TabsComponent.TabPane>
+            <TabsComponent.TabPane tab="Безопасность" key="security">
+              Содержимое
+            </TabsComponent.TabPane>
+          </TabsComponent>
+        `}
+        scope={{ SegmentedControl, TabsComponent }}
+      />
+
+      <DocExampleBlock
+        title="Дополнительный контент"
+        description="Рядом с заголовками вкладок можно разместить дополнительный контент, например кнопку действия. Используйте его только после согласования с командой дизайн-системы: дополнительные элементы не должны заменять навигацию, мешать меню «More» или ухудшать читаемость панели."
+      />
+
+      <DocExampleBlock
+        title="Названия вкладок"
+        description="Называйте вкладки коротко и однозначно: «Общее», «Настройки», «История». Подписи должны различать разделы и сохранять смысл при локализации. Используйте существительные или устойчивые названия разделов, а не действия и длинные пояснения."
+      />
+
+      <DocExampleBlock
+        title="Ограничения и пограничные сценарии"
+        description="Проверьте Tabs на узких экранах и при масштабировании интерфейса: пользователь должен находить все разделы через дополнительное меню. Если названия вкладок теряют смысл при сокращении или требуют длинных пояснений, пересмотрите структуру контента."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock description="**Tabs** объединяет связанный контент в разделы и показывает содержимое выбранной вкладки. Для заголовка вкладки используйте строку или **Tabs.TabPaneHead** с иконками, счётчиком, индикатором и подсказкой." />
+
+      <DocExampleBlock
+        title="tabPosition"
+        description="Расположение списка вкладок. Доступные значения: `top`, `left`. По умолчанию — `top`."
+        code={`
+          <TabsComponent tabPosition="top">
+            <TabsComponent.TabPane tab="Общее" key="general" />
+            <TabsComponent.TabPane tab="Настройки" key="settings" />
+          </TabsComponent>
+        `}
+        scope={{ TabsComponent }}
+      />
+
+      <DocExampleBlock
+        title="defaultActiveKey и activeKey"
+        description="**defaultActiveKey** задаёт ключ вкладки, выбранной при первом рендере. **activeKey** управляет выбранной вкладкой извне; изменение вкладки передаётся в **onChange**."
+        code={`
+          <TabsComponent defaultActiveKey="settings">
+            <TabsComponent.TabPane tab="Общее" key="general" />
+            <TabsComponent.TabPane tab="Настройки" key="settings" />
+          </TabsComponent>
+        `}
+        scope={{ TabsComponent }}
+      />
+
+      <DocExampleBlock
+        title="padding"
+        description="Добавляет горизонтальные отступы `24px` вокруг списка вкладок. По умолчанию — `false`."
+        code={`
+          <TabsComponent padding>
+            <TabsComponent.TabPane tab="Вкладка" key="tab" />
+          </TabsComponent>
+        `}
+        scope={{ TabsComponent }}
+      />
+
+      <DocExampleBlock
+        title="Tabs.TabPaneHead"
+        description="Заголовок вкладки с обязательным **text**. **iconBefore** и **iconAfter** добавляют иконки, **infoTooltip** показывает иконку информации с подсказкой, **number** — счётчик, **indicator** — индикатор со значением **indicatorMode** `critical` или `accent`."
+        code={`
+          <Tabs defaultActiveKey="base">
+            <Tabs.TabPane tab={<Tabs.TabPaneHead text="Обычная" />} key="base">
+              Содержимое
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab={<Tabs.TabPaneHead text="С иконкой" iconBefore={<Placeholder />} />}
+              key="icon"
+            >
+              Содержимое
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab={
+                <Tabs.TabPaneHead
+                  text="Справка"
+                  iconBefore={<Placeholder />}
+                  infoTooltip="Дополнительная информация"
+                />
+              }
+              key="info"
+            >
+              Содержимое
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab={
+                <Tabs.TabPaneHead
+                  text="Уведомления"
+                  number={5}
+                  indicator
+                  indicatorMode="accent"
+                />
+              }
+              key="indicator"
+            >
+              Содержимое
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab={
+                <Tabs.TabPaneHead
+                  text="Недоступно"
+                  disabledTooltip="Заполните обязательные поля"
+                />
+              }
+              key="disabled"
+              disabled
+            >
+              Содержимое
+            </Tabs.TabPane>
+          </Tabs>
+        `}
+        scope={{ Placeholder }}
+      />
+
+      <DocExampleBlock
+        title="ReactNode в заголовке вкладки"
+        description="В **tab** можно передать ReactNode, например поле ввода. Такой вариант подходит для специальных интерфейсных сценариев, где управляющий элемент является частью заголовка."
+        code={`
+          <TabsComponent>
+            <TabsComponent.TabPane tab={<HeartSolid />} key="reactnode" />
+            <TabsComponent.TabPane tab="Инциденты" key="incidents" />
+          </TabsComponent>
+        `}
+        scope={{ Button, TabsComponent }}
+      />
+
+      <DocExampleBlock
+        title="disabled"
+        description="Отключённая вкладка не реагирует на переключение. Для пояснения причины обязательно передайте **disabledTooltip** в **Tabs.TabPaneHead**."
+        code={`
+          <TabsComponent>
+            <TabsComponent.TabPane tab="Доступно" key="available" />
+            <TabsComponent.TabPane
+              tab={
+                <TabsComponent.TabPaneHead
+                  text="Недоступно"
+                  disabledTooltip="Заполните обязательные поля"
+                />
+              }
+              key="disabled"
+              disabled
+            />
+          </TabsComponent>
+        `}
+        scope={{ TabsComponent }}
+      />
+
+      <DocExampleBlock
+        title="onChange"
+        description="Вызывается при попытке переключить вкладку и получает её ключ. Колбэк может вернуть `false`, в том числе через Promise, чтобы отменить переход."
+        code={`
+          <TabsComponent onChange={(key) => alert(\`Выбрана вкладка \${key}\`)}>
+            <TabsComponent.TabPane tab="Первая" key="first" />
+            <TabsComponent.TabPane tab="Вторая" key="second" />
+          </TabsComponent>
+        `}
+        scope={{ TabsComponent }}
+      />
+
+      <DocExampleBlock
+        title="tabBarExtraContent"
+        description="Дополнительный элемент слева или справа от списка вкладок."
+        code={`
+          <TabsComponent
+            tabBarExtraContent={{
+              left: (
+                <Button
+                  mode="secondary"
+                  iconBefore={<PlusS />}
+                  text="Добавить"
+                  size="small"
+                />
+              ),
+            }}
+          >
+            <TabsComponent.TabPane tab="Инциденты" key="incidents" />
+            <TabsComponent.TabPane tab="Предупреждения" key="warnings" />
+          </TabsComponent>
+
+          <TabsComponent
+            tabBarExtraContent={{
+              right: (
+                <Button
+                  mode="secondary"
+                  iconBefore={<PlusS />}
+                  text="Добавить"
+                  size="small"
+                />
+              ),
+            }}
+          >
+            <TabsComponent.TabPane tab="Инциденты" key="incidents" />
+            <TabsComponent.TabPane tab="Предупреждения" key="warnings" />
+          </TabsComponent>
+        `}
+        scope={{ Button, PlusS, TabsComponent }}
+      />
+
+      <DocExampleBlock
+        title="Переполнение вкладок"
+        description="Когда горизонтальный список не помещается в контейнер, Tabs переносит скрытые вкладки в выпадающее меню."
+        code={`
+          <TabsComponent>
+            {Array.from({ length: 12 }, (_, index) => (
+              <TabsComponent.TabPane tab={\`Вкладка \${index + 1}\`} key={index} />
+            ))}
+          </TabsComponent>
+        `}
+        scope={{ TabsComponent }}
+      />
+
+      <DocExampleBlock
+        title="destroyInactiveTabPane"
+        description="Удаляет содержимое неактивной вкладки из DOM при переключении. По умолчанию — `false`."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={TabsStories} />
+      <AutodocArgsTable components={TabsComponent} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock title="Компонент в Pixso" titleSize="H5" description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=105891:405222)" />
+      <Space direction="vertical" gap={32}>
+        <Space direction="vertical" gap={8} align="stretch">
+          <Text type="H3">Tabs</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(tabsDesignPropPresentation)} />
+        </Space>
+        <Space direction="vertical" gap={8} align="stretch">
+          <Text type="H3">Tab item</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(tabItemDesignPropPresentation)} />
+        </Space>
+      </Space>
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Tabs" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

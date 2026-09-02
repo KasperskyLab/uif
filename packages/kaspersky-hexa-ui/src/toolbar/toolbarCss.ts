@@ -1,8 +1,9 @@
 import { Button } from '@src/button'
-import buttonStyles from '../button/Button.module.scss'
 import { Indicator } from '@src/indicator'
 import { Space } from '@src/space'
 import styled, { css } from 'styled-components'
+
+import buttonStyles from '../button/Button.module.scss'
 
 import { ToolbarBlockSide } from './types'
 
@@ -33,9 +34,10 @@ export const toolbarCss = css<StyledToolbarProps>`
   display: flex;
   align-items: center;
   height: 40px;
+  justify-content: flex-end;
   z-index: 1;
   padding: 4px;
-  gap: ${props => props.$autoDropdown ? 24 : 64}px;
+  gap: var(--spacing--gap_related);
   background: var(--toolbar--bg);
   border-radius: 8px;
   width: 100%;
@@ -57,7 +59,8 @@ export const toolbarCss = css<StyledToolbarProps>`
 
   .ant-btn > span[role=img] + span,
   .ant-btn > span + span[role=img] {
-    margin-left: 0px;
+    margin-left: unset;
+    margin-inline-start: 0;
   }
 
   &.sticky {
@@ -66,12 +69,12 @@ export const toolbarCss = css<StyledToolbarProps>`
     z-index: 2;
   }
 
-  &&& .ant-input-affix-wrapper{
+  &&& .ant-input-affix-wrapper {
     width: 300px;
     color: var(--toolbar_search--text--placeholder_enabled);
     border-color: transparent;
-    margin-right: 4px;
-    margin-left: -15px;
+    margin-right: unset;
+    margin-inline-end: 4px;
 
     &.hexa-ui-collapsible-search {
       transform: scaleX(1);
@@ -80,7 +83,10 @@ export const toolbarCss = css<StyledToolbarProps>`
 
     &.hexa-ui-collapsible-search-hidden {
       opacity: 0;
-      width: 0px;
+      width: 0;
+      padding: 0;
+      border: 0;
+      margin-inline-end: -4px;
     }
   }
   
@@ -167,9 +173,17 @@ type StyledBlockProps = {
   $autoDropdown?: boolean
 }
 
+const mapSide = (side?: ToolbarBlockSide) => {
+  const mappedSide = {
+    left: 'inset-inline-start',
+    right: 'inset-inline-end'
+  }
+  return side && mappedSide[side]
+}
+
 export const StyledBlock = styled(Space)<StyledBlockProps>`
   position: ${({ $autoDropdown }) => $autoDropdown ? 'relative' : 'absolute'};
-  ${({ $side, $autoDropdown }) => $autoDropdown ? '' : `${$side}: 4px;`}
+  ${({ $side, $autoDropdown }) => $autoDropdown ? '' : `${mapSide($side)}: 4px;`}
   ${({ $side, $autoDropdown }) => $side === 'left' && $autoDropdown && 'min-width: 0;'}
   ${({ $side, $autoDropdown }) => $autoDropdown && `
     flex-grow: ${$side === 'left' ? 1 : 'initial'};
@@ -203,7 +217,7 @@ export const AutoDropdownPart = styled.div<ToolbarItemWrapProps>`
   visibility: ${({ $isHidden }) => $isHidden ? 'hidden' : 'visible'};
   flex-shrink: 0;
   position: absolute;
-  right: 0;
+  inset-inline-end: 0;
 `
 
 export const DropdownTriggerIconsWrapper = styled.div``

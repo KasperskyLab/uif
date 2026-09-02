@@ -130,6 +130,7 @@
         },
         "filtering": {
           "add": "추가",
+          "addCondition": "조건 추가",
           "clearAll": "모두 지우기",
           "property": "속성",
           "attribute": "특성",
@@ -137,10 +138,24 @@
           "from": "시작",
           "to": "종료",
           "value": "값",
+          "operators": {
+            "or": "또는",
+            "and": "및"
+          },
+          "booleanFilter": {
+            "on": "사용",
+            "off": "꺼짐"
+          },
           "validation": {
             "emptyValue": "필터링 값 지정",
             "duplicateFilters": "중복 필터. 각 필터가 고유한지 확인하십시오."
           }
+        },
+        "resetSettingsModal": {
+          "content": "모든 작업이 기본 설정으로 초기화됩니다.",
+          "header": "열 설정을 초기화하시겠습니까?",
+          "firstButton": "초기화",
+          "secondButton": "취소"
         },
         "columnHideIsUnavailable": "열 숨기기를 이용할 수 없음",
         "onlyForFiltering": "이 열은 필터링 전용입니다"
@@ -149,7 +164,7 @@
         "⊆": "포함",
         "⊄": "포함 안 함",
         "cont_and": "모두 포함(AND)",
-        "cont_or": "하나라도 포함(OR)",
+        "cont_or": "다음 중 하나입니다",
         "ncont_or": "포함 안 함",
         "*=": "Regexp",
         "empty": "비어 있음",
@@ -178,7 +193,8 @@
     "actionBar": {
       "unsavedChanges": "대기 중인 변경 사항",
       "save": "적용",
-      "cancel": "취소"
+      "cancel": "취소",
+      "resetSettings": "기기 초기 설정으로 재설정"
     },
     "textarea": {
       "wordsCount": "{{total}} 중 {{count}}"

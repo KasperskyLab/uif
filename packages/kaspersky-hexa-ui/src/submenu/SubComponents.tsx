@@ -81,7 +81,7 @@ export const SubmenuRow: FC<RowViewProps & { hasChildren: boolean }> = ({
           className={styles.arrowButton}
           interactive={false}
           onClick={onCollapsibleClick}
-          icon={row.opened ? <ArrowDownSolid /> : <ArrowRightSolid />}
+          icon={row.opened ? <ArrowDownSolid /> : <ArrowRightSolid className={styles.arrowIcon} />}
           size="small"
         />
       )}

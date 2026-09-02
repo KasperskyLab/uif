@@ -25,7 +25,7 @@ interface BaseItemProps<Filter> {
   validationStatus?: ValidationStatus
 }
 
-export type EnumItemProps = BaseItemProps<EnumFilter> & Pick<EnumFilterType, 'getAvailableOptions' | 'getAvailableValues'>
+export type EnumItemProps = BaseItemProps<EnumFilter> & Pick<EnumFilterType, 'getAvailableOptions' | 'getAvailableValues' | 'search'>
 
 export type BooleanItemProps = BaseItemProps<BooleanFilter> & Pick<BooleanFilterType, 'onStateName' | 'offStateName'>
 

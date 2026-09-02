@@ -64,7 +64,7 @@ export const LinkPopup = ({
       destroyTooltipOnHide
       content={
         (
-          <Space direction="vertical" justify="start" align="left" gap={16} ref={containerRef}>
+          <Space direction="vertical" justify="start" align="left" gap="grouped" ref={containerRef}>
             <Field
               labelPosition="top"
               label={label}
@@ -72,7 +72,7 @@ export const LinkPopup = ({
                 <Textbox autoFocus value={address} showClearButton onChange={setAddress} />
               }
             />
-            <Space direction="horizontal" justify="start" align="left" gap={8}>
+            <Space direction="horizontal" justify="start" align="left" gap="related">
               <Button onClick={handleClick}>{buttonText.ok}</Button>
               <Button onClick={closePopup} mode="secondary">{buttonText.cancel}</Button>
             </Space>

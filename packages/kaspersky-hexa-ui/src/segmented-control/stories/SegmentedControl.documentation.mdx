@@ -1,0 +1,162 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+
+import { SegmentedControl } from '../SegmentedControl'
+import * as SegmentedControlStories from './SegmentedControl.stories'
+
+<Meta of={SegmentedControlStories} name="SegmentedControl Docs" />
+
+<DocPageLayout>
+
+  <DocPageHeader title="SegmentedControl" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **SegmentedControl** — набор вкладок для переключения между связанными представлениями
+
+          **SegmentedControl** применяют для переключения между небольшим числом связанных представлений в одном контексте: например, для предфильтров или разных представлений одной формы. Все варианты должны быть доступны одновременно и иметь короткие, различимые подписи.
+
+          Для навигации между независимыми разделами приложения выбирайте **Tabs**, а для выбора значения без смены содержимого — **SegmentedButton**."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**SegmentedControl** отображает связанные разделы в виде горизонтальной панели вкладок и показывает содержимое активной вкладки. Состав вкладок задаётся через **tabsData**, а соответствующее содержимое — через **contentData**."
+      />
+
+      <DocExampleBlock
+        title="tabsData"
+        description="Обязательный проп. Массив объектов вкладок. Для переключения вкладка использует **name** как идентификатор и **content** как ключ содержимого; **text** отображается на кнопке вкладки."
+        code={`
+          <SegmentedControl
+            tabsData={[
+              { name: 'summary', content: 'summary', text: 'Сводка' },
+              { name: 'details', content: 'details', text: 'Подробнее' },
+            ]}
+            contentData={{
+              summary: () => <div>Сводка</div>,
+              details: () => <div>Подробности</div>,
+            }}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="contentData"
+        description="Обязательный проп. Объект с функциями рендеринга содержимого. Ключ должен совпадать со значением **content** соответствующей вкладки; функции получают объект **properties**, заданный у вкладки."
+        code={`
+          <SegmentedControl
+            tabsData={[
+              {
+                name: 'users',
+                content: 'users',
+                text: 'Пользователи',
+                properties: { total: 12 },
+              },
+            ]}
+            contentData={{ users: ({ total }) => <div>Пользователей: {total}</div> }}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="size"
+        description="Размер панели и её вкладок. Доступные значения: `small`, `medium`, `large`. По умолчанию — `medium`."
+        code={`
+          <SegmentedControl
+            size="large"
+            tabsData={[
+              { name: 'one', content: 'one', text: 'Первый' },
+              { name: 'two', content: 'two', text: 'Второй' },
+            ]}
+            contentData={{
+              one: () => <div>Первое содержимое</div>,
+              two: () => <div>Второе содержимое</div>,
+            }}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="defaultActiveTab"
+        description="Имя вкладки, которая отображается активной при первом рендере. Если проп не задан, активной становится первая вкладка из **tabsData**."
+        code={`
+          <SegmentedControl
+            defaultActiveTab="details"
+            tabsData={[
+              { name: 'summary', content: 'summary', text: 'Сводка' },
+              { name: 'details', content: 'details', text: 'Подробнее' },
+            ]}
+            contentData={{
+              summary: () => <div>Сводка</div>,
+              details: () => <div>Подробности</div>,
+            }}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="Элементы вкладок"
+        description="Объекты в **tabsData** поддерживают иконку **iconBefore**, подсказку **infoTooltip**, индикатор **indicator**, счётчик **counter**, состояние **disabled** и обработчик **onClick**."
+        code={`
+          <SegmentedControl
+            tabsData={[
+              {
+                name: 'inbox',
+                content: 'inbox',
+                text: 'Входящие',
+                counter: { number: 3, mode: 'neutral_transparent' },
+                onClick: () => alert('Открыты входящие'),
+              },
+              { name: 'archive', content: 'archive', text: 'Архив', disabled: true },
+            ]}
+            contentData={{
+              inbox: () => <div>Входящие</div>,
+              archive: () => <div>Архив</div>,
+            }}
+          />
+        `}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={SegmentedControlStories} />
+      <AutodocArgsTable components={SegmentedControl} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=104829:563989)"
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="SegmentedControl" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

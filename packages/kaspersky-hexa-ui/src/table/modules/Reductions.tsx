@@ -1,8 +1,9 @@
 import { TextReducer } from '@helpers/index'
 import { ExpandableText } from '@src/expandable-text'
+import { ExpandableContent } from '@src/expandable-text/ExpandableContent'
 import React, { useMemo } from 'react'
 
-import { isRenderCellObject } from '../helpers/common'
+import { isRenderCellObject, mapVisibleColumns } from '../helpers/common'
 import { getColumnTitleDataTestId } from '../helpers/getColumnTitleDataTestId'
 import { TableColumn, TableRecord } from '../types'
 
@@ -17,17 +18,23 @@ export const Reductions = <T extends TableRecord = TableRecord>(
 
   const processedColumns = useMemo<TableColumn<T>[] | undefined>(() => !columns
     ? columns
-    : columns.map(({ ellipsis, expandableText, hasEmptyCellDash, ...column }) => {
+    : mapVisibleColumns(columns, (col) => {
+        const { ellipsis, expandableText, hasEmptyCellDash, ...column } = col
+
+        const title = column.title
+          ? <TextReducer className="hexa-ui-ellipsis" testId={getColumnTitleDataTestId(column)}>{column.title}</TextReducer>
+          : undefined
+
         if (!column.title || ellipsis === false) {
           return {
             ...column,
-            title: <TextReducer className="hexa-ui-ellipsis" testId={getColumnTitleDataTestId(column)}>{column.title}</TextReducer>
+            title
           }
         }
 
         return {
           ...column,
-          title: <TextReducer className="hexa-ui-ellipsis" testId={getColumnTitleDataTestId(column)}>{column.title}</TextReducer>,
+          title,
           render: (value, record, index) => {
             if (record.accordeon) {
               return column.render?.(value, record, index) ?? value
@@ -35,7 +42,7 @@ export const Reductions = <T extends TableRecord = TableRecord>(
 
             if (!column.render) {
               return expandableText
-                ? <ExpandableText useGradient className="hexa-ui-expandable">{value}</ExpandableText>
+                ? <ExpandableContent useGradient className="hexa-ui-expandable">{value}</ExpandableContent>
                 : <TextReducer className="hexa-ui-ellipsis">{value}</TextReducer>
             }
 
@@ -45,7 +52,7 @@ export const Reductions = <T extends TableRecord = TableRecord>(
             const tooltip = column.ellipsisTooltip ? column.ellipsisTooltip(value, record, index) : undefined
 
             const reducedNode = expandableText
-              ? <ExpandableText useGradient className="hexa-ui-expandable">{node}</ExpandableText>
+              ? <ExpandableContent useGradient className="hexa-ui-expandable">{node}</ExpandableContent>
               : <TextReducer tooltip={tooltip} className="hexa-ui-ellipsis">{node}</TextReducer>
 
             return isObject

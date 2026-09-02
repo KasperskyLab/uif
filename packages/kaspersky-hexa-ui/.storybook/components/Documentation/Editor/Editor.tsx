@@ -1,8 +1,8 @@
-import { getTextCssSizes } from '@design-system/tokens'
 import { useTheme } from '@design-system/theme'
+import { getTextCssSizes } from '@design-system/tokens'
 import { ThemeKey } from '@design-system/types'
-import { MonoTextTypes } from '@kaspersky/hexa-ui-core/typography/js'
 import { Link } from '@src/link'
+import { themes } from 'prism-react-renderer'
 import React, {
   FC,
   memo,
@@ -12,11 +12,11 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { themes } from 'prism-react-renderer'
 import { LiveEditor, LivePreview } from 'react-live'
 
-import { SafeLiveProvider } from './SafeLiveProvider'
+import { MonoTextTypes } from '@kaspersky/hexa-ui-core/typography/js'
 
+import { getMaxHeightForCodeLines } from './editorCodeMetrics'
 import {
   CodeEditor,
   CodeEditorWrapper,
@@ -30,10 +30,9 @@ import {
   PreviewPane,
   StyledLiveError
 } from './editorCss'
-import { getMaxHeightForCodeLines } from './editorCodeMetrics'
 import { unwrapDisplayCode } from './liveCodeWrap'
+import { SafeLiveProvider } from './SafeLiveProvider'
 import { transformCode } from './transformCode'
-import { TextDirection, useStorybookTextDirection } from './useStorybookTextDirection'
 
 const MemoizedLivePreview = memo(LivePreview)
 
@@ -46,7 +45,6 @@ export type PreviewLayout = {
 
 type PreviewWrapperProps = PreviewLayout & {
   children?: ReactNode
-  dir?: TextDirection
   minHeight?: number
   maxHeight?: number
 }
@@ -55,7 +53,6 @@ const PreviewWrapper: FC<PreviewWrapperProps> = ({
   children,
   direction,
   gap,
-  dir,
   minHeight,
   maxHeight
 }) => (
@@ -64,7 +61,6 @@ const PreviewWrapper: FC<PreviewWrapperProps> = ({
     $gap={gap}
     $minHeight={minHeight}
     $maxHeight={maxHeight}
-    dir={dir}
   >
     {children}
   </PreviewContent>
@@ -76,7 +72,7 @@ export type EditorExampleMode = 'dont'
 
 export type EditorProps = {
   code: string
-  /** Служебный код для react-live: выполняется в preview, но не показывается в редакторе */
+  /** Служебный код для react-live: выполняется в preview, но не показывается в редакторе. Может содержать stateful App для интерактивного примера. */
   setupCode?: string
   /** Минимальная высота preview, px */
   minHeight?: number
@@ -112,7 +108,6 @@ export const Editor: FC<EditorProps> = ({
 }) => {
   const themeConfig = useTheme()
   const isDark = themeConfig.key === ThemeKey.Dark
-  const textDirection = useStorybookTextDirection()
 
   const isMountedRef = useRef(true)
   const [displayCode, setDisplayCode] = useState(() => unwrapDisplayCode(code))
@@ -182,7 +177,6 @@ export const Editor: FC<EditorProps> = ({
               <PreviewWrapper
                 direction={previewDirection}
                 gap={previewGap}
-                dir={textDirection}
                 minHeight={minHeight}
                 maxHeight={maxHeight}
               >

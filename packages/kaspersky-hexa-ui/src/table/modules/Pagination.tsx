@@ -1,6 +1,7 @@
 import { MakeRequired } from '@helpers/typesHelpers'
 import { Pagination as PaginationComponent } from '@src/pagination'
 import { TotalSummary } from '@src/pagination/TotalSummary'
+import cn from 'classnames'
 import React, {
   FC,
   useEffect,
@@ -28,6 +29,7 @@ const StyledPaginationContainer = styled.div<StyledPaginationProps>`
     margin-top: 0;
     margin-bottom: 8px;
     position: sticky;
+    z-index: 1;
     bottom: 0;
     clip-path: inset(-100vw 0 0 0);
     > div {
@@ -86,7 +88,7 @@ function PaginationModule <T extends TableRecord = TableRecord> ({
   Component,
   ...props
 }: ModuleWithPaginationProps<T>) {
-  const { pagination: paginationContext } = useTableContext()
+  const paginationContext = useTableContext(state => state.pagination)
   const contentRef = useRef<HTMLDivElement | null>(null)
   const paginationRef = useRef<null | HTMLDivElement>(null)
 
@@ -113,7 +115,10 @@ function PaginationModule <T extends TableRecord = TableRecord> ({
 
   return (
     <>
-      <StyledTablePaginationWrapper ref={contentRef}>
+      <StyledTablePaginationWrapper
+        ref={contentRef}
+        className={cn({ 'hexa-ui-table-pagination-active': slicedData.length })}
+      >
         <Component
           {...props}
           pagination={false}

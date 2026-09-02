@@ -130,6 +130,7 @@
         },
         "filtering": {
           "add": "追加",
+          "addCondition": "条件を追加",
           "clearAll": "すべてクリア",
           "property": "プロパティ",
           "attribute": "属性",
@@ -137,10 +138,24 @@
           "from": "開始",
           "to": "終了",
           "value": "値",
+          "operators": {
+            "or": "または",
+            "and": "および"
+          },
+          "booleanFilter": {
+            "on": "オン",
+            "off": "オフ"
+          },
           "validation": {
             "emptyValue": "フィルター値を指定してください",
             "duplicateFilters": "フィルターが重複しています。各フィルターが一意であることを確認してください。"
           }
+        },
+        "resetSettingsModal": {
+          "content": "すべてのタスクは既定の設定にリセットされます。",
+          "header": "Reset columns settings?",
+          "firstButton": "リセット",
+          "secondButton": "キャンセル"
         },
         "columnHideIsUnavailable": "列を非表示にすることはできません",
         "onlyForFiltering": "この列はフィルタリング専用です"
@@ -149,7 +164,7 @@
         "⊆": "次を含む",
         "⊄": "次を含まない",
         "cont_and": "次を含む (AND)",
-        "cont_or": "次を含む (OR)",
+        "cont_or": "次に含まれる",
         "ncont_or": "次を含まない",
         "*=": "正規表現",
         "empty": "空白である",
@@ -178,7 +193,8 @@
     "actionBar": {
       "unsavedChanges": "保留中の変更",
       "save": "適用",
-      "cancel": "キャンセル"
+      "cancel": "キャンセル",
+      "resetSettings": "設定をリセット"
     },
     "textarea": {
       "wordsCount": "{{count}} / {{total}}"

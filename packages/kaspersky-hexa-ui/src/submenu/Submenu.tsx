@@ -1,7 +1,7 @@
 import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import cn from 'classnames'
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 
 import styles from './Submenu.module.scss'
 import { SubmenuItems } from './SubmenuItems'
@@ -35,6 +35,19 @@ export const Submenu: FC<SubmenuProps> = (rawProps) => {
   , [pathToActiveRowFromProps, items])
 
   const [activeRow, setActiveRow] = useState(pathToActiveRowFromProps ? activeRowFromProps : findFirstRow(itemsWithLevels))
+
+  useEffect(() => {
+    setActiveRow(prev => {
+      if (!prev) {
+        return findFirstRow(itemsWithLevels)
+      }
+
+      const path = findPathToActiveRow(itemsWithLevels, prev.key) ?? []
+      const optionalActiveRow = path[path.length - 1]
+
+      return optionalActiveRow ?? findFirstRow(itemsWithLevels)
+    })
+  }, [itemsWithLevels])
 
   const handleActiveRowChange = (row: LeveledRowProps) => {
     if (!activeKey) {

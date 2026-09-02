@@ -1,0 +1,96 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { TextDiff } from '../TextDiff'
+import * as TextDiffStories from './TextDiff.stories'
+import { textDiffDesignPropPresentation } from './TextDiff.design.properties'
+
+<Meta of={TextDiffStories} name="TextDiff Docs" />
+
+<DocPageLayout>
+
+  <DocPageHeader title="TextDiff" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **TextDiff** — компонент для отображения добавленных и удалённых фрагментов текста
+
+          Используйте TextDiff, когда важно показать пользователю изменение текста без отдельного экрана сравнения: при редактировании настроек, просмотре истории или согласовании правок. Компонент помогает быстро отличить добавленное содержание от удалённого в компактных контекстах.
+
+          Для сравнения больших документов, исходного кода или длинных многострочных блоков выбирайте специализированное представление различий, в котором удобно просматривать изменения целиком." />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**TextDiff** показывает различия между двумя версиями текста: добавленный фрагмент выделяется, а удалённый перечёркивается. Компонент поддерживает настройки **newText**, **oldText** и **textType**."
+      />
+
+      <DocExampleBlock
+        title="newText"
+        description="Текст, который будет показан как добавленный. Если значение не передано или пустое, добавленный фрагмент не отображается."
+        code={`
+          <TextDiff newText="Новая редакция" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="oldText"
+        description="Текст, который будет показан как удалённый. Если значение не передано или пустое, удалённый фрагмент не отображается."
+        code={`
+          <TextDiff oldText="Предыдущая редакция" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="textType"
+        description="Типографический стиль добавленного и удалённого текста. По умолчанию — `BTR3`."
+        code={`
+          <TextDiff newText="Новый текст" oldText="Старый текст" textType="BTR3" />
+        `}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={TextDiffStories} />
+      <AutodocArgsTable components={TextDiff} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=147673:321514)"
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(textDiffDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="TextDiff" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

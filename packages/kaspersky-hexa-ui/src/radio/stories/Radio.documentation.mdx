@@ -1,5 +1,14 @@
 import { Description, Meta } from '@storybook/addon-docs/blocks'
-import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
 import { Text } from '@src/typography'
 import { Textbox } from '@src/input'
 import { PopupConfigProvider } from '@helpers/components/PopupConfigProvider'
@@ -12,184 +21,221 @@ import { radioDesignPropPresentation } from './Radio.design.properties'
 
 <DocPageLayout>
 
-<DocPageHeader
-  title="Radio"
-  description='**Radio** — группа радиокнопок для выбора одной опции из взаимоисключающего набора'
-/>
+  <DocPageHeader title="Radio" />
 
-<Tabs defaultActiveKey="description">
-  <Tabs.TabPane tab="Описание" key="description">
+  <Tabs defaultActiveKey="description">
 
-    <DocExampleBlock
-      title="Описание компонента"
-      description="**Radio** отображает группу радиокнопок на базе Ant Design Radio.Group с темизацией Hexa UI. Пользователь может выбрать ровно одну опцию из предложенных. Список задаётся через **options** — массив объектов с **label**, **value** и опциональными **disabled**, **readonly**, **required**, **tooltip**, **description**, **dependentElement**. Состояние группы управляется через **vertical**, **disabled**, **readonly**, **invalid**."
-    />
+    <Tabs.TabPane tab="Описание" key="description">
 
-    <DocExampleBlock
-      title="options"
-      description="Обязательный проп. Массив опций радиогруппы. Каждая опция содержит **label** (подпись — строка или ReactNode) и **value** (уникальная строка). Значения **value** должны быть уникальными в пределах группы — при дублировании в консоль выводится ошибка."
-      previewDirection="vertical"
-      previewGap={8}
-      code={`
-<Radio
-  options={[
-    { label: 'Option 1', value: '1' },
-    { label: 'Option 2', value: '2' },
-    { label: 'Option 3', value: '3' }
-  ]}
-/>`}
-    />
+      <DocExampleBlock
+        description="
+          **Radio** — группа радиокнопок для выбора одной опции из взаимоисключающего набора
 
-    <DocExampleBlock
-      title="vertical"
-      description="Ориентация группы. При `true` опции расположены вертикально, при `false` — горизонтально (inline). По умолчанию — `true`."
-      previewDirection="vertical"
-      previewGap={8}
-      code={`
-<Radio
-  vertical={true}
-  options={[
-    { label: 'Option 1', value: '1' },
-    { label: 'Option 2', value: '2' },
-    { label: 'Option 3', value: '3' }
-  ]}
-/>
-<Radio
-  vertical={false}
-  options={[
-    { label: 'Option 1', value: '1' },
-    { label: 'Option 2', value: '2' },
-    { label: 'Option 3', value: '3' }
-  ]}
-/>`}
-    />
+          **Radio** применяется там, где пользователь должен выбрать ровно одну опцию из нескольких взаимоисключающих вариантов: тип отчёта, режим работы, способ доставки. Список вариантов должен быть полным и понятным — пользователь видит все доступные опции сразу, без раскрытия.
 
-    <DocExampleBlock
-      title="disabled"
-      description="Недоступное состояние группы. Все опции не реагируют на действия пользователя. Отдельную опцию можно отключить через `disabled` в объекте options. Доступные значения: `true`, `false`. По умолчанию — `false`."
-      previewDirection="vertical"
-      previewGap={8}
-      code={`
-<Radio
-  disabled
-  value="1"
-  options={[
-    { label: 'Option 1', value: '1' },
-    { label: 'Option 2', value: '2' }
-  ]}
-/>
-<Radio
-  options={[
-    { label: 'Option 1', value: '1' },
-    { label: 'Option 2 (disabled)', value: '2', disabled: true }
-  ]}
-/>`}
-    />
+          Для выбора нескольких значений из набора используйте [**CheckboxGroup**](/?path=/docs/hexa-ui-components-checkboxgroup--checkboxgroup-docs). Для выбора из большого списка, где показывать все варианты нецелесообразно, подходит **Select**. Если опция имеет только два состояния (вкл/выкл), рассмотрите **Toggle**."
+      />
 
-    <DocExampleBlock
-      title="readonly"
-      description="Режим только для чтения. Выбор виден, но изменить его нельзя. Отдельную опцию можно перевести в readonly через `readonly` в объекте options. Доступные значения: `true`, `false`. По умолчанию — `false`."
-      code={`
-<Radio
-  readonly
-  value="1"
-  options={[
-    { label: 'Option 1', value: '1' },
-    { label: 'Option 2', value: '2' }
-  ]}
-/>`}
-    />
+    </Tabs.TabPane>
 
-    <DocExampleBlock
-      title="invalid"
-      description="Состояние ошибки валидации группы. Применяет стиль invalid ко всем опциям. Доступные значения: `true`, `false`. По умолчанию — `false`."
-      code={`
-<Radio
-  invalid
-  options={[
-    { label: 'Option 1', value: '1' },
-    { label: 'Option 2', value: '2' }
-  ]}
-/>`}
-    />
+    <Tabs.TabPane tab="Структура" key="composition">
 
-    <DocExampleBlock
-      title="options.required"
-      description="Метка обязательного поля у подписи отдельной опции. Отображается маркер required рядом с **FormLabel**. Доступные значения: `true`, `false`. По умолчанию — `false`."
-      code={`
-<Radio
-  options={[
-    { label: 'Required option', value: '1', required: true },
-    { label: 'Optional option', value: '2' }
-  ]}
-/>`}
-    />
+      <DocExampleBlock
+        description="**Radio** отображает группу радиокнопок на базе Ant Design Radio.Group с темизацией Hexa UI. Пользователь может выбрать ровно одну опцию из предложенных. Список задаётся через **options** — массив объектов с **label**, **value** и опциональными **disabled**, **readonly**, **invalid**, **required**, **tooltip**, **description**, **dependentElement**. Состояние группы управляется через **vertical**, **disabled**, **readonly**, **invalid**."
+      />
 
-    <DocExampleBlock
-      title="options.tooltip"
-      description="Текст всплывающей подсказки у подписи опции через **FormLabel**. Для корректного позиционирования поповера оберните Radio в **PopupConfigProvider**."
-      code={`
-<PopupConfigProvider getPopupContainer={() => document.body}>
-  <Radio
-    options={[
-      { label: 'Option 1', value: '1' },
-      { label: 'With tooltip', value: '2', tooltip: 'Подсказка к опции' }
-    ]}
-  />
-</PopupConfigProvider>`}
-    />
+      <DocExampleBlock
+        title="options"
+        description="Обязательный проп. Массив опций радиогруппы. Каждая опция содержит **label** (подпись — строка или ReactNode) и **value** (уникальная строка). Значения **value** должны быть уникальными в пределах группы — при дублировании в консоль выводится ошибка."
+        previewDirection="vertical"
+        previewGap={8}
+        code={`
+          <Radio
+            options={[
+              { label: 'Option 1', value: '1' },
+              { label: 'Option 2', value: '2' },
+              { label: 'Option 3', value: '3' },
+            ]}
+          />
+        `}
+      />
 
-    <DocExampleBlock
-      title="options.description"
-      description="Поясняющий текст под опцией через **AdditionalContent**. Отображается под подписью как вспомогательная информация."
-      code={`
-<Radio
-  options={[
-    { label: 'Option 1', value: '1' },
-    { label: 'Option 2', value: '2', description: 'Дополнительное описание' }
-  ]}
-/>`}
-    />
+      <DocExampleBlock
+        title="vertical"
+        description="Ориентация группы. При `true` опции расположены вертикально, при `false` — горизонтально (inline). По умолчанию — `true`."
+        previewDirection="vertical"
+        previewGap={8}
+        code={`
+          <Radio
+            vertical={true}
+            options={[
+              { label: 'Option 1', value: '1' },
+              { label: 'Option 2', value: '2' },
+              { label: 'Option 3', value: '3' },
+            ]}
+          />
+          <Radio
+            vertical={false}
+            options={[
+              { label: 'Option 1', value: '1' },
+              { label: 'Option 2', value: '2' },
+              { label: 'Option 3', value: '3' },
+            ]}
+          />
+        `}
+      />
 
-    <DocExampleBlock
-      title="options.dependentElement"
-      description="Зависимый элемент под описанием опции через **AdditionalContent** — например поле ввода, которое становится доступным при выборе опции. Используется совместно с **description**."
-      code={`
-<Radio
-  options={[
-    { label: 'Option 1', value: '1' },
-    {
-      label: 'Option 2',
-      value: '2',
-      description: 'Описание',
-      dependentElement: <Textbox placeholder="Зависимый элемент" />
-    }
-  ]}
-/>`}
-    />
+      <DocExampleBlock
+        title="disabled"
+        description="Недоступное состояние группы. Все опции не реагируют на действия пользователя. Отдельную опцию можно настроить через `disabled` в объекте `options` — значение опции перекрывает групповое (см. **options.invalid**). Доступные значения: `true`, `false`. По умолчанию — `false`."
+        previewDirection="vertical"
+        previewGap={8}
+        code={`
+          <Radio
+            disabled
+            value="1"
+            options={[
+              { label: 'Option 1', value: '1' },
+              { label: 'Option 2', value: '2' },
+            ]}
+          />
+          <Radio
+            options={[
+              { label: 'Option 1', value: '1' },
+              { label: 'Option 2 (disabled)', value: '2', disabled: true },
+            ]}
+          />
+        `}
+      />
 
-  </Tabs.TabPane>
+      <DocExampleBlock
+        title="readonly"
+        description="Режим только для чтения. Выбор виден, но изменить его нельзя. Отдельную опцию можно настроить через `readonly` в объекте `options` — значение опции перекрывает групповое (см. **options.invalid**). Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <Radio
+            readonly
+            value="1"
+            options={[
+              { label: 'Option 1', value: '1' },
+              { label: 'Option 2', value: '2' },
+            ]}
+          />
+        `}
+      />
 
-  <Tabs.TabPane tab="Правила использования" key="howtouse">
+      <DocExampleBlock
+        title="invalid"
+        description="Состояние ошибки валидации группы. Применяет стиль invalid ко всем опциям. Отдельную опцию можно настроить через `invalid` в объекте `options` — значение опции перекрывает групповое (см. **options.invalid**). Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <Radio
+            invalid
+            options={[
+              { label: 'Option 1', value: '1' },
+              { label: 'Option 2', value: '2' },
+            ]}
+          />
+        `}
+      />
 
-    <DocExampleBlock
-      title="Правила использования"
-      description="**Radio** применяется там, где пользователь должен выбрать ровно одну опцию из нескольких взаимоисключающих вариантов: тип отчёта, режим работы, способ доставки. Список вариантов должен быть полным и понятным — пользователь видит все доступные опции сразу, без раскрытия.
+      <DocExampleBlock
+        title="options.invalid"
+        description="Состояние ошибки валидации отдельной опции. Состояния `disabled`, `readonly` и `invalid` считаются для каждой опции по одному правилу: значение, заданное на опции, перекрывает групповое, а если на опции его нет — берётся групповое. Опция, у которой одновременно `disabled` и `readonly`, отображается как readonly. Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <Radio
+            options={[
+              { label: 'Valid option', value: '1' },
+              { label: 'Invalid option', value: '2', invalid: true },
+            ]}
+          />
+        `}
+      />
 
-Для выбора нескольких значений из набора используйте [**CheckboxGroup**](/?path=/docs/hexa-ui-components-checkboxgroup--checkboxgroup-docs). Для выбора из большого списка, где показывать все варианты нецелесообразно, подходит **Select**. Если опция имеет только два состояния (вкл/выкл), рассмотрите **Toggle**."
-    />
+      <DocExampleBlock
+        title="options.required"
+        description="Метка обязательного поля у подписи отдельной опции. Отображается маркер required рядом с **FormLabel**. Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <Radio
+            options={[
+              { label: 'Required option', value: '1', required: true },
+              { label: 'Optional option', value: '2' },
+            ]}
+          />
+        `}
+      />
 
-  </Tabs.TabPane>
+      <DocExampleBlock
+        title="options.tooltip"
+        description="Текст всплывающей подсказки у подписи опции через **FormLabel**. Для корректного позиционирования поповера оберните Radio в **PopupConfigProvider**."
+        code={`
+          <PopupConfigProvider getPopupContainer={() => document.body}>
+            <Radio
+              options={[
+                { label: 'Option 1', value: '1' },
+                { label: 'With tooltip', value: '2', tooltip: 'Подсказка к опции' },
+              ]}
+            />
+          </PopupConfigProvider>
+        `}
+      />
 
-  <Tabs.TabPane tab="Дизайнеру" key="design">
-    <Text type="H3">Properties в Pixso</Text>
-    <DocumentationArgsTable rows={buildPresentationOnlyRows(radioDesignPropPresentation)} />
-  </Tabs.TabPane>
+      <DocExampleBlock
+        title="options.description"
+        description="Поясняющий текст под опцией через **AdditionalContent**. Отображается под подписью как вспомогательная информация."
+        code={`
+          <Radio
+            options={[
+              { label: 'Option 1', value: '1' },
+              { label: 'Option 2', value: '2', description: 'Дополнительное описание' },
+            ]}
+          />
+        `}
+      />
 
-  <Tabs.TabPane tab="Properties" key="properties">
-    <Description of={RadioStories} />
-    <AutodocArgsTable components={Radio} />
-  </Tabs.TabPane>
-</Tabs>
+      <DocExampleBlock
+        title="options.dependentElement"
+        description="Зависимый элемент под описанием опции через **AdditionalContent** — например поле ввода, которое становится доступным при выборе опции. Используется совместно с **description**."
+        code={`
+          <Radio
+            options={[
+              { label: 'Option 1', value: '1' },
+              {
+                label: 'Option 2',
+                value: '2',
+                description: 'Описание',
+                dependentElement: <Textbox placeholder="Зависимый элемент" />,
+              },
+            ]}
+          />
+        `}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={RadioStories} />
+      <AutodocArgsTable components={Radio} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=38132:137230)"
+      />
+
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(radioDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Radio" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
 
 </DocPageLayout>

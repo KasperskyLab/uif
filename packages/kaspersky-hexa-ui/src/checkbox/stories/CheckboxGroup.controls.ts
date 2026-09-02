@@ -7,7 +7,7 @@ import { sharedPropConfig } from '@helpers/resolveDesignControls'
 
 import { FormLabelMode } from '@src/form-label/types'
 
-const checkboxGroupModes: FormLabelMode[] = ['primary', 'secondary', 'disabled']
+const checkboxGroupModes: FormLabelMode[] = ['primary', 'secondary']
 const checkboxGroupDirections = ['vertical', 'horizontal'] as const
 
 const fromSharedProp = (

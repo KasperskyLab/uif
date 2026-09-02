@@ -29,9 +29,11 @@ export const H6: FC<HeadingProps> = (props: HeadingProps) => (
   <HeadingComponent type="H6" {...props} />
 )
 
-export const Text: FC<TextProps> = forwardRef<HTMLParagraphElement, TextProps>((props, ref) => (
-  <TextComponent {...props} ref={ref} />
-))
+// Re-exported directly rather than wrapped. The wrapper was a pass-through that
+// forwarded every prop and the ref, which styled-components already does, so it
+// only added a React element and a fiber per usage — thousands of them in a
+// table, where Text sits in every cell.
+export const Text = TextComponent
 
 export const P: FC<TextProps> = forwardRef<HTMLParagraphElement, TextProps>((props, ref) => (
   <TextComponent {...props} ref={ref} htmlTag={textTags.P} />

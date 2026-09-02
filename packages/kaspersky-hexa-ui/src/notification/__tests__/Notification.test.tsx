@@ -10,9 +10,8 @@ import { notificationDestroy, openNotification } from '../NotificationService'
 import { NotificationContainerProps, NotificationProps } from '../types'
 
 describe('Notification', () => {
-  const componentId = 'notification-test-id'
   const notificationProps: NotificationProps = {
-    id: componentId,
+    id: 'notification-test-id',
     duration: 10,
     description: 'notification text',
     mode: 'success'
@@ -44,7 +43,7 @@ describe('Notification', () => {
   test('should render container', () => {
     const { container } = render(<Wrapper />)
 
-    expect(container.querySelector(`[id="${componentId}"]`)).toBeInTheDocument()
+    expect(container.querySelector(`[id="${notificationProps.id}"]`)).toBeInTheDocument()
   })
 
   test('should render error', async () => {

@@ -26,9 +26,9 @@ export function UploadList ({
 }: UploadListProps) {
   const onInternalDownload = (file: UploadFile) => {
     if (typeof onDownload === 'function') {
-      onDownload(file)
+      return () => onDownload(file)
     } else if (file.url) {
-      window.open(file.url)
+      return () => window.open(file.url)
     }
   }
 
@@ -39,7 +39,7 @@ export function UploadList ({
           {...file}
           key={file.uid}
           disabled={disabled}
-          onDownload={() => onInternalDownload(file)}
+          onDownload={onInternalDownload(file)}
           onRemove={() => onRemove?.(file)}
           onUpload={() => onUpload?.(file)}
           percent={showProgress ? file.percent : undefined}

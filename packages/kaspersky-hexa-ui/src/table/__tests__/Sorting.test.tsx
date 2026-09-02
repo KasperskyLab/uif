@@ -1,101 +1,81 @@
-import { LocalizationProvider } from '@design-system/context'
-import i18n from '@helpers/localization/i18n'
-import { ITableProps, Table } from '@src/table'
-import { DROPDOWN_PREFIX, modifyColumns, openDropdown as openDropdownCommon } from '@src/table/test-utils/helpers'
-import { configure, fireEvent, render, screen } from '@testing-library/react'
-import React from 'react'
+import { modifyColumns } from '@src/table/test-utils/helpers'
+import { MODES, renderByMode, TableMode } from '@src/table/test-utils/renderByMode'
+import { configure, fireEvent, screen, waitFor } from '@testing-library/react'
 
-import { generatedData, tableColumns } from '../__mocks__/filtersMockData'
+import { generatedData, tableColumns, TableMockProps } from '../__mocks__/filtersMockData'
 
 configure({ testIdAttribute: 'data-testid' })
 
-const TABLE_TEST_ID = 'test-table-test-id'
+jest.setTimeout(15000)
 
-const defaultProps = {
-  klId: 'test-table-kl-id',
-  testId: TABLE_TEST_ID,
-  dataSource: generatedData
-}
-
+const sortData = generatedData.slice(0, 20)
 const modifiedColumns = modifyColumns(tableColumns, 'group', { showEnumFiltersInColumn: true })
 
-function DefaultTable (props: ITableProps) {
-  return <LocalizationProvider i18n={i18n}><Table pagination={{ pageSize: 20 }} {...props} {...defaultProps} /></LocalizationProvider>
+const renderSorting = (mode: TableMode, props: Partial<TableMockProps> = {}) =>
+  renderByMode(mode, sortData, { columns: modifiedColumns, ...props })
+
+const extractAttribute = (cellContent: string, attribute?: string): string => {
+  if (!attribute) return cellContent
+  const match = cellContent.match(new RegExp(`${attribute}:\\s*(.+?)(?=\\n|$)`))
+  return match ? match[1].trim() : ''
 }
 
-const openDropdown = async (dataIndex: string, attribute?: string) => {
-  const popup = await openDropdownCommon(dataIndex, TABLE_TEST_ID)
-  expect(popup).toBeInTheDocument()
+const columnIndexMap = { fullname: 0, details: 6 }
 
-  if (attribute) {
-    const attributeItem = await getSortItem(`${dataIndex}-sorting-${attribute}`)
-    await fireEvent.click(attributeItem.querySelector('div')!)
-  }
-}
-
-const getSortItem = async (postfix: string) => {
-  return await screen.findByTestId(`${TABLE_TEST_ID}-${DROPDOWN_PREFIX}-${postfix}`)
-}
-
-const getAllRows = async (): Promise<HTMLTableRowElement[]> => {
-  const tableBody = await screen.findByTestId(TABLE_TEST_ID)
-  return Array.from(tableBody.querySelectorAll('tr')).slice(1)
-}
-
-const getTextContentFromColumn = (rows: HTMLTableRowElement[], columnIndex: number, attribute?: string) => {
-  return Array.from(rows).map(row => {
-    const cells = row.querySelectorAll('td')
-    const cellContent = cells[columnIndex]?.textContent?.trim() || ''
-
-    if (attribute) {
-      const regex = new RegExp(`${attribute}:\\s*(.+?)(?=\\n|$)`)
-      const match = cellContent.match(regex)
-      return match ? match[1].trim() : ''
-    }
-
-    return cellContent
-  })
-}
-
-describe('Table sorting functionality', () => {
-  const sortFnAsc = (a: any, b: any) => a - b
-  const sortFnDesc = (a: any, b: any) => b - a
-
-  const scenarios: { dataIndex: string, attribute?: string, direction: string, sortFn: (a: any, b: any) => number }[] = [
+describe.each(MODES)('Table sorting - $description', ({ mode }) => {
+  const baseScenarios: { dataIndex: keyof typeof columnIndexMap, attribute?: string }[] = [
     { dataIndex: 'fullname' },
     { dataIndex: 'details', attribute: 'email' },
     { dataIndex: 'details', attribute: 'city' }
-  ].map(scenario => [
-    { ...scenario, direction: 'asc', sortFn: sortFnAsc },
-    { ...scenario, direction: 'desc', sortFn: sortFnDesc }
-  ]).flat()
+  ]
+  const scenarios = baseScenarios.flatMap(scenario => [
+    { ...scenario, direction: 'asc' as const },
+    { ...scenario, direction: 'desc' as const }
+  ])
 
-  const columnIndexMap = {
-    fullname: 0,
-    details: 6
-  }
-
-  scenarios.forEach(({ direction, sortFn, attribute, dataIndex }) => {
+  scenarios.forEach(({ direction, attribute, dataIndex }) => {
     it(`should sort ${dataIndex} column in ${direction} order${attribute ? ` with attribute ${attribute}` : ''}`, async () => {
-      render(<DefaultTable columns={modifiedColumns} />)
+      const { table, dataSourceFunction } = renderSorting(mode)
+      await table.rows.waitForData()
 
-      await openDropdown(dataIndex, attribute)
+      await table.sorting.sortBy(dataIndex, direction, attribute)
 
-      const sortItemTestId = `${dataIndex}-sorting${attribute ? `-${attribute}` : ''}-${direction}`
-      const sortItem = await getSortItem(sortItemTestId)
-      fireEvent.click(sortItem)
+      if (mode === 'server') {
+        const dsf = dataSourceFunction as jest.Mock
+        await waitFor(() => {
+          const sorting = dsf.mock.lastCall?.[0]?.sorting
+          expect(sorting?.isAsc).toBe(direction === 'asc')
+          if (attribute) {
+            expect(sorting?.attribute).toBe(attribute)
+          }
+        })
+      }
 
-      const rows = await getAllRows()
-      const values = getTextContentFromColumn(rows, columnIndexMap[dataIndex as keyof typeof columnIndexMap], attribute)
+      const columnIndex = columnIndexMap[dataIndex]
+      await waitFor(() => {
+        const values = table.rows.getColumnValues(columnIndex).map(value => extractAttribute(value, attribute))
+        const sorted = [...values].sort()
+        expect(values).toEqual(direction === 'asc' ? sorted : sorted.reverse())
+      })
 
-      expect(values).toEqual(values.slice().sort(sortFn))
-
-      await openDropdown(dataIndex, attribute)
-      expect(await getSortItem(sortItemTestId)).toHaveClass('ant-dropdown-menu-item-selected')
+      expect(await table.sorting.isActive(dataIndex, direction, attribute)).toBe(true)
     })
   })
+})
 
-  it('should call column sorter with rows and sort direction when sortable column header is clicked', async () => {
+describe('Table sorting - client-only', () => {
+  it('should not client-sort the data when isDefaultSortDisabled is true', async () => {
+    const { table } = await renderByMode('client', sortData, {
+      columns: modifiedColumns,
+      initialSorting: { field: 'fullname', direction: 'asc' },
+      isDefaultSortDisabled: true
+    })
+
+    const values = table.rows.getColumnValues(columnIndexMap.fullname)
+    expect(values).toEqual(sortData.map(row => row.fullname))
+  })
+
+  it('should call column sorter with rows and sort direction when sortable column header is clicked', () => {
     const sorterFunction = jest.fn(() => 0)
 
     const mockData = [
@@ -103,20 +83,17 @@ describe('Table sorting functionality', () => {
       { key: '2', fullname: 'Петр Петров', salary: 60000 }
     ]
 
-    render(
-      <DefaultTable
-        dataSource={mockData}
-        columns={[
-          {
-            key: 'fullname',
-            dataIndex: 'fullname',
-            title: 'Title',
-            isSortable: true,
-            sorter: sorterFunction
-          }
-        ]}
-      />
-    )
+    renderByMode('client', mockData, {
+      columns: [
+        {
+          key: 'fullname',
+          dataIndex: 'fullname',
+          title: 'Title',
+          isSortable: true,
+          sorter: sorterFunction
+        }
+      ]
+    })
 
     fireEvent.click(screen.getByText('Title'))
     fireEvent.click(screen.getByText('Ascending'))
@@ -126,5 +103,87 @@ describe('Table sorting functionality', () => {
       expect.objectContaining({ fullname: expect.any(String) }),
       true
     )
+  })
+})
+
+describe('Table sorting - server data specifics', () => {
+  it('should send columnServerField as sorting.field when configured', async () => {
+    const columns = modifyColumns(modifiedColumns, 'fullname', { columnServerField: 'server_fullname' })
+    const { table, dataSourceFunction } = renderSorting('server', { columns })
+    await table.rows.waitForData()
+
+    await table.sorting.sortBy('fullname', 'asc')
+
+    const dsf = dataSourceFunction as jest.Mock
+    await waitFor(() => expect(dsf.mock.lastCall?.[0]?.sorting?.field).toBe('server_fullname'))
+  })
+
+  it('should switch the request sorting attribute from email to city within one session', async () => {
+    const { table, dataSourceFunction } = renderSorting('server')
+    await table.rows.waitForData()
+    const dsf = dataSourceFunction as jest.Mock
+
+    await table.sorting.sortBy('details', 'asc', 'email')
+    await waitFor(() => {
+      expect(dsf.mock.lastCall?.[0]?.sorting?.attribute).toBe('email')
+      expect(dsf.mock.lastCall?.[0]?.sorting?.field).toBe('details')
+    })
+
+    await table.sorting.sortBy('details', 'desc', 'city')
+    await waitFor(() => {
+      expect(dsf.mock.lastCall?.[0]?.sorting?.attribute).toBe('city')
+      expect(dsf.mock.lastCall?.[0]?.sorting?.field).toBe('details')
+      expect(dsf.mock.lastCall?.[0]?.sorting?.isAsc).toBe(false)
+    })
+  })
+})
+
+describe.each(MODES)('Table sorting - controlled & callbacks - $description', ({ mode }) => {
+  it('should apply initialSorting to the initial state', async () => {
+    const { table, dataSourceFunction } = await renderSorting(mode, { initialSorting: { field: 'fullname', direction: 'asc' } })
+
+    if (mode === 'server') {
+      const dsf = dataSourceFunction as jest.Mock
+      await waitFor(() => {
+        expect(dsf.mock.lastCall?.[0]?.sorting?.field).toBe('fullname')
+        expect(dsf.mock.lastCall?.[0]?.sorting?.isAsc).toBe(true)
+      })
+    } else {
+      await waitFor(() => {
+        const values = table.rows.getColumnValues(columnIndexMap.fullname)
+        expect(values).toEqual([...values].sort())
+      })
+    }
+  })
+
+  it('should apply externalSorting (controlled) to the sort state', async () => {
+    const { table, dataSourceFunction } = await renderSorting(mode, { externalSorting: { field: 'fullname', direction: 'desc' } })
+
+    if (mode === 'server') {
+      const dsf = dataSourceFunction as jest.Mock
+      await waitFor(() => {
+        expect(dsf.mock.lastCall?.[0]?.sorting?.field).toBe('fullname')
+        expect(dsf.mock.lastCall?.[0]?.sorting?.isAsc).toBe(false)
+      })
+    } else {
+      await waitFor(() => {
+        const values = table.rows.getColumnValues(columnIndexMap.fullname)
+        expect(values).toEqual([...values].sort().reverse())
+      })
+    }
+  })
+
+  it('should call onSortChange when the user changes sorting', async () => {
+    const onSortChange = jest.fn()
+    const { table } = await renderSorting(mode, { onSortChange })
+
+    await table.sorting.sortBy('fullname', 'asc')
+
+    await waitFor(() => {
+      expect(onSortChange).toHaveBeenCalled()
+      const arg = onSortChange.mock.lastCall[0]
+      expect(arg.field).toBe('fullname')
+      expect(arg.direction).toBe('asc')
+    })
   })
 })

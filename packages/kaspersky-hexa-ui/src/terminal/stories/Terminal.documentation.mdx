@@ -1,0 +1,101 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Terminal } from '../Terminal'
+import { terminalDesignPropPresentation } from './Terminal.design.properties'
+import { TerminalDemo } from './TerminalDemo'
+import * as TerminalStories from './Terminal.stories'
+
+<Meta of={TerminalStories} name="Terminal Docs" />
+
+<DocPageLayout>
+  <DocPageHeader
+    title="Terminal"
+  />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **Terminal** — интерактивная область для отображения и ввода команд, работающая на базе xterm.js
+
+          **Terminal** применяйте в сценариях, где пользователю нужно выполнять команды и видеть потоковый результат: администрирование, диагностика или работа с удалённым окружением. Располагайте его в устойчивой по размеру области, чтобы длинный вывод и прокрутка оставались читаемыми.
+
+          Для просмотра или редактирования статичного фрагмента кода используйте **CodeViewer**. Если нужно сопоставить две версии текста, выбирайте **CodeCompare**." />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**Terminal** отображает вывод интерактивной консоли и передаёт пользовательский ввод во внешний сервис. Для работы нужны **dataTransferAddon** для обмена данными, **options** для настройки экземпляра xterm.js и **customAddons** для подключения дополнительных расширений."
+
+      />
+
+      <DocExampleBlock
+        title="Визуальный пример"
+        description="Демонстрация терминала с моковым каналом передачи данных."
+        code={`
+          <TerminalDemo width="100%" height="320px" showOutput />
+        `}
+        minHeight={320}
+        scope={{ TerminalDemo }}
+      />
+
+      <DocExampleBlock
+        title="dataTransferAddon"
+        description="Обязательный проп. Аддон обмена данными между терминалом и внешним сервисом. Создайте его на основе `TerminalBasicDataTransferAddon` и реализуйте передачу пользовательского ввода и обработку входящих сообщений."
+      />
+
+      <DocExampleBlock
+        title="options"
+        description="Настройки экземпляра xterm.js. По умолчанию — `{}`; переданные значения применяются после темы Terminal и могут переопределить её настройки."
+      />
+
+      <DocExampleBlock
+        title="customAddons"
+        description="Дополнительные аддоны xterm.js, которые подключаются после стандартных аддонов Terminal."
+
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={TerminalStories} />
+      <AutodocArgsTable components={Terminal} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=169090:233128)"
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(terminalDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Terminal" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

@@ -1,3 +1,55 @@
+### Table
+
+#### Basic Usage
+
+Базовый пример использования компонента таблицы с кастомной оберткой и типом `ProductTableRow` для данных.
+
+```tsx
+import { Table } from '@kaspersky/hexa-ui'
+import type { ITableProps, TableColumn, TableRecord } from '@kaspersky/hexa-ui'
+
+type ProductTableRow = TableRecord & {
+  id: string,
+  name: string,
+  age: number
+}
+
+// Кастомная обертка над таблицей
+const TableCustom = <T extends TableRecord = TableRecord>(
+  props: ITableProps<T>
+) => {
+  return <Table {...props} />
+}
+
+// Пример продуктового компонента
+export const UsersTable = () => {
+  const users: ProductTableRow[] = useMemo(() => ([
+    { id: '1', name: 'Ada', age: 36 },
+    { id: '2', name: 'Alan', age: 41 }
+  ]), [])
+
+  const columns: TableColumn<ProductTableRow>[] = useMemo(() => ([
+    {
+      key: 'name',
+      dataIndex: 'name',
+      title: 'Name'
+    },
+    {
+      key: 'age',
+      dataIndex: 'age',
+      title: 'Age'
+    }
+  ]), [])
+
+  return (
+    <TableCustom
+      dataSource={users}
+      columns={columns}
+    />
+  )
+}
+```
+
 #### Table props
 
 ##### resizeMode?: 'max' | 'last' | 'scroll' | 'manual'

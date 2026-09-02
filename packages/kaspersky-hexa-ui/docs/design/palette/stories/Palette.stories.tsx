@@ -15,7 +15,7 @@ import { SectionMessage } from '@src/section-message'
 import { P } from '@src/typography'
 
 const meta: Meta = {
-  title: 'Design/Colors',
+  title: 'Design Tokens/Colors',
   component: ThemedPalette,
   parameters: {
     docs: {

@@ -1,0 +1,299 @@
+@use 'sass:map';
+@use '../../design-system/tokens/typography.module.scss';
+@use '../../design-system/breakpoints/index.scss' as breakpoints;
+
+$min-modal-height: 180px;
+$title-padding: var(--spacing--padding_xl);
+$footer-padding: var(--spacing--padding_xl);
+$border-width: 1px;
+
+$modal-sizes: (
+  small: (
+    max-width: var(--modal-minwidth--desktop),
+    top: 120px
+  ),
+  large: (
+    max-width: 1200px,
+    top: 40px
+  )
+);
+
+$modal-modes: (
+  default: (
+    icon: none,
+    border: none,
+  ),
+  warning: (
+    icon: var(--fg--warning--muted),
+    border: var(--fg--warning--muted)
+  ),
+  error: (
+    icon: var(--common--danger--enabled),
+    border: var(--common--danger--enabled)
+  ),
+  success: (
+    icon: var(--common--success--enabled),
+    border: var(--common--success--enabled)
+  ),
+  ai: (
+    icon: var(--modal--icon--info),
+    border: linear-gradient(
+      90deg,
+      var(--modal--border--ai--green) 0%,
+      var(--modal--border--ai--marina) 40.38%,
+      var(--modal--border--ai--violet) 100%
+    )
+  )
+);
+
+@mixin apply-modal-size($size) {
+  $tokens: map.get($modal-sizes, $size);
+
+  --modal-max-width: #{map.get($tokens, max-width)};
+  --modal-top: #{map.get($tokens, top)};
+}
+
+@mixin apply-modal-mode($mode) {
+  $tokens: map.get($modal-modes, $mode);
+  $icon: map.get($tokens, icon);
+
+  --modal-mode-border: #{map.get($tokens, border)};
+
+  @if $icon {
+    --modal-icon-color: #{$icon};
+  }
+}
+
+:global(.ant-modal-mask) { 
+  background-color: transparent;
+}
+
+.modalWrap {
+  padding: var(--spacing--padding_xl);
+  background-color: var(--overlay--bg);
+}
+
+.dialogWrap {
+  padding: 40px;
+  pointer-events: none;
+  background-color: transparent;
+
+  &:global(.ant-modal-centered) {
+    :global(.ant-modal) {
+      vertical-align: bottom;
+    }
+  }
+
+  :global(.ant-modal-content) {
+    pointer-events: auto;
+  }
+
+  &.left {
+    text-align: start;
+  }
+
+  &.center {
+    text-align: center;
+  }
+
+  &.right {
+    text-align: end;
+  }
+}
+
+:global(.ant-modal).modal {
+  box-sizing: content-box;
+  margin: 0 auto;
+  max-width: var(--modal-max-width);
+  position: relative;
+  width: 100%;
+
+  &.small {
+    @include apply-modal-size(small);
+  }
+
+  &.large {
+    @include apply-modal-size(large);
+  }
+
+  &.default {
+    @include apply-modal-mode(default);
+  }
+
+  &.warning {
+    @include apply-modal-mode(warning);
+  }
+
+  &.error {
+    @include apply-modal-mode(error);
+  }
+
+  &.success {
+    @include apply-modal-mode(success);
+  }
+
+  &.ai {
+    @include apply-modal-mode(ai);
+  }
+
+  &.showTopBorder {
+    :global(.ant-modal-header) {
+      border-bottom-color: var(--border--neutral--bold);
+    }
+  }
+
+  &.showBottomBorder {
+    :global(.ant-modal-footer) {
+      border-top-color: var(--border--neutral--bold);
+    }
+  }
+
+  &.withoutFooter {
+    .modalContent {
+      padding-bottom: $footer-padding;
+    }
+  }
+
+  &.closable {
+    .title {
+      padding-inline-end: 40px;
+    }
+  }
+
+  :global(.ant-modal-close) {
+    height: auto;
+    right: unset;
+    inset-inline-end: 24px;
+    top: 28px;
+    width: auto;
+
+    :global(.ant-modal-close-x) {
+      display: flex;
+      height: auto;
+      width: auto;
+    }
+  }
+
+  :global(.ant-modal-content),
+  :global(.ant-modal-header),
+  :global(.ant-modal-footer) {
+    background: var(--bg--neutral--level_0);
+    color: var(--fg--neutral--primary);
+  }
+
+  :global(.ant-modal-content) {
+    border-radius: 12px;
+    box-shadow:
+      0 8px 12px 0 var(--elevation--shadow_drop),
+      0 0 1px 0 var(--elevation--shadow_contour);
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+
+    &::before {
+      background: var(--modal-mode-border);
+      content: '';
+      height: 4px;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+
+  :global(.ant-modal-body) {
+    @extend .btr3;
+
+    padding: 0;
+  }
+
+  :global(.ant-modal-header) {
+    border-bottom: $border-width solid transparent;
+    padding: $title-padding;
+  }
+
+  :global(.ant-modal-footer) {
+    border-radius: 0;
+    border-top: $border-width solid transparent;
+    padding: $footer-padding;
+
+    :global(.ant-btn + .ant-btn) {
+      margin-left: 0;
+    }
+  }
+}
+
+.title {
+  @extend .h5;
+
+  color: var(--fg--neutral--primary);
+  display: flex;
+  gap: 8px;
+  word-wrap: break-word;
+  text-align: start;
+}
+
+.icon {
+  flex-shrink: 0;
+  padding: 0;
+  height: 16px;
+
+  svg {
+    color: var(--modal-icon-color);
+  }
+}
+
+.modalContent {
+  max-height: calc(
+    100vh
+    - var(--modal-top)
+    - var(--modal-top)
+    - var(--modal-title-height)
+    - var(--modal-footer-height)
+    - #{$title-padding}
+    - #{$title-padding}
+    - #{$footer-padding}
+    - #{$footer-padding}
+  );
+
+  min-height: calc(
+    #{$min-modal-height}
+    - var(--modal-title-height)
+    - var(--modal-footer-height)
+    - #{$title-padding}
+    - #{$title-padding}
+    - #{$footer-padding}
+    - #{$footer-padding}
+  );
+
+  overflow-y: auto;
+  padding: 0 24px;
+  text-align: start;
+}
+
+@media (max-width: breakpoints.$mobile) {
+  .modalWrap {
+    padding: var(--spacing--padding_l);
+  }
+
+  .dialogWrap {
+    padding: var(--spacing--padding_xl);
+  }
+
+  :global(.ant-modal) {
+    &.modal.dialog {
+      .modalContent {
+          max-height: calc(
+            100vh
+            - var(--modal-top)
+            - var(--modal-title-height)
+            - var(--modal-footer-height)
+            - #{$border-width}
+            - #{$border-width}
+            - #{$footer-padding}
+          );
+      }
+    }
+  }
+}
+

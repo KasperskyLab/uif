@@ -73,7 +73,8 @@ export type UploaderCssConfig = {
     invalid: Omit<FileColorConfig, 'size'> & {
       validation: string
     },
-    loading: Omit<FileColorConfig, 'icon' | 'size'>
+    loading: Omit<FileColorConfig, 'icon' | 'size'>,
+    success: Pick<FileColorConfig, 'icon'>
   }
 }
 

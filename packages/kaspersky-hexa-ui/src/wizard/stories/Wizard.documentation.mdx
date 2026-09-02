@@ -1,0 +1,220 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Space } from '@src/space'
+import { Text } from '@src/typography'
+
+import { Wizard } from '../Wizard'
+import * as WizardStories from './Wizard.stories'
+import {
+  wizardPageDesignPropPresentation,
+  wizardSidebarDesignPropPresentation,
+} from './Wizard.design.properties'
+
+<Meta of={WizardStories} name="Wizard Docs" />
+
+<DocPageLayout>
+  <DocPageHeader
+    title="Wizard"
+  />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **Wizard** — компонент для последовательного прохождения шагов сценария
+
+          **Wizard** используйте для задач с обязательной последовательностью: создание учётной записи, настройка продукта, оформление многошаговой заявки. Шаги должны отражать понятные части сценария и помогать пользователю понимать прогресс, а не дробить одну короткую форму на несколько экранов.
+
+          Для независимых настроек на одной странице выбирайте обычную форму с **Button** для сохранения. В модальном окне и сайдбаре оставляйте сценарий компактным: если задача требует много данных или длительного изучения, размещайте её на отдельной странице."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**Wizard** помогает разбить последовательную задачу на шаги с навигацией назад и вперёд. Компонент отображается в составе страницы, модального окна или сайдбара; каждый шаг задаётся через **steps**, а завершение и смена шагов отслеживаются колбэками **onFinish** и **onStepChange**."
+
+      />
+
+      <DocExampleBlock
+        title="view"
+        description="Обязательный проп. Определяет контейнер мастера. Доступные значения: `page`, `modal`, `sidebar`."
+        previewDirection="vertical"
+        code={`
+          <Wizard
+            view="page"
+            steps={[{ name: 'Данные', render: () => <>Содержимое шага</> }]}
+          />
+
+          <Wizard
+            view="modal"
+            modal={{ visible: false, title: 'Настройка' }}
+            steps={[{ name: 'Данные', render: () => <>Содержимое шага</> }]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="steps"
+        description="Обязательный проп. Массив шагов сценария: имя шага передаётся через **name**, необязательное пояснение — через **description**, а содержимое — через **render** или устаревший **Component**. **render** получает функции перехода и сведения о текущем шаге."
+        code={`
+          <Wizard
+            view="page"
+            steps={[
+              { name: 'Профиль', render: () => <>Данные профиля</> },
+              { name: 'Подтверждение', render: () => <>Проверьте данные</> },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="initialStep и activeStep"
+        description="**initialStep** задаёт номер шага при первом рендере. **activeStep** устанавливает текущий шаг извне; при его изменении мастер переходит на указанную позицию."
+        code={`
+          <Wizard
+            view="page"
+            initialStep={1}
+            steps={[
+              { name: 'Шаг 1', render: () => <>Первый шаг</> },
+              { name: 'Шаг 2', render: () => <>Второй шаг</> },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="isVertical"
+        description="**isVertical** размещает индикаторы шагов вертикально на странице."
+        code={`
+          <Wizard
+            view="page"
+            isVertical
+            steps={[
+              { name: 'Шаг 1', render: () => <>Первый шаг</> },
+              { name: 'Шаг 2', render: () => <>Второй шаг</> },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="lastItem"
+        description="**lastItem** управляет завершающим сегментом после последнего индикатора."
+        code={`
+          <Wizard
+            view="page"
+            lastItem={false}
+            steps={[
+              { name: 'Шаг 1', render: () => <>Первый шаг</> },
+              { name: 'Шаг 2', render: () => <>Второй шаг</> },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="onStepChange"
+        description="**onStepChange** вызывается при переходе на другой шаг и получает его номер."
+        code={`
+          <Wizard
+            view="page"
+            onStepChange={(step) => alert(\`Текущий шаг: \${step + 1}\`)}
+            steps={[
+              { name: 'Шаг 1', render: () => <>Первый шаг</> },
+              { name: 'Шаг 2', render: () => <>Второй шаг</> },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="onFinish"
+        description="**onFinish** вызывается после успешного завершения последнего шага."
+        code={`
+          <Wizard
+            view="page"
+            onFinish={() => alert('Сценарий завершён')}
+            steps={[{ name: 'Завершение', render: () => <>Последний шаг</> }]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="Тексты кнопок"
+        description="**cancelButtonText**, **backButtonText**, **nextButtonText** и **finishButtonText** заменяют локализованные подписи кнопок."
+        code={`
+          <Wizard
+            view="page"
+            cancelButtonText="Отмена"
+            backButtonText="Назад"
+            nextButtonText="Продолжить"
+            finishButtonText="Готово"
+            steps={[{ name: 'Настройка', render: () => <>Содержимое шага</> }]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="footerAdditionalElement"
+        description="**footerAdditionalElement** добавляет содержимое в свободную область футера."
+        code={`
+          <Wizard
+            view="page"
+            footerAdditionalElement={<span>Черновик сохранён</span>}
+            steps={[{ name: 'Настройка', render: () => <>Содержимое шага</> }]}
+          />
+        `}
+
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={WizardStories} />
+      <AutodocArgsTable components={Wizard} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=125554:194646)"
+      />
+      <Space direction="vertical" gap={32} >
+        <Space direction="vertical" gap={8} align="stretch">
+          <Text type="H3">Wizard page</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(wizardPageDesignPropPresentation)} />
+        </Space>
+        <Space direction="vertical" gap={8} align="stretch">
+          <Text type="H3">Wizard sidebar</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(wizardSidebarDesignPropPresentation)} />
+        </Space>
+      </Space>
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Wizard" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

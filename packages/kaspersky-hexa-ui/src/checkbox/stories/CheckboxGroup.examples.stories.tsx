@@ -28,13 +28,11 @@ export const Basic: StoryCheckboxGroup = {
   render: (args: CheckboxGroupProps) => (
     <StoryColumn>
       <CheckboxComponent.Group
-        componentId="test-cb4"
         testId="test-cb4"
         direction="vertical"
         {...args}
       />
       <CheckboxComponent.Group
-        componentId="test-cb5"
         testId="test-cb5"
         direction="horizontal"
         {...args}

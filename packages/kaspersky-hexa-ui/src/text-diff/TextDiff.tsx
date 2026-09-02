@@ -27,7 +27,7 @@ export const TextDiff: FC<TextDiffProps> = (props) => {
     >
       {textDiffModes.map(mode => {
         const text = props[`${mode}Text`]
-        const { testAttributes: childTestAttributes } = useTestAttribute<any>(getChildTestProps(mode, testAttributes))
+        const { testAttributes: childTestAttributes } = useTestAttribute<any>(getChildTestProps(mode, testAttributes, false, true))
         return shouldRender(text) && React.createElement(
           mode === 'new' ? 'ins' : 'del',
           {

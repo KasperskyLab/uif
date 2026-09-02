@@ -59,13 +59,14 @@ export const Checkbox = ({
           ? (
               <FormLabel
                 disabled={disabled}
+                readOnly={readonly}
                 required={required}
                 tooltip={tooltip}
                 mode={mode}
                 htmlFor={uid}
                 getPopupContainer={
                   config.getPopupContainer ??
-                (triggerNode => config.usePortal ? document.body : triggerNode.parentElement!)
+                  (triggerNode => config.usePortal ? document.body : triggerNode.parentElement!)
                 }
               >
                 {children}

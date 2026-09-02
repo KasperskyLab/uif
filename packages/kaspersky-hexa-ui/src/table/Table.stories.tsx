@@ -15,7 +15,11 @@ import {
   Story
 } from './stories/_commonConstants'
 import TableDocs from './stories/docs/TableDocs.md'
+import { HorizontalScroll as HorizontalScrollStory } from './stories/HorizontalScroll'
+import { InSidebar as InSidebarStory } from './stories/InSidebar'
+import { TableSettings as TableSettingsStory } from './stories/TableSettings'
 
+import { TableMockStory } from './__mocks__/filtersMockData'
 import { ITableProps, Table } from './index'
 
 const meta: Meta<ITableProps> = {
@@ -24,8 +28,7 @@ const meta: Meta<ITableProps> = {
   args: {
     columns: basicTwoColumns,
     dataSource: basicDataSource,
-    testId: 'test-123',
-    borderedStyle: false
+    testId: 'test-123'
   },
   parameters: {
     badges: [badges.stable],
@@ -57,24 +60,16 @@ export const ColorTokens: PaletteStory = {
   render: args => <ThemedPalette {...args} />
 }
 
-export { EmptyText } from './stories/Empty'
-export { EmptyCellDash } from './stories/EmptyCellDash'
-export { EmptyHeightFull } from './stories/EmptyHeightFull'
 export { Disabled } from './stories/Disabled'
-export { Draggable } from './stories/Draggable'
-export { DraggableWithRowSelection } from './stories/DraggableWithRowSelection'
-export { HorizontalScroll } from './stories/HorizontalScroll'
-export { OnHoverContent } from './stories/OnHoverContent'
-export { CellWithTable } from './stories/CellWithTable'
-export { TagGroupCell } from './stories/TagGroupCell'
-export { ColumnsWidthPercent } from './stories/ColumnsWidthPercent'
-export { RowAccordion } from './stories/RowAccordion'
-export { BgPattern } from './stories/BgPattern'
-export { InSidebar } from './stories/InSidebar'
-export { ExpandableText } from './stories/ExpandableText'
-export { WithFilters } from './stories/WithFilters'
-export { WithIconColumn } from './stories/WithIconColumn'
-export { KesTable } from './stories/KesTable'
-export { WithContextMenu } from './stories/WithContextMenu'
-export { TableSettings } from './stories/TableSettings'
-export { Reduction } from './stories/Reduction'
+export const HorizontalScroll: Story = {
+  ...HorizontalScrollStory,
+  name: 'Horizontal scroll'
+}
+export const InSidebar: TableMockStory = {
+  ...InSidebarStory,
+  name: 'Table in sidebar'
+}
+export const TableSettings: Story = {
+  ...TableSettingsStory,
+  name: 'Table Settings'
+}

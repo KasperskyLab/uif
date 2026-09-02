@@ -1,121 +1,387 @@
 import { Description, Meta } from '@storybook/addon-docs/blocks'
-import { AutodocArgsTable, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
 import { Text } from '@src/typography'
 
 import { RangePicker } from '../RangePicker'
+import { rangePickerDesignPropPresentation } from './RangePicker.design.properties'
 import * as RangePickerStories from './RangePicker.stories'
 
 <Meta of={RangePickerStories} name="RangePicker Docs" />
 
 <DocPageLayout>
 
-<DocPageHeader
-  title="RangePicker"
-  description="**RangePicker** — поле выбора интервала дат «с — по» с календарём, маской ввода и опциональным выбором времени"
-/>
+  <DocPageHeader title="RangePicker" />
 
-<Tabs defaultActiveKey="description">
-  <Tabs.TabPane tab="Описание" key="description">
+  <Tabs defaultActiveKey="description">
 
-    <DocExampleBlock
-      title="Описание компонента"
-      description="Публичный API выбора диапазона дат в Hexa UI — компонент **RangePicker**. Построен на стилизованном RangePicker из Ant Design и rc-picker с темизацией поля ввода Hexa UI. Поддерживает два поля ввода с разделителем, ввод с маской, выпадающий календарь с выделением интервала, очистку значения, **showTime**, **format**, **placeholder**, пресеты **presets**, ограничение дат **disabledDate**, состояния **disabled** и **readonly**, а также **validationStatus**. Для выбора одной даты используйте **Calendar** (раздел DatePicker). Для интервала только времени — **RangeTimeInput**."
-    />
+    <Tabs.TabPane tab="Описание" key="description">
 
-    <DocExampleBlock
-      title="value"
-      description="Контролируемое значение — кортеж `[Date | null, Date | null]` или `null`, если диапазон сброшен. По умолчанию — `[null, null]`. Изменения передаются через **onChange**."
-      code={`<RangePicker value={[null, null]} />
-<RangePicker value={[new Date(), new Date()]} />`}
-    />
+      <DocExampleBlock
+        description="
+          **RangePicker** — поле выбора интервала дат «с — по» с календарём, маской ввода и опциональным выбором времени
 
-    <DocExampleBlock
-      title="showTime"
-      description="Добавляет панель выбора времени в выпадающем календаре. Доступные значения: `true`, `false`. По умолчанию — `false`. Если пользователь не выбирал время явно, при закрытии панели время конечной даты сбрасывается на полночь."
-      code='
-    <RangePicker />
-    <RangePicker showTime />'
-    />
+          **RangePicker** применяют в формах, фильтрах и панелях отчётности, когда пользователю нужно указать период «с — по»: диапазон событий, интервал отчёта, срок действия правила. Единый контрол с двумя полями и общим календарём удобнее двух отдельных полей даты и лучше поддерживает быстрые пресеты периода.
 
-    <DocExampleBlock
-      title="format"
-      description="Формат отображения даты в полях ввода. Строка преобразуется для `date-fns`. Если не задан, используется формат из текущей локали приложения."
-      code='
-    <RangePicker />
-    <RangePicker format="DD.MM.YYYY" />'
-    />
+          Для одной конкретной даты используйте **Calendar** (DatePicker). Для интервала только времени без даты — **RangeTimeInput**. Для простого текстового ввода без календаря подойдёт **Textbox**; для выбора из фиксированного списка периодов — **Select** или **SegmentedButton**."
+      />
 
-    <DocExampleBlock
-      title="placeholder"
-      description="Подсказки в пустых полях «с» и «по» — массив из двух строк. Если не задан, подставляются placeholder из локали (зависит от **showTime**)."
-      code={`<RangePicker placeholder={['__.__.____', '__.__.____']} />`}
-    />
+    </Tabs.TabPane>
 
-    <DocExampleBlock
-      title="presets"
-      description="Массив быстрых вариантов в подвале календаря: каждый элемент — **title** (подпись) и **value** (кортеж дат). По клику диапазон применяется и панель закрывается."
-      code={`<RangePicker presets={[{ title: 'Последняя неделя', value: [new Date(), new Date()] }]} />`}
-    />
+    <Tabs.TabPane tab="Структура" key="composition">
 
-    <DocExampleBlock
-      title="disabled"
-      description="Отключает поля и календарь: ввод и открытие панели недоступны, иконка очистки не показывается. Доступные значения: `true`, `false`. По умолчанию — `false`."
-      code='
-    <RangePicker />
-    <RangePicker disabled />'
-    />
+      <DocExampleBlock
+        description="Публичный API выбора диапазона дат в Hexa UI — компонент **RangePicker**. Построен на стилизованном RangePicker из Ant Design и rc-picker с темизацией поля ввода Hexa UI. Поддерживает два поля ввода с разделителем, ввод с маской, выпадающий календарь с выделением интервала, очистку значения, **showTime**, **format**, **placeholder**, пресеты **presets**, ограничение дат **disabledDate**, состояния **disabled** и **readonly**, а также **validationStatus**. Для выбора одной даты используйте **Calendar** (раздел DatePicker). Для интервала только времени — **RangeTimeInput**."
+      />
 
-    <DocExampleBlock
-      title="readonly"
-      description="Режим только для чтения: поля ведут себя как отключённые (**disabled** на уровне picker). Доступные значения: `true`, `false`. По умолчанию — `false`."
-      code={`<RangePicker value={[new Date(), new Date()]} />
-<RangePicker value={[new Date(), new Date()]} readonly />`}
-    />
+      <DocExampleBlock
+        title="value"
+        description="Контролируемое значение — кортеж `[Date | null, Date | null]` или `null`, если диапазон сброшен. По умолчанию — `[null, null]`. Изменения передаются через **onChange**."
+        code={`
+          <RangePicker value={[null, null]} />
+          <RangePicker value={[new Date(), new Date()]} />
+        `}
+      />
 
-    <DocExampleBlock
-      title="validationStatus"
-      description="Визуальный статус валидации полей ввода. Доступные значения: `default`, `error`, `success`. По умолчанию — `default`."
-      code='
-    <RangePicker validationStatus="default" />
-    <RangePicker validationStatus="error" />
-    <RangePicker validationStatus="success" />'
-    />
+      <DocExampleBlock
+        title="showTime"
+        description="Добавляет панель выбора времени в выпадающем календаре. Доступные значения: `true`, `false`. По умолчанию — `false`. Если пользователь не выбирал время явно, при закрытии панели время конечной даты сбрасывается на полночь."
+        code={`
+          <RangePicker />
+          <RangePicker showTime />
+        `}
+      />
 
-    <DocExampleBlock
-      title="disabledDate"
-      description="Функция, возвращающая `true` для дат, недоступных в календаре. Не блокирует ручной ввод в поля — только выбор в панели."
-      code={`<RangePicker disabledDate={(current) => current && current < new Date()} />`}
-    />
+      <DocExampleBlock
+        title="format"
+        description="Формат отображения даты в полях ввода. Строка преобразуется для `date-fns`. Если не задан, используется формат из текущей локали приложения."
+        code={`
+          <RangePicker />
+          <RangePicker format="DD.MM.YYYY" />
+        `}
+      />
 
-    <DocExampleBlock
-      title="onDateValidationChange"
-      description="Вызывается при изменении результата проверки заполненности диапазона: `true`, если обе даты заданы, `false` — если диапазон неполный, `null` — при пустом значении."
-    />
+      <DocExampleBlock
+        title="placeholder"
+        description="Подсказки в пустых полях «с» и «по» — массив из двух строк. Если не задан, подставляются placeholder из локали (зависит от **showTime**)."
+        code={`
+          <RangePicker placeholder={['__.__.____', '__.__.____']} />
+        `}
+      />
 
-  </Tabs.TabPane>
+      <DocExampleBlock
+        title="presets"
+        description="Массив быстрых вариантов в подвале календаря: каждый элемент — **title** (подпись) и **value** (кортеж дат). По клику диапазон применяется и панель закрывается."
+        code={`
+          <RangePicker
+            presets={[{ title: 'Последняя неделя', value: [new Date(), new Date()] }]}
+          />
+        `}
+      />
 
-  <Tabs.TabPane tab="Правила использования" key="howtouse">
+      <DocExampleBlock
+        title="disabled"
+        description="Отключает поля и календарь: ввод и открытие панели недоступны, иконка очистки не показывается. Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <RangePicker />
+          <RangePicker disabled />
+        `}
+      />
 
-    <DocExampleBlock
-      title="Правила использования"
-      description="**RangePicker** применяют в формах, фильтрах и панелях отчётности, когда пользователю нужно указать период «с — по»: диапазон событий, интервал отчёта, срок действия правила. Единый контрол с двумя полями и общим календарём удобнее двух отдельных полей даты и лучше поддерживает быстрые пресеты периода.
+      <DocExampleBlock
+        title="readonly"
+        description="Режим только для чтения: поля ведут себя как отключённые (**disabled** на уровне picker). Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <RangePicker value={[new Date(), new Date()]} />
+          <RangePicker value={[new Date(), new Date()]} readonly />
+        `}
+      />
 
-Для одной конкретной даты используйте **Calendar** (DatePicker). Для интервала только времени без даты — **RangeTimeInput**. Для простого текстового ввода без календаря подойдёт **Textbox**; для выбора из фиксированного списка периодов — **Select** или **SegmentedButton**."
-    />
+      <DocExampleBlock
+        title="validationStatus"
+        description="Визуальный статус валидации полей ввода. Доступные значения: `default`, `error`, `success`. По умолчанию — `default`."
+        code={`
+          <RangePicker validationStatus="default" />
+          <RangePicker validationStatus="error" />
+          <RangePicker validationStatus="success" />
+        `}
+      />
 
-  </Tabs.TabPane>
+      <DocExampleBlock
+        title="disabledDate"
+        description="Функция, возвращающая `true` для дат, недоступных в календаре. Не блокирует ручной ввод в поля — только выбор в панели."
+        code={`
+          <RangePicker disabledDate={(current) => current && current < new Date()} />
+        `}
+      />
 
-  <Tabs.TabPane tab="Дизайнеру" key="design">
-      <Text type="H3">Дизайн</Text>
-      <Text type="BTR3">
-        Раздел зарезервирован под дизайн-гайдлайны. Содержимое будет добавлено в следующих релизах.
-      </Text>
-  </Tabs.TabPane>
+      <DocExampleBlock
+        title="onDateValidationChange"
+        description="Вызывается при изменении результата проверки заполненности диапазона: `true`, если обе даты заданы, `false` — если диапазон неполный, `null` — при пустом значении."
+      />
 
-  <Tabs.TabPane tab="Properties" key="properties">
-    <Description of={RangePickerStories} />
-    <AutodocArgsTable components={RangePicker} />
-  </Tabs.TabPane>
-</Tabs>
+      <DocExampleBlock
+        title="onChange"
+        description="Вызывается при выборе, очистке или ручном вводе диапазона. Получает кортеж `[Date | null, Date | null]` либо `null` при сбросе значения."
+        code={`
+          <RangePicker onChange={(dates) => console.log(dates)} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="disabledTime"
+        description="Ограничивает доступные часы, минуты и секунды для начальной и конечной дат при включённом **showTime**. Функция получает дату и часть диапазона: `start` или `end`."
+        code={`
+          <RangePicker
+            showTime
+            disabledTime={(date, type) => ({
+              disabledHours: () => (type === 'start' ? [0, 1] : []),
+            })}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="allowEmpty"
+        description="Разрешает оставлять пустой начальную, конечную или обе даты. Принимает кортеж из двух булевых значений для начала и конца диапазона."
+        code={`
+          <RangePicker allowEmpty={[true, false]} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="defaultValue"
+        description="Проп объявлен в унаследованном API, но текущая реализация RangePicker не использует его для начального состояния: состояние всегда инициализируется из **value** или значением `[null, null]`."
+        code={`
+          <RangePicker defaultValue={[new Date(), new Date()]} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="defaultPickerValue"
+        description="Задаёт даты, которые календарь показывает при первом открытии, если диапазон ещё не выбран. Не изменяет **value**."
+        code={`
+          <RangePicker
+            defaultPickerValue={[new Date(2026, 0, 1), new Date(2026, 0, 31)]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="mode"
+        description="Задаёт режимы левой и правой панелей: `date`, `month`, `year`, `decade`, `week` или `time`. Передайте кортеж из двух значений."
+        code={`
+          <RangePicker mode={['month', 'month']} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="onPanelChange"
+        description="Вызывается при смене отображаемого периода или режима одной из панелей календаря. Получает текущие даты панелей и их режимы."
+        code={`
+          <RangePicker onPanelChange={(dates, modes) => console.log(dates, modes)} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="onOpenChange"
+        description="Вызывается при открытии и закрытии выпадающего календаря. Получает текущее состояние `true` или `false`."
+        code={`
+          <RangePicker onOpenChange={(isOpen) => console.log(isOpen)} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="open и defaultOpen"
+        description="**open** управляет видимостью календаря, а **defaultOpen** задаёт её только при монтировании. RangePicker хранит локальное состояние панели и синхронизирует его с **open**, если проп передан."
+        code={`
+          <RangePicker open />
+        `}
+      />
+
+      <DocExampleBlock
+        title="onCalendarChange и onOk"
+        description="**onCalendarChange** и **onOk** присутствуют в унаследованном типе. В текущей реализации **onCalendarChange** заменён внутренним обработчиком, поэтому переданная функция не вызывается; **onOk** передаётся в базовый picker и вызывается после подтверждения выбора времени."
+        code={`
+          <RangePicker showTime onOk={(dates) => console.log(dates)} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="dateRender и panelRender"
+        description="**dateRender** позволяет заменить содержимое ячейки даты. **panelRender** получает готовую панель и возвращает её содержимое; RangePicker помещает результат в собственный контейнер календаря."
+        code={`
+          <RangePicker dateRender={(date) => <span>{date.getDate()}</span>} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="order"
+        description="Определяет, упорядочивает ли базовый picker выбранные даты по возрастанию. Проп доступен из унаследованного API rc-picker."
+        code={`
+          <RangePicker order={false} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="customKeyDown"
+        description="Вызывается после внутренней обработки нажатия клавиши в поле диапазона. Получает событие клавиатуры нативного input."
+        code={`
+          <RangePicker customKeyDown={(event) => console.log(event.key)} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="validDatePattern"
+        description="Проп объявлен в публичном типе, но текущая реализация RangePicker его не использует. Переданное регулярное выражение не влияет на проверку или маску даты."
+        code={`
+          <RangePicker validDatePattern={/^\\d{2}\\.\\d{2}\\.\\d{4}$/} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="onDateValuesChange"
+        description="Проп объявлен в публичном типе, но текущая реализация RangePicker не вызывает переданную функцию при изменении строковых значений полей."
+        code={`
+          <RangePicker onDateValuesChange={(start, end) => console.log(start, end)} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="hasResetButton"
+        description="Проп объявлен в публичном типе, но текущая реализация RangePicker его не использует. Кнопка очистки определяется внутренней логикой: она показывается для непустого диапазона, если компонент не отключён и не находится в режиме только для чтения."
+        code={`
+          <RangePicker hasResetButton />
+        `}
+      />
+
+      <DocExampleBlock
+        title="allowClear, suffixIcon и clearIcon"
+        description="Пропы доступны из унаследованного API, но RangePicker заменяет их внутренней логикой: **allowClear** всегда `false`, а **suffixIcon** отображает календарь или собственную кнопку очистки. **clearIcon** не используется."
+        code={`
+          <RangePicker allowClear clearIcon={<span>×</span>} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="separator и иконки навигации"
+        description="**separator**, **prevIcon**, **nextIcon**, **superPrevIcon** и **superNextIcon** объявлены в унаследованном API, но RangePicker заменяет их собственными разделителем и иконками навигации. Переданные значения не отображаются."
+        code={`
+          <RangePicker separator="—" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="dropdownClassName, popupStyle, dropdownAlign и transitionName"
+        description="**dropdownClassName** добавляется к контейнеру выпадающего календаря. **popupStyle**, **dropdownAlign** и **transitionName** передаются базовому picker и настраивают стиль, положение и CSS-анимацию панели."
+        code={`
+          <RangePicker
+            dropdownClassName="report-range-calendar"
+            popupStyle={{ minWidth: 320 }}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="getPopupContainer"
+        description="Возвращает DOM-контейнер, в котором рендерится выпадающий календарь. Используйте, когда панель должна оставаться внутри конкретного контейнера, например модального окна."
+        code={`
+          <RangePicker
+            getPopupContainer={(trigger) => trigger.parentElement || document.body}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="autoFocus, inputReadOnly и tabIndex"
+        description="**autoFocus** переводит фокус в поле после монтирования, **inputReadOnly** устанавливает нативный `readonly`, а **tabIndex** задаёт порядок фокуса при клавиатурной навигации."
+        code={`
+          <RangePicker autoFocus inputReadOnly tabIndex={0} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="id, name и autoComplete"
+        description="Передают нативным полям идентификатор, имя для отправки формы и значение атрибута автозаполнения."
+        code={`
+          <RangePicker id="report-period" name="reportPeriod" autoComplete="off" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="className и style"
+        description="Добавляют CSS-класс и inline-стили к полю. Значение **className** также используется в контейнере выпадающего календаря."
+        code={`
+          <RangePicker className="report-period" style={{ width: 320 }} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="onFocus, onBlur, onMouseDown, onMouseUp, onMouseEnter, onMouseLeave, onClick и onContextMenu"
+        description="Обработчики фокуса и мыши для поля или его контейнера передаются базовому picker. **onKeyDown** не передаётся: RangePicker заменяет его внутренним обработчиком; используйте **customKeyDown**."
+        code={`
+          <RangePicker
+            onFocus={() => console.log('Фокус в поле')}
+            onMouseEnter={() => console.log('Курсор над полем')}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="role, direction и aria-атрибуты"
+        description="**role** и aria-атрибуты передают семантику и доступное имя полям. **direction** задаёт направление интерфейса: `ltr` или `rtl`."
+        code={`
+          <RangePicker aria-label="Период отчёта" direction="rtl" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="theme, testId и klId"
+        description="**theme** применяет зарегистрированную тему Hexa UI. **testId** и **klId** добавляют идентификаторы для автотестов и интеграций; **testId** также используется для внутренних элементов календаря и очистки."
+        code={`
+          <RangePicker theme="light" testId="report-period" klId="report-period" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="locale, pickerRef и activePickerIndex"
+        description="**locale** заменяется локалью приложения. **pickerRef** и **activePickerIndex** — внутренние параметры унаследованного rc-picker; RangePicker не документирует для них пользовательский сценарий и не рекомендует применять их в прикладном коде."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={RangePickerStories} />
+      <AutodocArgsTable components={RangePicker} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=80748:348477)"
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(rangePickerDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="RangePicker" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
 
 </DocPageLayout>

@@ -1,0 +1,354 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Space } from '@src/space'
+import { Text } from '@src/typography'
+
+import { Submenu } from '../Submenu'
+import * as SubmenuStories from './Submenu.stories'
+import {
+  submenuDesignPropPresentation,
+  submenuItemDesignPropPresentation,
+} from './Submenu.design.properties'
+
+<Meta of={SubmenuStories} name="Submenu Docs" />
+
+<DocPageLayout>
+  <DocPageHeader title="Submenu — вертикальная навигация в сайдбаре" />
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        title="Описание компонента"
+        description="**Submenu** — вертикальная навигация для разделов и вложенных пунктов в сайдбаре. Используйте компонент, когда выбор пункта должен открывать связанное содержимое рядом с навигацией."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        title="items"
+        description="Обязательный проп. Массив элементов подменю. Элемент имеет вариант `row`, `title` или `divider`; у `row` могут быть вложенные пункты."
+        code={`
+          <Submenu
+            style={{ width: 280 }}
+            items={[
+              { type: 'title', key: 'main', text: 'Раздел' },
+              { type: 'row', key: 'overview', text: 'Обзор' },
+              { type: 'row', key: 'settings', text: 'Настройки' },
+              { type: 'divider' },
+              { type: 'row', key: 'security', text: 'Безопасность' },
+              { type: 'row', key: 'support', text: 'Поддержка' },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="Submenu Item: варианты"
+        description="
+          `title` — заголовок группы. 
+          `row` — строка с текстом и опциональными вложенными элементами. 
+          `divider` — разделитель между группами."
+        previewDirection="vertical"
+        code={`
+          <Submenu
+            style={{ width: 280 }}
+            items={[
+              { type: 'title', key: 'settings', text: 'Заголовок' },
+              { type: 'divider' },
+              { type: 'row', key: 'general', text: 'Строка' },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="Submenu Item: состав"
+        description="В `row` можно разместить **iconBefore**, текст, **description**, **elementAfter**, **notification**, **action** и **hoverElementAfter**. Поле **children** добавляет вложенные пункты и кнопку раскрытия. `title` содержит текст и опциональное **action**, а `divider` отображает только разделитель."
+        previewDirection="vertical"
+        code={`
+          <Submenu
+            style={{ width: 280 }}
+            items={[
+              { type: 'row', key: 'base', text: 'Строка с текстом' },
+              {
+                type: 'row',
+                key: 'icon',
+                text: 'Строка с iconBefore',
+                iconBefore: <Placeholder />,
+              },
+              {
+                type: 'row',
+                key: 'icon',
+                text: 'Строка с цветной iconBefore',
+                iconBefore: <HeartSolid color="status.statuscritical" />,
+              },
+              {
+                type: 'row',
+                key: 'description',
+                text: 'Строка с description',
+                description: 'Настройки доступа',
+              },
+              {
+                type: 'row',
+                key: 'element-after',
+                text: 'Строка с elementAfter',
+                elementAfter: (
+                  <Tag mode="marengo" size="small">
+                    New
+                  </Tag>
+                ),
+              },
+              {
+                type: 'row',
+                key: 'notification',
+                text: 'Строка с notification',
+                notification: { type: 'indicator', mode: 'medium' },
+              },
+              {
+                type: 'row',
+                key: 'action',
+                text: 'Строка с action',
+                action: { icon: <Menu3 />, onClick: () => alert('Открыть действия') },
+              },
+              {
+                type: 'row',
+                key: 'hover-element-after',
+                text: 'Строка с hoverElementAfter',
+                hoverElementAfter: <Placeholder />,
+              },
+              {
+                type: 'row',
+                key: 'children',
+                text: 'Строка с вложенными элементами',
+                children: [{ type: 'row', key: 'access', text: 'Доступ' }],
+              },
+              { type: 'title', key: 'title', text: 'Заголовок' },
+              {
+                type: 'title',
+                key: 'title',
+                text: 'Заголовок с action',
+                action: { icon: <Menu3 />, onClick: () => alert('Открыть действия') },
+              },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="Submenu Item: уведомления"
+        description="**notificationVariant** задаёт тип уведомления: `indicator` или `badge`. Для `indicator` доступны значения **indicatorMode**: `new`, `critical`, `medium`; для `badge` — **badgeMode**: `new`, `critical`."
+        previewDirection="vertical"
+        code={`
+          <Submenu
+            style={{ width: 280 }}
+            items={[
+              {
+                type: 'row',
+                key: 'new',
+                text: 'Новый индикатор',
+                notification: { type: 'indicator', mode: 'new' },
+              },
+              {
+                type: 'row',
+                key: 'critical',
+                text: 'Критичный индикатор',
+                notification: { type: 'indicator', mode: 'critical' },
+              },
+              {
+                type: 'row',
+                key: 'medium',
+                text: 'Средний индикатор',
+                notification: { type: 'indicator', mode: 'medium' },
+              },
+              {
+                type: 'row',
+                key: 'badge-new',
+                text: 'Новый badge',
+                notification: { type: 'badge', mode: 'new', count: 1 },
+              },
+              {
+                type: 'row',
+                key: 'badge-critical',
+                text: 'Критичный badge',
+                notification: { type: 'badge', mode: 'critical', count: 1 },
+              },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="Submenu Item: состояния row"
+        description="Пункт `row` реагирует на наведение и нажатие. `disabled` отключает взаимодействие, а дочерние элементы создают раскрываемую ветку."
+        previewDirection="vertical"
+        code={`
+          <Submenu
+            style={{ width: 280 }}
+            defaultActiveKey="selected"
+            items={[
+              { type: 'row', key: 'default', text: 'Обычный пункт' },
+              { type: 'row', key: 'disabled', text: 'Недоступный пункт', disabled: true },
+              {
+                type: 'row',
+                key: 'parent',
+                text: 'Раскрываемый пункт',
+                children: [
+                  { type: 'row', key: 'child', text: 'Вложенный пункт' },
+                  { type: 'row', key: 'child', text: 'Вложенный пункт' },
+                ],
+              },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="defaultActiveKey"
+        description="Ключ пункта, который выделяется при первом рендере, если не задан **activeKey**. Для вложенного выбранного пункта родительские ветки раскрываются."
+        code={`
+          <Submenu
+            style={{ width: 280 }}
+            defaultActiveKey="access"
+            items={[
+              { type: 'row', key: 'overview', text: 'Обзор' },
+              {
+                type: 'row',
+                key: 'settings',
+                text: 'Настройки',
+                children: [
+                  { type: 'row', key: 'access', text: 'Доступ' },
+                  { type: 'row', key: 'notifications', text: 'Уведомления' },
+                ],
+              },
+              { type: 'row', key: 'security', text: 'Безопасность' },
+              { type: 'row', key: 'support', text: 'Поддержка' },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="activeKey и onChange"
+        description="**activeKey** управляет выбранным пунктом снаружи. **onChange** получает ключ пункта после выбора."
+        code={`
+          <Submenu
+            style={{ width: 280 }}
+            activeKey="overview"
+            onChange={(key) => alert(key)}
+            items={[
+              { type: 'row', key: 'overview', text: 'Обзор' },
+              { type: 'row', key: 'settings', text: 'Настройки' },
+              { type: 'row', key: 'access', text: 'Доступ' },
+              { type: 'row', key: 'security', text: 'Безопасность' },
+              { type: 'row', key: 'support', text: 'Поддержка' },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="collapseOnTextClick"
+        description="Определяет, раскрывает ли клик по тексту пункта его вложенную ветку. По умолчанию — `true`."
+        code={`
+          <Submenu
+            style={{ width: 280 }}
+            collapseOnTextClick={false}
+            items={[
+              {
+                type: 'row',
+                key: 'parent',
+                text: 'Раскрывайте иконкой',
+                children: [{ type: 'row', key: 'child', text: 'Вложенный пункт' }],
+              },
+              { type: 'row', key: 'overview', text: 'Обзор' },
+              { type: 'row', key: 'settings', text: 'Настройки' },
+              { type: 'row', key: 'security', text: 'Безопасность' },
+              { type: 'row', key: 'support', text: 'Поддержка' },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="truncateText"
+        description="Сокращает длинный текст с многоточием. По умолчанию — `true`. Для сокращения ширину подменю ограничивает контейнер: в примере — `280px`, как у меню в сайдбаре."
+        code={`
+          <Submenu
+            style={{ width: 280 }}
+            truncateText
+            items={[
+              { type: 'row', key: 'long', text: 'Длинное название пункта навигации' },
+              { type: 'row', key: 'overview', text: 'Обзор' },
+              { type: 'row', key: 'settings', text: 'Настройки' },
+              { type: 'row', key: 'security', text: 'Безопасность' },
+              { type: 'row', key: 'support', text: 'Поддержка' },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="elementBefore и elementAfter"
+        description="**elementBefore** отображается перед списком пунктов, **elementAfter** — после него. В оба слота можно передать ReactNode."
+        code={`
+          <Submenu
+            style={{ width: 280 }}
+            elementBefore="Верхний элемент"
+            elementAfter="Нижний элемент"
+            items={[
+              { type: 'row', key: 'overview', text: 'Обзор' },
+              { type: 'row', key: 'settings', text: 'Настройки' },
+              { type: 'row', key: 'access', text: 'Доступ' },
+              { type: 'row', key: 'security', text: 'Безопасность' },
+              { type: 'row', key: 'support', text: 'Поддержка' },
+            ]}
+          />
+        `}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={SubmenuStories} />
+      <AutodocArgsTable components={Submenu} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock title="Компонент в Pixso" titleSize="H5" description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=52471:280700)" />
+      <Space direction="vertical" gap={40}>
+        <Space direction="vertical" gap={16} align="stretch">
+          <Text type="H3">submenu</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(submenuDesignPropPresentation)} />
+        </Space>
+        <Space direction="vertical" gap={16} align="stretch">
+          <Text type="H3">submenu item / row</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(submenuItemDesignPropPresentation)} />
+        </Space>
+      </Space>
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Submenu" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

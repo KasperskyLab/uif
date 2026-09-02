@@ -75,7 +75,7 @@
   padding: 24px 0;
   gap: 24px;
   background: var(--submenu--bg_subtle);
-  border-right: 1px solid var(--submenu--border);
+  border-inline-end: 1px solid var(--submenu--border);
 }
 
 .itemsStack {
@@ -104,8 +104,9 @@
 .divider {
   width: 100%;
   min-width: 216px;
-  margin: 4px 8px;
+  padding: 4px 8px;
   min-height: 1px;
+  max-height: 1px;
 }
 
 .title {
@@ -114,7 +115,7 @@
   width: 100%;
   min-width: 216px;
   height: 16px;
-  margin: 0 8px;
+  padding: 0 8px;
   margin-top: 16px;
   justify-content: space-between;
 }
@@ -148,7 +149,11 @@
   width: 100%;
   min-width: 232px;
   padding: 6px 8px;
-  padding-left: calc(var(--left-offset) * 1px);
+  padding-inline-start: calc(var(--left-offset) * 1px);
+
+  [dir="rtl"] & .arrowIcon {
+    transform: rotate(180deg);
+  }
 
   .rowText {
     width: 100%;

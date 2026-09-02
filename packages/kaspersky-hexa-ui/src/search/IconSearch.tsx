@@ -20,8 +20,7 @@ export const IconSearch: FC<SearchIconProps> = ({
   onClick,
   indicator = false,
   modeIndicator = 'high',
-  borderBackground,
-  componentId
+  borderBackground
 }: SearchIconProps) => {
   return (
     <Space onClick={onClick} style={onClick ? { cursor: 'pointer' } : undefined}>
@@ -31,7 +30,7 @@ export const IconSearch: FC<SearchIconProps> = ({
               <SearchActive
                 color={color}
                 data-testid={testId}
-                data-component-id={componentId}
+                data-component-id="icon-search"
                 className={className}
                 kl-id={klId}
               />
@@ -42,7 +41,7 @@ export const IconSearch: FC<SearchIconProps> = ({
             <Search1
               color={color}
               data-testid={testId}
-              data-component-id={componentId}
+              data-component-id="icon-search"
               className={className}
               kl-id={klId}
             />
