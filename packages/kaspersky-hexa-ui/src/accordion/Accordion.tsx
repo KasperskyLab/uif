@@ -12,8 +12,8 @@ import { AccordionProps } from './types'
 export const Accordion: FC<AccordionProps> = memo(({
   className,
   disabled,
-  expandIconPosition = 'right',
-  withBorder = true,
+  expandIconPosition,
+  withBorder,
   ...rawProps
 }) => {
   const { testAttributes, ...props } = useTestAttribute(rawProps)
@@ -28,12 +28,17 @@ export const Accordion: FC<AccordionProps> = memo(({
           { [styles['hexa-ui-accordion-with-border']]: withBorder }
         )}
         collapsible={disabled ? 'disabled' : undefined}
-        expandIcon={() => <ArrowRight {...getChildTestProps('expand-icon', testAttributes)} />}
+        expandIcon={() => <ArrowRight {...getChildTestProps('expand-icon', testAttributes, false, true)} />}
         openMotion={accordionMotion}
         {...props}
       />
     </div>
   )
 })
+
+Accordion.defaultProps = {
+  expandIconPosition: 'right',
+  withBorder: true
+}
 
 Accordion.displayName = 'Accordion'

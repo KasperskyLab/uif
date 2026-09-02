@@ -1,9 +1,41 @@
+import { DividerProps } from '@src/divider'
+import { TextboxTextareaProps } from '@src/input'
 import { Key, ReactNode } from 'react'
-import { BaseOperation, NodeEntry } from 'slate'
-import { RenderElementProps, RenderLeafProps } from 'slate-react'
+import { BaseOperation, Descendant, NodeEntry } from 'slate'
+import {
+  RenderElementProps as BaseRenderElementProps,
+  RenderLeafProps as BaseRenderLeafProps,
+  RenderPlaceholderProps
+} from 'slate-react'
 
 import { BLOCK_STYLE_TYPES, LIST_TYPES } from './constants'
 import { CustomEditor, CustomElementType, CustomTextKey } from './customTypes'
+
+export type RichTextEditorTextareaProps = Pick<
+  TextboxTextareaProps,
+  'validationStatus' | 'disabled' | 'readOnly' | 'showCount'
+>
+
+export type RichTextEditorProps = {
+  textareaMode?: boolean | RichTextEditorTextareaProps,
+  plugins: Plugins,
+  limitTextSize?: number,
+  dividerPluginsProps?: DividerProps,
+  onChange: (value: Descendant[]) => void,
+  enabled?: boolean,
+  autoFocus?: boolean,
+  readOnly?: boolean,
+  initialValue?: Descendant[],
+  placeholder?: string,
+  renderPlaceholder?: (props: RenderPlaceholderProps) => ReactNode,
+  onFocus?: () => void,
+  onBlur?: () => void,
+  testId?: string
+}
+
+export type RichTextEditorContainerProps = RichTextEditorProps & {
+  onHover?: (isHovered: boolean) => void
+}
 
 export type BlockStyleType = (typeof BLOCK_STYLE_TYPES)[number]
 export type ListType = (typeof LIST_TYPES)[number]
@@ -52,6 +84,9 @@ export type PluginBehavior = {
   onDeleteBackward?: (props: PluginBehaviorProps<string | undefined>) => void;
   onNormalizeNode?: (props: PluginBehaviorProps<NodeEntry>) => void;
 }
+
+export type RenderLeafProps = BaseRenderLeafProps & Pick<TextboxTextareaProps, 'disabled' | 'readOnly'>
+export type RenderElementProps = BaseRenderElementProps & Pick<TextboxTextareaProps, 'disabled' | 'readOnly'>
 
 export type LeafPluginType = {
   leafType: CustomTextKey;

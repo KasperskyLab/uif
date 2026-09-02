@@ -4,18 +4,11 @@ import React, { useCallback, useMemo, useRef } from 'react'
 import { Descendant } from 'slate'
 
 import { CustomFormats } from './customTypes'
-import style from './richText.module.scss'
-import {
-  MemorizedRichTextEditor as RichTextEditor,
-  RichTextEditorProps
-} from './RichTextEditor'
+import styles from './richText.module.scss'
+import { MemorizedRichTextEditor as RichTextEditor } from './RichTextEditor'
 import { RichTextEditorContext } from './RichTextEditorContext'
 
-import { dividerPluginsProps as defaultDividerPluginsProps } from './index'
-
-export interface RichTextEditorContainerProps extends RichTextEditorProps {
-  onHover?: (isHovered: boolean) => void;
-}
+import { dividerPluginsProps as defaultDividerPluginsProps, RichTextEditorContainerProps } from './index'
 
 const defaultInitialValue: Descendant[] = [
   {
@@ -30,6 +23,7 @@ export const RichTextEditorContainer = ({
   onFocus,
   onHover,
   readOnly,
+  textareaMode = false,
   enabled = true,
   autoFocus = true,
   plugins,
@@ -79,14 +73,15 @@ export const RichTextEditorContainer = ({
     <RichTextEditorContext.Provider value={contextValue}>
       <Space
         ref={(ref) => (editContainer.current = ref)}
-        gap={4}
-        className={style.editableContainer}
+        gap="dependent"
+        className={styles.editableContainer}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onFocus={handleFocus}
         data-testid={testId}
       >
         <RichTextEditor
+          textareaMode={textareaMode}
           initialValue={initialValue}
           onChange={onChange}
           onBlur={onBlur}

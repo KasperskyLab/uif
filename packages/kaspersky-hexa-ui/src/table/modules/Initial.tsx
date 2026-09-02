@@ -1,7 +1,7 @@
 import { useStateProps } from '@helpers/hooks/useStateProps'
 import React, { useEffect } from 'react'
 
-import { ITableProps, TableRecord, TableRef, useTableContext } from '..'
+import { ITableProps, TableRecord, TableRef, useTableUpdate } from '..'
 import { checkExpandableGrouping, checkExpandableRows } from '../helpers/common'
 
 import { useRowSelection } from './hooks/rowSelection/useRowSelection'
@@ -32,7 +32,7 @@ export const Initial = <T extends TableRecord = TableRecord> (
   rowSelection: rowSelectionProps,
   ...props
 }: ITableProps<T> & React.RefAttributes<TableRef>) {
-  const { updateContext } = useTableContext()
+  const updateContext = useTableUpdate<T>()
   const [isDefaultSortDisabled, setIsDefaultSortDisabled] = useStateProps(isDefaultSortDisabledProps)
   const [isClientGroupSortingDisabled, setIsClientGroupSortingDisabled] = useStateProps(isClientGroupSortingDisabledProps)
   const [isInited, setIsInited] = useStateProps(isInitedProps)
@@ -46,11 +46,13 @@ export const Initial = <T extends TableRecord = TableRecord> (
   })
 
   useEffect(() => {
-    updateContext({ pagination: {
-      setTotal: additional?.setTotal,
-      shouldCountClientTotal: shouldCountClientTotal(paginationProps, !!dataSourceFunction),
+    updateContext({
+      pagination: {
+        setTotal: additional?.setTotal,
+        shouldCountClientTotal: shouldCountClientTotal(paginationProps, !!dataSourceFunction)
+      },
       useDataSourceFunction: !!dataSourceFunction
-    } })
+    })
   }, [dataSourceFunction])
 
   const dataSource = useDataSource<T>({

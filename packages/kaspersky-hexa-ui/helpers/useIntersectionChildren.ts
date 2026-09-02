@@ -1,3 +1,4 @@
+import { useBodyDirection } from '@helpers/bodyDirection'
 import { RefObject, useMemo } from 'react'
 
 import { useResizeObserver } from './useResizeObserver'
@@ -16,7 +17,17 @@ export const useIntersectionChildren = (
   renderCounter?: number,
   delay: number = 150
 ): number | undefined => {
-  const { right: containerRight, width: containerWidth } = useResizeObserver(ref, delay) ?? { right: 0, width: 0 }
+  const { isRtl } = useBodyDirection()
+
+  const { left: containerStart, right: containerEnd, width: containerWidth } =
+    useResizeObserver(ref, delay) ?? { left: 0, right: 0, width: 0 }
+
+  const hasOverflow = (el: Element, padding: number, wrapperEdge: number) =>
+    isRtl
+      ? el.getBoundingClientRect().left - padding < wrapperEdge
+      : el.getBoundingClientRect().right + padding > wrapperEdge
+
+  const wrapperEdge = isRtl ? containerStart : containerEnd
 
   return useMemo<number | undefined>(() => {
     if (!ref.current) {
@@ -24,16 +35,22 @@ export const useIntersectionChildren = (
     }
 
     const wrapper = wrapperQuerySelector ? ref.current.querySelector(wrapperQuerySelector) : ref.current
+    if (!wrapper) return undefined
 
-    if (!wrapper) {
-      return undefined
-    }
+    const children = Array.from(wrapper.children)
+    const overflowIdx = children.findIndex(child => hasOverflow(child, padding, wrapperEdge))
 
-    const wrapperRight = wrapper.getBoundingClientRect().right
+    if (overflowIdx === -1) return children.length - 1
 
-    const res = Array.from(wrapper.children)
-      .findIndex((child) => child.getBoundingClientRect().right + padding > wrapperRight)
-
-    return res === -1 ? undefined : Math.max(res - 1, 0)
-  }, [containerRight, containerWidth, ref.current, padding, renderCounter])
+    return Math.max(overflowIdx - 1, 0)
+  }, [
+    containerStart,
+    containerEnd,
+    containerWidth,
+    ref.current,
+    padding,
+    renderCounter,
+    wrapperQuerySelector,
+    isRtl
+  ])
 }

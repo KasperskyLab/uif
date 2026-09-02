@@ -1,0 +1,374 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Space } from '@src/space'
+import { Text } from '@src/typography'
+
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
+
+import { Toolbar } from '../Toolbar'
+import {
+  toolbarButtonDesignPropPresentation,
+  toolbarDesignPropPresentation,
+  toolbarIconButtonDesignPropPresentation,
+  toolbarLeftItemsDesignPropPresentation,
+  toolbarRightItemsDesignPropPresentation,
+  toolbarSearchDesignPropPresentation,
+  toolbarToggleButtonDesignPropPresentation,
+  toolbarToggleButtonIconDesignPropPresentation,
+} from './Toolbar.design.properties'
+import * as ToolbarStories from './Toolbar.stories'
+
+<Meta of={ToolbarStories} name="Toolbar Docs" />
+
+<DocPageLayout>
+  <DocPageHeader
+    title="Toolbar"
+  />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **Toolbar** — панель компактных действий и элементов управления для рабочего контекста
+
+          Используйте **Toolbar** над таблицами, списками, рабочими областями и другими контекстами, где пользователю нужны несколько связанных операций: поиск, фильтрация, экспорт и настройка представления. Располагайте в панели действия, относящиеся к содержимому непосредственно под ней, и сохраняйте понятную иерархию между основными и вспомогательными операциями.
+
+          Для одиночного ключевого действия выбирайте **Button**, а для компактного действия рядом с отдельной строкой, карточкой или полем — **Action Button**. Не превращайте панель в единственное место для несвязанных команд: крупные и самостоятельные сценарии лучше выносить в навигацию или отдельный блок интерфейса."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**Toolbar** группирует действия, поиск и дополнительные элементы в единой горизонтальной панели. Левая и правая части формируются массивами **left** и **right**; для типовых действий доступны подкомпоненты **Toolbar.Button**, **Toolbar.Search**, **Toolbar.FilterItem**, **Toolbar.ImportItem**, **Toolbar.ExportItem** и другие. Поведение переполнения настраивают **leftLimit** и **autoDropdown**."
+
+      />
+
+      <DocExampleBlock
+        title="left и right"
+        description="Массивы элементов для левой и правой части панели. В элементах указывают тип: `button`, `dropdown`, `toggleButton`, `link`, `divider` или `children`; у каждого элемента обязателен уникальный **key**. Если **visible**=`false`, элемент не отображается. По умолчанию **left** — пустой массив."
+        code={`
+          <Toolbar
+            left={[
+              {
+                type: 'button',
+                key: 'filter',
+                label: 'Фильтры',
+                iconBefore: <Placeholder />,
+              },
+              { type: 'divider', key: 'divider' },
+              {
+                type: 'dropdown',
+                key: 'more',
+                label: 'Ещё',
+                overlay: [{ children: 'Действие' }],
+              },
+            ]}
+            right={[
+              {
+                type: 'children',
+                key: 'search',
+                children: <Toolbar.Search placeholder="Поиск" />,
+              },
+            ]}
+          />
+        `}
+        scope={{ Placeholder }}
+      />
+
+      <DocExampleBlock
+        title="leftLimit"
+        description="Ограничивает количество видимых элементов левой части. Остальные доступные элементы открываются через выпадающее меню. По умолчанию — `4`."
+        code={`
+          <Toolbar
+            leftLimit={2}
+            left={[
+              { type: 'button', key: 'one', label: 'Один' },
+              { type: 'button', key: 'two', label: 'Два' },
+              { type: 'button', key: 'three', label: 'Три' },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="autoDropdown"
+        description="Включает автоматическое перемещение не поместившихся элементов левой части в меню при изменении доступной ширины. По умолчанию — `false`."
+        code={`
+          <Toolbar
+            autoDropdown
+            left={[
+              { type: 'button', key: 'one', label: 'Один' },
+              { type: 'button', key: 'two', label: 'Два' },
+              { type: 'button', key: 'three', label: 'Три' },
+              { type: 'button', key: 'four', label: 'Четыре' },
+              { type: 'button', key: 'five', label: 'Пять' },
+              { type: 'button', key: 'six', label: 'Шесть' },
+              { type: 'button', key: 'seven', label: 'Семь' },
+              { type: 'button', key: 'eight', label: 'Восемь' },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="sticky"
+        description="Вертикальное смещение закреплённой панели. Режим закрепления включается при значении больше `-1000`; если проп не задан, панель остаётся в обычном потоке документа."
+        code={`
+          <Toolbar
+            sticky={0}
+            left={[{ type: 'button', key: 'action', label: 'Действие' }]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="styleLeft и styleRight"
+        description="Объекты CSS-свойств для левой и правой групп элементов. Позволяют локально скорректировать их расположение внутри панели."
+        code={`
+          <Toolbar
+            left={[{ type: 'button', key: 'action', label: 'Действие' }]}
+            styleLeft={{ left: 8 }}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="button, dropdown и divider"
+        description="Элементы `button` и `dropdown` добавляют в панель текстовые действия; у `dropdown` список команд передают через **overlay**. Элемент `divider` визуально разделяет логические группы. Для **button** доступны подпись, иконки, состояние недоступности и всплывающая подсказка."
+        code={`
+          <Toolbar
+            left={[
+              {
+                type: 'button',
+                key: 'filter',
+                label: 'Фильтры',
+                iconBefore: <Placeholder />,
+              },
+              { type: 'divider', key: 'divider' },
+              {
+                type: 'dropdown',
+                key: 'more',
+                label: 'Ещё',
+                overlay: [{ children: 'Экспорт', onClick: () => alert('Экспорт') }],
+              },
+            ]}
+          />
+        `}
+        scope={{ Placeholder }}
+      />
+
+      <DocExampleBlock
+        title="showIndicator"
+        description="Показывает цветовой индикатор у иконки элемента `button`. Используйте его, чтобы обозначить наличие активного фильтра или другого требующего внимания состояния."
+        code={`
+          <Toolbar
+            left={[
+              {
+                type: 'button',
+                key: 'filter',
+                label: 'Фильтры',
+                iconBefore: <Placeholder />,
+                showIndicator: true,
+              },
+            ]}
+          />
+        `}
+        scope={{ Placeholder }}
+      />
+
+      <DocExampleBlock
+        title="tooltip"
+        description="Текст подсказки для элемента `button` или `dropdown`. Подсказка доступна и для недоступного действия, поскольку элемент обёрнут в контейнер."
+        code={`
+          <Toolbar
+            left={[
+              {
+                type: 'button',
+                key: 'settings',
+                label: 'Настройки',
+                tooltip: 'Открыть настройки',
+                disabled: true,
+              },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="toggleButton, link и children"
+        description="`toggleButton` добавляет независимый переключатель, `link` — ссылку, а `children` — произвольный React-узел. Используйте `children`, чтобы разместить в панели компонент Hexa UI, который не представлен типовым элементом Toolbar."
+        code={`
+          <Toolbar
+            left={[
+              {
+                type: 'toggleButton',
+                key: 'view',
+                value: 'view',
+                text: 'Показать',
+                onChange: (_, selected) => alert(String(selected)),
+              },
+              { type: 'link', key: 'help', label: 'Справка', href: '#' },
+              {
+                type: 'children',
+                key: 'search',
+                children: <Toolbar.Search placeholder="Поиск" />,
+              },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="ImportExportItem, ImportItem и ExportItem"
+        description="Типовые действия импорта и экспорта для панели. **Toolbar.ImportExportItem** может отображать одну кнопку или меню с отдельными командами импорта и экспорта; **Toolbar.ImportItem** и **Toolbar.ExportItem** добавляют отдельные иконочные действия."
+        code={`
+          <Toolbar
+            right={[
+              {
+                type: 'children',
+                key: 'import-export',
+                children: (
+                  <Toolbar.ImportExportItem
+                    dropdown
+                    onImport={() => alert('Импорт')}
+                    onExport={() => alert('Экспорт')}
+                  />
+                ),
+              },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="CollapsibleSearch"
+        description="**Toolbar.CollapsibleSearch** — компактный поиск, который раскрывается по действию пользователя. Поддерживает значение, обработчики изменения, очистки и подтверждения ввода."
+        code={`
+          <Toolbar
+            right={[
+              {
+                type: 'children',
+                key: 'search',
+                children: (
+                  <Toolbar.CollapsibleSearch
+                    placeholder="Введите запрос"
+                    onPressEnter={() => alert('Поиск')}
+                  />
+                ),
+              },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="Адаптивное переполнение"
+        description="При **autoDropdown**=`true` Toolbar отслеживает ширину левой группы и переносит не поместившиеся элементы в меню. Это подходит для панелей внутри сужаемых областей, например Sidebar."
+        code={`
+          <Toolbar
+            autoDropdown
+            left={[
+              { type: 'button', key: 'one', label: 'Один' },
+              { type: 'button', key: 'two', label: 'Два' },
+              { type: 'button', key: 'three', label: 'Три' },
+              { type: 'button', key: 'four', label: 'Четыре' },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="Компоновка частей панели"
+        description="Toolbar можно использовать с обеими группами, только с **left** или только с **right**."
+        code={`
+          <Toolbar left={[{ type: 'button', key: 'filter', label: 'Фильтры' }]} />
+          <Toolbar
+            right={[
+              { type: 'children', key: 'settings', children: <Toolbar.SettingsItem /> },
+            ]}
+          />
+        `}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={ToolbarStories} />
+      <AutodocArgsTable components={Toolbar} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=40522:169099)"
+      />
+      <Space direction="vertical" gap={32} >
+        <Space direction="vertical" gap={8} align="stretch">
+          <Text type="H3">toolbar</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(toolbarDesignPropPresentation)} />
+        </Space>
+
+        <Space direction="vertical" gap={8} align="stretch">
+          <Text type="H3">toolbar left items</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(toolbarLeftItemsDesignPropPresentation)} />
+        </Space>
+
+        <Space direction="vertical" gap={8} align="stretch">
+          <Text type="H3">toolbar search</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(toolbarSearchDesignPropPresentation)} />
+        </Space>
+
+        <Space direction="vertical" gap={8} align="stretch">
+          <Text type="H3">toolbar right items</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(toolbarRightItemsDesignPropPresentation)} />
+        </Space>
+
+        <Space direction="vertical" gap={8} align="stretch">
+          <Text type="H3">toolbar button</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(toolbarButtonDesignPropPresentation)} />
+        </Space>
+
+        <Space direction="vertical" gap={8} align="stretch">
+          <Text type="H3">toolbar icon button</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(toolbarIconButtonDesignPropPresentation)} />
+        </Space>
+
+        <Space direction="vertical" gap={8} align="stretch">
+          <Text type="H3">toolbar toggle button</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(toolbarToggleButtonDesignPropPresentation)} />
+        </Space>
+
+        <Space direction="vertical" gap={8} align="stretch">
+          <Text type="H3">toolbar toggle button icon</Text>
+          <DocumentationArgsTable rows={buildPresentationOnlyRows(toolbarToggleButtonIconDesignPropPresentation)} />
+        </Space>
+      </Space>
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Toolbar" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

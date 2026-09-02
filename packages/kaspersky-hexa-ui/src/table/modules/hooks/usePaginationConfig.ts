@@ -114,20 +114,22 @@ const useExistingPagination = <T extends TableRecord = TableRecord> ({
     propsTotalRoot !== undefined
   )
 
-  const isCurrentPageOutOfRage = Math.ceil((total || 0) / pageSize) < current
+  const isCurrentPageOutOfRange = Boolean(
+    total !== undefined && total > 0 && Math.ceil(total / pageSize) < current
+  )
 
   useEffect(() => {
-    if (propsOnChange && !shouldSliceDataSource) {
+    if (isCurrentPageOutOfRange && propsOnChange && !shouldSliceDataSource) {
       setCurrent(FIRST_PAGE)
       propsOnChange(current, pageSize)
     }
-  }, [isCurrentPageOutOfRage, shouldSliceDataSource])
+  }, [isCurrentPageOutOfRange, shouldSliceDataSource, pageSize])
 
   useEffect(() => {
-    if (restoreCurrentWhenDataChange && isCurrentPageOutOfRage) {
+    if (restoreCurrentWhenDataChange && isCurrentPageOutOfRange) {
       setCurrent(FIRST_PAGE)
     }
-  }, [isCurrentPageOutOfRage, restoreCurrentWhenDataChange])
+  }, [isCurrentPageOutOfRange, restoreCurrentWhenDataChange])
 
   const paginationConfig: UseExistingPaginationReturn<T> = useMemo(() => {
     const onCurrentPageChange: NonNullable<PaginationProps['onChange']> = (current) => {

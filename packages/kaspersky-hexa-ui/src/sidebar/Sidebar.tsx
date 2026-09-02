@@ -1,3 +1,4 @@
+import { useBodyDirection } from '@helpers/bodyDirection'
 import useEscapeToClose from '@helpers/hooks/useCloseOnEscape'
 import { getChildTestAttr, useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import Drawer from 'antd/es/drawer'
@@ -54,6 +55,8 @@ export const Sidebar = forwardRef<SidebarHandle, SidebarProps>((rawProps, ref) =
   const contentRef = React.useRef<HTMLDivElement>(null)
   const [key, setKey] = useState(Math.random())
   const [open, setOpen] = useState(false)
+
+  const { isRtl } = useBodyDirection()
 
   const isTopmost = React.useCallback(() => {
     const wrapper = contentRef.current?.closest('.ant-drawer')?.parentElement
@@ -145,6 +148,7 @@ export const Sidebar = forwardRef<SidebarHandle, SidebarProps>((rawProps, ref) =
         handleVisibleChange(visible)
         afterVisibleChange?.(visible)
       }}
+      destroyOnClose={destroyOnClose}
       title={(
         <SidebarHeader
           title={title}
@@ -167,7 +171,7 @@ export const Sidebar = forwardRef<SidebarHandle, SidebarProps>((rawProps, ref) =
       keyboard={true}
       mask={mask}
       maskClosable={true}
-      placement="right"
+      placement={isRtl ? 'left' : 'right'}
       visible={visible}
       zIndex={zIndex}
       push={false}
@@ -198,3 +202,5 @@ export const Sidebar = forwardRef<SidebarHandle, SidebarProps>((rawProps, ref) =
     </StyledSidebar>
   )
 })
+
+Sidebar.displayName = 'Sidebar'

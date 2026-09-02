@@ -1,0 +1,69 @@
+@use '../../design-system/tokens/typography.module.scss';
+
+@mixin apply-color($color) {
+  .icon path {
+    stroke: $color;
+  }
+
+  :global(.ant-spin-text) {
+    color: $color;
+  }
+}
+
+@mixin apply-size($icon-size, $text-class, $padding-top) {
+  .icon {
+    height: $icon-size;
+    width: $icon-size;
+  }
+
+  :global(.ant-spin-text) {
+    padding-top: $padding-top;
+
+    @if $text-class == '.btr4' {
+      @extend .btr4;
+    } @else if $text-class == '.btr3' {
+      @extend .btr3;
+    } @else if $text-class == '.btr2' {
+      @extend .btr2;
+    }
+  }
+}
+
+.loader {
+  line-height: 0;
+  
+  &:global(.ant-spinner-centered) {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+  }
+}
+
+.loader:not(.inverted) {
+  @include apply-color(var(--fg--neutral--secondary));
+}
+
+.loader.inverted {
+  @include apply-color(var(--fg--neutral--tertiary));
+}
+
+.extraSmall {
+  @include apply-size(8px, '.btr4', 2px);
+}
+
+.small {
+  @include apply-size(16px, '.btr4', 4px);
+}
+
+.medium {
+  @include apply-size(24px, '.btr4', 4px);
+}
+
+.large {
+  @include apply-size(48px, '.btr3', 4px);
+}
+
+.extraLarge {
+  @include apply-size(96px, '.btr2', 8px);
+}

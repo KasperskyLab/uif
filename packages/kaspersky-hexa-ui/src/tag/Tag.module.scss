@@ -1,0 +1,424 @@
+@use "sass:map";
+
+$tag-tokens: (
+  neutral: (
+    filled: (
+      text: var(--fg--neutral--muted),
+      icon: var(--fg--neutral--muted),
+      bg-enabled: var(--bg--neutral--level_2),
+      bg-hover: var(--bg--neutral--level_2_hover),
+      bg-active: var(--bg--neutral--level_2_active),
+    ),
+    outlined: (
+      text: var(--fg--neutral--muted),
+      icon: var(--fg--neutral--muted),
+      border: 1px solid var(--border--neutral--bold),
+      bg-enabled: var(--bg--neutral--level_0),
+      bg-hover: var(--bg--neutral--level_0_hover),
+      bg-active: var(--bg--neutral--level_0_active)
+    ),
+  ),
+  grey: (
+    filled: (
+      text: var(--fg--neutral--muted),
+      icon: var(--fg--neutral--muted),
+      bg-enabled: var(--bg--neutral--level_3),
+      bg-hover: var(--bg--neutral--level_3_hover),
+      bg-active: var(--bg--neutral--level_3_active),
+    ),
+    outlined: (
+      text: var(--fg--neutral--muted),
+      icon: var(--fg--neutral--muted),
+      border: 1px solid var(--border--neutral--bold),
+      bg-enabled: var(--bg--neutral--level_2),
+      bg-hover: var(--bg--neutral--level_2_hover),
+      bg-active: var(--bg--neutral--level_2_active)
+    ),
+  ),
+  red: (
+    filled: (
+      text: var(--fg--danger--inverted),
+      icon: var(--fg--danger--inverted),
+      bg-enabled: var(--common--danger--enabled),
+      bg-hover: var(--common--danger--hover),
+      bg-active: var(--common--danger--active),
+    ),
+    outlined: (
+      text: var(--fg--danger--bold),
+      icon: var(--fg--danger--bold),
+      border: 1px solid var(--border--color--danger),
+      bg-enabled: var(--bg--danger_subtle--enabled),
+      bg-hover: var(--bg--danger_subtle--hover),
+      bg-active: var(--bg--danger_subtle--active)
+    ),
+  ),
+  orange: (
+    filled: (
+      text: var(--fg--orange--inverted),
+      icon: var(--fg--orange--inverted),
+      bg-enabled: var(--common--orange--enabled),
+      bg-hover: var(--common--orange--hover),
+      bg-active: var(--common--orange--active),
+    ),
+    outlined: (
+      text: var(--fg--orange--bold),
+      icon: var(--fg--orange--bold),
+      border: 1px solid var(--border--color--orange),
+      bg-enabled: var(--bg--orange_subtle--enabled),
+      bg-hover: var(--bg--orange_subtle--hover),
+      bg-active: var(--bg--orange_subtle--active)
+    ),
+  ),
+  yellow: (
+    filled: (
+      text: var(--fg--warning--inverted),
+      icon: var(--fg--warning--inverted),
+      bg-enabled: var(--common--warning--enabled),
+      bg-hover: var(--common--warning--hover),
+      bg-active: var(--common--warning--active),
+    ),
+    outlined: (
+      text: var(--fg--warning--bold),
+      icon: var(--fg--warning--bold),
+      border: 1px solid var(--border--color--warning),
+      bg-enabled: var(--bg--warning_subtle--enabled),
+      bg-hover: var(--bg--warning_subtle--hover),
+      bg-active: var(--bg--warning_subtle--active)
+    ),
+  ),
+  grass: (
+    filled: (
+      text: var(--fg--grass--inverted),
+      icon: var(--fg--grass--inverted),
+      bg-enabled: var(--common--grass--enabled),
+      bg-hover: var(--common--grass--hover),
+      bg-active: var(--common--grass--active),
+    ),
+    outlined: (
+      text: var(--fg--grass--bold),
+      icon: var(--fg--grass--bold),
+      border: 1px solid var(--border--color--grass),
+      bg-enabled: var(--bg--grass_subtle--enabled),
+      bg-hover: var(--bg--grass_subtle--hover),
+      bg-active: var(--bg--grass_subtle--active)
+    ),
+  ),
+  emerald: (
+    filled: (
+      text: var(--fg--success--inverted),
+      icon: var(--fg--success--inverted),
+      bg-enabled: var(--common--success--enabled),
+      bg-hover: var(--common--success--hover),
+      bg-active: var(--common--success--active),
+    ),
+    outlined: (
+      text: var(--fg--success--bold),
+      icon: var(--fg--success--bold),
+      border: 1px solid var(--border--color--success),
+      bg-enabled: var(--bg--success_subtle--enabled),
+      bg-hover: var(--bg--success_subtle--hover),
+      bg-active: var(--bg--success_subtle--active)
+    ),
+  ),
+  marengo: (
+    filled: (
+      text: var(--fg--marengo--inverted),
+      icon: var(--fg--marengo--inverted),
+      bg-enabled: var(--common--marengo--enabled),
+      bg-hover: var(--common--marengo--hover),
+      bg-active: var(--common--marengo--active),
+    ),
+    outlined: (
+      text: var(--fg--marengo--bold),
+      icon: var(--fg--marengo--bold),
+      border: 1px solid var(--border--color--marengo),
+      bg-enabled: var(--bg--marengo_subtle--enabled),
+      bg-hover: var(--bg--marengo_subtle--hover),
+      bg-active: var(--bg--marengo_subtle--active)
+    ),
+  ),
+  marina: (
+    filled: (
+      text: var(--fg--accent--inverted),
+      icon: var(--fg--accent--inverted),
+      bg-enabled: var(--common--accent--enabled),
+      bg-hover: var(--common--accent--hover),
+      bg-active: var(--common--accent--active),
+    ),
+    outlined: (
+      text: var(--fg--accent--bold),
+      icon: var(--fg--accent--bold),
+      border: 1px solid var(--border--color--accent),
+      bg-enabled: var(--bg--accent_subtle--enabled),
+      bg-hover: var(--bg--accent_subtle--hover),
+      bg-active: var(--bg--accent_subtle--active)
+    ),
+  ),
+  purple: (
+    filled: (
+      text: var(--fg--purple--inverted),
+      icon: var(--fg--purple--inverted),
+      bg-enabled: var(--common--purple--enabled),
+      bg-hover: var(--common--purple--hover),
+      bg-active: var(--common--purple--active),
+    ),
+    outlined: (
+      text: var(--fg--purple--bold),
+      icon: var(--fg--purple--bold),
+      border: 1px solid var(--border--color--purple),
+      bg-enabled: var(--bg--purple_subtle--enabled),
+      bg-hover: var(--bg--purple_subtle--hover),
+      bg-active: var(--bg--purple_subtle--active)
+    ),
+  ),
+  violet: (
+    filled: (
+      text: var(--fg--violet--inverted),
+      icon: var(--fg--violet--inverted),
+      bg-enabled: var(--common--violet--enabled),
+      bg-hover: var(--common--violet--hover),
+      bg-active: var(--common--violet--active),
+    ),
+    outlined: (
+      text: var(--fg--violet--bold),
+      icon: var(--fg--violet--bold),
+      border: 1px solid var(--border--color--violet),
+      bg-enabled: var(--bg--violet_subtle--enabled),
+      bg-hover: var(--bg--violet_subtle--hover),
+      bg-active: var(--bg--violet_subtle--active)
+    )
+  ),
+  ai: (
+    filled: (
+      text: var(--fg--neutral_inverted--primary),
+      icon: var(--fg--neutral_inverted--primary),
+      bg-enabled: (
+        linear-gradient(90deg, var(--brand--solid--kaspersky_green_300) 0%, var(--brand--transparent--kaspersky_green_300_0) 45%),
+        linear-gradient(45.68deg, var(--common--marina--enabled) 40.93%, var(--common--violet--enabled) 89.87%)
+      ),
+      bg-hover: (
+        linear-gradient(90deg, var(--brand--solid--kaspersky_green_300) 0%, var(--brand--transparent--kaspersky_green_300_0) 45%),
+        linear-gradient(45.68deg, var(--common--marina--hover) 40.93%, var(--common--violet--hover) 89.87%)
+      ),
+      bg-active: (
+        linear-gradient(90deg, var(--brand--solid--kaspersky_green_300) 0%, var(--brand--transparent--kaspersky_green_300_0) 45%),
+        linear-gradient(45.68deg, var(--common--marina--active) 40.93%, var(--common--violet--active) 89.87%)
+      ),
+    ),
+    outlined: (
+      text: var(--fg--neutral_inverted--primary),
+      icon: var(--fg--neutral_inverted--primary),
+      border: none,
+      bg-enabled: (
+        linear-gradient(90deg, var(--brand--solid--kaspersky_green_300) 0%, var(--brand--transparent--kaspersky_green_300_0) 45%),
+        linear-gradient(45.68deg, var(--common--marina--enabled) 40.93%, var(--common--violet--enabled) 89.87%)
+      ),
+      bg-hover: (
+        linear-gradient(90deg, var(--brand--solid--kaspersky_green_300) 0%, var(--brand--transparent--kaspersky_green_300_0) 45%),
+        linear-gradient(45.68deg, var(--common--marina--hover) 40.93%, var(--common--violet--hover) 89.87%)
+      ),
+      bg-active: (
+        linear-gradient(90deg, var(--brand--solid--kaspersky_green_300) 0%, var(--brand--transparent--kaspersky_green_300_0) 45%),
+        linear-gradient(45.68deg, var(--common--marina--active) 40.93%, var(--common--violet--active) 89.87%)
+      ),
+    ),
+  )
+);
+
+$size-tokens: (
+  small: (
+    height: 20px,
+    padding: 1px var(--spacing--padding_xs),
+    gap: var(--spacing--gap_closest),
+    radius: var(--radius--s),
+  ),
+  medium: (
+    height: 24px,
+    padding: var(--spacing--padding_xs) var(--spacing--padding_s),
+    gap: var(--spacing--gap_closest),
+    radius: var(--radius--s),
+  ),
+);
+
+@mixin apply-size-variant($size) {
+  height: map.get($size, height);
+  padding: map.get($size, padding);
+  gap: map.get($size, gap);
+  border-radius: map.get($size, radius);
+}
+
+@mixin tag-state-colors($bg, $color, $icon-color, $border: none) {
+  background: $bg;
+  color: $color;
+  border: $border;
+
+  :global(.kl-components-tag-text) {
+    color: $color;
+  }
+
+  :global(.kl-components-tag-icon) {
+    color: $icon-color;
+  }
+}
+
+@mixin apply-mode-variant($mode, $filling-type) {
+  $tokens: map.get(map.get($tag-tokens, $mode), $filling-type);
+  $bg: map.get($tokens, bg-enabled);
+  $text: map.get($tokens, text);
+  $icon: map.get($tokens, icon);
+  $border: map.get($tokens, border);
+  $bg-hover: map.get($tokens, bg-hover);
+  $bg-active: map.get($tokens, bg-active);
+
+  @if $border == null {
+    $border: none;
+  }
+
+  @include tag-state-colors($bg, $text, $icon, $border);
+
+  &.interactive {
+    &:hover {
+      background: $bg-hover;
+    }
+
+    &:active {
+      background: $bg-active;
+    }
+  }
+}
+
+:global(.ant-tag).tag {
+  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  cursor: default;
+  outline: none;
+  box-shadow: none;
+  margin-right: unset;
+  margin-inline-end: 8px;
+
+  :global(.kl-components-tag-text) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &.uninteractive {
+    &:focus,
+    &:focus-visible {
+      box-shadow: none;
+    }
+  }
+
+  &.interactive {
+    cursor: pointer;
+
+    &:focus-visible {
+      box-shadow: 0 0 0 2px var(--border--color--focus);
+    }
+  }
+
+  @each $mode, $tokens in $tag-tokens {
+    &.#{"" + $mode}:not(.disabled):not([disabled]):not(.readOnly):not([readonly]):not(.invalid) {
+      @include apply-mode-variant($mode, filled);
+
+      &.outlined {
+        @include apply-mode-variant($mode, outlined);
+      }
+    }
+  }
+
+  @each $size, $tokens in $size-tokens {
+    &.#{"" + $size} {
+      @include apply-size-variant($tokens);
+    }
+  }
+
+  &.disabled,
+  &[disabled] {
+    @include tag-state-colors(
+      var(--bg--neutral--disabled),
+      var(--fg--neutral--tertiary),
+      var(--fg--neutral--tertiary)
+    );
+    cursor: not-allowed;
+  }
+
+  &.readOnly,
+  &[readonly] {
+    @include tag-state-colors(
+      var(--bg--neutral--disabled),
+      var(--fg--neutral--muted),
+      var(--fg--neutral--muted)
+    );
+  }
+
+  &.invalid {
+    @include tag-state-colors(
+      var(--bg--danger_subtle--enabled),
+      var(--fg--danger--bold),
+      var(--fg--danger--bold)
+    );
+
+    &:global(.tag-invalid-icon) {
+      color: var(--common--danger--enabled);
+    }
+  }
+
+  &:global(.ant-tag-hidden) {
+    display: none;
+  }
+
+  &[ant-click-animating-without-extra-node="true"]::after,
+  :global(.ant-click-animating-node) {
+    display: none;
+  }
+}
+
+.reductionGroup {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-grow: 1;
+  gap: var(--spacing--gap_related);
+
+  &:not(.multiline) {
+    overflow: hidden;
+  }
+
+  &.multiline {
+    :global(.hexa-tag-reduction-group-shown-tags) {
+      flex-wrap: wrap;
+    }
+  }
+}
+
+:global(.hexa-tag-reduction-group-shown-tags) {
+  display: flex;
+  gap: var(--spacing--gap_related);
+}
+
+:global(.hexa-tag-reduction-group-hidden-elements) {
+  display: flex;
+  gap: var(--spacing--gap_related);
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.tagWithReduction {
+  display: flex;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+
+  > span {
+    display: block;
+  }
+
+  :global(.hexa-tag-reduction-group-trunc-tags) {
+    overflow: visible;
+  }
+}

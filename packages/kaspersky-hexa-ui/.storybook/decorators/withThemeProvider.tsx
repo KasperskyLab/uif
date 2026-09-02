@@ -2,7 +2,7 @@ import { GlobalStyle } from '@design-system/global-style'
 import { ThemeProvider } from '@design-system/theme'
 import { themeColors } from '@design-system/tokens'
 import { ThemeKey } from '@design-system/types'
-import React, { FC, HTMLAttributes } from 'react'
+import React, { FC, HTMLAttributes, useEffect } from 'react'
 import styled from 'styled-components'
 
 export const withThemeProvider = (Story: FC, context: any) => {
@@ -10,15 +10,20 @@ export const withThemeProvider = (Story: FC, context: any) => {
   const direction = context.globals.direction || 'ltr'
   const isFullscreenLayout = context.parameters?.layout === 'fullscreen'
 
+  useEffect(() => {
+    document.body.setAttribute('dir', direction)
+    return () => { document.body.removeAttribute('dir') }
+  }, [direction])
+
   return (
     <ThemeProvider theme={themeKey}>
       <GlobalStyle />
       {isFullscreenLayout ? (
-        <div dir={direction}>
+        <div>
           <Story {...context} theme={themeKey} />
         </div>
       ) : (
-        <StoryLayoutContainer theme={themeKey} dir={direction}>
+        <StoryLayoutContainer theme={themeKey}>
           <Story {...context} theme={themeKey} />
         </StoryLayoutContainer>
       )}

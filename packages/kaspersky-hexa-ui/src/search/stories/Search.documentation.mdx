@@ -1,5 +1,14 @@
 import { Description, Meta } from '@storybook/addon-docs/blocks'
-import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
 import { Text } from '@src/typography'
 
 import { Search } from '../Search'
@@ -10,91 +19,117 @@ import { searchDesignPropPresentation } from './Search.design.properties'
 
 <DocPageLayout>
 
-<DocPageHeader
-  title="Search"
-  description="**Search** — поле поиска с иконкой и кнопкой очистки, с опциональным выпадающим списком результатов"
-/>
+  <DocPageHeader title="Search" />
 
-<Tabs defaultActiveKey="description">
-  <Tabs.TabPane tab="Описание" key="description">
+  <Tabs defaultActiveKey="description">
 
-    <DocExampleBlock
-      title="Описание компонента"
-      description="**Search** — специализированное поле ввода для поиска. Реализован на основе **Textbox** с фиксированной кнопкой очистки и иконкой поиска в суффиксе. При передаче **dropdownOverlay** результаты отображаются во всплывающем выпадающем списке через **Dropdown**. Настраиваются **disabled**, **validationStatus**, **placeholder**, **value**, **prefix**, **suffix**."
-    />
+    <Tabs.TabPane tab="Описание" key="description">
 
-    <DocExampleBlock
-      title="disabled"
-      description="Отключает поле: ввод и фокус недоступны. Доступные значения: `true`, `false`. По умолчанию — `false`."
-      code={`<Search disabled placeholder="Search..." />`}
-    />
+      <DocExampleBlock
+        description="
+          **Search** — поле поиска с иконкой и кнопкой очистки, с опциональным выпадающим списком результатов
 
-    <DocExampleBlock
-      title="validationStatus"
-      description="Визуальный статус валидации поля. Доступные значения: `default`, `error`, `success`. По умолчанию — `default`."
-      code={`<Search validationStatus="default" placeholder="Search..." />
-<Search validationStatus="error" placeholder="Search..." />
-<Search validationStatus="success" placeholder="Search..." />`}
-    />
+          **Search** — компонент для мгновенного поиска в списках, таблицах и каталогах внутри интерфейса. Используйте его, когда пользователю нужно быстро найти элемент из отображаемого набора данных — без перехода на отдельную страницу или полноэкранный поиск.
 
-    <DocExampleBlock
-      title="placeholder"
-      description="Подсказка, отображаемая в пустом поле. По умолчанию — `search.dotted` (локализованная строка)."
-      code={`<Search placeholder="Поиск по списку..." />`}
-    />
+          Для вывода предложений по мере ввода передавайте результаты через **dropdownOverlay**: они отображаются прямо под полем в виде выпадающего списка. Если поиск выполняется по большой базе данных с переходом на страницу результатов, используйте стандартное поле **Textbox**."
+      />
 
-    <DocExampleBlock
-      title="value и onChange"
-      description="Контролируемое значение поля. Изменения передаются через **onChange**."
-      code={`<Search value="Введённый текст" onChange={(value) => alert(value)} />`}
-    />
+    </Tabs.TabPane>
 
-    <DocExampleBlock
-      title="onClearClick"
-      description="Обработчик нажатия на кнопку очистки. Кнопка отображается всегда, когда поле непустое."
-      code={`<Search value="текст" onClearClick={() => alert('cleared')} />`}
-    />
+    <Tabs.TabPane tab="Структура" key="composition">
 
-    <DocExampleBlock
-      title="dropdownOverlay"
-      description="Список элементов для выпадающего меню результатов поиска. Если задан, поле оборачивается в **Dropdown** с триггером по клику."
-      code={`<Search
-  value=""
-  dropdownOverlay={[
-    { children: 'result 0' },
-    { children: 'result 1' }
-  ]}
-/>`}
-    />
+      <DocExampleBlock
+        description="**Search** — специализированное поле ввода для поиска. Реализован на основе **Textbox** с фиксированной кнопкой очистки и иконкой поиска в суффиксе. При передаче **dropdownOverlay** результаты отображаются во всплывающем выпадающем списке через **Dropdown**. Настраиваются **disabled**, **validationStatus**, **placeholder**, **value**, **prefix**, **suffix**."
+      />
 
-    <DocExampleBlock
-      title="prefix и suffix"
-      description="Произвольное содержимое слева (**prefix**) и справа (**suffix**) от поля ввода. Если передан **prefix**, иконка поиска по умолчанию скрывается."
-      code={`<Search suffix={<span>⌘K</span>} placeholder="Search..." />`}
-    />
+      <DocExampleBlock
+        title="disabled"
+        description="Отключает поле: ввод и фокус недоступны. Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <Search disabled placeholder="Search..." />
+        `}
+      />
 
-  </Tabs.TabPane>
+      <DocExampleBlock
+        title="validationStatus"
+        description="Визуальный статус валидации поля. Доступные значения: `default`, `error`, `success`. По умолчанию — `default`."
+        code={`
+          <Search validationStatus="default" placeholder="Search..." />
+          <Search validationStatus="error" placeholder="Search..." />
+          <Search validationStatus="success" placeholder="Search..." />
+        `}
+      />
 
-  <Tabs.TabPane tab="Правила использования" key="howtouse">
+      <DocExampleBlock
+        title="placeholder"
+        description="Подсказка, отображаемая в пустом поле. По умолчанию — `search.dotted` (локализованная строка)."
+        code={`
+          <Search placeholder="Поиск по списку..." />
+        `}
+      />
 
-    <DocExampleBlock
-      title="Правила использования"
-      description="**Search** — компонент для мгновенного поиска в списках, таблицах и каталогах внутри интерфейса. Используйте его, когда пользователю нужно быстро найти элемент из отображаемого набора данных — без перехода на отдельную страницу или полноэкранный поиск.
+      <DocExampleBlock
+        title="value и onChange"
+        description="Контролируемое значение поля. Изменения передаются через **onChange**."
+        code={`
+          <Search value="Введённый текст" onChange={(value) => alert(value)} />
+        `}
+      />
 
-Для вывода предложений по мере ввода передавайте результаты через **dropdownOverlay**: они отображаются прямо под полем в виде выпадающего списка. Если поиск выполняется по большой базе данных с переходом на страницу результатов, используйте стандартное поле **Textbox**."
-    />
+      <DocExampleBlock
+        title="onClearClick"
+        description="Обработчик нажатия на кнопку очистки. Кнопка отображается всегда, когда поле непустое."
+        code={`
+          <Search value="текст" onClearClick={() => alert('cleared')} />
+        `}
+      />
 
-  </Tabs.TabPane>
+      <DocExampleBlock
+        title="dropdownOverlay"
+        description="Список элементов для выпадающего меню результатов поиска. Если задан, поле оборачивается в **Dropdown** с триггером по клику."
+        code={`
+          <Search
+            value=""
+            dropdownOverlay={[{ children: 'result 0' }, { children: 'result 1' }]}
+          />
+        `}
+      />
 
-  <Tabs.TabPane tab="Дизайнеру" key="design">
-    <Text type="H3">Properties в Pixso</Text>
-    <DocumentationArgsTable rows={buildPresentationOnlyRows(searchDesignPropPresentation)} />
-  </Tabs.TabPane>
+      <DocExampleBlock
+        title="prefix и suffix"
+        description="Произвольное содержимое слева (**prefix**) и справа (**suffix**) от поля ввода. Если передан **prefix**, иконка поиска по умолчанию скрывается."
+        code={`
+          <Search suffix={<span>⌘K</span>} placeholder="Search..." />
+        `}
+      />
 
-  <Tabs.TabPane tab="Properties" key="properties">
-    <Description of={SearchStories} />
-    <AutodocArgsTable components={Search} />
-  </Tabs.TabPane>
-</Tabs>
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={SearchStories} />
+      <AutodocArgsTable components={Search} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=53702:194023)"
+      />
+
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(searchDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Search" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
 
 </DocPageLayout>

@@ -1,8 +1,8 @@
 import { TableRecord } from '@src/table'
 
-export const getTotalRowCount = (rows: TableRecord[] = []) => rows.reduce(calcRowSize, 0)
+export const getTotalRowCount = <T extends TableRecord = TableRecord> (rows: T[] = []) => rows.reduce(calcRowSize, 0)
 
-function getRowSize (row: TableRecord) {
+function getRowSize <T extends TableRecord = TableRecord> (row: T) {
   const total = 1
 
   const { children } = row
@@ -13,7 +13,7 @@ function getRowSize (row: TableRecord) {
   return children.reduce(calcRowSize, total)
 }
 
-function calcRowSize (total = 0, row: TableRecord) {
+function calcRowSize <T extends TableRecord = TableRecord> (total = 0, row: T) {
   const value = getRowSize(row)
   total += value
   return total

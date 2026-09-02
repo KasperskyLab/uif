@@ -2,53 +2,12 @@ import { useImmutableRef } from '@helpers/useImmutableRef'
 import { useResizeObserver } from '@helpers/useResizeObserver'
 import { Popover } from '@src/popover'
 import { Tooltip } from '@src/tooltip'
+import cn from 'classnames'
 import React, { FC, useEffect, useMemo, useState } from 'react'
-import styled from 'styled-components'
 
 import Tag from './Tag'
+import styles from './Tag.module.scss'
 import { TagProps, TagReductionGroupProps } from './types'
-
-const StyledTagReductionGroup = styled.div.withConfig<{ isMultiline: boolean }>({
-  shouldForwardProp: prop => !['isMultiline'].includes(prop)
-})`
-  position: relative;
-  width: 100%;
-  display: flex;
-  flex-grow: 1;
-  ${({ isMultiline }) => !isMultiline && 'overflow: hidden;'}
-  gap: 8px;
-
-  .hexa-tag-reduction-group-shown-tags {
-    display: flex;
-    gap: 8px;
-    ${({ isMultiline }) => isMultiline && 'flex-wrap: wrap;'}
-  }
-
-  .hexa-tag-reduction-group-hidden-elements {
-    display: flex;
-    gap: 8px;
-    position: absolute;
-    z-index: -1;
-    opacity: 0;
-  }
-`
-
-const TagWithReduction = styled(Tag)`
-  display: flex;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex-shrink: 1;
-
-  > span {
-    display: block;
-  }
-
-  &.hexa-tag-reduction-group-trunc-tag {
-    overflow: visible;
-  }
-`
 
 type TagGroupItems = TagReductionGroupProps['items']
 
@@ -110,25 +69,39 @@ export const TagReductionGroup: FC<TagReductionGroupProps> = ({
   }, [lastFittingItemIndex, items])
 
   return (
-    <StyledTagReductionGroup ref={setContainerRef} isMultiline={isMultiline}>
+    <div
+      ref={setContainerRef}
+      className={cn(styles.reductionGroup, isMultiline && styles.multiline)}
+    >
       {!isMultiline && (
         <div className="hexa-tag-reduction-group-hidden-elements">
-          {items.map((item, index) => <TagWithReduction key={index} {...item} />)}
+          {items.map((item, index) => (
+            <Tag key={index} {...item} className={cn(item.className, styles.tagWithReduction)} />
+          ))}
         </div>
       )}
       {Boolean(itemsToShow && itemsToShow.length) && (
         <div className="hexa-tag-reduction-group-shown-tags">
-          {itemsToShow.map((item, index) => <TagWithReduction key={index} {...item} />)}
+          {itemsToShow.map((item, index) => (
+            <Tag key={index} {...item} className={cn(item.className, styles.tagWithReduction)} />
+          ))}
         </div>
       )}
-      {centralItem && <Tooltip text={centralItem.label}><TagWithReduction {...centralItem} /></Tooltip>}
+      {centralItem && (
+        <Tooltip text={centralItem.label}>
+          <Tag {...centralItem} className={cn(centralItem.className, styles.tagWithReduction)} />
+        </Tooltip>
+      )}
       {showTruncTag && (
         <Popover content={<Tag.Group items={itemsToHide} />}>
-          <TagWithReduction {...reductionTag} className="hexa-tag-reduction-group-trunc-tag">
+          <Tag
+            {...reductionTag}
+            className="hexa-tag-reduction-group-trunc-tag"
+          >
             {`+${itemsToHide.length}`}
-          </TagWithReduction>
+          </Tag>
         </Popover>
       )}
-    </StyledTagReductionGroup>
+    </div>
   )
 }

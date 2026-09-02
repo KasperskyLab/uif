@@ -7,7 +7,7 @@ import { sharedPropConfig } from '@helpers/resolveDesignControls'
 
 import type { LinkDecorationType, LinkSize } from '../types'
 
-const linkSizes: LinkSize[] = ['medium', 'large', 'noSize']
+const linkSizes: LinkSize[] = ['small', 'medium', 'large', 'noSize']
 const linkDecorations: LinkDecorationType[] = ['none', 'icon']
 const iconPositionOptions = ['before', 'after'] as const
 const targetOptions = ['_self', '_blank', '_parent', '_top'] as const

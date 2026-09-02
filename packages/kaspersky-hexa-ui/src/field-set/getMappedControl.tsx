@@ -2,6 +2,7 @@ import { Button } from '@src/button'
 import { Checkbox } from '@src/checkbox'
 import { CodeViewer } from '@src/code-viewer'
 import { Calendar, RangePicker } from '@src/datepicker'
+import { HelpMessage } from '@src/help-message'
 import { Textbox } from '@src/input'
 import { Link } from '@src/link'
 import { Radio } from '@src/radio'
@@ -120,6 +121,10 @@ export const getMappedControl = (control: FieldSetControlConfig): ReactElement =
     case 'uploader': {
       const { component, ...props } = control
       return <Uploader {...props} />
+    }
+    case 'help-message': {
+      const { component, ...props } = control
+      return <HelpMessage {...props} size="medium" />
     }
     default:
       return <></>

@@ -12,7 +12,8 @@ import {
   getActiveFilters,
   ITableProps,
   TableRecord,
-  useTableContext
+  useTableContext,
+  useTableUpdate
 } from '../../'
 import { useRefMethod } from '../../context/TableContext'
 import { updatePersistentStorage } from '../../helpers/persistentStorage/persistentStorage'
@@ -77,7 +78,8 @@ function FiltersModule<T extends TableRecord = TableRecord> ({
   Component,
   ...rest
 }: MakeRequired<ITableProps<T>, 'columns'> & { Component: FC<ITableProps<T>> }) {
-  const { updateContext, enableNestedFilters } = useTableContext<T>()
+  const enableNestedFilters = useTableContext(state => state.enableNestedFilters)
+  const updateContext = useTableUpdate<T>()
   const [{
     filterApi,
     filteredRows,

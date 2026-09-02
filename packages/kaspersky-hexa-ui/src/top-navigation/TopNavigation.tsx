@@ -71,14 +71,14 @@ export const TopNavigation = ({
           {elementCentered?.type === 'button' && elementCentered?.buttonConfig && (
             <CenterButton
               {...elementCentered.buttonConfig}
-              {...getChildTestProps('header-center-element', testAttributes)}
+              {...getChildTestProps('header-center-element', testAttributes, false, true)}
             />
           )}
           {elementCentered?.type === 'horizontalNavigation' && elementCentered?.horizontalNavigationConfig && (
             <HorizontalNav
               borderless
               {...elementCentered.horizontalNavigationConfig}
-              {...getChildTestProps('header-center-element', testAttributes)}
+              {...getChildTestProps('header-center-element', testAttributes, false, true)}
             />
           )}
         </TopNavigationPart>
@@ -88,13 +88,13 @@ export const TopNavigation = ({
             <NotificationButton
               indicator={notificationIndicator}
               {...notificationButtonProps}
-              {...getChildTestProps('notification-button', testAttributes)}
+              {...getChildTestProps('notification-button', testAttributes, false, true)}
             />
           )}
           {accountMenuProps && (
             <AccountMenu
               {...accountMenuProps}
-              {...getChildTestProps('account-menu', testAttributes)}
+              {...getChildTestProps('account-menu', testAttributes, false, true)}
             />
           )}
         </TopNavigationPart>

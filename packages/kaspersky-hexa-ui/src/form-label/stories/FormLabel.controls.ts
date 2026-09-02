@@ -7,7 +7,7 @@ import { sharedPropConfig } from '@helpers/resolveDesignControls'
 
 import { FormLabelMode } from '../types'
 
-const formLabelModes: FormLabelMode[] = ['primary', 'secondary', 'disabled']
+const formLabelModes: FormLabelMode[] = ['primary', 'secondary'] as const
 const popoverPlacements = ['top', 'left', 'right', 'bottom'] as const
 
 const fromSharedProp = (
@@ -18,6 +18,7 @@ const fromSharedProp = (
 export const defaultArgs = {
   mode: 'primary' as const,
   disabled: false,
+  readOnly: false,
   required: false,
   children: 'My text',
   tooltip: 'Replace me',
@@ -32,6 +33,7 @@ export const formLabelPropPresentation: PropPresentationMap = {
   disabled: fromSharedProp('disabled', {
     description: 'Недоступное состояние подписи'
   }),
+  readOnly: fromSharedProp('readOnly'),
   required: {
     control: 'boolean',
     description: 'Метка обязательного поля: к тексту добавляется символ *'

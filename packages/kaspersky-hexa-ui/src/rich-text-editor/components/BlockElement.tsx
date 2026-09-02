@@ -2,14 +2,18 @@ import cn from 'classnames'
 import React from 'react'
 import { RenderElementProps } from 'slate-react'
 
-import styles from './BlockElement.module.scss'
+import { RichTextEditorTextareaProps } from '../types'
 
-type BlockElementProps = Pick<RenderElementProps, 'attributes' | 'children'> & {
+import styles from './Element.module.scss'
+
+type BlockElementProps = RichTextEditorTextareaProps & Pick<RenderElementProps, 'attributes' | 'children'> & {
   className?: string;
   dataElement?: string;
 }
 
 export const BlockElement = ({
+  disabled,
+  readOnly,
   attributes,
   children,
   className,
@@ -17,7 +21,14 @@ export const BlockElement = ({
 }: BlockElementProps) => (
   <div
     {...attributes}
-    className={cn(className, styles.blockElement)}
+    className={cn(
+      className,
+      styles.element,
+      {
+        [styles.disabled]: disabled,
+        [styles.readOnly]: readOnly
+      }
+    )}
     data-rich-text-element={dataElement}
   >
     {children}

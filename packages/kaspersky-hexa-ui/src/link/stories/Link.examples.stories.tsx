@@ -1,13 +1,15 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { renderVariants, StoryComponentContainer } from '@sb/StoryComponents'
-import { Meta, StoryObj } from '@storybook/react'
+import { StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
 
 import { Link as LinkComponent } from '../Link'
+import type { LinkSize } from '../types'
+
+import { BasicLink, linkIconVariants, StoryLinkProps } from './helpers'
 import { linkStorySettings } from './Link.stories'
-import type { LinkProps, LinkSize } from '../types'
 
 const linkSizes: LinkSize[] = ['medium', 'large', 'noSize']
 
@@ -15,12 +17,13 @@ const meta = {
   title: 'Hexa UI Components/Link/Stories',
   component: LinkComponent,
   tags: ['!autodocs'],
+  render: BasicLink.bind({}),
   ...linkStorySettings
 }
 
 export default meta
 
-type Story = StoryObj<LinkProps>
+type Story = StoryObj<StoryLinkProps>
 
 export const Basic: Story = {
   args: {
@@ -39,16 +42,29 @@ export const WithIcon: Story = {
 }
 
 export const IsTooltipVisible: Story = {
-  render: (args) =>
+  render: ({ decoration, icon, ...args }) =>
     renderVariants(
       [
         {
           label: 'isTooltipVisible: true',
-          content: <LinkComponent {...args} isTooltipVisible />
+          content: (
+            <LinkComponent
+              {...args} decoration={decoration}
+              icon={decoration === 'icon' ? linkIconVariants[icon] : undefined}
+              isTooltipVisible
+            />
+          )
         },
         {
           label: 'isTooltipVisible: false',
-          content: <LinkComponent {...args} isTooltipVisible={false} />
+          content: (
+            <LinkComponent
+              {...args}
+              decoration={decoration}
+              icon={decoration === 'icon' ? linkIconVariants[icon] : undefined}
+              isTooltipVisible={false}
+            />
+          )
         }
       ],
       true
@@ -66,10 +82,14 @@ export const IsTooltipVisible: Story = {
 }
 
 export const InText: Story = {
-  render: (args: LinkProps) => (
+  render: ({ decoration, icon, ...args }) => (
     <div>
       Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-      been the industry&apos;s standard dummy text ever since the 1500s, <LinkComponent {...args} /> when
+      been the industry&apos;s standard dummy text ever since the 1500s,  <LinkComponent
+        {...args}
+        decoration={decoration}
+        icon={decoration === 'icon' ? linkIconVariants[icon] : undefined}
+      /> when
       an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
       survived not only five centuries, but also the leap into electronic typesetting, remaining
       essentially unchanged.
@@ -78,11 +98,18 @@ export const InText: Story = {
 }
 
 export const Size: Story = {
-  render: (args) =>
+  render: ({ decoration, icon, ...args }) =>
     renderVariants(
       linkSizes.map(size => ({
         label: size,
-        content: <LinkComponent {...args} size={size} />
+        content: (
+          <LinkComponent
+            {...args}
+            decoration={decoration}
+            icon={decoration === 'icon' ? linkIconVariants[icon] : undefined}
+            size={size}
+          />
+        )
       })),
       true
     ),
@@ -95,9 +122,13 @@ export const Size: Story = {
 }
 
 export const Disabled: Story = {
-  render: (args: LinkProps) => (
+  render: ({ decoration, icon, ...args }) => (
     <StoryComponentContainer>
-      <LinkComponent {...args} />
+      <LinkComponent
+        {...args}
+        decoration={decoration}
+        icon={decoration === 'icon' ? linkIconVariants[icon] : undefined}
+      />
       <LinkComponent {...args} decoration="icon" />
     </StoryComponentContainer>
   ),
@@ -108,9 +139,12 @@ export const Disabled: Story = {
 }
 
 export const Visited: Story = {
-  render: (args: LinkProps) => (
+  render: ({ decoration, icon, ...args }) => (
     <StoryComponentContainer>
-      <LinkComponent {...args} />
+      <LinkComponent {...args}
+        decoration={decoration}
+        icon={decoration === 'icon' ? linkIconVariants[icon] : undefined}
+      />
       <LinkComponent {...args} decoration="icon" />
     </StoryComponentContainer>
   ),

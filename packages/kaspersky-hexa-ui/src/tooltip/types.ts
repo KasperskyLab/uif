@@ -1,21 +1,8 @@
 import { Theme } from '@design-system/types'
-import { ToViewProps } from '@helpers/typesHelpers'
 
 import { TooltipPropsWithTitle } from './AntdTooltip'
 
-export type TooltipCssConfig = {
-  background: string,
-  boxShadow: string,
-  boxShadowLine: string,
-  color: string
-}
-
-export type TooltipThemeProps = {
-  /** Custom theme */
-  theme?: Theme
-}
-
-type TooltipPlacement =
+export type TooltipPlacement =
  'top' |
   'left' |
   'right' |
@@ -29,13 +16,13 @@ type TooltipPlacement =
   'rightTop' |
   'rightBottom'
 
-export type TooltipProps = Omit<TooltipPropsWithTitle, 'placement' | 'title'> & TooltipThemeProps & {
+export type TooltipProps = Omit<TooltipPropsWithTitle, 'placement' | 'title'> & {
   /** Placement */
   placement?: TooltipPlacement,
   /** Should fall back to default align config */
   defaultAlign?: boolean,
   /** Tooltip content */
-  text: TooltipPropsWithTitle['title']
+  text: TooltipPropsWithTitle['title'],
+  /** Custom theme */
+  theme?: Theme
 }
-
-export type TooltipViewProps = ToViewProps<TooltipProps, TooltipCssConfig, TooltipThemeProps>

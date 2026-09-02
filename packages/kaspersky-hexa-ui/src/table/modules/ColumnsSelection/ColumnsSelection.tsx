@@ -1,5 +1,4 @@
 import { Portal } from '@helpers/components/Portal'
-import { useLocalization } from '@helpers/localization/useLocalization'
 import { useUpdateEffect } from '@helpers/useUpdateEffect'
 import { Button } from '@src/button'
 import { Modal, ModalProps } from '@src/modal'
@@ -7,12 +6,11 @@ import { RadioOption } from '@src/radio'
 import { Search } from '@src/search'
 import { Sidebar } from '@src/sidebar'
 import { Space } from '@src/space'
-import { TableColumn, TableRecord, useTableContext } from '@src/table'
+import { TableColumn, TableRecord, useTableContext, useTableUpdate } from '@src/table'
 import { getTabsConfig } from '@src/table/helpers/getTabsConfig'
 import { getPersistentStorageValue, updatePersistentStorage } from '@src/table/helpers/persistentStorage'
 import { Tabs } from '@src/tabs'
 import React, {
-  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -123,7 +121,9 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
   const prevStorageKeyRef = useRef(props.storageKey)
   const tableColumnsRef = useRef(tableColumns)
 
-  const { updateContext } = useTableContext<T>()
+  const updateContext = useTableUpdate<T>()
+
+  const showColumnsSelector = useTableContext(state => state.showColumnsSelector)
 
   const setTableColumns = (nextColumns: TableColumn<T>[]) => {
     tableColumnsRef.current = nextColumns
@@ -178,10 +178,6 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
   }, [tableGroupBy, props.storageKey, updateContext])
 
   useEffect(() => {
-    updateContext({ allColumns: tableColumns })
-  }, [tableColumns])
-
-  useEffect(() => {
     if (activeTab === 'columns' && !showColumnsTab) {
       setActiveTab('grouping')
     }
@@ -217,17 +213,10 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
     }
   }, [activeTab])
 
-  const displayColumns = useMemo(
-    () =>
-      tableColumns.filter(
-        (column) => isColumnReadonly(column) || column.show
-      ),
-    [tableColumns]
-  )
-
   const closeColumnsSelector = () => {
     setDraftGroupBy(tableGroupBy)
     setDraftColumns(tableColumns)
+    updateContext({ showColumnsSelector: false })
     props.onCloseColumnsSelector?.()
     setSearchValue('')
   }
@@ -254,11 +243,12 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
     setTableGroupBy(draftGroupBy)
     props.onGroupByChange?.(draftGroupBy)
     props.onColumnsChange?.(draftColumns)
+    updateContext({ showColumnsSelector: false })
     props.onCloseColumnsSelector?.()
     setSearchValue('')
   }
 
-  const title = useLocalization('table.columnsSettings.header')
+  const title = t('table.columnsSettings.header')
 
   const isSaveDisabled = useMemo(
     () => activeTab === 'columns' && !hasSelected(draftColumns),
@@ -296,9 +286,11 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
     }
   }
 
+  const canShowSelector = showColumnsTab || showGroupingTab
+
   return (
     <>
-      {props.showColumnsSelector && (
+      {canShowSelector && (
         <Portal>
           <Modal
             visible={isModalOpen}
@@ -310,7 +302,7 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
           <Sidebar
             size="extraSmall"
             onClose={closeColumnsSelector}
-            visible={props.showColumnsSelector}
+            visible={showColumnsSelector}
             title={title}
             subHeader={
               !hideTabsHeader && (
@@ -396,7 +388,7 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
           </Sidebar>
         </Portal>
       )}
-      <Component {...props} columns={displayColumns} groupBy={tableGroupBy} />
+      <Component {...props} columns={tableColumns} groupBy={tableGroupBy} />
     </>
   )
 }

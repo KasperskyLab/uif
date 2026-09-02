@@ -7,13 +7,19 @@ import { CustomFormats } from '../customTypes'
 import { LeafPluginType } from '../types'
 
 import styles from './BoldPlugin.module.scss'
+
 export const BoldPlugin: LeafPluginType = {
   leafType: CustomFormats.BOLD,
   icon: <FontBold />,
   hotKey: 'mod+b',
-  render: ({ children, attributes }) => {
+  render: ({ children, attributes, disabled, readOnly }) => {
     return (
-      <InlineElement attributes={attributes} className={styles.richTextBold}>
+      <InlineElement
+        attributes={attributes}
+        className={styles.richTextBold}
+        disabled={disabled}
+        readOnly={readOnly}
+      >
         {children}
       </InlineElement>
     )}

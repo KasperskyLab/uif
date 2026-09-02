@@ -1,6 +1,6 @@
 import { getIconPackFromWindows } from '@helpers/getIconPackFrowWindows'
 
-/** @deprecated Use direct imports from kl-hexa-ui-icons */
+/** @deprecated Use direct imports from kaspersky-hexa-ui-icons */
 export const icons = {
   extraSmall: [...Object.keys(getIconPackFromWindows(8)), ...Object.keys(getIconPackFromWindows(12))],
   small: Object.keys(getIconPackFromWindows(16)),

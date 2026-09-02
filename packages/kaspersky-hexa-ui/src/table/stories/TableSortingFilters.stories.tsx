@@ -81,15 +81,14 @@ const dataSource = basicDataSource.map((item, index, arr) => ({
 }))
 
 const meta: Meta<ITableProps> = {
-  title: 'Hexa UI Components/Table/SortingAndFilters',
+  title: 'Hexa UI Components/Table/Sorting and Filters in column',
   component: Table,
   args: {
     pagination: {
       restoreCurrentWhenDataChange: true
     },
     columns,
-    dataSource,
-    borderedStyle: false
+    dataSource
   },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
@@ -116,8 +115,7 @@ export const SortingAndFilters: Story = {
     initialSorting: {
       field: 'name',
       direction: 'asc'
-    },
-    borderedStyle: false
+    }
   },
   argTypes: {
     initialFilters: basicArgTypes.initialFilters,
@@ -180,8 +178,7 @@ export const AttributesSorting: Story = {
         isSortable: true,
         render: (key) => key
       }
-    ],
-    borderedStyle: false
+    ]
   },
   argTypes: {
     initialFilters: basicArgTypes.initialFilters,
@@ -193,8 +190,7 @@ export const FiltersSaving: Story = {
   render: BasicTableStory.bind({}),
   args: {
     saveFilters: { storageKey: 'storybook-table-saved-filters' },
-    onFilterChange: (filter) => console.log(filter),
-    borderedStyle: false
+    onFilterChange: (filter) => console.log(filter)
   },
   argTypes: { saveFilters: basicArgTypes.saveFilters }
 }
@@ -232,8 +228,7 @@ export const FiltersWithORLogicOperation: Story = {
           }
         ]
       }
-    ] as ITableProps['columns'],
-    borderedStyle: false
+    ] as ITableProps['columns']
   },
   argTypes: {
     initialFilters: basicArgTypes.initialFilters

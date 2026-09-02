@@ -1,16 +1,9 @@
-import { LocalizationProvider } from '@design-system/context'
-import i18n from '@helpers/localization/i18n'
-import {
-  configure,
-  fireEvent,
-  render,
-  screen,
-  waitFor
-} from '@testing-library/react'
-import React from 'react'
+import { configure, waitFor } from '@testing-library/react'
+import { Key } from 'react'
 
-import { ITableProps, Table, TableRef } from '..'
-import { createMockDataSourceFunction, generatedData, tableColumns } from '../__mocks__/filtersMockData'
+import { generatedData, MockRow, tableColumns, TableMockProps } from '../__mocks__/filtersMockData'
+import { MODES, renderByMode } from '../test-utils/renderByMode'
+import { TableRowSelection } from '../types'
 
 configure({ testIdAttribute: 'data-testid' })
 
@@ -19,7 +12,6 @@ type PaginationMode = 'client' | 'server'
 interface TestConfig {
   mode: PaginationMode
   description: string
-  tableProps: ITableProps
   expectDeselectedKeys: boolean
   expectManualIsSelectedAll: boolean
 }
@@ -30,120 +22,65 @@ const pageSize = 20
 const TABLE_TEST_ID = 'test-table'
 
 const testConfigs: TestConfig[] = [
-  {
-    mode: 'client',
-    description: 'Client pagination',
-    tableProps: {
-      columns: tableColumns,
-      dataSource: testRows,
-      pagination: { pageSize },
-      testId: TABLE_TEST_ID
-    },
-    expectDeselectedKeys: false,
-    expectManualIsSelectedAll: false
-  },
-  {
-    mode: 'server',
-    description: 'Server pagination',
-    tableProps: {
-      columns: tableColumns,
-      dataSourceFunction: createMockDataSourceFunction(testRows),
-      pagination: { pageSize },
-      testId: TABLE_TEST_ID
-    },
-    expectDeselectedKeys: true,
-    expectManualIsSelectedAll: true
-  }
+  { ...MODES[0], expectDeselectedKeys: false, expectManualIsSelectedAll: false },
+  { ...MODES[1], expectDeselectedKeys: true, expectManualIsSelectedAll: true }
 ]
 
-const renderTable = (config: TestConfig, { rowSelection, ...otherProps }: Partial<ITableProps> = {}, disableRowSelection: boolean = false) => {
+const renderTable = (
+  config: TestConfig,
+  { rowSelection, ...otherProps }: Partial<TableMockProps> = {},
+  disableRowSelection = false,
+  data: MockRow[] = testRows
+) => {
   const processSelection = jest.fn()
-  const props = {
-    ...config.tableProps,
-    ...otherProps,
+  const { table, ref } = renderByMode(config.mode, data, {
+    columns: tableColumns,
+    pagination: { pageSize },
+    testId: TABLE_TEST_ID,
     rowSelection: disableRowSelection ? undefined : {
       processSelection,
       builtInRowSelection: true,
       ...rowSelection
-    }
-  }
-  const ref: React.MutableRefObject<TableRef | null> = { current: null }
-
-  const utils = render(<LocalizationProvider i18n={i18n}><Table {...props} ref={ref} /></LocalizationProvider>)
-  return { ...utils, processSelection, ref }
-}
-
-const waitForTableData = async () => {
-  await waitFor(() => {
-    const rows = document.querySelectorAll('.ant-table-row')
-    expect(rows.length).toBeGreaterThan(0)
-  }, { timeout: 5000 })
-}
-
-const getCheckboxTestId = (key: string) => `table-row__select-${key}`
-const HEADER_CHECKBOX_ID = `${TABLE_TEST_ID}-select-all-checkbox`
-
-const getCheckbox = (id = HEADER_CHECKBOX_ID) => screen.getByTestId(id).querySelector('[role="checkbox"]')!
-
-const clickHeaderCheckbox = async () => {
-  fireEvent.click(getCheckbox())
-  await waitFor(() => {
-    expect(screen.getByTestId('select-all')).toBeInTheDocument()
-  }, { timeout: 2000 })
-}
-
-const selectSelectAllOption = async () => {
-  await clickHeaderCheckbox()
-  const selectAllOption = await screen.getByTestId('select-all')
-  fireEvent.click(selectAllOption)
-}
-
-const selectSelectCurrentPageOption = async () => {
-  await clickHeaderCheckbox()
-  const selectCurrentPageOption = await screen.findByTestId('select-current-page')
-  fireEvent.click(selectCurrentPageOption)
-}
-
-const selectDeselectAllOption = async () => {
-  await clickHeaderCheckbox()
-  const deselectAllOption = await screen.findByTestId('deselect-all')
-  fireEvent.click(deselectAllOption)
+    },
+    ...otherProps
+  }, { withRef: true })
+  return { processSelection, ref, table }
 }
 
 describe.each(testConfigs)('Row Selection - $description', (config) => {
   describe('Basic behavior', () => {
     it('should render row checkboxes when rowSelection is provided', () => {
-      const { container } = renderTable(config)
-      const checkboxes = container.querySelectorAll('.ant-checkbox-input')
+      const { table } = renderTable(config)
+      const checkboxes = table.selection.getCheckboxes()
       expect(checkboxes.length).toBeGreaterThan(0)
     })
 
     it('should render header checkbox', () => {
-      renderTable(config)
-      expect(getCheckbox()).toBeInTheDocument()
+      const { table } = renderTable(config)
+      expect(table.selection.getHeaderCheckbox()).toBeInTheDocument()
     })
 
     it('should not render checkboxes when rowSelection is undefined', () => {
-      const { container } = renderTable(config, {}, true)
-      const checkboxes = container.querySelectorAll('.ant-checkbox-input')
+      const { table } = renderTable(config, {}, true)
+      const checkboxes = table.selection.getCheckboxes()
       expect(checkboxes.length).toBe(0)
     })
 
     it('should not render header checkbox when hasSelectAll is false', () => {
-      renderTable(config, { rowSelection: { hasSelectAll: false } })
-      expect(screen.queryByTestId(HEADER_CHECKBOX_ID)).not.toBeInTheDocument()
+      const { table } = renderTable(config, { rowSelection: { hasSelectAll: false } })
+      expect(table.selection.queryHeaderCheckbox()).not.toBeInTheDocument()
     })
   })
 
   describe('Single row selection', () => {
     it('should select row on checkbox click', async () => {
-      const { processSelection } = renderTable(config)
-      await waitForTableData()
+      const { processSelection, table } = renderTable(config)
+      await table.rows.waitForData()
 
       const row = testRows[1]
       const rowKey = row.key
 
-      fireEvent.click(screen.getByTestId(getCheckboxTestId(rowKey)))
+      table.selection.toggleRow(rowKey)
 
       await waitFor(() => {
         const lastCall = processSelection.mock.lastCall[0]
@@ -157,15 +94,13 @@ describe.each(testConfigs)('Row Selection - $description', (config) => {
     })
 
     it('should deselect row on second click', async () => {
-      const { processSelection } = renderTable(config, config.mode === 'client'
-        ? { dataSource: testRowWithSelected }
-        : { dataSourceFunction: createMockDataSourceFunction(testRowWithSelected) })
-      await waitForTableData()
+      const { processSelection, table } = renderTable(config, {}, false, testRowWithSelected)
+      await table.rows.waitForData()
 
       const row = testRowWithSelected[3]
       const rowKey = row.key
 
-      fireEvent.click(screen.getByTestId(getCheckboxTestId(rowKey)))
+      table.selection.toggleRow(rowKey)
 
       await waitFor(() => {
         const lastCall = processSelection.mock.lastCall[0]
@@ -178,24 +113,33 @@ describe.each(testConfigs)('Row Selection - $description', (config) => {
         }
       })
     })
+  })
 
-    it('should block selection for disabled rows', async () => {
+  describe('Disabled rows', () => {
+    it('should block selection for row._disabled', async () => {
       const disabledRow1 = { ...testRows[0], _disabled: true }
       const disabledRow2 = { ...testRows[1], _selectionDisabled: true }
+      const disabledRow3Key = testRows[2].key
+      const normalRowKey = testRows[3].key
       const newTestRows = [disabledRow1, disabledRow2, ...testRows.slice(2)]
-      const { processSelection } = renderTable(config, config.mode === 'client'
-        ? { dataSource: newTestRows }
-        : { dataSourceFunction: createMockDataSourceFunction(newTestRows) })
-      await waitForTableData()
 
-      const checkbox1 = screen.getByTestId(getCheckboxTestId(disabledRow1.key))
-      const checkbox2 = screen.getByTestId(getCheckboxTestId(disabledRow2.key))
+      const getCheckboxProps: TableRowSelection['getCheckboxProps'] = (row) => ({ disabled: row.key === disabledRow3Key })
+      const { processSelection, table } = renderTable(config, { rowSelection: { getCheckboxProps } }, false, newTestRows)
+      await table.rows.waitForData()
+
+      const checkbox1 = table.selection.getRowCheckbox(disabledRow1.key)
+      const checkbox2 = table.selection.getRowCheckbox(disabledRow2.key)
+      const checkbox3 = table.selection.getRowCheckbox(disabledRow3Key)
+      const checkbox4 = table.selection.getRowCheckbox(normalRowKey)
 
       expect(checkbox1).toBeDisabled()
       expect(checkbox2).toBeDisabled()
+      expect(checkbox3).toBeDisabled()
+      expect(checkbox4).not.toBeDisabled()
 
-      fireEvent.click(checkbox1)
-      fireEvent.click(checkbox2)
+      table.selection.toggleRow(disabledRow1.key)
+      table.selection.toggleRow(disabledRow2.key)
+      table.selection.toggleRow(disabledRow3Key)
 
       await waitFor(() => {
         const lastCall = processSelection.mock.lastCall[0]
@@ -207,18 +151,16 @@ describe.each(testConfigs)('Row Selection - $description', (config) => {
 
   describe('Radio selection type', () => {
     it('should allow only one row selection', async () => {
-      const { processSelection } = renderTable(config, {
+      const { processSelection, table } = renderTable(config, {
         rowSelection: { type: 'radio', builtInRowSelection: true }
       })
-      await waitForTableData()
+      await table.rows.waitForData()
 
-      const firstCheckbox = screen.getByTestId(getCheckboxTestId(testRows[0].key))
-      const secondCheckbox = screen.getByTestId(getCheckboxTestId(testRows[1].key))
       const firstRow = testRows[0]
       const secondRow = testRows[1]
 
-      fireEvent.click(firstCheckbox)
-      fireEvent.click(secondCheckbox)
+      table.selection.toggleRow(testRows[0].key)
+      table.selection.toggleRow(testRows[1].key)
 
       await waitFor(() => {
         const lastCall = processSelection.mock.lastCall[0]
@@ -234,10 +176,10 @@ describe.each(testConfigs)('Row Selection - $description', (config) => {
   describe('Bulk operations', () => {
     describe('Select All', () => {
       it('should select all rows and update header checkbox state', async () => {
-        const { processSelection } = renderTable(config)
-        await waitForTableData()
+        const { processSelection, table } = renderTable(config)
+        await table.rows.waitForData()
 
-        await selectSelectAllOption()
+        await table.selection.selectAll()
 
         await waitFor(() => {
           const lastCall = processSelection.mock.lastCall[0]
@@ -253,16 +195,16 @@ describe.each(testConfigs)('Row Selection - $description', (config) => {
           }
         })
 
-        expect(getCheckbox()).toBeChecked()
+        expect(table.selection.getHeaderCheckbox()).toBeChecked()
       })
     })
 
     describe('Select Current Page', () => {
       it('should select current page rows and not affect next page', async () => {
-        const { processSelection } = renderTable(config)
-        await waitForTableData()
+        const { processSelection, table } = renderTable(config)
+        await table.rows.waitForData()
 
-        await selectSelectCurrentPageOption()
+        await table.selection.selectCurrentPage()
 
         await waitFor(() => {
           const lastCall = processSelection.mock.lastCall[0]
@@ -278,12 +220,11 @@ describe.each(testConfigs)('Row Selection - $description', (config) => {
           expect(lastCall.isSelectedAll).toBe(false)
         })
 
-        const nextPageButton = screen.getByTitle('Next Page')
-        fireEvent.click(nextPageButton)
+        table.pagination.next()
 
         await waitFor(() => {
           testRows.slice(pageSize, pageSize * 2).forEach(row => {
-            const checkbox = screen.getByTestId(getCheckboxTestId(row.key))
+            const checkbox = table.selection.getRowCheckbox(row.key)
             expect(checkbox).not.toBeChecked()
           })
         })
@@ -292,17 +233,15 @@ describe.each(testConfigs)('Row Selection - $description', (config) => {
 
     describe('Deselect All', () => {
       it('should reset selection by clicking on checkbox', async () => {
-        const { processSelection } = renderTable(config, config.mode === 'client'
-          ? { dataSource: testRowWithSelected }
-          : { dataSourceFunction: createMockDataSourceFunction(testRowWithSelected) })
+        const { processSelection, table } = renderTable(config, {}, false, testRowWithSelected)
 
-        await waitForTableData()
+        await table.rows.waitForData()
 
         await waitFor(() => {
           expect(processSelection).toHaveBeenCalled()
         })
 
-        await selectDeselectAllOption()
+        await table.selection.deselectAll()
 
         await waitFor(() => {
           const lastCall = processSelection.mock.lastCall[0]
@@ -318,11 +257,9 @@ describe.each(testConfigs)('Row Selection - $description', (config) => {
       })
 
       it('should reset selection by ref.current.resetSelection() and reapply preselected rows by ref.current.setPreselectedRows()', async () => {
-        const { processSelection, ref } = renderTable(config, config.mode === 'client'
-          ? { dataSource: testRowWithSelected }
-          : { dataSourceFunction: createMockDataSourceFunction(testRowWithSelected) })
+        const { processSelection, ref, table } = renderTable(config, {}, false, testRowWithSelected)
 
-        await waitForTableData()
+        await table.rows.waitForData()
 
         await waitFor(() => {
           expect(processSelection).toHaveBeenCalled()
@@ -362,10 +299,10 @@ describe.each(testConfigs)('Row Selection - $description', (config) => {
   describe('DeselectedRowKeys behavior', () => {
     if (config.mode === 'server') {
       it('should manage deselectedRowKeys for server pagination', async () => {
-        const { processSelection } = renderTable(config)
-        await waitForTableData()
+        const { processSelection, table } = renderTable(config)
+        await table.rows.waitForData()
 
-        await selectSelectAllOption()
+        await table.selection.selectAll()
 
         const row1 = testRows[0]
         const row2 = testRows[1]
@@ -373,8 +310,8 @@ describe.each(testConfigs)('Row Selection - $description', (config) => {
         const rowKey2 = row2.key
 
         await waitFor(() => {
-          fireEvent.click(screen.getByTestId(getCheckboxTestId(rowKey1)))
-          fireEvent.click(screen.getByTestId(getCheckboxTestId(rowKey2)))
+          table.selection.toggleRow(rowKey1)
+          table.selection.toggleRow(rowKey2)
         })
 
         await waitFor(() => {
@@ -389,21 +326,19 @@ describe.each(testConfigs)('Row Selection - $description', (config) => {
       })
 
       it('should keep deselectedRowKeys when page is changed', async () => {
-        const { processSelection } = renderTable(config)
-        await waitForTableData()
+        const { processSelection, table } = renderTable(config)
+        await table.rows.waitForData()
 
-        await selectSelectAllOption()
+        await table.selection.selectAll()
 
         const deselectedRow = testRows[0]
         const deselectedRowKey = deselectedRow.key
 
-        fireEvent.click(screen.getByTestId(getCheckboxTestId(deselectedRowKey)))
+        table.selection.toggleRow(deselectedRowKey)
 
-        const secondPageButton = screen.getByText('2')
-        fireEvent.click(secondPageButton)
+        table.pagination.goToPage(2)
 
-        const firstPageButton = screen.getByText('1')
-        fireEvent.click(firstPageButton)
+        table.pagination.goToPage(1)
 
         await waitFor(() => {
           const lastCall = processSelection.mock.lastCall[0]
@@ -412,14 +347,18 @@ describe.each(testConfigs)('Row Selection - $description', (config) => {
           expect(lastCall.selectedRowKeys).toHaveLength(pageSize - 1)
           expect(lastCall.selectedRows).toHaveLength(pageSize - 1)
         })
+
+        await table.rows.findByKey(deselectedRowKey)
+        expect(table.selection.isRowChecked(deselectedRowKey)).toBe(false)
+        expect(table.selection.isRowChecked(testRows[1].key)).toBe(true)
       })
     } else {
       it('should have no deselectedRowKeys for client pagination', async () => {
-        const { processSelection } = renderTable(config)
+        const { processSelection, table } = renderTable(config)
 
         const rowKey = testRows[1].key
-        fireEvent.click(screen.getByTestId(getCheckboxTestId(rowKey)))
-        fireEvent.click(screen.getByTestId(getCheckboxTestId(rowKey)))
+        table.selection.toggleRow(rowKey)
+        table.selection.toggleRow(rowKey)
 
         await waitFor(() => {
           const lastCall = processSelection.mock.lastCall[0]
@@ -436,17 +375,105 @@ describe('Client pagination specific tests', () => {
   const smallDataset = generatedData.slice(0, 15)
 
   it('should automatically calculate isSelectedAll when selecting all rows individually on single page', async () => {
-    const { processSelection } = renderTable(clientConfig, {
-      dataSource: smallDataset
-    })
+    const { processSelection, table } = renderTable(clientConfig, {}, false, smallDataset)
 
     smallDataset.forEach(row => {
-      fireEvent.click(screen.getByTestId(getCheckboxTestId(row.key)))
+      table.selection.toggleRow(row.key)
     })
 
     await waitFor(() => {
       const lastCall = processSelection.mock.lastCall[0]
       expect(lastCall.isSelectedAll).toBe(true)
     })
+  })
+
+  it('should preselect rows returned by an async getPreselectedRows', async () => {
+    const preselectedKey = smallDataset[2].key as string
+    const { table } = renderTable(clientConfig, {
+      rowSelection: { getPreselectedRows: async () => [preselectedKey] }
+    }, false, smallDataset)
+
+    await table.rows.findByKey(preselectedKey)
+    await waitFor(() => expect(table.selection.isRowChecked(preselectedKey)).toBe(true))
+    expect(table.selection.isRowChecked(smallDataset[0].key)).toBe(false)
+  })
+})
+
+describe('Server pagination specific tests', () => {
+  const serverConfig = testConfigs[1]
+
+  it('should re-apply getPreselectedRows after a server page change', async () => {
+    const getPreselectedRows = jest.fn(async () => [] as string[])
+    const { table } = renderTable(serverConfig, { rowSelection: { getPreselectedRows } }, false, testRows)
+    await table.rows.waitForData()
+
+    const callsAfterMount = getPreselectedRows.mock.calls.length
+    table.pagination.goToPage(2)
+
+    await waitFor(() => expect(getPreselectedRows.mock.calls.length).toBeGreaterThan(callsAfterMount))
+  })
+
+  it('should count the server total (not the page size) in the context menu under select-all', async () => {
+    const contextMenu = jest.fn(() => [{ type: 'button' as const, key: 'a', label: 'A', testId: 'ctx-a' }])
+    const { table } = await renderByMode('server', testRows, {
+      columns: tableColumns,
+      pagination: { pageSize },
+      contextMenu,
+      rowSelection: { builtInRowSelection: true }
+    })
+
+    await table.selection.selectAll()
+
+    table.contextMenu.openOnRow(testRows[0].key)
+    await table.contextMenu.getMenu()
+    // «Выбрано N» под select-all считается от серверного total (25), а не от размера страницы (20).
+    await waitFor(() => expect(table.contextMenu.getSelectedCount()).toBe(testRows.length))
+  })
+
+  it('should preserve a single-row selection across a server page change and back', async () => {
+    const { processSelection, table } = renderTable(serverConfig)
+    await table.rows.waitForData()
+
+    const row = testRows[0]
+    table.selection.toggleRow(row.key)
+    await waitFor(() => expect(processSelection.mock.lastCall[0].selectedRowKeys).toContain(row.key))
+
+    table.pagination.next()
+    await waitFor(() => expect(table.rows.getByKey(row.key)).toBeNull())
+
+    table.pagination.prev()
+    await table.rows.findByKey(row.key)
+    expect(table.selection.isRowChecked(row.key)).toBe(true)
+  })
+})
+
+describe('Tree selection integration', () => {
+  const treeData = [
+    {
+      ...testRows[0],
+      key: 'p1',
+      children: [
+        { ...testRows[1], key: 'c1' },
+        { ...testRows[2], key: 'c2' }
+      ]
+    },
+    { ...testRows[3], key: 'leaf' }
+  ] as MockRow[]
+
+  it('should select parent and child rows independently (no cascade)', async () => {
+    const { table } = renderTable(testConfigs[0], {}, false, treeData)
+    await table.rows.waitForData()
+
+    table.rows.clickExpandIcon('p1')
+    await table.rows.findByKey('c1')
+
+    // Таблица не каскадит выбор: выбор родителя не выбирает детей автоматически.
+    table.selection.toggleRow('p1')
+    expect(table.selection.isRowChecked('p1')).toBe(true)
+    expect(table.selection.isRowChecked('c1')).toBe(false)
+
+    table.selection.toggleRow('c1')
+    expect(table.selection.isRowChecked('c1')).toBe(true)
+    expect(table.selection.isRowChecked('p1')).toBe(true)
   })
 })

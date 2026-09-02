@@ -7,12 +7,9 @@ import { FormLabel } from '@src/form-label'
 import RadioAntd from 'antd/es/radio'
 import cn from 'classnames'
 import React, { FC, useMemo } from 'react'
-import styled from 'styled-components'
 
-import { radioCss } from './radioCss'
+import styles from './Radio.module.scss'
 import { RadioOption, RadioProps } from './types'
-
-const StyledRadioGroup = styled(RadioAntd.Group)`${radioCss}`
 
 export const Radio: FC<RadioProps> = (rawProps: RadioProps) => {
   try {
@@ -35,24 +32,29 @@ export const Radio: FC<RadioProps> = (rawProps: RadioProps) => {
     ...rest
   } = useTestAttribute(rawProps)
   const id = useId()
-  const newClassName = useMemo(() => cn(getClassNameWithTheme(className, theme), {
-    'kl-radio-invalid': invalid,
-    'ant-radio-vertical': vertical
-  }), [vertical, invalid, className, theme])
+  const newClassName = useMemo(() => cn(
+    getClassNameWithTheme(className, theme),
+    styles.radioGroup,
+    { 'ant-radio-vertical': vertical }
+  ), [vertical, className, theme])
 
   const config = usePopupConfig()
 
   return (
-    <StyledRadioGroup
+    <RadioAntd.Group
       className={newClassName}
       value={value}
-      disabled={disabled || readonly}
       role="radioList"
       {...testAttributes}
       {...rest}
     >
       {options.map((option, index) => {
         const optionId = `${id}-${option.value}`
+        // disabled не передаётся на RadioAntd.Group: antd дописал бы его детям
+        // через контекст и перекрытие на уровне опции перестало бы работать
+        const optionDisabled = option.disabled ?? disabled
+        const optionReadonly = option.readonly ?? readonly
+        const optionInvalid = option.invalid ?? invalid
 
         return (
           <div key={index}>
@@ -60,9 +62,10 @@ export const Radio: FC<RadioProps> = (rawProps: RadioProps) => {
               id={optionId}
               value={option.value}
               data-testid={`${rawProps.testId}-${option.value}`}
-              disabled={option.disabled || option.readonly}
-              className={cn(className, {
-                'kl-radio-readonly': (option.readonly && !disabled) || readonly,
+              disabled={optionDisabled || optionReadonly}
+              className={cn(className, styles.radio, {
+                'kl-radio-invalid': optionInvalid,
+                'kl-radio-readonly': optionReadonly,
                 'radio-string-label': typeof option.label === 'string'
               })}
             >
@@ -72,13 +75,14 @@ export const Radio: FC<RadioProps> = (rawProps: RadioProps) => {
                       testId={`${rawProps.testId}-${option.value}-label`}
                       required={option.required}
                       tooltip={option.tooltip}
-                      disabled={option.disabled}
+                      disabled={optionDisabled}
+                      readOnly={optionReadonly}
                       theme={theme}
                       htmlFor={optionId}
                       getPopupContainer={
                         getPopupContainer ??
-                      config.getPopupContainer ??
-                      (triggerNode => config.usePortal ? document.body : triggerNode.parentElement!)
+                        config.getPopupContainer ??
+                        (triggerNode => config.usePortal ? document.body : triggerNode.parentElement!)
                       }
                     >
                       {option.label}
@@ -94,7 +98,7 @@ export const Radio: FC<RadioProps> = (rawProps: RadioProps) => {
           </div>
         )
       })}
-    </StyledRadioGroup>
+    </RadioAntd.Group>
   )
 }
 

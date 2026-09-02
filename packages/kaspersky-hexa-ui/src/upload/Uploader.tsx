@@ -87,7 +87,7 @@ export const Uploader: FC<UploaderProps & RefAttributes<{ upload: () => void }>>
   React.useImperativeHandle(ref, () => ({
     upload: () => {
       fileList
-        .filter(x => x.status !== 'error' && x.status !== 'uploading' && x.status !== 'done')
+        .filter(x => x.status !== 'error' && x.status !== 'uploading' && x.status !== 'done' && x.status !== 'success')
         .forEach(uploadFile)
     }
   }))

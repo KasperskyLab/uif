@@ -13,7 +13,7 @@ import { useThemedPopover } from './useThemedPopover'
 export const Popover: FC<PopoverProps> = ({
   content,
   defaultVisible = false,
-  placement = 'bottom',
+  placement = 'top',
   overlayClassName,
   shouldLimitSize = true,
   ...rawProps

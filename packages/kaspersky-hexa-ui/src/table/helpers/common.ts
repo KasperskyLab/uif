@@ -38,6 +38,23 @@ export const isColumnReadonly = <T extends TableRecord = TableRecord>(
   column: TableColumn<T>
 ): boolean => READONLY_COLUMNS.includes(column)
 
+export const isColumnVisible = <T extends TableRecord = TableRecord>(
+  column: TableColumn<T>
+): boolean => isColumnReadonly(column) || column.show !== false
+
+export const mapVisibleColumns = <T extends TableRecord = TableRecord>(
+  columns: TableColumn<T>[],
+  mapFn: (column: TableColumn<T>, visibleIndex: number, visibleCount: number) => TableColumn<T>
+): TableColumn<T>[] => {
+  const visibleCount = columns.reduce((count, column) => isColumnVisible(column) ? count + 1 : count, 0)
+
+  let visibleIndex = 0
+
+  return columns.map((column) => (
+    isColumnVisible(column) ? mapFn(column, visibleIndex++, visibleCount) : column
+  ))
+}
+
 export const isReactServiceParam = (key: string) => REACT_SERVICE_PARAMS.includes(key)
 
 export const safeWidth = (

@@ -130,6 +130,7 @@
         },
         "filtering": {
           "add": "Қосу",
+          "addCondition": "Шарт қосу",
           "clearAll": "Барлығын тазалау",
           "property": "Сипат",
           "attribute": "Атрибут",
@@ -137,10 +138,24 @@
           "from": "бастап",
           "to": "дейін",
           "value": "Мән",
+          "operators": {
+            "or": "НЕМЕСЕ",
+            "and": "ЖӘНЕ"
+          },
+          "booleanFilter": {
+            "on": "Қосулы",
+            "off": "Өшірілген"
+          },
           "validation": {
             "emptyValue": "Сүзгілеу мәнін көрсетіңіз",
             "duplicateFilters": "Сүзгілер қайталанған. Әрбір сүзгі бірегей екеніне көз жеткізіңіз."
           }
+        },
+        "resetSettingsModal": {
+          "content": "Барлық тапсырмалар әдепкі параметрлерге қайтарылады",
+          "header": "Бағандардың баптауларын қайтару керек пе?",
+          "firstButton": "Қалпына келтіру",
+          "secondButton": "Бас тарту"
         },
         "columnHideIsUnavailable": "Бағанды ​​жасыру мүмкін емес",
         "onlyForFiltering": "Бұл баған тек сүзгілеуге арналған"
@@ -149,7 +164,7 @@
         "⊆": "Құрамы",
         "⊄": "Қамтымайды",
         "cont_and": "Қамтиды (ЖӘНЕ)",
-        "cont_or": "Is one of",
+        "cont_or": "Келесінің бірі",
         "ncont_or": "Қамтымайды",
         "*=": "Тұрақты өрнек",
         "empty": "Бос",
@@ -178,7 +193,8 @@
     "actionBar": {
       "unsavedChanges": "Күтудегі өзгерістер",
       "save": "Қолдану",
-      "cancel": "Бас тарту"
+      "cancel": "Бас тарту",
+      "resetSettings": "Параметрлерді қайтару"
     },
     "textarea": {
       "wordsCount": "{{count}}/{{total}}"

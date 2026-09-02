@@ -1,0 +1,214 @@
+@use "sass:map";
+
+$toggle-tokens: (
+  disabled: (
+    background: var(--bg--neutral_transparent--level_2),
+    handle: var(--bg--neutral_transparent--level_3),
+    checked-background: var(--bg--neutral_transparent--level_2),
+    checked-handle: var(--bg--neutral_transparent--level_3)
+  ),
+  readonly: (
+    background: var(--bg--neutral_transparent--level_2),
+    handle: var(--bg--neutral_transparent--level_3),
+    checked-background: var(--bg--accent_subtle_level_1--active),
+    checked-handle: var(--bg--accent_subtle--hover)
+  ),
+  loading: (
+    background: var(--bg--neutral_transparent--level_2),
+    handle: var(--fg--neutral_inverted--primary),
+    checked-background: var(--bg--accent_subtle_level_1--active),
+    checked-handle: var(--bg--accent_subtle--hover)
+  )
+);
+
+@mixin handle-style($bg-color) {
+  &::before {
+    background-color: $bg-color;
+    box-shadow: none
+  }
+}
+
+@mixin apply-colors($mode) {
+  $theme: map.get($toggle-tokens, $mode);
+
+  background-color: map.get($theme, background);
+
+  :global(.ant-switch-handle) {
+    @include handle-style(map.get($theme, handle))
+  }
+
+  &:global(.ant-switch-checked) {
+    background-color: map.get($theme, checked-background);
+
+    :global(.ant-switch-handle) {
+      @include handle-style(map.get($theme, checked-handle))
+    }
+  }
+}
+
+.labelBefore {
+  order: 100;
+}
+
+.labelAfter {
+  order: 0;
+}
+
+.toggle {
+  background-color: var(--bg--neutral--level_5);
+  box-shadow: none;
+
+  [dir="rtl"] & {
+    transform: rotate(180deg);
+  }
+
+  &:last-child {
+    translate: none;
+  }
+
+  &:not(:global(.ant-switch-small)) {
+    height: 20px;
+    min-width: 32px;
+
+    :global(.ant-switch-handle) {
+      width: 16px;
+      height: 16px;
+    }
+
+    :global(.ant-switch-loading-icon.anticon) {
+      top: 1px;
+    }
+  }
+
+  :global(.ant-switch-handle) {
+    @include handle-style(var(--fg--neutral_inverted--primary))
+  }
+
+  &:global(.ant-switch-checked) {
+    background-color: var(--common--accent--enabled);
+
+    :global(.ant-switch-handle) {
+      @include handle-style(var(--fg--neutral_inverted--primary))
+    }
+
+    &:not(:global(.ant-switch-small)) {
+      :global(.ant-switch-handle) {
+        left: calc(100% - 16px - 2px);
+      }
+    }
+  }
+
+  :global(.ant-click-animating-node) {
+    display: none;
+  }
+
+  // hover
+  &:hover:not(:disabled),
+  .toggleRoot:hover &:not(:disabled) {
+    background-color: var(--bg--neutral--level_5_hover);
+
+    &:global(.ant-switch-checked) {
+      background-color: var(--common--accent--hover);
+    }
+  }
+
+  // active
+  &:hover:active,
+  &:active,
+  .toggleRoot:active &,
+  .toggleRoot:hover:active & {
+    &:not(:disabled) {
+      background-color: var(--bg--neutral--level_5_active);
+
+      &:global(.ant-switch-checked) {
+        background-color: var(--common--accent--active);
+
+        :global(.ant-switch-handle)::before {
+          left: 0;
+        }
+      }
+
+      :global(.ant-switch-handle)::before {
+        right: 0;
+      }
+    }
+  }
+
+  // focus
+  &:not(:disabled) {
+    &,
+    &:hover,
+    &:active {
+      &:focus,
+      &:focus-within {
+        outline: none;
+        box-shadow: none;
+      }
+
+      &:focus-visible {
+        outline: none;
+        box-shadow: var(--toggle-focus-box-shadow);
+      }
+    }
+  }
+
+  // disabled
+  &:global(.ant-switch-disabled),
+  &:disabled {
+    opacity: 1;
+
+    @include apply-colors(disabled);
+  }
+
+  // readonly
+  &.readonly {
+    @include apply-colors(readonly);
+
+    &,
+    * {
+      cursor: default;
+    }
+  }
+
+  // loading
+  &:global(.ant-switch-loading) {
+    @include apply-colors(loading);
+
+    :global(.ant-switch-loading-icon.anticon) {
+      color: var(--fg--neutral--secondary);
+    }
+
+    &:global(.ant-switch-checked) {
+      :global(.ant-switch-loading-icon.anticon) {
+        color: var(--common--accent--enabled);
+      }
+    }
+  }
+
+  + .toggleLabel {
+    line-height: 20px;
+
+    :global(.ant-table-cell) & {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+
+  &:not(:disabled) + .toggleLabel {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &:disabled + .toggleLabel {
+    cursor: not-allowed;
+    user-select: none;
+  }
+}
+
+.toggleWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--spacing--gap_dependent);
+}

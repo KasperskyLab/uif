@@ -17,8 +17,12 @@ type StoryAlertProps = Omit<AlertProps, 'actions'> & {
 
 const actionsButtons: AlertProps['actions'] = {
   FIRST_ACTION: {
-    text: 'Action',
+    text: 'Action 1',
     onClick: () => console.log('Action1')
+  },
+  SECOND_ACTION: {
+    text: 'Action 2',
+    onClick: () => console.log('Action2')
   }
 }
 

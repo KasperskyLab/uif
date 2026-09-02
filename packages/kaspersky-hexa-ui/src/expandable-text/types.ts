@@ -1,12 +1,26 @@
-import { Focus } from '@design-system/tokens/focus'
 import { Theme } from '@design-system/types'
-import { ToViewProps } from '@helpers/typesHelpers'
-import { Text } from '@src/typography'
-import { ComponentProps } from 'react'
+import { TextProps } from '@src/typography'
+import { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
 
-export type ExpandableTextColorConfig = Focus
+type OwnProps<E extends ElementType> = {
+  children?: ReactNode
+  className?: string
+  /** Element or component to render as the root. Defaults to a plain `div`. */
+  as?: E
+  /** Fades the trailing edge of clipped content into the background behind it. */
+  useGradient?: boolean
+  /** Called when the content is expanded or collapsed. */
+  onExpand?: (expanded: boolean) => void
+  /** Extra class applied while the content does not fit. */
+  clippedClassName?: string
+  /** Extra class applied while the content is expanded. */
+  expandedClassName?: string
+  /** Native tooltip offered while the content is clipped. */
+  clippedTitle?: string
+}
 
-export type ExpandableTextCssConfig = ExpandableTextColorConfig
+export type ExpandableContentProps<E extends ElementType = 'div'> =
+  OwnProps<E> & Omit<ComponentPropsWithoutRef<E>, keyof OwnProps<E>>
 
 export type ExpandableTextThemeProps = {
   /** Custom theme */
@@ -17,16 +31,9 @@ type SafeExpandableTextProps = ExpandableTextThemeProps & {
   /** Alternative text */
   altText?: string,
   /** Function-trigger when text expanded */
-  onExpand?: (expanded: boolean) => void
+  onExpand?: (expanded: boolean) => void,
+  /** Fades the trailing edge of clipped text into the background behind it */
+  useGradient?: boolean
 }
-export type ExpandableTextProps = ComponentProps<typeof Text> & SafeExpandableTextProps
 
-export type ExpandableTextViewProps =
-  ComponentProps<typeof Text> &
-  ToViewProps<SafeExpandableTextProps, ExpandableTextCssConfig, ExpandableTextThemeProps>
-
-export type StyledTextProps = {
-  expanded: boolean,
-  clipped: boolean,
-  cssConfig: ExpandableTextCssConfig
-}
+export type ExpandableTextProps = TextProps & SafeExpandableTextProps

@@ -1,11 +1,10 @@
+import { sharedPropConfig } from '@helpers/resolveDesignControls'
 import {
   extendPropPresentation,
   PropPresentationMap
 } from '@sb/components/Documentation'
 
-import { sharedPropConfig } from '@helpers/resolveDesignControls'
-
-import { tagModes, TagMode, TagSize } from '../types'
+import { TagMode, tagModes, TagSize } from '../types'
 
 const fromSharedProp = (
   propName: keyof typeof sharedPropConfig,
@@ -39,10 +38,7 @@ export const tagPropPresentation: PropPresentationMap = {
     description: 'Контурный вариант тега'
   },
   disabled: fromSharedProp('disabled'),
-  readOnly: {
-    control: { type: 'boolean' },
-    description: 'Состояние только для чтения'
-  },
+  readOnly: fromSharedProp('readOnly'),
   invalid: {
     control: { type: 'boolean' },
     description: 'Невалидное состояние'

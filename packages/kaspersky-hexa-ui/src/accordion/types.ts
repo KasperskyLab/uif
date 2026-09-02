@@ -34,7 +34,7 @@ export type AccordionPanelProps = {
   /** Additional text */
   additionalText?: string,
   /** Element after additional text */
-  elementAfter?: React.ReactElement,
+  elementAfter?: React.ReactNode,
   /** Actions */
   actions?: AccordionAction[],
   /** Should disable actions when accordion panel is disabled */

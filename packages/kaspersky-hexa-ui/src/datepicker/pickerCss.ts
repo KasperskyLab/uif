@@ -36,14 +36,14 @@ export const listCss = css`
   }
 
   & > div:not(:empty) {
-    margin-left: auto;
+    margin-left: unset;
+    margin-inline-start: auto;
     display: inline-flex;
     gap: 12px;
   }
 `
 
 export const pickerCss = css`
-
   &&&.ant-picker-range {
     width: 360px;
   }
@@ -54,7 +54,8 @@ export const pickerCss = css`
     pointer-events: auto;
     color: ${fromInputProps('enabled.color')};
     border-radius: 3px;
-    margin-left: auto;
+    margin-left: unset;
+    margin-inline-start: auto;
   }
 
   &.kl6-textbox-readonly {
@@ -93,6 +94,15 @@ export const pickerCss = css`
 `
 
 export const pickerContainerCss = css`
+  [dir="rtl"] & {
+    .ant-picker-header-super-prev-btn,
+    .ant-picker-header-super-next-btn,
+    .ant-picker-header-prev-btn,
+    .ant-picker-header-next-btn {
+      transform: rotate(180deg);
+    }
+  }
+
   background: ${fromProps('unselected.enabled.background')};
   
   &.kl6-datepicker-presets-calendar {
@@ -136,6 +146,10 @@ export const pickerContainerCss = css`
     flex-direction: row;
     background: ${fromProps('unselected.enabled.background')};
     border: none;
+
+    [dir="rtl"] & {
+      direction: rtl;
+    }
 
     .ant-picker-decade-panel,
     .ant-picker-year-panel,
@@ -200,7 +214,7 @@ export const pickerContainerCss = css`
         position: absolute;
       }
       .ant-picker-year-btn {
-        margin-left: 4px;
+        margin-inline-start: 4px;
       }
     }
 
@@ -219,11 +233,11 @@ export const pickerContainerCss = css`
     }
 
     .ant-picker-header-super-prev-btn {
-      margin-right: 4px;
+      margin-inline-end: 4px;
     }
 
     .ant-picker-header-super-next-btn {
-      margin-left: 4px;
+      margin-inline-start: 4px;
     }
   }
 
@@ -355,9 +369,8 @@ export const pickerContainerCss = css`
 
   .ant-picker-footer {
     min-width: ${DATE_PICKER_PANEL_FOOTER_WIDTH};
-    border-width: 0 0 0 1px;
-    border-style: solid;
-    border-color: ${fromProps('separator')};
+    border: none;
+    border-inline-start: 1px solid ${fromProps('separator')};
     
     .ant-picker-footer-extra {
       line-height: 1;
@@ -382,7 +395,13 @@ export const pickerContainerCss = css`
   }
 
   .ant-picker-time-panel {
+    border-right: none;
     border-left: 1px solid ${fromProps('separator')};
+
+    [dir="rtl"] & {
+      border-left: none;
+      border-right: 1px solid ${fromProps('separator')};
+    }
   }
 
   .ant-picker-time-panel .ant-picker-header {
@@ -395,7 +414,9 @@ export const pickerContainerCss = css`
     padding: 16px 12px;
     
     &:not(:first-child) {
-      border-left: 1px solid ${fromProps('separator')};
+      border-right: none;
+      border-left: none;
+      border-inline-start: 1px solid ${fromProps('separator')};
     }
 
     & > li {
@@ -423,28 +444,32 @@ export const pickerContainerCss = css`
 
   .ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single):not(.ant-picker-cell-range-end) {
     .ant-picker-cell-inner {
-      border-radius: 4px 0 0 4px;
+      border-radius: unset;
+      border-end-start-radius: 4px;
+      border-start-start-radius: 4px;
     }
     &::before {
-      left: 50%;
+      inset-inline-start: 50%;
       border-radius: 0;
     }
     &::after {
-      left: -1px;
+      inset-inline-start: -1px;
       border-radius: 0;
     }
   }
 
   .ant-picker-cell-range-end:not(.ant-picker-cell-range-end-single):not(.ant-picker-cell-range-start) {
     .ant-picker-cell-inner {
-      border-radius: 0 4px 4px 0;
+      border-radius: unset;
+      border-start-end-radius: 4px;
+      border-end-end-radius: 4px;
     }
     &::before {
-      right: 50%;
+      inset-inline-end: 50%;
       border-radius: 0;
     }
     &::after {
-      right: -1px;
+      inset-inline-end: -1px;
       border-radius: 0;
     }
   }

@@ -31,8 +31,7 @@ const meta: Meta<ITableProps> = {
   args: {
     pagination: defaultPagination,
     dataSource: basicDataSource,
-    columns: basicTwoColumns,
-    borderedStyle: false
+    columns: basicTwoColumns
   },
   argTypes: {
     pagination: basicArgTypes
@@ -90,16 +89,6 @@ export const CursorPagination: Story = {
     pagination: {
       ...defaultPagination,
       cursor: true
-    }
-  }
-}
-
-export const SimplePagination: Story = {
-  render: BasicTableStory.bind({}),
-  args: {
-    pagination: {
-      ...defaultPagination,
-      simple: true
     }
   }
 }

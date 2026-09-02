@@ -162,7 +162,6 @@ describe('Checkbox.Group', () => {
 
   const defaultProps = {
     options,
-    componentId: 'test-checkbox-group',
     onChange: jest.fn(),
     testId: 'test-id'
   }
@@ -207,7 +206,6 @@ describe('Checkbox.Group', () => {
 
   const defaultPropsPartiallyDisabled = {
     options: optionsPartiallyDisabled,
-    componentId: 'test-checkbox-group-partially-disabled',
     defaultValue: ['option2'],
     onChange: jest.fn()
   }

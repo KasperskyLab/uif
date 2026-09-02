@@ -1,0 +1,178 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Modal } from '../Modal'
+import * as ModalStories from './Modal.stories'
+import { modalDesignPropPresentation } from './Modal.design.properties'
+
+<Meta of={ModalStories} name="Modal Docs" />
+
+<DocPageLayout>
+
+  <DocPageHeader title="Modal" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **Modal** — диалоговое окно поверх текущего интерфейса для информации, подтверждения или завершения сценария
+
+          Используйте Modal, когда пользователю нужно принять решение, подтвердить значимое действие или ознакомиться с важной информацией, не теряя контекст текущего экрана. Содержимое диалога должно быть коротким и самодостаточным: пользователь должен понимать причину открытия и следующий шаг.
+
+          Для краткой обратной связи после выполненного действия выбирайте Notification. Если сообщение относится к содержимому страницы и не требует немедленного решения, используйте Alert или SectionMessage вместо диалога."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**Modal** показывает контент в отдельном диалоге поверх страницы. В нём можно задать **header**, **content**, семантическое оформление через **mode**, размер через **size**, набор действий через **actions** или пользовательские кнопки через **customButtons**."
+      />
+
+      <DocExampleBlock
+        title="mode"
+        description="Семантический вариант диалога. Доступны `default`, `warning`, `error`, `success` и `ai`. По умолчанию — `default`; для вариантов, кроме `default`, отображается иконка соответствующего статуса."
+        code={`
+          <Modal
+            visible
+            getContainer={false}
+            header="Удалить объект"
+            content="Действие нельзя отменить"
+            mode="error"
+          />
+        `}
+        minHeight={300}
+      />
+
+      <DocExampleBlock
+        title="size"
+        description="Размер диалога. Доступны `small` и `large`. По умолчанию — `small`."
+        code={`
+          <Modal
+            visible
+            getContainer={false}
+            header="Заголовок"
+            content="Содержимое"
+            size="large"
+          />
+        `}
+        minHeight={400}
+      />
+
+      <DocExampleBlock
+        title="header и content"
+        description="**header** задаёт заголовок, а **content** — основное содержимое. Оба пропа принимают текст или произвольную React-разметку."
+        code={`
+          <Modal
+            visible
+            getContainer={false}
+            header="Подтвердите действие"
+            content="После подтверждения изменения будут применены"
+          />
+        `}
+        minHeight={300}
+      />
+
+      <DocExampleBlock
+        title="actions"
+        description="Набор кнопок в нижней части диалога: **FIRST_ACTION**, **SECOND_ACTION** и **THIRD_ACTION**. Каждая настройка поддерживает текст, обработчик и параметры Button. Если **actions** и **customButtons** не переданы, нижняя часть не отображается."
+        code={`
+          <Modal
+            visible
+            getContainer={false}
+            header="Подтвердите действие"
+            content="Изменения будут применены"
+            actions={modalActions}
+          />
+        `}
+        setupCode={`
+          const modalActions = {
+            FIRST_ACTION: { text: 'Подтвердить', onClick: () => alert('Подтверждено') },
+            SECOND_ACTION: {
+              text: 'Отмена',
+              mode: 'secondary',
+              onClick: () => alert('Отменено'),
+            },
+          }
+        `}
+        minHeight={320}
+      />
+
+      <DocExampleBlock
+        title="customButtons"
+        description="Массив дополнительных кнопок для обратной совместимости с Confirmation Popup. Для новых сценариев используйте **actions**, чтобы сохранить единый набор основных действий."
+        code={`
+          <Modal
+            visible
+            getContainer={false}
+            header="Подтвердите действие"
+            content="Содержимое диалога"
+            customButtons={modalCustomButtons}
+          />
+        `}
+        setupCode={`
+          const modalCustomButtons = [
+            { text: 'Закрыть', onClick: () => alert('Закрыто') },
+          ]
+        `}
+        minHeight={320}
+      />
+
+      <DocExampleBlock
+        title="centered и closable"
+        description="**centered** располагает диалог по центру окна, по умолчанию — `true`. **closable** показывает кнопку закрытия в заголовке, по умолчанию — `true`."
+        code={`
+          <Modal
+            visible
+            getContainer={false}
+            header="Заголовок"
+            content="Содержимое"
+            centered={false}
+            closable={false}
+          />
+        `}
+        minHeight={300}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={ModalStories} />
+      <AutodocArgsTable components={Modal} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=63994:234722)"
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(modalDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Modal" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

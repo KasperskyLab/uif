@@ -19,11 +19,11 @@ export const defaultArgs = {
 
 export const radioPropPresentation: PropPresentationMap = {
   disabled: fromSharedProp('disabled', {
-    description: 'Недоступное состояние: все опции группы не реагируют на действия пользователя'
+    description: 'Недоступное состояние: все опции группы не реагируют на действия пользователя. Отдельную опцию можно настроить через `disabled` в объекте `options` — значение опции перекрывает групповое'
   }),
   readonly: {
     control: 'boolean',
-    description: 'Только для чтения: выбор виден, но изменить его нельзя'
+    description: 'Только для чтения: выбор виден, но изменить его нельзя. Отдельную опцию можно настроить через `readonly` в объекте `options` — значение опции перекрывает групповое'
   },
   vertical: {
     control: 'boolean',
@@ -31,6 +31,6 @@ export const radioPropPresentation: PropPresentationMap = {
   },
   invalid: {
     control: 'boolean',
-    description: 'Состояние ошибки валидации: применяет стиль invalid к опциям группы'
+    description: 'Состояние ошибки валидации: применяет стиль invalid к опциям группы. Отдельную опцию можно настроить через `invalid` в объекте `options` — значение опции перекрывает групповое'
   }
 }

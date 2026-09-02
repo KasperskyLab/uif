@@ -1,8 +1,8 @@
-import { useLocalization } from '@helpers/localization/useLocalization'
 import { navCss, navSeparator } from '@src/menu/navCss'
 import { NavItemData, NavItemProps, NavProps, StateActions } from '@src/menu/types'
 import cn from 'classnames'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { Pin } from '@kaspersky/hexa-ui-icons/16'
@@ -33,6 +33,7 @@ const NavComponent = ({
   favIcon
 }: NavProps) => {
   const [navFavItems, setNavFavItems] = useState(favItems)
+  const { t } = useTranslation()
   const {
     menuActiveItem,
     setMenuActiveItem,
@@ -42,7 +43,7 @@ const NavComponent = ({
   const favSection: NavItemData = {
     state: 'favorites',
     weight: 0,
-    key: useLocalization('menu.favoritesNavItem'),
+    key: t('menu.favoritesNavItem') as string,
     expanded: favsExpanded,
     icon: favIcon || Pin,
     itemClass: 'favorites-item',
@@ -120,9 +121,10 @@ const NavComponent = ({
       (minimized || !!childPop) &&
       !document.querySelectorAll('.ant-layout-sider')[0].contains(event.target)
     ) {
+      updateNavState({ collapseAll: true })
       collapseAll()
     }
-  }, [minimized])
+  }, [minimized, childPop])
 
   useEffect(() => {
     const { addEventListener, removeEventListener } = document

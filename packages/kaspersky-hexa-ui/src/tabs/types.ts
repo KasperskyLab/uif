@@ -46,6 +46,7 @@ export type TabsVariants = {
 export type ComplexTabBarExtraContent = { right?: ReactNode, left?: ReactNode }
 
 export const tabPositionArray = ['top', 'left'] as const
+/** @deprecated Vertical tabs are not recommended. Use Submenu component instead. */
 export type TabPosition = typeof tabPositionArray[number]
 
 export type TabsProps = TabsThemeProps & PropsWithChildren<{
@@ -53,7 +54,10 @@ export type TabsProps = TabsThemeProps & PropsWithChildren<{
   tabBarExtraContent?: ReactNode | ComplexTabBarExtraContent,
   /** TabPane's className */
   className?: string,
-  /** Tabs position */
+  /**
+   * Tabs position.
+   * @deprecated Vertical tabs are not recommended. Use Submenu component instead.
+   */
   tabPosition?: TabPosition,
   /** Current TabPane's key */
   activeKey?: string,

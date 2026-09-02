@@ -27,6 +27,12 @@ export const Badge: FC<BadgeProps> = ({ className, ...rawProps }: BadgeProps) =>
   )
 }
 
+Badge.defaultProps = {
+  mode: 'neutral',
+  overflowCount: 99,
+  size: 'medium'
+}
+
 const BadgeView: FC<BadgeViewProps> = ({
   count,
   overflowCount = 99,

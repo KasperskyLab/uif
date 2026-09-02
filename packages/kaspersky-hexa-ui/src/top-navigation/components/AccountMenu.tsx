@@ -28,11 +28,11 @@ export const AccountMenu = ({
 
   return (
     <Dropdown
-      {...getChildTestProps('account-dropdown', testAttributes)}
+      {...getChildTestProps('account-dropdown', testAttributes, false, true)}
       {...dropdownMenuProps}
     >
       <Button
-        {...getChildTestProps('account-button', testAttributes)}
+        {...getChildTestProps('account-button', testAttributes, false, true)}
         mode="secondary"
         iconBefore={iconBefore ?? <UserAccount />}
         iconAfter={<ArrowDown1 />}

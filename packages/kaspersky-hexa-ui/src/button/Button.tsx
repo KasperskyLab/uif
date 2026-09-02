@@ -29,7 +29,7 @@ export const Button = ({
   size = 'medium',
   text,
   theme,
-  type,
+  type = 'button',
   ...props
 }: ButtonProps): JSX.Element => {
   const { testAttributes, ...rest } = useTestAttribute(props)
@@ -80,7 +80,7 @@ export const Button = ({
             ]
           : iconBefore || iconAfter
       }
-      {loading && <Loader size="small" {...getChildTestProps('loader', testAttributes)} />}
+      {loading && <Loader size="small" {...getChildTestProps('loader', testAttributes, false, true)} />}
     </AntdButton>
   )
 }

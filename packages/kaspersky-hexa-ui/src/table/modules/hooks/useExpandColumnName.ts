@@ -4,23 +4,23 @@ import { useEffect, useMemo, useState } from 'react'
 import { ITableProps, TableRecord } from '../../types'
 import { getDefaultExpandConfig } from '../ExpandableRows'
 
-type UseExpandColumnNameParams<T extends TableRecord> = Pick<ITableProps<T>, 'expandable' | 'columns' | 'rowSelection'>
+type UseExpandColumnNameParams<T extends TableRecord> = Pick<ITableProps<T>, 'expandable' | 'columns' | 'rowSelection' | 'useDragDrop'>
 type UseExpandColumnNameReturnType<T extends TableRecord> = ITableProps<T>['expandable']
 
 export const useExpandColumnName = <T extends TableRecord = TableRecord> ({
   expandable,
   columns,
-  rowSelection
+  rowSelection,
+  useDragDrop
 }: UseExpandColumnNameParams<T>): UseExpandColumnNameReturnType<T> => {
-  const defaultExpandConfig = useMemo(() => getDefaultExpandConfig<T>(), [])
+  const hasRowSelection = !!rowSelection
+  const defaultExpandConfig = useMemo(() => getDefaultExpandConfig<T>({ hasRowSelection, useDragDrop }), [])
 
   const [expandableConfig, setExpandableConfig] = useState<ITableProps<T>['expandable']>({ ...defaultExpandConfig, ...expandable })
 
-  const hasRowSelection = !!rowSelection
-
   useEffect(() => {
     if (!(expandable?.expandColumnName && columns)) {
-      setExpandableConfig({ ...defaultExpandConfig, ...expandable, expandIconColumnIndex: hasRowSelection ? 2 : 0 })
+      setExpandableConfig({ ...defaultExpandConfig, ...expandable })
       return
     }
 
@@ -53,7 +53,7 @@ export const useExpandColumnName = <T extends TableRecord = TableRecord> ({
     }
 
     setExpandableConfig({ ...defaultExpandConfig, ...result })
-  }, [columns, expandable, hasRowSelection])
+  }, [columns, expandable, hasRowSelection, useDragDrop])
 
   return expandableConfig
 }

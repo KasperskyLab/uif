@@ -1,69 +1,32 @@
-import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
-import { ThemeKey } from '@design-system/types'
-import { withDesignControls } from '@sb/components/designControls'
-import { withMeta } from '@sb/components/Meta'
+import { badges } from '@sb/badges'
+import { buildStoryArgTypes, getControlsInclude } from '@sb/components/Documentation'
 import { StoryComponentContainer } from '@sb/StoryComponents'
-import { DropdownItemProps, DropdownOverlayProp } from '@src/dropdown'
-import { getStatusIcon } from '@src/menu/NavUserItem'
-import { Placeholder } from '@src/placeholder'
-import { Search } from '@src/search'
-import { Tag } from '@src/tag'
 import { Toggle } from '@src/toggle'
 import { Meta, StoryObj } from '@storybook/react'
-import Layout from 'antd/es/layout'
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React from 'react'
 
-import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import {
-  Advertisement,
-  ArrowDown1,
-  ArrowTurnOver,
-  Browser,
-  ITestIds,
-  Moon,
-  Settings21,
-  SignOut,
-  Web
-} from '@kaspersky/hexa-ui-icons/16'
+import { Moon, Settings21, SignOut, Web } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
 import { TopNavigation as TopNavigationComponent } from '../TopNavigation'
 import { TopNavigationProps } from '../types'
 
 import { AppLogo } from './AppLogo'
+import { defaultArgs, topNavigationPropPresentation } from './TopNavigation.controls'
 
-const centerElementOverlay: DropdownItemProps[] = [
-  { children: <Search /> },
-  { children: 'Workspace 1' },
-  { children: 'Workspace 2' },
-  { children: 'Workspace 3' },
-  { type: 'divider', children: '' },
-  {
-    title: 'Go to Portal',
-    type: 'action',
-    children: 'Go to Portal',
-    // eslint-disable-next-line react/jsx-key
-    componentsBefore: [<ArrowTurnOver />]
-  }
-]
-
-const defaultAccountMenuOverlay: DropdownItemProps[] = [
+const defaultAccountMenuOverlay = [
   {
     children: 'Account settings',
     componentsBefore: [<Settings21 key="account-settings-icon" />]
   },
   {
-    type: 'submenu',
+    type: 'submenu' as const,
     title: 'English',
     componentsBefore: [<Web key="language-icon" />],
     children: [
       { children: 'English' },
       { children: 'Русский' },
-      {
-        type: 'divider',
-        children: ''
-      },
+      { type: 'divider' as const, children: '' },
       { children: 'Deutsch' },
       { children: 'Italiano' }
     ]
@@ -73,78 +36,29 @@ const defaultAccountMenuOverlay: DropdownItemProps[] = [
     componentsBefore: [<Moon key="mode-icon" />],
     componentsAfter: [<Toggle key="mode-toggle" />]
   },
-  {
-    type: 'divider',
-    children: ''
-  },
+  { type: 'divider' as const, children: '' },
   {
     children: 'Log out',
     componentsBefore: [<SignOut key="logout-icon" />]
   },
-  {
-    title: '© 2025 AO Kaspersky Lab',
-    type: 'group',
-    children: []
-  }
+  { title: '© 2025 AO Kaspersky Lab', type: 'group' as const, children: [] }
 ]
 
-export enum UserWorkStatuses {
-  AVAILABLE = 'available',
-  BUSY = 'busy'
-}
-
-const UserAvailableIcon = getStatusIcon('available', ThemeKey.Light) as unknown as React.ComponentType<ITestIds>
-const UserBusyIcon = getStatusIcon('unavailable', ThemeKey.Light) as unknown as React.ComponentType<ITestIds>
-
-const userStatusIcons = {
-  [UserWorkStatuses.AVAILABLE]: <UserAvailableIcon />,
-  [UserWorkStatuses.BUSY]: <UserBusyIcon />
-}
-
-function getUserWorkStatusMenuItems (onClick?: (info: any) => void): DropdownItemProps[] {
-  return [
-    {
-      title: 'User work status',
-      type: 'group',
-      children: [
-        {
-          key: UserWorkStatuses.AVAILABLE,
-          componentsBefore: [userStatusIcons[UserWorkStatuses.AVAILABLE]],
-          children: 'Available',
-          onClick
-        },
-        {
-          key: UserWorkStatuses.BUSY,
-          componentsBefore: [userStatusIcons[UserWorkStatuses.BUSY]],
-          children: 'Busy',
-          onClick
-        }
-      ]
-    },
-    {
-      type: 'divider',
-      children: ''
-    }
-  ]
-}
-
-const storySettings: Meta<TopNavigationProps> = {
+export const topNavigationStorySettings: Meta<TopNavigationProps> = {
+  argTypes: buildStoryArgTypes(topNavigationPropPresentation),
   args: {
-    title: 'Kaspersky Next',
-    notificationButtonProps: {},
-    notificationIndicator: true,
+    ...defaultArgs,
+    logo: <AppLogo />,
     accountMenuProps: {
       title: 'test_user_123@mail.ru',
       dropdownMenuProps: {
         overlay: defaultAccountMenuOverlay
       }
-    },
-    logo: <AppLogo />
+    }
   },
   parameters: {
-    docs: {
-      page: withMeta(MetaData)
-    }
+    badges: [badges.stable, badges.reviewedByDesign],
+    design: MetaData.pixsoView
   },
   decorators: [
     (Story, context) => (
@@ -155,129 +69,25 @@ const storySettings: Meta<TopNavigationProps> = {
   ]
 }
 
-const meta: Meta<TopNavigationProps> = {
-  component: TopNavigationComponent,
+const meta = {
   title: 'Hexa UI Components/TopNavigation',
-  ...withDesignControls<TopNavigationProps>({
-    componentName: 'topNavigation',
-    meta: storySettings
-  })
-}
+  component: TopNavigationComponent,
+  tags: ['!autodocs'],
+  includeStories: ['Playground'],
+  excludeStories: ['topNavigationStorySettings'],
+  ...topNavigationStorySettings
+} satisfies Meta<TopNavigationProps>
+
 export default meta
 
 type Story = StoryObj<TopNavigationProps>
 
-export const Basic: Story = {}
-
-export const WithCenteredElementButton: Story = {
-  args: {
-    elementCentered: {
-      type: 'button',
-      buttonConfig: {
-        title: 'New workspace',
-        buttonProps: {
-          mode: 'secondary',
-          iconBefore: <Browser />,
-          iconAfter: <ArrowDown1 />
-        },
-        dropdownMenuProps: {
-          overlay: centerElementOverlay
-        }
-      }
+export const Playground: Story = {
+  name: 'Playground',
+  parameters: {
+    controls: {
+      include: getControlsInclude(topNavigationPropPresentation),
+      sort: 'none'
     }
-  },
-  name: 'With Centered Element / Button'
-}
-
-export const WithCenteredElementHorizontalNav: Story = {
-  args: {
-    elementCentered: {
-      type: 'horizontalNavigation',
-      horizontalNavigationConfig: {
-        items: [
-          {
-            label: 'Workspaces',
-            selected: true,
-            key: 'workspaces'
-          },
-          {
-            label: 'Licenses',
-            key: 'licenses'
-          },
-          {
-            label: 'Trainings',
-            key: 'trainings'
-          }
-        ]
-      }
-    }
-  },
-  name: 'With Centered Element / HorizontalNav'
-}
-
-export const WithContentRight: Story = {
-  args: {
-    contentRight: (
-      <Tag
-        icon={<Advertisement />}
-        mode="yellow"
-        outlined
-        style={{ marginRight: 0 }}
-      >
-        Getting started: 3 of 12
-      </Tag>
-    )
   }
-}
-
-export const WithUserStatus: Story = {
-  render: (args: TopNavigationProps) => {
-    const [selectedStatus, setSelectedStatus] = useState<UserWorkStatuses>(UserWorkStatuses.AVAILABLE)
-
-    const onMenuItemClick = (info: any) => {
-      setSelectedStatus(info.key as UserWorkStatuses)
-    }
-
-    const accountMenuProps = {
-      ...args.accountMenuProps,
-      iconBefore: userStatusIcons[selectedStatus],
-      dropdownMenuProps: {
-        overlay: [...getUserWorkStatusMenuItems(onMenuItemClick), ...defaultAccountMenuOverlay] as DropdownOverlayProp,
-        selectedItemsKeys: [selectedStatus]
-      }
-    }
-
-    return <TopNavigationComponent {...args} accountMenuProps={accountMenuProps} />
-  }
-}
-
-const StyledTopNavigationComponent = styled(TopNavigationComponent)`
-  position: sticky;
-  top: 0;
-  zIndex: 1;
-`
-
-export const InScrollableLayout: Story = {
-  render: (args: TopNavigationProps) => (
-    <Layout>
-      <StyledTopNavigationComponent {...args} />
-      <Layout.Content style={{ overflow: 'scroll', height: '150vh' }}>
-        <Placeholder
-          description="Description"
-          image="noData"
-          mode="filled"
-          size="medium"
-          textAlign="center"
-          title="Placeholder"
-        />
-      </Layout.Content>
-    </Layout>
-  )
-}
-
-type PaletteStory = StoryObj<ThemedPaletteProps>
-
-export const ColorTokens: PaletteStory = {
-  args: { source: componentColors.top_navigation },
-  render: args => <ThemedPalette {...args} />
 }

@@ -24,8 +24,8 @@ export const CenterButton = ({
   const { testAttributes } = useTestAttribute(props)
 
   return (
-    <Dropdown {...getChildTestProps('dropdown', testAttributes)} {...dropdownMenuProps}>
-      <Button {...getChildTestProps('button', testAttributes)} {...buttonProps}>
+    <Dropdown {...getChildTestProps('dropdown', testAttributes, false, true)} {...dropdownMenuProps}>
+      <Button {...getChildTestProps('button', testAttributes, false, true)} {...buttonProps}>
         {title}
       </Button>
     </Dropdown>

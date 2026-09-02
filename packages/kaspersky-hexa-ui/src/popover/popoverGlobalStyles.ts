@@ -22,6 +22,7 @@ export const getPopoverGlobalStyles = (
   .${rootHashClass} .ant-popover-inner {
     min-width: 240px;
     min-height: 52px;
+    text-align: start;
     ${extraProps?.shouldLimitSize && `
     max-width: 560px;
     max-height: 320px;`}

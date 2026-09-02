@@ -287,8 +287,12 @@ export const assertCorrectFilters = <T extends TableRecord = TableRecord> ({
   }
 }
 
-export const checkHasColumnFilters = <T extends TableRecord = TableRecord> (columns?: TableColumn<T>[]): boolean => (
-  columns?.some(column => column?.filters?.length) ?? false
+export const checkHasColumnFilters = <T extends TableRecord = TableRecord> (columns: TableColumn<T>[]): boolean => (
+  columns.some(
+    column =>
+      column.filters?.length ||
+      column.filterType?.type === FilterType.Enum && column.filterType.getAvailableOptions && column.showEnumFiltersInColumn
+  )
 )
 
 export const isMultipleOp = (condition: FilterOperation) => [
@@ -340,7 +344,8 @@ export const removeId = <T extends TableRecord = TableRecord> (filterItems: Side
 )
 
 export const isEmptyValue = (value: any) => {
-  return value === undefined || value === null || value === ''
+  return value === undefined || value === null || value === '' ||
+    (Array.isArray(value) && value.length === 0)
 }
 
 export const validate = <T extends TableRecord = TableRecord> (filters: SidebarFilterInternal<T>[]): InvalidFilter[] => {
@@ -355,7 +360,7 @@ export const validate = <T extends TableRecord = TableRecord> (filters: SidebarF
 
         if (!isEmptyFilterValue || [FilterOperation.empty, FilterOperation.nempty].includes(condition)) return
 
-        if ([FilterType.Text, FilterType.Number].includes(type)) {
+        if ([FilterType.Text, FilterType.Number, FilterType.Enum].includes(type)) {
           invalidFilters.push({ id: filter.id, validationMessage })
         }
       })

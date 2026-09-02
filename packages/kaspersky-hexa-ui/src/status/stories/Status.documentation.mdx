@@ -1,0 +1,105 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
+
+import { Status } from '../Status'
+import * as StatusStories from './Status.stories'
+import { statusDesignPropPresentation } from './Status.design.properties'
+
+<Meta of={StatusStories} name="Status Docs" />
+
+<DocPageLayout>
+  <DocPageHeader
+    title="Status"
+  />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **Status** — текстовая метка с иконкой или цветовым индикатором для обозначения состояния
+
+          Используйте Status рядом с объектом, строкой таблицы или сообщением, когда нужно быстро показать его текущее состояние: результат операции, уровень важности или этап процесса. Подпись должна быть короткой и однозначной, а цвет — поддерживать её смысл, а не быть единственным носителем информации.
+
+          Для нескольких связанных статусов используйте вертикальную группу, чтобы сохранить ровный ритм и сопоставимость обозначений. Не применяйте Status как управляющий элемент: для запуска действий выбирайте Button или другие интерактивные компоненты Hexa UI."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**Status** показывает краткое текстовое обозначение состояния. Перед подписью отображается переданная **icon**; если иконка отсутствует и выбран не `default` режим, компонент использует индикатор. Для вертикального списка используйте **Status.Group**."
+
+      />
+
+      <DocExampleBlock
+        title="mode"
+        description="Цветовой режим статуса. Доступные значения: `default`, `not-active`, `new`, `update`, `inProgress`, `resolved`, `inIncident`, `high`, `critical`, `medium`, `info`, `positive`, `low`. По умолчанию — `default`."
+        code={`
+          <Status mode="positive" label="Завершено" />
+          <Status mode="critical" label="Ошибка" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="icon"
+        description="Произвольный React-узел перед подписью. Если **icon** не задан и **mode** отличается от `default`, отображается индикатор соответствующего режима."
+        code={`
+          <Status label="С иконкой" icon={<Placeholder />} />
+          <Status mode="info" label="С индикатором" />
+        `}
+        scope={{ Placeholder }}
+      />
+
+      <DocExampleBlock
+        title="label"
+        description="Текстовая подпись статуса. Если не задана, компонент отображает только иконку или индикатор."
+        code={`
+          <Status mode="update" label="Обновление" />
+        `}
+
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={StatusStories} />
+      <AutodocArgsTable components={Status} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=81752:621783)"
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(statusDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Status" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

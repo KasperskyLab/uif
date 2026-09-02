@@ -128,9 +128,13 @@ describe('Radio', () => {
     expect(screen.getByRole('radioList')).toHaveClass('ant-radio-vertical')
   })
 
-  test('should apply invalid class when invalid prop is true', () => {
-    render(<Radio {...defaultProps} invalid />)
-    expect(screen.getByRole('radioList')).toHaveClass('kl-radio-invalid')
+  test('should apply invalid class to the options, not to the group', () => {
+    const { container } = render(<Radio {...defaultProps} invalid />)
+
+    expect(screen.getByRole('radioList')).not.toHaveClass('kl-radio-invalid')
+    container.querySelectorAll('.ant-radio-wrapper').forEach(wrapper => {
+      expect(wrapper).toHaveClass('kl-radio-invalid')
+    })
   })
 
   test('should disable radio buttons when disabled prop is true', () => {
@@ -146,6 +150,134 @@ describe('Radio', () => {
       expect(screen.getByLabelText(option.label)).toBeInTheDocument()
       expect(screen.getByLabelText(option.label)).toHaveAttribute('value', option.value)
     })
+  })
+
+  test('should apply invalid class to the option marked as invalid', () => {
+    const { container } = render(
+      <Radio
+        {...defaultProps}
+        options={[
+          { label: 'Valid', value: '1' },
+          { label: 'Invalid', value: '2', invalid: true }
+        ]}
+      />
+    )
+    const [first, second] = container.querySelectorAll('.ant-radio-wrapper')
+
+    expect(first).not.toHaveClass('kl-radio-invalid')
+    expect(second).toHaveClass('kl-radio-invalid')
+  })
+
+  test('should apply group state to every option', () => {
+    const { container } = render(
+      <Radio
+        {...defaultProps}
+        invalid
+        readonly
+        disabled
+        options={[
+          { label: 'First', value: '1' },
+          { label: 'Second', value: '2' }
+        ]}
+      />
+    )
+
+    container.querySelectorAll('.ant-radio-wrapper').forEach(wrapper => {
+      expect(wrapper).toHaveClass('kl-radio-invalid')
+      expect(wrapper).toHaveClass('kl-radio-readonly')
+      expect(wrapper).toHaveClass('ant-radio-wrapper-disabled')
+    })
+  })
+
+  test('should let an option override the invalid state of the group', () => {
+    const { container } = render(
+      <Radio
+        {...defaultProps}
+        invalid
+        options={[
+          { label: 'First', value: '1' },
+          { label: 'Second', value: '2', invalid: false }
+        ]}
+      />
+    )
+    const [first, second] = container.querySelectorAll('.ant-radio-wrapper')
+
+    expect(first).toHaveClass('kl-radio-invalid')
+    expect(second).not.toHaveClass('kl-radio-invalid')
+  })
+
+  test('should let an option override the disabled state of the group', () => {
+    const handleChange = jest.fn()
+    render(
+      <DefaultRadio
+        {...defaultProps}
+        onChange={handleChange}
+        disabled
+        options={[
+          { label: 'First', value: '1' },
+          { label: 'Second', value: '2', disabled: false }
+        ]}
+      />
+    )
+    fireEvent.click(screen.getByLabelText(secondElementLabel))
+
+    expect(screen.getByLabelText(secondElementLabel)).not.toBeDisabled()
+    expect(handleChange).toHaveBeenCalledTimes(1)
+  })
+
+  test('readonly should block interaction on both the group and a single option', () => {
+    const handleChange = jest.fn()
+    const { rerender } = render(<DefaultRadio {...defaultProps} onChange={handleChange} readonly />)
+    fireEvent.click(screen.getByLabelText(secondElementLabel))
+
+    expect(screen.getByLabelText(secondElementLabel)).toBeDisabled()
+
+    rerender(
+      <DefaultRadio
+        {...defaultProps}
+        onChange={handleChange}
+        options={[
+          { label: 'First', value: '1' },
+          { label: 'Second', value: '2', readonly: true }
+        ]}
+      />
+    )
+    fireEvent.click(screen.getByLabelText(secondElementLabel))
+
+    expect(screen.getByLabelText(secondElementLabel)).toBeDisabled()
+    expect(handleChange).toHaveBeenCalledTimes(0)
+  })
+
+  test('should let an option override the readonly state of the group', () => {
+    const { container } = render(
+      <Radio
+        {...defaultProps}
+        readonly
+        options={[
+          { label: 'First', value: '1' },
+          { label: 'Second', value: '2', readonly: false }
+        ]}
+      />
+    )
+    const [first, second] = container.querySelectorAll('.ant-radio-wrapper')
+
+    expect(first).toHaveClass('kl-radio-readonly')
+    expect(second).not.toHaveClass('kl-radio-readonly')
+    expect(second.querySelector('input')).not.toBeDisabled()
+  })
+
+  test('should paint the option as readonly when it is both disabled and readonly', () => {
+    const { container } = render(
+      <Radio
+        {...defaultProps}
+        options={[{ label: 'First', value: '1', disabled: true, readonly: true }]}
+      />
+    )
+    const [wrapper] = container.querySelectorAll('.ant-radio-wrapper')
+
+    // оба класса на месте, в css-модуле readonly объявлен после disabled и выигрывает
+    expect(wrapper).toHaveClass('ant-radio-wrapper-disabled')
+    expect(wrapper).toHaveClass('kl-radio-readonly')
   })
 
   test('should handle empty options array gracefully', () => {

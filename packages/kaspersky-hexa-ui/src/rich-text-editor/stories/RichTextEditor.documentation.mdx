@@ -1,0 +1,152 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { allPlugins } from '../index'
+import { RichTextEditorContainer as RichTextEditor } from '../RichTextEditorContainer'
+import * as RichTextEditorStories from './RichTextEditor.stories'
+import { richTextEditorDesignPropPresentation } from './RichTextEditor.design.properties'
+import {
+  initialValue,
+  initialValueEmpty,
+  longValue,
+} from './richTextEditorData'
+
+<Meta of={RichTextEditorStories} name="RichTextEditor Docs" />
+
+<DocPageLayout>
+  <DocPageHeader title="RichTextEditor" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="**RichTextEditor** — редактор форматированного текста на базе Slate. В состав входят область ввода и панель форматирования; набор доступных операций определяет обязательный проп **plugins**. Редактор поддерживает начальное содержимое, подсказку для пустого состояния, режим чтения и ограничение длины текста."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**RichTextEditor** принимает начальное значение Slate, отслеживает изменения через **onChange** и отображает плагины форматирования. Панель инструментов показывается, когда редактор доступен для редактирования. Обработчики **onFocus**, **onBlur** и **onHover** сообщают об изменениях состояния взаимодействия."
+      />
+
+      <DocExampleBlock
+        title="initialValue"
+        description="Начальное содержимое редактора в формате Slate. Если проп не передан или массив пуст, редактор создаёт пустой абзац."
+        code={`
+          <RichTextEditor
+            plugins={allPlugins}
+            initialValue={initialValue}
+            onChange={() => undefined}
+          />
+        `}
+        scope={{ RichTextEditor, allPlugins, initialValue }}
+      />
+
+      <DocExampleBlock
+        title="placeholder"
+        description="Текст подсказки для пустого редактора. По умолчанию — пустая строка."
+        code={`
+          <RichTextEditor
+            plugins={allPlugins}
+            initialValue={initialValueEmpty}
+            placeholder="Введите описание"
+            onChange={() => undefined}
+          />
+        `}
+        scope={{ RichTextEditor, allPlugins, initialValueEmpty }}
+      />
+
+      <DocExampleBlock
+        title="readOnly и enabled"
+        description="**readOnly** включает режим чтения: редактирование и панель форматирования недоступны. **enabled** управляет возможностью изменять текст; по умолчанию — `true`."
+        code={`
+          <RichTextEditor
+            plugins={allPlugins}
+            initialValue={initialValue}
+            readOnly
+            onChange={() => undefined}
+          />
+        `}
+        scope={{ RichTextEditor, allPlugins, initialValue }}
+      />
+
+      <DocExampleBlock
+        title="autoFocus"
+        description="Переводит фокус в редактор после монтирования. По умолчанию — `true`."
+      />
+
+      <DocExampleBlock
+        title="limitTextSize"
+        description="Ограничивает длину вводимого и вставляемого текста. Если проп не задан, длина не ограничена."
+        code={`
+          <RichTextEditor
+            plugins={allPlugins}
+            initialValue={longValue}
+            limitTextSize={60}
+            onChange={() => undefined}
+          />
+        `}
+        scope={{ RichTextEditor, allPlugins, longValue }}
+      />
+
+      <DocExampleBlock
+        title="plugins"
+        description="Обязательный проп. Массив плагинов, который определяет доступные операции форматирования и их отображение в панели инструментов."
+      />
+
+      <DocExampleBlock
+        title="textareaMode"
+        description="Добавление функциональности компонента Textarea в RichTextEditor. Можно задать следующие пропы: 'validationStatus', 'disabled', 'readOnly' и 'showCount'."
+        code={`
+          <RichTextEditor
+            plugins={allPlugins}
+            initialValue={initialValue}
+            limitTextSize={1000}
+            textareaMode={{ showCount: true }}
+          />
+        `}
+        scope={{ RichTextEditor, allPlugins, initialValue }}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={RichTextEditorStories} />
+      <AutodocArgsTable components={RichTextEditor} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=16998:5673)"
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(richTextEditorDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="RichTextEditor" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

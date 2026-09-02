@@ -18,7 +18,7 @@ import MetaData from '../__meta__/meta.json'
 import { FieldProps } from '../types'
 
 const meta: Meta<FieldProps> = {
-  title: 'Hexa UI Components/Field/FieldDev',
+  title: 'Hexa UI Components/Field/Stories/FieldDev',
   component: Field,
   argTypes: {
     ...sbHideControls(['theme', 'control'])

@@ -1,7 +1,7 @@
 import { Button } from '@src/button'
 import { Dropdown } from '@src/dropdown'
-import { Locale } from '@src/locale'
 import React, { Key, ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ArrowDown1 } from '@kaspersky/hexa-ui-icons/16'
 
@@ -18,6 +18,8 @@ export const TabsDropdown = ({
   activeKey,
   className
 }: TabsDropdownProps): JSX.Element => {
+  const { t } = useTranslation()
+
   return (
     <Dropdown
       trigger={['click']}
@@ -38,7 +40,7 @@ export const TabsDropdown = ({
         mode="tertiary"
         iconAfter={<ArrowDown1 />}
       >
-        <Locale localizationKey="tabs.dropdown.more" />
+        {t('tabs.dropdown.more')}
       </Button>
     </Dropdown>
   )

@@ -56,7 +56,9 @@ export type ButtonProps = BaseThemedButtonProps & {
   isPressed?: boolean,
   /** React children */
   children?: ReactNode,
-  style?: React.CSSProperties
+  style?: React.CSSProperties,
+  /** Html form attribute */
+  form?: string
 } & TestingProps
 
 export type ButtonGroupProps = AntdButtonGroupProps & {

@@ -1,10 +1,10 @@
 import cn from 'classnames'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ArrowDown1, ArrowRight } from '@kaspersky/hexa-ui-icons/16'
 
-import { isColumnReadonly, isRenderCellObject } from '../helpers/common'
+import { isColumnReadonly, isRenderCellObject, mapVisibleColumns } from '../helpers/common'
 import { TableColumn, TableRecord } from '../types'
 
 import { TableModule } from './index'
@@ -80,16 +80,18 @@ export const accordionRenderer = (
   return columnData
 }
 
-export const TableAccordion: TableModule = Component => function TableAccordionModule (props: any) {
-  if (!props.useAccordion) {
-    return <Component {...props} />
-  }
+export const TableAccordion: TableModule = Component => function TableAccordionModule (props) {
+  const columns = useMemo(() => {
+    if (!props.useAccordion || !props.columns) {
+      return props.columns
+    }
 
-  const columns = props.columns.map((column: any, index: number) => {
-    return isColumnReadonly(column)
-      ? column
-      : { ...column, render: accordionRenderer(index, props.columns.length, column.render) }
-  })
+    return mapVisibleColumns(props.columns, (column, columnIndex, visibleColumnsCount) => (
+      isColumnReadonly(column)
+        ? column
+        : { ...column, render: accordionRenderer(columnIndex, visibleColumnsCount, column.render) }
+    ))
+  }, [props.useAccordion, props.columns])
 
   return <Component {...props} columns={columns} />
 }

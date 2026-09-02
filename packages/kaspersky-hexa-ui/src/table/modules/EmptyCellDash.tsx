@@ -1,6 +1,7 @@
 import { Text } from '@src/typography'
 import React, { useMemo } from 'react'
 
+import { mapVisibleColumns } from '../helpers/common'
 import { TableRecord } from '../types'
 
 import { TableComponent } from './index'
@@ -14,7 +15,7 @@ export const EmptyCellDash = <T extends TableRecord = TableRecord>(
   columns = [],
   ...props
 }) {
-  const processedColumns = useMemo(() => columns.map((col) => {
+  const processedColumns = useMemo(() => mapVisibleColumns(columns, (col) => {
     if (col.hasEmptyCellDash) {
       return {
         ...col,

@@ -11,14 +11,21 @@ import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
 import { FilterConfig, Table } from '..'
 import MetaData from '../__meta__/meta.json'
-import { generatedData, mockCustomFilterFunction, tableColumns } from '../__mocks__/filtersMockData'
+import {
+  generatedData,
+  groups,
+  mockCustomFilterFunction,
+  tableColumns,
+  TableMockProps,
+  TableMockStory
+} from '../__mocks__/filtersMockData'
 import { FilterGroup, FilterOperation, FilterType, TextFilter } from '../modules/Filters'
+import { EnumOption } from '../modules/Filters/types'
 import { modifyColumns } from '../test-utils/helpers'
-import { ITableProps, TableColumn } from '../types'
 
-import { Story, Wrapper } from './_commonConstants'
+import { Wrapper } from './_commonConstants'
 
-const meta: Meta<ITableProps> = {
+const meta: Meta<TableMockProps> = {
   title: 'Hexa UI Components/Table/Filters',
   component: Table,
   args: {
@@ -35,7 +42,6 @@ const meta: Meta<ITableProps> = {
     onFilterChange: val => console.log('onFilterChange', val),
     onDropdownFiltersChange: val => console.log('onDropdownFiltersChange', val),
     onSidebarFiltersChange: val => console.log('onSidebarFiltersChange', val),
-    borderedStyle: false,
     testId: 'tableTestId'
   },
   argTypes: {
@@ -117,7 +123,7 @@ const columnFilter2: FilterGroup = {
   ]
 }
 
-export const Filters: Story = {
+export const Filters: TableMockStory = {
   render: args => (
     <>
       <SectionMessage closable={false} mode="info" style={{ marginBottom: 16 }}>
@@ -130,7 +136,7 @@ export const Filters: Story = {
   )
 }
 
-export const DefaultFilters: Story = {
+export const DefaultFilters: TableMockStory = {
   render: args => (
     <>
       <SectionMessage closable={false} mode="info" style={{ marginBottom: 16 }}>
@@ -159,7 +165,7 @@ export const DefaultFilters: Story = {
   }
 }
 
-export const ExternalFilters: Story = {
+export const ExternalFilters: TableMockStory = {
   render: args => (
     <>
       <SectionMessage closable={false} mode="info" style={{ marginBottom: 16 }}>
@@ -182,28 +188,96 @@ export const ExternalFilters: Story = {
   }
 }
 
-export const SavingFilters: Story = {
+export const SavingFilters: TableMockStory = {
   args: {
     storageKey: 'test-filters-table',
     storageMergeFiltersMode: 'merge'
   }
 }
 
-export const ServerFiltering: Story = {
+export const ServerFiltering: TableMockStory = {
   args: {
     isServerFiltering: true
   }
 }
 
-export const CustomFilterFunction: Story = {
+export const CustomFilterFunction: TableMockStory = {
   args: {
     customFilterFunction: mockCustomFilterFunction
   }
 }
 
-export const ShowEnumFiltersInColumn: Story = {
+export const ShowEnumFiltersInColumn: TableMockStory = {
   args: {
-    columns: modifyColumns(tableColumns, 'group', { showEnumFiltersInColumn: true }) as TableColumn[]
+    columns: modifyColumns(tableColumns, 'group', { showEnumFiltersInColumn: true })
+  }
+}
+
+const groupedGroupOptions: EnumOption[] = [
+  {
+    value: 'group-leadership',
+    label: 'Leadership',
+    options: [
+      { value: 'CEO', label: 'CEO' },
+      { value: 'Managers', label: 'Managers' }
+    ]
+  },
+  {
+    value: 'group-people',
+    label: 'People',
+    options: [
+      { value: 'HR', label: 'HR' },
+      { value: 'Teamleads', label: 'Teamleads' }
+    ]
+  },
+  {
+    value: 'group-engineering',
+    label: 'Engineering',
+    options: [
+      { value: 'Developers', label: 'Developers' },
+      { value: 'Financials', label: 'Financials' }
+    ]
+  },
+  {
+    value: 'group-other',
+    label: 'Other',
+    options: [
+      { value: 'Sales', label: 'Sales' },
+      { value: 'Unmanaged', label: 'Unmanaged' }
+    ]
+  }
+]
+
+export const EnumGroupedWithBasicSearch: TableMockStory = {
+  args: {
+    filterVersion: 2,
+    columns: modifyColumns(tableColumns, 'group', {
+      showEnumFiltersInColumn: true,
+      filterType: {
+        type: FilterType.Enum,
+        getAvailableOptions: async () => groupedGroupOptions,
+        search: { enabled: true }
+      }
+    })
+  }
+}
+
+export const EnumFlatWithCustomSearch: TableMockStory = {
+  args: {
+    columns: modifyColumns(tableColumns, 'group', {
+      showEnumFiltersInColumn: true,
+      filterType: {
+        type: FilterType.Enum,
+        getAvailableOptions: async () => groups.map(group => ({ value: group, label: group })),
+        search: {
+          enabled: true,
+          customSearchFunction: (searchValue: string, options: EnumOption[]): EnumOption[] => {
+            const query = searchValue.toLowerCase()
+            return options.filter(option => String(option.label ?? '').toLowerCase().includes(query))
+          }
+        }
+      }
+    })
   }
 }
 
@@ -214,7 +288,7 @@ const randomFilter: TextFilter = {
   value: 'a'
 }
 
-export const CustomFilterSidebarButtons: Story = {
+export const CustomFilterSidebarButtons: TableMockStory = {
   args: {
     getFiltersSidebarToolbarButtons: async (params) => {
       console.debug('params', params)
@@ -229,7 +303,7 @@ export const CustomFilterSidebarButtons: Story = {
   }
 }
 
-export const DataSourceChanged: Story = {
+export const DataSourceChanged: TableMockStory = {
   render: (args) => {
     const [dataSource, setDataSource] = useState(args.dataSource)
     return (

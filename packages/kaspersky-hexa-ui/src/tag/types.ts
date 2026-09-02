@@ -1,6 +1,6 @@
 import { Focus } from '@design-system/tokens/focus'
 import { SizingType, Theme } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingProps } from '@helpers/typesHelpers'
 import { TooltipProps } from '@src/tooltip'
 import {
   FC,
@@ -29,36 +29,7 @@ export const tagModes = [
 
 export type TagMode = typeof tagModes[number]
 
-type StateProps = {
-  background?: string,
-  color?: string,
-  border?: string,
-  icon?: string,
-  iconStatus?: string
-}
-
-export type TagColorStates = Focus & {
-  enabled?: StateProps,
-  hover?: StateProps,
-  active?: StateProps
-}
-
-export type TagBaseColorConfig = {
-  disabled?: StateProps,
-  readOnly?: StateProps,
-  invalid?: StateProps
-}
-
-export type TagColorConfig = Record<'filled' | 'outlined', TagColorStates> & TagBaseColorConfig
-
 export type TagSize = Extract<SizingType, 'small' | 'medium'>
-
-export type TagSizeConfig = {
-  padding: string,
-  gap: string,
-  borderRadius: string,
-  height: string
-}
 
 export type TagThemeProps = {
   /** Size */
@@ -68,8 +39,6 @@ export type TagThemeProps = {
   /** Color mode */
   mode?: TagMode
 }
-
-export type TagCssConfig = TagColorConfig & TagSizeConfig
 
 type TruncationProps = {
   /** Maximum number of characters allowed in the tag content */
@@ -109,8 +78,6 @@ export type TagProps = TagThemeProps & RefAttributes<HTMLSpanElement> & HTMLAttr
    */
   isResponsive?: boolean
 } & TestingProps
-
-export type TagViewProps = ToViewProps<TagProps, TagCssConfig, Omit<TagThemeProps, 'size' | 'mode'>>
 
 export type TagGroupProps = ToGroupProps<TagProps>
 

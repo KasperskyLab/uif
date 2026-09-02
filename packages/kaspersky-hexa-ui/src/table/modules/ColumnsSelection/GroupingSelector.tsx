@@ -1,7 +1,7 @@
-import { Locale } from '@src/locale'
 import { Radio, RadioOption } from '@src/radio'
 import { Text } from '@src/typography'
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { SelectorWrapper } from './SelectorWrapper'
 
@@ -18,6 +18,8 @@ export const GroupingSelector = ({
   options,
   searchValue
 }: GroupingSelectorProps) => {
+  const { t } = useTranslation()
+
   const filteredOptions = useMemo(() => {
     if (!searchValue) return options
 
@@ -29,7 +31,7 @@ export const GroupingSelector = ({
       <Radio
         vertical
         className="grouping-item"
-        options={[{ label: <Text type="BTM3"><Locale localizationKey="table.columnsSettings.noGrouping" /></Text>, value: '' }, ...filteredOptions]}
+        options={[{ label: <Text type="BTM3">{t('table.columnsSettings.noGrouping')}</Text>, value: '' }, ...filteredOptions]}
         onChange={(e) => {
           setGroupBy(e.target.value)
         }}

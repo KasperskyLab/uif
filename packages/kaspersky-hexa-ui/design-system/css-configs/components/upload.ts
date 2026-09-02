@@ -74,6 +74,9 @@ export const upload = (): UploaderCssConfig => {
         background: 'var(--upload_file--bg--loading)',
         border: 'var(--upload_file--border--loading)',
         name: 'var(--upload_file--text--name_loading)'
+      },
+      success: {
+        icon: 'var(--common--success--enabled)'
       }
     }
   }

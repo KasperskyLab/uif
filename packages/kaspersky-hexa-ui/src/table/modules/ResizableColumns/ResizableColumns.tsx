@@ -5,13 +5,14 @@ import React, {
   ReactNode,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState
 } from 'react'
 
 import { TableComponent } from '..'
 import { ITableProps, TableColumn, TableRecord } from '../..'
-import { isColumnReadonly } from '../../helpers/common'
+import { isColumnReadonly, isColumnVisible } from '../../helpers/common'
 import { getPersistentStorageValue, updatePersistentStorage } from '../../helpers/persistentStorage'
 import { ResizableColumnsContext, STICKY_HEADER_CLASS, StickyHeaderWrapper } from '../../helpers/stickyHeader'
 
@@ -189,13 +190,13 @@ export const ResizableColumns = <T extends TableRecord = TableRecord> (
     maxColumnsForAutoResizing = 1,
     defaultColumnWidth = DEFAULT_COLUMN_WIDTH
   } = props
-  const components = {
+  const components = useMemo(() => ({
     ...props.components,
     header: {
       cell: ResizableTitle,
       ...(props.stickyHeader !== undefined && { wrapper: StickyHeaderWrapper })
     }
-  }
+  }), [props.components, props.stickyHeader])
 
   const [columnsFromStorage, setColumnsFromStorage] = useState(
     addWidthFromStorage<T>({ columns: props.columns, storageKey: props.storageKey })
@@ -299,20 +300,27 @@ export const ResizableColumns = <T extends TableRecord = TableRecord> (
           const stickyHeaderColumns = tableWrapper.querySelectorAll(`.${STICKY_HEADER_CLASS} th`)
 
           setColumns(prev => {
-            const columns = [...prev]
+            const next = [...prev]
+            // `next` now carries hidden columns too, but the sticky <th> exist only for visible
+            // columns — map the i-th visible <th> back to that column's position in the full array.
+            const visiblePositions = next.reduce<number[]>((acc, column, position) => {
+              if (isColumnVisible(column)) acc.push(position)
+              return acc
+            }, [])
             let index = 0
             stickyHeaderColumns.forEach(stickyHeaderColumn => {
               if (!stickyHeaderColumn.classList.contains('ant-table-selection-column')) {
                 const width = stickyHeaderColumn.getBoundingClientRect().width
                 const key = hasRowSelection ? index + 1 : index
-                if (colgroupColumns[key]?.clientWidth !== width) {
-                  columns[index] = { ...columns[index], width }
+                const position = visiblePositions[index]
+                if (position !== undefined && colgroupColumns[key]?.clientWidth !== width) {
+                  next[position] = { ...next[position], width }
                 }
                 index++
               }
             })
 
-            return columns
+            return next
           })
         }
       }, 150)

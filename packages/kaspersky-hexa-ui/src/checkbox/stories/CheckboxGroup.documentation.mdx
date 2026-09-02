@@ -1,5 +1,15 @@
 import { Description, Meta } from '@storybook/addon-docs/blocks'
-import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  PropsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
 import { Text } from '@src/typography'
 
 import { Checkbox } from '../Checkbox'
@@ -11,137 +21,236 @@ import { checkboxGroupDesignPropPresentation } from './CheckboxGroup.design.prop
 
 <DocPageLayout>
 
-<DocPageHeader
-  title="CheckboxGroup"
-  description='**CheckboxGroup** — группа связанных чекбоксов с общими настройками и единым выбором нескольких значений'
-/>
+  <DocPageHeader title="CheckboxGroup" />
 
-<Tabs defaultActiveKey="description">
-  <Tabs.TabPane tab="Описание" key="description">
+  <Tabs defaultActiveKey="description">
 
-    <DocExampleBlock
-      title="Описание компонента"
-      description="**CheckboxGroup** (`Checkbox.Group`) объединяет несколько чекбоксов с общими пропсами **disabled**, **readonly**, **invalid** и **mode**. Состав группы задаётся массивом **options**. Расположение — **direction** (`vertical` с отступом 8px или `horizontal` с 16px). Выбранные значения — через **defaultValue** или **value** с **onChange**."
-    />
+    <Tabs.TabPane tab="Описание" key="description">
 
-    <DocExampleBlock
-      title="direction"
-      description="Расположение чекбоксов в группе. Доступные значения: `vertical`, `horizontal`. По умолчанию — `vertical`."
-      previewDirection="vertical"
-      previewGap={16}
-      code={`
-<Checkbox.Group direction="vertical" options={[
-  { label: 'One', value: 1 },
-  { label: 'Two', value: 2 }
-]} />
-<Checkbox.Group direction="horizontal" options={[
-  { label: 'One', value: 1 },
-  { label: 'Two', value: 2 }
-]} />`}
-    />
+      <DocExampleBlock
+        description="
+          **CheckboxGroup** — группа связанных чекбоксов с общими настройками и единым выбором нескольких значений
 
-    <DocExampleBlock
-      title="options"
-      description="Массив пунктов группы. Каждый объект содержит **label** (подпись) и **value** (значение). Опционально: **disabled**, **readonly**, **description**, **invalid**, **mode** — переопределяют соответствующие пропы группы для отдельного пункта."
-      code={`
-<Checkbox.Group
-  options={[
-    { label: 'One', value: 1 },
-    { label: 'Two', value: 2 },
-    { label: 'Three', value: 3, description: 'Description in checkbox group' }
-  ]}
-/>`}
-    />
+          **CheckboxGroup** — когда пользователь выбирает несколько значений из одного набора опций: фильтры, настройки с несколькими флагами, списки разрешений. Группу сопровождайте общим заголовком поля (**Field**), а не отдельными чекбоксами без связи.
 
-    <DocExampleBlock
-      title="defaultValue"
-      description="Массив **value** отмеченных пунктов в неконтролируемом режиме. Для управления снаружи используйте **value** и **onChange**."
-      code={`
-<Checkbox.Group
-  defaultValue={[1, 2]}
-  options={[
-    { label: 'One', value: 1 },
-    { label: 'Two', value: 2 },
-    { label: 'Three', value: 3, description: 'Description in checkbox group' }
-  ]}
-/>`}
-    />
+          Для одного булева выбора используйте [**Checkbox**](/?path=/docs/hexa-ui-components-checkbox--checkbox-docs). Для взаимоисключающих вариантов — **Radio**." />
 
-    <DocExampleBlock
-      title="onChange"
-      description="Вызывается при изменении выбора. Аргумент — массив **value** отмеченных пунктов."
-      code={`
-<Checkbox.Group
-  onChange={(values) => alert(JSON.stringify(values))}
-  options={[
-    { label: 'One', value: 1 },
-    { label: 'Two', value: 2 }
-  ]}
-/>`}
-    />
+    </Tabs.TabPane>
 
-    <DocExampleBlock
-      title="disabled"
-      description="Отключает всю группу. Отдельный пункт можно отключить через **disabled** в элементе **options**. Доступные значения: `true`, `false`. По умолчанию — `false`."
-      code={`
-<Checkbox.Group disabled options={[
-  { label: 'One', value: 1 },
-  { label: 'Two', value: 2 }
-]} />`}
-    />
+    <Tabs.TabPane tab="Структура" key="composition">
 
-    <DocExampleBlock
-      title="readonly"
-      description="Режим только для чтения для всей группы. Доступные значения: `true`, `false`. По умолчанию — `false`."
-      code={`
-<Checkbox.Group readonly defaultValue={[1]} options={[
-  { label: 'One', value: 1 },
-  { label: 'Two', value: 2 }
-]} />`}
-    />
+      <DocExampleBlock
+        description="**CheckboxGroup** (`Checkbox.Group`) объединяет несколько чекбоксов с общими пропсами **disabled**, **readonly**, **invalid** и **mode**. Состав группы задаётся массивом **options**. Расположение — **direction** (`vertical` с отступом 8px или `horizontal` с 16px). Выбранные значения — через **defaultValue** или **value** с **onChange**."
+      />
 
-    <DocExampleBlock
-      title="invalid"
-      description="Состояние ошибки валидации для всей группы. Доступные значения: `true`, `false`. По умолчанию — `false`."
-      code={`
-<Checkbox.Group invalid options={[
-  { label: 'One', value: 1 },
-  { label: 'Two', value: 2 }
-]} />`}
-    />
+      <DocExampleBlock
+        title="mode"
+        description="Режим **FormLabel** для строковых **label** в **options**. Доступные значения: `primary`, `secondary`, `disabled`. По умолчанию — `primary`."
+        previewDirection="vertical"
+        code={`
+          <Checkbox.Group
+            mode="primary"
+            direction="horizontal"
+            options={[
+              { label: 'Primary mode', value: 1 },
+              { label: 'Primary mode', value: 2 },
+            ]}
+          />
 
-    <DocExampleBlock
-      title="mode"
-      description="Режим **FormLabel** для строковых **label** в **options**. Доступные значения: `primary`, `secondary`, `disabled`. По умолчанию — `primary`."
-      code={`
-<Checkbox.Group mode="secondary" options={[
-  { label: 'One', value: 1 },
-  { label: 'Two', value: 2 }
-]} />`}
-    />
+          <Checkbox.Group
+            mode="secondary"
+            direction="horizontal"
+            options={[
+              { label: 'Secondary mode', value: 1 },
+              { label: 'Secondary mode', value: 2 },
+            ]}
+          />
 
-  </Tabs.TabPane>
+          <Checkbox.Group
+            mode="disabled"
+            direction="horizontal"
+            options={[
+              { label: 'Disabled mode', value: 1 },
+              { label: 'Disabled mode', value: 2 },
+            ]}
+          />
+        `}
+      />
 
-  <Tabs.TabPane tab="Правила использования" key="howtouse">
+      <DocExampleBlock
+        title="direction"
+        description="Расположение чекбоксов в группе. Доступные значения: `vertical`, `horizontal`. По умолчанию — `vertical`."
+        previewDirection="vertical"
+        previewGap={16}
+        code={`
+          <Checkbox.Group
+            direction="vertical"
+            options={[
+              { label: 'One', value: 1 },
+              { label: 'Two', value: 2 },
+            ]}
+          />
+          <Checkbox.Group
+            direction="horizontal"
+            options={[
+              { label: 'One', value: 1 },
+              { label: 'Two', value: 2 },
+            ]}
+          />
+        `}
+      />
 
-    <DocExampleBlock
-      title="Правила использования"
-      description="**CheckboxGroup** — когда пользователь выбирает несколько значений из одного набора опций: фильтры, настройки с несколькими флагами, списки разрешений. Группу сопровождайте общим заголовком поля (**Field**), а не отдельными чекбоксами без связи.
+      <DocExampleBlock
+        title="options"
+        description="Массив пунктов группы. Каждый объект содержит **label** (подпись) и **value** (значение). Опционально: **disabled**, **readonly**, **description**, **invalid**, **mode** — переопределяют соответствующие пропы группы для отдельного пункта."
+        code={`
+          <Checkbox.Group
+            options={[
+              { label: 'One', value: 1 },
+              { label: 'Two', value: 2 },
+              { label: 'Three', value: 3, description: 'Description in checkbox group' },
+            ]}
+          />
+        `}
+      />
 
-Для одного булева выбора используйте [**Checkbox**](/?path=/docs/hexa-ui-components-checkbox--checkbox-docs). Для взаимоисключающих вариантов — **Radio**."
-    />
+      <DocExampleBlock
+        title="defaultValue"
+        description="Массив **value** отмеченных пунктов в неконтролируемом режиме. Для управления снаружи используйте **value** и **onChange**."
+        code={`
+          <Checkbox.Group
+            defaultValue={[1, 2]}
+            options={[
+              { label: 'One', value: 1 },
+              { label: 'Two', value: 2 },
+              { label: 'Three', value: 3, description: 'Description in checkbox group' },
+            ]}
+          />
+        `}
+      />
 
-  </Tabs.TabPane>
+      <DocExampleBlock
+        title="onChange"
+        description="Вызывается при изменении выбора. Аргумент — массив **value** отмеченных пунктов."
+        code={`
+          <Checkbox.Group
+            onChange={(values) => alert(JSON.stringify(values))}
+            options={[
+              { label: 'One', value: 1 },
+              { label: 'Two', value: 2 },
+            ]}
+          />
+        `}
+      />
 
-  <Tabs.TabPane tab="Дизайнеру" key="design">
-    <Text type="H3">Properties в Pixso</Text>
-    <DocumentationArgsTable rows={buildPresentationOnlyRows(checkboxGroupDesignPropPresentation)} />
-  </Tabs.TabPane>
+      <DocExampleBlock
+        title="disabled"
+        description="Отключает всю группу. Отдельный пункт можно отключить через **disabled** в элементе **options**. Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <Checkbox.Group
+            disabled
+            options={[
+              { label: 'One', value: 1 },
+              { label: 'Two', value: 2 },
+            ]}
+          />
+        `}
+      />
 
-  <Tabs.TabPane tab="Poperties" key="properties">
-    <Description of={CheckboxGroupStories} />
-    <AutodocArgsTable components={Checkbox.Group} />
-  </Tabs.TabPane>
-</Tabs>
+      <DocExampleBlock
+        title="readonly"
+        description="Режим только для чтения для всей группы. Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <Checkbox.Group
+            readonly
+            defaultValue={[1]}
+            options={[
+              { label: 'One', value: 1 },
+              { label: 'Two', value: 2 },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="invalid"
+        description="Состояние ошибки валидации для всей группы. Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <Checkbox.Group
+            invalid
+            options={[
+              { label: 'One', value: 1 },
+              { label: 'Two', value: 2 },
+            ]}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="Кастомизация label"
+        description="В **label** можно передать React-элемент. Для иконки высотой 16 px рядом с первой строкой текста высотой 20 px используйте flex-контейнер и отступ сверху 2 px."
+        previewDirection="vertical"
+        code={`
+          <Checkbox.Group
+            options={[
+              {
+                label: (
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 4 }}>
+                    <Placeholder style={{ marginTop: 2, flexShrink: 0 }} />
+                    <span style={{ lineHeight: '20px' }}>
+                      React Element
+                      <br />
+                      with multiple icon
+                    </span>
+                  </div>
+                ),
+                value: 1,
+              },
+              {
+                label: (
+                  <div>
+                    React Element
+                    <br />
+                    with small{' '}
+                    <Tag size="small" mode="secondary" outlined>
+                      Tag
+                    </Tag>
+                  </div>
+                ),
+                value: 2,
+              },
+            ]}
+          />
+        `}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={CheckboxGroupStories} />
+      <AutodocArgsTable components={Checkbox.Group} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=80966:404142)"
+      />
+
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(checkboxGroupDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="CheckboxGroup" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
 
 </DocPageLayout>

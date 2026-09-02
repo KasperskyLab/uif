@@ -1,0 +1,346 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Space } from '@src/space'
+import { Text } from '@src/typography'
+
+import { Button } from '../../button'
+import { Tooltip } from '../Tooltip'
+import * as TooltipStories from './Tooltip.stories'
+import { tooltipDesignPropPresentation } from './Tooltip.design.properties'
+
+<Meta of={TooltipStories} name="Tooltip Docs" />
+
+<DocPageLayout>
+
+  <DocPageHeader title="Tooltip" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **Tooltip** — всплывающая подсказка с поясняющим содержимым из description **Tooltip** используйте для коротких пояснений к иконкам, отключённым действиям и элементам, смысл которых не очевиден без дополнительного контекста. Подсказка дополняет интерфейс, но не заменяет постоянную подпись, если без неё пользователь не сможет выполнить основное действие.
+
+          Размещайте подсказку рядом с элементом, к которому относится сообщение, и формулируйте текст кратко. Для более объёмной информации, настроек или действий выбирайте **Popover** либо отдельный информационный блок."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**Tooltip** показывает короткое пояснение рядом с элементом при взаимодействии с ним. Основные настройки: **text**, **children**, **placement**, **trigger**, видимость, задержки, стрелка и правила позиционирования."
+      />
+
+      <DocExampleBlock
+        title="text"
+        description="Обязательный проп. Содержимое подсказки: строка, React-элемент или функция, возвращающая React-элемент."
+        code={`
+          <Tooltip text="Поясняющая подсказка">
+            <Button>Навести курсор</Button>
+          </Tooltip>
+        `}
+      />
+
+      <DocExampleBlock
+        title="children"
+        description="Элемент-триггер, рядом с которым появляется подсказка. Подходит любой React-элемент, например **Button**, иконка или текст."
+        code={`
+          <Tooltip text="Пояснение">
+            <Button>Действие</Button>
+          </Tooltip>
+        `}
+      />
+
+      <DocExampleBlock
+        title="placement"
+        description="Расположение подсказки относительно элемента. Доступные значения: `top`, `left`, `right`, `bottom`, `topLeft`, `topRight`, `bottomLeft`, `bottomRight`, `leftTop`, `leftBottom`, `rightTop`, `rightBottom`. По умолчанию — `top`."
+        maxCodeLines={62}
+        code={`
+          <div style={{ display: 'grid', columnGap: 8, rowGap: 8 }}>
+            <Tooltip placement="topLeft" text="topLeft">
+              <Button>topLeft</Button>
+            </Tooltip>
+            <Tooltip placement="top" text="top">
+              <Button>top</Button>
+            </Tooltip>
+            <Tooltip placement="topRight" text="topRight">
+              <Button>topRight</Button>
+            </Tooltip>
+            <Space
+              direction="vertical"
+              gap={8}
+              style={{ gridColumn: 1, gridRow: 2, justifyContent: 'center' }}
+            >
+              <Tooltip placement="leftTop" text="leftTop">
+                <Button>leftTop</Button>
+              </Tooltip>
+              <Tooltip placement="left" text="left">
+                <Button>left</Button>
+              </Tooltip>
+              <Tooltip placement="leftBottom" text="leftBottom">
+                <Button>leftBottom</Button>
+              </Tooltip>
+            </Space>
+            <div style={{ gridColumn: 2, gridRow: 2 }} />
+            <Space
+              direction="vertical"
+              gap={8}
+              style={{ gridColumn: 3, gridRow: 2, justifyContent: 'center' }}
+            >
+              <Tooltip placement="rightTop" text="rightTop">
+                <Button>rightTop</Button>
+              </Tooltip>
+              <Tooltip placement="right" text="right">
+                <Button>right</Button>
+              </Tooltip>
+              <Tooltip placement="rightBottom" text="rightBottom">
+                <Button>rightBottom</Button>
+              </Tooltip>
+            </Space>
+            <Tooltip placement="bottomLeft" text="bottomLeft">
+              <Button>bottomLeft</Button>
+            </Tooltip>
+            <Tooltip placement="bottom" text="bottom">
+              <Button>bottom</Button>
+            </Tooltip>
+            <Tooltip placement="bottomRight" text="bottomRight">
+              <Button>bottomRight</Button>
+            </Tooltip>
+          </div>
+        `}
+      />
+
+      <DocExampleBlock
+        title="trigger"
+        description="Событие, которое открывает подсказку. Поддерживаются `hover`, `click`, `focus`, `contextMenu` и массив этих значений. По умолчанию — `hover`."
+        code={`
+          <Tooltip trigger="hover" text="При наведении">
+            <Button>hover</Button>
+          </Tooltip>
+
+          <Tooltip trigger="click" text="По клику">
+            <Button>click</Button>
+          </Tooltip>
+
+          <Tooltip trigger="focus" text="При фокусе">
+            <Button>focus</Button>
+          </Tooltip>
+
+          <Tooltip trigger="contextMenu" text="По правому клику">
+            <Button>contextMenu</Button>
+          </Tooltip>
+        `}
+      />
+
+      <DocExampleBlock
+        title="defaultVisible"
+        description="Открывает подсказку при монтировании и задаёт её начальное неконтролируемое состояние. По умолчанию — `false`."
+        code={`
+          <Tooltip defaultVisible text="Открыта при монтировании">
+            <Button>defaultVisible</Button>
+          </Tooltip>
+        `}
+      />
+
+      <DocExampleBlock
+        title="visible"
+        description="Управляет видимостью извне. При передаче **visible** состояние становится контролируемым; изменение состояния возвращается через **onVisibleChange**."
+        code={`
+          <Tooltip visible={true} text="Открыта явно">
+            <Button>visible</Button>
+          </Tooltip>
+        `}
+      />
+
+      <DocExampleBlock
+        title="onVisibleChange и afterVisibleChange"
+        description="**onVisibleChange** вызывается при запросе на изменение видимости. **afterVisibleChange** вызывается после завершения изменения видимости."
+        code={`
+          <Tooltip
+            text="Подсказка"
+            onVisibleChange={(visible) => alert(\`Видимость: \${visible}\`)}
+            afterVisibleChange={(visible) => alert(\`Завершено: \${visible}\`)}
+          >
+            <Button>Навести курсор</Button>
+          </Tooltip>
+        `}
+      />
+
+      <DocExampleBlock
+        title="mouseEnterDelay и mouseLeaveDelay"
+        description="Задержки показа и скрытия подсказки в секундах. Компонент задаёт `mouseEnterDelay` равным `0.2`, а `mouseLeaveDelay` — `0`."
+        code={`
+          <Tooltip mouseEnterDelay={0.5} mouseLeaveDelay={0.2} text="С задержкой">
+            <Button>Навести курсор</Button>
+          </Tooltip>
+        `}
+      />
+
+      <DocExampleBlock
+        title="defaultAlign"
+        description="Включает стандартную конфигурацию выравнивания базового компонента вместо настроек Hexa UI для выбранного расположения. По умолчанию — `false`."
+        code={`
+          <Tooltip defaultAlign text="Стандартное выравнивание">
+            <Button>Навести курсор</Button>
+          </Tooltip>
+        `}
+      />
+
+      <DocExampleBlock
+        title="align, builtinPlacements и onPopupAlign"
+        description="Расширенная настройка позиции: **align** дополняет выравнивание смещениями и правилами переполнения, **builtinPlacements** задаёт карту выравниваний, **onPopupAlign** сообщает итоговое выравнивание. Используйте, когда стандартных вариантов **placement** недостаточно."
+        code={`
+          <Tooltip
+            placement="top"
+            align={{ offset: [0, 8] }}
+            onPopupAlign={() => alert('Подсказка выровнена')}
+            text="Смещена вниз"
+          >
+            <Button>align</Button>
+          </Tooltip>
+
+          <Tooltip
+            placement="customTop"
+            builtinPlacements={{
+              customTop: { points: ['bc', 'tc'], offset: [0, -12] },
+            }}
+            text="Пользовательское размещение"
+          >
+            <Button>builtinPlacements</Button>
+          </Tooltip>
+        `}
+      />
+
+      <DocExampleBlock
+        title="autoAdjustOverflow"
+        description="Разрешает менять позицию подсказки, когда ей не хватает места в видимой области. По умолчанию — `true`."
+        code={`
+          <Tooltip autoAdjustOverflow={false} placement="top" text="Без автокоррекции">
+            <Button>Навести курсор</Button>
+          </Tooltip>
+        `}
+      />
+
+      <DocExampleBlock
+        title="showArrow, arrowContent и arrowPointAtCenter"
+        description="**showArrow** управляет отображением стрелки, **arrowPointAtCenter** выравнивает её по центру триггера. По умолчанию стрелка показана, а **arrowPointAtCenter** равен `false`. **arrowContent** есть в унаследованном API, но текущая реализация Tooltip заменяет его внутренним элементом стрелки, поэтому пользовательское содержимое не отображается."
+        code={`
+          <Tooltip showArrow={false} text="Без стрелки">
+            <Button>showArrow=false</Button>
+          </Tooltip>
+
+          <Tooltip arrowPointAtCenter text="Стрелка по центру">
+            <Button>arrowPointAtCenter</Button>
+          </Tooltip>
+
+          <Tooltip showArrow text="Стрелка показана">
+            <Button>showArrow=true</Button>
+          </Tooltip>
+        `}
+      />
+
+      <DocExampleBlock
+        title="getPopupContainer и getTooltipContainer"
+        description="Задают контейнер, в который монтируется подсказка. **getPopupContainer** имеет приоритет и подходит для прокручиваемых или ограниченных областей; без него используется контейнер из конфигурации Hexa UI."
+        code={`
+          <div id="tooltip-container">
+            <Tooltip
+              getPopupContainer={(trigger) => trigger.parentElement}
+              text="Внутри контейнера"
+            >
+              <Button>Навести курсор</Button>
+            </Tooltip>
+          </div>
+        `}
+      />
+
+      <DocExampleBlock
+        title="destroyTooltipOnHide, forceRender и fresh"
+        description="
+          **destroyTooltipOnHide** передаёт базовому триггеру `autoDestroy`: после скрытия портал подсказки удаляется из DOM и создаётся заново при следующем открытии. **forceRender** монтирует содержимое до первого открытия, что полезно, когда оно должно быть подготовлено заранее.
+
+          Когда подсказка скрыта и **fresh** не задан или равен `false`, базовый триггер кэширует прежнее содержимое и не перерисовывает его. При **fresh** равном `true` кэш отключён: изменения содержимого применяются и в скрытом состоянии."
+        code={`
+          <Tooltip destroyTooltipOnHide text="Удаляется после скрытия">
+            <Button>destroyTooltipOnHide</Button>
+          </Tooltip>
+
+          <Tooltip forceRender text="Создана до открытия">
+            <Button>forceRender</Button>
+          </Tooltip>
+
+          <Tooltip fresh text="Обновляется без кэша">
+            <Button>fresh</Button>
+          </Tooltip>
+        `}
+      />
+
+      <DocExampleBlock
+        title="zIndex и id"
+        description="**zIndex** задаёт порядок наложения подсказки, **id** — идентификатор её содержимого. Используйте их при интеграции со сложным слоем всплывающих элементов."
+      />
+
+      <DocExampleBlock
+        title="overlay"
+        description="Альтернативное содержимое подсказки. Принимает строку, React-элемент или функцию, возвращающую React-элемент. Если переданы **overlay** и **text**, отображается **overlay**."
+        code={`
+          <Tooltip
+            overlay={
+              <Space gap={8}>
+                <Text themedColor="primary-invert">Сохранить</Text>
+                <Text color="secondary">⌘S</Text>
+              </Space>
+            }
+            text="Содержимое text"
+          >
+            <Button>Сохранить</Button>
+          </Tooltip>
+        `}
+      />
+
+      <DocExampleBlock
+        title="prefixCls, openClassName и popupVisible"
+        description="Расширенные props базового компонента: **prefixCls** задаёт CSS-префикс, **openClassName** — класс триггера при открытии, **popupVisible** передаётся базовому триггеру. Для управляемой видимости используйте **visible**."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={TooltipStories} />
+      <AutodocArgsTable components={Tooltip} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=36492:136298)"
+      />
+
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(tooltipDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Tooltip" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

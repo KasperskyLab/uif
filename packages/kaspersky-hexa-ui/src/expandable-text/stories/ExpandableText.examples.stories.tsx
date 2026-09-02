@@ -9,7 +9,7 @@ import {
   EXPANDABLE_TEXT_MOCK_BODY,
   EXPANDABLE_TEXT_MOCK_WITH_BREAKS
 } from './expandableTextStoryData'
-import { expandableTextStorySettings } from '../ExpandableText.stories'
+import { expandableTextStorySettings } from './ExpandableText.stories'
 
 const meta: Meta<typeof ExpandableTextComponent> = {
   title: 'Hexa UI Components/ExpandableText/Stories',

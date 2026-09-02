@@ -59,6 +59,10 @@ export const navItemCss = css`
     }
   }
 
+  a.uif-nav-item-entry {
+    color: inherit;
+  }
+
   .uif-nav-item-entry-icon {
     display: flex;
     align-items: center;

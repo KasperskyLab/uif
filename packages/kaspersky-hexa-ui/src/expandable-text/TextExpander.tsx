@@ -1,31 +1,42 @@
+import { ActionButton } from '@src/action-button'
 import React from 'react'
-import { v4 as uiidv4 } from 'uuid'
 
 import { ArrowDown1 } from '@kaspersky/hexa-ui-icons/16'
 
-import { StyledTextExpander } from './expandableTextCss'
-
 type TextExpanderProps = {
-  onClick: () => void
+  expanded: boolean
+  onToggle: () => void
   className?: string
 }
 
-export const TextExpander: React.FC<TextExpanderProps> = ({ onClick, className }) => {
-  return (
-    <StyledTextExpander
-      className={className}
-      key={uiidv4()}
-      onClick={e => {
-        e.stopPropagation()
-        onClick()
-      }}
-      onKeyDown={e => {
-        if (e.key === 'Enter') {
-          onClick()
-        }
-      }}
-      size="large"
-      icon={<ArrowDown1 />}
-    />
-  )
-}
+/**
+ * The expand/collapse toggle.
+ *
+ * A plain function rather than a component on purpose: called as `textExpander(...)`
+ * the element it returns is reconciled in place by whoever renders it, so a table
+ * with hundreds of clipped cells does not pay a React fiber per toggle on top of the
+ * one ActionButton already costs.
+ */
+export const textExpander = ({ expanded, onToggle, className }: TextExpanderProps): JSX.Element => (
+  <ActionButton
+    className={className}
+    size="large"
+    icon={<ArrowDown1 />}
+    aria-label={expanded ? 'Collapse' : 'Expand'}
+    aria-expanded={expanded}
+    onClick={event => {
+      // The cell usually sits inside a clickable row, so the toggle must not double
+      // as a row click.
+      event.stopPropagation()
+      onToggle()
+    }}
+    onKeyDown={event => {
+      if (event.key !== 'Enter') return
+      // ActionButton renders a native button, which the browser also activates on
+      // Enter by synthesising a click. Without this the toggle fires twice and lands
+      // back where it started — verified in a browser, Enter was a no-op.
+      event.preventDefault()
+      onToggle()
+    }}
+  />
+)

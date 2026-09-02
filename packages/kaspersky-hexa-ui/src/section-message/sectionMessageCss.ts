@@ -73,7 +73,7 @@ export const sectionMessageCss = css<{
     content: '';
     display: block;
     position: absolute;
-    left: 0;
+    inset-inline-start: 0;
     bottom: 0;
     top: 0;
     width: 4px;

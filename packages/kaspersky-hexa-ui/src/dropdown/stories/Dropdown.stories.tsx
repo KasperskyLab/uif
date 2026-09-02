@@ -1,15 +1,15 @@
 import { badges } from '@sb/badges'
 import { buildStoryArgTypes, getControlsInclude } from '@sb/components/Documentation'
 import { withMeta } from '@sb/components/Meta'
-import { Button } from '@src/button'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
 import MetaData from '../__meta__/meta.json'
 import { Dropdown as DropdownComponent } from '../Dropdown'
+import { DropdownProps, Trigger } from '../types'
+
 import { dropdownPropPresentation } from './Dropdown.controls'
 import { defaultDropdownOverlay } from './dropdownStoryFixtures'
-import { DropdownProps, Trigger } from '../types'
 
 type DropdownPlaygroundProps = Omit<DropdownProps, 'children' | 'trigger'> & {
   children: string

@@ -49,7 +49,10 @@ export function FilterItemValue <T extends TableRecord = TableRecord> ({
         <StringItem filter={filter} validationStatus={validationStatus} {...rest} />
       )
     case FilterType.Enum: {
-      const getterOptions = filter.attribute?.getAvailableOptions || (
+      const attributeGetter = column?.filterAttributes
+        ?.find(attribute => attribute.name === filter.attribute?.name)
+        ?.filter.getAvailableOptions
+      const getterOptions = attributeGetter || (
         column?.filterType?.type === FilterType.Enum
           ? column?.filterType?.getAvailableOptions
           : undefined
@@ -61,6 +64,7 @@ export function FilterItemValue <T extends TableRecord = TableRecord> ({
           // TODO: remove getAvailableValues after XXX major releases
           getAvailableValues={column?.filterType?.type === FilterType.Enum ? column?.filterType?.getAvailableValues : undefined}
           validationStatus={validationStatus}
+          search={column?.filterType?.type === FilterType.Enum ? column?.filterType?.search : undefined}
           {...rest}
         />
       )

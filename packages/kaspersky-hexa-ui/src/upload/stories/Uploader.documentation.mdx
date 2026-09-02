@@ -1,0 +1,156 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Uploader } from '../Uploader'
+import * as UploaderStories from './Uploader.stories'
+import { uploaderDesignPropPresentation } from './Uploader.design.properties'
+
+<Meta of={UploaderStories} name="Uploader Docs" />
+
+<DocPageLayout>
+  <DocPageHeader
+    title="Uploader"
+  />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **Uploader** — компонент для выбора, проверки и загрузки файлов
+
+          Используйте Uploader, когда пользователю нужно добавить один или несколько файлов к форме, задаче или сообщению. Коротко сформулируйте требования к файлам рядом с областью загрузки и показывайте выбранные файлы, чтобы пользователь мог проверить результат до продолжения сценария.
+
+          Компактный вариант подходит для плотных форм и панелей, а крупная область перетаскивания — для самостоятельного шага загрузки или работы с несколькими файлами. Если файл уже добавлен к записи и требуется только действие над ним, используйте соответствующие управляющие компоненты Hexa UI, а не новую область загрузки."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**Uploader** отображает область выбора файлов, список выбранных файлов и ход загрузки. Компонент поддерживает автоматическую и ручную загрузку, проверку ограничений и управление списком через **fileList**. Внешний вид и поведение определяют **size**, **maxCount**, **maxFileSize**, **maxTotalSize**, **manual**, **showProgress**, **validationStatus** и **fullHeight**."
+      />
+
+      <DocExampleBlock
+
+        title="size"
+        description="Размер области загрузки: `medium` выводит зону перетаскивания, а `small` — компактную кнопку выбора файла."
+        code={`
+          <Uploader
+            manual
+            size="medium"
+            description="Перетащите файлы или выберите их"
+          />{' '}
+          <Uploader manual size="small" description="Выберите файл" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="maxCount, maxFileSize и maxTotalSize"
+        description="Ограничивают количество файлов, размер одного файла и суммарный размер списка. Размеры **maxFileSize** и **maxTotalSize** задаются в килобайтах."
+        code={`
+          <Uploader
+            manual
+            maxCount={3}
+            maxFileSize={1024}
+            maxTotalSize={2048}
+            description="До 3 файлов, не более 1 МБ каждый"
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="manual"
+        description="Переключает ручной режим: выбранные файлы остаются в списке до явного запуска загрузки через ref компонента."
+        code={`
+          <Uploader manual description="Загрузка начнётся после подтверждения" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="showProgress"
+        description="Управляет отображением прогресса загрузки в элементах списка. По умолчанию — `true`."
+        code={`
+          <Uploader
+            manual
+            showProgress={false}
+            description="Файлы без индикатора прогресса"
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="validationStatus"
+        description="Передаёт внешний статус валидации. При значении `error` область загрузки отображается в состоянии ошибки."
+        code={`
+          <Uploader
+            manual
+            validationStatus="error"
+            description="Выберите файл для продолжения"
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="accept и directory"
+        description="**accept** ограничивает доступные для выбора типы файлов, а **directory** разрешает выбрать целую папку."
+        code={`
+          <Uploader
+            accept=".pdf,.docx"
+            directory
+            manual
+            description="Документы PDF или DOCX"
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="fullHeight и truncateFileName"
+        description="**fullHeight** растягивает вариант `medium` по высоте контейнера. **truncateFileName** сокращает длинное имя файла многоточием, когда оно не помещается в строку."
+        code={`
+          <Uploader fullHeight manual truncateFileName description="Файлы проекта" />
+        `}
+
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={UploaderStories} />
+      <AutodocArgsTable components={Uploader} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=107611:414575)"
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(uploaderDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Uploader" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

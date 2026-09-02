@@ -358,7 +358,7 @@ const ButtonGroup = styled.div`
   background: white;
   z-index: 9999;
   padding: 8px;
-  left: 20px;
+  inset-inline-start: 20px;
   bottom: 20px;
 `
 

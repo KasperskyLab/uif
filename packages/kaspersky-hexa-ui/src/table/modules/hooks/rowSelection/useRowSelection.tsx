@@ -2,9 +2,11 @@ import { SetState } from '@helpers/hooks/useStateProps'
 import { MakeRequired } from '@helpers/typesHelpers'
 import { useRefMethod } from '@src/table/context/TableContext'
 import { TableRowSelection as RowSelectionAntd } from 'antd/lib/table/interface'
+import cn from 'classnames'
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { useTableContext } from '../../../context/TableContext'
+import radioStyles from '../../../../radio/Radio.module.scss'
+import { useTableContext, useTableUpdate } from '../../../context/TableContext'
 import { ITableProps, TableRecord, TableRowSelection, TableRowSelectionData } from '../../../types'
 import { UsePaginationConfigReturn } from '../usePaginationConfig'
 
@@ -34,7 +36,7 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
   withSelection,
   useDataSourceFunction
 }: UseRowSelectionProps<T>): RowSelectionAntd<T> | undefined => {
-  const { updateContext } = useTableContext()
+  const updateContext = useTableUpdate<T>()
 
   const {
     getPreselectedRows,
@@ -45,11 +47,23 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
     ...restRowSelection
   } = rowSelectionProps ?? {}
 
-  const getCheckboxProps: TableRowSelection['getCheckboxProps'] = (row) => ({
-    'data-testid': row.key ? `table-row__select-${row.key}` : 'table-row__select',
-    className: withSelection ? 'table-row-has-expandable' : undefined,
-    disabled: disabled || row._disabled || row._selectionDisabled
-  })
+  const getCheckboxProps: TableRowSelection<T>['getCheckboxProps'] = (row) => {
+    const externalCheckboxProps = restRowSelection.getCheckboxProps?.(row)
+
+    return {
+      ...externalCheckboxProps,
+      // @ts-expect-error data-testid is not defined in type but it can be used in external getCheckboxProps
+      'data-testid': externalCheckboxProps?.['data-testid'] ?? row.key ? `table-row__select-${row.key}` : 'table-row__select',
+      className: cn(
+        externalCheckboxProps?.className,
+        {
+          'table-row-has-expandable': withSelection,
+          [radioStyles.radio]: rowSelectionProps?.type === 'radio'
+        }
+      ),
+      disabled: externalCheckboxProps?.disabled || disabled || row._disabled || row._selectionDisabled
+    }
+  }
 
   useEffect(() => {
     if (rowSelectionProps && !builtInRowSelection && rowSelectionProps.selectedRowKeys) {
@@ -74,7 +88,7 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
     setDeselectedRows(prevRows => updateRows(prevRows, deselectedRowKeys, dataSource))
   }, [deselectedRowKeys, dataSource])
 
-  const { groupsMap } = useTableContext()
+  const groupsMap = useTableContext(state => state.groupsMap)
 
   const renderCellWithGroups: TableRowSelection<T>['renderCell'] = (_, row, __, originNode) => {
     if (row.isGroupTitle && groupsMap && __EXPERIMENTAL__GROUP__SELECTION) {
@@ -112,11 +126,13 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
 
   useEffect(() => {
     if (!builtInRowSelection) return
-    // isSelectedAll for server pagination can be set only from SelectAll dropdown
+    // isSelectedAll for server pagination can be set only from SelectAll dropdown or if it is equals to defined total
     if (!useDataSourceFunction) {
       setIsSelectedAll(dataSource.length !== 0 && selectedRowKeys.length === dataSource.length)
+    } else if (dataSource.length !== 0 && typeof total === 'number' && total > 0 && selectedRowKeys.length === total) {
+      setIsSelectedAll(true)
     }
-  }, [useDataSourceFunction, selectedRowKeys.length, dataSource.length])
+  }, [useDataSourceFunction, selectedRowKeys.length, dataSource.length, total])
 
   useEffect(() => {
     if (!builtInRowSelection) return
@@ -169,7 +185,7 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
   const processItemsSelection = useCallback((items: { key: string, isSelected: boolean }[]) => {
     const validItems = items.filter(item => {
       const row = dataSource.find(row => row.key === item.key)
-      return !row?._disabled && !row?._selectionDisabled
+      return !row || !getCheckboxProps(row).disabled
     })
 
     if (validItems.length === 0) return
@@ -258,7 +274,7 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
   if (!builtInRowSelection) {
     return {
       ...rowSelectionProps,
-      getCheckboxProps: rowSelectionProps?.getCheckboxProps ?? getCheckboxProps
+      getCheckboxProps
     }
   }
 
@@ -286,7 +302,7 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
     },
     selectedRowKeys,
     renderCell: renderCellWithGroups,
-    getCheckboxProps: restRowSelection.getCheckboxProps ?? getCheckboxProps
+    getCheckboxProps
   }
 
   return rowSelection

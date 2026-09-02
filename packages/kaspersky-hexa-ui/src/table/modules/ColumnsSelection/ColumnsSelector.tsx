@@ -1,10 +1,9 @@
-import { useLocalization } from '@helpers/localization/useLocalization'
 import { Checkbox } from '@src/checkbox'
-import { Locale } from '@src/locale'
 import { TableColumn, TableRecord } from '@src/table'
 import { Tooltip } from '@src/tooltip'
 import { Text } from '@src/typography'
 import React, { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   SortableContainer as sortableContainer,
   SortableElement as sortableElement,
@@ -70,17 +69,17 @@ const CheckboxRow = styled.div`
 const NoDragIcon = styled.div`
   padding-left: 20px;
 `
-interface SortableItemProps <T extends TableRecord = TableRecord> {
-  column: TableColumn<T>,
-  onChange: (column: TableColumn<T>) => void
-}
 
-type BaseItemProps <T extends TableRecord = TableRecord> = {
-  value: SortableItemProps<T>
+type BaseItemProps <T extends TableRecord> = {
+  value: {
+    column: TableColumn<T>,
+    onChange: (column: TableColumn<T>) => void
+  },
   prefix?: React.ReactNode
 }
 
-const BaseItem = <T extends TableRecord = TableRecord> ({ value, prefix }: BaseItemProps<T>) => {
+const BaseItem = <T extends TableRecord> ({ value, prefix }: BaseItemProps<T>) => {
+  const { t } = useTranslation()
   const {
     column,
     column: {
@@ -119,7 +118,7 @@ const BaseItem = <T extends TableRecord = TableRecord> ({ value, prefix }: BaseI
         !tooltipTextKey
           ? CheckboxRowComponent
           : (
-              <Tooltip text={useLocalization(tooltipTextKey)}>
+              <Tooltip text={t(tooltipTextKey)}>
                 {CheckboxRowComponent}
               </Tooltip>
             )
@@ -128,25 +127,24 @@ const BaseItem = <T extends TableRecord = TableRecord> ({ value, prefix }: BaseI
   )
 }
 
-const SortableItem = sortableElement(
-  ({ value }: { value: SortableItemProps }) => (
-    <BaseItem
-      value={value}
-      prefix={(
-        <Dragger>
-          <DragHandle />
-        </Dragger>
-      )}
-    />
-  )
-)
-
-const NormalItem = <T extends TableRecord = TableRecord,> ({ value }: { value: SortableItemProps<T> }) => (
-  <BaseItem<T> value={value} />
-)
+const getItem = <T extends TableRecord> (draggingAvailable: boolean) =>
+  draggingAvailable
+    ? sortableElement(
+        ({ value }: BaseItemProps<T>) => (
+          <BaseItem
+            value={value}
+            prefix={(
+              <Dragger>
+                <DragHandle />
+              </Dragger>
+            )}
+          />
+        )
+      )
+    : (props: BaseItemProps<T>) => <BaseItem {...props} />
 
 const SortableContainer = sortableContainer(
-  ({ children, draggingAvailable }: { children: any, draggingAvailable?: boolean }) => {
+  ({ children, draggingAvailable }: { children: React.ReactNode, draggingAvailable?: boolean }) => {
     if (!draggingAvailable) {
       return (
         <ItemsContainer>
@@ -177,14 +175,14 @@ const arrayMove = (array: any[], from: number, to: number) => {
   return array
 }
 
-export function hasSelected <T extends TableRecord = TableRecord> (columns: TableColumn<T>[]): boolean {
+export function hasSelected <T extends TableRecord> (columns: TableColumn<T>[]) {
   return columns.reduce(
-    (acc: boolean, current: any) => (acc = acc || current.show),
+    (acc: boolean, current: TableColumn<T>) => (acc = acc || Boolean(current.show)),
     false
   )
 }
 
-function isColumnSelectable <T extends TableRecord = TableRecord> (column: TableColumn<T>) {
+function isColumnSelectable <T extends TableRecord> (column: TableColumn<T>) {
   return (
     !isColumnReadonly(column) &&
     column.hideColumnAvailable &&
@@ -192,35 +190,36 @@ function isColumnSelectable <T extends TableRecord = TableRecord> (column: Table
   )
 }
 
-function areAllSelected <T extends TableRecord = TableRecord> (columns: TableColumn<T>[]) {
+function areAllSelected <T extends TableRecord> (columns: TableColumn<T>[]) {
   const filteredColumns = columns.filter(isColumnSelectable)
   return filteredColumns.every(({ show }) => show)
 }
 
-function isPartiallySelected <T extends TableRecord = TableRecord> (columns: TableColumn<T>[]) {
+function isPartiallySelected <T extends TableRecord> (columns: TableColumn<T>[]) {
   const filteredColumns = columns.filter(isColumnSelectable)
   const allSelected = filteredColumns.every(({ show }) => show)
   const hasSelected = filteredColumns.some(({ show }) => show)
   return hasSelected && !allSelected
 }
 
-export interface ColumnsSelectorProps <T extends TableRecord = TableRecord> {
+export interface ColumnsSelectorProps <T extends TableRecord> {
   columns: TableColumn<T>[],
-  setColumns: (value: any[]) => void,
+  setColumns: (value: TableColumn<T>[]) => void,
   draggingAvailable?: boolean,
   searchValue?: string
 }
 
-export const ColumnsSelector = <T extends TableRecord = TableRecord> ({
+export const ColumnsSelector = <T extends TableRecord> ({
   columns,
   setColumns,
   draggingAvailable = true,
   searchValue
 }: ColumnsSelectorProps<T>) => {
+  const { t } = useTranslation()
   const [selectAll, setAllSelected] = useState(areAllSelected(columns))
   const [indeterminate, setIndeterminate] = useState(isPartiallySelected(columns))
 
-  const filterColumnsBySearch = <T extends TableRecord = TableRecord> (columns: TableColumn<T>[], searchValue: string) => {
+  const filterColumnsBySearch = (columns: TableColumn<T>[], searchValue: string) => {
     if (!searchValue.trim()) return columns
 
     return columns.filter((column) => {
@@ -231,7 +230,7 @@ export const ColumnsSelector = <T extends TableRecord = TableRecord> ({
     })
   }
 
-  const updateSelectionStates = (newColumns: any[]) => {
+  const updateSelectionStates = (newColumns: TableColumn<T>[]) => {
     const visibleColumns = filterColumnsBySearch(newColumns, searchValue || '')
     setAllSelected(areAllSelected(visibleColumns))
     setIndeterminate(isPartiallySelected(visibleColumns))
@@ -257,7 +256,7 @@ export const ColumnsSelector = <T extends TableRecord = TableRecord> ({
         return column
       }
 
-      return isColumnSelectable(column)
+      return !isColumnSelectable(column)
         ? column
         : {
             ...column,
@@ -269,10 +268,10 @@ export const ColumnsSelector = <T extends TableRecord = TableRecord> ({
     updateSelectionStates(newColumns)
   }
 
-  const onColumnSelect = (selectedColumn: any) => {
+  const onColumnSelect = (selectedColumn: TableColumn<T>) => {
     const columnIndex = columns.findIndex(
       (column) =>
-        String(column.key).localeCompare(selectedColumn.key) === 0
+        String(column.key).localeCompare(String(selectedColumn.key)) === 0
     )
     const newColumns = columns.map((column, index) => {
       if (index === columnIndex) {
@@ -310,6 +309,9 @@ export const ColumnsSelector = <T extends TableRecord = TableRecord> ({
     updateSelectionStates(columns)
   }, [columns, searchValue])
 
+  const ColumnItem = useMemo(() => getItem<T>(draggingAvailable), [draggingAvailable])
+  const getScrollContainer = () => document.querySelector('.ant-drawer-body') as HTMLElement || document.body
+
   return (
     <SelectorWrapper>
       <Item className="selector-item select-all-item">
@@ -317,7 +319,7 @@ export const ColumnsSelector = <T extends TableRecord = TableRecord> ({
           <Checkbox checked={selectAll} indeterminate={indeterminate} disabled={!isAnyColsSelectable} onChange={onSelectAll} />
           <ItemLabel>
             <Text type="BTM3">
-              <Locale localizationKey="table.columnsSettings.selectAll" />
+              {t('table.columnsSettings.selectAll')}
             </Text>
           </ItemLabel>
         </CheckboxRow>
@@ -327,20 +329,15 @@ export const ColumnsSelector = <T extends TableRecord = TableRecord> ({
         onSortEnd={onSortEnd}
         helperClass="selector-item-dragging"
         draggingAvailable={draggingAvailable}
+        getContainer={getScrollContainer}
       >
-        {filteredColumns.map((value, index) =>
-          draggingAvailable ? (
-            <SortableItem
-              key={`item-${value.key}-${index}`}
-              index={index}
-              value={{ column: value, onChange: () => onColumnSelect(value) } as SortableItemProps}
-            />
-          ) : (
-            <NormalItem
-              key={`item-${value.key}-${index}`}
-              value={{ column: value, onChange: () => onColumnSelect(value) } as SortableItemProps}
-            />
-          ))}
+        {filteredColumns.map((value, index) => (
+          <ColumnItem
+            key={`item-${value.key}-${index}`}
+            index={index}
+            value={{ column: value, onChange: () => onColumnSelect(value) }}
+          />
+        ))}
       </SortableContainer>
     </SelectorWrapper>
   )

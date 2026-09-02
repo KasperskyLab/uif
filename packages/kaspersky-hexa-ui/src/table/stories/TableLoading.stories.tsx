@@ -19,12 +19,11 @@ import {
 } from './_commonConstants'
 
 const meta: Meta<ITableProps> = {
-  title: 'Hexa UI Components/Table/Loading',
+  title: 'Hexa UI Components/Table/Loading and Empty state',
   component: Table,
   args: {
     columns: basicTwoColumns,
-    dataSource: basicDataSource.slice(0, 60),
-    borderedStyle: false
+    dataSource: basicDataSource.slice(0, 60)
   },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],
@@ -38,6 +37,9 @@ const meta: Meta<ITableProps> = {
   tags: ['!autodocs']
 }
 export default meta
+
+export { EmptyText } from './Empty'
+export { EmptyHeightFull } from './EmptyHeightFull'
 
 export const Loader: Story = {
   render: BasicTableStory.bind({}),

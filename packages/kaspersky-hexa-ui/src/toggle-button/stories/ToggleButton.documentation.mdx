@@ -1,0 +1,180 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
+
+import { ToggleButton } from '../ToggleButton'
+import * as ToggleButtonStories from './ToggleButton.stories'
+import { toggleButtonDesignPropPresentation } from './ToggleButton.design.properties'
+
+<Meta of={ToggleButtonStories} name="ToggleButton Docs" />
+
+<DocPageLayout>
+  <DocPageHeader
+    title="ToggleButton"
+  />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **ToggleButton** — кнопка с независимым выбранным состоянием для включения и выключения параметров
+
+          Используйте ToggleButton для независимых переключателей в фильтрах, настройках и наборах признаков, когда пользователь может включать несколько вариантов одновременно. Подпись должна кратко объяснять, какое состояние будет включено.
+
+          Для выбора одного варианта из взаимоисключающего набора используйте компоненты с одиночным выбором. Если действие запускает операцию, а не меняет состояние интерфейса, выбирайте Button." />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**ToggleButton** переключает независимый параметр между выбранным и невыбранным состояниями. Кнопка отображает подпись, иконку перед ней и дополнительный элемент после неё. Настраиваются **mode**, **size**, **selected**, **disabled**, **loading**, **text**, **iconBefore**, **elementAfter** и **tooltip**."
+
+      />
+
+      <DocExampleBlock
+        title="value"
+        description="Обязательный проп. Идентификатор кнопки, который передаётся первым аргументом в **onChange**."
+        code={`
+          <ToggleButton value="notifications" text="Уведомления" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="mode"
+        description="Цветовой режим выбранной кнопки. Доступные значения: `grey`, `red`, `orange`, `yellow`, `grass`, `emerald`, `marengo`, `marina`, `purple`, `violet`. По умолчанию — `marina`."
+        code={`
+          <ToggleButton mode="marina" value="marina" text="marina" />
+          <ToggleButton mode="violet" value="violet" text="violet" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="size"
+        description="Размер кнопки и типографика подписи. Доступные значения: `extraSmall`, `small`, `medium`. По умолчанию — `medium`."
+        code={`
+          <ToggleButton size="extraSmall" value="extra-small" text="extraSmall" />
+          <ToggleButton size="small" value="small" text="small" />
+          <ToggleButton size="medium" value="medium" text="medium" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="selected"
+        description="Включает выбранное состояние. Доступные значения: `true`, `false`. Если проп не задан, состояние не выбрано."
+        code={`
+          <ToggleButton selected value="selected" text="Выбрана" />
+          <ToggleButton selected={false} value="not-selected" text="Не выбрана" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="disabled"
+        description="Отключает переключение и нативный checkbox. Доступные значения: `true`, `false`. Если проп не задан, кнопка доступна."
+        code={`
+          <ToggleButton disabled value="disabled" text="Недоступна" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="loading"
+        description="Показывает состояние загрузки и отключает переключение. Доступные значения: `true`, `false`. Если проп не задан, загрузка не отображается."
+        code={`
+          <ToggleButton loading value="loading" text="Загрузка" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="text"
+        description="Текстовая подпись кнопки. Если **text** не задан или пустой, отображается вариант только с иконками."
+        code={`
+          <ToggleButton value="with-text" text="С подписью" />
+          <ToggleButton
+            value="icon-only"
+            iconBefore={<Placeholder />}
+            tooltip="Подсказка"
+          />
+        `}
+        scope={{ Placeholder }}
+      />
+
+      <DocExampleBlock
+        title="iconBefore"
+        description="Произвольный React-узел перед подписью."
+        code={`
+          <ToggleButton value="icon" text="С иконкой" iconBefore={<Placeholder />} />
+        `}
+        scope={{ Placeholder }}
+      />
+
+      <DocExampleBlock
+        title="elementAfter"
+        description="Произвольный React-узел после подписи."
+        code={`
+          <ToggleButton value="after" text="Статус" elementAfter={<span>1</span>} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="tooltip"
+        description="Текст всплывающей подсказки для содержимого кнопки."
+        code={`
+          <ToggleButton value="tooltip" text="Наведение" tooltip="Текст подсказки" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="onChange"
+        description="Вызывается после изменения checkbox и получает **value** и новое состояние **checked**."
+        code={`
+          <ToggleButton
+            value="notifications"
+            text="Уведомления"
+            onChange={(value, checked) => alert(\`\${value}: \${checked}\`)}
+          />
+        `}
+
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={ToggleButtonStories} />
+      <AutodocArgsTable components={ToggleButton} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=165938:234164)"
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(toggleButtonDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="ToggleButton" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

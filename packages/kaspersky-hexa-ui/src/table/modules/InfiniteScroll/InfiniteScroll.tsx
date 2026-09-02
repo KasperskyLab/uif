@@ -47,8 +47,10 @@ export const InfiniteScroll = <T extends TableRecord = TableRecord> (
     pageSize,
     rowHeight,
     tableBodyHeight,
-    infiniteScrollPageGetter
+    infiniteScrollPageGetter: pageGetter
   } = pagination as TablePaginationConfig<T>
+
+  // TODO: не делать это все если нет virtualScroll
 
   const virtualInfiniteScrollProps = useVirtualInfiniteScroll({
     total,
@@ -56,7 +58,7 @@ export const InfiniteScroll = <T extends TableRecord = TableRecord> (
     pageSize,
     rowHeight,
     tableBodyHeight,
-    infiniteScrollPageGetter
+    infiniteScrollPageGetter: pageGetter
   })
 
   if (virtualInfiniteScrollProps) {
@@ -89,7 +91,7 @@ export const InfiniteScroll = <T extends TableRecord = TableRecord> (
   const [error, setError] = useState(false)
   const [finished, setFinished] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [pageGetter, setPageGetter] = useState<TablePaginationConfig<T>['infiniteScrollPageGetter'] | null>(null)
+
   const [rows, setRows] = useState(dataSource || [])
   const [page, setPage] = useState(
     rows.length
@@ -100,14 +102,6 @@ export const InfiniteScroll = <T extends TableRecord = TableRecord> (
   useEffect(() => () => {
     mountedRef.current = false
   }, [])
-
-  useEffect(() => {
-    const pageGetter = infiniteScrollPageGetter || null
-    setPageGetter((
-      pageGetter &&
-      (() => pageGetter)
-    ) || null)
-  }, [infiniteScrollPageGetter])
 
   useEffect(() => {
     setLoading(false)

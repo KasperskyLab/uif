@@ -51,7 +51,8 @@ const leftTabsCss = css`
   && > .ant-tabs-nav {
     width: 280px;
     padding: ${tabsSizes.tabList.padding};
-    border-right: 1px solid ${fromProps('divider.color')};
+    border-right: unset;
+    border-inline-end: 1px solid ${fromProps('divider.color')};
 
     .ant-tabs-nav-list {
       &::before {
@@ -64,7 +65,7 @@ const leftTabsCss = css`
     }
 
     .ant-tabs-tab {
-      text-align: left;
+      text-align: start;
       border: none;
       padding: 0;
       margin: 0;
@@ -105,10 +106,20 @@ const leftTabsCss = css`
 
   & > .ant-tabs-content-holder {
     border-left: unset;
+    border-inline-start: unset;
+
+    .ant-tabs-tabpane-active {
+      padding-left: unset;
+      padding-inline-start: 24px;
+    }
   }
 
   ${StyledTabPaneText} {
     width: 100%;
+  }
+
+  .hexa-ui-indicator {
+    position: static;
   }
 `
 
@@ -176,7 +187,8 @@ export const tabsCss = css<{
   }
 
   .ant-tabs-tab + .ant-tabs-tab {
-    margin-left: ${tabsSizes.tabList.gap};
+    margin-left: unset;
+    margin-inline-start: ${tabsSizes.tabList.gap};
   }
 
   ${props => props.hiddenTabsLength
@@ -271,7 +283,7 @@ export const tabPaneHeadCss = css<{ cssConfig: TabsCssConfig }>`
   .hexa-ui-indicator {
     position: absolute;
     top: 0px;
-    right: -6px;
+    inset-inline-end: -6px;
     z-index: 1;
   }
 
@@ -310,7 +322,7 @@ export const tabsWrapperCss = css<{
     }
 
     > .kl6-tabs-more-button {
-      right: calc(var(--spacing--padding_xl) + 4px);
+      inset-inline-end: calc(var(--spacing--padding_xl) + 4px);
     }
   }
 
@@ -336,17 +348,18 @@ export const tabsWrapperCss = css<{
   }
 
   .ant-tabs-extra-content {
-    padding-right: 4px;
+    padding-right: unset;
+    padding-inline-end: 4px;
   }
   
   & ${StyledExtraContent} {
     position: absolute;
-    right: 0px;
+    inset-inline-end: 0;
   }
 
   & > .kl6-tabs-more-button {
     position: absolute;
-    right: ${props => (props.extraContentWidth) + 'px'};
+    inset-inline-end: ${props => (props.extraContentWidth) + 'px'};
     color: ${fromProps('unselected.enabled.color')};
     ${props => props.selectedMoreButton && `
       color: ${fromProps('selected.enabled.color')(props)};

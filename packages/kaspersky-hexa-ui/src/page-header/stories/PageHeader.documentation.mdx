@@ -1,0 +1,136 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Button } from '@src/button'
+import { generateRoutes } from '@src/breadcrumbs/helpers'
+import { Text } from '@src/typography'
+
+import { Placeholder, Settings } from '@kaspersky/hexa-ui-icons/24'
+
+import { PageHeader } from '../PageHeader'
+import * as PageHeaderStories from './PageHeader.stories'
+import { pageHeaderDesignPropPresentation } from './PageHeader.design.properties'
+
+<Meta of={PageHeaderStories} name="PageHeader Docs" />
+
+<DocPageLayout>
+
+  <DocPageHeader title="PageHeader" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **PageHeader** — шапка страницы с контекстом, заголовком и действиями
+
+          **PageHeader** используйте в начале самостоятельной страницы или крупного раздела, когда пользователю нужно быстро понять текущий контекст, название экрана и доступное основное действие. Хлебные крошки помогают сохранить связь с уровнем навигации, а короткое пояснение — уточнить назначение раздела.
+
+          Не превращайте шапку в панель со множеством равнозначных действий: для основного сценария выберите один **Button**, а второстепенные операции перенесите в контент или отдельную панель инструментов. В компактных блоках и карточках используйте локальные заголовки вместо **PageHeader**."
+
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**PageHeader** формирует верхнюю часть страницы: может показывать путь навигации, заголовок, поясняющий текст, иконку, теги и действие. Основные настройки: **title**, **description**, **breadcrumbs**, **iconBefore**, **tagsAfter** и **elementAfter**."
+      />
+
+      <DocExampleBlock
+        title="title"
+        description="Текст заголовка страницы. Если проп не передан, заголовок рендерится без текста."
+        code={`
+          <PageHeader title="Projects" />
+        `}
+        scope={{ PageHeader }}
+      />
+
+      <DocExampleBlock
+        title="description"
+        description="Дополнительный текст под заголовком. Отображается, только когда передана непустая строка."
+        code={`
+          <PageHeader title="Projects" description="Manage team projects" />
+        `}
+        scope={{ PageHeader }}
+      />
+
+      <DocExampleBlock
+        title="breadcrumbs"
+        description="Данные для **Breadcrumbs** над основным содержимым шапки. Компонент передаёт им размер `small`."
+        code={`
+          <PageHeader title="Settings" breadcrumbs={{ routes: generateRoutes() }} />
+        `}
+        scope={{ PageHeader, generateRoutes }}
+      />
+
+      <DocExampleBlock
+        title="iconBefore"
+        description="Произвольный элемент перед заголовком: обычно иконка, которая уточняет контекст страницы."
+        code={`
+          <PageHeader title="Settings" iconBefore={<Settings />} />
+        `}
+        scope={{ PageHeader, Settings }}
+      />
+
+      <DocExampleBlock
+        title="tagsAfter"
+        description="Массив элементов **Tag.Group**, отображаемых после заголовка. Теги не рендерятся для пустого массива."
+        code={`
+          <PageHeader
+            title="Projects"
+            tagsAfter={[{ label: 'New' }, { label: '3 items' }]}
+          />
+        `}
+        scope={{ PageHeader }}
+      />
+
+      <DocExampleBlock
+        title="elementAfter"
+        description="Произвольный элемент в правой части шапки, например основное действие страницы."
+        code={`
+          <PageHeader title="Projects" elementAfter={<Button text="Create project" />} />
+        `}
+        scope={{ Button, PageHeader }}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={PageHeaderStories} />
+      <AutodocArgsTable components={PageHeader} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=117409:474760)"
+      />
+
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(pageHeaderDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="PageHeader" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

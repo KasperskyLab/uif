@@ -1,106 +1,45 @@
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { useResizeObserver } from '@helpers/useResizeObserver'
+import { ExpandableContent } from './ExpandableContent'
 import { Text } from '@src/typography'
 import cn from 'classnames'
-import React, { useLayoutEffect, useRef, useState } from 'react'
-import ResizeObserver from 'resize-observer-polyfill'
-import styled from 'styled-components'
+import React from 'react'
 
-import { expandableGradientCss, expandableTextCss } from './expandableTextCss'
-import { isEllipsisActive } from './helpers'
-import { TextExpander } from './TextExpander'
-import { ExpandableTextProps, ExpandableTextViewProps } from './types'
-import { useThemedExpandableText } from './useThemedExpandableText'
+import styles from './ExpandableText.module.scss'
+import { ExpandableTextProps } from './types'
 
-const StyledText = styled(Text).withConfig<ExpandableTextViewProps>({
-  shouldForwardProp: (prop) => !['cssConfig', 'clipped', 'expanded'].includes(prop as string)
-})`${expandableTextCss}`
-
-export const ExpandableText: React.FC<ExpandableTextProps> = (rawProps: ExpandableTextProps) => {
-  const themedProps = useThemedExpandableText(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <ExpandableTextView {...props} />
-}
-
-const GradientWrapper = styled(StyledText)`
-  ${expandableGradientCss}
-`
-
-const ExpandableTextView = ({
+/**
+ * ExpandableContent rendered as a typography element.
+ *
+ * All of the clipping, the toggle and the gradient live in ExpandableContent; what
+ * is added here is the text side of it — the typography root, word breaking, the
+ * native tooltip carrying the full value, and the nested rules for links and fields
+ * that end up inside a text cell.
+ */
+export function ExpandableText ({
   type = 'BTR3',
-  testAttributes,
-  onExpand = () => {},
+  theme,
+  altText,
+  onExpand,
   useGradient = false,
   className,
-  ...props
-}: ExpandableTextViewProps) => {
-  const ref = useRef<HTMLParagraphElement | null>(null)
-  const [clipped, setClipped] = useState<boolean>(false)
-  const [expanded, setExpanded] = useState<boolean>(false)
-  const contentWidth = useRef<number>(0)
-
-  const dimensions = useResizeObserver(ref, 150)
-
-  useLayoutEffect(() => {
-    const element = ref.current?.childNodes[0]
-    if (!element || !dimensions) return
-
-    const ellipsisState = isEllipsisActive(element as HTMLElement, contentWidth, expanded)
-    setClipped(ellipsisState)
-  }, [contentWidth, dimensions])
-
-  useLayoutEffect(() => {
-    const { current: element } = ref
-    if (!element) return
-
-    element.title = clipped
-      ? props.altText ?? typeof props.children === 'string' ? String(props.children) : ''
-      : ''
-
-    if (!clipped) {
-      setExpanded(false)
-      onExpand(false)
-    }
-  }, [clipped, props.altText])
-
-  const expand = React.useCallback(() => {
-    if (expanded) {
-      setExpanded(false)
-      onExpand(false)
-      setClipped(true)
-      return
-    }
-
-    if (ref.current) {
-      contentWidth.current = ref.current.scrollWidth
-    }
-
-    setExpanded(true)
-    onExpand(true)
-  }, [expanded])
-
-  const ResolvedComponent = useGradient
-    ? GradientWrapper
-    : StyledText
+  ...rawProps
+}: ExpandableTextProps): JSX.Element {
+  const { testAttributes, ...props } = useTestAttribute(rawProps)
 
   return (
-    <ResolvedComponent
-      className={cn(
-        { 'expandable-text-clipped': clipped },
-        { 'expandable-text-expanded': expanded },
-        { 'expandable-gradient': useGradient }
-      )}
-      ref={ref}
-      clipped={clipped}
-      expanded={expanded}
-      data-hide={expanded || !clipped ? true : undefined}
+    <ExpandableContent
+      {...props}
+      {...testAttributes}
+      as={Text}
       type={type}
       tabIndex={0}
-      {...testAttributes}
-      {...props}
-    >
-      <div className="inner-text-wrapper">{props.children}</div>
-      <TextExpander onClick={expand} className="hexa-ui-expander" />
-    </ResolvedComponent>
+      className={cn(styles.expandableText, getClassNameWithTheme(className, theme), className)}
+      clippedClassName="expandable-text-clipped"
+      expandedClassName="expandable-text-expanded"
+      clippedTitle={altText ?? (typeof props.children === 'string' ? props.children : undefined)}
+      useGradient={useGradient}
+      onExpand={onExpand}
+    />
   )
 }
