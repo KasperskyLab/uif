@@ -147,6 +147,8 @@ export const LoadingWithCode: Story = {
 }
 
 export const ManyChanges: Story = {
+  // Слишком большая сторя, => большой таймаут
+  tags: ['skip-visual'],
   args: {
     oldVersion: getVersions()[2],
     newVersion: getVersions()[3],

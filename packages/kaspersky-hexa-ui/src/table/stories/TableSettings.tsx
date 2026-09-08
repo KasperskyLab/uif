@@ -38,5 +38,7 @@ export const TableSettings: Story = {
         'onFilterChange'
       ]
     }
-  }
+  },
+  // отключаем, т.к используется функция random для age
+  tags: ['skip-visual']
 }

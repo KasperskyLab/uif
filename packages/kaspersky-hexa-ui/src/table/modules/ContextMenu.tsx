@@ -6,6 +6,7 @@ import { DropdownItemProps } from '@src/dropdown'
 import { ToolbarItems } from '@src/toolbar'
 import { mapToolbarItemsIntoDropdownItems } from '@src/toolbar/helpers'
 import { Text } from '@src/typography'
+import cn from 'classnames'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -87,6 +88,7 @@ export const ContextMenu = <T extends TableRecord = TableRecord>(
   const menuRef = React.useRef<ContextMenuRef>(null)
 
   const [overlay, setOverlay] = React.useState<DropdownItemProps[]>([])
+  const [hoveredRowKey, setHoveredRowKey] = React.useState<React.Key | null>(null)
 
   const onRow = React.useMemo<ITableProps<T>['onRow']>(() => {
     if (!contextMenu) {
@@ -95,9 +97,14 @@ export const ContextMenu = <T extends TableRecord = TableRecord>(
 
     return (row, rowIndex) => {
       const orig = props.onRow?.(row, rowIndex)
+      const rowKey = row.key ?? rowIndex
+      const isHovered = hoveredRowKey !== null && hoveredRowKey === rowKey
 
       return {
         ...orig,
+        className: cn(orig?.className, {
+          'table-row-hover': isHovered
+        }),
         onContextMenu: async event => {
           event.preventDefault()
 
@@ -124,13 +131,14 @@ export const ContextMenu = <T extends TableRecord = TableRecord>(
           }
 
           setOverlay(contextItems)
+          setHoveredRowKey(count > 1 ? null : (rowKey ?? rowIndex ?? null))
 
           menuRef.current?.open(event)
           orig?.onContextMenu?.(event)
         }
       }
     }
-  }, [t, contextMenu, props.onRow, props.pagination, store])
+  }, [t, contextMenu, props.onRow, props.pagination, store, hoveredRowKey])
 
   return (
     <>
@@ -139,6 +147,11 @@ export const ContextMenu = <T extends TableRecord = TableRecord>(
           ref={menuRef}
           klId="table-context-menu"
           overlay={overlay}
+          onVisibleChange={visible => {
+            if (!visible) {
+              setHoveredRowKey(null)
+            }
+          }}
           testId="table-context-menu"
         />
       )}

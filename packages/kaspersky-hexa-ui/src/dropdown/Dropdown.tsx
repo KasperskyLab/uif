@@ -63,7 +63,7 @@ export const Dropdown: FC<DropdownProps> & DropdownVariants = (rawProps: Dropdow
   const placement = mirrorPlacement(rawPlacement, direction) as RcDropdownProps['placement']
 
   const handleOverlaySelect: RcMenuProps['onSelect'] = (info) => {
-    setVisible(false)
+    handleVisibleChange(false)
     rawOnOverlaySelect?.(info)
   }
 

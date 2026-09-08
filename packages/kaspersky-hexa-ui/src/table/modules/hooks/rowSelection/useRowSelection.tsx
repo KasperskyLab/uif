@@ -134,20 +134,12 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
 
   useEffect(() => {
     if (!builtInRowSelection) return
-
-    let newSelectedAll: boolean
-
-    switch (paginationMode) {
-      case 'client':
-        newSelectedAll = dataSource.length !== 0 && selectedRowKeys.length === dataSource.length
-        break
-      case 'server':
-      case 'pseudo-server':
-        newSelectedAll = dataSource.length !== 0 && !!total && selectedRowKeys.length === total
-        break
+    // isSelectedAll for server pagination can be set only from SelectAll dropdown or if it is equals to defined total
+    if (!useDataSourceFunction) {
+      setIsSelectedAll(dataSource.length !== 0 && selectedRowKeys.length === dataSource.length)
+    } else if (dataSource.length !== 0 && typeof total === 'number' && total > 0 && selectedRowKeys.length === total) {
+      setIsSelectedAll(true)
     }
-
-    setIsSelectedAll(prev => prev !== newSelectedAll ? newSelectedAll : prev)
   }, [useDataSourceFunction, selectedRowKeys.length, dataSource.length, total])
 
   useEffect(() => {

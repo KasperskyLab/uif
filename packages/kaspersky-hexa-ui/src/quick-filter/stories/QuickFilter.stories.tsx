@@ -51,5 +51,7 @@ export const QuickFilter: Story = {
 }
 
 export const WithTable: Story = {
+  // недетерминированный рендер: таблица догружается разным числом строк
+  tags: ['skip-visual'],
   render: (args) => <WithTableExample {...args} />
 }

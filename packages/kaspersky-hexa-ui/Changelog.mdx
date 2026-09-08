@@ -1,6 +1,60 @@
 
 
 ### 2026-09-07
+* fix: Fix field with condition after displaying hint in filters BUMP_CONSOLE 
+<details>
+<summary>description</summary>
+
+- Исправлена логика отображения полей фильтра после появления подсказки, устранён конфликт условий, вызывавший неверное поведение UI. В стилях боковой панели удалён параметр `align-items: end`, что приводит к корректному выравниванию элементов и предотвращает смещение фильтров после вывода подсказки. Эти изменения обеспечивают стабильную работу условных фильтров и улучшенную визуальную консистентность.
+
+- Затронутые файлы/компоненты
+    - Table
+
+</details>
+
+* feat: adopt playwright visual tests 
+<details>
+<summary>description</summary>
+
+- Добавлены визуальные регрессионные тесты на базе Playwright: реализован декоратор withVisualData, обновлена конфигурация Storybook, добавлены Docker‑file и compose‑файлы compose.visual.pipeline.yaml для изолированного запуска, а также playwright.visual.config.ts и новый тест tests/visual/visual.test.ts, сравнивающий скриншоты всех историй. Удалены устаревшие puppeteer‑скриншотные тесты и их артефакты, а в README добавлена ссылка на документацию VISUAL_TESTS.md. В некоторых story‑файлах введены параметры visual и теги skip-visual/visual-timeout для управления включением и таймаутом визуальных тестов.
+
+- Затронутые файлы/компоненты
+    - Code-compare
+    - Gallery
+    - Quick-filter
+    - Table
+    - Tree
+    - .gitignore
+    - .storybook
+    - compose.visual.pipeline.yaml
+    - compose.visual.yaml
+    - docker-compose.yml
+    - Dockerfile
+    - Dockerfile.visual
+    - package.json
+    - playwright.visual.config.ts
+    - README.md
+    - screenshots
+    - tests
+    - tsconfig.build.json
+    - tsconfig.json
+    - VISUAL_TESTS.md
+
+</details>
+
+* feat: [hexa-ui][table] display row hover state on context menu open 
+<details>
+<summary>description</summary>
+
+- Добавлен проп onVisibleChange в тип ContextMenuProps и его вызов при изменении видимости, а в Dropdown заменён прямой вызов setVisible на handleVisibleChange, чтобы корректно передавать событие. В модуле таблицы внедрён стейт hoveredRowKey для отслеживания текущей строки, условные классы table-row-hover и сброс этого состояния при закрытии контекстного меню. CSS‑правила расширены, чтобы стиль table-row-hover применялся к ячейкам и градиентам как для обычных, так и для выбранных строк. Это обеспечивает сохранение визуального состояния «hover» строки во время открытого контекстного меню.
+
+- Затронутые файлы/компоненты
+    - Dropdown
+    - Table
+    - helpers
+
+</details>
+
 * fix: [hexa-ui][checkbox] validate documentation 
 <details>
 <summary>description</summary>

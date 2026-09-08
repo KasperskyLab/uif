@@ -3,7 +3,7 @@ import { Dropdown, DropdownProps } from '@src/dropdown'
 import React, { CSSProperties, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 
-export type ContextMenuProps = Pick<DropdownProps, 'overlay'> & TestingProps
+export type ContextMenuProps = Pick<DropdownProps, 'overlay' | 'onVisibleChange'> & TestingProps
 
 export type ContextMenuRef = {
   open: (event: React.MouseEvent<any, MouseEvent>) => void
@@ -36,6 +36,7 @@ export const ContextMenu: React.FC<ContextMenuProps & React.RefAttributes<Contex
           setTriggerStyle(undefined)
           unsubscribeRef.current?.()
         }
+        props.onVisibleChange?.(visible)
       }}
       selectedItemsKeys={[]}
       trigger={['click']}
