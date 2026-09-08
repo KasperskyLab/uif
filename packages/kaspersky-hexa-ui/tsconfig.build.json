@@ -12,6 +12,7 @@
     ".storybook",
     "docs",
     "screenshots",
+    "setupTests.ts",
     "**/__mocks__",
     "**/test-utils"
   ]

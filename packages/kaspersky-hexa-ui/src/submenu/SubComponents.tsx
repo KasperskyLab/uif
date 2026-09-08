@@ -81,7 +81,7 @@ export const SubmenuRow: FC<RowViewProps & { hasChildren: boolean }> = ({
           className={styles.arrowButton}
           interactive={false}
           onClick={onCollapsibleClick}
-          icon={row.opened ? <ArrowDownSolid /> : <ArrowRightSolid />}
+          icon={row.opened ? <ArrowDownSolid /> : <ArrowRightSolid className={styles.arrowIcon} />}
           size="small"
         />
       )}
@@ -124,7 +124,14 @@ export const SubmenuTitle: FC<TitleProps & { testAttributes: TestingAttributes }
     <Text className={styles.titleText} type="BTR4">
       {typeof props.text ==='string' ? <TextReducer>{props.text}</TextReducer> : props.text}
     </Text>
-    {props.action && <ActionButton icon={props.action?.icon} onClick={props.action?.onClick} />}
+    {props.elementAfter && <span className={styles.titleAfter}>{props.elementAfter}</span>}
+    {props.action && (
+      <ActionButton
+        className={styles.titleAction}
+        icon={props.action?.icon}
+        onClick={props.action?.onClick}
+      />
+    )}
   </div>
 )
 

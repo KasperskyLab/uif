@@ -1,32 +1,18 @@
 import { useGlobalStyles } from '@helpers/hooks/useGlobalStyles'
-import { useStateProps } from '@helpers/hooks/useStateProps'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { ActionButton } from '@src/action-button'
 import AntdInput from 'antd/es/input'
-import React, {
-  ChangeEvent,
-  FC,
-  forwardRef,
-  useEffect,
-  useRef
-} from 'react'
-import styled from 'styled-components'
+import React, { ChangeEvent, FC, forwardRef } from 'react'
 
-import { inputStyles } from './inputCss'
 import { InputMasked } from './InputMasked'
 import { InputNumber } from './InputNumber'
 import { InputPassword } from './InputPassword'
 import { Textarea } from './Textarea'
-import { TextboxProps, TextboxVariants } from './types'
+import { StyledInput, TextboxInternal } from './TextboxInternal'
+import { TextboxInternalProps, TextboxProps, TextboxVariants } from './types'
 import { UrlInput } from './UrlInput'
 import { useClassNamedTextbox } from './useClassNamedTextbox'
 import { useThemedTextbox } from './useThemedTextbox'
 
-const StyledInput = styled(AntdInput).withConfig({
-  shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
-})`
-  ${inputStyles}
-`
 // @deprecated Use Textbox instead
 export const TextboxWithRef = forwardRef<AntdInput, TextboxProps>((props: TextboxProps, ref) => {
   const {
@@ -49,63 +35,8 @@ export const TextboxWithRef = forwardRef<AntdInput, TextboxProps>((props: Textbo
   )
 })
 
-export const Textbox: FC<TextboxProps> & TextboxVariants = (props: TextboxProps) => {
-  const {
-    autoFocus,
-    onChange,
-    onClearClick,
-    onKeyDown,
-    testAttributes,
-    showClearButton,
-    value,
-    suffix,
-    ...rest
-  } = useTestAttribute(useThemedTextbox(useClassNamedTextbox(props)))
-
-  const [innerValue, setInnerValue] = useStateProps(value || '')
-
-  const ref = useRef<AntdInput | null>(null)
-  useEffect(() => {
-    if (autoFocus) ref?.current?.focus()
-  }, [autoFocus])
-
-  const showClear = showClearButton && !!innerValue?.length && !props.disabled && !props.readOnly
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newVal = e.target.value
-    setInnerValue(newVal)
-    onChange?.(newVal)
-  }
-
-  const handleClear = () => {
-    if (onChange) {
-      onChange('')
-      return
-    }
-    setInnerValue('')
-  }
-
-  return (
-    <StyledInput
-      ref={ref}
-      value={innerValue}
-      onChange={handleChange}
-      onKeyDown={(event) => { event.stopPropagation(); onKeyDown?.(event) }}
-      suffix={
-        showClear ? (
-          <ActionButton
-            onClick={onClearClick || handleClear}
-            mode="filled"
-            testId="clear-button"
-          />
-          //https://4x.ant.design/components/input/#Why-Input-lose-focus-when-change-prefix/suffix/showCount
-        ) : suffix || <span />
-      }
-      {...testAttributes}
-      {...rest}
-    />
-  )
-}
+export const Textbox: FC<TextboxProps> & TextboxVariants = (props: TextboxProps) =>
+  <TextboxInternal {...props as TextboxInternalProps} />
 
 Textbox.Textarea = Textarea
 Textbox.Password = InputPassword

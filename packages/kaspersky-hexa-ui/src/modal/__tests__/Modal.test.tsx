@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 
 import '@testing-library/jest-dom'
 import { Modal } from '../Modal'
-import { ModalProps } from '../types'
+import { ModalPosition, ModalProps } from '../types'
 
 const handleMockChange = jest.fn()
 const actionsButtons: ModalProps['actions'] = {
@@ -83,7 +83,7 @@ describe('Modal', () => {
       expect(baseElement.querySelector(`[kl-id="${SECOND_CUSTOM_TEST_ID}"]`)).toBeInTheDocument())
   })
 
-  test('should recieve componentId prop', async () => {
+  test('should receive testId prop', async () => {
     const { baseElement } = render(
       <Modal testId={testId} mode="default" content="" visible />
     )
@@ -349,5 +349,68 @@ describe('Modal', () => {
   it('should not render antd default footer if actions is not passed', async () => {
     const modal = render(<Modal testId="testModal" visible />)
     expect(modal.container.querySelector('.ant-modal-footer')).toBeFalsy()
+  })
+
+  describe('dialog', () => {
+    const positions: ModalPosition[] = ['left', 'center', 'right']
+
+    it.each(positions)('should render with dialog={{ position: "%s" }}', async (position) => {
+      const { baseElement } = render(
+        <Modal
+          testId={testId}
+          mode="default"
+          content="content"
+          header="Title"
+          dialog={{ position }}
+          visible
+        />
+      )
+
+      const modalWrap = baseElement.querySelector('.ant-modal-wrap')
+
+      await waitFor(() => expect(modalWrap).toHaveClass('dialogWrap'))
+      await waitFor(() => expect(modalWrap).toHaveClass(position))
+    })
+
+    it('should not block interaction with background elements when dialog is set', async () => {
+      const onButtonClick = jest.fn()
+
+      render(
+        <>
+          <Button onClick={onButtonClick}>
+            Background Button
+          </Button>
+          <Modal
+            testId={testId}
+            mode="default"
+            content="content"
+            dialog={{ position: 'center' }}
+            visible
+          />
+        </>
+      )
+
+      await userEvent.click(screen.getByRole('button', { name: 'Background Button' }))
+
+      expect(onButtonClick).toHaveBeenCalledTimes(1)
+    })
+
+    it('should force small size regardless of size prop', async () => {
+      const { baseElement } = render(
+        <Modal
+          testId={testId}
+          mode="default"
+          content="content"
+          size="large"
+          dialog={{ position: 'center' }}
+          visible
+        />
+      )
+
+      const modal = baseElement.querySelector('.ant-modal') as HTMLElement
+
+      await waitFor(() => expect(modal).toHaveClass('small'))
+      await waitFor(() => expect(modal).not.toHaveClass('large'))
+    })
   })
 })

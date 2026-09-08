@@ -4,7 +4,7 @@
 
 .content {
   flex: 1 1;
-  padding-right: 24px;
+  padding-inline-end: 24px;
 }
 
 .navigation {
@@ -29,9 +29,9 @@
 
   .items {
     flex: 1 1;
-    border-left: 1px solid var(--tabs--border);
+    border-inline-start: 1px solid var(--tabs--border);
     border-radius: 1px;
-    padding-left: 5px;
+    padding-inline-start: 5px;
 
     &:not(:first-child) {
       margin-top: 8px;
@@ -54,7 +54,7 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      left: -6px;
+      inset-inline-start: -6px;
       width: 2px;
       border-radius: 2px;
       background: var(--tabs_item--border--selected--base);

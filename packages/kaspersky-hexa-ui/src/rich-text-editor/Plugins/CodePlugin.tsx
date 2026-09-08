@@ -12,9 +12,15 @@ export const CodePlugin: LeafPluginType = {
   leafType: CustomFormats.CODE,
   icon: <Code />,
   hotKey: 'mod+`',
-  render: ({ children, attributes }) => (
+  render: ({ children, attributes, disabled, readOnly }) => (
     <code className={styles.codePlugin}>
-      <InlineElement attributes={attributes}>{children}</InlineElement>
+      <InlineElement
+        attributes={attributes}
+        disabled={disabled}
+        readOnly={readOnly}
+      >
+        {children}
+      </InlineElement>
     </code>
   )
 }

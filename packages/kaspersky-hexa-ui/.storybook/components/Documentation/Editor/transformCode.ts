@@ -14,9 +14,14 @@ const isAppComponentDefinition = (code: string): boolean =>
  */
 export const transformCode = (code: string, setupCode?: string): string => {
   const unwrappedCode = stripImports(unwrapDisplayCode(code))
+  const setup = setupCode?.trim()
+
+  // Позволяет скрыть stateful App в setupCode и оставить в редакторе только JSX компонента.
+  if (setup && isAppComponentDefinition(setup)) {
+    return `${stripImports(setup)};\nrender(<App />);`
+  }
 
   if (isAppComponentDefinition(unwrappedCode)) {
-    const setup = setupCode?.trim()
     const cleanCode = setup ? `${stripImports(setup)}\n\n${unwrappedCode}` : unwrappedCode
 
     return `${cleanCode};\nrender(<App />);`
@@ -30,7 +35,6 @@ export const transformCode = (code: string, setupCode?: string): string => {
   cleanCode = cleanCode.replace(/export\s+default\s+function\s+App/g, 'function App')
   cleanCode = cleanCode.replace(/export\s+default\s+(?!App\b)/g, 'const App = ')
 
-  const setup = setupCode?.trim()
   if (setup) {
     cleanCode = `${stripImports(setup)}\n\n${cleanCode}`
   }

@@ -155,3 +155,14 @@ export const ManyChanges: Story = {
     newValue: getCodeByVersion(getVersions()[3])
   }
 }
+
+export const Readonly: Story = {
+  args: {
+    oldVersion: getVersions()[0],
+    newVersion: getVersions()[1],
+    options: getVersions(),
+    oldValue: getCodeByVersion(getVersions()[0]),
+    newValue: getCodeByVersion(getVersions()[1]),
+    readOnly: true
+  }
+}

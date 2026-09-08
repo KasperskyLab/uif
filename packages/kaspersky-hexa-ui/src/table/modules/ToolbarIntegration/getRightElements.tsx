@@ -1,14 +1,12 @@
 import { SetState } from '@helpers/hooks/useStateProps'
-import { ITableProps, TableRecord } from '@src/table'
-import { getTabsConfig } from '@src/table/helpers/getTabsConfig'
 import { Toolbar } from '@src/toolbar'
 import React, { ReactNode } from 'react'
 
-import { Reload } from '@kaspersky/hexa-ui-icons/16'
-import { Filter, FilterWithIndicator } from '@kaspersky/hexa-ui-icons/16'
+import { Filter, FilterWithIndicator, Reload } from '@kaspersky/hexa-ui-icons/16'
 
+import { ITableProps, TableRecord, useTableUpdate } from '../../'
+import { getTabsConfig } from '../../helpers/getTabsConfig'
 import { FilterApi } from '../Filters/FilterApi'
-import { isFilterConfig } from '../Filters/helpers'
 
 import { Search } from './Search'
 
@@ -17,6 +15,7 @@ type GetRightElementsProps<T extends TableRecord> =
     ITableProps<T>,
     'toolbar' |
     'dataSource' |
+    'clientSearchFields' |
     'columns' |
     'onSearch' |
     'onClientSearch' |
@@ -26,24 +25,23 @@ type GetRightElementsProps<T extends TableRecord> =
     filterApi?: FilterApi<T> | null
     setFilteredRows: SetState<ITableProps<T>['dataSource']>
     setExpandedRowKeys: SetState<React.Key[]>
-    setOpenFilterSidebar: SetState<boolean>
-    setOpenColumnsSelector: SetState<boolean>
   }
 
 export const getRightElements = <T extends TableRecord>({
   toolbar,
   dataSource,
+  clientSearchFields,
   columns,
   table,
   filterApi,
   setFilteredRows,
   setExpandedRowKeys,
-  setOpenFilterSidebar,
-  setOpenColumnsSelector,
   onSearch,
   onClientSearch,
   enableSearchHighlighting
 }: GetRightElementsProps<T>): ReactNode[] => {
+  const updateContext = useTableUpdate<T>()
+
   if (!toolbar) return []
 
   const rightElements: ReactNode[] = []
@@ -57,10 +55,12 @@ export const getRightElements = <T extends TableRecord>({
         dataSource={dataSource}
         onSearch={onSearch}
         onClientSearch={onClientSearch}
+        clientSearchFields={clientSearchFields}
         columns={columns}
         tableContainer={table}
         enableSearchHighlighting={enableSearchHighlighting}
         collapsibleSearch={toolbar.collapsibleSearch}
+        placeholder={toolbar.searchPlaceholder}
       />
     )
   }
@@ -72,7 +72,7 @@ export const getRightElements = <T extends TableRecord>({
       <Toolbar.FilterSidebar
         key="filter-sidebar"
         testId="table-filter-sidebar"
-        onClick={() => setOpenFilterSidebar(true)}
+        onClick={() => updateContext({ showFilterSidebar: true })}
         showIndicator={filtersApplied}
         iconBefore={filtersApplied ? <FilterWithIndicator /> : <Filter />}
       />
@@ -108,7 +108,7 @@ export const getRightElements = <T extends TableRecord>({
         key="settings"
         testId="table-settings"
         klId="table-configuration"
-        onClick={() => setOpenColumnsSelector(true)}
+        onClick={() => updateContext({ showColumnsSelector: true })}
       />
     )
   }

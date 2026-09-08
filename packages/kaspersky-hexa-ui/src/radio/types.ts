@@ -9,6 +9,7 @@ export type RadioOption = WithAdditionalContent<{
   value: string,
   disabled?: boolean,
   readonly?: boolean,
+  invalid?: boolean,
   required?: boolean,
   tooltip?: ReactNode
 }>

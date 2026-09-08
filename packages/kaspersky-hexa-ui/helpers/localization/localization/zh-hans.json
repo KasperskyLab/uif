@@ -239,8 +239,8 @@
       "daysLeft": "剩余 {{count}} 天",
       "termDays": "{{count}} 天",
       "statuses": {
-        "valid": "主动响应式",
-        "expired": "已过期"
+        "valid": "活动",
+        "expired": "已到期"
       }
     },
     "input": {

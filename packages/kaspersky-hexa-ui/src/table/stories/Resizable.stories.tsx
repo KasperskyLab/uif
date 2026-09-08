@@ -12,6 +12,7 @@ import {
   Story,
   Wrapper
 } from './_commonConstants'
+import { HorizontalScroll as HorizontalScrollStory } from './HorizontalScroll'
 
 const columnsManual = [
   basicTwoColumns[0],
@@ -77,14 +78,15 @@ const dataSource = Array(20).fill(null).map((_, i) => ({
 }))
 
 const meta: Meta<ITableProps> = {
-  title: 'Hexa UI Components/Table/Resizable',
+  title: 'Hexa UI Components/Table/Resizing',
   component: Table,
   argTypes: {
     columns: genArgType('columns[n].resizing = { disabled: true } - disable resizing for n`th column'),
     onColumnResize: basicArgTypes.onColumnResize,
     resizingMode: basicArgTypes.resizingMode
   },
-  parameters: { controls: { exclude: ['dataSource'] } }
+  parameters: { controls: { exclude: ['dataSource'] } },
+  tags: ['!autodocs']
 }
 export default meta
 
@@ -100,8 +102,7 @@ export const Resizable: Story = {
   ),
   args: {
     columns: columnsManual,
-    dataSource: dataSourceManual,
-    borderedStyle: false
+    dataSource: dataSourceManual
   }
 }
 
@@ -126,8 +127,7 @@ export const ResizableLast: Story = {
   args: {
     columns,
     dataSource,
-    resizingMode: 'last',
-    borderedStyle: false
+    resizingMode: 'last'
   }
 }
 
@@ -156,9 +156,12 @@ export const ResizableMax: Story = {
   args: {
     columns,
     dataSource,
-    resizingMode: 'max',
-    borderedStyle: false
+    resizingMode: 'max'
   }
 }
 
-export { HorizontalScroll } from './HorizontalScroll'
+export const HorizontalScroll: Story = {
+  ...HorizontalScrollStory,
+  name: 'Horizontal scroll'
+}
+export { ColumnsWidthPercent as Resize } from './ColumnsWidthPercent'

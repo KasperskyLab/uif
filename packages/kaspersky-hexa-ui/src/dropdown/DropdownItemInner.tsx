@@ -7,7 +7,6 @@ import { DropdownItemInnerProps } from './types'
 export const DropdownItemInner: FC<DropdownItemInnerProps> = ({
   children,
   icon,
-  type,
   tooltip,
   description,
   componentsBefore,
@@ -42,7 +41,7 @@ export const DropdownItemInner: FC<DropdownItemInnerProps> = ({
       }
     </div>
   )
-  , [children, componentsAfter, componentsBefore, description, type])
+  , [children, componentsAfter, componentsBefore, description, icon])
 
   return tooltip
     ? (

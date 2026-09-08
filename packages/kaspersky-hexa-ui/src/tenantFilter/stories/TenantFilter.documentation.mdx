@@ -1,0 +1,221 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+
+import { TenantFilter } from '../TenantFilter'
+import * as TenantFilterStories from './TenantFilter.stories'
+
+export const tenantTreeData = [
+  {
+    title: 'Основной тенант',
+    key: 'main',
+    children: [
+      {
+        title: 'Подтенант 1',
+        key: 'subtenant-1',
+        children: [
+          {
+            title: 'Подтенант 1.1',
+            key: 'subtenant-1-1',
+            children: [{ title: 'Подтенант 1.1.1', key: 'subtenant-1-1-1' }],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Тенант филиала',
+    key: 'branch',
+    children: [
+      {
+        title: 'Подтенант филиала',
+        key: 'branch-subtenant',
+        children: [
+          { title: 'Подтенант филиала 1.1', key: 'branch-subtenant-1-1' },
+        ],
+      },
+    ],
+  },
+]
+
+export const tenantTreeKeys = [
+  'main',
+  'subtenant-1',
+  'subtenant-1-1',
+  'subtenant-1-1-1',
+  'branch',
+  'branch-subtenant',
+  'branch-subtenant-1-1',
+]
+
+<Meta of={TenantFilterStories} name="TenantFilter Docs" />
+
+<DocPageLayout>
+  <DocPageHeader title="TenantFilter" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        title="Описание компонента"
+        description="**TenantFilter** — фильтр для выбора тенантов из иерархического списка. Используйте его, когда результаты или настройки интерфейса должны ограничиваться выбранными тенантами и их дочерними элементами."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        title="data"
+        description="Обязательный проп. **data** задаёт дерево тенантов: у каждого элемента есть **title** и **key**, а дочерние элементы передаются в **children**."
+        code={`
+          <TenantFilter
+            data={tenantTreeData}
+            defaultSelectedKeys={[]}
+            allTenantsKeys={tenantTreeKeys}
+          />
+        `}
+        scope={{ tenantTreeData, tenantTreeKeys }}
+      />
+
+      <DocExampleBlock
+        title="defaultSelectedKeys"
+        description="Обязательный проп. **defaultSelectedKeys** определяет ключи тенантов, выбранных при первом рендере."
+        code={`
+          <TenantFilter
+            data={tenantTreeData}
+            defaultSelectedKeys={['subtenant-1-1-1']}
+            allTenantsKeys={tenantTreeKeys}
+          />
+        `}
+        scope={{ tenantTreeData, tenantTreeKeys }}
+      />
+
+      <DocExampleBlock
+        title="allTenantsKeys"
+        description="Обязательный проп. **allTenantsKeys** содержит ключи всех тенантов. Если **defaultSelectedKeys** пуст, компонент раскрывает дерево по этим ключам."
+        code={`
+          <TenantFilter
+            data={tenantTreeData}
+            defaultSelectedKeys={[]}
+            allTenantsKeys={tenantTreeKeys}
+          />
+        `}
+        scope={{ tenantTreeData, tenantTreeKeys }}
+      />
+
+      <DocExampleBlock
+        title="Плоский список"
+        description="Для списка тенантов без подчинённых элементов передайте элементы **data** без **children**."
+        code={`
+          <TenantFilter
+            data={[
+              { title: 'Тенант 1', key: 'tenant-1' },
+              { title: 'Тенант 2', key: 'tenant-2' },
+              { title: 'Тенант 3', key: 'tenant-3' },
+              { title: 'Тенант 4', key: 'tenant-4' },
+              { title: 'Тенант 5', key: 'tenant-5' },
+            ]}
+            defaultSelectedKeys={[]}
+            allTenantsKeys={['tenant-1', 'tenant-2', 'tenant-3', 'tenant-4', 'tenant-5']}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="titleText и counterText"
+        description="**titleText** отображает заголовок фильтра. **counterText** добавляет подпись перед количеством выбранных тенантов. По умолчанию оба значения — пустая строка, поэтому соответствующие элементы заголовка не отображаются."
+        code={`
+          <TenantFilter
+            titleText="Тенанты"
+            counterText="Выбрано"
+            data={tenantTreeData}
+            defaultSelectedKeys={[]}
+            allTenantsKeys={tenantTreeKeys}
+          />
+        `}
+        scope={{ tenantTreeData, tenantTreeKeys }}
+      />
+
+      <DocExampleBlock
+        title="withSearch"
+        description="**withSearch** управляет отображением поля поиска. По умолчанию — `true`. Поиск раскрывает ветви, в которых найдены элементы по введённой строке."
+        previewGap={40}
+        code={`
+          <TenantFilter
+            withSearch={true}
+            data={tenantTreeData}
+            defaultSelectedKeys={[]}
+            allTenantsKeys={tenantTreeKeys}
+          />
+
+          <TenantFilter
+            withSearch={false}
+            data={tenantTreeData}
+            defaultSelectedKeys={[]}
+            allTenantsKeys={tenantTreeKeys}
+          />
+        `}
+        scope={{ tenantTreeData, tenantTreeKeys }}
+      />
+
+      <DocExampleBlock
+        title="withButton и buttonText"
+        description="**withButton** отображает кнопку применения фильтра; по умолчанию — `false`. **buttonText** задаёт её подпись и по умолчанию равен пустой строке."
+        code={`
+          <TenantFilter
+            withButton
+            buttonText="Применить"
+            data={tenantTreeData}
+            defaultSelectedKeys={[]}
+            allTenantsKeys={tenantTreeKeys}
+          />
+        `}
+        scope={{ tenantTreeData, tenantTreeKeys }}
+      />
+
+      <DocExampleBlock
+        title="withIcon"
+        description="**withIcon** оборачивает счётчик выбранных тенантов в отдельный контейнер и сдвигает его на `20 px` влево. По умолчанию — `false`. Проп не отображает иконку; настройка действует, когда задан **counterText**."
+        code={`
+          <TenantFilter
+            counterText="Выбрано"
+            withIcon
+            data={tenantTreeData}
+            defaultSelectedKeys={[]}
+            allTenantsKeys={tenantTreeKeys}
+          />
+        `}
+        scope={{ tenantTreeData, tenantTreeKeys }}
+      />
+
+      <DocExampleBlock
+        title="applyHandler"
+        description="**applyHandler** вызывается с массивом выбранных ключей. Если **withButton**=`false`, компонент вызывает обработчик после изменения выбора с задержкой; при **withButton**=`true` — по нажатию кнопки."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={TenantFilterStories} />
+      <AutodocArgsTable components={TenantFilter} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="TenantFilter" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

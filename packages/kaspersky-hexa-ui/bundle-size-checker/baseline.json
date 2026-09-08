@@ -1,0 +1,26 @@
+{
+  "Button": {
+    "entryRaw": 695009,
+    "entryGz": 157430,
+    "totalGz": 225132,
+    "chunks": 3
+  },
+  "CommonSet": {
+    "entryRaw": 875330,
+    "entryGz": 207772,
+    "totalGz": 275483,
+    "chunks": 3
+  },
+  "Table": {
+    "entryRaw": 3170477,
+    "entryGz": 758612,
+    "totalGz": 833254,
+    "chunks": 3
+  },
+  "Everything": {
+    "entryRaw": 5009989,
+    "entryGz": 1302989,
+    "totalGz": 1377662,
+    "chunks": 3
+  }
+}

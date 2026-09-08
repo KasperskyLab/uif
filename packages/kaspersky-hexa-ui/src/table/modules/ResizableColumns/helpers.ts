@@ -1,8 +1,9 @@
 import cloneDeepWith from 'lodash/cloneDeepWith'
 
-import { isColumnReadonly, isReactServiceParam } from '../../helpers/common'
+import { isColumnReadonly, isColumnVisible, isReactServiceParam, mapVisibleColumns } from '../../helpers/common'
 import { getPersistentStorageValue } from '../../helpers/persistentStorage'
 import { ITableProps, TableColumn, TableRecord, TableResizingMode } from '../../types'
+import { DND_COLUMN_KEY } from '../Draggable'
 
 const cloneColumns = <T extends TableRecord = TableRecord>(columns: TableColumn<T>[]): TableColumn<T>[] =>
   cloneDeepWith(columns, (value, key) => {
@@ -18,7 +19,7 @@ function removeWidthFromLastColumn <T extends TableRecord = TableRecord> (column
     let columnIndex = -1
 
     for (let i = columnsCopy.length - 1; i >= 0; --i) {
-      if (isColumnReadonly(columnsCopy[i])) {
+      if (isColumnReadonly(columnsCopy[i]) || !isColumnVisible(columnsCopy[i])) {
         continue
       }
 
@@ -40,7 +41,7 @@ function removeWidthFromLastColumn <T extends TableRecord = TableRecord> (column
       }
     }
 
-    if (needRemoveWidth) {
+    if (needRemoveWidth && columnIndex >= 0) {
       columnsCopy[columnIndex].width = undefined
     }
   }
@@ -55,7 +56,7 @@ function removeWidthFromMaxColumn <T extends TableRecord = TableRecord> (columns
   let maxColumnWidth = 0
 
   for (let i = 0; i < columnsCopy.length; ++i) {
-    if (isColumnReadonly(columnsCopy[i])) {
+    if (isColumnReadonly(columnsCopy[i]) || !isColumnVisible(columnsCopy[i])) {
       continue
     }
 
@@ -77,8 +78,12 @@ function removeWidthFromMaxColumn <T extends TableRecord = TableRecord> (columns
     }
   }
 
-  if (columnsCopy.length >= 1 && maxColumnIndex >= 0) {
-    columnsCopy[maxColumnIndex].width = undefined
+  const maxColumn = maxColumnIndex >= 0 ? columnsCopy[maxColumnIndex] : undefined
+
+  // Guard the fallback (maxColumnIndex init 0): never clear width on a hidden/readonly column — it is
+  // not rendered and its width must pass through unchanged (mirrors removeWidthFromLastColumn).
+  if (maxColumn && isColumnVisible(maxColumn) && !isColumnReadonly(maxColumn)) {
+    maxColumn.width = undefined
   }
 
   return columnsCopy
@@ -89,11 +94,13 @@ export function applyResizingMode <T extends TableRecord = TableRecord> (
   resizingMode: TableResizingMode,
   defaultWidth?: number
 ): TableColumn<T>[] {
-  const applyDefaultWidth = (columns: any[]) => {
-    return columns.map((column) => {
-      return isColumnReadonly(column) ? column : { ...column, width: column.width ? column.width : defaultWidth }
-    })
-  }
+  const applyDefaultWidth = (columns: TableColumn<T>[]) => (
+    mapVisibleColumns(columns, (column) => (
+      isColumnReadonly(column) || (column.key === DND_COLUMN_KEY)
+        ? column
+        : { ...column, width: column.width ? column.width : defaultWidth }
+    ))
+  )
 
   switch (resizingMode) {
     case 'max':
@@ -113,7 +120,7 @@ export const selectAutoResizingMode = function <T extends TableRecord = TableRec
   maxColumnsForAutoResizing: number,
   overflow: boolean
 ): TableResizingMode {
-  const columnsForShow = columns?.reduce((acc, col) => acc + (col.show || col.dataIndex || col.render ? 1 : 0), 0)
+  const columnsForShow = columns?.reduce((acc, col) => acc + (isColumnVisible(col) ? 1 : 0), 0)
 
   if ((
     columnsForShow > maxColumnsForAutoResizing &&
@@ -137,7 +144,7 @@ export const addWidthFromStorage = <T extends TableRecord = TableRecord> ({
 
   if (!savedColumns) return columns
 
-  return columns.map(column => {
+  return mapVisibleColumns(columns, column => {
     const columnFromStorage = savedColumns[column.key]
 
     if (!columnFromStorage) return column

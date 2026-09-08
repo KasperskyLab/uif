@@ -1,5 +1,7 @@
 import { RefObject } from 'react'
 
+import styles from '../Table.module.scss'
+
 export function toggleHorizontalScrollbarVisibility (horizontalScrollbarRef: RefObject<HTMLDivElement>) {
   const scrollbarContainer: HTMLElement | null = horizontalScrollbarRef.current
   const scrollbarFiller = scrollbarContainer?.firstChild as HTMLElement | undefined
@@ -7,10 +9,8 @@ export function toggleHorizontalScrollbarVisibility (horizontalScrollbarRef: Ref
   if (!scrollbarContainer || !scrollbarFiller) return
 
   if (scrollbarFiller.offsetWidth > scrollbarContainer.offsetWidth) {
-    scrollbarContainer.style.removeProperty('height')
-    scrollbarContainer.style.removeProperty('border-bottom')
+    scrollbarContainer.classList.remove(styles.hidden)
   } else {
-    scrollbarContainer.style.height = '0px'
-    scrollbarContainer.style.borderBottom = '0px'
+    scrollbarContainer.classList.add(styles.hidden)
   }
 }

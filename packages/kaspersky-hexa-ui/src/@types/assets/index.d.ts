@@ -18,3 +18,17 @@ declare module '*.less' {
   const classes: { [key: string]: string }
   export default classes
 }
+
+declare module 'virtual:hexa-ui-changelog' {
+  const entries: Array<{
+    date: string
+    title: string
+    commitId: string
+    sha: string
+    author: string
+    version: string
+    description: string
+    affectedFilesOrComponents: string[]
+  }>
+  export default entries
+}

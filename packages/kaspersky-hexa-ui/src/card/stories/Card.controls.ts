@@ -3,7 +3,7 @@ import {
   PropPresentationMap
 } from '@sb/components/Documentation'
 
-import { sharedPropConfig } from '@helpers/resolveDesignControls'
+import { sharedPropConfig } from '@sb/resolveDesignControls'
 
 import { CardMode, CardSize, CardTitleSize } from '../types'
 

@@ -106,18 +106,26 @@ export type BooleanFilter = BasicFilter<BooleanOperations> & {
 }
 
 export type EnumOption = {
+  /** Stored value of the option (used to build the filter). */
   value: string | number | boolean,
-  label?: ReactNode
+  /** Text (or any React node) shown in the dropdown. */
+  label?: ReactNode,
+  /**
+   * Search key (defaults to the `label` text). Override it for React-node
+   * `label`s or to search by a different text.
+   */
+  dataLabel?: string
+  /** Nested options that render the option as a collapsible group in the dropdown. */
+  options?: EnumOption[]
 }
 
 export type EnumOptionsMap = Record<string, EnumOption[]>
 
-export type EnumFilter = BasicFilter<EnumOperations, {
-  name: string,
-  getAvailableOptions: () => Promise<EnumOption[]>
+export type EnumFilter<T = any> = BasicFilter<EnumOperations, {
+  name: string
 }> & {
   type: FilterType.Enum,
-  value: any
+  value: T | T[]
 }
 
 export type DateTimeRange = { from: number | null, to: number | null }
@@ -139,24 +147,29 @@ export type FilterConfig =
   DateTimeFilter
 
 /** Configuration object for a single filter operation */
-export type FilterOperationConfig<TOperation> = {
+export type FilterOperationConfig<Operation extends FilterOperation> = {
   /** Operation */
-  readonly operation: TOperation,
+  readonly operation: Operation | FilterOperation.custom,
   /** Label for operation. If not provided, operation will be used as label */
   readonly label?: ReactNode
 }
 
-/** Helper type that extracts the list of allowed operations for a given `FilterType` */
-export type ExtractFilterConditions<TFilterType extends FilterType> =
-  TFilterType extends FilterType.Enum
-    ? FilterOperationConfig<EnumFilter['condition']>[]
-    : TFilterType extends FilterType.Text
-      ? FilterOperationConfig<TextFilter['condition']>[]
-      : TFilterType extends FilterType.DateRange
-        ? FilterOperationConfig<DateRangeFilter['condition']>[]
-        : TFilterType extends FilterType.Number
-          ? FilterOperationConfig<NumberFilter['condition']>[]
-          : never
+export type ExtractFilterCondition<T extends FilterType> =
+  T extends FilterType.Text
+    ? TextOperations
+    : T extends FilterType.Number
+      ? NumberOperations
+      : T extends FilterType.Boolean
+        ? BooleanOperations
+        : T extends FilterType.Enum
+          ? EnumOperations
+          : T extends FilterType.DateRange
+            ? DateRangeOperations
+            : T extends FilterType.DateTime
+              ? DateTimeOperations
+              : never
+
+export type CustomFilterOperations<T extends FilterType> = FilterOperationConfig<ExtractFilterCondition<T>>[]
 
 /** ======== II. Column-like filters ======== */
 

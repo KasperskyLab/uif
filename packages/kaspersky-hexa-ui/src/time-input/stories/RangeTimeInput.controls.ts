@@ -3,7 +3,7 @@ import {
   PropPresentationMap
 } from '@sb/components/Documentation'
 
-import { sharedPropConfig } from '@helpers/resolveDesignControls'
+import { sharedPropConfig } from '@sb/resolveDesignControls'
 import { validationStatuses } from '@helpers/typesHelpers'
 
 import { timeFormat } from '../types'

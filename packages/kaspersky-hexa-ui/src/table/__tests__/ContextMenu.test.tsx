@@ -1,10 +1,13 @@
-import { fireEvent, render, screen } from '@testing-library/react'
-import React from 'react'
-
+import { generatedData, tableColumns } from '../__mocks__/filtersMockData'
 import { getContextParams } from '../modules/ContextMenu'
 import { GetLeftItemsProps } from '../modules/ToolbarIntegration/types'
-import { Table } from '../test-utils/shared'
+import { TableTestingClass } from '../test-utils/TableTestingClass'
 import { ITableProps } from '../types'
+
+const defaultProps = {
+  columns: tableColumns,
+  dataSource: generatedData
+}
 
 describe('Table ContextMenu module', () => {
   const toolbar = {
@@ -29,33 +32,66 @@ describe('Table ContextMenu module', () => {
   }
 
   it('should render context menu', async () => {
-    const { baseElement } = render(
-      <Table
-        contextMenu={() => toolbar.left}
-        toolbar={toolbar}
-      />
-    )
+    const table = TableTestingClass.render({ ...defaultProps, contextMenu: () => toolbar.left, toolbar })
 
-    fireEvent.contextMenu(baseElement.querySelector('td')!)
+    table.contextMenu.openOnCell(0)
 
-    expect(await screen.findByTestId('table-context-menu')).toBeInTheDocument()
-    expect(baseElement.querySelector(
-      '[data-testid="table-context-menu"] [data-testid="action-2"]'
-    )).toBeInTheDocument()
+    expect(await table.contextMenu.getMenu()).toBeInTheDocument()
+    expect(table.contextMenu.getAction('action-2')).toBeInTheDocument()
+  })
+
+  it('should filter out hidden and disabled context menu items', async () => {
+    const contextMenu = () => ([
+      {
+        type: 'button' as const,
+        key: 'a',
+        label: 'A',
+        testId: 'ctx-a'
+      },
+      {
+        type: 'button' as const,
+        key: 'hidden',
+        label: 'H',
+        testId: 'ctx-hidden',
+        visible: false
+      },
+      {
+        type: 'button' as const,
+        key: 'dis',
+        label: 'D',
+        testId: 'ctx-dis',
+        disabled: true
+      },
+      {
+        type: 'button' as const,
+        key: 'b',
+        label: 'B',
+        testId: 'ctx-b'
+      }
+    ])
+
+    const table = TableTestingClass.render({ ...defaultProps, contextMenu })
+
+    table.contextMenu.openOnCell(0)
+    await table.contextMenu.getMenu()
+
+    expect(table.contextMenu.getAction('ctx-a')).toBeInTheDocument()
+    expect(table.contextMenu.getAction('ctx-b')).toBeInTheDocument()
+    expect(table.contextMenu.getAction('ctx-hidden')).not.toBeInTheDocument()
+    expect(table.contextMenu.getAction('ctx-dis')).not.toBeInTheDocument()
   })
 
   it('should render context menu for the selected rows', async () => {
     const mockContextMenu = jest.fn().mockReturnValue(toolbar.left)
-    const { baseElement } = render(
-      <Table
-        contextMenu={mockContextMenu}
-        rowSelection={{ selectedRowKeys: [1, 2] }}
-        toolbar={toolbar}
-      />
-    )
+    const table = TableTestingClass.render({
+      ...defaultProps,
+      contextMenu: mockContextMenu,
+      rowSelection: { selectedRowKeys: [generatedData[0].key, generatedData[1].key] },
+      toolbar
+    })
 
-    fireEvent.contextMenu(baseElement.querySelector('tr[data-row-key="1"] td')!)
-    await screen.findByTestId('table-context-menu')
+    table.contextMenu.openOnRow(generatedData[0].key)
+    await table.contextMenu.getMenu()
 
     expect(mockContextMenu).toHaveBeenCalledTimes(1)
 
@@ -64,37 +100,32 @@ describe('Table ContextMenu module', () => {
     expect(calledWith).toHaveLength(2)
     expect(calledWith).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ key: 1 }),
-        expect.objectContaining({ key: 2 })
+        expect.objectContaining({ key: generatedData[0].key }),
+        expect.objectContaining({ key: generatedData[1].key })
       ])
     )
-    expect(
-      baseElement.querySelector('[data-testid="table-context-menu"]')?.textContent
-    ).toContain('Selected: 2')
+    expect(table.contextMenu.getSelectedCount()).toBe(2)
   })
 
   it('should render context menu for the clicked row', async () => {
     const mockContextMenu = jest.fn().mockReturnValue(toolbar.left)
-    const { baseElement } = render(
-      <Table
-        contextMenu={mockContextMenu}
-        rowSelection={{ selectedRowKeys: [1, 2] }}
-        toolbar={toolbar}
-      />
-    )
+    const table = TableTestingClass.render({
+      ...defaultProps,
+      contextMenu: mockContextMenu,
+      rowSelection: { selectedRowKeys: [generatedData[0].key, generatedData[1].key] },
+      toolbar
+    })
 
-    fireEvent.contextMenu(baseElement.querySelector('tr[data-row-key="3"] td')!)
-    await screen.findByTestId('table-context-menu')
+    table.contextMenu.openOnRow(generatedData[2].key)
+    await table.contextMenu.getMenu()
 
     expect(mockContextMenu).toHaveBeenCalledTimes(1)
 
     const calledWith = mockContextMenu.mock.calls[0][0]
 
     expect(calledWith).toHaveLength(1)
-    expect(calledWith).toEqual(expect.arrayContaining([expect.objectContaining({ key: 3 })]))
-    expect(
-      baseElement.querySelector('[data-testid="table-context-menu"]')?.textContent
-    ).not.toContain('Selected')
+    expect(calledWith).toEqual(expect.arrayContaining([expect.objectContaining({ key: generatedData[2].key })]))
+    expect(table.contextMenu.getSelectedCount()).toBeNull()
   })
 
   describe('getContextParams', () => {

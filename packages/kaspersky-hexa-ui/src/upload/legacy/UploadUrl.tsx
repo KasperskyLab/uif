@@ -21,7 +21,6 @@ const UploadUrlView: FC<UploadUrlViewProps> = ({ cssConfig: config, ...props }: 
   const { t } = useTranslation()
   const {
     testId,
-    componentId,
     width,
     height,
     status = 'none',

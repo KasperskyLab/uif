@@ -36,7 +36,8 @@ export const mockedItems: SubmenuItemProps[] = [
     type: 'title',
     key: 'title-1',
     testId: 'title-1-test-id',
-    text: 'Title 1'
+    text: 'Title 1',
+    elementAfter: <Placeholder />
   },
   {
     type: 'row',
@@ -153,7 +154,8 @@ export const mockedItems: SubmenuItemProps[] = [
     type: 'title',
     key: 'title-2',
     testId: 'title-2-test-id',
-    text: 'Long long long long long long long long title 2'
+    text: 'Long long long long long long long long title 2',
+    elementAfter: <Placeholder />
   },
   {
     type: 'row',
@@ -245,6 +247,7 @@ export const mockedItems: SubmenuItemProps[] = [
     key: 'title-3',
     testId: 'title-3-test-id',
     text: 'Title 3',
+    elementAfter: <Placeholder />,
     action: {
       onClick: () => console.log('Title 3 action clicked'),
       icon: <Placeholder />

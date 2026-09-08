@@ -21,6 +21,7 @@ const cloneWithKey = (node: React.ReactNode, key: string) => (
 export const Button = ({
   children,
   className,
+  disabled,
   iconBefore,
   iconAfter,
   isPressed,
@@ -29,7 +30,7 @@ export const Button = ({
   size = 'medium',
   text,
   theme,
-  type,
+  type = 'button',
   ...props
 }: ButtonProps): JSX.Element => {
   const { testAttributes, ...rest } = useTestAttribute(props)
@@ -67,20 +68,23 @@ export const Button = ({
       )}
       htmlType={type}
       icon={undefined}
-      loading={loading}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
     >
       {
         child
           ? [
-              renderIcon(iconBefore, 'iconBefore'),
+              iconBefore && renderIcon(iconBefore, 'iconBefore'),
               <span key="radio" className={styles.buttonText}>
                 {child}
               </span>,
-              renderIcon(iconAfter, 'iconAfter')
+              iconAfter && renderIcon(iconAfter, 'iconAfter')
             ]
           : iconBefore || iconAfter
       }
-      {loading && <Loader size="small" {...getChildTestProps('loader', testAttributes)} />}
+      {loading && (
+        <Loader className={styles.loader} size="small" {...getChildTestProps('loader', testAttributes, false, true)} />
+      )}
     </AntdButton>
   )
 }

@@ -24,7 +24,7 @@ import { ActionButton } from '@src/action-button'
 import { LicenseCard } from '../LicenseCard'
 import { LicenseCardProps } from '../types'
 
-import { licenseCardStorySettings } from '../LicenseCard.stories'
+import { licenseCardStorySettings } from './LicenseCard.stories'
 
 const meta = {
   title: 'Hexa UI Components/LicenseCard/Stories',

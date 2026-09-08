@@ -102,7 +102,7 @@
         "resetFilters": "Filter zurücksetzen"
       },
       "contextMenu": {
-        "selected": "Ausgewählt {{count}}"
+        "selected": "Ausgewählt: {{count}}"
       },
       "selectAll": {
         "selectAll": "Alle auswählen",
@@ -130,6 +130,7 @@
         },
         "filtering": {
           "add": "Hinzufügen",
+          "addCondition": "Bedingung hinzufügen",
           "clearAll": "Alle zurücksetzen",
           "property": "Eigenschaft",
           "attribute": "Attribute",
@@ -137,19 +138,33 @@
           "from": "von",
           "to": "bis",
           "value": "Wert",
+          "operators": {
+            "or": "ODER",
+            "and": "UND"
+          },
+          "booleanFilter": {
+            "on": "Ein",
+            "off": "Aus"
+          },
           "validation": {
             "emptyValue": "Geben Sie den Wert des Filters an",
             "duplicateFilters": "Der Filter ist mehrfach vorhanden. Stellen Sie sicher, dass jeder Filter eindeutig ist."
           }
         },
+        "resetSettingsModal": {
+          "content": "Alle Aufgaben werden auf die Standardeinstellungen zurückgesetzt",
+          "header": "Spalteneinstellungen zurücksetzen?",
+          "firstButton": "Zurücksetzen",
+          "secondButton": "Abbrechen"
+        },
         "columnHideIsUnavailable": "Das Verbergen der Spalten ist nicht verfügbar",
-        "onlyForFiltering": "Diese Spalte dient nur der Filterung"
+        "onlyForFiltering": "Diese Spalte ist nur zum Filtern"
       },
       "filterOperation": {
         "⊆": "Enthält",
         "⊄": "Enthält nicht",
         "cont_and": "Enthält (UND)",
-        "cont_or": "Enthält (ODER)",
+        "cont_or": "Ist eins von",
         "ncont_or": "Enthält nicht",
         "*=": "Regexp",
         "empty": "Leer",
@@ -178,7 +193,8 @@
     "actionBar": {
       "unsavedChanges": "Ausstehende Änderungen",
       "save": "Übernehmen",
-      "cancel": "Abbrechen"
+      "cancel": "Abbrechen",
+      "resetSettings": "Einstellungen zurücksetzen"
     },
     "textarea": {
       "wordsCount": "{{count}} von {{total}}"

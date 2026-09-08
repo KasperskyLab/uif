@@ -1,6 +1,6 @@
 import { Divider, DividerProps } from '@src/divider'
 import { Space } from '@src/space'
-import clsx from 'clsx'
+import cn from 'classnames'
 import React, { Fragment } from 'react'
 import { useSlate } from 'slate-react'
 
@@ -14,7 +14,7 @@ import { Plugins, PluginsFlat, PluginType } from '../types'
 import { BlockButton } from './components/BlockButton'
 import { MarkButton } from './components/MarkButton'
 import { isBlockActive } from './helpers'
-import styles from './ToolbatContainer.module.scss'
+import styles from './ToolbarContainer.module.scss'
 
 interface ToolbarContainerProps {
   plugins: Plugins;
@@ -95,7 +95,7 @@ export const ToolbarContainer = ({
         {!isLastGroup && (
           <Divider
             {...dividerPluginsProps}
-            className={clsx(styles.divider, dividerPluginsProps?.className)}
+            className={cn(styles.divider, dividerPluginsProps?.className)}
             key={keyDivider}
           />
         )}
@@ -104,7 +104,7 @@ export const ToolbarContainer = ({
   }
 
   return (
-    <Space wrap="nowrap" gap="related" width="max-content" className={clsx(styles.toolbarContainer, className)} data-test-id={testId ? `${testId}-toolbar` : undefined}>
+    <Space wrap="nowrap" gap="related" width="max-content" className={cn(styles.toolbarContainer, className)} data-test-id={testId ? `${testId}-toolbar` : undefined}>
       {plugins.map((plugin, idx) =>
         Array.isArray(plugin)
           ? renderGroupPlugins(plugin, idx === plugins.length - 1)

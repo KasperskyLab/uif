@@ -1,9 +1,7 @@
+import { ActionButton } from '@src/action-button'
 import React from 'react'
-import { v4 as uiidv4 } from 'uuid'
 
 import { ArrowDown1 } from '@kaspersky/hexa-ui-icons/16'
-
-import { StyledTextExpander } from './expandableTextCss'
 
 type TextExpanderProps = {
   onClick: () => void
@@ -12,9 +10,8 @@ type TextExpanderProps = {
 
 export const TextExpander: React.FC<TextExpanderProps> = ({ onClick, className }) => {
   return (
-    <StyledTextExpander
+    <ActionButton
       className={className}
-      key={uiidv4()}
       onClick={e => {
         e.stopPropagation()
         onClick()

@@ -1,5 +1,6 @@
-import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
+import { ThemeKey } from '@design-system/types'
 import { badges } from '@sb/badges'
+import { StatesMatrix, StatesMatrixItem } from '@sb/components/StatesMatrix'
 import { StoryColumn } from '@sb/StoryComponents'
 import { Button } from '@src/button'
 import { Textbox } from '@src/input'
@@ -9,14 +10,13 @@ import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
-import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-import { Advertisement } from '@kaspersky/hexa-ui-icons/16'
 import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
+import { ThemeProvider } from '../../../design-system/theme'
 import MetaData from '../__meta__/meta.json'
 import Tag from '../Tag'
 import { TagReductionGroup } from '../TagReductionGroup'
-import { TagMode, tagModes, TagProps, TagReductionGroupProps } from '../types'
+import { tagModes, TagProps, TagReductionGroupProps } from '../types'
 
 const meta: Meta<TagProps> = {
   title: 'Hexa UI Components/Tag/Stories',
@@ -32,43 +32,134 @@ export default meta
 
 type Story = StoryObj<TagProps>
 
-const TagWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-  align-items: center;
-`
+type StateRow = StatesMatrixItem & {
+  disabled?: boolean;
+  readOnly?: boolean;
+  outlined?: boolean;
+}
 
-const AllModesMock = (args: TagProps) => (
-  <Space gap={16} direction="horizontal">
-    <TagWrapper>
-      {tagModes.map((mode, i) => (
-        <div key={mode + i}>
-          <Tag
-            {...args}
-            key={mode}
-            mode={mode as TagMode}
-          >
-            {`I'm a ${mode} tag`}
-          </Tag>
-          {mode !== 'ai' && (
-            <Tag
-              {...args}
-              key={`${mode}-outlined`}
-              mode={mode as TagMode}
-              onClose={() => alert('outlined tag')}
-              outlined
-            >
-              {`I'm a ${mode} outlined tag`}
-            </Tag>
-          )}
-        </div>
-      ))}
-    </TagWrapper>
-  </Space>
+type VariantColumn = StatesMatrixItem & {
+  mode?: TagProps['mode'],
+  size?: TagProps['size'],
+  outlined?: boolean,
+  icon?: boolean,
+  closable?: boolean,
+  interactive?: boolean
+}
+
+const stateRows: StateRow[] = [
+  { key: 'default', label: 'Default' },
+  { key: 'hover', label: 'Hover' },
+  { key: 'active', label: 'Active' },
+  { key: 'disabled', label: 'Disabled', disabled: true },
+  { key: 'readonly', label: 'ReadOnly', readOnly: true }
+]
+
+const variantColumns: VariantColumn[] = [
+  {
+    key: 'filled',
+    label: 'Filled',
+    mode: 'emerald',
+    interactive: true
+  },
+  {
+    key: 'outlined',
+    label: 'Outlined',
+    mode: 'emerald',
+    outlined: true,
+    interactive: true
+  },
+  {
+    key: 'icon',
+    label: 'Icon',
+    mode: 'emerald',
+    icon: true,
+    interactive: true
+  },
+  {
+    key: 'closable',
+    label: 'Closable',
+    mode: 'emerald',
+    closable: true,
+    interactive: true
+  }
+]
+
+const renderStateCell = (row: StateRow, column: VariantColumn) => (
+  <Tag
+    mode={column.mode}
+    size={column.size}
+    outlined={column.outlined}
+    icon={column.icon ? <Placeholder /> : undefined}
+    closable={column.closable}
+    interactive={column.interactive}
+    disabled={row.disabled}
+    readOnly={row.readOnly}
+  >
+    {column.label}
+  </Tag>
 )
+
+const colorRows: StateRow[] = [
+  { key: 'filled', label: 'Filled', outlined: false },
+  { key: 'outlined', label: 'Outlined', outlined: true }
+]
+
+const modes = [
+  'neutral',
+  'purple',
+  'grey',
+  'marina',
+  'red',
+  'marengo',
+  'emerald',
+  'orange',
+  'yellow',
+  'violet',
+  'grass',
+  'ai'
+] as const
+
+const colorColumns: VariantColumn[] = modes.map((mode) => ({
+  key: `color-${mode}`,
+  label: `${mode.charAt(0).toUpperCase() + mode.slice(1)}`,
+  mode: mode
+}))
+
+const renderColorStateCell = (row: StateRow, column: VariantColumn) => (
+  <Tag
+    mode={column.mode}
+    outlined={row.outlined}
+  >
+    {column.label}
+  </Tag>
+)
+
+export const States: Story = {
+  parameters: {
+    controls: { include: [] }
+  },
+  render: () => (
+    <StatesMatrix
+      rows={stateRows}
+      columns={variantColumns}
+      renderCell={renderStateCell}
+    />
+  )
+}
+
+export const ModeVariants: Story = {
+  parameters: {
+    controls: { include: [] }
+  },
+  render: () => (
+    <StatesMatrix
+      rows={colorRows}
+      columns={colorColumns}
+      renderCell={renderColorStateCell}
+    />
+  )
+}
 
 export const Basic: Story = {
   render: (args: TagProps) => (
@@ -93,83 +184,6 @@ export const Basic: Story = {
       options: tagModes,
       control: { type: 'select' }
     }
-  }
-}
-
-export const AllModeVariants: Story = {
-  render: AllModesMock.bind({})
-}
-
-export const TagsWithIcons: Story = {
-  render: AllModesMock.bind({}),
-  args: {
-    icon: <Advertisement />,
-    size: 'medium'
-  }
-}
-
-export const ClosableTags: Story = {
-  render: AllModesMock.bind({}),
-  args: {
-    size: 'medium',
-    closable: true
-  }
-}
-
-export const ClickedTags: Story = {
-  render: AllModesMock.bind({}),
-  args: {
-    size: 'medium',
-    closable: true,
-    onClick: () => alert('tag')
-  }
-}
-
-export const ClosableAndIconCombo: Story = {
-  render: AllModesMock.bind({}),
-  args: {
-    size: 'medium',
-    closable: true,
-    icon: <Advertisement />
-  }
-}
-
-const DefaultAndClosableMock = (state: string) => (args: TagProps) => (
-  <Space gap={16} direction="horizontal">
-    <Tag {...args}>
-      {state} tag
-    </Tag>
-    <Tag
-      {...args}
-      closable
-      onClose={() => alert(`${state} closable tag`)}
-    >
-      {state} closable tag
-    </Tag>
-  </Space>
-)
-
-export const ReadonlyTag: Story = {
-  render: DefaultAndClosableMock('Readonly'),
-  args: {
-    readOnly: true,
-    size: 'medium'
-  }
-}
-
-export const InvalidTag: Story = {
-  render: DefaultAndClosableMock('Invalid'),
-  args: {
-    invalid: true,
-    size: 'medium'
-  }
-}
-
-export const DisabledTag: Story = {
-  render: DefaultAndClosableMock('Disabled'),
-  args: {
-    disabled: true,
-    size: 'medium'
   }
 }
 
@@ -211,12 +225,6 @@ export const ResponsiveTag: Story = {
     size: 'medium',
     isResponsive: true
   }
-}
-
-type PaletteStory = StoryObj<ThemedPaletteProps>
-export const ColorTokens: PaletteStory = {
-  args: { source: componentColors.tag },
-  render: args => <ThemedPalette {...args} />
 }
 
 type ReductionGroupStory = StoryObj<TagReductionGroupProps>

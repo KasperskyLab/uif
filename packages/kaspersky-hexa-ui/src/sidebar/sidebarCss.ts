@@ -24,19 +24,6 @@ export const sidebarCss = css`
       gap: ${fromProps('gap')};
     }
 
-    .ant-drawer-close {
-      padding: 0;
-      top: 2px;
-      width: 32px;
-      height: 32px;
-
-      margin-right: 0;
-
-      & > {
-        display: inline-block;
-      }
-    }
-
     .ant-drawer-title {
       overflow: hidden;
 
@@ -84,7 +71,8 @@ export const sidebarCss = css`
   .ant-drawer-footer .antd-sidebar-footer-right {
     display: inline-flex;
     gap: var(--spacing--gap_related);
-    margin-left: auto;
+    margin-left: unset;
+    margin-inline-start: auto;
   }
 
   div${StyledHeaderFirstLine} {

@@ -2,10 +2,18 @@ import { SetState } from '@helpers/hooks/useStateProps'
 import { MakeRequired } from '@helpers/typesHelpers'
 import { useRefMethod } from '@src/table/context/TableContext'
 import { TableRowSelection as RowSelectionAntd } from 'antd/lib/table/interface'
+import cn from 'classnames'
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { useTableContext } from '../../../context/TableContext'
-import { ITableProps, TableRecord, TableRowSelection, TableRowSelectionData } from '../../../types'
+import radioStyles from '../../../../radio/Radio.module.scss'
+import { useTableContext, useTableUpdate } from '../../../context/TableContext'
+import {
+  ITableProps,
+  TableRecord,
+  TableRowSelection,
+  TableRowSelectionData
+} from '../../../types'
+import { PaginationMode } from '../../Initial'
 import { UsePaginationConfigReturn } from '../usePaginationConfig'
 
 import { HeaderCheckbox } from './HeaderCheckbox'
@@ -14,6 +22,7 @@ import { getGroupCheckboxOnChange, renderGroupCell } from './useGroupRowSelectio
 
 type UseRowSelectionProps<T extends TableRecord = TableRecord> = {
   disabled: boolean,
+  paginationMode: PaginationMode,
   setSelected?: SetState<number | undefined>,
   tableId?: string,
   withSelection: boolean,
@@ -27,6 +36,7 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
   current,
   dataSource,
   disabled,
+  paginationMode,
   tableId,
   pageSize,
   setSelected,
@@ -34,7 +44,7 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
   withSelection,
   useDataSourceFunction
 }: UseRowSelectionProps<T>): RowSelectionAntd<T> | undefined => {
-  const { updateContext } = useTableContext()
+  const updateContext = useTableUpdate<T>()
 
   const {
     getPreselectedRows,
@@ -45,11 +55,23 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
     ...restRowSelection
   } = rowSelectionProps ?? {}
 
-  const getCheckboxProps: TableRowSelection['getCheckboxProps'] = (row) => ({
-    'data-testid': row.key ? `table-row__select-${row.key}` : 'table-row__select',
-    className: withSelection ? 'table-row-has-expandable' : undefined,
-    disabled: disabled || row._disabled || row._selectionDisabled
-  })
+  const getCheckboxProps: TableRowSelection<T>['getCheckboxProps'] = (row) => {
+    const externalCheckboxProps = restRowSelection.getCheckboxProps?.(row)
+
+    return {
+      ...externalCheckboxProps,
+      // @ts-expect-error data-testid is not defined in type but it can be used in external getCheckboxProps
+      'data-testid': externalCheckboxProps?.['data-testid'] ?? row.key ? `table-row__select-${row.key}` : 'table-row__select',
+      className: cn(
+        externalCheckboxProps?.className,
+        {
+          'table-row-has-expandable': withSelection,
+          [radioStyles.radio]: rowSelectionProps?.type === 'radio'
+        }
+      ),
+      disabled: externalCheckboxProps?.disabled || disabled || row._disabled || row._selectionDisabled
+    }
+  }
 
   useEffect(() => {
     if (rowSelectionProps && !builtInRowSelection && rowSelectionProps.selectedRowKeys) {
@@ -74,7 +96,7 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
     setDeselectedRows(prevRows => updateRows(prevRows, deselectedRowKeys, dataSource))
   }, [deselectedRowKeys, dataSource])
 
-  const { groupsMap } = useTableContext()
+  const groupsMap = useTableContext(state => state.groupsMap)
 
   const renderCellWithGroups: TableRowSelection<T>['renderCell'] = (_, row, __, originNode) => {
     if (row.isGroupTitle && groupsMap && __EXPERIMENTAL__GROUP__SELECTION) {
@@ -112,25 +134,33 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
 
   useEffect(() => {
     if (!builtInRowSelection) return
-    // isSelectedAll for server pagination can be set only from SelectAll dropdown
-    if (!useDataSourceFunction) {
-      setIsSelectedAll(dataSource.length !== 0 && selectedRowKeys.length === dataSource.length)
+
+    let newSelectedAll: boolean
+
+    switch (paginationMode) {
+      case 'client':
+        newSelectedAll = dataSource.length !== 0 && selectedRowKeys.length === dataSource.length
+        break
+      case 'server':
+      case 'pseudo-server':
+        newSelectedAll = dataSource.length !== 0 && !!total && selectedRowKeys.length === total
+        break
     }
-  }, [useDataSourceFunction, selectedRowKeys.length, dataSource.length])
+
+    setIsSelectedAll(prev => prev !== newSelectedAll ? newSelectedAll : prev)
+  }, [useDataSourceFunction, selectedRowKeys.length, dataSource.length, total])
 
   useEffect(() => {
-    if (!builtInRowSelection) return
+    if (!builtInRowSelection || !setSelected) return
 
-    if (setSelected) {
-      if (isSelectedAll) {
-        if (useDataSourceFunction) {
-          setSelected(total ? total - deselectedRowKeys.length : total)
-        } else {
-          setSelected(total)
-        }
+    if (isSelectedAll) {
+      if (useDataSourceFunction) {
+        setSelected(total ? total - deselectedRowKeys.length : total)
       } else {
-        setSelected(selectedRowKeys.length)
+        setSelected(total)
       }
+    } else {
+      setSelected(selectedRowKeys.length)
     }
   }, [useDataSourceFunction, isSelectedAll, setSelected, selectedRowKeys, deselectedRowKeys, total])
 
@@ -169,7 +199,7 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
   const processItemsSelection = useCallback((items: { key: string, isSelected: boolean }[]) => {
     const validItems = items.filter(item => {
       const row = dataSource.find(row => row.key === item.key)
-      return !row?._disabled && !row?._selectionDisabled
+      return !row || !getCheckboxProps(row).disabled
     })
 
     if (validItems.length === 0) return
@@ -258,9 +288,16 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
   if (!builtInRowSelection) {
     return {
       ...rowSelectionProps,
-      getCheckboxProps: rowSelectionProps?.getCheckboxProps ?? getCheckboxProps
+      getCheckboxProps
     }
   }
+  const didWeKnowAboutAllData = paginationMode === 'client' || total !== undefined && total <= pageSize
+
+  const disableSelectAll = didWeKnowAboutAllData
+    ? dataSource.length === 0 || dataSource.every(row => getCheckboxProps(row).disabled)
+    : dataSource.length === 0
+
+  const disableSelectAllOnCurrentPage = dataSource.slice(0, pageSize).every(row => getCheckboxProps(row).disabled)
 
   const rowSelection: RowSelectionAntd<T> = {
     ...restRowSelection,
@@ -268,7 +305,8 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
     columnTitle: hasSelectAll && restRowSelection.type !== 'radio' && (
       <HeaderCheckbox
         tableId={tableId}
-        disableSelectAll={dataSource.length === 0 || dataSource.every(row => row._disabled) || disabled}
+        disableSelectAll={disableSelectAll}
+        disableSelectAllOnCurrentPage={disableSelectAllOnCurrentPage}
         selectedRowsLength={selectedRowKeys.length}
         deselectedRowsLength={deselectedRowKeys.length}
         useDataSourceFunction={useDataSourceFunction}
@@ -286,7 +324,7 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
     },
     selectedRowKeys,
     renderCell: renderCellWithGroups,
-    getCheckboxProps: restRowSelection.getCheckboxProps ?? getCheckboxProps
+    getCheckboxProps
   }
 
   return rowSelection

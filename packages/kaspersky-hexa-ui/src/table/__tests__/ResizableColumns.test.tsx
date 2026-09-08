@@ -1,16 +1,10 @@
-import { fireEvent, render } from '@testing-library/react'
 import React from 'react'
 
+import { generatedData, tableColumns } from '../__mocks__/filtersMockData'
 import { getPersistentStorageValue, updatePersistentStorage } from '../helpers/persistentStorage/persistentStorage'
-import { Table } from '../test-utils/shared'
+import { TableTestingClass, TestTable } from '../test-utils/TableTestingClass'
 
 const STORAGE_KEY = 'resizable-columns-storage-test'
-
-const getRenderedColumnWidth = (container: HTMLElement, columnIndex = 0) => {
-  const column = container.querySelectorAll<HTMLTableColElement>('colgroup col')[columnIndex]
-
-  return Number.parseInt(column?.style.width || column?.getAttribute('width') || '0')
-}
 
 describe('ResizableColumns', () => {
   beforeEach(() => {
@@ -41,48 +35,47 @@ describe('ResizableColumns', () => {
       storageKey: STORAGE_KEY,
       featureKey: 'columns',
       updatedValue: {
-        name: {
+        fullname: {
           width: 300,
           isUserDefinedWidth: true
         }
       }
     })
 
-    const { container, rerender } = render(
-      <Table
-        storageKey={STORAGE_KEY}
-        resizingMode="last"
-      />
-    )
+    const table = TableTestingClass.render({
+      columns: tableColumns,
+      dataSource: generatedData,
+      storageKey: STORAGE_KEY,
+      resizingMode: 'last'
+    })
 
-    expect(getPersistentStorageValue({ storageKey: STORAGE_KEY, featureKey: 'columns' })?.name?.width).toBe(300)
-    expect(getRenderedColumnWidth(container)).toBe(300)
+    expect(getPersistentStorageValue({ storageKey: STORAGE_KEY, featureKey: 'columns' })?.fullname?.width).toBe(300)
+    expect(table.columns.getWidthFromColgroup()).toBe(300)
 
-    const resizeHandle = container.querySelector<HTMLElement>('.resizing-handle-container')!
+    table.columns.resize(0, 80)
 
-    fireEvent.mouseDown(resizeHandle, { clientX: 0 })
-    fireEvent.mouseMove(document, { clientX: 80 })
-    fireEvent.mouseUp(document)
+    expect(getPersistentStorageValue({ storageKey: STORAGE_KEY, featureKey: 'columns' })?.fullname?.width).toBe(380)
+    expect(table.columns.getWidthFromColgroup()).toBe(380)
 
-    expect(getPersistentStorageValue({ storageKey: STORAGE_KEY, featureKey: 'columns' })?.name?.width).toBe(380)
-    expect(getRenderedColumnWidth(container)).toBe(380)
-
-    rerender(
-      <Table
+    table.rerender(
+      <TestTable
+        columns={tableColumns}
         storageKey={STORAGE_KEY}
         resizingMode="last"
         dataSource={[]}
       />
     )
 
-    rerender(
-      <Table
+    table.rerender(
+      <TestTable
+        columns={tableColumns}
+        dataSource={generatedData}
         storageKey={STORAGE_KEY}
         resizingMode="last"
       />
     )
 
-    expect(getPersistentStorageValue({ storageKey: STORAGE_KEY, featureKey: 'columns' })?.name?.width).toBe(380)
-    expect(getRenderedColumnWidth(container)).toBe(380)
+    expect(getPersistentStorageValue({ storageKey: STORAGE_KEY, featureKey: 'columns' })?.fullname?.width).toBe(380)
+    expect(table.columns.getWidthFromColgroup()).toBe(380)
   })
 })

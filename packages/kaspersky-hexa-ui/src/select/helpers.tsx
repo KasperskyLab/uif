@@ -161,7 +161,8 @@ export const MultiSelectCheckBox = styled(({ className }) => (
   display: inline-flex;
 
   .ant-checkbox-wrapper + .ant-checkbox-wrapper {
-    margin-left: 0;
+    margin-left: unset;
+    margin-inline-start: 0;
   }
 
   .ant-checkbox {

@@ -8,7 +8,7 @@ import { convertToDate, parseDate } from '../../Filters/helpers'
 import { DateTimeItemProps } from './types'
 
 export const DateTimeItem: FC<DateTimeItemProps> = ({ filter, onChange, dateOnly, validationStatus }) => {
-  const { dateFormat } = useTableContext()
+  const dateFormat = useTableContext(state => state.dateFormat)
 
   const filterValue = filter.value as Extract<DateTimeFilterValue, number | null>
   const filterRangeValue = filter.value as Exclude<DateTimeFilterValue, number>

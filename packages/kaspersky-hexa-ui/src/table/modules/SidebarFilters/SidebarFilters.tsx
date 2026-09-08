@@ -1,23 +1,21 @@
-import { useLocalization } from '@helpers/localization/useLocalization'
 import { MakeRequired } from '@helpers/typesHelpers'
 import { Button, ButtonProps } from '@src/button'
 import { Divider } from '@src/divider'
-import { Locale } from '@src/locale'
 import { Sidebar, SidebarHandle } from '@src/sidebar'
 import { Space } from '@src/space'
 import { Text } from '@src/typography'
 import React, {
-  FC,
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
 
 import { TableComponent } from '..'
-import { useTableContext } from '../../context/TableContext'
+import { useTableContext, useTableUpdate } from '../../context/TableContext'
 import { ITableProps, TableRecord } from '../../types'
 import { FilterApi, SidebarFilterGroupInternal, SidebarFilterInternal } from '../Filters'
 import {
@@ -42,43 +40,71 @@ import { SidebarFilterHandler } from './types'
 export const SidebarFilters = <T extends TableRecord = TableRecord> (
   Component: TableComponent<T>
 ): TableComponent<T> => function SidebarFiltersModuleCallback ({
+  getFiltersSidebarToolbarButtons,
   useFiltersSidebar,
   columns,
   ...rest
 }) {
-  const { filterApi } = useTableContext<T>()
+  const filterApi = useTableContext(state => state.filterApi)
 
   if (!columns) {
     return <Component {...rest} />
   }
 
-  if (!useFiltersSidebar || !filterApi) {
-    return <Component {...rest} columns={columns} />
-  }
-
-  return <SidebarFiltersModule<T> {...rest} Component={Component} filterApi={filterApi} columns={columns} />
+  return (
+    <>
+      {useFiltersSidebar && filterApi && (
+        <SidebarFiltersModule<T>
+          filterApi={filterApi}
+          columns={columns}
+          testId={rest.testId}
+          onCloseFilterSidebar={rest.onCloseFilterSidebar}
+          onSidebarFiltersChange={rest.onSidebarFiltersChange}
+          getFiltersSidebarToolbarButtons={getFiltersSidebarToolbarButtons}
+        />
+      )}
+      <Component {...rest} columns={columns} />
+    </>
+  )
 }
 
-type SidebarFiltersModuleProps<T extends TableRecord = TableRecord> = MakeRequired<Omit<ITableProps<T>, 'useSidebarFilters'>, 'columns'> & {
-  Component: FC<ITableProps<T>>,
+type SidebarFiltersModuleProps<T extends TableRecord = TableRecord> = MakeRequired<
+  Pick<
+    ITableProps<T>,
+    'columns' |
+    'testId' |
+    'onCloseFilterSidebar' |
+    'onSidebarFiltersChange' |
+    'getFiltersSidebarToolbarButtons'
+  >,
+  'columns'
+> & {
   filterApi: FilterApi<T>
 }
 
 function SidebarFiltersModule<T extends TableRecord = TableRecord> ({
-  Component,
   onCloseFilterSidebar,
-  showFilterSidebar,
   onSidebarFiltersChange,
-  isServerFiltering,
   getFiltersSidebarToolbarButtons,
   filterApi,
-  ...rest
+  columns,
+  testId
 }: SidebarFiltersModuleProps<T>) {
-  const { columns, testId } = rest
-
   const { t } = useTranslation()
 
-  const { sorting, setSorting, enableNestedFilters } = useTableContext<T>()
+  const { sorting, setSorting, enableNestedFilters } = useTableContext(state => ({
+    sorting: state.sorting,
+    setSorting: state.setSorting,
+    enableNestedFilters: state.enableNestedFilters
+  }))
+
+  const showFilterSidebar = useTableContext(state => state.showFilterSidebar)
+  const updateTableContext = useTableUpdate<T>()
+
+  const onCloseSidebar = useCallback(() => {
+    updateTableContext({ showFilterSidebar: false })
+    onCloseFilterSidebar?.()
+  }, [updateTableContext, onCloseFilterSidebar])
 
   const availableColumns = useMemo(() => {
     return (columns || []).filter(column => (
@@ -116,7 +142,7 @@ function SidebarFiltersModule<T extends TableRecord = TableRecord> ({
     /** @deprecated Only to support old contract */
     onSidebarFiltersChange?.(filtersWithoutId.filter(isFilterConfig))
     filterApi.setExternalSidebarFilters(filtersWithoutId)
-    onCloseFilterSidebar?.()
+    onCloseSidebar()
   }
 
   const handleRemove: SidebarFilterHandler<T>['handleRemove'] = useCallback((filterToRemove) => {
@@ -191,11 +217,11 @@ function SidebarFiltersModule<T extends TableRecord = TableRecord> ({
     }
   }, [handleFilterChange])
 
-  const sidebarRef = React.useRef<SidebarHandle>(null)
+  const sidebarRef = useRef<SidebarHandle>(null)
 
   const handleCancel = () => {
     setFilters(filtersForRestore)
-    onCloseFilterSidebar?.()
+    onCloseSidebar()
   }
 
   const handleClose = () => {
@@ -217,70 +243,67 @@ function SidebarFiltersModule<T extends TableRecord = TableRecord> ({
   }, [filterApi, filters, sorting, setSorting, columns])
 
   return (
-    <>
-      <Sidebar
-        size="small"
-        ref={sidebarRef}
-        onClose={handleCancel}
-        visible={showFilterSidebar}
-        title={useLocalization('common.filters')}
-        testId={testId ? `${testId}-filters-sidebar` : 'filters-sidebar'}
-        subHeader={(
-          <Space gap="section" >
-            <FilterToolbar<T>
-              columns={availableColumns}
-              filters={filters}
-              onChange={setFilters}
-              additionalButtons={additionalButtons}
-            />
-            <Divider />
-          </Space>
-        )}
-        footer={(
-          <div className={styles.filtersFooter}>
-            <Button
-              onClick={handleApply}
-              testId="table-filters-apply-button"
-              klId="filters-button_apply"
-            >
-              <Locale localizationKey="table.columnsSettings.apply" />
-            </Button>
-            <Button
-              onClick={handleClose}
-              mode="secondary"
-              testId="table-filters-cancel-button"
-              klId="filters-button_cancel"
-            >
-              <Locale localizationKey="table.columnsSettings.cancel" />
-            </Button>
-          </div>
-        )}
-      >
-        <div className={styles.filtersList} style={{ '--gap': enableNestedFilters ? '0px' : 'var(--spacing--gap_grouped)' }}>
-          {filters.map((item, index) => (
-            <div key={item.id}>
-              <FilterItem
-                key={`filter-item-${item.id ?? index}`}
-                index={index}
-                columnsToShow={availableColumns}
-                filter={item}
-                handleRemove={handleRemove}
-                handlePropertyChange={handlePropertyChange}
-                handleFilterChange={handleFilterChange}
-                handleFilterAdd={handleFilterAdd}
-                handleRemoveFilterRow={handleRemoveFilterRow}
-                invalidFilters={invalidFilters}
-              />
-              {enableNestedFilters && index !== filters.length - 1 && (
-                <span className={styles.filtersSeparator}>
-                  <Text color="disabled" type="BTR4">{t('table.columnsSettings.filtering.operators.and')}</Text>
-                </span>
-              )}
-            </div>
-          ))}
+    <Sidebar
+      size="small"
+      ref={sidebarRef}
+      onClose={handleCancel}
+      visible={showFilterSidebar}
+      title={t('common.filters')}
+      testId={testId ? `${testId}-filters-sidebar` : 'filters-sidebar'}
+      subHeader={(
+        <Space gap="section" >
+          <FilterToolbar<T>
+            columns={availableColumns}
+            filters={filters}
+            onChange={setFilters}
+            additionalButtons={additionalButtons}
+          />
+          <Divider />
+        </Space>
+      )}
+      footer={(
+        <div className={styles.filtersFooter}>
+          <Button
+            onClick={handleApply}
+            testId="table-filters-apply-button"
+            klId="filters-button_apply"
+          >
+            {t('table.columnsSettings.apply')}
+          </Button>
+          <Button
+            onClick={handleClose}
+            mode="secondary"
+            testId="table-filters-cancel-button"
+            klId="filters-button_cancel"
+          >
+            {t('table.columnsSettings.cancel')}
+          </Button>
         </div>
-      </Sidebar>
-      <Component {...rest} />
-    </>
+      )}
+    >
+      <div className={styles.filtersList} style={{ '--gap': enableNestedFilters ? '0px' : 'var(--spacing--gap_grouped)' }}>
+        {filters.map((item, index) => (
+          <div key={item.id}>
+            <FilterItem
+              key={`filter-item-${item.id ?? index}`}
+              index={index}
+              columnsToShow={availableColumns}
+              filter={item}
+              handleRemove={handleRemove}
+              handlePropertyChange={handlePropertyChange}
+              handleFilterChange={handleFilterChange}
+              handleFilterAdd={handleFilterAdd}
+              handleRemoveFilterRow={handleRemoveFilterRow}
+              invalidFilters={invalidFilters}
+            />
+            {enableNestedFilters && index !== filters.length - 1 && (
+              <span className={styles.filtersSeparator}>
+                <Text color="disabled" type="BTR4">{t('table.columnsSettings.filtering.operators.and')}</Text>
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+    </Sidebar>
   )
 }

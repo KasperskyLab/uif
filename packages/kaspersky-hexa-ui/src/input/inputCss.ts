@@ -36,6 +36,21 @@ export const inputInnerStyles = css`
     outline: unset;
     width: 100%;
 
+    .ant-input-suffix {
+      margin-left: unset;
+      margin-inline-start: 4px;
+    }
+
+    .ant-input-prefix {
+      margin-right: unset;
+      margin-inline-end: 4px;
+    }
+
+    // InputNumber styles
+    &.hexa-ui-input-number .hexa-ui-input-number-controls {
+      display: inline-grid;
+    }
+
     // font styles
     &, & input {
       ${fontStyles(inputFont)}
@@ -178,48 +193,6 @@ export const inputPasswordStyles = css`
   }
 `
 
-export const inputNumberStyles = css`
-  .ant-input-number-input {
-    padding: unset;
-    height: unset;
-  }
-  
-  .ant-input-number-input-wrap {
-    padding-right: 16px;
-  }
-
-  .ant-input-number-handler-wrap {
-    opacity: 1;
-    display: block;
-    background: transparent;
-    margin-right: 12px;
-    width: max-content;
-    border: none;
-    
-    &:hover {
-      .ant-input-number-handler {
-        height: 50% !important;
-      }
-    }
-    
-    .ant-input-number-handler {
-      border: none;
-      color: ${fromProps('enabled.color')};
-      
-      &:active {
-        background: transparent;
-      }
-    }
-  }
-  
-  &.kl6-textbox-disabled, &.kl6-textbox-readonly {
-    .ant-input-number-handler {
-      cursor: not-allowed;
-      color: ${fromProps('disabled.color')};
-    }
-  } 
-`
-
 export const inputTextareaStyles = css`
   border: none;
   padding: 0;
@@ -254,11 +227,11 @@ export const inputTextareaContainerStyles = css<{ cssConfig: InputCssConfig, dis
     width: calc(100% - 17px);
     position: absolute;
     bottom: 1px;
-    left: 1px;
+    inset-inline-start: 1px;
     border-radius: 0 0 0 8px;
     padding-top: 4px;
     padding-bottom: 5px;
-    padding-left: 11px;
+    padding-inline-start: 11px;
     transition: background-color 0.3s;
     background-color: var(--bg--neutral--level_0);
   }
@@ -266,6 +239,15 @@ export const inputTextareaContainerStyles = css<{ cssConfig: InputCssConfig, dis
   &[disabled] .kl6-textbox-textarea-counter,
   &:has(textarea[readonly]) .kl6-textbox-textarea-counter {
     display:none;
+  }
+
+  // validation status
+  &:not(.kl6-textbox-disabled):not(.kl6-textbox-readonly) {
+    ${props => validationStatuses.map(status => status !== 'default' && `
+      &.${status}:not(:focus-within) {
+        border-color: ${fromProps(`${status}.border`)(props)};
+      }
+    `).filter(Boolean)}
   }
 
   // hover

@@ -1,33 +1,30 @@
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import cn from 'classnames'
 import React, { FC } from 'react'
-import styled from 'styled-components'
 
-import { dividerCss } from './dividerCss'
-import { DividerProps, DividerViewProps } from './types'
-import { useThemedDivider } from './useThemedDivider'
+import styles from './Divider.module.scss'
+import { DividerProps } from './types'
 
-const StyledDivider = styled.div.withConfig<DividerViewProps>({
-  shouldForwardProp: prop => !['cssConfig', 'direction'].includes(prop)
-})`
-  ${dividerCss}
-`
-
-export const Divider: FC<DividerProps> = (rawProps: DividerProps) => {
-  const themedProps: DividerViewProps = useThemedDivider(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <DividerView {...props} />
-}
-
-const DividerView: FC<DividerViewProps> = ({
-  testAttributes,
-  cssConfig,
+export const Divider: FC<DividerProps> = ({
+  className,
   direction = 'horizontal',
-  ...rest
-}: DividerViewProps) => (
-  <StyledDivider
-    direction={direction}
-    cssConfig={cssConfig}
-    {...testAttributes}
-    {...rest}
-  />
-)
+  mode = 'bold',
+  theme,
+  ...props
+}) => {
+  const { testAttributes, ...rest } = useTestAttribute(props)
+
+  return (
+    <div
+      className={cn(
+        getClassNameWithTheme(className, theme),
+        styles.divider,
+        styles[direction],
+        styles[mode]
+      )}
+      {...testAttributes}
+      {...rest}
+    />
+  )
+}

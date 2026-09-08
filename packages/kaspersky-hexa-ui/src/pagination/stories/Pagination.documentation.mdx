@@ -1,0 +1,181 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Pagination } from '../Pagination'
+import * as PaginationStories from './Pagination.stories'
+import { paginationDesignPropPresentation } from './Pagination.design.properties'
+
+<Meta of={PaginationStories} name="Pagination Docs" />
+
+<DocPageLayout>
+
+  <DocPageHeader title="Pagination" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **Pagination** — компонент для навигации по страницам списка или таблицы
+
+          **Pagination** применяют для длинных таблиц, списков и результатов поиска, когда одновременный показ всех элементов усложняет просмотр и работу с данными. В макете компонент размещают после набора данных и связывают с тем же контекстом, чтобы пользователю было понятно, какой объём данных он просматривает.
+
+          Для небольших наборов, которые помещаются на одном экране, пагинация не нужна. Если пользователю важнее непрерывный просмотр содержимого, используйте постепенную подгрузку или бесконечный список; если нужно отфильтровать данные — дополняйте сценарий фильтрами, а не заменяйте ими навигацию по страницам."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**Pagination** разделяет большой набор данных на страницы и позволяет перейти к нужной странице. Компонент отображает общее количество и выбранные элементы, номера страниц, а также при необходимости выбор размера страницы и поле быстрого перехода. Основные настройки: **current**, **pageSize**, **total**, **showSizeChanger**, **jumper**, **simple**, **disabled** и **hideOnSinglePage**."
+      />
+
+      <DocExampleBlock
+        title="current"
+        description="**current** задаёт номер текущей страницы. По умолчанию — `1`. При смене страницы компонент вызывает **onChange** с номером страницы и размером страницы."
+        code={`
+          <Pagination
+            current={1}
+            total={500}
+            onChange={(page, pageSize) => alert(\`Страница: \${page}, размер: \${pageSize}\`)}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="pageSize"
+        description="**pageSize** задаёт количество элементов на странице. По умолчанию используется значение `DEFAULT_TABLE_PAGE_SIZE`."
+        code={`
+          <Pagination pageSize={25} total={500} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="total"
+        description="**total** задаёт общее количество элементов. По умолчанию — `0`."
+        code={`
+          <Pagination total={500} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="totalRoot"
+        description="**totalRoot** задаёт количество корневых элементов для расчёта числа страниц в древовидных данных. Если не передан, используется значение **total**."
+        code={`
+          <Pagination total={100} totalRoot={80} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="showSizeChanger и pageSizeOptions"
+        description="**showSizeChanger** отображает Select для выбора размера страницы. По умолчанию — `false`. **pageSizeOptions** задаёт список размеров в этом Select; по умолчанию используется `DEFAULT_TABLE_PAGE_SIZE_OPTIONS`. При изменении размера вызывается **onShowSizeChange**."
+        code={`
+          <Pagination
+            total={500}
+            showSizeChanger
+            pageSizeOptions={['10', '25', '50']}
+            onShowSizeChange={(current, size) =>
+              alert(\`Страница: \${current}, размер: \${size}\`)
+            }
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="jumper"
+        description="**jumper** добавляет поле для перехода к странице по номеру. По умолчанию — `false`."
+        code={`
+          <Pagination total={500} jumper />
+        `}
+      />
+
+      <DocExampleBlock
+        title="showLessItems"
+        description="**showLessItems** сокращает количество номеров страниц в навигации. По умолчанию — `true`."
+        code={`
+          <Pagination total={500} showLessItems={false} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="simple"
+        description="**simple** скрывает сводку с общим количеством и выбранными элементами. По умолчанию — `false`."
+        code={`
+          <Pagination total={500} simple />
+        `}
+      />
+
+      <DocExampleBlock
+        title="selected и showSelected"
+        description="**selected** задаёт количество выбранных элементов в сводке. **showSelected** управляет его отображением: по умолчанию — `true`; если передать `false`, остаётся только общее количество. **selected** по умолчанию — `0`."
+        code={`
+          <Pagination total={500} selected={12} />
+          <Pagination total={500} showSelected={false} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="hideOnSinglePage"
+        description="**hideOnSinglePage** скрывает пагинацию, когда количество элементов не превышает размер страницы. По умолчанию — `false`."
+        code={`
+          <Pagination total={10} pageSize={25} hideOnSinglePage />
+        `}
+      />
+
+      <DocExampleBlock
+        title="disabled"
+        description="**disabled** отключает взаимодействие с пагинацией. По умолчанию — `false`."
+        code={`
+          <Pagination total={500} disabled />
+        `}
+      />
+
+      <DocExampleBlock
+        title="cursor"
+        description="**cursor** включает ограничение перехода к последней странице: при восьми и более страницах последняя страница становится недоступной, если до неё больше трёх страниц. По умолчанию — `false`."
+        code={`
+          <Pagination current={1} pageSize={25} total={500} cursor />
+        `}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={PaginationStories} />
+      <AutodocArgsTable components={Pagination} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=65125:247509)"
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(paginationDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Pagination" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

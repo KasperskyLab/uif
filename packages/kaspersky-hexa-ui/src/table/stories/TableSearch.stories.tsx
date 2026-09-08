@@ -25,8 +25,7 @@ const meta: Meta<ITableProps> = {
     toolbar: { showSearch: true },
     columns: basicTwoColumns,
     dataSource: patchKeys(basicTreeDataSource),
-    enableSearchHighlighting: true,
-    borderedStyle: false
+    enableSearchHighlighting: true
   },
   argTypes: {
     toolbar: genArgType('You need to set "{ showSearch: true }" to enable the search'),

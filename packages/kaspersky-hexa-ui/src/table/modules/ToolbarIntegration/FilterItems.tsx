@@ -145,8 +145,9 @@ const getFilterItemCondition: GetFilterItemConditionProps = ({
         return (
           t(`table.filterTag.${condition}`, {
             from: formatDate(value.from, dateFormat),
-            to: formatDate(value.to, dateFormat)
-          }).replace(/&#x2F;/g, '/')
+            to: formatDate(value.to, dateFormat),
+            interpolation: { escapeValue: false }
+          })
         )
       }
 
@@ -172,7 +173,7 @@ const getFilterItemCondition: GetFilterItemConditionProps = ({
     }
     case FilterType.Text:
       if (condition === FilterOperation.cont || condition === FilterOperation.ncont) {
-        return t(`table.filterTag.${condition}`, { value })
+        return t(`table.filterTag.${condition}`, { value, interpolation: { escapeValue: false } })
       }
 
       return `${condition} "${value}"`
@@ -220,7 +221,10 @@ const getConditionTestId = (filters: FilterConfig[]) => (
 type FilterItemsProps<T extends TableRecord = TableRecord> = TableInternalFilterItems & Pick<ITableProps<T>, 'onSidebarFiltersChange' | 'columns'>
 
 export function FilterItems <T extends TableRecord = TableRecord> (props: FilterItemsProps<T>) {
-  const { filterApi, dateFormat } = useTableContext<T>()
+  const { filterApi, dateFormat } = useTableContext(state => ({
+    filterApi: state.filterApi,
+    dateFormat: state.dateFormat
+  }))
   const { t } = useTranslation()
   const klId = 'table-filters-reset-button'
 

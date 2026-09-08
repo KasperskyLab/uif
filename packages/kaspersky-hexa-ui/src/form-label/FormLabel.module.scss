@@ -1,0 +1,68 @@
+@use "sass:map";
+
+$form-label-tokens: (
+  primary: (
+    text: var(--fg--neutral--primary),
+    asterisk: var(--fg--danger--bold)
+  ),
+  secondary: (
+    text: var(--fg--neutral--secondary),
+    asterisk: var(--fg--danger--bold)
+  ),
+  disabled: (
+    text: var(--fg--neutral--tertiary),
+    asterisk: var(--fg--danger--bold)
+  ),
+  readOnly: (
+    text: var(--fg--neutral--muted),
+    asterisk: var(--fg--danger--bold)
+  )
+);
+
+@mixin apply-colors($mode) {
+  $theme: map.get($form-label-tokens, $mode);
+
+  & :global(.form-label-text) {
+    color: map.get($theme, text);
+  }
+
+  & :global(.form-label-asterisk) {
+    color: map.get($theme, asterisk);
+  }
+}
+
+.formLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  &.primary {
+    @include apply-colors(primary);
+  }
+
+  &.secondary {
+    @include apply-colors(secondary);
+  }
+
+  &.disabled {
+    @include apply-colors(disabled);
+  }
+
+  &.readOnly {
+    @include apply-colors(readOnly);
+  }
+
+  .textContainer {
+    display: inline;
+  }
+
+  & :global(.form-label-info-icon) {
+    display: inline-flex;
+    margin-inline-start: 4px;
+    vertical-align: -3px;
+  }
+
+  .tag {
+    margin: 0;
+  }
+}

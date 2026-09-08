@@ -1,7 +1,7 @@
-import { act, render } from '@testing-library/react'
-import React from 'react'
+import { act } from '@testing-library/react'
 
-import { Table } from '../test-utils/shared'
+import { tableColumns } from '../__mocks__/filtersMockData'
+import { TableTestingClass } from '../test-utils/TableTestingClass'
 
 describe('Table virtualizedtableforantd4 (VTable)', () => {
   it('removes its passive scroll listener from the table body on unmount', async () => {
@@ -33,29 +33,27 @@ describe('Table virtualizedtableforantd4 (VTable)', () => {
     ))
 
     try {
-      let result: ReturnType<typeof render>
+      let table: TableTestingClass
       await act(async () => {
-        result = render(
-          <Table
-            pagination={{
-              virtualInfiniteScroll: true,
-              total: 100,
-              pageSize: 10,
-              rowHeight: 40,
-              tableBodyHeight: 400,
-              infiniteScrollPageGetter: pageGetter
-            } as any}
-          />
-        )
+        table = TableTestingClass.render({
+          columns: tableColumns,
+          pagination: {
+            virtualInfiniteScroll: true,
+            total: 100,
+            pageSize: 10,
+            rowHeight: 40,
+            tableBodyHeight: 400,
+            infiniteScrollPageGetter: pageGetter as any
+          }
+        })
       })
 
-      const { container, unmount } = result!
-      const body = container.querySelector('.ant-table-body') as HTMLElement
+      const body = table!.getBody()
 
       expect(body).toBeTruthy()
       expect(entries.some((e) => e.t === body && e.passive)).toBe(true)
 
-      await act(async () => { unmount() })
+      await act(async () => { table.unmount() })
 
       expect(entries.filter((e) => e.t === body && e.passive)).toHaveLength(0)
     } finally {

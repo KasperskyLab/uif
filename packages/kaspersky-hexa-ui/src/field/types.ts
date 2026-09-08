@@ -1,15 +1,11 @@
 import { LabelType } from '@design-system/tokens'
 import { Theme } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingProps } from '@helpers/typesHelpers'
 import { HelpMessageMode } from '@src/help-message'
 import { PopoverProps } from '@src/popover'
 import { ReactElement, ReactNode } from 'react'
 
 export type LabelPosition = 'before' | 'after' | 'top'
-
-export type FieldColorConfig = { helpIconColor: string }
-
-export type FieldCssConfig = FieldColorConfig
 
 export type FieldThemeProps = {
   /** Custom theme */
@@ -73,5 +69,3 @@ export type FieldProps = {
   /** Popover content */
   tooltip?: ReactNode
 } & FieldThemeProps & TestingProps
-
-export type FieldViewProps = ToViewProps<FieldProps, FieldColorConfig, FieldThemeProps>

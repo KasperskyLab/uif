@@ -14,6 +14,7 @@ export const groupTitleRenderer = <T extends TableRecord = TableRecord>(
   columnsCount: number,
   predefinedRender: TableColumn<T>['render'],
   groupTitleRender: ITableProps<T>['groupTitleRender'],
+  hasDND?: boolean,
   onGroupToggle?: (key: string) => void
 ): TableColumn<T>['render'] => (value, row, index) => {
   const columnData = {
@@ -26,8 +27,9 @@ export const groupTitleRenderer = <T extends TableRecord = TableRecord>(
     const title = groupTitleRender ? groupTitleRender(titleText) : titleText
 
     const icon = row.groupTitleIconRender?.(titleText, row)
+    const targetColumnIndex = hasDND ? 1 : 0
 
-    columnData.props.colSpan = columnIndex === 0 ? columnsCount : 0
+    columnData.props.colSpan = columnIndex === targetColumnIndex ? columnsCount : 0
     columnData.props.className = 'group-title'
     columnData.children = row.groupTitleRender
       ? row.groupTitleRender(titleText, row)

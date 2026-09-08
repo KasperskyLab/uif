@@ -87,7 +87,7 @@
       "total": "Toplam {{count}}",
       "selected": "Seçilen {{count}}",
       "page": "sayfa",
-      "goto": "Kaspersky lisanslarına git"
+      "goto": "Şu sayfaya git"
     },
     "search": {
       "raw": "Ara",
@@ -100,6 +100,9 @@
         "sorting": "Sırala",
         "filters": "Filtrele",
         "resetFilters": "Filtreyi sıfırla"
+      },
+      "contextMenu": {
+        "selected": "Seçilen: {{count}}"
       },
       "selectAll": {
         "selectAll": "Tümünü seç",
@@ -127,6 +130,7 @@
         },
         "filtering": {
           "add": "Ekle",
+          "addCondition": "Koşul ekleyin",
           "clearAll": "Tümünü temizle",
           "property": "Özellik",
           "attribute": "Öznitelik",
@@ -134,18 +138,33 @@
           "from": "başlangıç",
           "to": "-",
           "value": "Değer",
+          "operators": {
+            "or": "VEYA",
+            "and": "VE"
+          },
+          "booleanFilter": {
+            "on": "Açık",
+            "off": "Kapalı"
+          },
           "validation": {
             "emptyValue": "Filtreleme değerini belirtin",
-            "duplicateFilters": "Duplicate filters. Ensure each filter is unique."
+            "duplicateFilters": "Yinelenen filtreler. Her filtrenin benzersiz olduğundan emin olun."
           }
         },
-        "columnHideIsUnavailable": "Sütunlar gizlenememektedir"
+        "resetSettingsModal": {
+          "content": "Tüm görevler varsayılan ayarlara sıfırlanacaktır",
+          "header": "Sütun ayarları sıfırlansın mı?",
+          "firstButton": "Sıfırla",
+          "secondButton": "İptal"
+        },
+        "columnHideIsUnavailable": "Sütunlar gizlenememektedir",
+        "onlyForFiltering": "Bu sütun yalnızca filtreleme amaçlıdır"
       },
       "filterOperation": {
         "⊆": "İçerir",
         "⊄": "İçermez",
         "cont_and": "İçeren (VE)",
-        "cont_or": "İçeren (VEYA)",
+        "cont_or": "Şunlardan biridir:",
         "ncont_or": "İçermez",
         "*=": "Regexp",
         "empty": "Boş",
@@ -174,7 +193,8 @@
     "actionBar": {
       "unsavedChanges": "Bekleyen değişiklikler",
       "save": "Uygula",
-      "cancel": "İptal"
+      "cancel": "İptal",
+      "resetSettings": "Ayarları sıfırla"
     },
     "textarea": {
       "wordsCount": "{{count}}/{{total}}"
@@ -217,7 +237,11 @@
       "term": "Süre",
       "dayLeft": "{{count}} gün kaldı",
       "daysLeft": "{{count}} gün kaldı",
-      "termDays": "{{count}} gün"
+      "termDays": "{{count}} gün",
+      "statuses": {
+        "valid": "Etkin",
+        "expired": "Sona erdi"
+      }
     },
     "input": {
       "password": {

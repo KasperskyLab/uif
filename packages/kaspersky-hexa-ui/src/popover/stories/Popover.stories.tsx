@@ -6,7 +6,7 @@ import React from 'react'
 
 import MetaData from '../__meta__/meta.json'
 import { Popover as PopoverComponent } from '../Popover'
-import { popoverPropPresentation } from './Popover.properties'
+import { defaultArgs, popoverPropPresentation } from './Popover.controls'
 import { PopoverProps } from '../types'
 
 type PopoverPlaygroundProps = Omit<PopoverProps, 'content' | 'children'> & {
@@ -16,14 +16,7 @@ type PopoverPlaygroundProps = Omit<PopoverProps, 'content' | 'children'> & {
 
 export const popoverStorySettings: Meta<PopoverProps> = {
   argTypes: buildStoryArgTypes(popoverPropPresentation),
-  args: {
-    trigger: 'click',
-    placement: 'bottom',
-    shouldLimitSize: true,
-    defaultVisible: false,
-    content: 'Popover content',
-    children: 'Open popover'
-  },
+  args: defaultArgs,
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
     design: MetaData.pixsoView
@@ -54,7 +47,8 @@ export const Playground: Story = {
   ),
   parameters: {
     controls: {
-      include: getControlsInclude(popoverPropPresentation)
+      include: getControlsInclude(popoverPropPresentation),
+      sort: 'none'
     }
   }
 }

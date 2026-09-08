@@ -8,7 +8,7 @@ import MetaData from '../__meta__/meta.json'
 import { FileItem, FileItemProps } from '../UploadList/FileItem'
 
 const meta: Meta<FileItemProps> = {
-  title: 'Hexa UI Components/Upload/File Item',
+  title: 'Hexa UI Components/Uploader/Stories',
   component: FileItem,
   tags: ['!autodocs'],
   ...withDesignControls<FileItemProps>({
@@ -51,6 +51,7 @@ export const Status: StoryObj<FileItemProps> = {
   render: args => renderVariants([
     { label: 'default', content: <StyledFileItem {...args} status="done" /> },
     { label: 'uploading', content: <StyledFileItem {...args} percent={50} status="uploading" /> },
+    { label: 'success', content: <StyledFileItem {...args} status="success" /> },
     { label: 'error', content: <StyledFileItem {...args} status="error" /> },
     { label: 'disabled', content: <StyledFileItem {...args} disabled status="done" /> }
   ], true)

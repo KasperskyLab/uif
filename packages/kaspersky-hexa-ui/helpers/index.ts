@@ -1,4 +1,5 @@
 export * from './generateId'
+export * from './shallowEqual'
 export * from './useResizeObserver'
 export * from './useUpdateEffect'
 export * from './useImmutableRef'

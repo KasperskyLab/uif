@@ -1,22 +1,29 @@
 import { navigate } from '@storybook/addon-links'
 import { RefObject, useEffect } from 'react'
 
-const STORY_PATH_PREFIX = '/story/'
+const INTERNAL_PATH_PREFIXES = ['/story/', '/docs/'] as const
 
 /**
  * Extracts a Storybook story id from an internal doc link like
- * `./?path=/story/hexa-ui-components-table-row-selection--basic`.
+ * `./?path=/story/hexa-ui-components-table-row-selection--basic` or
+ * `/hexa-ui/?path=/docs/hexa-ui-components-actionbutton--actionbutton-docs`.
  * Returns null for external / non-story links.
  */
 const extractStoryId = (href: string): string | null => {
   try {
     const path = new URL(href, window.location.href).searchParams.get('path')
 
-    if (!path || !path.startsWith(STORY_PATH_PREFIX)) {
+    if (!path) {
       return null
     }
 
-    const id = path.slice(STORY_PATH_PREFIX.length).split(/[?&#]/)[0]
+    const prefix = INTERNAL_PATH_PREFIXES.find((item) => path.startsWith(item))
+
+    if (!prefix) {
+      return null
+    }
+
+    const id = path.slice(prefix.length).split(/[?&#]/)[0]
 
     return id || null
   } catch {
@@ -25,9 +32,9 @@ const extractStoryId = (href: string): string | null => {
 }
 
 /**
- * Turns internal `?path=/story/...` links inside docs into in-app Storybook
- * navigation (no full page reload / new tab). Falls back to the anchor's
- * default behaviour for modifier clicks and external links.
+ * Turns internal `?path=/story/...` and `?path=/docs/...` links inside docs
+ * into in-app Storybook navigation (no full page reload / new tab). Falls
+ * back to the anchor's default behaviour for modifier clicks and external links.
  */
 export const useDocumentationStoryLinks = (contentRef: RefObject<HTMLElement | null>) => {
   useEffect(() => {

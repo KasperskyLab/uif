@@ -1,7 +1,7 @@
 import { useStateProps } from '@helpers/hooks/useStateProps'
 import React, { useEffect } from 'react'
 
-import { ITableProps, TableRecord, TableRef, useTableContext } from '..'
+import { ITableProps, TableRecord, TableRef, useTableUpdate } from '..'
 import { checkExpandableGrouping, checkExpandableRows } from '../helpers/common'
 
 import { useRowSelection } from './hooks/rowSelection/useRowSelection'
@@ -14,6 +14,23 @@ import { TableComponent } from './index'
 const shouldCountClientTotal = (pagination: ITableProps['pagination'], isServerPagination: boolean): boolean => {
   if (pagination === false) return false
   return pagination?.total === undefined && pagination?.totalRoot === undefined && !isServerPagination
+}
+
+/** Table pagination modes:
+ * 'client' — all data in dataSource and total !== undefined
+ * 'server' — using dataSourceFunction;
+ * 'pseudo-server' — sliced data in dataSource, total defined */
+export type PaginationMode = 'client' | 'server' | 'pseudo-server'
+
+const getPaginationMode = (
+  pagination: ITableProps['pagination'],
+  isServerPagination: boolean
+): PaginationMode => {
+  if (isServerPagination) return 'server'
+  if (pagination && (pagination.total !== undefined || pagination.totalRoot !== undefined)) {
+    return 'pseudo-server'
+  }
+  return 'client'
 }
 
 export const Initial = <T extends TableRecord = TableRecord> (
@@ -32,7 +49,7 @@ export const Initial = <T extends TableRecord = TableRecord> (
   rowSelection: rowSelectionProps,
   ...props
 }: ITableProps<T> & React.RefAttributes<TableRef>) {
-  const { updateContext } = useTableContext()
+  const updateContext = useTableUpdate<T>()
   const [isDefaultSortDisabled, setIsDefaultSortDisabled] = useStateProps(isDefaultSortDisabledProps)
   const [isClientGroupSortingDisabled, setIsClientGroupSortingDisabled] = useStateProps(isClientGroupSortingDisabledProps)
   const [isInited, setIsInited] = useStateProps(isInitedProps)
@@ -46,11 +63,13 @@ export const Initial = <T extends TableRecord = TableRecord> (
   })
 
   useEffect(() => {
-    updateContext({ pagination: {
-      setTotal: additional?.setTotal,
-      shouldCountClientTotal: shouldCountClientTotal(paginationProps, !!dataSourceFunction),
+    updateContext({
+      pagination: {
+        setTotal: additional?.setTotal,
+        shouldCountClientTotal: shouldCountClientTotal(paginationProps, !!dataSourceFunction)
+      },
       useDataSourceFunction: !!dataSourceFunction
-    } })
+    })
   }, [dataSourceFunction])
 
   const dataSource = useDataSource<T>({
@@ -66,6 +85,8 @@ export const Initial = <T extends TableRecord = TableRecord> (
     setIsDefaultSortDisabled
   })
 
+  const paginationMode = getPaginationMode(paginationProps, !!dataSourceFunction)
+
   const rowSelection = useRowSelection({
     rowSelection: rowSelectionProps,
     current: pagination.current,
@@ -75,6 +96,7 @@ export const Initial = <T extends TableRecord = TableRecord> (
     tableId: props.testId || props.klId || undefined,
     total: pagination.total,
     pageSize: pagination.pageSize,
+    paginationMode,
     withSelection: checkExpandableRows(dataSourceClient || []) || checkExpandableGrouping(columns),
     useDataSourceFunction: !!dataSourceFunction,
     __EXPERIMENTAL__GROUP__SELECTION: props.__EXPERIMENTAL__GROUP__SELECTION

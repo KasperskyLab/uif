@@ -1,6 +1,6 @@
 import { Button } from '@src/button'
-import { Locale } from '@src/locale'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 type ColumnSelectionActionsProps = {
@@ -19,6 +19,8 @@ const ColumnSelectionActions: React.FC<ColumnSelectionActionsProps> = ({
   onClose,
   isSaveDisabled
 }) => {
+  const { t } = useTranslation()
+
   return (
     <Buttons>
       <Button
@@ -28,7 +30,7 @@ const ColumnSelectionActions: React.FC<ColumnSelectionActionsProps> = ({
         disabled={isSaveDisabled}
         onClick={onSave}
       >
-        <Locale localizationKey="actionBar.save" />
+        {t('actionBar.save')}
       </Button>
       <Button
         data-testid="table-settings-cancel"
@@ -37,7 +39,7 @@ const ColumnSelectionActions: React.FC<ColumnSelectionActionsProps> = ({
         mode="secondary"
         onClick={onClose}
       >
-        <Locale localizationKey="actionBar.cancel" />
+        {t('actionBar.cancel')}
       </Button>
     </Buttons>
   )

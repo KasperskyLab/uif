@@ -21,11 +21,11 @@ import {
 } from './_commonConstants'
 
 const meta: Meta<ITableProps> = {
-  title: 'Hexa UI Components/Table/Virtual',
+  title: 'Hexa UI Components/Table/[DEV]/Virtual',
   component: Table,
   args: {
-    useDragDrop: false,
-    borderedStyle: false
+    afterColumn: false,
+    useDragDrop: false
   },
   parameters: {
     docs: {

@@ -1,14 +1,15 @@
 import { ActionButton } from '@src/action-button'
 import { Loader } from '@src/loader'
 import { Space } from '@src/space'
-import * as React from 'react'
+import React from 'react'
 
 import {
   CrossS,
   Download2,
   File,
   Reload,
-  StatusDangerOutlineSquare
+  StatusDangerOutlineSquare,
+  StatusOkOutline
 } from '@kaspersky/hexa-ui-icons/16'
 
 import {
@@ -104,8 +105,8 @@ export function FileItem ({
   return (
     <FileWrapper $disabled={disabled} $done className={className} onClick={disabled ? undefined : onDownload}>
       <Space gap={8} wrap="nowrap" style={{ overflow: 'hidden' }}>
-        <File className="file-icon" />
-        {!disabled && <Download2 className="download-icon" />}
+        {status === 'success' ? <StatusOkOutline className="success-icon file-icon" /> : <File className="file-icon" />}
+        {!disabled && onDownload && <Download2 className="download-icon" />}
         <FileName truncateName={truncateName}>{name}</FileName>
       </Space>
       <Space gap={8}>

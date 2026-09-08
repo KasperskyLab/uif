@@ -31,7 +31,6 @@ const ElementBefore = styled.span`
 `
 
 type FilterRowProps =
-  Pick<TableColumn, 'allowMultipleFilters'> &
   Pick<ColumnFilter, 'elementBefore' | 'localizationKey'> &
   {
     isChecked: boolean,

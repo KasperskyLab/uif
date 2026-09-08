@@ -1,9 +1,9 @@
 import { StatusWarningSolid } from '@kaspersky/hexa-ui-icons/16'
 import { Link } from '@src/link'
-import { Locale } from '@src/locale'
 import { Space } from '@src/space'
 import { Text } from '@src/typography'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface ErrorProps {
   onClick?: () => void,
@@ -12,17 +12,19 @@ interface ErrorProps {
 }
 
 export const Error = ({ onClick, errorText, retryText }: ErrorProps) => {
+  const { t } = useTranslation()
+
   return (
     <Space justify="center" direction="vertical">
       <Space gap="dependent" align="center">
         <StatusWarningSolid color="var(--icon--status--statuswarning)" />
         <Text type="BTM3" htmlTag="span">
-          {errorText || <Locale localizationKey="table.loadingError" />}
+          {errorText || t('table.loadingError')}
         </Text>
       </Space>
       {onClick && (
         <Link onClick={onClick}>
-          {retryText || <Locale localizationKey="table.loadingRetry" />}
+          {retryText || t('table.loadingRetry')}
         </Link>
       )}
     </Space>

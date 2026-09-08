@@ -1,5 +1,7 @@
+import { badges, badgesConfig } from '@sb/badges'
 import { Link } from '@src/link'
 import { Markdown } from '@src/markdown'
+import { SectionMessage } from '@src/section-message'
 import { Space } from '@src/space'
 import { Heading, Text } from '@src/typography'
 import React from 'react'
@@ -44,6 +46,8 @@ const StyledLink = styled(Link)`
   }
 `
 
+const inBuilderBadge = badgesConfig[badges.inBuilder]
+
 export function withMeta (
   list: MetaList,
   content?: MetaContent
@@ -54,6 +58,15 @@ export function withMeta (
       <Space gap={32} direction="vertical" align="start">
         <Space gap={16} direction="vertical" align="start">
           <StyledHeading className="skip-toc" type="H2">{list?.component}</StyledHeading>
+          {list?.dod?.inBuilder && (
+            <SectionMessage
+              mode={inBuilderBadge.mode}
+              title={inBuilderBadge.title}
+              closable={false}
+            >
+              {list?.dod?.inBuilder}
+            </SectionMessage>
+          )}
           {(list?.pixsoView || list?.designLink) && (
             <Space gap={16}>
               {list?.pixsoView && (

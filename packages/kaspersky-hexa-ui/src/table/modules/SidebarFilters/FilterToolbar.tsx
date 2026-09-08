@@ -1,6 +1,6 @@
 import { Button } from '@src/button'
-import { Locale } from '@src/locale'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Cross, Plus } from '@kaspersky/hexa-ui-icons/16'
 
@@ -17,6 +17,8 @@ const FilterToolbar = <T extends TableRecord = TableRecord>({
   columns,
   additionalButtons
 }: FilterToolbarProps<T>): JSX.Element => {
+  const { t } = useTranslation()
+
   const handleAdd = async () => {
     const newFilter: FilterConfigInternal = await getNewFilter(columns[0])
     onChange([...filters, newFilter])
@@ -35,7 +37,7 @@ const FilterToolbar = <T extends TableRecord = TableRecord>({
         testId="table-filters-add-button"
         klId="filters_add_button"
       >
-        <Locale localizationKey="table.columnsSettings.filtering.add" />
+        {t('table.columnsSettings.filtering.add')}
       </Button>
       {filters.length > 0 && (
         <Button
@@ -45,7 +47,7 @@ const FilterToolbar = <T extends TableRecord = TableRecord>({
           testId="table-filters-clear-all-button"
           klId="filters_clear_all_button"
         >
-          <Locale localizationKey="table.columnsSettings.filtering.clearAll" />
+          {t('table.columnsSettings.filtering.clearAll')}
         </Button>
       )}
       {additionalButtons?.map((button, index) => (

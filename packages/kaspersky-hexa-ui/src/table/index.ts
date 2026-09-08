@@ -1,4 +1,4 @@
-import { TableContext, useTableContext } from './context/TableContext'
+import { TableContext, useTableContext, useTableUpdate } from './context/TableContext'
 import { composeWithModules, tableModules } from './modules'
 import { LocalizeColumnTitles } from './modules/LocalizeColumnTitles'
 import { Table } from './Table'
@@ -11,7 +11,8 @@ export {
   TableContext,
   tableWithModules as Table,
   TableWithoutModules,
-  useTableContext
+  useTableContext,
+  useTableUpdate
 }
 
 export type { ToolbarCommonProps, ToolbarWithAllVisibleTabHeaders, ToolbarWithOnlyOneHiddenTabHeader } from './modules/ToolbarIntegration'
@@ -19,8 +20,10 @@ export * from './modules/SidebarFilters'
 export type { DateRangeFilter, FilterConfig } from './modules/Filters'
 export { FilterOperation, FilterType } from './modules/Filters'
 export { isFilterConfig, isFilterFromColumn, isGroup, isSidebarFilter } from './modules/Filters/helpers'
+export type { CustomFilterOperations } from './modules/Filters/types'
 
 export type {
+  EnumFilterType,
   ITableProps,
   TableColumn,
   TablePaginationProps,

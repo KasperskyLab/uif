@@ -1,12 +1,11 @@
-import { render } from '@testing-library/react'
-import React from 'react'
+import { TableTestingClass } from '../test-utils/TableTestingClass'
 
-import { Table } from '../test-utils/shared'
+const getEmptyCellDashes = (table: TableTestingClass): HTMLElement[] => table.queryAll('.hexa-ui-empty-dash-cell')
 
 describe('Table EmptyCellDash module', () => {
   it('should find dash in empty cell', () => {
-    const { container } = render(<Table
-      columns={[
+    const table = TableTestingClass.render({
+      columns: [
         {
           title: 'table.column.name',
           key: 'name',
@@ -19,8 +18,8 @@ describe('Table EmptyCellDash module', () => {
           hasEmptyCellDash: false,
           dataIndex: 'description'
         }
-      ]}
-      dataSource={[
+      ],
+      dataSource: [
         {
           name: '',
           description: 'description',
@@ -31,13 +30,13 @@ describe('Table EmptyCellDash module', () => {
           description: '',
           key: 2
         }
-      ]}
-    />)
-    expect(container.querySelectorAll('.hexa-ui-empty-dash-cell')).toHaveLength(1)
+      ]
+    })
+    expect(getEmptyCellDashes(table)).toHaveLength(1)
   })
   it('should find all dashes in all empty cells', () => {
-    const { container } = render(<Table
-      columns={[
+    const table = TableTestingClass.render({
+      columns: [
         {
           title: 'table.column.name',
           key: 'name',
@@ -50,8 +49,8 @@ describe('Table EmptyCellDash module', () => {
           hasEmptyCellDash: true,
           dataIndex: 'description'
         }
-      ]}
-      dataSource={[
+      ],
+      dataSource: [
         {
           name: '',
           description: 'description',
@@ -72,8 +71,8 @@ describe('Table EmptyCellDash module', () => {
           description: '',
           key: 4
         }
-      ]}
-    />)
-    expect(container.querySelectorAll('.hexa-ui-empty-dash-cell')).toHaveLength(4)
+      ]
+    })
+    expect(getEmptyCellDashes(table)).toHaveLength(4)
   })
 })

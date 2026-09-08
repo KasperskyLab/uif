@@ -24,7 +24,8 @@ export const ToggleButton: FC<ToggleButtonProps> = (props) => {
     tooltip,
     testId,
     value,
-    selected
+    selected,
+    ...rest
   } = props
 
   const { testAttributes } = useTestAttribute(props)
@@ -56,6 +57,7 @@ export const ToggleButton: FC<ToggleButtonProps> = (props) => {
 
   return (
     <div
+      {...rest}
       className={cn(
         styles.container,
         styles[size],

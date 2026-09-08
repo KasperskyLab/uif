@@ -6,7 +6,8 @@
       "screenshotTests": false,
       "migration": false,
       "apiTable": false,
-      "storybook": true
+      "storybook": true,
+      "inBuilder": "Используется под названием «Таблица»"
     },
     "component": "Table",
     "description": "Компонент-контейнер для группы команд или элементов управления. ",

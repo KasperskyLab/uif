@@ -4,12 +4,10 @@ import { Table } from '@src/table'
 import React from 'react'
 import { useState } from 'react'
 
-import { generatedData, tableColumns } from '../__mocks__/filtersMockData'
+import { generatedData, tableColumns, TableMockProps, TableMockStory } from '../__mocks__/filtersMockData'
 
-import { Story } from './_commonConstants'
-
-export const InSidebar: Story = {
-  render: (args) => {
+export const InSidebar: TableMockStory = {
+  render: (args: TableMockProps) => {
     const [isOpen, setIsOpen] = useState(false)
     const [dataSourceState, setDataSourceState] = useState(generatedData.slice(0, 20))
 
@@ -24,7 +22,7 @@ export const InSidebar: Story = {
         >
           <Table
             {...args}
-            onDragEnd={(rows: any) => { setDataSourceState(rows) }}
+            onDragEnd={setDataSourceState}
             dataSource={dataSourceState}
           />
         </Sidebar>

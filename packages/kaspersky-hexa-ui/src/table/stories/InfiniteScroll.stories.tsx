@@ -53,8 +53,7 @@ const meta: Meta<ITableProps> = {
       ]
     },
     columns: basicTwoColumns,
-    dataSource: basicDataSource.slice(0, 60),
-    borderedStyle: false
+    dataSource: basicDataSource.slice(0, 60)
   },
   parameters: {
     badges: [badges.stable, badges.needsDesignReview],

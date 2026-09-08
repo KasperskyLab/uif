@@ -1,83 +1,93 @@
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { ActionButton } from '@src/action-button'
-import { Markdown } from '@src/markdown'
+import { LazyMarkdown } from '@src/markdown/LazyMarkdown'
 import { Popover } from '@src/popover'
+import { Space } from '@src/space'
 import { Tag } from '@src/tag'
 import { Text } from '@src/typography'
 import cn from 'classnames'
 import React, { FC } from 'react'
-import styled from 'styled-components'
 
 import { StatusInfoOutline } from '@kaspersky/hexa-ui-icons/16'
 
-import FormLabelCSS from './FormLabelCSS'
-import { FormLabelProps, FormLabelViewProps } from './types'
-import { useThemedFormLabel } from './useThemedFormLabel'
-
-const StyledFormLabel = styled('label').withConfig({
-  shouldForwardProp: prop => !['cssConfig'].includes(prop)
-})`${FormLabelCSS}`
+import styles from './FormLabel.module.scss'
+import { FormLabelProps } from './types'
 
 export const FormLabel: FC<FormLabelProps> = (rawProps: FormLabelProps) => {
-  const { disabled, mode, ...rest } = rawProps
-  const themedProps = useThemedFormLabel({ ...rest, disabled, mode: disabled ? 'disabled' : mode })
-  const props = useTestAttribute(themedProps)
-  return <FormLabelView {...props} />
-}
-
-const FormLabelView: FC<FormLabelViewProps> = ({
-  mode,
-  children,
-  className,
-  disabled,
-  required,
-  tooltip,
-  tagsAfter = [],
-  testAttributes,
-  getPopupContainer,
-  popoverPlacement,
-  popoverWidth,
-  ...props
-}: FormLabelViewProps) => {
+  const {
+    mode = 'primary',
+    children,
+    className,
+    disabled,
+    readOnly,
+    required,
+    tooltip,
+    tagsAfter = [],
+    testAttributes,
+    getPopupContainer,
+    popoverPlacement,
+    popoverWidth,
+    theme,
+    ...props
+  } = useTestAttribute(rawProps)
   const getParentNode = (trigger: HTMLElement) => trigger.parentElement as HTMLElement
+  const hasTags = tagsAfter.some(Boolean)
+  // @ts-expect-error for backward compatibility
+  const isDisabledOrReadonly = disabled || mode === 'disabled' || readOnly
+
   return (
-    <StyledFormLabel
+    <label
       {...props}
       {...testAttributes}
-      className={cn('form-label', className)}
+      className={cn(
+        'form-label',
+        styles.formLabel,
+        getClassNameWithTheme(className, theme),
+        {
+          [styles.primary]: mode === 'primary' && !isDisabledOrReadonly,
+          [styles.secondary]: mode === 'secondary' && !isDisabledOrReadonly,
+          // @ts-expect-error for backward compatibility
+          [styles.disabled]: disabled ?? mode === 'disabled',
+          [styles.readOnly]: readOnly
+        }
+      )}
     >
-      <Text type="BTR3" className="form-label-text">
-        {children}
-      </Text>
-      {required && (
-        <Text type="BTR3" className="form-label-asterisk">
-          *
+      <span className={styles.textContainer}>
+        <Text type="BTR3" className="form-label-text">
+          {children}
         </Text>
-      )}
-      {tooltip && (
-        <Popover
-          content={typeof tooltip === 'string' ? <Markdown withoutTextStyle={true} value={tooltip} /> : tooltip}
-          getPopupContainer={getPopupContainer || getParentNode}
-          placement={popoverPlacement}
-          width={popoverWidth}
-        >
-          <ActionButton
-            mode="ghost"
-            size="large"
-            interactive={false}
-            icon={<StatusInfoOutline />}
-            className="form-label-info-icon"
-          />
-        </Popover>
-      )}
-      {tagsAfter.map((label, index) => label && (
-        <Tag
-          key={`${label}-${index}`}
-          label={label}
-          className="form-label-tag"
-          outlined={!(disabled || mode === 'disabled')}
+        {required && (
+          <Text type="BTR3" className="form-label-asterisk">
+            *
+          </Text>
+        )}
+        {tooltip && (
+          <Popover
+            content={typeof tooltip === 'string' ? <LazyMarkdown withoutTextStyle={true} value={tooltip} /> : tooltip}
+            getPopupContainer={getPopupContainer || getParentNode}
+            placement={popoverPlacement}
+            width={popoverWidth}
+          >
+            <ActionButton
+              mode="ghost"
+              size="large"
+              interactive={false}
+              icon={<StatusInfoOutline />}
+              className="form-label-info-icon"
+            />
+          </Popover>
+        )}
+      </span>
+      {hasTags && (
+        <Tag.Group
+          items={tagsAfter.filter(Boolean).map(label => ({
+            label,
+            // @ts-expect-error for backward compatibility
+            outlined: !(disabled || mode === 'disabled')
+          }))}
         />
-      ))}
-    </StyledFormLabel>
+      )}
+    </label>
   )
 }

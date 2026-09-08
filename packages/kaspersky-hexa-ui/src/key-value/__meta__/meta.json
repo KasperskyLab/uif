@@ -7,7 +7,8 @@
     "migration": true,
     "apiTable": true,
     "storybook": true,
-    "pixsoView": true
+    "pixsoView": true,
+    "inBuilder": "Используется под названием «Ключ: Значение»"
   },
   "component": "KeyValue",
   "usage": "Используется для структурирования информации.",

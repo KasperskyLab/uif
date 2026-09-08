@@ -83,7 +83,7 @@ export const horizontalNavStorySettings: Meta<HorizontalNavProps> = {
 }
 
 const meta: Meta<typeof HorizontalNavComponent> = {
-  title: 'Hexa UI Components/HorizontalNav',
+  title: 'Other/HorizontalNav',
   component: HorizontalNavComponent,
   tags: ['!autodocs'],
   includeStories: ['Playground'],

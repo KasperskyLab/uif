@@ -21,6 +21,7 @@ export interface CodeCompareProps {
   oldValue?: string,
   newValue?: string,
   loading?: boolean,
+  readOnly?: boolean,
   onVersionChange?: (leftVersion?: IVersionOption, rightVersion?: IVersionOption) => void
 }
 
@@ -32,6 +33,7 @@ export const CodeCompare: FC<CodeCompareProps> = ({
   options,
   rightOptions,
   loading = false,
+  readOnly = false,
   onVersionChange,
   compareMode = 'split'
 }) => {
@@ -55,6 +57,8 @@ export const CodeCompare: FC<CodeCompareProps> = ({
           onChange={(version) => onVersionChange?.(version, newVersion)}
           options={leftVersionsOptions}
           placeholder={t('codeCompare.basicVersion')}
+          readOnly={readOnly}
+          testId="old-version-select"
         />
         <ChangeIcon color="secondary">
           <Change />
@@ -64,6 +68,8 @@ export const CodeCompare: FC<CodeCompareProps> = ({
           onChange={(compareVersion) => onVersionChange?.(oldVersion, compareVersion)}
           options={rightVersionOptions}
           placeholder={t('codeCompare.comparableVersion')}
+          readOnly={readOnly}
+          testId="new-version-select"
         />
         <div />
         {!valuesEqual && (

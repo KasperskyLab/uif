@@ -1,20 +1,21 @@
 import { render } from '@testing-library/react'
 import React from 'react'
 
+import { generatedData, tableColumns } from '../__mocks__/filtersMockData'
 import { STICKY_HEADER_CLASS, StickyHeaderWrapper } from '../helpers/stickyHeader'
-import { Table } from '../test-utils/shared'
+import { TableTestingClass } from '../test-utils/TableTestingClass'
 
 describe('Table StickyHeader', () => {
   it('removes the sticky-header portal table on unmount', () => {
-    const { container, unmount } = render(<Table stickyHeader={0} />)
+    const table = TableTestingClass.render({ columns: tableColumns, dataSource: generatedData, stickyHeader: 0 })
 
-    const stickyHost = container.querySelector(`.${STICKY_HEADER_CLASS} .ant-table`) as HTMLElement
+    const stickyHost = table.query(`.${STICKY_HEADER_CLASS} .ant-table`) as HTMLElement
     const portalTable = stickyHost?.querySelector('table')
 
     expect(portalTable).toBeTruthy()
     expect(portalTable!.parentNode).toBe(stickyHost)
 
-    unmount()
+    table.unmount()
 
     expect(portalTable!.parentNode).toBeNull()
   })

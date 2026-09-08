@@ -1,11 +1,11 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { useLocalization } from '@helpers/localization/useLocalization'
 import { Search, SearchProps } from '@src/search'
 import { IconSearch } from '@src/search/IconSearch'
 import { useTableContext } from '@src/table'
 import { ToggleButton } from '@src/toggle-button'
 import cn from 'classnames'
 import React, { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const ToolbarSearch: FC<SearchProps> = (props: SearchProps) => {
   const {
@@ -25,9 +25,10 @@ export const ToolbarSearch: FC<SearchProps> = (props: SearchProps) => {
   const [visible, setVisible] = useState(false)
   const [isFilterApplied, setIsFilterApplied] = useState(false)
 
-  const { useV3TestId } = useTableContext()
+  const useV3TestId = useTableContext(state => state.useV3TestId)
 
-  const localizedPlaceholder = useLocalization(placeholder)
+  const { t } = useTranslation()
+  const localizedPlaceholder = t(placeholder)
   const backgroundIndicator = 'var(--toolbar--bg)'
 
   const toggleButton = (

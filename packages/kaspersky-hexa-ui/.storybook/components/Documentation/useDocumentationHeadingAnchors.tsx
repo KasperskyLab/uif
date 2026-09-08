@@ -5,11 +5,12 @@ import {
   ensureDocumentationHeadingId,
   isDocumentationHeadingExcluded
 } from './documentationHeadings'
+import { scrollToDocumentationSectionWithRetry } from './documentationSectionScroll'
 import {
   getDocumentationPageHash,
-  getDocumentationSectionUrl
+  getDocumentationSectionUrl,
+  parseDocumentationHash
 } from './documentationSectionUrl'
-import { scrollToDocumentationSectionWithRetry } from './documentationSectionScroll'
 
 const HEADING_ANCHOR_CLASS = 'hexa-docs-heading-anchor'
 const LEGACY_HEADING_ROW_CLASS = 'hexa-docs-heading-row'
@@ -100,6 +101,15 @@ const ensureHeadingAnchorWrapper = (
     button.setAttribute('data-heading-id', headingId)
   }
 
+  const pane = heading.closest('.ant-tabs-tabpane')
+  const tabKey = pane?.getAttribute('aria-labelledby')?.match(/-tab-(.+)$/)?.[1]
+
+  if (tabKey) {
+    button.setAttribute('data-tab-key', tabKey)
+  } else {
+    button.removeAttribute('data-tab-key')
+  }
+
   if (button.nextElementSibling !== heading) {
     wrapper!.insertBefore(button, heading)
   }
@@ -145,7 +155,8 @@ export const useDocumentationHeadingAnchors = (contentRef: RefObject<HTMLElement
 
     const copySectionLink = async (id: string, button: HTMLButtonElement) => {
       try {
-        await copyTextToClipboard(getDocumentationSectionUrl(id))
+        const tabKey = button.getAttribute('data-tab-key') || undefined
+        await copyTextToClipboard(getDocumentationSectionUrl(id, tabKey))
         setLinkButtonCopied(button, true)
 
         const previousTimeout = copiedTimeouts.get(button)
@@ -187,13 +198,13 @@ export const useDocumentationHeadingAnchors = (contentRef: RefObject<HTMLElement
     }
 
     const scrollToHashFromLocation = () => {
-      const hash = getDocumentationPageHash().slice(1)
+      const { tabKey, sectionId } = parseDocumentationHash(getDocumentationPageHash())
 
-      if (!hash) {
+      if (!sectionId) {
         return
       }
 
-      scrollToDocumentationSectionWithRetry(hash)
+      scrollToDocumentationSectionWithRetry(sectionId, tabKey)
     }
 
     let debounceId: ReturnType<typeof setTimeout> | undefined

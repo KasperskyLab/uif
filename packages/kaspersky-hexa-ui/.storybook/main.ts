@@ -1,8 +1,12 @@
 import type { StorybookConfig } from '@storybook/react-vite'
 
+import fs from 'node:fs'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import path from 'path'
+
+const CHANGELOG_VIRTUAL_ID = 'virtual:hexa-ui-changelog'
+const CHANGELOG_RESOLVED_ID = `\0${CHANGELOG_VIRTUAL_ID}`
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -14,12 +18,15 @@ const config: StorybookConfig = {
       directory: '../src',
       files: '**/*.@(mdx|stories*.@(ts|tsx))'
     },
-    '../Changelog.mdx'
+    '../ChangelogSearch.mdx'
   ],
   addons: [
     '@storybook/addon-docs',
     '@storybook/addon-links'
   ],
+  core: {
+    disableTelemetry: true
+  },
   refs: {
     icons: {
       title: 'Icons',
@@ -67,15 +74,40 @@ const config: StorybookConfig = {
     }
 
     config.plugins = config.plugins || []
-    config.plugins.push({
-      name: 'hexa-raw-md',
-      enforce: 'pre',
-      transform (code, id) {
-        if (id.split('?')[0].endsWith('.md')) {
-          return { code: `export default ${JSON.stringify(code)}`, map: null }
+    config.plugins.push(
+      {
+        name: 'hexa-raw-md',
+        enforce: 'pre',
+        transform (code, id) {
+          if (id.split('?')[0].endsWith('.md')) {
+            return { code: `export default ${JSON.stringify(code)}`, map: null }
+          }
+        }
+      },
+      {
+        // Storybook MDX pipeline owns `*.mdx`; serve Changelog.json via a virtual module.
+        name: 'hexa-changelog-source',
+        resolveId (id) {
+          if (id === CHANGELOG_VIRTUAL_ID) {
+            return CHANGELOG_RESOLVED_ID
+          }
+        },
+        load (id) {
+          if (id === CHANGELOG_RESOLVED_ID) {
+            const changelogPath = path.resolve(__dirname, '../Changelog.json')
+            this.addWatchFile(changelogPath)
+            try {
+              const content = fs.readFileSync(changelogPath, 'utf8')
+              const parsed = JSON.parse(content)
+              const entries = Array.isArray(parsed) ? parsed : []
+              return `export default ${JSON.stringify(entries)}`
+            } catch {
+              return 'export default []'
+            }
+          }
         }
       }
-    })
+    )
 
     config.optimizeDeps = {
       ...(config.optimizeDeps || {}),

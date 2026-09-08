@@ -1,14 +1,12 @@
-import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { StoryColumn, StoryWrapper } from '@sb/StoryComponents'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 import styled from 'styled-components'
 
-import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
-
 import { Divider as DividerComponent } from '../Divider'
-import { dividerStorySettings } from './Divider.stories'
 import { DividerProps } from '../types'
+
+import { dividerStorySettings } from './Divider.stories'
 
 const SomeContent = styled.div`
   width: 50px;
@@ -40,10 +38,4 @@ export const Basic: Story = {
       </Wrapper>
     )
   }
-}
-
-type PaletteStory = StoryObj<ThemedPaletteProps>
-export const ColorTokens: PaletteStory = {
-  args: { source: componentColors.divider },
-  render: args => <ThemedPalette {...args} />
 }

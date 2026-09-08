@@ -4,38 +4,54 @@ import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
 import {
+  scrollShadowCss,
   tableCss,
   tableCssProps,
-  TableCssProps,
-  tableWithBordersCss
+  TableCssProps
 } from '../../tableCss'
-import { findParentForClassName } from '../common'
+import { findParentForClassName, isColumnVisible } from '../common'
 
 import { useResizableColumnsContext } from './ResizableColumnsContext'
 
 export const STICKY_HEADER_CLASS = 'hexa-ui-table-sticky-header'
 
-export const TableStickyHeader = styled.div.withConfig({
+export const TableStickyHeaderWrapper = styled.div.withConfig({
   shouldForwardProp: prop => !tableCssProps.includes(prop as typeof tableCssProps[number])
 })<TableCssProps>`
   position: sticky;
   z-index: 3;
   overflow: hidden;
   max-width: 100%;
-  ${({ stickyHeader }) => `top: ${stickyHeader}px;`} 
-  ${({ useDragDrop }) => useDragDrop && 'padding-left: 16px;'}
-  ${tableCss}
+  ${({ stickyHeader }) => `top: ${stickyHeader}px;`}
+`
 
+export const TableStickyHeader = styled.div.withConfig({
+  shouldForwardProp: prop => !tableCssProps.includes(prop as typeof tableCssProps[number])
+})<TableCssProps>`
+  ${tableCss}
+  
   & .ant-table table col {
     min-width: unset;
   }
-  
-  ${({ borderedStyle }) => borderedStyle && `
-      & .ant-table table {
-        ${tableWithBordersCss}
+
+  &.table-sticky-selection {
+    ${scrollShadowCss}
+
+    .ant-table-selection-column {
+      position: sticky;
+      left: 0;
+      top: 0;
+      z-index: 3;
+    }
+  }
+
+  &.table-draggable {
+    .ant-table-selection-column {
+      .ant-checkbox-wrapper {
+        transform: translate(8px, 0px);  
       }
-      box-shadow: 0 7px 7px -7px var(--elevation--overlap);
-  `}
+    }
+  }
 `
 
 export function StickyHeaderWrapper ({ children, className }: {
@@ -71,7 +87,7 @@ export function StickyHeaderWrapper ({ children, className }: {
     return (
       <>
         {hasRowSelection ? <Tag className={`ant-table-selection-${classname}`} /> : null}
-        {columns.map(item => (
+        {columns.filter(isColumnVisible).map(item => (
           <Tag key={item.key} style={{ width: item.width, minWidth: item.minWidth }} />
         ))}
       </>

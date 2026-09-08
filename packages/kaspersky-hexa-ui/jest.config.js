@@ -28,7 +28,8 @@ module.exports = {
   preset: 'ts-jest',
   roots: [
     '<rootDir>/src',
-    '<rootDir>/helpers'
+    '<rootDir>/helpers',
+    '<rootDir>/.storybook/components/Documentation'
   ],
   setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
   testPathIgnorePatterns: ['/src/table/__tests__/Filters/helpers.ts'],

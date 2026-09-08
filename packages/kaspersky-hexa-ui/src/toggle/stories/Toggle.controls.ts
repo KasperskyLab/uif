@@ -3,7 +3,7 @@ import {
   PropPresentationMap
 } from '@sb/components/Documentation'
 
-import { sharedPropConfig } from '@helpers/resolveDesignControls'
+import { sharedPropConfig } from '@sb/resolveDesignControls'
 
 const fromSharedProp = (
   propName: keyof typeof sharedPropConfig,

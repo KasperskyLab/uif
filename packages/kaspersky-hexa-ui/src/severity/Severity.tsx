@@ -1,6 +1,6 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { useLocalization } from '@helpers/localization/useLocalization'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { Tag } from '../tag'
@@ -28,8 +28,9 @@ const SeverityView: FC<SeverityViewProps> = ({
   testAttributes,
   ...rest
 }: SeverityViewProps) => {
+  const { t } = useTranslation()
   // eslint-disable-next-line security/detect-object-injection
-  const modeDefaultText = useLocalization(severityTextLocalization[mode])
+  const modeDefaultText = t(severityTextLocalization[mode])
   const content = children || modeDefaultText
   return (
     <StyledSeverity {...testAttributes} {...rest}>

@@ -17,14 +17,14 @@ export function FilterItemCondition <T extends TableRecord = TableRecord> ({
   index
 }: FilterItemConditionProps<T>) {
   const { t } = useTranslation()
-  const { filterVersion } = useTableContext()
+  const filterVersion = useTableContext(state => state.filterVersion)
 
   const options = useMemo(() => {
     const hasOperations = operations && operations.length
 
     if (hasOperations) {
       return operations.map(({ label, operation }) => ({
-        label: label || operation,
+        label: label || t(`table.filterOperation.${operation}`, operation),
         value: operation
       }))
     }

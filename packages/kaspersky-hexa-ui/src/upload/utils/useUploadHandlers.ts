@@ -131,7 +131,7 @@ export function useUploadHandlers (
     const targetItem = file2Obj(file, {
       percent: 100,
       response,
-      status: 'done',
+      status: 'success',
       xhr
     })
 
