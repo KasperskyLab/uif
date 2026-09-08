@@ -30,10 +30,10 @@ describe('Badge', () => {
     expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
   })
 
-  test('should use overflowCount instead of count if count is higher', () => {
+  test('should append plus to overflowCount if count is higher', () => {
     const overflowCount = 9
     const { container } = render(<DefaultBadge overflowCount={overflowCount} />)
-    expect(matchBadgeContent(container, `+${overflowCount}`)).toBeTruthy()
+    expect(matchBadgeContent(container, `${overflowCount}+`)).toBeTruthy()
   })
 
   test('should pass title attribute', () => {
@@ -53,11 +53,11 @@ describe('Badge', () => {
   })
 
   describe('hooks', () => {
-    test('useOverflowCount should return overflowCount if count is higher', () => {
+    test('useOverflowCount should append plus to overflowCount if count is higher', () => {
       const count = 10
       const overflowCount = 9
       const { result } = renderHook(() => useOverflowCount(count, overflowCount))
-      expect(result.current).toEqual(`+${overflowCount}`)
+      expect(result.current).toEqual(`${overflowCount}+`)
     })
   })
 

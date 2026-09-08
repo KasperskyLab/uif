@@ -1,0 +1,19 @@
+@use '../../design-system/tokens/typography.module.scss' as *;
+
+$text-like-controls: ':global(.kl6-link), :global(.kl6-status), :global(.kl6-text)';
+
+.fieldSet {
+  width: 100%;
+  max-width: 910px;
+  display: flex;
+  flex-direction: column;
+
+  :global(.kl6-field):not(:first-child) {
+    margin-top: var(--field-margin-before, 16px);
+  }
+
+  :global(.kl6-field):has(:global(.kl6-field-control-box) > #{$text-like-controls})
+  + :global(.kl6-field):has(:global(.kl6-field-control-box) > #{$text-like-controls}) {
+    margin-top: var(--field-margin-before, 8px);
+  }
+}

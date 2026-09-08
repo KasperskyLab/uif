@@ -1,6 +1,24 @@
 import { flattenDataSource } from '@src/table/helpers/common'
 import { TableColumn, TableCustomGroupSorter, TableRecord } from '@src/table/types'
 import get from 'lodash/get'
+import isEqualWith from 'lodash/isEqualWith'
+
+const treatFunctionsAsEqual = (a: unknown, b: unknown): boolean | undefined =>
+  (typeof a === 'function' && typeof b === 'function') ? true : undefined
+
+export const areGroupsPropsEqual = (prev: Record<string, unknown>, next: Record<string, unknown>): boolean => {
+  const prevKeys = Object.keys(prev)
+  if (prevKeys.length !== Object.keys(next).length) return false
+  for (const key of prevKeys) {
+    if (prev[key] === next[key]) continue
+    if (key === 'columns') {
+      if (!isEqualWith(prev[key], next[key], treatFunctionsAsEqual)) return false
+      continue
+    }
+    return false
+  }
+  return true
+}
 
 export const createGroupsMap = <T extends TableRecord = TableRecord>(
   dataSource: T[],

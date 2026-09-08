@@ -6,7 +6,7 @@ import MetaData from '../__meta__/meta.json'
 import { columns, gapData, paddingData, borderRadiusData } from '../data'
 
 const meta = {
-  title: 'Design/Sizing & Spacing',
+  title: 'Design Tokens/Sizing & Spacing',
   args: {
     columns: columns,
     pagination: false

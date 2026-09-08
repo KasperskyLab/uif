@@ -28,7 +28,7 @@ const IconInfoMap: { [key in SectionMessageMode]: FC } = {
 }
 
 const StyledSectionMessage = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['cssConfig', 'componentId'].includes(prop)
+  shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
 })`
   ${sectionMessageCss}
 `

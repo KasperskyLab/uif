@@ -1,4 +1,5 @@
 import { getTextSizes } from '@design-system/tokens'
+import { dedentMarkdownDescription } from '@helpers/dedentMarkdownDescription'
 import { Markdown } from '@src/markdown'
 import { textLevels } from '@kaspersky/hexa-ui-core/typography/js'
 import React, { ReactNode } from 'react'
@@ -31,5 +32,5 @@ export const DocMarkdownDescription: React.FC<DocMarkdownDescriptionProps> = ({ 
     return <>{value}</>
   }
 
-  return <StyledMarkdown value={value} breaks />
+  return <StyledMarkdown value={dedentMarkdownDescription(value)} breaks />
 }

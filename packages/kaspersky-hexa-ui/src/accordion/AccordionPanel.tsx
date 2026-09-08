@@ -20,9 +20,9 @@ export const AccordionPanel: FC<AccordionPanelProps> = memo(({
   elementAfter,
   actions,
   disabled,
-  shouldDisableActions = true,
+  shouldDisableActions,
   className,
-  titleSize = 'small',
+  titleSize,
   ...rest
 }) => {
   const actionsView = actions && (
@@ -105,5 +105,10 @@ export const AccordionPanel: FC<AccordionPanelProps> = memo(({
     />
   )
 })
+
+AccordionPanel.defaultProps = {
+  shouldDisableActions: true,
+  titleSize: 'small'
+}
 
 AccordionPanel.displayName = 'AccordionPanel'

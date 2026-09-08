@@ -71,7 +71,7 @@ export const Accordion: Story = {
   parameters: {
     controls: {
       // eslint-disable-next-line @stylistic/max-len
-      exclude: /(accordion|expandIconPosition|componentId|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
+      exclude: /(accordion|expandIconPosition|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
     }
   }
 }
@@ -110,7 +110,7 @@ export const TitleSize: Story = {
   parameters: {
     controls: {
       // eslint-disable-next-line @stylistic/max-len
-      exclude: /(accordion|expandIconPosition|componentId|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
+      exclude: /(accordion|expandIconPosition|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
     }
   }
 }
@@ -149,7 +149,7 @@ export const WithBorder: Story = {
   parameters: {
     controls: {
       // eslint-disable-next-line @stylistic/max-len
-      exclude: /(accordion|expandIconPosition|componentId|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
+      exclude: /(accordion|expandIconPosition|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
     }
   }
 }
@@ -189,7 +189,7 @@ export const Disabled: Story = {
   parameters: {
     controls: {
       // eslint-disable-next-line @stylistic/max-len
-      exclude: /(accordion|expandIconPosition|componentId|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
+      exclude: /(accordion|expandIconPosition|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
     }
   }
 }
@@ -231,7 +231,7 @@ export const AdditionalText: Story = {
   parameters: {
     controls: {
       // eslint-disable-next-line @stylistic/max-len
-      exclude: /(accordion|expandIconPosition|componentId|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
+      exclude: /(accordion|expandIconPosition|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
     }
   }
 }
@@ -272,7 +272,7 @@ export const TagAfter: Story = {
   },
   parameters: {
     controls: {
-      exclude: /(accordion|expandIconPosition|componentId|componentType|children|theme|indicatorMode)/
+      exclude: /(accordion|expandIconPosition|componentType|children|theme|indicatorMode)/
     }
   }
 }
@@ -329,7 +329,7 @@ export const ElementBeforeAfter: Story = {
   parameters: {
     controls: {
       // eslint-disable-next-line @stylistic/max-len
-      exclude: /(accordion|expandIconPosition|componentId|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
+      exclude: /(accordion|expandIconPosition|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
     }
   },
   args: {
@@ -379,7 +379,7 @@ export const Actions: Story = {
   parameters: {
     controls: {
       // eslint-disable-next-line @stylistic/max-len
-      exclude: /(accordion|expandIconPosition|componentId|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
+      exclude: /(accordion|expandIconPosition|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
     }
   }
 }
@@ -403,7 +403,7 @@ export const SingleAndMultipleMode: Story = {
   },
   parameters: {
     controls: {
-      exclude: /(expandIconPosition|componentId|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
+      exclude: /(expandIconPosition|componentType|children|theme|indicatorMode|tagBeforeLabel|tagBeforeMode|tagAfterLabel|tagAfterMode)/
     }
   }
 }

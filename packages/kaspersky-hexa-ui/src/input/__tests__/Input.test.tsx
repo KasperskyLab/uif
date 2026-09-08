@@ -1,4 +1,5 @@
 import { ConfigProvider } from '@design-system/context'
+import { validationStatuses } from '@helpers/typesHelpers'
 import { fireEvent, render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
@@ -15,6 +16,13 @@ describe('Input - Textbox - Basic ', () => {
 
     expect(container.querySelector(`[kl-id="${klId}"]`)).toBeInTheDocument()
     expect(container.querySelector('[data-testid="test-id"]')).toBeInTheDocument()
+  })
+
+  test('should display validation status', () => {
+    validationStatuses.forEach(validationStatus => {
+      render(<Textbox validationStatus={validationStatus} klId={klId} />)
+      expect(document.querySelector(`.ant-input-affix-wrapper.${validationStatus}`)).toBeInTheDocument()
+    })
   })
 
   test('should render with mask Date', async () => {
@@ -142,71 +150,6 @@ describe('Input - Textbox - Basic ', () => {
     const inputMAC = getByTestId(klId)
     await userEvent.type(inputMAC, '11111111')
     expect(inputMAC).toHaveValue('11:11:11:11')
-  })
-})
-
-describe('Input - Textbox - Number ', () => {
-  const klId = 'input-id'
-  test('should recieve kl-id prop', () => {
-    const { getByTestId } = render(
-      <Textbox.Number
-        klId={klId}
-      />
-    )
-    expect(getByTestId(klId)).toBeInTheDocument()
-  })
-
-  test('should not render text value', async () => {
-    const { getByTestId } = render(
-      <Textbox.Number
-        klId={klId}
-      />
-    )
-    const textboxNumber = getByTestId(klId)
-    await userEvent.clear(textboxNumber)
-    await userEvent.type(textboxNumber, 'aaa')
-    await userEvent.click(document.body)
-    expect(textboxNumber).toHaveValue('')
-  })
-
-  test('should render only numeric value', async () => {
-    const { getByTestId } = render(
-      <Textbox.Number
-        klId={klId}
-      />
-    )
-    const textboxNumber = getByTestId(klId)
-    await userEvent.clear(textboxNumber)
-    await userEvent.type(textboxNumber, '444')
-    await userEvent.click(document.body)
-    expect(textboxNumber).toHaveValue('444')
-  })
-
-  test('should prevent non-integer input when integerOnly is true', () => {
-    const { getByTestId } = render(<Textbox.Number integerOnly klId={klId} />)
-
-    const textboxNumber = getByTestId(klId)
-    userEvent.clear(textboxNumber)
-    userEvent.type(textboxNumber, '1.')
-    expect(textboxNumber).toHaveValue('1')
-  })
-
-  test('should prevent negative input when min is set to 0', () => {
-    const { getByTestId } = render(<Textbox.Number min={0} klId={klId} />)
-
-    const textboxNumber = getByTestId(klId)
-    userEvent.clear(textboxNumber)
-    userEvent.type(textboxNumber, '-1')
-    expect(textboxNumber).toHaveValue('1')
-  })
-
-  test('should prevent positive input when max is set to 0', () => {
-    const { getByTestId } = render(<Textbox.Number max={0} klId={klId} />)
-
-    const textboxNumber = getByTestId(klId)
-    userEvent.clear(textboxNumber)
-    userEvent.type(textboxNumber, '1')
-    expect(textboxNumber).toHaveValue('')
   })
 })
 

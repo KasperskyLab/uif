@@ -31,7 +31,7 @@ export function FilterItem <T extends TableRecord = TableRecord> ({
 }: FilterItemProps<T>): JSX.Element {
   const { t } = useTranslation()
 
-  const { enableNestedFilters } = useTableContext()
+  const enableNestedFilters = useTableContext(state => state.enableNestedFilters)
 
   const filterConfig = useMemo(() => getFilterConfigFromGroup(filter)!, [filter])
 

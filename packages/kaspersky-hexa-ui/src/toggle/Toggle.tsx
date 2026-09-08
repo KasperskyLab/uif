@@ -1,7 +1,10 @@
 import { AdditionalContent } from '@helpers/components/AdditionalContent'
+import { usePopupConfig } from '@helpers/components/PopupConfigProvider'
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { FormLabel } from '@src/form-label'
 import SwitchAntd from 'antd/es/switch'
+import cn from 'classnames'
 import React, {
   Children,
   cloneElement,
@@ -10,37 +13,29 @@ import React, {
   useEffect,
   useState
 } from 'react'
-import styled from 'styled-components'
 
-import { toggleCss, ToggleWrapper } from './toggleCss'
-import { ToggleProps, ToggleViewProps } from './types'
-import { useThemedToggle } from './useThemedToggle'
-
-const StyledToggle = styled(SwitchAntd).withConfig({
-  shouldForwardProp: prop => !['cssConfig', 'readonly', 'labelPosition'].includes(prop)
-})`${toggleCss}`
+import styles from './Toggle.module.scss'
+import { ToggleProps } from './types'
 
 export const Toggle: FC<ToggleProps> = (rawProps: ToggleProps) => {
-  const themedProps = useThemedToggle(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <ToggleView {...props} />
-}
+  const {
+    onChange,
+    checked,
+    children,
+    disabled,
+    readonly,
+    loading,
+    theme,
+    labelPosition = 'after',
+    required,
+    tooltip,
+    testAttributes,
+    description,
+    dependentElement,
+    className,
+    ...rest
+  } = useTestAttribute(rawProps)
 
-const ToggleView: FC<ToggleViewProps> = ({
-  onChange,
-  checked,
-  children,
-  disabled,
-  readonly,
-  cssConfig,
-  labelPosition = 'after',
-  required,
-  tooltip,
-  testAttributes,
-  description,
-  dependentElement,
-  ...rest
-}: ToggleViewProps) => {
   const [isChecked, setChecked] = useState(!!checked)
 
   useEffect(() => {
@@ -53,27 +48,59 @@ const ToggleView: FC<ToggleViewProps> = ({
     checked === undefined && setChecked(check)
   }
 
+  const hasChildren = Children.count(children) > 0
+
+  const canToggle = !(disabled || readonly || loading)
+
+  const config = usePopupConfig()
+
   return (
-    <div className="ant-toggle-wrapper" role="toggle">
-      <ToggleWrapper>
-        <StyledToggle
+    <div
+      className={cn(
+        styles.root,
+        styles.toggleRoot,
+        getClassNameWithTheme(className, theme)
+      )}
+      role="toggle"
+    >
+      <div className={styles.toggleWrapper}>
+        <SwitchAntd
           onChange={toggleValue}
           checked={isChecked}
-          cssConfig={cssConfig}
           disabled={disabled || readonly}
-          readonly={readonly}
-          labelPosition={children ? labelPosition : undefined}
+          loading={loading}
+          className={cn(
+            styles.toggle,
+            {
+              [styles.readonly]: readonly,
+              [styles.labelBefore]: hasChildren && labelPosition === 'before',
+              [styles.labelAfter]: hasChildren && labelPosition === 'after'
+            }
+          )}
           {...testAttributes}
           {...rest}
         />
         {typeof children === 'string'
           ? (
               <FormLabel
-                onClick={() => !disabled && !readonly && toggleValue(!isChecked, new MouseEvent('click'))}
-                className="toggle-label"
+                onClick={(event) => {
+                  const target = event.target as HTMLElement
+
+                  if (target.closest('.form-label-info-icon')) return
+
+                  event.preventDefault()
+
+                  if (canToggle) toggleValue(!isChecked, new MouseEvent('click'))
+                }}
+                className={styles.toggleLabel}
                 disabled={disabled}
+                readOnly={readonly}
                 required={required}
                 tooltip={tooltip}
+                getPopupContainer={
+                  config.getPopupContainer ??
+                  (triggerNode => config.usePortal ? document.body : triggerNode.parentElement!)
+                }
               >
                 {children}
               </FormLabel>
@@ -81,10 +108,14 @@ const ToggleView: FC<ToggleViewProps> = ({
           : Children
               .map(children, child =>
                 isValidElement(child)
-                  ? cloneElement<any>(child, { onClick: () => !disabled && toggleValue(!isChecked, new MouseEvent('click')) })
+                  ? cloneElement<any>(child, {
+                      onClick: () =>
+                        canToggle &&
+                        toggleValue(!isChecked, new MouseEvent('click'))
+                    })
                   : child)
         }
-      </ToggleWrapper>
+      </div>
       <AdditionalContent
         description={description}
         dependentElement={dependentElement}

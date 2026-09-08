@@ -1,9 +1,9 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
-import { Locale } from '@src/locale'
 import { Text } from '@src/typography'
 import { Meta, StoryObj } from '@storybook/react'
 import Empty from 'antd/es/empty'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
@@ -48,13 +48,15 @@ export const Basic: Story = {
 }
 
 const EmptyData = () => {
+  const { t } = useTranslation()
+
   return (
     <Empty
       image={Empty.PRESENTED_IMAGE_SIMPLE}
       className="ant-empty-small"
       description={(
         <Text type="BTR3">
-          <Locale localizationKey="common.empty" />
+          {t('common.empty')}
         </Text>
       )}
       style={{ width: '276px', margin: '8px 0' }}

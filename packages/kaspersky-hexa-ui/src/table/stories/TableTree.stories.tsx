@@ -50,8 +50,7 @@ const meta: Meta<ITableProps> = {
     columns,
     pagination: {
       showSizeChanger: true
-    },
-    borderedStyle: false
+    }
   },
   argTypes: {
     columns: basicArgTypes.columns,

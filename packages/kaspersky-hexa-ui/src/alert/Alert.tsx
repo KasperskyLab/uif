@@ -1,16 +1,16 @@
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import { showDeprecationWarn } from '@helpers/showDeprecationWarn'
 import { ActionButton } from '@src/action-button'
 import { Link } from '@src/link'
 import { Space } from '@src/space'
 import cn from 'classnames'
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React, { useMemo, useState } from 'react'
 
 import { StatusDangerOutline1, StatusInfoOutline, StatusOkOutline, StatusWarningOutline } from '@kaspersky/hexa-ui-icons/16'
 
-import { alertCss, IconStyled, SpaceBox } from './alertCss'
-import { AlertMode, AlertProps } from './types'
-import { useThemedAlert } from './useThemedAlert'
+import styles from './Alert.module.scss'
+import { AlertMode, alertModes, AlertProps } from './types'
 
 const IconMap: { [key in AlertMode]: React.FC } = {
   error: () => <StatusDangerOutline1 data-testid="alert-error-icon" data-component-id="icon-error" />,
@@ -19,53 +19,73 @@ const IconMap: { [key in AlertMode]: React.FC } = {
   info: () => <StatusInfoOutline data-testid="alert-info-icon" data-component-id="icon-info" />
 }
 
-const StyledAlert = styled.div.withConfig({
-  shouldForwardProp: (prop) =>
-    !['cssConfig', 'componentId'].includes(prop)
-})`
-  ${alertCss}
-`
-
 export const Alert = (props: AlertProps) => {
   const {
     actions,
     children,
     closable,
-    cssConfig,
-    mode,
+    className,
+    mode: rawMode = 'info',
+    theme,
+    width,
     onClose,
     testAttributes,
+    style,
     ...forwardedProps
-  } = useTestAttribute(useThemedAlert(props))
+  } = useTestAttribute(props)
 
   const [visibility, setVisibility] = useState(true)
-  const IconComponent = IconMap[mode as AlertMode]
 
   const closeNotification = () => {
     onClose?.()
     setVisibility(false)
   }
 
+  const mode: AlertMode = useMemo(() => {
+    if (!alertModes.includes(rawMode)) {
+      showDeprecationWarn('mode', rawMode)
+      return 'info'
+    }
+
+    return rawMode
+  }, [rawMode])
+
   if (!visibility) return null
 
+  const IconComponent = IconMap[mode]
+
   return (
-    <StyledAlert cssConfig={cssConfig} {...testAttributes} {...forwardedProps}>
-      <IconStyled cssConfig={cssConfig}>
+    <div
+      {...testAttributes}
+      {...forwardedProps}
+      className={cn(getClassNameWithTheme(className, theme), styles.alert, styles[mode])}
+      style={width ? { ...style, '--alert--width': width } : style}
+    >
+      <span className={styles.icon}>
         <IconComponent />
-      </IconStyled>
-      <SpaceBox
-        gap={8}
-        direction="horizontal"
+      </span>
+      <Space
+        gap="related"
         align="flex-start"
+        wrap="nowrap"
+        justify="space-between"
+        width="100%"
       >
-        <SpaceBox
-          gap={24}
-          direction="horizontal"
+        <Space
+          gap="section"
           align="flex-start"
+          wrap="nowrap"
+          justify="space-between"
+          width="100%"
         >
           {children}
           {actions && (
-            <Space gap={8} className={cn(closable && 'alert-action-separator')} direction="horizontal">
+            <Space
+              gap="related"
+              className={cn(styles.actionsSeparator, closable && 'alert-action-separator')}
+              wrap="nowrap"
+              width="max-content"
+            >
               {actions.FIRST_ACTION && (
                 <Link {...actions.FIRST_ACTION}>
                   {actions.FIRST_ACTION.text}
@@ -78,10 +98,10 @@ export const Alert = (props: AlertProps) => {
               )}
             </Space>
           )}
-        </SpaceBox>
+        </Space>
         {closable && <ActionButton size="large" onClick={() => closeNotification()} />}
-      </SpaceBox>
-    </StyledAlert>
+      </Space>
+    </div>
   )
 }
 

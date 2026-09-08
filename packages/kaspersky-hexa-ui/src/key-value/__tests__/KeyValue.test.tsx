@@ -19,7 +19,7 @@ const DefaultKeyValue = (props: KeyValueProps) => (
 )
 
 describe('KeyValue ', () => {
-  const componentId = 'key-value-id'
+  const testId = 'key-value-id'
 
   const data: KeyValuePair[] = [
     {
@@ -60,7 +60,7 @@ describe('KeyValue ', () => {
 
   test('should recieve data prop', () => {
     render(
-      <KeyValue componentId={componentId} data={data} />
+      <KeyValue testId={testId} data={data} />
     )
     const keyItem = screen.getByText('Copy')
     const valueItem = screen.getByText('SideCopy')
@@ -70,7 +70,7 @@ describe('KeyValue ', () => {
 
   test('should handle custom components in key and value', () => {
     render(
-      <KeyValue componentId={componentId} data={data} />
+      <KeyValue testId={testId} data={data} />
     )
     const button = screen.getByRole('button', { name: 'Button' })
     const url = screen.getByText(

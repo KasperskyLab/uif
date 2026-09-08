@@ -29,23 +29,23 @@ export const segmentedButtonCss = css<{ isStretch?: boolean }>`
     }
     div:first-child {
       &, & label {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
+        border-start-end-radius: 0;
+        border-end-end-radius: 0;
       }
     }
     div:last-child {
       &, & label {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
+        border-start-start-radius: 0;
+        border-end-start-radius: 0;
       }
     }
     div:not(:last-child):not(.kl6-segmentedButton-item-checked) {
       &, &:hover, &:active, &:focus-visible {
-        border-right-color: transparent;
+        border-inline-end-color: transparent;
       }
     }
     div:not(:last-child) {
-      margin-right: -1px;
+      margin-inline-end: -1px;
     }
   }
 
@@ -126,7 +126,7 @@ export const segmentedButtonItemCss = css<{ type: SegmentedButtonType, cssConfig
   ${({ type }) => type === 'radio' && css`
     &:not(.kl6-segmentedButton-item-disabled) + .kl6-segmentedButton-item-disabled {
       &, &:hover, &:active, &:focus-visible {
-        border-left-color: ${fromProps('unchecked.enabled.border')};
+        border-inline-start-color: ${fromProps('unchecked.enabled.border')};
       }
     }
   `}

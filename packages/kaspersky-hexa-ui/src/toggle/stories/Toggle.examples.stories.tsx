@@ -42,7 +42,6 @@ export const Disabled: Story = {
     <StoryColumn>
       <Toggle {...args} disabled>Label</Toggle>
       <Toggle {...args} disabled checked>Label</Toggle>
-      <Toggle {...args} disabled />
     </StoryColumn>
   )
 }
@@ -52,7 +51,6 @@ export const Readonly: Story = {
     <StoryColumn>
       <Toggle {...args} readonly>Label</Toggle>
       <Toggle {...args} readonly checked>Label</Toggle>
-      <Toggle {...args} readonly />
     </StoryColumn>
   )
 }
@@ -62,7 +60,6 @@ export const Loading: Story = {
     <StoryColumn>
       <Toggle {...args} loading>Label</Toggle>
       <Toggle {...args} loading checked>Label</Toggle>
-      <Toggle {...args} loading />
     </StoryColumn>
   )
 }

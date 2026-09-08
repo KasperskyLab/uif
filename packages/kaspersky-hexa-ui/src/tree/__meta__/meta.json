@@ -6,7 +6,8 @@
     "screenshotTests": false,
     "migration": true,
     "apiTable": true,
-    "storybook": true
+    "storybook": true,
+    "inBuilder": "Используется под названием «Дерево»"
   },
   "component": "Tree",
   "description": "В качестве основы используется Tree из библиотеки Antd.",

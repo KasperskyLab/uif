@@ -29,7 +29,7 @@ const Wrapper = styled.div`
   margin-top: 4px;
 
   &.sidebar-postfix {
-    margin-right: 8px;
+    margin-inline-end: 8px;
   }
 `
 

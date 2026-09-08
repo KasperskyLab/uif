@@ -3,11 +3,11 @@ import {
   PropPresentationMap
 } from '@sb/components/Documentation'
 
-import { sharedPropConfig } from '@helpers/resolveDesignControls'
+import { sharedPropConfig } from '@sb/resolveDesignControls'
 
 import { FormLabelMode } from '@src/form-label/types'
 
-const checkboxModes: FormLabelMode[] = ['primary', 'secondary', 'disabled']
+const checkboxModes: FormLabelMode[] = ['primary', 'secondary']
 
 const fromSharedProp = (
   propName: keyof typeof sharedPropConfig,

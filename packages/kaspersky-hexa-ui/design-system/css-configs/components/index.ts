@@ -15,7 +15,6 @@ import { segmentedButton, segmentedButtonSize } from './segmentedButton'
 import { select } from './select'
 import { statusCard, statusCardSize } from './statusCard'
 import { tabs } from './tabs'
-import { toggle } from './toggle'
 import { tree } from './tree'
 import { treeSelect } from './treeSelect'
 import { upload } from './upload'
@@ -67,9 +66,6 @@ export const COMPONENTS_CONFIG: ComponentsConfig = {
     },
     tabs: {
       colors: tabs({ effects })
-    },
-    toggle: {
-      colors: toggle({ effects })
     },
     tree: {
       colors: tree({ effects })

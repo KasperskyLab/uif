@@ -6,7 +6,8 @@
       "screenshotTests": false,
       "migration": false,
       "apiTable": false,
-      "storybook": true
+      "storybook": true,
+      "inBuilder": "Используется под названием «Markdown»"
     },
     "component": "Markdown",
     "description": "Компонент для отображения маркдаун-разметки",

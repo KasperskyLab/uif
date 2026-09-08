@@ -13,7 +13,7 @@ export const defaultSortFunction = <T extends TableRecord = TableRecord>(
   isAsc: boolean,
   attribute: string
 ): T[] => {
-  return [...(rows).sort((rowA, rowB) => {
+  return [...rows].sort((rowA, rowB) => {
     let parseValue = (v: any) => (typeof v === 'string') ? v.toUpperCase() : v
 
     const path = attribute ? `${field as string}.${attribute}` : field
@@ -34,9 +34,9 @@ export const defaultSortFunction = <T extends TableRecord = TableRecord>(
     } else {
       return -1
     }
-  })]
+  })
 }
 
 export const customSortFunctionWrapper = <T extends TableRecord = TableRecord>(data: T[], sorter: CustomSorter<T>, isAsc: boolean): T[] => {
-  return [...data.sort((a, b) => sorter(a, b, isAsc))]
+  return [...data].sort((a, b) => sorter(a, b, isAsc))
 }

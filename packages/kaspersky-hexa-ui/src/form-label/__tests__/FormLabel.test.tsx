@@ -43,4 +43,14 @@ describe('FormLabel', () => {
     const { container } = render(<FormLabel>Test Label</FormLabel>)
     expect(container.querySelector('.form-label-info-icon')).not.toBeInTheDocument()
   })
+
+  it('should render in readOnly mode', () => {
+    const { container } = render(<FormLabel readOnly>Test Label</FormLabel>)
+    expect(container.querySelector('.form-label')).toHaveClass('readOnly')
+  })
+
+  it('should render in disabled mode', () => {
+    const { container } = render(<FormLabel disabled>Test Label</FormLabel>)
+    expect(container.querySelector('.form-label')).toHaveClass('disabled')
+  })
 })

@@ -9,6 +9,7 @@ type SelectionCheckboxState = typeof selectionCheckboxStates[number]
 export type HeaderCheckboxProps = {
   tableId?: string,
   disableSelectAll: boolean,
+  disableSelectAllOnCurrentPage: boolean,
   selectedRowsLength: number,
   deselectedRowsLength: number,
   isSelectedAll: boolean,
@@ -20,6 +21,7 @@ export type HeaderCheckboxProps = {
 
 export const HeaderCheckbox: FC<HeaderCheckboxProps> = ({
   disableSelectAll,
+  disableSelectAllOnCurrentPage,
   selectedRowsLength,
   deselectedRowsLength,
   isSelectedAll,
@@ -52,6 +54,7 @@ export const HeaderCheckbox: FC<HeaderCheckboxProps> = ({
       testId: 'select-current-page',
       klId: 'select-current-page',
       onClick: onSelectCurrentPage,
+      disabled: disableSelectAllOnCurrentPage,
       children: t('table.selectAll.selectCurrentPage')
     },
     {

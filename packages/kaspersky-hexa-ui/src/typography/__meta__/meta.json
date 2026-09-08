@@ -8,7 +8,8 @@
     "apiTable": true,
     "storybook": true,
     "designLink": true,
-    "pixsoView": true
+    "pixsoView": true,
+    "inBuilder": "Компонент Heading используется под названием «Заголовок», Text - «Текст»"
   },
   "component": "Typography",
   "description": "Компонент для отображения стилизованного текста.",

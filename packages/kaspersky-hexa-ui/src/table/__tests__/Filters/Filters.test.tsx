@@ -1,383 +1,299 @@
 import { localization } from '@helpers/localization'
-import { ITableProps, TableRef } from '@src/table'
+import { TableColumn, TableRef } from '@src/table'
 import { isFilterConfig } from '@src/table/modules/Filters/helpers'
-import {
-  addFilter,
-  applyFilters,
-  getFilterChip,
-  modifyColumns,
-  openFiltersSidebar
-} from '@src/table/test-utils/helpers'
+import { modifyColumns } from '@src/table/test-utils/helpers'
+import { MODES, renderByMode } from '@src/table/test-utils/renderByMode'
+import { TableTestingClass, TestTable } from '@src/table/test-utils/TableTestingClass'
 import {
   configure,
   fireEvent,
-  render,
   screen,
   waitFor
 } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React, { MutableRefObject } from 'react'
-import { act } from 'react-dom/test-utils'
 
-import { generatedData, tableColumns } from '../../__mocks__/filtersMockData'
-import mockData from '../../__mocks__/table-mock-data.json'
+import { generatedData, tableColumns, TableMockProps } from '../../__mocks__/filtersMockData'
 import { FilterApi } from '../../modules/Filters/FilterApi'
-import { FilterOperation, FilterType, NumberFilter, UnitedFilter } from '../../modules/Filters/types'
-import { columns } from '../../stories/_commonConstants'
-import { Table } from '../../test-utils/shared'
+import {
+  CustomFilterOperations,
+  FilterOperation,
+  FilterType,
+  NumberFilter,
+  UnitedFilter
+} from '../../modules/Filters/types'
 
-const defaultProps = {
+configure({ testIdAttribute: 'data-testid' })
+
+// Серверные сценарии (мок dataSourceFunction + debounce) не укладываются в дефолтный таймаут jest.
+jest.setTimeout(15000)
+
+const pageSize = 20
+
+const defaultProps: TableMockProps = {
   klId: 'table-filters-kl-id',
   testId: 'table-filters-test-id',
   useFiltersSidebar: true,
-  dataSource: mockData,
-  columns,
+  dataSource: generatedData,
+  columns: tableColumns,
   pagination: {
-    pageSize: 20
+    pageSize
   },
   toolbar: {
     showFilterSidebar: true
   }
 }
 
-const DefaultTable = (props: ITableProps) => <Table {...defaultProps as ITableProps} {...props} />
-
-const getTotalRowsNumber = () => {
-  const totalSummary = screen.getByTestId('total').textContent
-  if (!totalSummary) return -1
-  const match = totalSummary.match(/Total (\d+)/)
-  return match && parseInt(match[1])
-}
-
-const cancelFiltering = () => {
-  const cancelButton = screen.getByText('Cancel')
-  fireEvent.click(cancelButton)
-}
-
-const changeFilterValue = (index: number, value: string) => {
-  const filterItemValue = screen.getByTestId(`filter-item-value-${index}`)
-  fireEvent.change(filterItemValue, { target: { value } })
+const renderTable = (props: Partial<TableMockProps> = {}) => {
+  const table = TableTestingClass.render({ ...defaultProps, ...props })
+  return { table }
 }
 
 describe('Table filters module', () => {
   it('should render by default', () => {
-    const container = render(<DefaultTable />).container as HTMLDivElement
-    expect(container.querySelector(`[kl-id="${defaultProps.klId}"]`)).toBeInTheDocument()
-    expect(container.querySelector(`[data-testid="${defaultProps.testId}"]`)).toBeInTheDocument()
+    const { table } = renderTable()
+    const instance = table.getInstance()
+    expect(instance).toHaveAttribute('kl-id', defaultProps.klId)
+    expect(instance).toHaveAttribute('data-testid', defaultProps.testId)
   })
 
   it('should render filters sidebar with correct test id', () => {
-    configure({ testIdAttribute: 'data-testid' })
-    const container = render(<DefaultTable />).container as HTMLDivElement
-    openFiltersSidebar(container)
-    const filtersSidebar = screen.getByTestId(`${defaultProps.testId}-filters-sidebar`)
-    expect(filtersSidebar).toBeInTheDocument()
+    const { table } = renderTable()
+    table.filters.openSidebar()
+    expect(table.filters.getSidebar()).toBeInTheDocument()
   })
 
   it('should have initial size of dataSource without filters', () => {
-    render(<DefaultTable />)
-    const expectedRowsCount = 100
-    const pageCount = Math.ceil(expectedRowsCount / defaultProps.pagination.pageSize)
-
-    expect(screen.getByTitle(pageCount)).toBeTruthy()
-    expect(screen.queryByTitle(pageCount + 1)).toBeNull()
-    expect(getTotalRowsNumber()).toBe(expectedRowsCount)
+    const { table } = renderTable()
+    table.pagination.expectTotal(100, pageSize)
   })
 
   it('should hide clear all button if there are no filters', () => {
-    const container = render(<DefaultTable />).container as HTMLDivElement
+    const { table } = renderTable()
 
-    openFiltersSidebar(container)
+    table.filters.openSidebar()
 
-    expect(screen.queryAllByRole('filter')).toHaveLength(0)
+    expect(table.filters.getCount()).toBe(0)
     expect(screen.queryByText('Clear all')).toBeNull()
   })
 
   it('should filter by one initial filter', () => {
-    render(
-      <DefaultTable
-        defaultSidebarFilters={[
-          {
-            name: 'name',
-            condition: FilterOperation.cont,
-            type: FilterType.Text,
-            value: 'e'
-          }
-        ]}
-      />
-    )
-    const expectedRowsCount = 72
-    const pageCount = Math.ceil(expectedRowsCount / defaultProps.pagination.pageSize)
+    const { table } = renderTable({
+      defaultSidebarFilters: [
+        {
+          name: 'fullname',
+          condition: FilterOperation.cont,
+          type: FilterType.Text,
+          value: 'ov'
+        }
+      ]
+    })
 
-    expect(screen.getByTitle(pageCount)).toBeTruthy()
-    expect(screen.queryByTitle(pageCount + 1)).toBeNull()
-    expect(getTotalRowsNumber()).toBe(expectedRowsCount)
+    table.pagination.expectTotal(60, pageSize)
   })
 
   it('should filter by multiple initial filters', () => {
-    render(
-      <DefaultTable
-        defaultSidebarFilters={[
-          {
-            name: 'name',
-            condition: FilterOperation.cont,
-            type: FilterType.Text,
-            value: 'e'
-          },
-          {
-            name: 'country',
-            condition: FilterOperation.eq,
-            type: FilterType.Enum,
-            value: 'Ireland'
-          }
-        ]}
-      />
-    )
-    const expectedRowsCount = 5
-    const pageCount = Math.ceil(expectedRowsCount / defaultProps.pagination.pageSize)
+    const { table } = renderTable({
+      defaultSidebarFilters: [
+        {
+          name: 'fullname',
+          condition: FilterOperation.cont,
+          type: FilterType.Text,
+          value: 'ov'
+        },
+        {
+          name: 'group',
+          condition: FilterOperation.eq,
+          type: FilterType.Enum,
+          value: 'CEO'
+        }
+      ]
+    })
 
-    expect(screen.getByTitle(pageCount)).toBeTruthy()
-    expect(screen.queryByTitle(pageCount + 1)).toBeNull()
-    expect(getTotalRowsNumber()).toBe(expectedRowsCount)
+    table.pagination.expectTotal(6, pageSize)
   })
 
   it('should hide condition select when filter item is boolean', () => {
-    const { container } = render(
-      <DefaultTable
-        dataSource={generatedData}
-        columns={tableColumns}
-        defaultFilters={[
-          {
-            name: 'isTrainee',
-            condition: FilterOperation.eq,
-            type: FilterType.Boolean,
-            value: true
-          }
-        ]}
-      />
-    )
+    const { table } = renderTable({
+      defaultFilters: [
+        {
+          name: 'isTrainee',
+          condition: FilterOperation.eq,
+          type: FilterType.Boolean,
+          value: true
+        }
+      ]
+    })
 
-    openFiltersSidebar(container)
+    table.filters.openSidebar()
 
-    const sidebarFilter = screen.queryByRole('filter')!
-    expect(sidebarFilter).toBeInTheDocument()
-
-    const conditionSelect = sidebarFilter.querySelector('[data-testid="filter-item-condition-select-0"]')
-    expect(conditionSelect).not.toBeInTheDocument()
+    expect(table.filters.getItem(0)).toBeInTheDocument()
+    expect(table.filters.getConditionSelect(0)).not.toBeInTheDocument()
   })
 
   it('should clear all filters', () => {
-    const container = render(
-      <DefaultTable
-        defaultSidebarFilters={[
-          {
-            name: 'name',
-            condition: FilterOperation.cont,
-            type: FilterType.Text,
-            value: 'e'
-          },
-          {
-            name: 'country',
-            condition: FilterOperation.eq,
-            type: FilterType.Enum,
-            value: 'Ireland'
-          }
-        ]}
-      />
-    ).container as HTMLDivElement
-    let expectedRowsCount = 5
-    let pageCount = Math.ceil(expectedRowsCount / defaultProps.pagination.pageSize)
+    const { table } = renderTable({
+      defaultSidebarFilters: [
+        {
+          name: 'fullname',
+          condition: FilterOperation.cont,
+          type: FilterType.Text,
+          value: 'ov'
+        },
+        {
+          name: 'group',
+          condition: FilterOperation.eq,
+          type: FilterType.Enum,
+          value: 'CEO'
+        }
+      ]
+    })
 
-    expect(screen.getByTitle(pageCount)).toBeTruthy()
-    expect(screen.queryByTitle(pageCount + 1)).toBeNull()
-    expect(getTotalRowsNumber()).toBe(expectedRowsCount)
+    table.pagination.expectTotal(6, pageSize)
 
-    openFiltersSidebar(container)
-    expect(screen.queryAllByRole('filter')).toHaveLength(2)
+    table.filters.openSidebar()
+    expect(table.filters.getCount()).toBe(2)
 
-    const clearAllButton = screen.getByText('Clear all')
-    fireEvent.click(clearAllButton)
+    table.filters.clearAll()
 
-    expect(screen.queryAllByRole('filter')).toHaveLength(0)
+    expect(table.filters.getCount()).toBe(0)
 
-    applyFilters()
+    table.filters.apply()
 
-    expectedRowsCount = 100
-    pageCount = Math.ceil(expectedRowsCount / defaultProps.pagination.pageSize)
-
-    expect(screen.getByTitle(pageCount)).toBeTruthy()
-    expect(screen.queryByTitle(pageCount + 1)).toBeNull()
-    expect(getTotalRowsNumber()).toBe(expectedRowsCount)
+    table.pagination.expectTotal(100, pageSize)
   })
 
   it('should change existing filter', () => {
-    const container = render(
-      <DefaultTable
-        defaultSidebarFilters={[
-          {
-            name: 'name',
-            condition: FilterOperation.cont,
-            type: FilterType.Text,
-            value: 'e'
-          },
-          {
-            name: 'country',
-            condition: FilterOperation.eq,
-            type: FilterType.Enum,
-            value: 'Ireland'
-          }
-        ]}
-      />
-    ).container as HTMLDivElement
-    let expectedRowsCount = 5
-    let pageCount = Math.ceil(expectedRowsCount / defaultProps.pagination.pageSize)
+    const { table } = renderTable({
+      defaultSidebarFilters: [
+        {
+          name: 'fullname',
+          condition: FilterOperation.cont,
+          type: FilterType.Text,
+          value: 'ov'
+        },
+        {
+          name: 'group',
+          condition: FilterOperation.eq,
+          type: FilterType.Enum,
+          value: 'CEO'
+        }
+      ]
+    })
 
-    expect(screen.getByTitle(pageCount)).toBeTruthy()
-    expect(screen.queryByTitle(pageCount + 1)).toBeNull()
-    expect(getTotalRowsNumber()).toBe(expectedRowsCount)
+    table.pagination.expectTotal(6, pageSize)
 
-    openFiltersSidebar(container)
-    changeFilterValue(0, 'en')
-    expect(screen.queryAllByRole('filter')).toHaveLength(2)
+    table.filters.openSidebar()
+    table.filters.setValue(0, 'ova')
+    expect(table.filters.getCount()).toBe(2)
 
-    applyFilters()
+    table.filters.apply()
 
-    expectedRowsCount = 2
-    pageCount = Math.ceil(expectedRowsCount / defaultProps.pagination.pageSize)
-
-    expect(screen.getByTitle(pageCount)).toBeTruthy()
-    expect(screen.queryByTitle(pageCount + 1)).toBeNull()
-    expect(getTotalRowsNumber()).toBe(expectedRowsCount)
+    table.pagination.expectTotal(3, pageSize)
   })
 
   it('should add filter', async () => {
-    const container = render(
-      <DefaultTable
-        defaultSidebarFilters={[
-          {
-            name: 'name',
-            condition: FilterOperation.cont,
-            type: FilterType.Text,
-            value: 'e'
-          },
-          {
-            name: 'country',
-            condition: FilterOperation.eq,
-            type: FilterType.Enum,
-            value: 'Ireland'
-          }
-        ]}
-      />
-    ).container as HTMLDivElement
-    let expectedRowsCount = 5
-    let pageCount = Math.ceil(expectedRowsCount / defaultProps.pagination.pageSize)
+    const { table } = renderTable({
+      defaultSidebarFilters: [
+        {
+          name: 'fullname',
+          condition: FilterOperation.cont,
+          type: FilterType.Text,
+          value: 'ov'
+        },
+        {
+          name: 'group',
+          condition: FilterOperation.eq,
+          type: FilterType.Enum,
+          value: 'CEO'
+        }
+      ]
+    })
 
-    expect(screen.getByTitle(pageCount)).toBeTruthy()
-    expect(screen.queryByTitle(pageCount + 1)).toBeNull()
-    expect(getTotalRowsNumber()).toBe(expectedRowsCount)
+    table.pagination.expectTotal(6, pageSize)
 
-    openFiltersSidebar(container)
+    table.filters.openSidebar()
 
-    expect(screen.queryAllByRole('filter')).toHaveLength(2)
+    expect(table.filters.getCount()).toBe(2)
 
-    await act(async () => { addFilter() })
+    await table.filters.add()
 
-    expect(screen.queryAllByRole('filter')).toHaveLength(3)
+    expect(table.filters.getCount()).toBe(3)
 
-    changeFilterValue(2, 'Amelia Craig')
-    applyFilters()
+    table.filters.setValue(2, 'Egor Kuznetsov')
+    table.filters.apply()
 
-    expectedRowsCount = 1
-    pageCount = Math.ceil(expectedRowsCount / defaultProps.pagination.pageSize)
-
-    expect(screen.getByTitle(pageCount)).toBeTruthy()
-    expect(screen.queryByTitle(pageCount + 1)).toBeNull()
-    expect(getTotalRowsNumber()).toBe(expectedRowsCount)
+    table.pagination.expectTotal(1, pageSize)
   })
 
   it('should clear filter', () => {
-    const container = render(
-      <DefaultTable
-        defaultSidebarFilters={[
-          {
-            name: 'name',
-            condition: FilterOperation.cont,
-            type: FilterType.Text,
-            value: 'e'
-          },
-          {
-            name: 'country',
-            condition: FilterOperation.eq,
-            type: FilterType.Enum,
-            value: 'Ireland'
-          }
-        ]}
-      />
-    ).container as HTMLDivElement
-    let expectedRowsCount = 5
-    let pageCount = Math.ceil(expectedRowsCount / defaultProps.pagination.pageSize)
+    const { table } = renderTable({
+      defaultSidebarFilters: [
+        {
+          name: 'fullname',
+          condition: FilterOperation.cont,
+          type: FilterType.Text,
+          value: 'ov'
+        },
+        {
+          name: 'group',
+          condition: FilterOperation.eq,
+          type: FilterType.Enum,
+          value: 'CEO'
+        }
+      ]
+    })
 
-    expect(screen.getByTitle(pageCount)).toBeTruthy()
-    expect(screen.queryByTitle(pageCount + 1)).toBeNull()
-    expect(getTotalRowsNumber()).toBe(expectedRowsCount)
+    table.pagination.expectTotal(6, pageSize)
 
-    openFiltersSidebar(container)
+    table.filters.openSidebar()
 
-    expect(screen.queryAllByRole('filter')).toHaveLength(2)
+    expect(table.filters.getCount()).toBe(2)
 
-    const filterItemRemoveButton = screen.getByTestId('table-filter-item-1-close-icon')
-    fireEvent.click(filterItemRemoveButton)
+    table.filters.remove(1)
 
-    expect(screen.queryAllByRole('filter')).toHaveLength(1)
+    expect(table.filters.getCount()).toBe(1)
 
-    applyFilters()
+    table.filters.apply()
 
-    expectedRowsCount = 72
-    pageCount = Math.ceil(expectedRowsCount / defaultProps.pagination.pageSize)
-
-    expect(screen.getByTitle(pageCount)).toBeTruthy()
-    expect(screen.queryByTitle(pageCount + 1)).toBeNull()
-    expect(getTotalRowsNumber()).toBe(expectedRowsCount)
+    table.pagination.expectTotal(60, pageSize)
   })
 
   it('should disable client filtering if isServerFiltering = true', async () => {
     const onSidebarFiltersChangeMock = jest.fn()
-    const container = render(
-      <DefaultTable
-        isServerFiltering={true}
-        onSidebarFiltersChange={onSidebarFiltersChangeMock}
-      />
-    ).container as HTMLDivElement
+    const { table } = renderTable({
+      isServerFiltering: true,
+      onSidebarFiltersChange: onSidebarFiltersChangeMock
+    })
 
-    openFiltersSidebar(container)
-    await act(async () => { addFilter() })
-    changeFilterValue(0, 'test')
-    applyFilters()
+    table.filters.openSidebar()
+    await table.filters.add()
+    table.filters.setValue(0, 'test')
+    table.filters.apply()
 
     expect(onSidebarFiltersChangeMock).toHaveBeenCalledTimes(2)
-    expect(getTotalRowsNumber()).toBe(100)
+    expect(table.pagination.getTotal()).toBe(100)
   })
 
   it('should call onSidebarFiltersChange with applied filters', async () => {
     const onSidebarFiltersChangeMock = jest.fn()
-    const container = render(
-      <DefaultTable
-        isServerFiltering={true}
-        onSidebarFiltersChange={onSidebarFiltersChangeMock}
-      />
-    ).container as HTMLDivElement
+    const { table } = renderTable({
+      isServerFiltering: true,
+      onSidebarFiltersChange: onSidebarFiltersChangeMock
+    })
 
-    openFiltersSidebar(container)
+    table.filters.openSidebar()
 
-    await act(async () => { addFilter() })
+    await table.filters.add()
 
-    changeFilterValue(0, 'test')
+    table.filters.setValue(0, 'test')
 
-    applyFilters()
+    table.filters.apply()
 
     expect(onSidebarFiltersChangeMock).toHaveBeenCalledTimes(2)
     expect(onSidebarFiltersChangeMock).toHaveBeenCalledWith([
       {
-        name: 'name',
+        name: 'fullname',
         condition: FilterOperation.eq,
         type: FilterType.Text,
         value: 'test',
@@ -388,42 +304,40 @@ describe('Table filters module', () => {
 
   it('should call onFiltersChange with filter with custom column filter name (column.filterName)', async () => {
     const onFiltersChange = jest.fn()
-    const { container } = render(
-      <DefaultTable
-        columns={modifyColumns(columns, 'name', { filterName: 'fullname' })}
-        onFiltersChange={onFiltersChange}
-      />
-    )
+    const { table } = renderTable({
+      columns: modifyColumns(tableColumns, 'fullname', { filterName: 'custom_fullname' }),
+      onFiltersChange
+    })
 
-    openFiltersSidebar(container)
-    await act(async () => { addFilter() })
-    changeFilterValue(0, 'Test name')
+    table.filters.openSidebar()
+    await table.filters.add()
+    table.filters.setValue(0, 'Test name')
 
-    applyFilters()
+    table.filters.apply()
 
     await waitFor(() => {
       const lastCall: UnitedFilter[] = onFiltersChange.mock.lastCall[0]
       const filter = lastCall.find(el => isFilterConfig(el))
       expect(filter?.value).toBe('Test name')
-      expect(filter?.name).toBe('fullname')
+      expect(filter?.name).toBe('custom_fullname')
     })
   })
 
   it('should disable filtering when there are duplicate filters', async () => {
-    const { container, queryAllByText } = render(<DefaultTable />)
+    const { table } = renderTable()
 
-    openFiltersSidebar(container)
+    table.filters.openSidebar()
 
-    await act(async () => { addFilter() })
-    changeFilterValue(0, 'test')
+    await table.filters.add()
+    table.filters.setValue(0, 'test')
 
-    await act(async () => { addFilter() })
-    changeFilterValue(1, 'test')
+    await table.filters.add()
+    table.filters.setValue(1, 'test')
 
-    applyFilters()
+    table.filters.apply()
 
     expect(
-      queryAllByText(localization['en-us']
+      screen.queryAllByText(localization['en-us']
         .translation
         .table
         .columnsSettings
@@ -433,22 +347,22 @@ describe('Table filters module', () => {
     )
       .toHaveLength(2)
 
-    cancelFiltering()
+    table.filters.cancel()
 
-    expect(getTotalRowsNumber()).toBe(100)
+    expect(table.pagination.getTotal()).toBe(100)
   })
 
   it('should disable filtering when there are empty filters', async () => {
-    const { container, queryAllByText } = render(<DefaultTable />)
+    const { table } = renderTable()
 
-    openFiltersSidebar(container)
+    table.filters.openSidebar()
 
-    await act(async () => { addFilter() })
+    await table.filters.add()
 
-    applyFilters()
+    table.filters.apply()
 
     expect(
-      queryAllByText(localization['en-us']
+      screen.queryAllByText(localization['en-us']
         .translation
         .table
         .columnsSettings
@@ -458,23 +372,22 @@ describe('Table filters module', () => {
     )
       .toHaveLength(1)
 
-    cancelFiltering()
+    table.filters.cancel()
 
-    expect(getTotalRowsNumber()).toBe(100)
+    expect(table.pagination.getTotal()).toBe(100)
   })
 
   it('should reinit FilterApi by ref.current.reinitFilterApi()', async () => {
-    configure({ testIdAttribute: 'data-testid' })
     const predefinedFilter: NumberFilter = {
-      name: 'age',
+      name: 'salary',
       type: FilterType.Number,
       condition: FilterOperation.gt,
       value: 1
     }
     const ref: MutableRefObject<TableRef | null> = { current: null }
-    render(<Table {...defaultProps as ITableProps} defaultFilters={[predefinedFilter]} ref={ref} />)
+    const table = TableTestingClass.render({ ...defaultProps, defaultFilters: [predefinedFilter], ref })
 
-    const chip = getFilterChip(predefinedFilter.name, predefinedFilter.condition, predefinedFilter.value!)
+    const chip = table.filters.getChip(predefinedFilter)
     expect(chip).toBeInTheDocument()
 
     fireEvent.click(chip?.querySelector('.ant-tag-close-icon')!)
@@ -484,27 +397,26 @@ describe('Table filters module', () => {
     await ref.current?.reinitFilterApi?.()
 
     waitFor(() => {
-      expect(getFilterChip(predefinedFilter.name, predefinedFilter.condition, predefinedFilter.value!)).toBeInTheDocument()
+      expect(table.filters.getChip(predefinedFilter)).toBeInTheDocument()
     })
   })
 
   it('should apply defaultFilters that appeared after being initially undefined', async () => {
-    configure({ testIdAttribute: 'data-testid' })
     const defaultFilter: NumberFilter = {
-      name: 'age',
+      name: 'salary',
       type: FilterType.Number,
       condition: FilterOperation.gt,
       value: 1
     }
 
-    const { rerender } = render(<Table {...defaultProps as ITableProps} defaultFilters={undefined} />)
+    const table = TableTestingClass.render({ ...defaultProps, defaultFilters: undefined })
 
-    expect(getFilterChip(defaultFilter.name, defaultFilter.condition, defaultFilter.value!)).not.toBeInTheDocument()
+    expect(table.filters.getChip(defaultFilter)).not.toBeInTheDocument()
 
-    rerender(<Table {...defaultProps as ITableProps} defaultFilters={[defaultFilter]} />)
+    table.rerender(<TestTable {...defaultProps} defaultFilters={[defaultFilter]} />)
 
     await waitFor(() => {
-      expect(getFilterChip(defaultFilter.name, defaultFilter.condition, defaultFilter.value!)).toBeInTheDocument()
+      expect(table.filters.getChip(defaultFilter)).toBeInTheDocument()
     })
   })
 
@@ -512,20 +424,20 @@ describe('Table filters module', () => {
     const initDefaultFilters = jest.spyOn(FilterApi.prototype, 'initDefaultFilters')
 
     const defaultFilter: NumberFilter = {
-      name: 'age',
+      name: 'salary',
       type: FilterType.Number,
       condition: FilterOperation.gt,
       value: 1
     }
 
-    const { rerender } = render(<Table {...defaultProps as ITableProps} defaultFilters={undefined} />)
+    const table = TableTestingClass.render({ ...defaultProps, defaultFilters: undefined })
     expect(initDefaultFilters).not.toHaveBeenCalled()
 
-    rerender(<Table {...defaultProps as ITableProps} defaultFilters={[defaultFilter]} />)
+    table.rerender(<TestTable {...defaultProps} defaultFilters={[defaultFilter]} />)
     await waitFor(() => expect(initDefaultFilters).toHaveBeenCalledTimes(1))
 
-    rerender(<Table {...defaultProps as ITableProps} defaultFilters={undefined} />)
-    rerender(<Table {...defaultProps as ITableProps} defaultFilters={[defaultFilter]} />)
+    table.rerender(<TestTable {...defaultProps} defaultFilters={undefined} />)
+    table.rerender(<TestTable {...defaultProps} defaultFilters={[defaultFilter]} />)
 
     expect(initDefaultFilters).toHaveBeenCalledTimes(1)
 
@@ -533,11 +445,9 @@ describe('Table filters module', () => {
   })
 
   it('should render custom sidebar toolbar buttons', async () => {
-    configure({ testIdAttribute: 'data-testid' })
-
     const customButtonTestId = 'custom-button'
     const onClick = jest.fn()
-    const getFiltersSidebarToolbarButtons: ITableProps['getFiltersSidebarToolbarButtons'] = async () => {
+    const getFiltersSidebarToolbarButtons: TableMockProps['getFiltersSidebarToolbarButtons'] = async () => {
       return [{
         children: 'Custom button',
         testId: customButtonTestId,
@@ -545,16 +455,105 @@ describe('Table filters module', () => {
       }]
     }
 
-    const { container } = render(
-      <Table {...defaultProps as ITableProps} getFiltersSidebarToolbarButtons={getFiltersSidebarToolbarButtons} />
-    )
+    const { table } = renderTable({ getFiltersSidebarToolbarButtons })
 
-    await openFiltersSidebar(container)
+    table.filters.openSidebar()
 
     const customButton = await screen.findByTestId(customButtonTestId)
     expect(customButton).toBeInTheDocument()
 
     fireEvent.click(customButton)
     expect(onClick).toHaveBeenCalled()
+  })
+
+  it('should render custom filter operations', async () => {
+    const groupColumn = tableColumns.find(column => column.key === 'group')!
+    const operations: CustomFilterOperations<FilterType.Enum> = [
+      { operation: FilterOperation.cont_or },
+      { operation: FilterOperation.eq, label: 'Equals123' }
+    ]
+    const props: TableMockProps = {
+      ...defaultProps,
+      columns: modifyColumns(tableColumns, 'group', {
+        filterType: {
+          ...groupColumn.filterType,
+          operations
+        } as TableColumn['filterType']
+      }),
+      defaultFilters: [
+        {
+          name: 'group',
+          type: FilterType.Enum,
+          condition: FilterOperation.eq,
+          value: 'CEO'
+        }
+      ]
+    }
+
+    const { table } = renderTable(props)
+
+    table.filters.openSidebar()
+
+    const conditionSelect = table.filters.getSelectedItem(0, 'filter-item-condition-select-0')!
+    await userEvent.click(conditionSelect)
+
+    const conditionSelectDropdown = (await screen
+      .findByTestId('filter-item-condition-select-0-select-dropdown'))
+      .querySelectorAll('.ant-select-item-option-content')
+
+    expect(conditionSelectDropdown[0].textContent).toBe('Is one of')
+    expect(conditionSelectDropdown[1].textContent).toBe('Equals123')
+  })
+})
+
+describe.each(MODES)('Table sidebar filters - $description', ({ mode }) => {
+  it('should apply a default sidebar filter', async () => {
+    const { table, dataSourceFunction } = renderByMode(mode, generatedData, {
+      columns: tableColumns,
+      useFiltersSidebar: true,
+      toolbar: { showFilterSidebar: true },
+      defaultFilters: [{ name: 'fullname', condition: FilterOperation.cont, type: FilterType.Text, value: 'ov' }],
+      pagination: { pageSize }
+    })
+    await table.rows.waitForData()
+
+    await waitFor(() => table.pagination.expectTotal(60, pageSize))
+
+    if (mode === 'server') {
+      const dsf = dataSourceFunction as jest.Mock
+      await waitFor(() =>
+        expect((dsf.mock.lastCall?.[0]?.params.filters ?? []).some((f: { name: string }) => f.name === 'fullname')).toBe(true))
+    }
+  })
+
+  it('should reflect adding and removing a sidebar filter', async () => {
+    const { table, dataSourceFunction } = renderByMode(mode, generatedData, {
+      columns: tableColumns,
+      useFiltersSidebar: true,
+      toolbar: { showFilterSidebar: true },
+      pagination: { pageSize }
+    })
+    await table.rows.waitForData()
+
+    table.filters.openSidebar()
+    await table.filters.add()
+    table.filters.setValue(0, 'Egor Kuznetsov')
+    table.filters.apply()
+
+    await waitFor(() => table.pagination.expectTotal(1, pageSize))
+    if (mode === 'server') {
+      const dsf = dataSourceFunction as jest.Mock
+      await waitFor(() => expect((dsf.mock.lastCall?.[0]?.params.filters ?? []).length).toBeGreaterThan(0))
+    }
+
+    table.filters.openSidebar()
+    table.filters.remove(0)
+    table.filters.apply()
+
+    await waitFor(() => table.pagination.expectTotal(100, pageSize))
+    if (mode === 'server') {
+      const dsf = dataSourceFunction as jest.Mock
+      await waitFor(() => expect((dsf.mock.lastCall?.[0]?.params.filters ?? []).length).toBe(0))
+    }
   })
 })

@@ -1,0 +1,272 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Field } from '@src/field'
+import { Space } from '@src/space'
+import { Text } from '@src/typography'
+
+import { InputMasked } from '../../InputMasked'
+import { Textbox } from '../../Textbox'
+import * as InputMaskedStories from './InputMasked.stories'
+
+<Meta of={InputMaskedStories} name="Input Masked Docs" />
+
+<DocPageLayout>
+
+  <DocPageHeader title="Input Masked" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **Input Masked** — однострочное поле с форматированием и ограничением ввода по маске
+
+          **Input Masked** применяют для данных с заранее известным форматом: телефонных номеров, сетевых адресов, кодов и технических идентификаторов. Маска помогает сразу показать ожидаемую структуру и не принимать символы, которые ей не соответствуют.
+
+          Для произвольного однострочного текста используйте **Textbox**. Для времени выбирайте **TimeInput**, а для даты с календарём — **DatePicker**: специализированные компоненты лучше передают назначение поля и ожидаемое взаимодействие."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**Input Masked** форматирует ввод по заданной маске и доступен в публичном API как **Textbox.Masked**. Компонент использует react-imask и визуальные стили полей Hexa UI. Основное поведение задаётся через **maskOptions**; также поддерживаются **value**, **onChange**, **placeholder**, **disabled**, **readOnly**, **validationStatus** и **autoFocus**."
+      />
+
+      <DocExampleBlock
+        title="maskOptions"
+        description="Параметры маски react-imask. Поле **mask** принимает строковый шаблон, `Date`, `Number` и другие конфигурации библиотеки; дополнительные параметры управляют отображением заполнителей, перезаписью и автокоррекцией ввода. Без **maskOptions** поле принимает обычный текст."
+        code={`
+          <Textbox.Masked
+            maskOptions={{
+              mask: '+7 (000) 000-00-00',
+              lazy: false,
+              overwrite: true,
+              autofix: true,
+            }}
+          />
+          <Textbox.Masked
+            maskOptions={{ mask: Date, lazy: false, overwrite: true, autofix: true }}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="Паттерны маски"
+        description="Готовые конфигурации из примеров документации: `None` — ввод без маски; `Date` — дата; `Number` — число; `Phone` — российский телефон; `Pattern` — составной пользовательский шаблон; `Email` — адрес электронной почты; `IP` и `MAC` — сетевые адреса. Это демонстрационные варианты **maskOptions**, а не отдельные значения публичного API компонента."
+        previewDirection="vertical"
+        codeBlock="collapsed"
+        scope={{ Field, Space, Textbox }}
+        code={`
+          <Space direction="vertical" gap={16}>
+            <Field
+              label="None"
+              labelPosition="top"
+              control={<Textbox.Masked placeholder="Ввод без маски" />}
+            />
+            <Field
+              label="Date"
+              labelPosition="top"
+              control={
+                <Textbox.Masked
+                  maskOptions={{
+                    mask: Date,
+                    lazy: false,
+                    overwrite: true,
+                    autofix: true,
+                  }}
+                />
+              }
+            />
+            <Field
+              label="Number"
+              labelPosition="top"
+              control={
+                <Textbox.Masked
+                  placeholder="Только числа"
+                  maskOptions={{ mask: Number }}
+                />
+              }
+            />
+            <Field
+              label="Phone"
+              labelPosition="top"
+              control={
+                <Textbox.Masked
+                  maskOptions={{
+                    mask: '+7 (000) 000-00-00',
+                    lazy: false,
+                    overwrite: true,
+                    autofix: true,
+                  }}
+                />
+              }
+            />
+            <Field
+              label="Pattern"
+              labelPosition="top"
+              control={
+                <Textbox.Masked
+                  maskOptions={{
+                    mask: '{#}000[aaa]/NIC-\`*[**]',
+                    lazy: false,
+                    overwrite: true,
+                    autofix: true,
+                  }}
+                />
+              }
+            />
+            <Field
+              label="Email"
+              labelPosition="top"
+              control={
+                <Textbox.Masked
+                  placeholder="name@host.code"
+                  maskOptions={{
+                    mask: 'NAME@HOST.CODE',
+                    blocks: {
+                      NAME: { mask: /^[a-zA-Z0-9_.-]*$/ },
+                      HOST: { mask: /^[a-zA-Z0-9_-]*$/ },
+                      CODE: { mask: /^[a-zA-Zs.]{1,8}$/ },
+                    },
+                  }}
+                />
+              }
+            />
+            <Field
+              label="IP"
+              labelPosition="top"
+              control={
+                <Textbox.Masked
+                  placeholder="192.168.0.1"
+                  maskOptions={{
+                    mask: 'NUM.NUM.NUM.NUM',
+                    blocks: { NUM: { mask: /^[0-9]{1,3}$/ } },
+                  }}
+                />
+              }
+            />
+            <Field
+              label="MAC"
+              labelPosition="top"
+              control={
+                <Textbox.Masked
+                  maskOptions={{
+                    mask: 'MACAD:MACAD:MACAD:MACAD',
+                    blocks: { MACAD: { mask: /^[0-9a-f]{1,2}$/ } },
+                    lazy: false,
+                    overwrite: true,
+                    autofix: true,
+                  }}
+                />
+              }
+            />
+          </Space>
+        `}
+      />
+
+      <DocExampleBlock
+        title="value"
+        description="Контролируемое строковое значение поля после применения маски. Изменения передаются через **onChange**."
+        code={`
+          <Textbox.Masked
+            value="+7 (999) 123-45-67"
+            maskOptions={{ mask: '+7 (000) 000-00-00' }}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="onChange"
+        description="Вызывается при принятии значения маской. Передаёт актуальную строку и объект параметров маски; для неконтролируемого пустого поля начальный вызов пропускается."
+        code={`
+          <Textbox.Masked
+            maskOptions={{ mask: '0000-0000' }}
+            onChange={(value) => alert(value)}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="disabled"
+        description="Отключает поле: ввод недоступен. Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <Textbox.Masked
+            disabled
+            value="1234-5678"
+            maskOptions={{ mask: '0000-0000' }}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="readOnly"
+        description="Режим только для чтения: значение отображается, но не редактируется. Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <Textbox.Masked
+            readOnly
+            value="1234-5678"
+            maskOptions={{ mask: '0000-0000' }}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="validationStatus"
+        description="Визуальный статус валидации поля. Доступные значения: `default`, `error`, `success`. По умолчанию — `default`."
+        code={`
+          <Textbox.Masked validationStatus="default" maskOptions={{ mask: '0000' }} />
+          <Textbox.Masked validationStatus="error" maskOptions={{ mask: '0000' }} />
+          <Textbox.Masked validationStatus="success" maskOptions={{ mask: '0000' }} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="placeholder"
+        description="Подсказка, отображаемая в пустом поле, если конфигурация маски не выводит собственные заполнители."
+        code={`
+          <Textbox.Masked placeholder="Введите код" maskOptions={{ mask: '0000' }} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="autoFocus"
+        description="При монтировании переводит фокус в поле ввода. Доступные значения: `true`, `false`."
+        code={`
+          <Textbox.Masked autoFocus maskOptions={{ mask: '0000' }} />
+        `}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={InputMaskedStories} />
+      <AutodocArgsTable components={InputMasked} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <Text type="BTR3"></Text>
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="InputMasked" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

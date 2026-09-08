@@ -9,7 +9,7 @@ import { Text } from '@src/typography'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useTableContext } from '../context/TableContext'
+import { useTableStore } from '../context/TableContext'
 import styles from '../Table.module.scss'
 import { ITableProps, TableRecord } from '../types'
 
@@ -80,7 +80,9 @@ export const ContextMenu = <T extends TableRecord = TableRecord>(
   contextMenu,
   ...props
 }) {
-  const { toolbarContext } = useTableContext<T>()
+  // Стор читаем императивно (не подписываемся): toolbarContext нужен только в момент клика,
+  // так ContextMenu (оборачивающий всю таблицу) не ре-рендерится на его обновления → нет каскада.
+  const store = useTableStore<T>()
   const { t } = useTranslation()
   const menuRef = React.useRef<ContextMenuRef>(null)
 
@@ -103,7 +105,7 @@ export const ContextMenu = <T extends TableRecord = TableRecord>(
             contextRows,
             context,
             count
-          ] = getContextParams(row, toolbarContext, props.pagination)
+          ] = getContextParams(row, store.getSnapshot().toolbarContext, props.pagination)
 
           const contextItems = mapToolbarItemsIntoDropdownItems(
             filterContextMenuItems(
@@ -128,7 +130,7 @@ export const ContextMenu = <T extends TableRecord = TableRecord>(
         }
       }
     }
-  }, [t, contextMenu, props.onRow, toolbarContext, props.pagination])
+  }, [t, contextMenu, props.onRow, props.pagination, store])
 
   return (
     <>

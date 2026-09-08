@@ -6,7 +6,8 @@
     "screenshotTests": false,
     "migration": true,
     "apiTable": true,
-    "storybook": true
+    "storybook": true,
+    "inBuilder": "Используется под названием «Grid»"
   },
   "component": "Grid",
   "description": "Компонент для композиции элементов на странице с помощью грид системы",

@@ -1,5 +1,5 @@
 import { Search } from '@src/search'
-import { useTableContext } from '@src/table'
+import { useTableContext, useTableUpdate } from '@src/table'
 import { Toolbar } from '@src/toolbar'
 import Mark from 'mark.js'
 import React, {
@@ -46,10 +46,12 @@ interface ISearchModuleProps<T extends TableRecord = TableRecord> {
   dataSource?: readonly T[],
   onSearch?: (searchString: string) => void,
   onClientSearch?: (searchString: string, row: T, index: number) => boolean,
+  clientSearchFields?: (keyof T)[]
   columns?: any[],
   tableContainer?: HTMLDivElement | null,
   collapsibleSearch?: boolean,
   enableSearchHighlighting?: boolean
+  placeholder?: string
 }
 
 const escapeRegexp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -60,10 +62,12 @@ const SearchModule = <T extends TableRecord = TableRecord>({
   dataSource = [],
   onSearch,
   onClientSearch,
+  clientSearchFields,
   columns,
   tableContainer,
   collapsibleSearch = false,
-  enableSearchHighlighting
+  enableSearchHighlighting,
+  placeholder
 }: ISearchModuleProps<T>): ReactElement => {
   const [searchValue, setSearchValue] = useState('')
   const highlightTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
@@ -126,6 +130,10 @@ const SearchModule = <T extends TableRecord = TableRecord>({
           const row = { ...currentLevelRow }
           let isPassFilter = false
           for (const key in row) {
+            if (key === 'key' || clientSearchFields?.length && !clientSearchFields.includes(key)) {
+              continue
+            }
+
             if (row[key] && typeof row[key] === 'string') {
               const parts = row[key].split(new RegExp(`(${escapeRegexp(valueToSearch)})`, 'gi'))
 
@@ -133,7 +141,7 @@ const SearchModule = <T extends TableRecord = TableRecord>({
                 isPassFilter = true
               }
 
-              if (columnsRenders[key]) {
+              if (!isPassFilter && columnsRenders[key]) {
                 const res = columnsRenders[key]
                   .reduce(
                     (result: boolean, render: renderFunction) =>
@@ -168,7 +176,11 @@ const SearchModule = <T extends TableRecord = TableRecord>({
     setFilteredRows(filteredRows)
   }
 
-  const { updateContext, pagination, useV3TestId } = useTableContext()
+  const { useDataSourceFunction, useV3TestId } = useTableContext(state => ({
+    useDataSourceFunction: state.useDataSourceFunction,
+    useV3TestId: state.useV3TestId
+  }))
+  const updateContext = useTableUpdate<T>()
 
   useEffect(() => {
     updateContext({ searchValue })
@@ -187,9 +199,10 @@ const SearchModule = <T extends TableRecord = TableRecord>({
       klId="table-search"
       value={searchValue}
       onChange={setSearchValue}
-      onPressEnter={!pagination.useDataSourceFunction ? () => filterValues() : undefined}
+      onPressEnter={!useDataSourceFunction ? () => filterValues() : undefined}
       onClearClick={onClearClick}
       searchIconTestId={useV3TestId ? 'toggle-table-search' : undefined}
+      placeholder={placeholder}
     />
   )
 }

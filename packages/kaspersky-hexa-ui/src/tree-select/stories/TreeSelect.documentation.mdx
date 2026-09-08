@@ -1,0 +1,125 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+
+import { TreeSelect } from '../TreeSelect'
+import * as TreeSelectStories from './TreeSelect.stories'
+
+export const treeData = [
+  {
+    title: 'Группа 1',
+    value: 'group-1',
+    children: [
+      { title: 'Элемент 1', value: 'item-1' },
+      { title: 'Элемент 2', value: 'item-2' },
+    ],
+  },
+  {
+    title: 'Группа 2',
+    value: 'group-2',
+    children: [{ title: 'Элемент 3', value: 'item-3' }],
+  },
+]
+
+<Meta of={TreeSelectStories} name="TreeSelect Docs" />
+
+<DocPageLayout>
+  <DocPageHeader title="TreeSelect" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        title="Описание компонента"
+        description="**TreeSelect** — компонент выбора значения из иерархического списка. Используйте его, когда варианты связаны отношением родитель—потомок: например, для выбора категории, подразделения или элемента структуры."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        title="treeData"
+        description="**treeData** задаёт данные дерева. У узла используются **title** для отображаемого текста, **value** для значения и **children** для дочерних узлов."
+        minHeight={280}
+        code={`
+          <TreeSelect
+            treeDefaultExpandAll
+            treeData={treeData}
+            placeholder="Выберите элемент"
+          />
+        `}
+        scope={{ treeData }}
+      />
+
+      <DocExampleBlock
+        title="treeCheckable"
+        description="**treeCheckable** включает множественный выбор: рядом с узлами отображаются чекбоксы, а выбранные значения показываются в поле. По умолчанию — `false`."
+        minHeight={280}
+        code={`
+          <TreeSelect
+            treeCheckable
+            treeDefaultExpandAll
+            treeData={treeData}
+            placeholder="Выберите элементы"
+          />
+        `}
+        scope={{ treeData }}
+      />
+
+      <DocExampleBlock
+        title="showSearch и allowClear"
+        description="**showSearch** включает поиск по дереву. При **allowClear** отображается кнопка очистки выбранного значения."
+        minHeight={280}
+        code={`
+          <TreeSelect
+            showSearch
+            allowClear
+            treeDefaultExpandAll
+            treeData={treeData}
+            placeholder="Найдите или выберите элемент"
+          />
+        `}
+        scope={{ treeData }}
+      />
+
+      <DocExampleBlock
+        title="validationStatus"
+        description="**validationStatus** задаёт статус валидации: `default`, `error` или `success`. По умолчанию — `default`."
+        minHeight={280}
+        code={`
+          <TreeSelect
+            validationStatus="error"
+            treeDefaultExpandAll
+            treeData={treeData}
+            placeholder="Выберите элемент"
+          />
+        `}
+        scope={{ treeData }}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={TreeSelectStories} />
+      <AutodocArgsTable components={TreeSelect} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="TreeSelect" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

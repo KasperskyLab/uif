@@ -104,4 +104,22 @@ describe('Menu', () => {
     userEvent.click(getItem('navigation.users-and-roles.users'))
     expect(menuItemClickHandler).toHaveBeenCalledTimes(1)
   })
+
+  describe('popup in minimized menu', () => {
+    const isPopupExpanded = (klId: string) => {
+      return getItem(klId).closest('.uif-nav-item')!.classList.contains('popup-expanded')
+    }
+
+    test('should close popup on outside click so it can be reopened', () => {
+      render(<MenuComponent collapsed />)
+      const item = getItem('navigation.main.usersAndRoles')
+
+      userEvent.click(item)
+      fireEvent.click(document.body)
+      expect(isPopupExpanded('navigation.main.usersAndRoles')).toBe(false)
+
+      userEvent.click(item)
+      expect(isPopupExpanded('navigation.main.usersAndRoles')).toBe(true)
+    })
+  })
 })

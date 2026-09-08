@@ -130,6 +130,7 @@
         },
         "filtering": {
           "add": "Adicionar",
+          "addCondition": "Adicionar condição",
           "clearAll": "Limpar tudo",
           "property": "Propriedade",
           "attribute": "Atributos",
@@ -137,10 +138,24 @@
           "from": "de",
           "to": "até",
           "value": "Valor",
+          "operators": {
+            "or": "OU",
+            "and": "E"
+          },
+          "booleanFilter": {
+            "on": "Ativada",
+            "off": "Desativado"
+          },
           "validation": {
             "emptyValue": "Especificar o valor de filtragem",
             "duplicateFilters": "Filtros duplicados. Verificar se que cada filtro é único."
           }
+        },
+        "resetSettingsModal": {
+          "content": "Todas as tarefas serão redefinidas para as configurações padrão",
+          "header": "Redefinir a configuração das colunas",
+          "firstButton": "Redefinir",
+          "secondButton": "Cancelar"
         },
         "columnHideIsUnavailable": "A ocultação de colunas não está disponível",
         "onlyForFiltering": "Esta coluna é destinada somente para filtragem"
@@ -149,7 +164,7 @@
         "⊆": "Contém",
         "⊄": "Não contém",
         "cont_and": "Contém (E)",
-        "cont_or": "Is one of",
+        "cont_or": "É um de",
         "ncont_or": "Não contém",
         "*=": "Regexp",
         "empty": "Vazio",
@@ -178,7 +193,8 @@
     "actionBar": {
       "unsavedChanges": "Alterações pendentes",
       "save": "Aplicar",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "resetSettings": "Redefinir configurações"
     },
     "textarea": {
       "wordsCount": "{{count}} de {{total}}"

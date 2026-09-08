@@ -72,7 +72,7 @@ const preview: Preview = {
       source: { language: 'tsx' }
     },
     controls: {
-      exclude: /(componentType|componentId|dataTestId|klId|theme)/,
+      exclude: /(componentType|klId|theme)/,
       expanded: true,
       matchers: {
         color: /(background|color)$/i,

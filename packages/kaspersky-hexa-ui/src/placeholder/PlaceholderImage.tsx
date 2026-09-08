@@ -14,7 +14,7 @@ type PlaceholderImageProps = {
 }
 
 export const PlaceholderImage: React.FC<PlaceholderImageProps> = ({ imageVariant, size, testAttributes, ...rest }) => {
-  const testingProps = getChildTestProps(`placeholder-image-${imageVariant}`, testAttributes)
+  const testingProps = getChildTestProps(`placeholder-image-${imageVariant}`, testAttributes, false, true)
   const Image = imageVariantConfig[size][imageVariant || 'noData']
   const { testAttributes: imageTestAttributes } = useTestAttribute({ rest, ...testingProps })
   return (

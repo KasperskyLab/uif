@@ -1,2 +1,7 @@
 export * from './Modal'
-export type { ModalMode, ModalProps, ModalSize } from './types'
+export type {
+  ModalMode,
+  ModalPosition,
+  ModalProps,
+  ModalSize
+} from './types'

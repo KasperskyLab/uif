@@ -1,4 +1,4 @@
-import { sharedPropConfig } from '@helpers/resolveDesignControls'
+import { sharedPropConfig } from '@sb/resolveDesignControls'
 import {
   extendPropPresentation,
   PropPresentationMap

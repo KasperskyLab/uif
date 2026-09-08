@@ -1,7 +1,7 @@
 import { TestingAttributes, TestingProps } from '@helpers/typesHelpers'
 
 export const useTestAttribute = <P>(props: P & TestingProps): P & { testAttributes: TestingAttributes } => {
-  const { testId, klId, componentId, componentType, ...rest } = props
+  const { testId, klId, componentType, ...rest } = props
 
   return {
     testAttributes: {
@@ -14,19 +14,19 @@ export const useTestAttribute = <P>(props: P & TestingProps): P & { testAttribut
   }
 }
 
-export const getChildTestProps = (postfix: string, attrs?: TestingAttributes, disableOnlyPostfix?: boolean): TestingProps => {
+export const getChildTestProps = (postfix: string, attrs?: TestingAttributes, disableOnlyPostfix?: boolean, useKlId?: boolean): TestingProps => {
   const klId = attrs?.['kl-id']
   const testId = attrs?.['data-testid']
 
   if (disableOnlyPostfix) {
     return {
-      klId: klId && `${klId}-${postfix}`,
+      klId: useKlId && klId ? `${klId}-${postfix}` : undefined,
       testId: testId && `${testId}-${postfix}`
     }
   }
 
   return {
-    klId: klId ? `${klId}-${postfix}` : postfix,
+    ...(useKlId && { klId: klId ? `${klId}-${postfix}` : postfix }),
     testId: testId ? `${testId}-${postfix}` : postfix
   }
 }

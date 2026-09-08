@@ -1,13 +1,12 @@
-import { Editor, type CodeBlockMode } from '@sb/components/Documentation/Editor'
+import { DocMarkdownContent, DocMarkdownDescription } from '@sb/components/Documentation/DocMarkdownDescription'
 import { mergeDocumentationLiveScope } from '@sb/components/Documentation/documentationLiveScope'
+import { type CodeBlockMode, Editor } from '@sb/components/Documentation/Editor'
 import { Text } from '@src/typography'
 import React, { ReactNode, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { DocMarkdownContent, DocMarkdownDescription } from '@sb/components/Documentation/DocMarkdownDescription'
-
 const Block = styled.section`
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 
   &:has(+ section[data-without-title]) {
     margin-bottom: 16px;
@@ -20,14 +19,23 @@ const Footer = styled.div`
 
 const Description = styled.div`
   padding: 4px 0 8px 0;
+
+  a {
+    color: var(--common--accent--enabled);
+  }
+  a:hover {
+    color: var(--common--accent--hover);
+  }
 `
 
 export type DocExampleBlockProps = {
   title?: string
+  /** Размер заголовка примера. По умолчанию — H3. */
+  titleSize?: 'H3' | 'H4' | 'H5'
   /** Markdown: абзацы через пустую строку, перенос строки — через `breaks` */
   description?: string | ReactNode
   code?: string
-  /** Служебный код для react-live: выполняется в preview, но не показывается в редакторе */
+  /** Служебный код для react-live: выполняется в preview, но не показывается в редакторе. Может содержать stateful App для интерактивного примера. */
   setupCode?: string
   /** Минимальная высота preview, px */
   minHeight?: number
@@ -54,6 +62,7 @@ export type DocExampleBlockProps = {
 
 export const DocExampleBlock: React.FC<DocExampleBlockProps> = ({
   title,
+  titleSize = 'H3',
   description,
   code,
   setupCode,
@@ -74,7 +83,7 @@ export const DocExampleBlock: React.FC<DocExampleBlockProps> = ({
 
   return (
     <Block {...(!title && { 'data-without-title': true })}>
-      {title && <Text type="H3">{title}</Text>}
+      {title && <Text type={titleSize}>{title}</Text>}
       {description && (
         <Description>
           <DocMarkdownContent>

@@ -1,7 +1,16 @@
 import { ArgTypes, Description, Meta } from '@storybook/addon-docs/blocks'
-import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  PropsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
 import { Text } from '@src/typography'
-
 import { Chip } from '../Chip'
 import * as ChipStories from './Chip.stories'
 import { chipDesignPropPresentation } from './Chip.design.properties'
@@ -10,91 +19,156 @@ import { chipDesignPropPresentation } from './Chip.design.properties'
 
 <DocPageLayout>
 
-<DocPageHeader
-  title="Chip"
-  description='**Chip** — компактный интерактивный элемент с меткой, опциональной иконкой и счётчиком'
-/>
+  <DocPageHeader title="Chip" />
 
-<Tabs defaultActiveKey="description">
-  <Tabs.TabPane tab="Описание" key="description">
+  <Tabs defaultActiveKey="description">
 
-    <DocExampleBlock
-      title="Описание компонента"
-      description="**Chip** предназначен для отображения выбранных фильтров, тегов или других компактных меток с возможностью закрытия. В основе лежит Ant Design Tag с темизацией Hexa UI. Компонент поддерживает размеры `medium` и `large`, метку **label**, иконку **icon**, числовой счётчик **counter** через **Badge**, обрезку длинного текста через **truncationWidth**, состояние **disabled**, а также настройку через **theme** и **onClose**."
-    />
+    <Tabs.TabPane tab="Описание" key="description">
 
-    <DocExampleBlock
-      title="label"
-      description="Текстовая метка chip"
-      code='
-    <Chip label="Label" />
-    <Chip label="Selected filter" />'
-    />
+      <DocExampleBlock
+        title="Описание компонента"
+        description="
+          **Чип (Chip)** — это специализированный интерактивный компонент, предназначенный исключительно для отображения и быстрого удаления выбранных параметров или данных. Он выполняет роль динамического элемента управления контентом: чип содержит текст и опциональную иконку удаления. 
 
-    <DocExampleBlock
-      title="size"
-      description="Размер chip. Доступные значения: `medium`, `large`. По умолчанию — `medium`."
-      code='
-    <Chip label="medium" size="medium" />
-    <Chip label="large" size="large" />'
-    />
+          В отличие от полностью статического информационного бейджа и универсального тега (который может отвечать за фильтрацию или переход по ссылкам), Chip используется в строго определенных сценариях. Его главное назначение — визуализация сущностей, которые пользователь может мгновенно отменить. Типичными примерами использования чипа являются сброс примененных фильтров или очистка списка выбранных категорий."
+      />
 
-    <DocExampleBlock
-      title="icon"
-      description="Иконка перед меткой. Передаётся как ReactElement из @kaspersky/hexa-ui-icons/16 — например Plus или Settings."
-      code='
-    <Chip label="Label" icon={<Plus />} />
-    <Chip label="With icon" icon={<Settings />} counter={5} />'
-    />
+      <DocExampleBlock
+        title="Когда использовать"
+        description="Используйте Chip, чтобы показать применённые фильтры и дать пользователю возможность снять отдельное условие. Например, Chip подходит для фильтров таблицы: «Статус: активен» или «Ответственный: Иван Петров»."
+      />
 
-    <DocExampleBlock
-      title="counter"
-      description="Числовой счётчик справа от метки. Отображается через **Badge** с **mode** `neutral`. При значении больше 99 показывается `+99`."
-      code='
-    <Chip label="Label" counter={5} />
-    <Chip label="Label" counter={9999} />'
-    />
+      <DocExampleBlock
+        title="Когда не использовать"
+        description="Не используйте Chip для статуса или счётчика, которые нельзя снять: для этого выберите **Badge**. Не заменяйте Chip элементом управления для выбора значения: сначала пользователь задаёт условие в поле фильтра или списке значений, затем Chip показывает выбранный результат."
+      />
 
-    <DocExampleBlock
-      title="disabled"
-      description="Отключённый chip не реагирует на закрытие: клик по кнопке закрытия блокируется. Доступные значения: `true`, `false`. По умолчанию — `false`."
-      code='
-    <Chip label="Label" disabled />'
-    />
+      <DocExampleBlock
+        title="Контент"
+        description="Называйте Chip так, чтобы по метке было понятно выбранное условие. Для фильтра используйте пару «параметр: значение», например «Приоритет: высокий». Иконка и счётчик дополняют метку, но не должны заменять её смысл. Чип обязательно должен содержать текст и иконку удаления, чтобы пользователь понимал, что условие можно снять. Если Chip используется для фильтра, счётчик показывает количество выбранных значений."
+      />
 
-    <DocExampleBlock
-      title="truncationWidth"
-      description="Максимальная ширина метки в пикселях. При превышении текст обрезается с многоточием через TextReducer."
-      code='
-    <Chip label="Short label" />
-    <Chip label="label long long long long" truncationWidth={150} icon={<Plus />} counter={5} />'
-    />
+      <DocExampleBlock
+        title="Использование в других компонентах"
+        description="Chip можно использовать самостоятельно. Обычно несколько чипов объединяются в группу. В **Table** он показывает применённые фильтры."
+      />
 
-    <DocExampleBlock
-      title="onClose"
-      description="Callback при закрытии chip. Компонент всегда closable; после закрытия получает класс ant-tag-hidden."
-      code='
-    <Chip label="Label" onClose={() => console.log("closed")} />'
-    />
+      <DocExampleBlock
+        title="Связанные компоненты"
+        description="Используйте **Badge** для отображения количества, статуса или короткой информационной метки без действия удаления. Для снятия всех выбранных фильтров рядом с группой Chip используйте **Link** с понятной подписью, например «Очистить»."
+      />
 
-  </Tabs.TabPane>
+    </Tabs.TabPane>
 
-  <Tabs.TabPane tab="Правила использования" key="howtouse">
-      <Text type="H3">Правила использования</Text>
-      <Text color="secondary" type="BTR3">
-        Раздел зарезервирован под правила использования. Содержимое будет добавлено в следующих релизах.
-      </Text>
-  </Tabs.TabPane>
+    <Tabs.TabPane tab="Структура" key="composition">
 
-  <Tabs.TabPane tab="Дизайнеру" key="design">
-    <Text type="H3">Properties в Pixso</Text>
-    <DocumentationArgsTable rows={buildPresentationOnlyRows(chipDesignPropPresentation)} />
-  </Tabs.TabPane>
+      <DocExampleBlock
+        description="
+          **Chip** предназначен для отображения выбранных фильтров, тегов или других компактных меток с возможностью закрытия. В основе лежит Ant Design Tag с темизацией Hexa UI. 
+          Компонент поддерживает размеры `medium` и `large`, метку **label**, иконку **icon**, счётчик, обрезку длинного текста через **truncationWidth**, состояние **disabled**."
+      />
 
-  <Tabs.TabPane tab="Properties" key="properties">
-    <Description of={ChipStories} />
-    <AutodocArgsTable component={Chip}/>
-  </Tabs.TabPane>
-</Tabs>
+      <DocExampleBlock
+        title="label"
+        description="Метка внутри Chip. Принимает строку или ReactNode, поэтому может содержать основной и вторичный текст."
+        code={`
+          <Chip label="Label" />
+          <Chip
+            label={
+              <Space gap={2}>
+                <Text type="BTM3">Label:</Text>
+                <Text type="BTM3" color="secondary">
+                  Value
+                </Text>
+              </Space>
+            }
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="size"
+        description="Размер chip. Доступные значения: `medium`, `large`. По умолчанию — `medium`."
+        code={`
+          <Chip label="medium" size="medium" />
+          <Chip label="large" size="large" />
+        `}
+      />
+
+      <DocExampleBlock
+        title="icon"
+        description="Иконка перед меткой. Передаётся как ReactElement из @kaspersky/hexa-ui-icons/16"
+        code={`
+          <Chip label="Label" icon={<Plus />} />
+          <Chip label="With icon" icon={<Settings />} counter={5} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="counter"
+        description="Числовой счётчик справа от метки. Отображается через **Badge**."
+        code={`
+          <Chip label="Label" counter={5} />
+          <Chip label="Label" counter={9999} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="disabled"
+        description="
+          Отключённый chip не реагирует на закрытие: клик по кнопке закрытия блокируется.
+          Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <Chip label="Label" disabled />
+        `}
+      />
+
+      <DocExampleBlock
+        title="truncationWidth"
+        description="
+          Максимальная ширина метки в пикселях. 
+          При превышении текст обрезается с многоточием через TextReducer."
+        code={`
+          <Chip label="Short label" />
+          <Chip label="label with long text value" truncationWidth={150} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="onClose"
+        description="Callback при закрытии chip. Компонент всегда closable; после закрытия получает класс ant-tag-hidden."
+        code={`
+          <Chip label="Label" onClose={() => alert('closed')} />
+        `}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={ChipStories} />
+      <AutodocArgsTable component={Chip} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=45808:305923)"
+      />
+
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(chipDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Chip" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
 
 </DocPageLayout>

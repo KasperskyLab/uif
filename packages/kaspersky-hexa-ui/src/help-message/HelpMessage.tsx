@@ -30,13 +30,12 @@ export const HelpMessage: FC<HelpMessageProps> = ({
   mode = 'common',
   size = 'small',
   testId,
-  dataTestId,
   componentType,
   klId,
   ...rest
 }) => {
 
-  const testingProps = { testId, dataTestId, componentType, klId }
+  const testingProps = { testId, componentType, klId }
 
   return (
     <Space

@@ -117,4 +117,16 @@ describe('Button', () => {
     const { container } = render(<Button />)
     expect(container.querySelector(`.${styles.iconOnly}`)).toBeInTheDocument()
   })
+
+  it('should trigger form when form prop enabled', async () => {
+    const submitMock = jest.fn()
+    const renderResult = render(
+      <div>
+        <form id="test-form" onSubmit={submitMock}></form>
+        <Button klId="test-btn" form="test-form" type="submit" />
+      </div>
+    )
+    await userEvent.click(renderResult.getByTestId('test-btn'))
+    expect(submitMock).toHaveBeenCalled()
+  })
 })

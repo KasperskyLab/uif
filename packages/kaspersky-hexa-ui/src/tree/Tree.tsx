@@ -2,8 +2,8 @@ import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { ActionButton } from '@src/action-button'
 import { Checkbox } from '@src/checkbox'
 import { Radio } from '@src/radio'
-import TreeAntd from 'antd/es/tree'
 import type { TreeNodeProps, TreeProps } from 'antd'
+import TreeAntd from 'antd/es/tree'
 import React, { FC, MouseEventHandler } from 'react'
 import styled from 'styled-components'
 
@@ -13,7 +13,13 @@ import { ArrowDownSolid } from '@kaspersky/hexa-ui-icons/8'
 import { Loader } from '../loader'
 
 import { treeCss } from './treeCss'
-import { DataNode, ITreeProps, Key, TreeCheckEvent } from './types'
+import {
+  DataNode,
+  ITreeProps,
+  Key,
+  TreeCheckEvent,
+  TreeCommonProps
+} from './types'
 import {
   checkNode,
   getParents,
@@ -137,7 +143,7 @@ export const Tree: FC<ITreeProps> = ({
     setNonStrictlyCheckedKeys(sortCheckedKeys(treeData, checkedKeys))
   }, [checkStrictly, checkedKeys, treeData])
 
-  const onCheckFn = (_: any, event: TreeCheckEvent) => {
+  const onCheckFn: TreeCommonProps['onCheck'] = (_, event) => {
     const checked = new Set<Key>(nonStrictlyCheckedKeys.checked)
     const halfChecked = new Set<Key>(nonStrictlyCheckedKeys.halfChecked)
     const node: DataNode = event.node
@@ -247,8 +253,6 @@ export const Tree: FC<ITreeProps> = ({
           </>
         )
       }}
-      invalid={invalid}
-      // @ts-expect-error не разобрался
       onCheck={checkStrictly ? onCheck : onCheckFn}
       selectable={selectable}
       showIcon={checkable}

@@ -10,26 +10,29 @@ import { IconVariant, StatusCardImageProps, StatusCardMode } from './types'
 
 type IconMap = Record<IconVariant, { icons: { [key in StatusCardMode]: FC }, size: number }>
 
-export const iconMap: (testAttributes?: TestingAttributes) => IconMap = (testAttributes) => ({
-  default: {
-    icons: {
-      error: () => <StatusErrorSolid {...getChildTestProps('error-icon', testAttributes)} />,
-      critical: () => <StatusDangerSquareSolid {...getChildTestProps('critical-icon', testAttributes)} />,
-      warning: () => <StatusWarningSolid {...getChildTestProps('warning-icon', testAttributes)} />,
-      success: () => <StatusOkSolid {...getChildTestProps('success-icon', testAttributes)} />
+export const iconMap: (testAttributes?: TestingAttributes) => IconMap = (testAttributes) => {
+  const getTestId = (testId: string) => getChildTestProps(testId, testAttributes, false, true)
+  return {
+    default: {
+      icons: {
+        error: () => <StatusErrorSolid {...getTestId('error-icon')} />,
+        critical: () => <StatusDangerSquareSolid {...getTestId('critical-icon')} />,
+        warning: () => <StatusWarningSolid {...getTestId('warning-icon')} />,
+        success: () => <StatusOkSolid {...getTestId('success-icon')} />
+      },
+      size: 24
     },
-    size: 24
-  },
-  shield: {
-    icons: {
-      error: () => <ShieldDangerSolid {...getChildTestProps('shield-error-icon', testAttributes)} />,
-      critical: () => <ShieldDangerSolid {...getChildTestProps('shield-critical-icon', testAttributes)} />,
-      warning: () => <ShieldDangerSolid {...getChildTestProps('shield-warning-icon', testAttributes)} />,
-      success: () => <ShieldOkSolid {...getChildTestProps('shield-success-icon', testAttributes)} />
-    },
-    size: 32
+    shield: {
+      icons: {
+        error: () => <ShieldDangerSolid {...getTestId('shield-error-icon')} />,
+        critical: () => <ShieldDangerSolid {...getTestId('shield-critical-icon')} />,
+        warning: () => <ShieldDangerSolid {...getTestId('shield-warning-icon')} />,
+        success: () => <ShieldOkSolid {...getTestId('shield-success-icon')} />
+      },
+      size: 32
+    }
   }
-})
+}
 
 export const StatusCardImage: FC<StatusCardImageProps> = ({ cssConfig, mode, iconVariant, testAttributes }) => {
   const IconComponent = iconMap(testAttributes)[iconVariant].icons[mode]

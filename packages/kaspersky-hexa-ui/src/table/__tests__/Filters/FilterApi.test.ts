@@ -1,6 +1,6 @@
 import { createElement } from 'react'
 
-import { generatedData, mockCustomFilterFunction, tableColumns } from '../../__mocks__/filtersMockData'
+import { generatedData, mockCustomFilterFunction, MockRow, tableColumns as baseColumns } from '../../__mocks__/filtersMockData'
 import {
   BooleanFilter,
   BooleanOperations,
@@ -22,7 +22,11 @@ import {
   TextOperations
 } from '../../modules/Filters'
 import { isGroup, parseDate } from '../../modules/Filters/helpers'
-import { TableRecord } from '../../types'
+import { TableColumn, TableRecord } from '../../types'
+
+type TableRow = Partial<MockRow>
+
+const tableColumns = baseColumns as TableColumn<TableRow>[]
 
 type DescribeData<Operations, ValueToFilter> = [
   string, // test name
@@ -174,7 +178,7 @@ describe('FilterApi Integration Tests', () => {
       ]
     ])('%s', (_, condition, data) => {
       it.each(data)('%#', async (fullname, value, expected) => {
-        const api = new FilterApi({
+        const api = new FilterApi<TableRow>({
           defaultFilters: [{ ...textFilter, condition, value }],
           columns: tableColumns
         })
@@ -971,7 +975,7 @@ describe('FilterApi Integration Tests', () => {
     })
 
     it('should pass rowMatchesFilter and rowMatchesGroup helpers in params', () => {
-      const customFilterFunction = jest.fn<void, Parameters<TableCustomFilterFunction>>((rows, filters, renderList) => {
+      const customFilterFunction = jest.fn<void, Parameters<TableCustomFilterFunction<TableRow>>>((rows, filters, renderList) => {
         renderList(rows)
       })
       const api = new FilterApi({ customFilterFunction, defaultFilters: [textFilter], columns: tableColumns })
@@ -995,7 +999,7 @@ describe('FilterApi Integration Tests', () => {
     }
 
     const countMatches = (
-      apply: (record: TableRecord, params: Parameters<TableCustomFilterFunction>[3]) => boolean
+      apply: (record: TableRecord, params: Parameters<TableCustomFilterFunction<TableRow>>[3]) => boolean
     ): number => {
       const api = new FilterApi({
         customFilterFunction: (rows, filters, renderList, params) => renderList(rows.filter(r => apply(r, params))),

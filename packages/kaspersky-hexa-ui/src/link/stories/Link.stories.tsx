@@ -4,30 +4,12 @@ import {
   getControlsInclude
 } from '@sb/components/Documentation'
 import { Meta, StoryObj } from '@storybook/react'
-import React from 'react'
-
-import { ArrowRight, LinkExternal, Placeholder, SettingsGear } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
 import { Link as LinkComponent } from '../Link'
-import { LinkProps } from '../types'
 
-import {
-  defaultArgs,
-  linkIconOptions,
-  linkPropPresentation
-} from './Link.controls'
-
-export const linkIconVariants = {
-  linkExternal: <LinkExternal />,
-  arrowRight: <ArrowRight />,
-  settingsGear: <SettingsGear />,
-  placeholder: <Placeholder />
-} as const
-
-type StoryLinkProps = Omit<LinkProps, 'icon'> & {
-  icon: (typeof linkIconOptions)[number]
-}
+import { BasicLink, StoryLinkProps } from './helpers'
+import { defaultArgs, linkPropPresentation } from './Link.controls'
 
 export const linkStorySettings: Meta<StoryLinkProps> = {
   argTypes: buildStoryArgTypesFromComponents(
@@ -52,6 +34,7 @@ const meta = {
   tags: ['!autodocs'],
   includeStories: ['Playground'],
   excludeStories: ['linkStorySettings', 'linkIconVariants'],
+  render: BasicLink.bind({}),
   ...linkStorySettings
 } satisfies Meta<StoryLinkProps>
 
@@ -61,13 +44,6 @@ type Story = StoryObj<StoryLinkProps>
 
 export const Playground: Story = {
   name: 'Playground',
-  render: ({ icon, decoration, ...rest }) => (
-    <LinkComponent
-      {...rest}
-      decoration={decoration}
-      icon={decoration === 'icon' ? linkIconVariants[icon] : undefined}
-    />
-  ),
   parameters: {
     controls: {
       include: getControlsInclude(linkPropPresentation),

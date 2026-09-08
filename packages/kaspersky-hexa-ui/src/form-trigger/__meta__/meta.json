@@ -6,7 +6,8 @@
       "screenshotTests": false,
       "migration": false,
       "apiTable": true,
-      "storybook": true
+      "storybook": true,
+      "inBuilder": "Используется под названием «Триггер формы»"
     },
     "component": "FormTrigger",
     "description": "",

@@ -1,26 +1,28 @@
-import { DividerProps } from '@src/divider'
-import clsx from 'clsx'
+import { Text } from '@src/typography'
+import cn from 'classnames'
 import isHotkey from 'is-hotkey'
 import React, {
   KeyboardEvent,
-  ReactNode,
   useCallback,
   useEffect,
-  useMemo
+  useMemo,
+  useState
 } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Descendant, Editor, Transforms } from 'slate'
 import {
   Editable,
   ReactEditor,
   RenderElementProps,
   RenderLeafProps,
-  RenderPlaceholderProps,
   Slate
 } from 'slate-react'
 
+import { ResizeInput } from '@kaspersky/hexa-ui-icons/12'
+
 import { BlockElement, InlineElement } from './components'
 import { CustomPlaceholder } from './components/CustomPlaceholder'
-import { CustomFormats } from './customTypes'
+import { defaultInitialValue, editorState, showCounter, validationStatusClassName } from './helpers/common'
 import { removeEmptyTrailingParagraphs } from './helpers/removeEmptyTrailingParagraphs'
 import {
   isBlockStyleElement,
@@ -34,42 +36,20 @@ import {
 import { useHotkeys } from './hooks/useHotkeys'
 import { useRichTextEditor } from './hooks/useRichTextEditor'
 import DefaultPlugins from './Plugins/DefaultPlugins'
-import style from './richText.module.scss'
+import styles from './richText.module.scss'
 import { ToolbarContainer } from './Toolbar'
 import { toggleBlockWithRelatedLeafs, toggleMark } from './Toolbar'
 import {
   ElementPluginType,
   LeafPluginType,
-  Plugins,
-  PluginsFlat
+  PluginsFlat,
+  RichTextEditorProps
 } from './types'
 
 import { dividerPluginsProps as defaultDividerPluginsProps } from './index'
 
-export interface RichTextEditorProps {
-  plugins: Plugins;
-  limitTextSize?: number;
-  dividerPluginsProps?: DividerProps;
-  onChange: (value: Descendant[]) => void;
-  enabled?: boolean;
-  autoFocus?: boolean;
-  readOnly?: boolean;
-  initialValue?: Descendant[];
-  placeholder?: string;
-  renderPlaceholder?: (props: RenderPlaceholderProps) => ReactNode;
-  onFocus?: () => void;
-  onBlur?: () => void;
-  testId?: string;
-}
-
-const defaultInitialValue: Descendant[] = [
-  {
-    type: CustomFormats.PARAGRAPH,
-    children: [{ text: '' }]
-  }
-]
-
 export const RichTextEditor = ({
+  textareaMode,
   onChange,
   onBlur,
   onFocus,
@@ -84,10 +64,21 @@ export const RichTextEditor = ({
   dividerPluginsProps = defaultDividerPluginsProps,
   testId
 }: RichTextEditorProps) => {
-
   const initialValueSlate = initialValue?.length ? initialValue : defaultInitialValue
   const flatPlugins: PluginsFlat = useMemo(() => plugins.flat(), [plugins])
   const editor = useRichTextEditor(flatPlugins)
+
+  const [currentLength, setCurrentLength] = useState<number>()
+
+  useEffect(() => {
+    setCurrentLength(Editor.string(editor, []).length)
+  }, [])
+
+  const { t } = useTranslation()
+
+  const textareaDisabledState = editorState({ mode: 'textareaDisabled', readOnly, textareaMode })
+  const textareaReadOnlyState = editorState({ mode: 'textareaReadOnly', readOnly, textareaMode })
+  const readOnlyState = editorState({ mode: 'readOnly', readOnly, textareaMode })
 
   const handleBlur = useCallback(() => {
     removeEmptyTrailingParagraphs(editor)
@@ -159,6 +150,8 @@ export const RichTextEditor = ({
         if (foundBlockStylePlugin) {
           resultChildren = foundBlockStylePlugin.render({
             ...props,
+            disabled: textareaDisabledState,
+            readOnly: textareaReadOnlyState,
             children: resultChildren
           })
         }
@@ -166,6 +159,8 @@ export const RichTextEditor = ({
         if (foundElementPlugin) {
           resultChildren = foundElementPlugin.render({
             ...props,
+            disabled: textareaDisabledState,
+            readOnly: textareaReadOnlyState,
             children: resultChildren
           })
         }
@@ -173,6 +168,8 @@ export const RichTextEditor = ({
         if (defaultPlugin) {
           resultChildren = defaultPlugin.render({
             ...props,
+            disabled: textareaDisabledState,
+            readOnly: textareaReadOnlyState,
             children: resultChildren
           })
         }
@@ -180,9 +177,17 @@ export const RichTextEditor = ({
         return resultChildren
       }
 
-      return <BlockElement attributes={attributes}>{children}</BlockElement>
+      return (
+        <BlockElement
+          attributes={attributes}
+          disabled={textareaDisabledState}
+          readOnly={textareaReadOnlyState}
+        >
+          {children}
+        </BlockElement>
+      )
     },
-    [flatPlugins]
+    [flatPlugins, textareaDisabledState, textareaReadOnlyState]
   )
 
   const renderLeafPlugins = useCallback(
@@ -200,13 +205,34 @@ export const RichTextEditor = ({
 
       if (foundPlugins.length > 0) {
         foundPlugins.forEach((plugin) => {
-          children = plugin.render({ ...props, children })
+          children = plugin.render({
+            ...props,
+            children,
+            disabled: textareaDisabledState,
+            readOnly: textareaReadOnlyState
+          })
         })
       }
 
-      return <InlineElement attributes={attributes}>{children}</InlineElement>
+      return (
+        <InlineElement
+          attributes={attributes}
+          disabled={textareaDisabledState}
+          readOnly={textareaReadOnlyState}
+        >
+          {children}
+        </InlineElement>
+      )
     },
-    [flatPlugins]
+    [flatPlugins, textareaDisabledState, textareaReadOnlyState]
+  )
+
+  const handleChange = useCallback(
+    (value: Descendant[]) => {
+      setCurrentLength(Editor.string(editor, []).length)
+      onChange?.(value)
+    },
+    [editor, onChange]
   )
 
   const handleKeyDown = useCallback(
@@ -293,27 +319,49 @@ export const RichTextEditor = ({
   )
 
   return (
-    <Slate editor={editor} initialValue={initialValueSlate} onChange={onChange}>
-      <Editable
-        className={clsx(style.editable, !readOnly && style.enabled)}
-        renderElement={renderElementPlugins}
-        renderLeaf={renderLeafPlugins}
-        placeholder="stub"
-        spellCheck
-        autoFocus={autoFocus}
-        readOnly={readOnly}
-        renderPlaceholder={customPlaceholder}
-        onKeyDown={handleKeyDown}
-        onDOMBeforeInput={handleDOMBeforeInput}
-        onPaste={handlePaste}
-        onBlur={handleBlur}
-        data-testid={testId ? `${testId}-editable` : undefined}
-      />
-      {!readOnly && enabled && (
+    <Slate editor={editor} initialValue={initialValueSlate} onChange={handleChange}>
+      <div
+        className={cn(
+          styles.editableWrapper,
+          validationStatusClassName({ textareaMode }),
+          {
+            [styles.enabled]: !readOnly || textareaMode,
+            [styles.textarea]: textareaMode,
+            [styles.disabled]: textareaDisabledState,
+            [styles.readOnly]: textareaReadOnlyState
+          }
+        )}
+      >
+        <Editable
+          className={cn(styles.editable, { [styles.hasCounter]: showCounter({ readOnly, textareaMode, limitTextSize }) })}
+          renderElement={renderElementPlugins}
+          renderLeaf={renderLeafPlugins}
+          placeholder="stub"
+          spellCheck
+          autoFocus={autoFocus}
+          readOnly={readOnlyState}
+          renderPlaceholder={customPlaceholder}
+          onKeyDown={handleKeyDown}
+          onDOMBeforeInput={handleDOMBeforeInput}
+          onPaste={handlePaste}
+          onBlur={handleBlur}
+          data-testid={testId ? `${testId}-editable` : undefined}
+        />
+        {showCounter({ readOnly, textareaMode, limitTextSize }) &&
+          (
+            <Text type="BTR4" className={styles.counter}>
+              {t('textarea.wordsCount', { count: currentLength, total: limitTextSize })}
+            </Text>
+          )}
+        {textareaMode && !readOnlyState && (
+          <ResizeInput className={styles.resizeIcon} />
+        )}
+      </div>
+      {!readOnlyState && enabled && (
         <ToolbarContainer
           plugins={plugins}
           flatPlugins={flatPlugins}
-          className={style.toolbar}
+          className={styles.toolbar}
           dividerPluginsProps={dividerPluginsProps}
           testId={testId}
         />

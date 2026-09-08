@@ -90,7 +90,7 @@ $button-tokens: (
     &:hover,
     &:active,
     &:focus {
-      background-color: var(--bg--neutral_transparent--level_1);
+      background: var(--bg--neutral_transparent--level_1);
       box-shadow: none;
       color: var(--fg--neutral--tertiary);
       cursor: not-allowed;
@@ -145,10 +145,18 @@ $button-tokens: (
   justify-content: center;
   max-width: 100%;
   outline: none;
+  transition: none;
 
   .iconWrapper {
     display: flex;
     flex-shrink: 0;
+  }
+
+  .loader { 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   &:focus-visible {
@@ -181,12 +189,8 @@ $button-tokens: (
   }
 }
 
-:global(.ant-btn).buttonLoading {
-  &:global(.ant-btn-loading) {
-    > span, > svg {
-      visibility: hidden;
-    }
-  }
+:global(.ant-btn).buttonLoading > *:not(.loader) {
+  visibility: hidden;
 }
 
 :global(.ant-btn):global(.ant-btn).primary {

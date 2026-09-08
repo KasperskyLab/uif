@@ -1,5 +1,7 @@
 export type MetaList = {
-  dod?: MetaDodProps['list'],
+  dod?: MetaDodProps['list'] & {
+    inBuilder?: string
+  },
   component?: string,
   description?: string,
   usage?: string,

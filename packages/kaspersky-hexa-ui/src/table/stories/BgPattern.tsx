@@ -1,8 +1,8 @@
-import { generatedData, tableColumns } from '../__mocks__/filtersMockData'
+import { generatedData, tableColumns, TableMockStory } from '../__mocks__/filtersMockData'
 
-import { basicArgTypes, BasicTableStory, Story } from './_commonConstants'
+import { basicArgTypes, BasicTableStory } from './_commonConstants'
 
-export const BgPattern: Story = {
+export const BgPattern: TableMockStory = {
   render: BasicTableStory.bind({}),
   argTypes: { backgroundPattern: basicArgTypes.backgroundPattern },
   args: {

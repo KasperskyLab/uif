@@ -9,6 +9,7 @@ import {
   DocumentationArgsTable,
   DocumentationArgsTableWrapper
 } from './DocumentationArgsTable'
+import { markPresentationOnlyRows } from './presentationOnlyRows'
 import {
   PropPresentation,
   PropPresentationMap,
@@ -59,6 +60,17 @@ const getPresentationDefaultValue = (presentation?: PropPresentation) => {
 
   return presentation?.table?.defaultValue
 }
+
+const isDeprecatedProp = (
+  argType: StorybookArgType,
+  presentation?: PropPresentation
+) => (
+  Boolean(presentation?.deprecated) ||
+  (argType.table as { jsDocTags?: { deprecated?: unknown } } | undefined)
+    ?.jsDocTags?.deprecated != null ||
+  typeof argType.description === 'string' &&
+    /^\s*@deprecated\b/i.test(argType.description)
+)
 
 /** PureArgsTable accepts only string summaries; docgen may attach non-renderable `detail`. */
 const toTableTypeCell = (
@@ -283,8 +295,8 @@ export const getPropsTableRows = (
       declarationIndex
     }))
     .sort((left, right) => {
-      const leftDeprecated = Boolean(left.presentation?.deprecated)
-      const rightDeprecated = Boolean(right.presentation?.deprecated)
+      const leftDeprecated = isDeprecatedProp(left.argType, left.presentation)
+      const rightDeprecated = isDeprecatedProp(right.argType, right.presentation)
 
       if (leftDeprecated !== rightDeprecated) {
         return leftDeprecated ? 1 : -1
@@ -304,7 +316,7 @@ export const getPropsTableRows = (
     rows: ArgTypes
     deprecatedRows: ArgTypes
   }>((rows, entry) => {
-    if (entry.presentation?.deprecated) {
+    if (isDeprecatedProp(entry.argType, entry.presentation)) {
       rows.deprecatedRows[entry.name] = mergeArgTypeRow(
         entry.name,
         entry.argType,
@@ -355,7 +367,7 @@ const stripRowCategories = (rows: Record<string, any>) => Object.fromEntries(
   ])
 )
 
-/** Строки таблицы только из presentation (вкладка «Дизайнеру», без docgen и без групп). */
+/** Строки таблицы только из presentation (вкладка «Дизайн», без docgen и без групп). */
 export const buildPresentationOnlyRows = (
   presentation: PropPresentationMap
 ): ArgTypes => {
@@ -379,7 +391,7 @@ export const buildPresentationOnlyRows = (
     return acc
   }, {})
 
-  return stripRowCategories(rows)
+  return markPresentationOnlyRows(stripRowCategories(rows))
 }
 
 const getStoryArgTypes = (resolved: any) => {

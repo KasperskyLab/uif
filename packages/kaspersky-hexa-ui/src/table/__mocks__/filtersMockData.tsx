@@ -1,9 +1,11 @@
+/* eslint-disable max-lines */
 import { Text } from '@src/typography'
+import { StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
-import { FilterType, TableColumn } from '..'
+import { FilterType, ITableProps, TableColumn, TableRecord } from '..'
 import { FilterApi, TableCustomFilterFunction } from '../modules/Filters'
 import { isGroup } from '../modules/Filters/helpers'
 import { TableDataSourceFunction } from '../types'
@@ -38,16 +40,17 @@ export const cities = [
   'Volgograd'
 ] as const
 
-const createColumn = (dataIndex: string): TableColumn => ({
+const createColumn = (dataIndex: string): TableColumn<MockRow> => ({
   title: `table.columns.${dataIndex}`,
   key: dataIndex,
   dataIndex,
   show: true
 })
 
-type MockRowFields = keyof MockRow
-
-export const createMockDataSourceFunction = (dataSource: MockRow[]): TableDataSourceFunction<MockRow> => {
+export const createMockDataSourceFunction = <T extends TableRecord = TableRecord> (
+  dataSource: T[],
+  columns: TableColumn<T>[]
+): TableDataSourceFunction<T> => {
   return async ({
     page,
     pageSize,
@@ -62,19 +65,19 @@ export const createMockDataSourceFunction = (dataSource: MockRow[]): TableDataSo
 
     if (params?.filters && params.filters.length > 0) {
       // use your filter system instead of FilterApi
-      const filterApi = new FilterApi({ defaultFilters: params.filters, columns: tableColumns })
-      processedData = filterApi.filterRows(processedData) as MockRow[]
+      const filterApi = new FilterApi<T>({ defaultFilters: params.filters, columns })
+      processedData = filterApi.filterRows(processedData)
     }
 
     if (sorting) {
-      const sortField = (sorting.field || sorting.attribute) as MockRowFields
+      const sortField = sorting.field || sorting.attribute
       if (sortField) {
-        processedData = applySorting(processedData, sortField, sorting.isAsc)
+        processedData = applySorting(processedData, sorting.field, sorting.attribute, sorting.isAsc)
       }
     }
 
     if (params?.groupBy) {
-      processedData = applyGrouping(processedData, params.groupBy as MockRowFields)
+      processedData = applyGrouping(processedData, params.groupBy)
     }
 
     const totalCount = processedData.length
@@ -90,7 +93,7 @@ export const createMockDataSourceFunction = (dataSource: MockRow[]): TableDataSo
   }
 }
 
-const applySearch = (data: MockRow[], searchString?: string): MockRow[] => {
+const applySearch = <T extends TableRecord = TableRecord> (data: T[], searchString?: string): T[] => {
   if (!searchString?.trim()) return data
 
   const searchLower = searchString.toLowerCase().trim()
@@ -103,10 +106,23 @@ const applySearch = (data: MockRow[], searchString?: string): MockRow[] => {
   ))
 }
 
-const applySorting = (data: MockRow[], sortField: MockRowFields, isAsc: boolean): MockRow[] => {
+const applySorting = <T extends TableRecord = TableRecord> (
+  data: T[],
+  field: string | undefined,
+  attribute: string | undefined,
+  isAsc: boolean
+): T[] => {
+  const getSortValue = (row: T): T[keyof T] | undefined => {
+    const base = field ? row[field as keyof T] : undefined
+    if (attribute && base && typeof base === 'object') {
+      return (base as T['details'])[attribute as keyof T['details']]
+    }
+    return field ? base : row[attribute as keyof T]
+  }
+
   return [...data].sort((a, b) => {
-    const aValue = a[sortField]
-    const bValue = b[sortField]
+    const aValue = getSortValue(a)
+    const bValue = getSortValue(b)
 
     if (aValue == null && bValue == null) return 0
     if (aValue == null) return isAsc ? -1 : 1
@@ -117,7 +133,7 @@ const applySorting = (data: MockRow[], sortField: MockRowFields, isAsc: boolean)
   })
 }
 
-const applyGrouping = (data: MockRow[], groupBy: MockRowFields): MockRow[] => {
+const applyGrouping = <T extends TableRecord = TableRecord> (data: T[], groupBy: keyof T): T[] => {
   return [...data].sort((a, b) => {
     const aGroupValue = a[groupBy] || ''
     const bGroupValue = b[groupBy] || ''
@@ -128,14 +144,14 @@ const applyGrouping = (data: MockRow[], groupBy: MockRowFields): MockRow[] => {
   })
 }
 
-export const mockCustomFilterFunction: TableCustomFilterFunction = (rows, filters, renderList, { rowMatchesFilter, rowMatchesGroup }) => {
+export const mockCustomFilterFunction: TableCustomFilterFunction<MockRow> = (rows, filters, renderList, { rowMatchesFilter, rowMatchesGroup }) => {
   const filteredRows = rows.filter(row => (
     filters.every(filter => isGroup(filter) ? rowMatchesGroup(row, filter) : rowMatchesFilter(row, filter))
   ))
   renderList(filteredRows)
 }
 
-export const tableColumns: TableColumn[] = [
+export const tableColumns: TableColumn<MockRow>[] = [
   {
     ...createColumn('fullname'),
     allowMultipleFilters: true,
@@ -254,21 +270,25 @@ export const tableColumns: TableColumn[] = [
   }
 ]
 
-export type MockRow = {
+export type MockRow = TableRecord & {
   _uniqueId: string,
-  key: string,
-  group: typeof groups[number],
+  key: React.Key,
+  group: typeof groups[number] | string,
   fullname: string,
   salary: number,
   isTrainee: boolean,
   dateHired: string,
-  datetime: string,
+  datetime: string | number | Date,
   ip: number,
   details: {
     email: string,
     city: typeof cities[number]
   }
 }
+
+export type TableMockProps = ITableProps<MockRow>
+
+export type TableMockStory = StoryObj<TableMockProps>
 
 export const generatedData: MockRow[] = [
   {

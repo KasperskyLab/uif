@@ -45,7 +45,7 @@ const meta: Meta<SidebarProps> = {
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
     controls: {
-      exclude: /(dataTestId|klId|theme)/
+      exclude: /(klId|theme)/
     },
     docs: {
       page: withMeta(MetaData)

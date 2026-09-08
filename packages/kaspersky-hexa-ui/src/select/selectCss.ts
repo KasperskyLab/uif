@@ -51,12 +51,14 @@ export const selectCss = css<SelectCssProps>`
           top: 0;
         }
         &:not(.ant-select-selection-overflow-item-rest) > span {
-          margin-right: 4px;
+          margin-right: unset;
+          margin-inline-end: 4px;
         }
       }
 
       .ant-tag {
-        margin-right: 0;
+        margin-right: unset;
+        margin-inline-end: 0;
       }
     }
 
@@ -67,20 +69,25 @@ export const selectCss = css<SelectCssProps>`
 
   &.ant-select-single {
     .ant-select-selector {
-      padding: 6px 36px 6px 12px;
+      padding: unset;
+      padding-block: 6px;
+      padding-inline: 12px 36px;
     }
 
     &.ant-select-show-arrow {
       .ant-select-selection-placeholder,
       .ant-select-selection-item {
-        padding-right: 0;
+        padding-right: unset;
+        padding-inline-end: 0;
       }
     }
   }
 
   &.ant-select-multiple {
     .ant-select-selector {
-      padding: 0 64px 0 12px;
+      padding: unset;
+      padding-block: 0;
+      padding-inline: 12px 64px;
     }
 
     .ant-select-selection-search {
@@ -212,7 +219,8 @@ export const selectCss = css<SelectCssProps>`
   > .ant-select-arrow {
     width: 16px;
     height: 16px;
-    right: 12px;
+    right: unset;
+    inset-inline-end: 12px;
     margin-top: 0;
     transform: none;
     top: 8px;
@@ -220,7 +228,8 @@ export const selectCss = css<SelectCssProps>`
 
   > .ant-select-clear {
     opacity: 1;
-    right: 32px;
+    right: unset;
+    inset-inline-end: 32px;
     top: 8px;
     bottom: 1px;
     width: 16px;
@@ -268,7 +277,7 @@ const dropdownCss = css<DropdownStylesProps>`
       align-items: center;
 
       .dropdown-v6-multi-checkbox {
-        margin-right: 5px;
+        margin-inline-end: 5px;
       }
     }
 
@@ -287,6 +296,11 @@ const dropdownCss = css<DropdownStylesProps>`
       background-color: ${fromProps('hover.option.background')};
       outline: none;
     }
+  }
+
+  .ant-select-item-option-grouped {
+    padding-left: unset;
+    padding-inline-start: 12px;
   }
 
   .rc-virtual-list {
@@ -399,12 +413,12 @@ export const StyledErrorWrapper = styled.div<{ cssConfig: SelectCssConfig }>`
   color: ${fromProps('enabled.loadingError.color')};
 
   > svg {
-   margin-top: 2px;
-   margin-right: 4px;
+    margin-top: 2px;
+    margin-inline-end: 4px;
   }
 
   > div {
-   flex: 1;
+    flex: 1;
   }
 `
 

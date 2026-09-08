@@ -36,6 +36,7 @@ const NavItemComponent = ({
     items,
     state,
     onClick,
+    onToggle,
     key,
     expanded,
     disabled,
@@ -47,7 +48,9 @@ const NavItemComponent = ({
     submenuItems,
     canBeAddedAsFav = true,
     skipActivation = false,
-    lineClamp
+    lineClamp,
+    href,
+    target
   } = data
   const NavItemIcon = icon
   const hasChild = Boolean(items && items.length)
@@ -71,11 +74,11 @@ const NavItemComponent = ({
   } = menuState
 
   const toggleItem = (item: string) => {
-    minimized && setMenuActivePopupItem(state as string)
     updateNavState({ toggleExpandItem: item })
+    onToggle?.(item)
   }
 
-  const itemClick = () => {
+  const itemClick = (e: React.MouseEvent<HTMLElement>) => {
     if (!skipActivation) {
       updateNavState({ activateItem: state })
       setMenuActiveItem(state as string)
@@ -83,7 +86,7 @@ const NavItemComponent = ({
     if (minimized || childPop) {
       collapseAll()
     }
-    onClick && onClick()
+    onClick && onClick(e)
   }
 
   const expandSubmenu = () => {
@@ -96,7 +99,7 @@ const NavItemComponent = ({
     }
   }
 
-  const entryClick = () => {
+  const entryClick = (e: React.MouseEvent<HTMLElement>) => {
     if (disabled) return
     if (hasChild) {
       toggleItem(state as string)
@@ -110,7 +113,7 @@ const NavItemComponent = ({
       setSubmenuMarginActive(false)
       setSubmenuActive(false)
     }
-    itemClick()
+    itemClick(e)
   }
 
   const isItemFavEnabled = canBeAddedAsFav && !hasChild && favsEnabled && key !== 'Fav'
@@ -144,8 +147,10 @@ const NavItemComponent = ({
   const shouldBeMarkedAsNewIndicator = hasNew
   const shouldBeMarkedAsNewBadge = !hasItems && isNew
 
+  const EntryComponent = href ? 'a' : 'div'
+
   const navEntry = (
-    <div
+    <EntryComponent
       className={cn(
         className,
         'uif-nav-item-entry',
@@ -154,6 +159,8 @@ const NavItemComponent = ({
       kl-id={data.klId}
       data-testid={data.klId}
       onClick={entryClick}
+      href={href}
+      target={target}
     >
       {icon && (
         <div className="uif-nav-item-entry-icon">
@@ -175,7 +182,7 @@ const NavItemComponent = ({
         {isItemFavEnabled && <AddToFavs {...favsProps} />}
         {hasChild && <ArrowRightMini className="uif-nav-item-entry-arrow" />}
       </div>
-    </div>
+    </EntryComponent>
   )
 
   return (

@@ -1,12 +1,12 @@
 import { Focus } from '@design-system/tokens/focus'
 import { ThemeKey } from '@design-system/types'
 import { TestingProps } from '@helpers/typesHelpers'
-import type { TreeProps } from 'antd'
+import type { TreeNodeProps } from 'antd'
 import type { NodeDragEventParams } from 'rc-tree/lib/contextTypes'
-import type { DataNode as BaseDataNode, EventDataNode, Key } from 'rc-tree/lib/interface'
+import type { BasicDataNode, DataNode as AntdDataNode, EventDataNode, Key } from 'rc-tree/lib/interface'
 import React, { PropsWithChildren, ReactNode } from 'react'
 
-export type { EventDataNode, Key, NodeDragEventParams, TreeProps }
+export type { EventDataNode, Key, NodeDragEventParams }
 
 export type NodeDropEventParams = NodeDragEventParams & {
   dragNode: EventDataNode,
@@ -45,19 +45,36 @@ export type TreeThemeProps = {
 }
 
 export type TreeCheckEvent = {
+  event: string,
+  node: EventDataNode,
   checked: boolean,
-  halfCheckedKeys: [],
-  event: Record<string, string>,
-  checkedNodes: Record<string, string>[],
-  node: { checked: boolean, key: string }
+  nativeEvent: MouseEvent,
+  checkedNodes: (BasicDataNode | AntdDataNode)[],
+  halfCheckedKeys?: Key[]
 }
 
-export type DataNode = BaseDataNode & {
+export type DataNode = AntdDataNode & {
   _action?: boolean,
   children?: DataNode[]
 }
 
-type TreeCommonProps = TreeThemeProps & Pick<TreeProps, 'loadData' | 'icon' | 'onSelect' | 'showIcon' | 'selectedKeys'> & TestingProps & {
+export type TreeCommonProps = TreeThemeProps & TestingProps & {
+  /** Load data asynchronously */
+  loadData?: (treeNode: EventDataNode) => Promise<void>,
+  /** Custom treeNode icon */
+  icon?: React.ReactNode | ((props: TreeNodeProps) => React.ReactNode),
+  /** Callback function for when the onSelect event occurs */
+  onSelect?: (selectedKeys: Key[], info: {
+    event: 'select',
+    selected: boolean,
+    node: EventDataNode,
+    selectedNodes: (BasicDataNode | AntdDataNode)[],
+    nativeEvent: MouseEvent
+  }) => void,
+  /** Shows an icon before a TreeNode's title. There is no default for this */
+  showIcon?: boolean,
+  /** Specifies the keys of the selected treeNodes */
+  selectedKeys?: Key[],
   /** The treeNodes data Array, if set it then you need not construct children TreeNode.
    * (key should be unique across the whole array) */
   treeData?: DataNode[],
@@ -74,17 +91,17 @@ type TreeCommonProps = TreeThemeProps & Pick<TreeProps, 'loadData' | 'icon' | 'o
   /** Check treeNode precisely; parent treeNode and children treeNodes are not associated */
   checkStrictly?: boolean,
   /** Callback function for when the onCheck event occurs */
-  onCheck?: (checkedKeys: Key[], e: TreeCheckEvent) => void | undefined,
+  onCheck?: (checkedKeys: Key[] | { checked: Key[], halfChecked: Key[] }, e: TreeCheckEvent) => void,
   /** Specifies the keys of the checked treeNodes */
-  checkedKeys?: string[] | undefined,
+  checkedKeys?: Key[] | undefined,
   /** Callback function for when a treeNode is expanded or collapsed */
-  onExpand?: (newExpandedKeys: string[], info: { node: EventDataNode, expanded: boolean }) => void | undefined,
+  onExpand?: (newExpandedKeys: Key[], info: { node: EventDataNode, expanded: boolean, nativeEvent: MouseEvent }) => void | undefined,
   /** Specifies the keys of the expanded treeNodes */
-  expandedKeys?: string[] | undefined,
+  expandedKeys?: Key[] | undefined,
   /** Callback function for when a treeNode is loaded by loadData function */
-  onLoad?: (newExpandedKeys: string[]) => void | undefined,
+  onLoad?: (loadedKeys: Key[], info: { event: 'load', node: EventDataNode }) => void | undefined,
   /** Specifies the keys of the loaded treeNodes by loadData function */
-  loadedKeys?: string[] | undefined,
+  loadedKeys?: Key[] | undefined,
   /** Whether to automatically expand a parent treeNode */
   autoExpandParent?: boolean,
   /** Callback function for when the onDragStart event occurs */
@@ -128,7 +145,7 @@ type TreeCommonProps = TreeThemeProps & Pick<TreeProps, 'loadData' | 'icon' | 'o
 export type TreeNavProps = TreeCommonProps & {
   multiple?: boolean,
   selectable?: boolean,
-  onSelect?: TreeProps['onSelect']
+  onSelect?: TreeCommonProps['onSelect']
 }
 
 export type TreeListProps = TreeCommonProps & {
@@ -141,5 +158,5 @@ export type ITreeProps = TreeCommonProps & {
   selectable?: boolean,
   disableNodeBg?: boolean,
   multiple?: boolean,
-  icon?: TreeProps['icon']
+  icon?: TreeCommonProps['icon']
 }

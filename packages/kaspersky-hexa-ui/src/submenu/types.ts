@@ -12,7 +12,7 @@ export type SubmenuThemeProps = {
 
 type ActionProps = Pick<ActionButtonProps, 'onClick' | 'icon'>
 
-export type BadgeNotificationMode = Extract<BadgeMode, 'new' | 'critical'>
+export type BadgeNotificationMode = Extract<BadgeMode, 'new' | 'critical' | 'neutral'>
 
 type BadgeNotification = {
   type: 'badge',
@@ -54,6 +54,7 @@ export type TitleProps = {
   type: 'title',
   key: string,
   text: ReactNode,
+  elementAfter?: ReactNode,
   action?: ActionProps
 } & TestingProps
 

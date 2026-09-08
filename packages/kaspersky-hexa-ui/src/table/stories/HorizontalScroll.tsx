@@ -1,5 +1,5 @@
 import { SectionMessage } from '@src/section-message'
-import React from 'react'
+import React, { useState } from 'react'
 
 import mockData from '../__mocks__/table-mock-data.json'
 import { TableColumn } from '../types'
@@ -45,6 +45,7 @@ export const columns = [
 export const dataSource = mockData.map((el, i) => {
   return {
     ...el,
+    key: i,
     date: i === 2 ? new Date().toDateString() : new Date(Number(i.toString() + '0000000000')).toDateString(),
     isSortable: i === 3 ? 'aaaaaaaaaaa' : new Array(i).fill('a').join(''),
     sorter: i === 4 ? 'aaaaaaaaaaaa' : new Array(i).fill('a').join(''),
@@ -54,13 +55,19 @@ export const dataSource = mockData.map((el, i) => {
 
 export const HorizontalScroll: Story = {
   render: (args) => {
+    const [dataSourceState, setDataSourceState] = useState(dataSource)
+
     return (
       <>
         <SectionMessage mode="info">
           <div>Проп таблицы resizingMode = &quot;scroll&quot;</div>
           <div>Режим scroll используется для таблиц с большим количеством колонок и под капотом включает кастомный горизонтальный скроллбар</div>
         </SectionMessage>
-        <BasicTableStory {...args} />
+        <BasicTableStory
+          {...args}
+          onDragStart={(...arg) => { console.log(arg) }}
+          onDragEnd={(rows: any) => { setDataSourceState(rows) }}
+          dataSource={dataSourceState} />
       </>
     )
 
@@ -74,8 +81,9 @@ export const HorizontalScroll: Story = {
     dataSource,
     resizingMode: 'scroll',
     afterColumn: true,
-    borderedStyle: false,
     stickyHeader: 0,
-    stickyFooter: false
+    stickyFooter: false,
+    stickySelection: true,
+    useDragDrop: true
   }
 }

@@ -328,6 +328,14 @@ export const Basic: Story = {
             value="MB"
           />
         </>
+      },
+      {
+        label: 'help-message',
+        control: {
+          component: 'help-message',
+          mode: 'common',
+          text: 'Help message example'
+        }
       }
     ]
   }
@@ -440,6 +448,14 @@ export const ReducedMargin: Story = {
         label: 'input-like',
         marginBefore: 48,
         control: { component: 'search', value: 'custom margin' }
+      },
+      {
+        label: 'help-message',
+        control: {
+          component: 'help-message',
+          mode: 'common',
+          text: 'Help message example'
+        }
       }
     ]
   }

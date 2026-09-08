@@ -36,10 +36,6 @@
     }
   ],
   "common": [{
-      "prop": "componentId",
-      "changes": "new prop"
-    },
-    {
       "prop": "noIcon",
       "changes": "new prop"
     }

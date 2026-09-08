@@ -1,25 +1,10 @@
 import { Size, Theme } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingProps } from '@helpers/typesHelpers'
 import * as React from 'react'
-
-import { TextSizes } from '@kaspersky/hexa-ui-core/typography/js'
 
 export type LoaderMode = 'default' | 'inverted'
 
 export type LoaderSize = Size | `${Size}`
-
-export type LoaderColorConfig = {
-  color: string,
-  textColor: string
-}
-
-export type LoaderSizeConfig = TextSizes & {
-  width: string,
-  height: string,
-  gap: string
-}
-
-export type LoaderCssConfig = LoaderColorConfig & LoaderSizeConfig
 
 export type LoaderThemeProps = {
   /** Custom theme */
@@ -42,5 +27,3 @@ export type LoaderProps = {
   /** Customize description content when Spin has children */
   tip?: React.ReactNode
 } & LoaderThemeProps & TestingProps
-
-export type LoaderViewProps = ToViewProps<LoaderProps, LoaderCssConfig, LoaderThemeProps>

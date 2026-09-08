@@ -1,17 +1,18 @@
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import useDimension from '@helpers/hooks/useDimension'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { ActionButton } from '@src/action-button'
 import { Button } from '@src/button'
 import { Space } from '@src/space'
 import AntdModal from 'antd/es/modal'
+import cn from 'classnames'
 import React, {
+  CSSProperties,
   FC,
   useEffect,
   useMemo,
-  useRef,
   useState
 } from 'react'
-import styled from 'styled-components'
 
 import {
   Kira,
@@ -20,49 +21,45 @@ import {
   StatusWarningOutline
 } from '@kaspersky/hexa-ui-icons/24'
 
+import styles from './Modal.module.scss'
 import {
-  getMaskStyle,
-  ModalContent,
-  modalCss,
-  ModalGlobalStyles,
-  StyledIcon
-} from './modalCss'
-import { ModalMode, ModalProps, ModalViewProps } from './types'
-import { useThemedModal } from './useThemedModal'
+  ModalMode,
+  ModalProps
+} from './types'
 
-const StyledModal = styled(AntdModal).withConfig({
-  shouldForwardProp: (prop) => !['cssConfig'].includes(prop)
-})`${modalCss}`
-
-export const Modal: FC<ModalProps> = (rawProps: ModalProps) => {
-  const themedProps = useThemedModal(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <ModalView {...props} />
+const iconMap: Record<Exclude<ModalMode, 'default'>, React.FC> = {
+  warning: () => <StatusWarningOutline testId="modal-warning-icon" klId="icon-warning" />,
+  error: () => <StatusDangerOutline1 testId="modal-error-icon" klId="icon-error" />,
+  success: () => <StatusOkOutline testId="modal-success-icon" klId="icon-success" />,
+  ai: () => <Kira testId="modal-ai-icon" klId="icon-ai" />
 }
 
-const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
+type ModalStyle = CSSProperties & {
+  '--modal-title-height': string,
+  '--modal-footer-height': string
+}
+
+export const Modal: FC<ModalProps> = (rawProps: ModalProps) => {
   const {
     mode = 'default',
     header,
     content,
     actions,
-    cssConfig,
+    dialog,
     visible,
     centered = true,
     closable = true,
     testAttributes,
-    customButtons
-  } = props
+    customButtons,
+    style,
+    className,
+    wrapClassName,
+    closeIcon = <ActionButton _wrapInSpan size="large" />,
+    size = 'small',
+    ...rest
+  } = useTestAttribute(rawProps)
 
-  const iconMap = useMemo((): { [key in Exclude<ModalMode, 'default'>]: React.FC; } => {
-    return {
-      warning: () => <StatusWarningOutline testId="modal-warning-icon" klId="icon-warning" />,
-      error: () => <StatusDangerOutline1 testId="modal-error-icon" klId="icon-error" />,
-      success: () => <StatusOkOutline testId="modal-success-icon" klId="icon-success" />,
-      ai: () => <Kira testId="modal-ai-icon" klId="icon-ai" />
-    }
-  }, [])
-
+  const resolvedSize = dialog ? 'small' : size
   const IconComponent = useMemo(() => mode !== 'default' && iconMap[mode], [iconMap, mode])
 
   const [titleElement, setTitleElement] = useState<HTMLDivElement | null>(null)
@@ -72,27 +69,28 @@ const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
   const { height: footerHeight } = useDimension(footerElement, [visible])
 
   useEffect(() => {
-    if (visible && footerElement) {
-      const firstFooterButton: HTMLButtonElement | null = footerElement.querySelector('button')
-
-      setTimeout(() => {
-        firstFooterButton?.focus()
-      })
+    if (!visible || !footerElement) {
+      return
     }
+
+    const firstFooterButton: HTMLButtonElement | null = footerElement.querySelector('button')
+    const timeoutId = window.setTimeout(() => {
+      firstFooterButton?.focus()
+    })
+
+    return () => window.clearTimeout(timeoutId)
   }, [visible, footerElement])
 
-  const titleMemoized = useMemo(() => {
-    return (
-      <div ref={setTitleElement}>
-        {IconComponent && (
-          <StyledIcon cssConfig={cssConfig}>
-            <IconComponent />
-          </StyledIcon>
-        )}
-        {header}
-      </div>
-    )
-  }, [header, IconComponent, cssConfig])
+  const titleMemoized = useMemo(() => (
+    <div ref={setTitleElement} className={styles.title}>
+      {IconComponent && (
+        <span className={styles.icon}>
+          <IconComponent />
+        </span>
+      )}
+      {header}
+    </div>
+  ), [header, IconComponent])
 
   const footerMemoized = useMemo(() => {
     if (!actions && !customButtons) {
@@ -106,7 +104,11 @@ const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
             <Button
               size="medium"
               {...actions.FIRST_ACTION}
-              mode={mode === 'error' && !actions.FIRST_ACTION.mode ? 'dangerFilled' : actions.FIRST_ACTION.mode}
+              mode={
+                mode === 'error' && !actions.FIRST_ACTION.mode
+                  ? 'dangerFilled'
+                  : actions.FIRST_ACTION.mode
+              }
             >
               {actions.FIRST_ACTION.text}
             </Button>
@@ -121,12 +123,12 @@ const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
               {actions.THIRD_ACTION.text}
             </Button>
           )}
-          {customButtons && customButtons.map(({ text, ...rest }, i) => (
+          {customButtons?.map(({ text, ...buttonProps }, index) => (
             <Button
-              key={`modalCustomButton${i}`}
+              key={`modalCustomButton${index}`}
               size="medium"
               mode="secondary"
-              {...rest}
+              {...buttonProps}
             >
               {text}
             </Button>
@@ -146,55 +148,60 @@ const ModalView: FC<ModalViewProps> = (props: ModalViewProps) => {
     }
   }, [visible])
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLDivElement
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const target = event.currentTarget
+    setShowBottomBorder(target.scrollHeight - target.scrollTop > target.clientHeight)
+    setShowTopBorder(target.scrollTop !== 0)
+  }
 
-    const bottom = target.scrollHeight - target.scrollTop === target.clientHeight
-    setShowBottomBorder(!bottom)
-
-    const top = target.scrollTop === 0
-    setShowTopBorder(!top)
+  const modalStyle: ModalStyle = {
+    ...style,
+    '--modal-title-height': `${titleHeight}px`,
+    '--modal-footer-height': `${footerHeight}px`
   }
 
   return (
-    <>
-      <ModalGlobalStyles
-        cssConfig={cssConfig}
-        titleHeight={titleHeight}
-        footerHeight={footerHeight}
-        showTopBorder={showTopBorder}
-        showBottomBorder={showBottomBorder}
-        closable={closable}
-      />
-      <StyledModal
-        title={titleMemoized}
-        footer={footerMemoized}
-        mask
-        maskClosable={false}
-        maskStyle={getMaskStyle(cssConfig)}
-        keyboard={false}
-        centered={centered}
-        closable={closable}
-        closeIcon={<ActionButton _wrapInSpan size="large" />}
-        {...testAttributes}
-        {...props}
-        width="none"
-        cssConfig={cssConfig}
-        titleHeight={titleHeight}
-        footerHeight={footerHeight}
-        showTopBorder={showTopBorder}
-        showBottomBorder={showBottomBorder}
-      >
-        <ModalContent
-          cssConfig={cssConfig}
-          titleHeight={titleHeight}
-          footerHeight={footerHeight}
-          onScroll={handleScroll}
-        >
-          {content}
-        </ModalContent>
-      </StyledModal>
-    </>
+    <AntdModal
+      {...rest}
+      {...testAttributes}
+      visible={visible}
+      title={titleMemoized}
+      footer={footerMemoized}
+      mask={!dialog}
+      maskClosable={false}
+      keyboard={false}
+      centered={centered}
+      closable={closable}
+      closeIcon={closeIcon}
+      width="none"
+      className={cn(
+        getClassNameWithTheme(className, rest.theme),
+        'hexa-ui-modal',
+        styles.modal,
+        styles[resolvedSize],
+        styles[mode],
+        {
+          [styles.dialog]: dialog,
+          [styles.closable]: closable,
+          [styles.showTopBorder]: showTopBorder,
+          [styles.showBottomBorder]: showBottomBorder,
+          [styles.withoutFooter] : !footerMemoized
+        }
+      )}
+      wrapClassName={cn(
+        wrapClassName,
+        styles.modalWrap,
+        {
+          [styles.dialogWrap]: dialog,
+          [styles[dialog?.position ?? '']]: dialog
+        }
+      )}
+      style={modalStyle}
+    >
+      <div className={styles.modalContent} onScroll={handleScroll}>
+        {content}
+      </div>
+    </AntdModal>
   )
 }
 

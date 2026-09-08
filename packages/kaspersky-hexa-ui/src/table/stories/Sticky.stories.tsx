@@ -7,19 +7,23 @@ import { ToolbarItems } from '@src/toolbar/types'
 import { Meta } from '@storybook/react'
 import React from 'react'
 
-import { ITableProps, Table } from '..'
-import { generatedData, tableColumns } from '../__mocks__/filtersMockData'
+import { Table, TableColumn } from '..'
+import { generatedData, tableColumns, TableMockProps, TableMockStory } from '../__mocks__/filtersMockData'
 
 import { basicArgTypes, BasicTableStory, Story } from './_commonConstants'
+import {
+  columns as horizontalScrollColumns,
+  dataSource as horizontalScrollDataSource,
+  HorizontalScroll as HorizontalScrollStory
+} from './HorizontalScroll'
 
-const meta: Meta<ITableProps> = {
+const meta: Meta<TableMockProps> = {
   title: 'Hexa UI Components/Table/Sticky',
   component: Table,
   args: {
     pagination: { pageSize: 200 },
     columns: tableColumns,
-    dataSource: generatedData,
-    borderedStyle: false
+    dataSource: generatedData
   },
   argTypes: {
     stickyHeader: basicArgTypes
@@ -61,27 +65,48 @@ const itemsToolbar: ToolbarItems[] = [
   }
 ]
 
-export const StickyHeader: Story = {
-  render: BasicTableStory.bind({}),
+export const StickySelection: Story = {
+  ...HorizontalScrollStory,
+  name: 'Sticky Selection',
+  render: args => {
+    const [dataSource, setDataSource] = React.useState(horizontalScrollDataSource)
+
+    return (
+      <BasicTableStory
+        {...args}
+        onDragStart={(...arg) => { console.log(arg) }}
+        onDragEnd={(rows: any) => { setDataSource(rows) }}
+        dataSource={dataSource}
+      />
+    )
+  },
   args: {
-    stickyHeader: 0,
-    borderedStyle: false
+    ...HorizontalScrollStory.args,
+    columns: horizontalScrollColumns as TableColumn[],
+    dataSource: horizontalScrollDataSource,
+    stickySelection: true
   }
 }
 
-export const StickyToolbar: Story = {
+export const StickyHeader: TableMockStory = {
+  render: BasicTableStory.bind({}),
+  args: {
+    stickyHeader: 0
+  }
+}
+
+export const StickyToolbar: TableMockStory = {
   render: BasicTableStory.bind({}),
   args: {
     stickyHeader: undefined,
     toolbar: {
       sticky: 0,
       left: itemsToolbar
-    },
-    borderedStyle: false
+    }
   }
 }
 
-export const StickyFooter: Story = {
+export const StickyFooter: TableMockStory = {
   render: BasicTableStory.bind({}),
   args: {
     stickyFooter: true,
@@ -90,12 +115,11 @@ export const StickyFooter: Story = {
       showColumns: true,
       showGrouping: true,
       showSettingsSearch: true
-    },
-    borderedStyle: false
+    }
   }
 }
 
-export const StickyFooterWithScroll: Story = {
+export const StickyFooterWithScroll: TableMockStory = {
   render: BasicTableStory.bind({}),
   args: {
     columns: tableColumns.map(col => ({ ...col, width: 200 })),
@@ -107,11 +131,11 @@ export const StickyFooterWithScroll: Story = {
       showGrouping: true,
       showSettingsSearch: true
     },
-    borderedStyle: false
+    stickySelection: false
   }
 }
 
-export const StickyHeaderWithToolbarAndFooter: Story = {
+export const StickyHeaderWithToolbarAndFooter: TableMockStory = {
   render: BasicTableStory.bind({}),
   args: {
     stickyFooter: true,
@@ -122,12 +146,11 @@ export const StickyHeaderWithToolbarAndFooter: Story = {
       showColumns: true,
       showGrouping: true,
       showSettingsSearch: true
-    },
-    borderedStyle: false
+    }
   }
 }
 
-export const WithinScrollableContainer: Story = {
+export const WithinScrollableContainer: TableMockStory = {
   render: (args) => (
     <StoryColumn>
       <ScrollableContainer>
@@ -146,7 +169,6 @@ export const WithinScrollableContainer: Story = {
     toolbar: {
       sticky: 0,
       left: itemsToolbar
-    },
-    borderedStyle: false
+    }
   }
 }

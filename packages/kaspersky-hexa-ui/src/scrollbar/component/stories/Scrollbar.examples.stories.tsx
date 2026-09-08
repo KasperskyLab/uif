@@ -12,7 +12,7 @@ import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
 
 import { content, wrapperCss } from '../../common'
 import { Scrollbar as ScrollbarComponent } from '../Scrollbar'
-import { scrollbarStorySettings } from '../Scrollbar.stories'
+import { scrollbarStorySettings } from './Scrollbar.stories'
 import { ScrollbarProps } from '../types'
 
 const meta = {

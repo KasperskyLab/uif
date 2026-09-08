@@ -236,7 +236,6 @@ export class FiltersStateManager<T extends TableRecord = TableRecord> {
     const targetGroup = this.findGroup(this.rootGroup, groupId)
 
     if (!targetGroup) {
-      console.warn(`${prefix} Can't get group, because group ${groupId} wasn't found.`)
       return []
     }
 

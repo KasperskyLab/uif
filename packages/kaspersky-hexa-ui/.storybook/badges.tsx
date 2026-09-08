@@ -7,7 +7,8 @@ export const badges = {
   deprecated: 'deprecated',
   stable: 'stable',
   dev: 'dev',
-  notProdReady: 'notProdReady'
+  notProdReady: 'notProdReady',
+  inBuilder: 'inBuilder'
 }
 
 export type SBBadges = typeof badges[keyof typeof badges]
@@ -55,5 +56,9 @@ export const badgesConfig: SBBadgesConfig = {
     mode: 'warning',
     title: 'Not production ready',
     description: 'This is experimental feature, not ready to use in production'
+  },
+  [badges.inBuilder]: {
+    mode: 'info',
+    title: 'Есть в UI-Builder'
   }
 }

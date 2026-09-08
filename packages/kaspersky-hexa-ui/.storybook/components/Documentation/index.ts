@@ -1,6 +1,9 @@
 export { DocPageLayout } from './DocPageLayout'
 export { DocumentationTabs } from './DocumentationTabs'
+export { ComponentChangelog } from './ComponentChangelog'
 export { DocExampleBlock } from './DocExampleBlock'
+export { DocRulesBlock } from './DocRulesBlock'
+export type { DocRulesBlockColumnProps, DocRulesBlockProps } from './DocRulesBlock'
 export {
   documentationLiveScope,
   mergeDocumentationLiveScope

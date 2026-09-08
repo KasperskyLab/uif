@@ -1,0 +1,164 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Tag } from '@src/tag'
+import { Text } from '@src/typography'
+
+import { TopNavigation } from '../TopNavigation'
+import { AppLogo } from './AppLogo'
+import { topNavigationDesignPropPresentation } from './TopNavigation.design.properties'
+import * as TopNavigationStories from './TopNavigation.stories'
+
+<Meta of={TopNavigationStories} name="TopNavigation Docs" />
+
+<DocPageLayout>
+
+  <DocPageHeader title="TopNavigation" />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **TopNavigation** — верхняя панель продукта с навигацией и пользовательскими действиями
+
+          **TopNavigation** размещайте в верхней части интерфейса продукта, когда пользователю нужно видеть его идентичность, глобальные разделы и постоянные действия аккаунта. Центральную область используйте для ключевой навигации или выбора рабочего контекста, а правую — для статусов и пользовательских действий.
+
+          Сохраняйте панель компактной: показывайте только действия, доступные из большинства разделов продукта. Контекстные операции конкретной страницы размещайте в её заголовке, панели инструментов или содержимом, чтобы верхняя навигация оставалась предсказуемой."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**TopNavigation** объединяет логотип и название продукта, центральную область навигации и действия пользователя справа. Основные настройки: **logo**, **title**, **elementCentered**, **contentRight**, **notificationButtonProps**, **notificationIndicator**, **accountMenuProps** и **titleLinkURL**."
+      />
+
+      <DocExampleBlock
+        title="logo и title"
+        description="Обязательные пропы. **logo** задаёт элемент с логотипом, а **title** — название продукта рядом с ним. Название отображается как ссылка."
+        code={`
+          <TopNavigation logo={<AppLogo />} title="Kaspersky Next" />
+        `}
+        scope={{ AppLogo, TopNavigation }}
+      />
+
+      <DocExampleBlock
+        title="titleLinkURL"
+        description="Адрес ссылки для названия продукта. По умолчанию — пустая строка."
+        code={`
+          <TopNavigation
+            logo={<AppLogo />}
+            title="Kaspersky Next"
+            titleLinkURL="#/home"
+          />
+        `}
+        scope={{ AppLogo, TopNavigation }}
+      />
+
+      <DocExampleBlock
+        title="elementCentered"
+        description="Конфигурация центральной области. Поддерживает кнопку с выпадающим меню или горизонтальную навигацию; при отсутствии конфигурации центральная область пуста."
+        code={`
+          <TopNavigation
+            logo={<AppLogo />}
+            title="Kaspersky Next"
+            elementCentered={{
+              type: 'horizontalNavigation',
+              horizontalNavigationConfig: {
+                items: [
+                  { key: 'workspaces', label: 'Workspaces', selected: true },
+                  { key: 'licenses', label: 'Licenses' },
+                ],
+              },
+            }}
+          />
+        `}
+        scope={{ AppLogo, TopNavigation }}
+      />
+
+      <DocExampleBlock
+        title="contentRight"
+        description="Произвольный элемент перед кнопкой уведомлений и меню аккаунта в правой части панели."
+        code={`
+          <TopNavigation
+            logo={<AppLogo />}
+            title="Kaspersky Next"
+            contentRight={<Tag mode="yellow">Getting started: 3 of 12</Tag>}
+          />
+        `}
+        scope={{ AppLogo, Tag, TopNavigation }}
+      />
+
+      <DocExampleBlock
+        title="notificationButtonProps и notificationIndicator"
+        description="**notificationButtonProps** добавляет кнопку уведомлений. **notificationIndicator** показывает на ней индикатор; по умолчанию — `false`."
+        code={`
+          <TopNavigation
+            logo={<AppLogo />}
+            title="Kaspersky Next"
+            notificationButtonProps={{ onClick: () => alert('Notifications') }}
+            notificationIndicator
+          />
+        `}
+        scope={{ AppLogo, TopNavigation }}
+      />
+
+      <DocExampleBlock
+        title="accountMenuProps"
+        description="Настройки меню аккаунта в правой части панели. Меню отображается, только когда передана конфигурация."
+        code={`
+          <TopNavigation
+            logo={<AppLogo />}
+            title="Kaspersky Next"
+            accountMenuProps={{
+              title: 'user@example.com',
+              dropdownMenuProps: {
+                overlay: [{ children: 'Account settings' }, { children: 'Log out' }],
+              },
+            }}
+          />
+        `}
+        scope={{ AppLogo, TopNavigation }}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+
+      <Description of={TopNavigationStories} />
+      <AutodocArgsTable components={TopNavigation} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=152094:629395)"
+      />
+
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(topNavigationDesignPropPresentation)} />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="TopNavigation" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

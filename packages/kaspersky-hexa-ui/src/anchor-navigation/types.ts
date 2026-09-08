@@ -9,6 +9,7 @@ export type AnchorItem = {
 
 export type NavigationProps = {
   items: AnchorItem[],
+  /** Navigation panel title */
   title?: string,
   style?: React.CSSProperties
 }
@@ -21,6 +22,7 @@ export type NavigationItemProps = {
 }
 
 export type AnchorNavigationProps = NavigationProps & {
+  /** Page content */
   children: ReactNode,
   className?: string
 }

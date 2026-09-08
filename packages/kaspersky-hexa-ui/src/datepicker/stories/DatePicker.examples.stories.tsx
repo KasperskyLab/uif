@@ -1,25 +1,15 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { validationStatuses } from '@helpers/typesHelpers'
 import { sbHideControls } from '@sb/helpers'
-import { P } from '@src/typography'
 import { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
-import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
 
 import { Calendar } from '../Calendar'
-import { RangePicker } from '../RangePicker'
-import { CalendarProps, RangePickerProps } from '../types'
+import { CalendarProps } from '../types'
+
 import { datePickerStorySettings } from './DatePicker.stories'
-
-const Wrapper = styled.div`
-  width: 300px;
-`
-
-const WrapperForRangeWithTime = styled.div`
-  width: 500px;
-`
 
 const meta: Meta<CalendarProps> = {
   title: 'Hexa UI Components/DateTime Pickers/DatePicker/Stories',
@@ -38,36 +28,8 @@ const meta: Meta<CalendarProps> = {
 export default meta
 
 type StoryCalendar = StoryObj<CalendarProps>
-type StoryRangePicker = StoryObj<RangePickerProps>
 
 export const Basic: StoryCalendar = {}
-
-const RangePickerExample: React.FC<RangePickerProps> = ({ onChange, value, ...props }) => {
-  const [dates, setDates] = React.useState<RangePickerProps['value']>([null, null])
-
-  return (
-    <RangePicker
-      value={dates}
-      onChange={(value: RangePickerProps['value']) => setDates(value)}
-      {...props}
-    />
-  )
-}
-
-export const Range: StoryRangePicker = {
-  render: (args: RangePickerProps) => <RangePickerExample {...args} />
-}
-
-export const RangeWithTime: StoryRangePicker = {
-  render: ({ showTime, ...args }: RangePickerProps) => <RangePickerExample {...args} showTime />,
-  decorators: [
-    (Story, context) => (
-      <WrapperForRangeWithTime>
-        <Story {...context} />
-      </WrapperForRangeWithTime>
-    )
-  ]
-}
 
 export const WithTime: StoryCalendar = {
   render: (args: CalendarProps) => <Calendar {...args} showTime />
@@ -108,45 +70,6 @@ export const WithDisabled: StoryCalendar = {
     const disabledDate: CalendarProps['disabledDate'] = current => current && current < today
 
     return <Calendar {...args} disabledDate={disabledDate} />
-  }
-}
-
-export const WithValidation: StoryObj<RangePickerProps> = {
-  render: (args: RangePickerProps) => {
-    const [isValidDate, setIsValidDate] = React.useState<boolean>(true)
-    const [startDate, setStartDate] = React.useState('')
-    const [endDate, setEndDate] = React.useState('')
-
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <div style={{ marginTop: 10 }}>
-          <P>startDate: {startDate}</P>
-          <P>endDate: {endDate}</P>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
-          <RangePicker
-            onDateValidationChange={(isValid) => {
-              setIsValidDate(isValid)
-            }}
-            onDateValuesChange={(startDate, endDate) => {
-              setStartDate(startDate)
-              setEndDate(endDate)
-            }}
-            value={null}
-            {...args}
-          />
-          {!isValidDate && (
-            <div style={{ marginTop: 10 }}>
-              <P themedColor="high">Введена недопустимая дата!</P>
-            </div>
-          )}
-        </div>
-      </div>
-    )
-  },
-  args: {
-    customKeyDown: () => { console.log('Custom onKeyDown triggered') },
-    validDatePattern: /^\d{4}-\d{2}-\d{2}$/
   }
 }
 

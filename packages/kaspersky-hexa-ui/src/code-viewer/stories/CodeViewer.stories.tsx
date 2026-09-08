@@ -12,7 +12,7 @@ import { CodeViewer as CodeViewerComponent } from '../CodeViewer'
 import { DEFAULT_SIZES } from '../constants'
 import { CodeViewerProps } from '../types'
 import { codeViewerPropPresentation } from './CodeViewer.controls'
-import { basicExample } from './examples'
+import { basicExample } from './CodeViewerDocExamples'
 
 type Languages = {
   yara: [],

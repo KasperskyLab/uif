@@ -2,14 +2,18 @@ import cn from 'classnames'
 import React from 'react'
 import { RenderLeafProps } from 'slate-react'
 
-import styles from './InlineElement.module.scss'
+import { RichTextEditorTextareaProps } from '../types'
 
-type InlineElementProps = Pick<RenderLeafProps, 'attributes' | 'children'> & {
+import styles from './Element.module.scss'
+
+type InlineElementProps = RichTextEditorTextareaProps & Pick<RenderLeafProps, 'attributes' | 'children'> & {
   className?: string;
   dataElement?: string;
 }
 
 export const InlineElement = ({
+  disabled,
+  readOnly,
   attributes,
   children,
   className,
@@ -17,7 +21,14 @@ export const InlineElement = ({
 }: InlineElementProps) => (
   <span
     {...attributes}
-    className={cn(className, styles.inlineElement)}
+    className={cn(
+      className,
+      styles.element,
+      {
+        [styles.disabled]: disabled,
+        [styles.readOnly]: readOnly
+      }
+    )}
     data-rich-text-element={dataElement}
   >
     {children}

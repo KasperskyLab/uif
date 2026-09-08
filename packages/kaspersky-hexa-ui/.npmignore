@@ -17,3 +17,6 @@ __mocks__
 tsconfig.json
 custom.d.ts
 react.ts
+
+
+AGENTS.md

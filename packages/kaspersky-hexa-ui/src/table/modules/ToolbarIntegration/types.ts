@@ -25,6 +25,7 @@ export type GetLeftItems<T = ToolbarItems<ToolbarItemKey>> = (props: GetLeftItem
 export type ToolbarCommonProps = Omit<OriginToolbarProps, 'right'> & {
   showSearch?: boolean,
   collapsibleSearch?: boolean,
+  searchPlaceholder?: string,
   showFilter?: boolean,
   showFilterSidebar?: boolean,
   importExportButton?: ImportExportButtonProps | ImportExportDropdownProps,

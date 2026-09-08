@@ -120,4 +120,14 @@ describe('Tag ', () => {
     const closeButton = queryByTestId(`${klId}-close-icon`)
     expect(closeButton).not.toBeInTheDocument()
   })
+
+  test('should call onClick when tag is clicked', () => {
+    const onClickMock = jest.fn()
+    const { getByTestId } = render(
+      <Tag klId={klId} onClick={onClickMock}>hello</Tag>
+    )
+
+    fireEvent.click(getByTestId(klId))
+    expect(onClickMock).toHaveBeenCalled()
+  })
 })

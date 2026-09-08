@@ -45,10 +45,41 @@ const getShareBaseUrl = (): URL => {
   return getStorybookManagerUrl(window.location)
 }
 
+export type DocumentationHashLocation = {
+  tabKey?: string
+  sectionId?: string
+}
+
+/** Parses `#composition/current` or legacy `#current`. */
+export const parseDocumentationHash = (hash: string): DocumentationHashLocation => {
+  let raw = hash.replace(/^#/, '')
+
+  try {
+    raw = decodeURIComponent(raw)
+  } catch {
+    // keep raw
+  }
+
+  if (!raw) {
+    return {}
+  }
+
+  const separator = raw.indexOf('/')
+
+  if (separator === -1) {
+    return { sectionId: raw }
+  }
+
+  return {
+    tabKey: raw.slice(0, separator),
+    sectionId: raw.slice(separator + 1) || undefined
+  }
+}
+
 /** Full share URL to a docs section (manager shell + sidebar, not iframe.html). */
-export const getDocumentationSectionUrl = (sectionId: string): string => {
+export const getDocumentationSectionUrl = (sectionId: string, tabKey?: string): string => {
   const url = getShareBaseUrl()
-  url.hash = sectionId
+  url.hash = tabKey ? `${tabKey}/${sectionId}` : sectionId
 
   return url.toString()
 }

@@ -1,9 +1,9 @@
 import { Theme } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingProps } from '@helpers/typesHelpers'
 import { PopoverProps } from '@src/popover'
 import React, { ReactNode } from 'react'
 
-export type FormLabelMode = 'primary' | 'secondary' | 'disabled'
+export type FormLabelMode = 'primary' | 'secondary'
 
 export type FormLabelThemeProps = {
   /** Custom theme */
@@ -17,6 +17,8 @@ export type FormLabelProps = React.LabelHTMLAttributes<HTMLLabelElement> & {
   required?: boolean,
   /** Is disabled */
   disabled?: boolean,
+  /** Is readonly */
+  readOnly?: boolean,
   /** Tags after label */
   tagsAfter?: string[],
   /** Popover content */
@@ -28,16 +30,3 @@ export type FormLabelProps = React.LabelHTMLAttributes<HTMLLabelElement> & {
   /** Custom width for popover */
   popoverWidth?: number
 } & FormLabelThemeProps & TestingProps
-
-export type FormLabelColorConfig = {
-  text?: string,
-  asterisk?: string
-}
-
-export type FormLabelStateProps = {
-  primary: FormLabelColorConfig,
-  secondary: FormLabelColorConfig,
-  disabled: FormLabelColorConfig
-}
-
-export type FormLabelViewProps = ToViewProps<FormLabelProps, FormLabelColorConfig, Omit<FormLabelThemeProps, 'mode'>>

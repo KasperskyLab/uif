@@ -1,26 +1,10 @@
 import { ThemeKey } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingProps } from '@helpers/typesHelpers'
 import { AllHTMLAttributes, DetailedHTMLProps, MouseEventHandler } from 'react'
 
 export const alertModes = ['info', 'success', 'warning', 'error'] as const
 
 export type AlertMode = typeof alertModes[number]
-
-type StateProps = {
-  background?: string,
-  color?: string,
-  border?: string,
-  icon?: string,
-  separator?: string
-}
-
-export type AlertSizeConfig = Record<string, string | number> & {
-  fontStretch: string,
-  margin: number
-}
-
-export type AlertColorConfig = StateProps
-export type AlertCssConfig = AlertColorConfig
 
 export enum ActionsMap {
   FIRST_ACTION = 'firstAction',
@@ -34,17 +18,14 @@ export type ActionType = {
 
 type ActionConfig = Partial<Record<keyof typeof ActionsMap, ActionType>>
 
-export type AlertThemeProps = {
-  /** Custom theme */
-  theme?: ThemeKey,
-  /** Color mode */
-  mode: AlertMode
-}
-
 export type AlertProps = Omit<
   DetailedHTMLProps<AllHTMLAttributes<HTMLDivElement>, HTMLDivElement>,
   'title' | 'ref' | 'as' | 'type' | 'width'
-> & AlertThemeProps & TestingProps & {
+> & TestingProps & {
+  /** Custom theme */
+  theme?: ThemeKey,
+  /** Color mode */
+  mode: AlertMode,
   /** If alert can be closed */
   closable?: boolean,
   /**
@@ -57,5 +38,3 @@ export type AlertProps = Omit<
   /** Width in pixels */
   width?: string | number
 }
-
-export type AlertViewProps = ToViewProps<AlertProps, AlertCssConfig, Omit<AlertThemeProps, 'mode'>>

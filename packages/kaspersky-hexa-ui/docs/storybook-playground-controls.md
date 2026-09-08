@@ -167,7 +167,7 @@ export const componentStorySettings: Meta<ComponentProps> = {
 
 ```tsx
 controls: {
-  exclude: /(componentType|componentId|dataTestId|klId|theme)/
+  exclude: /(componentType|klId|theme)/
 }
 ```
 
