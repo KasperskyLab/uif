@@ -11,3 +11,7 @@ storybook-static/
 esm/
 !package-lock.json
 .npmrc
+.npm-cache
+
+playwright-report/
+test-results/

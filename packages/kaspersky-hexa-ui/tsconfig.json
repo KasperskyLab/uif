@@ -30,8 +30,6 @@
     "./helpers/**/*",
     "./docs",
     "./.storybook/**/*",
-    "./screenshots/**/*",
-    "./.changelog/scripts/*",
     "./setupTests.ts"
   ],
   "exclude": [

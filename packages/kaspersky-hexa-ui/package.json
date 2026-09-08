@@ -1,7 +1,7 @@
 {
   "name": "@kaspersky/hexa-ui",
   "author": "AO Kaspersky Lab",
-  "version": "6.429.3",
+  "version": "6.430.1",
   "description": "Kaspersky Hexa UI Design System UI Kit",
   "license": "Apache-2.0",
   "homepage": "https://github.com/KasperskyLab/uif#readme",
@@ -55,14 +55,7 @@
     "test:watch": "jest --watch",
     "test:format:mdx": "node --test tools/format-mdx-doc.test.mjs",
     "format:mdx": "node tools/format-mdx-doc.mjs",
-    "format:mdx:check": "node tools/format-mdx-doc.mjs --check",
-    "jest:screenshots": "jest --runInBand --useStderr --verbose -i -c screenshots/jest.config.js",
-    "jest:screenshots-update": "jest --runInBand --useStderr --verbose -i -c screenshots/jest.config.js -u",
-    "test:screenshots": "start-server-and-test storybook:ci http-get://localhost:6006 jest:screenshots",
-    "test:screenshots-update": "start-server-and-test storybook:ci http-get://localhost:6006 jest:screenshots-update",
-    "changelog": "conventional-changelog -n ./.changelog/changelog.config.js -i Changelog.mdx -s -r 1 -t \"product/osmp/@kaspersky/hexa-ui@\"",
-    "tag": "node .changelog/scripts/create-tag.mts",
-    "changelog:ai": "node .changelog/scripts/changelogs-ai.mts"
+    "format:mdx:check": "node tools/format-mdx-doc.mjs --check"
   },
   "sideEffects": [
     "*.less",
@@ -81,9 +74,6 @@
       "react-dom": "^17.x"
     }
   },
-  "bundleDependencies": [
-    "style-inject"
-  ],
   "dependencies": {
     "@codemirror/commands": "6.7.1",
     "@codemirror/lang-html": "6.4.9",
@@ -160,7 +150,6 @@
     "@types/lodash": "4.14.178",
     "@types/mark.js": "8.11.7",
     "@types/node": "24.10.1",
-    "@types/puppeteer": "5.4.4",
     "@types/react": "17.0.39",
     "@types/react-dom": "17.0.11",
     "@types/react-resizable": "1.7.4",
@@ -179,6 +168,7 @@
     "gulp": "5.0.1",
     "gulp-rename": "2.0.0",
     "gulp-typescript": "6.0.0-alpha.1",
+    "http-server": "14.1.1",
     "identity-obj-proxy": "3.0.0",
     "jest": "29.7.0",
     "jest-canvas-mock": "2.5.2",

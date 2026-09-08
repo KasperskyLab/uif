@@ -5,6 +5,7 @@ import { Preview } from '@storybook/react-vite'
 import { badgesConfig } from './badges'
 import { withI18n } from './decorators/withI18n'
 import { withThemeProvider } from './decorators/withThemeProvider'
+import { withVisualData } from './decorators/withVisualData'
 
 import '../style/styles.less'
 
@@ -62,6 +63,7 @@ export const globalTypes = {
 
 const preview: Preview = {
   decorators: [
+    withVisualData,
     withI18n,
     withThemeProvider,
     withBadges

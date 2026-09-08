@@ -197,6 +197,8 @@ export const TreeNavWithLines: Story<typeof TreeNav> = {
 
 export const TreeNavMultipleChoiceWithALotOfData: Story<typeof TreeNav> = {
   ...TreeNavBasic,
+  // недетерминированный рендер: виртуализация большого дерева отрисовывается по-разному
+  tags: ['skip-visual'],
   render: (args) => {
     const treeData = React.useMemo(() => {
       return [

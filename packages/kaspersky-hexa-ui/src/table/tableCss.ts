@@ -315,12 +315,16 @@ export const tableCss = css<TableCssProps>`
   }
 
   .ant-table-tbody > tr.ant-table-row:hover > td,
-  .ant-table-tbody > tr.ant-table-row:hover:after {
+  .ant-table-tbody > tr.ant-table-row:hover:after,
+  .ant-table-tbody > tr.ant-table-row.table-row-hover > td,
+  .ant-table-tbody > tr.ant-table-row.table-row-hover:after {
     background-color: var(--table_row--bg--hover);
   }
 
   .ant-table-tbody > tr.ant-table-row:hover .expandable-gradient::after,
-  .ant-table-tbody > tr.ant-table-row.ant-table-row-selected:hover .expandable-gradient::after {
+  .ant-table-tbody > tr.ant-table-row.ant-table-row-selected:hover .expandable-gradient::after,
+  .ant-table-tbody > tr.ant-table-row.table-row-hover .expandable-gradient::after,
+  .ant-table-tbody > tr.ant-table-row.ant-table-row-selected.table-row-hover .expandable-gradient::after {
     background-color: var(--table_row--bg--hover);
   }
 

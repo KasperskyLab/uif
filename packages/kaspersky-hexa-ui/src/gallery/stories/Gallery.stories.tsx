@@ -241,6 +241,8 @@ const listWithImageIds = new Array(100).fill(null).map((_, index) => ({
 }))
 
 export const WithCustomLoader: Story = {
+  // кастомная загрузка картинок: скриншот без задержки попадает в середину загрузки
+  parameters: { visual: { delayMs: 2000 } },
   args: {
     screensList: listWithImageIds,
     handleCustomImageLoad: api.loadImage
