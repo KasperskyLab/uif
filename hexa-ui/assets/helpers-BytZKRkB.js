@@ -1,1 +1,0 @@
-const a=e=>({table:{defaultValue:{summary:e}}}),c=e=>e.reduce((s,t)=>(s[t]={control:!1},s),{});function f(e,s){const t={...e};for(const r of s)Array.isArray(t[r])||delete t[r];return t}function l(e,s){const t={...e};for(const r in s){const o=t[r],u=s[r];t[r]=(...n)=>{o==null||o(...n),u(...n)}}return t}export{a,l as b,f as c,c as s};
