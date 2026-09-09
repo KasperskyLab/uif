@@ -4,22 +4,41 @@ import React from 'react'
 
 import { ITableProps, TableRecord } from '..'
 
+import { createOverflowCell } from './reductions/CellOverflow'
+import { useCellTooltip } from './reductions/CellTooltip'
+
 const FROZEN_HOVER = { startRow: -1, endRow: -1, onHover: () => undefined }
 
+type BodyComponents = Exclude<NonNullable<ITableProps<TableRecord>['components']>['body'], undefined | ((...args: never[]) => unknown)>
+
+const createFrozenHoverWrapper = (Base: NonNullable<BodyComponents['wrapper']> | 'tbody') =>
+  function TableBody (wrapperProps: Record<string, unknown>) {
+    const { tooltip, bodyProps } = useCellTooltip()
+
+    return (
+      <HoverContext.Provider value={FROZEN_HOVER}>
+        <Base {...wrapperProps} {...bodyProps} />
+        {tooltip}
+      </HoverContext.Provider>
+    )
+  }
+
 // antd adds the .ant-table-cell-hover class to every cell, which causes expensive re-renders of multiple rows.
-export const useBodyWithoutHover = <T extends TableRecord>(components?: ITableProps<T>['components']) => useMemo(() => {
-  const body = components?.body
+export const useBodyWithoutHover = <T extends TableRecord>(components?: ITableProps<T>['components']) => {
+  const bodyFromProps = typeof components?.body === 'function' ? undefined : components?.body
 
-  // A function body is a custom scroll body (virtual tables); it renders its own
-  // rows and must not be wrapped.
-  if (typeof body === 'function') return components
+  const BaseWrapper = bodyFromProps?.wrapper ?? 'tbody'
+  const BaseCell = bodyFromProps?.cell
 
-  const BaseWrapper = body?.wrapper ?? 'tbody'
-  const Wrapper = (wrapperProps: Record<string, unknown>) => (
-    <HoverContext.Provider value={FROZEN_HOVER}>
-      <BaseWrapper {...wrapperProps} />
-    </HoverContext.Provider>
-  )
+  const Wrapper = useMemo(() => createFrozenHoverWrapper(BaseWrapper), [BaseWrapper])
 
-  return { ...components, body: { ...body, wrapper: Wrapper } }
-}, [components])
+  const cell = useMemo(() => (
+    createOverflowCell(BaseCell as Parameters<typeof createOverflowCell>[0])
+  ), [BaseCell])
+
+  return useMemo(() => (
+    typeof components?.body === 'function'
+      ? components
+      : { ...components, body: { ...bodyFromProps, wrapper: Wrapper, cell } }
+  ), [components, bodyFromProps, Wrapper, cell])
+}

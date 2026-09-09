@@ -1,0 +1,38 @@
+.expandableContainer {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &[data-expanded] {
+    overflow: visible;
+    white-space: normal;
+  }
+}
+
+
+.expandableFade {
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 80px;
+    z-index: 1;
+    pointer-events: none;
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #000 75%);
+  }
+
+  &[data-hide]::after {
+    display: none;
+  }
+
+  :global(.hexa-ui-expander) {
+    position: absolute;
+    right: 0;
+    z-index: 2;
+    justify-content: center;
+  }
+
+  &[data-expanded] :global(.hexa-ui-expander) {
+    transform: rotate(180deg);
+  }
+}

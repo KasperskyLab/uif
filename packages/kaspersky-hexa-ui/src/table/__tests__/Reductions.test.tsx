@@ -42,21 +42,43 @@ describe('Table Reductions module', () => {
     )
   })
 
-  it('should wrap a plain cell value in an ellipsis reducer', () => {
+  it('should mark a plain cell for clipping and render its value directly', () => {
     const table = renderTable()
 
     const cell = table.rows.getCell(0, 0)
-    expect(cell?.querySelector('.hexa-ui-ellipsis')).toBeInTheDocument()
+    expect(cell).toHaveClass('hexa-ui-ellipsis-cell')
+    expect(cell?.querySelector('.hexa-ui-ellipsis')).not.toBeInTheDocument()
     expect(cell?.textContent).toContain('hello world')
   })
 
-  it('should use ExpandableText for a column with expandableText', () => {
+  it('should mark an expandableText column on the cell itself, not wrap its value', () => {
     const table = renderTable()
 
     const cell = table.rows.getCell(0, 1)
-    expect(cell?.querySelector('.expandable-gradient')).toBeInTheDocument()
-    expect(cell?.querySelector('.hexa-ui-expander')).toBeInTheDocument()
+    expect(cell).toHaveClass('hexa-ui-expandable-cell')
+    expect(cell?.querySelector('.hexa-ui-expandable')).not.toBeInTheDocument()
     expect(cell?.textContent).toContain('hello world')
+  })
+
+  it('should not write tooltip text on an expandable column, which never shows one', () => {
+    const table = TableTestingClass.render({
+      columns: [{
+        key: 'exp',
+        dataIndex: 'text',
+        title: 'Exp',
+        expandableText: true,
+        ellipsisTooltip: (v: any) => String(v)
+      }],
+      dataSource: data
+    })
+
+    expect(table.rows.getCell(0, 0)).not.toHaveAttribute('data-ellipsis-tooltip')
+  })
+
+  it('should leave an accordion row unmarked', () => {
+    const table = renderTable()
+
+    expect(table.rows.getCell(1, 0)).not.toHaveClass('hexa-ui-expandable-cell')
   })
 
   it('should preserve a custom render and still wrap it in a reducer', () => {
@@ -64,7 +86,8 @@ describe('Table Reductions module', () => {
 
     const cell = table.rows.getCell(0, 2)
     expect(cell?.querySelector('[data-testid="custom-link"]')).toBeInTheDocument()
-    expect(cell?.querySelector('.hexa-ui-ellipsis')).toBeInTheDocument()
+    expect(cell).toHaveClass('hexa-ui-ellipsis-cell')
+    expect(cell?.firstElementChild).toBe(cell?.querySelector('[data-testid="custom-link"]'))
   })
 
   it('should preserve render-cell-object props (colSpan) while reducing children', () => {
@@ -72,7 +95,8 @@ describe('Table Reductions module', () => {
 
     const spanCell = table.query('td[colspan="2"]')
     expect(spanCell).toBeInTheDocument()
-    expect(spanCell?.querySelector('.hexa-ui-ellipsis')).toBeInTheDocument()
+    expect(spanCell).toHaveClass('hexa-ui-ellipsis-cell')
+    expect(spanCell?.textContent).toContain('hello world')
   })
 
   it('should bypass reduction for accordion rows', () => {
@@ -80,7 +104,7 @@ describe('Table Reductions module', () => {
 
     const accCell = table.rows.getByKey('acc')?.querySelectorAll('td')[0]
     expect(accCell?.textContent).toContain('accord')
-    expect(accCell?.querySelector('.hexa-ui-ellipsis')).not.toBeInTheDocument()
+    expect(accCell).not.toHaveClass('hexa-ui-ellipsis-cell')
   })
 
   it('should dispose ResizeObserver on unmount', () => {

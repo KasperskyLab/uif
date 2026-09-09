@@ -1,35 +1,28 @@
 /* eslint-disable max-lines */
-import { getTextSizes } from '@design-system/tokens'
 import styled, { css } from 'styled-components'
-
-import { TextTypes } from '@kaspersky/hexa-ui-core/typography/js'
 
 import { getCheckboxCss } from '../checkbox/checkboxCss'
 
+import { getCellPadding, tableSizes } from './helpers/stylesHelpers'
 import { ITableProps } from './types'
 
-const tableSizes = {
-  headSizes: getTextSizes(TextTypes.BTM3),
-  cellSizes: getTextSizes(TextTypes.BTR3),
-  dragHandler: {
-    size: 20
-  }
-}
+type CellPaddingProps = Pick<TableCssProps, 'rowMode'>
 
-const getRowModeCss = (props: Pick<TableCssProps, 'rowMode'>) => {
+const getRowModeCss = (props: CellPaddingProps) => {
   const { rowMode = 'standard' } = props
+  const { top, bottom } = getCellPadding(props)
   return rowMode === 'standard'
     ? css`
       height: 40px;
-      padding: 10px var(--spacing--padding_m) 9px var(--spacing--padding_m);
+      padding: ${top} var(--spacing--padding_m) ${bottom} var(--spacing--padding_m);
 
       &:first-child {
         padding-left: 0;
       }
-    `
+        `
     : css`
       height: 28px;
-      padding: 4px var(--spacing--padding_m) 3px var(--spacing--padding_m);
+      padding: ${top} var(--spacing--padding_m) ${bottom} var(--spacing--padding_m);
 
       &:first-child {
         padding-left: 0;
@@ -102,7 +95,7 @@ export const tableCss = css<TableCssProps>`
 
     .ant-table-tbody > tr > td.ant-table-selection-column {
       position: sticky;
-      z-index: 1;
+      z-index: 3;
       left: 0;
       top: 0;
     }
@@ -111,7 +104,7 @@ export const tableCss = css<TableCssProps>`
       position: sticky;
       top: 0;
       left: 46px;
-      z-index: 1;
+      z-index: 3;
       background: transparent;
     }
   }
@@ -194,7 +187,12 @@ export const tableCss = css<TableCssProps>`
       font-weight: ${tableSizes.cellSizes.fontWeight};
       font-style: ${tableSizes.cellSizes.fontStyle};
       letter-spacing: ${tableSizes.cellSizes.letterSpacing};
-      position: static;
+
+      // Undoes antd's own relative positioning. A clipping cell is exempt: its fade and
+      // its toggle are placed against the cell, so it has to stay the positioning context.
+      &:not(.hexa-ui-expandable-cell) {
+        position: static;
+      }
 
       border-bottom-color: var(--table_row--border);
 
@@ -306,6 +304,10 @@ export const tableCss = css<TableCssProps>`
 
   .ant-table-tbody > tr.ant-table-placeholder:after {
     display: none;
+  }
+
+  .ant-table-tbody textarea:not(:focus) {
+    overflow: hidden;
   }
 
   // antd fades the row background over 0.3s. Every frame of that fade re-layerizes
@@ -517,7 +519,12 @@ export const tableCss = css<TableCssProps>`
 
     && .ant-table-thead > tr > th,
     && .ant-table-tbody > tr > td {
-      &.ant-table-cell-with-append {
+      // Keeps the tree indent and the value on one line. An expanded cell is the one
+      // case that wants the opposite, and this block sits deep enough that its selector
+      // carries the component class six times over — it beat the expanded rule outright,
+      // so a first column with expandableText set its attribute, opened its overflow and
+      // then never wrapped: clicking the toggle appeared to do nothing at all.
+      &.ant-table-cell-with-append:not([data-expanded]) {
         white-space: nowrap;
       }
 

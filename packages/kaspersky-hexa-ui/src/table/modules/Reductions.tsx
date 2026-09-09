@@ -1,12 +1,16 @@
 import { TextReducer } from '@helpers/index'
-import { ExpandableText } from '@src/expandable-text'
+import cn from 'classnames'
 import React, { useMemo } from 'react'
 
-import { isRenderCellObject, mapVisibleColumns } from '../helpers/common'
+import { mapVisibleColumns } from '../helpers/common'
 import { getColumnTitleDataTestId } from '../helpers/getColumnTitleDataTestId'
+import { ELLIPSIS_CELL_CLASS, OVERFLOW_CELL_CLASS } from '../helpers/reductions/CellOverflow'
+import { ELLIPSIS_TOOLTIP_ATTR } from '../helpers/reductions/CellTooltip'
 import { TableColumn, TableRecord } from '../types'
 
 import { TableComponent } from './index'
+
+const valueOf = <T extends TableRecord>(row: T, dataIndex?: string) => dataIndex === undefined || dataIndex === '' ? row : row[dataIndex]
 
 export const Reductions = <T extends TableRecord = TableRecord>(
   Component: TableComponent<T>
@@ -31,32 +35,24 @@ export const Reductions = <T extends TableRecord = TableRecord>(
           }
         }
 
+        const cellClass = expandableText ? OVERFLOW_CELL_CLASS : ELLIPSIS_CELL_CLASS
+        const tooltipText = expandableText ? undefined : column.ellipsisTooltip
+
         return {
           ...column,
           title,
-          render: (value, record, index) => {
-            if (record.accordeon) {
-              return column.render?.(value, record, index) ?? value
+          onCell: (record, index = 0) => {
+            const inherited = column.onCell?.(record, index)
+
+            if (record.accordeon) return inherited ?? {}
+
+            return {
+              ...inherited,
+              className: cn(cellClass, inherited?.className),
+              ...(tooltipText && {
+                [ELLIPSIS_TOOLTIP_ATTR]: tooltipText(valueOf(record, column.dataIndex), record, index)
+              })
             }
-
-            if (!column.render) {
-              return expandableText
-                ? <ExpandableText useGradient className="hexa-ui-expandable">{value}</ExpandableText>
-                : <TextReducer className="hexa-ui-ellipsis">{value}</TextReducer>
-            }
-
-            const renderResult = column.render(value, record, index)
-            const isObject = isRenderCellObject(renderResult)
-            const node = isObject ? renderResult.children : renderResult
-            const tooltip = column.ellipsisTooltip ? column.ellipsisTooltip(value, record, index) : undefined
-
-            const reducedNode = expandableText
-              ? <ExpandableText useGradient className="hexa-ui-expandable">{node}</ExpandableText>
-              : <TextReducer tooltip={tooltip} className="hexa-ui-ellipsis">{node}</TextReducer>
-
-            return isObject
-              ? { ...renderResult, children: reducedNode }
-              : reducedNode
           }
         }
       }), [columns])

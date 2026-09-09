@@ -27,6 +27,7 @@ import {
   TableStickyHeaderWrapper,
   useSyncTableScroll
 } from './helpers/stickyHeader'
+import { getClippingStyle } from './helpers/stylesHelpers'
 import { toggleHorizontalScrollbarVisibility } from './helpers/toggleHorizontalScrollbarVisibility'
 import { useBodyWithoutHover } from './helpers/useBodyWithoutHover'
 import { useStableRows } from './helpers/useStableRows'
@@ -173,6 +174,8 @@ export const Table: <T extends TableRecord = TableRecord>(
     columnVerticalAlign
   }
 
+  const clippingStyle = getClippingStyle(tableCssProps)
+
   useEffect(() => {
     onPatchedColumnsChange?.(columns)
   }, [columns])
@@ -190,6 +193,7 @@ export const Table: <T extends TableRecord = TableRecord>(
     ? createPortal(
         <RowDraggingContainer
           {...tableCssProps}
+          style={clippingStyle}
           className={cn(
             'table-dragging-row',
             ...commonClassNames
@@ -263,6 +267,7 @@ export const Table: <T extends TableRecord = TableRecord>(
           <StyledTable<ComponentType<ITableProps<T>>>
             {...tableProps}
             {...tableCssProps}
+            style={{ ...clippingStyle, ...tableProps.style }}
             className={cn(
               tableProps.className,
               { 'table-height-full': fullHeight },
