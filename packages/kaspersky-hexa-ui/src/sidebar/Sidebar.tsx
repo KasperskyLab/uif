@@ -13,6 +13,7 @@ import styled from 'styled-components'
 
 import SidebarHeader from './components/SidebarHeader'
 import { SidebarPortal } from './components/SidebarPortal'
+import { usePageScrollLock } from './components/usePageScrollLock'
 import { sidebarCss } from './sidebarCss'
 import { SidebarProps, SidebarViewProps } from './types'
 import { useThemedSidebar } from './useThemedSidebar'
@@ -88,6 +89,9 @@ export const Sidebar = forwardRef<SidebarHandle, SidebarProps>((rawProps, ref) =
     setLayer(takeLayer())
     return releaseLayer
   }, [visible])
+
+  // A sidebar without a mask does not cover the page, so it has no claim on its scroll.
+  usePageScrollLock(visible && !!mask)
 
   const { isRtl } = useBodyDirection()
 
