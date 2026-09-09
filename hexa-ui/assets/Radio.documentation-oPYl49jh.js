@@ -1,0 +1,106 @@
+import{j as i,M as l,D as n}from"./blocks-Jd3tffSd.js";import{useMDXComponents as s}from"./index-mDkxnObo.js";import{D as d}from"./DocPageLayout-ZmDutUur.js";import{D as t,a as o,A as c}from"./AutodocArgsTable-BaQVWUMu.js";import{C as u}from"./ComponentChangelog-BehzwUy3.js";import{D as b}from"./DocPageHeader-Ch1Lwxl4.js";import{D as v,a as x}from"./propPresentation-BNIeMkgM.js";import"./iframe-DedYZBTA.js";import{R as f}from"./Radio-Cpvj7bye.js";import{R as e}from"./Radio.stories-Bc38D2J4.js";import"./preload-helper-Dp1pzeXC.js";import"./index-1habROHK.js";import"./TextReducer-DfctGdJH.js";import"./SubComponents-bNxy1m5y.js";import"./TextWithTruncation-9ZCEnufi.js";import"./ArrowDownSolid-Ckv4ljMR.js";import"./ArrowRightSolid-ZNfuOHa8.js";import"./Divider-CSCFEdMt.js";import"./Badge-MGlXnKsn.js";import"./type-8et6jEI2.js";import"./colors-BWEb3wBP.js";import"./Indicator-Bx9eTEZ-.js";import"./shouldForwardProp-Cdy-RLhZ.js";import"./Tabs-BUVjZPCj.js";import"./i18n-GMt4C5be.js";import"./FormLabel-a_agw1kt.js";import"./Tag-BKPu3-sD.js";import"./index-D9mMt9l0.js";import"./omit-DXgDXInf.js";import"./wave-MdFmrsKf.js";import"./Group-3Po5iaS9.js";import"./useMergedState-Rc5-DXZ5.js";import"./KeyCode-c5NdJp32.js";import"./isEqual-BEs9Hbuo.js";import"./index-SJNK96pD.js";import"./addEventListener-XwZ_2C5f.js";import"./Portal-CZOHXnhR.js";import"./regeneratorRuntime-D6qV2PU5.js";import"./focus-CS35CTr_.js";import"./EllipsisOutlined-uFoLp0uK.js";import"./useIntersectionChildren-CtinNUu0.js";import"./Button-Dn3YNhT7.js";import"./Dropdown-C8Jtav0F.js";import"./ArrowRight-DWYHjndK.js";import"./Toggle-B_SlzXxU.js";import"./AdditionalContent-nPPwbP5q.js";import"./HelpMessage-BT7POId6.js";import"./Loader-C9846UWr.js";import"./index-DlVZRnRV.js";import"./v4-BoP187Zn.js";import"./button-D1isEG_A.js";import"./useTranslation-od-Kmf1k.js";import"./generateId-BXJELych.js";import"./Advertisement-BnmHQOA4.js";import"./Thread-BW1wsEyS.js";import"./index-Cg9kxjBr.js";import"./ResizeInput-Bwz4NNbm.js";import"./ToggleButton-t01FaFnT.js";import"./imaskDateOptionsGenerator-CuWnnqgb.js";import"./input-CAqmA_rE.js";import"./index-Chjiymov.js";import"./Field-DDFvGKqW.js";import"./Help-CNwaf6Dz.js";import"./Markdown-Bfn0KgDg.js";import"./index-_nYjx9Ua.js";import"./Textbox-B-hgsSTM.js";import"./useGlobalStyles-DdWamh97.js";import"./InputMasked-Bbhb0bxg.js";import"./useThemedTextbox-CnXfBV1i.js";import"./typesHelpers-tpz7Of7L.js";import"./useClassNamedTextbox-Su5-ronh.js";import"./InputNumber-ZzYxxSm4.js";import"./index-DTSNSACu.js";import"./SearchOutlined-DnINVVX9.js";import"./InputPassword-C-5Li4PE.js";import"./StatusOkSolid-OcpnRZV_.js";import"./IconResolver-DW8XVFKA.js";import"./Placeholder-DXWNW80D.js";import"./ServicesNav-xYmWc_9q.js";import"./ArrowRightMini-zdpqicP8.js";import"./ArrowDown-D15hSvbO.js";import"./Toolbar-BZLdf55H.js";import"./useImmutableRef-DP3c_TCz.js";import"./Menu2-vNCkCt-I.js";import"./Settings21-BCtESblA.js";import"./IconSearch-tU4SVZjn.js";import"./Table-cxYHK-tb.js";import"./pickAttrs-C2PClXaq.js";import"./Pagination-D43-V0d_.js";import"./RightOutlined-DqJ4jJl3.js";import"./List-Dn04FqKX.js";import"./iconUtil-DxrXKhw9.js";import"./useForceUpdate-3wDUnL8Y.js";import"./Tree-BbkTKoxh.js";import"./index-RNU6oZ57.js";import"./index-B_L1GtX7.js";import"./Sider-BrE3ju6i.js";import"./index-Cgmls7nb.js";import"./_getTag-Ds-KxlEY.js";import"./scrollTo-D3QjD7w5.js";import"./Card-C6AxAZ3v.js";import"./Delete-27yiPRcg.js";import"./useThemedScrollbar-CBVjJbCI.js";import"./scrollbarCss-D6fBG7vz.js";import"./Checkbox-CNZ65EGY.js";import"./useId-D-iZuP_C.js";import"./Pagination-D5L8svdn.js";import"./Select-xZT8Da8H.js";import"./ExpandableText-BqvhIY9N.js";import"./Chip-B1yu8WNj.js";import"./Reload-DfpUPU2e.js";import"./Search-D_lTkfoh.js";import"./Modal-BClO_RqC.js";import"./PortalWrapper-CRoUwEST.js";import"./StatusOkOutline-b1x4d3lq.js";import"./Sidebar-t3wS3LLT.js";import"./CrossM-DucbsMYv.js";import"./RangePicker-DbMw3oSo.js";import"./RangeSeparator-DPMyZRJ-.js";import"./WithGlobalStyles-Dptm3X0S.js";import"./dateFns-Dx1vzaFu.js";import"./useThemedPicker-D5D4Rfgc.js";import"./Calendar-Bhrbz6cn.js";import"./Grid-y5IvP__E.js";import"./SegmentedButton-B-fNJlic.js";import"./Plus-k0o_2j9Z.js";import"./StatusWarningSolid-QDwfXbEe.js";import"./ArrowRightSmall-BfkkCuCt.js";import"./Browser-CZIfrGdQ.js";import"./Expand-CmbRHbtG.js";import"./Bell-YqaJPUHI.js";import"./CodeCompare-DvaQ5C8C.js";import"./SettingsGear-Cl0aLKMC.js";import"./ExpandAll-CQoV-QHD.js";import"./CheckPoint-BRG14NqO.js";import"./TreeNav-BGpNkSTo.js";import"./Tree-DIlayO6k.js";import"./Copy-Dtt7prkO.js";import"./Download2-CuwAL7pw.js";import"./Edit-DQasHO_Y.js";import"./StatusLevelMedium-DHfr4BuF.js";import"./EngineeringStation-BOLeRQZE.js";import"./FileItem-DxEC4fKm.js";import"./Heart-DrE4rlRx.js";import"./Servers-CF9Gm0XP.js";import"./NotificationService-srLTRq3q.js";import"./Wrap-C435pd6p.js";import"./LockGroup-BO_GeyOJ.js";import"./Menu3-CAgzKlIF.js";import"./Minus-C_AfWTwv.js";import"./Moon-CleZIcua.js";import"./LicenseCard-XhDKyOyc.js";import"./Status-DG_v2bke.js";import"./Menu-D-9EhFFp.js";import"./Submenu-DH5AzpW9.js";import"./PlusM-C0PhuRKW.js";import"./Printer-B9kyQwX7.js";import"./Server-CNw55YUF.js";import"./Settings-5WzWAE_r.js";import"./TopNavigation-CcmtjO7B.js";import"./UserAccount-BotbArDw.js";import"./HorizontalNav-DrdwUIHN.js";import"./Youtube-Xi4bVUmw.js";import"./AccordionPanel-BABIWV5y.js";import"./Upload-DbIY1HSO.js";import"./UserGroup-B4dSxV8b.js";import"./index-BzNJfH8u.js";import"./ToggleButtonGroup-D4of78Bd.js";import"./Uploader-CYtRJ9rM.js";import"./CodeViewer-BmyiNSrY.js";import"./StatusWarningSolid-BBMHc-36.js";import"./TimeInput-nsHDph6x.js";import"./TagReductionGroup-uZHtAm41.js";import"./Alert-DPa3IrZ0.js";import"./Anchor-CJ8s89AK.js";import"./Breadcrumbs-DG0vgmIh.js";import"./DetailsPage-Dj7VGPP6.js";import"./FormTrigger-TwP93ncE.js";import"./Gallery-CRWBlbeq.js";import"./Scrollbar-DobPzsKq.js";import"./KeyValue-B921E_8r.js";import"./InformationCard-_2IADjxX.js";import"./Label-DDJN4HcY.js";import"./LoadingOverlay-CUsm39zK.js";import"./Notification-z-FH90IU.js";import"./PageHeader-CF_ZAefx.js";import"./Panel-B-5YZOXo.js";import"./Placeholder-DvzGvHTV.js";import"./ProgressBar-DY7RzcJW.js";import"./QuickFilter-DmSNF712.js";import"./RangeTimeInput-C6pFmrN_.js";import"./Repeater-DqiyFWdS.js";import"./SegmentedControl-DLPA8GAq.js";import"./Severity-CeQiQKAw.js";import"./Skeleton-DMqYBAAn.js";import"./StatusCard-ecQDPVfE.js";import"./StatusOkSolid-DqMfjLAK.js";import"./TenantFilter-B0zOsceK.js";import"./basic-data-transfer.addon-4BwT_iRn.js";import"./TextDiff-DnwtAEVE.js";import"./TreeSelect-CgurQRVt.js";import"./WeeklySchedule-CXhIfde4.js";import"./Wizard-CP9WQKMO.js";import"./types-D1pYS17c.js";import"./types-CHQbqp6R.js";import"./index-C1LccaPr.js";import"./resolveDesignControls-CFhBuB_d.js";const j={state:{description:"Интерактивное состояние компонента",type:"enabled | active | hover | disabled | readonly"},disabled:{description:"Неактивное состояние: компонент недоступен для взаимодействия",type:"false | true"},selected:{description:"Отмеченное состояние радиокнопки",type:"true | false"},label:{description:"Отображение текстовой подписи рядом с радиокнопкой",type:"false | true"},invalid:{description:"Состояние ошибки валидации",type:"false | true"},description:{description:"Отображение поясняющего текста под опцией",type:"Boolean",defaultValue:"false"}};function m(r){return t||a("Tabs",!1),t.TabPane||a("Tabs.TabPane",!0),i.jsxs(i.Fragment,{children:[i.jsx(l,{of:e,name:"Radio Docs"}),`
+`,i.jsxs(d,{children:[i.jsx(b,{title:"Radio",rtlSupported:!0,inBuilder:!0,builderInfo:"Используется под названием «Радио кнопка»"}),i.jsxs(t,{defaultActiveKey:"description",children:[i.jsx(t.TabPane,{tab:"Описание",children:i.jsx(o,{description:`
+**Radio** — группа радиокнопок для выбора одной опции из взаимоисключающего набора
+
+**Radio** применяется там, где пользователь должен выбрать ровно одну опцию из нескольких взаимоисключающих вариантов: тип отчёта, режим работы, способ доставки. Список вариантов должен быть полным и понятным — пользователь видит все доступные опции сразу, без раскрытия.
+
+Для выбора нескольких значений из набора используйте [**CheckboxGroup**](/?path=/docs/hexa-ui-components-checkboxgroup--checkboxgroup-docs). Для выбора из большого списка, где показывать все варианты нецелесообразно, подходит **Select**. Если опция имеет только два состояния (вкл/выкл), рассмотрите **Toggle**.`})},"description"),i.jsxs(t.TabPane,{tab:"Структура",children:[i.jsx(o,{description:"**Radio** отображает группу радиокнопок на базе Ant Design Radio.Group с темизацией Hexa UI. Пользователь может выбрать ровно одну опцию из предложенных. Список задаётся через **options** — массив объектов с **label**, **value** и опциональными **disabled**, **readonly**, **invalid**, **required**, **tooltip**, **description**, **dependentElement**. Состояние группы управляется через **vertical**, **disabled**, **readonly**, **invalid**."}),i.jsx(o,{title:"options",description:"Обязательный проп. Массив опций радиогруппы. Каждая опция содержит **label** (подпись — строка или ReactNode) и **value** (уникальная строка). Значения **value** должны быть уникальными в пределах группы — при дублировании в консоль выводится ошибка.",previewDirection:"vertical",previewGap:8,code:`
+        <Radio
+          options={[
+            { label: 'Option 1', value: '1' },
+            { label: 'Option 2', value: '2' },
+            { label: 'Option 3', value: '3' },
+          ]}
+        />
+      `}),i.jsx(o,{title:"vertical",description:"Ориентация группы. При `true` опции расположены вертикально, при `false` — горизонтально (inline). По умолчанию — `true`.",previewDirection:"vertical",previewGap:8,code:`
+        <Radio
+          vertical={true}
+          options={[
+            { label: 'Option 1', value: '1' },
+            { label: 'Option 2', value: '2' },
+            { label: 'Option 3', value: '3' },
+          ]}
+        />
+        <Radio
+          vertical={false}
+          options={[
+            { label: 'Option 1', value: '1' },
+            { label: 'Option 2', value: '2' },
+            { label: 'Option 3', value: '3' },
+          ]}
+        />
+      `}),i.jsx(o,{title:"disabled",description:"Недоступное состояние группы. Все опции не реагируют на действия пользователя. Отдельную опцию можно настроить через `disabled` в объекте `options` — значение опции перекрывает групповое (см. **options.invalid**). Доступные значения: `true`, `false`. По умолчанию — `false`.",previewDirection:"vertical",previewGap:8,code:`
+        <Radio
+          disabled
+          value="1"
+          options={[
+            { label: 'Option 1', value: '1' },
+            { label: 'Option 2', value: '2' },
+          ]}
+        />
+        <Radio
+          options={[
+            { label: 'Option 1', value: '1' },
+            { label: 'Option 2 (disabled)', value: '2', disabled: true },
+          ]}
+        />
+      `}),i.jsx(o,{title:"readonly",description:"Режим только для чтения. Выбор виден, но изменить его нельзя. Отдельную опцию можно настроить через `readonly` в объекте `options` — значение опции перекрывает групповое (см. **options.invalid**). Доступные значения: `true`, `false`. По умолчанию — `false`.",code:`
+        <Radio
+          readonly
+          value="1"
+          options={[
+            { label: 'Option 1', value: '1' },
+            { label: 'Option 2', value: '2' },
+          ]}
+        />
+      `}),i.jsx(o,{title:"invalid",description:"Состояние ошибки валидации группы. Применяет стиль invalid ко всем опциям. Отдельную опцию можно настроить через `invalid` в объекте `options` — значение опции перекрывает групповое (см. **options.invalid**). Доступные значения: `true`, `false`. По умолчанию — `false`.",code:`
+        <Radio
+          invalid
+          options={[
+            { label: 'Option 1', value: '1' },
+            { label: 'Option 2', value: '2' },
+          ]}
+        />
+      `}),i.jsx(o,{title:"options.invalid",description:"Состояние ошибки валидации отдельной опции. Состояния `disabled`, `readonly` и `invalid` считаются для каждой опции по одному правилу: значение, заданное на опции, перекрывает групповое, а если на опции его нет — берётся групповое. Опция, у которой одновременно `disabled` и `readonly`, отображается как readonly. Доступные значения: `true`, `false`. По умолчанию — `false`.",code:`
+        <Radio
+          options={[
+            { label: 'Valid option', value: '1' },
+            { label: 'Invalid option', value: '2', invalid: true },
+          ]}
+        />
+      `}),i.jsx(o,{title:"options.required",description:"Метка обязательного поля у подписи отдельной опции. Отображается маркер required рядом с **FormLabel**. Доступные значения: `true`, `false`. По умолчанию — `false`.",code:`
+        <Radio
+          options={[
+            { label: 'Required option', value: '1', required: true },
+            { label: 'Optional option', value: '2' },
+          ]}
+        />
+      `}),i.jsx(o,{title:"options.tooltip",description:"Текст всплывающей подсказки у подписи опции через **FormLabel**. Для корректного позиционирования поповера оберните Radio в **PopupConfigProvider**.",code:`
+        <PopupConfigProvider getPopupContainer={() => document.body}>
+          <Radio
+            options={[
+              { label: 'Option 1', value: '1' },
+              { label: 'With tooltip', value: '2', tooltip: 'Подсказка к опции' },
+            ]}
+          />
+        </PopupConfigProvider>
+      `}),i.jsx(o,{title:"options.description",description:"Поясняющий текст под опцией через **AdditionalContent**. Отображается под подписью как вспомогательная информация.",code:`
+        <Radio
+          options={[
+            { label: 'Option 1', value: '1' },
+            { label: 'Option 2', value: '2', description: 'Дополнительное описание' },
+          ]}
+        />
+      `}),i.jsx(o,{title:"options.dependentElement",description:"Зависимый элемент под описанием опции через **AdditionalContent** — например поле ввода, которое становится доступным при выборе опции. Используется совместно с **description**.",code:`
+        <Radio
+          options={[
+            { label: 'Option 1', value: '1' },
+            {
+              label: 'Option 2',
+              value: '2',
+              description: 'Описание',
+              dependentElement: <Textbox placeholder="Зависимый элемент" />,
+            },
+          ]}
+        />
+      `})]},"composition"),i.jsxs(t.TabPane,{tab:"Properties",children:[i.jsx(n,{of:e}),i.jsx(c,{components:f})]},"properties"),i.jsxs(t.TabPane,{tab:"Дизайн",children:[i.jsx(o,{title:"Компонент в Pixso",titleSize:"H5",description:"[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=38132:137230)"}),i.jsx(v,{rows:x(j)})]},"design"),i.jsx(t.TabPane,{tab:"Изменения",children:i.jsx(u,{component:"Radio"})},"changelog")]})]})]})}function dr(r={}){const{wrapper:p}={...s(),...r.components};return p?i.jsx(p,{...r,children:i.jsx(m,{...r})}):m()}function a(r,p){throw new Error("Expected "+(p?"component":"object")+" `"+r+"` to be defined: you likely forgot to import, pass, or provide it.")}export{dr as default};

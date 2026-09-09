@@ -1,0 +1,1 @@
+import{d as l}from"./iframe-DedYZBTA.js";const n=({className:t,disabled:e,readOnly:s,validationStatus:a="default",...o})=>{const x=l(t,a,{"kl6-textbox-disabled":e,"kl6-textbox-readonly":s});return{...o,disabled:e,readOnly:s,className:x}};export{n as u};

@@ -1,0 +1,1 @@
+const t="https://pixso.net/app/design/-fVODBnK0ACJ-vsMCVc4HA",e={pixsoView:t},s=["default","not-active","new","update","inProgress","resolved","inIncident","high","critical","medium","info","positive","low"];export{e as M,s as S};

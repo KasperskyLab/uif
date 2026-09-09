@@ -1,0 +1,1 @@
+import{z as e,D as s,E as a,F as n}from"./iframe-DedYZBTA.js";const t=e.use(s).use(a);t.init({debug:!1,resources:n,lng:"en-us",fallbackLng:"en-us",lowerCaseLng:!0,react:{useSuspense:!1},interpolation:{escapeValue:!0}});export{t as i};
