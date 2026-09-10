@@ -90,7 +90,10 @@ export const scrollShadowCss = css`
 `
 
 export const tableCss = css<TableCssProps>`
-  &.table-sticky-selection {
+  // Doubled on purpose: these two columns are deliberately stuck, and that has to win
+  // against the blanket static positioning the body cells get further down — which carries
+  // one class more than it looks, because it excludes the clipping cell with :not().
+  &&.table-sticky-selection {
     ${scrollShadowCss}
 
     .ant-table-tbody > tr > td.ant-table-selection-column {

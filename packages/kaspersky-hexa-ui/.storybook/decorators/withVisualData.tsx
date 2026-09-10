@@ -7,6 +7,7 @@ export const withVisualData = (Story: FC, context: any) => {
     <div
       data-visual-root
       data-visual-delay-ms={visual?.delayMs ?? 0}
+      style={{ width: '100%' }}
     >
       <Story {...context} />
     </div>
