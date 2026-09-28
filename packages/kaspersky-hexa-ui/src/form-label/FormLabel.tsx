@@ -72,7 +72,6 @@ export const FormLabel: FC<FormLabelProps> = (rawProps: FormLabelProps) => {
             <ActionButton
               mode="ghost"
               size="large"
-              interactive={false}
               icon={<StatusInfoOutline />}
               className="form-label-info-icon"
             />

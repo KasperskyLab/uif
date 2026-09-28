@@ -41,6 +41,7 @@
   $padding_label: map.get($sizes, "padding_label");
   $padding_icon: map.get($sizes, "padding_icon");
   $gap: map.get($sizes, "gap");
+  $size: map.get($sizes, "size");
 
   &.withLabel {
     padding: $padding_label;
@@ -51,6 +52,16 @@
   &.withLabel.withIcon {
     padding: $padding;
     gap: $gap;
+  }
+
+  @if $size {
+    &:not(.withLabel) {
+      box-sizing: border-box;
+      justify-content: center;
+      width: $size;
+      height: $size;
+      padding: 0;
+    }
   }
 }
 

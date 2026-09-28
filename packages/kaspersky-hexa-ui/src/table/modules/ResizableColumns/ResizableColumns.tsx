@@ -1,8 +1,6 @@
-import { SetState } from '@helpers/hooks/useStateProps'
 import { useUpdateEffect } from '@helpers/useUpdateEffect'
 import React, {
   MouseEventHandler,
-  ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -15,22 +13,13 @@ import { ITableProps, TableColumn, TableRecord } from '../..'
 import { isColumnReadonly, isColumnVisible } from '../../helpers/common'
 import { getPersistentStorageValue, updatePersistentStorage } from '../../helpers/persistentStorage'
 import { ResizableColumnsContext, STICKY_HEADER_CLASS, StickyHeaderWrapper } from '../../helpers/stickyHeader'
+import { ResizableHeaderCellProps, SetColumns } from './types'
 
-import { addWidthFromStorage, applyResizingMode, selectAutoResizingMode } from './helpers'
+import { addWidthFromStorage, applyResizingMode, selectAutoResizingMode, resizeColumns } from './helpers'
 
 const DEFAULT_COLUMN_WIDTH = 220
 const COLUMN_DEFAULT_MIN_WIDTH = 100
 const COLUMN_MANUAL_MIN_WIDTH = 40
-
-type SetColumns<T extends TableRecord = TableRecord> = SetState<TableColumn<T>[]>
-
-type ResizableHeaderCellProps = {
-  children: ReactNode
-  width: number
-  minWidth?: number
-  onResize: (width: number) => void
-  disabled?: boolean
-}
 
 const ResizableHeaderCell: React.FC<ResizableHeaderCellProps> = ({
   children,
@@ -140,26 +129,6 @@ const ResizableTitle = (props: any) => {
   )
 }
 
-const resizeColumns = <T extends TableRecord = TableRecord>(
-  index: number,
-  columnWidth: number,
-  columns: TableColumn<T>[],
-  onManualColumnResize?: ITableProps<T>['onManualColumnResize'],
-  columnMinWidth?: number
-) => {
-  const nextColumns = [...columns]
-  nextColumns[index] = {
-    ...nextColumns[index],
-    width: columnWidth,
-    minWidth: columnMinWidth,
-    isUserDefinedWidth: true
-  }
-
-  onManualColumnResize?.(nextColumns[index])
-
-  return nextColumns
-}
-
 const mapColumns = <T extends TableRecord = TableRecord>(
   tableColumns: TableColumn<T>[],
   setTableColumns: SetColumns<T>,
@@ -172,11 +141,23 @@ const mapColumns = <T extends TableRecord = TableRecord>(
         ...col,
         onHeaderCell: (column: any) => {
           resizeColumnCallback?.(column)
+          const existing = typeof col.onHeaderCell === 'function'
+            ? col.onHeaderCell(column)
+            : col.onHeaderCell
+
           return ({
+            ...existing,
             resizing: column.resizing,
             width: column.width,
             minWidth: column.minWidth,
-            onResize: (newWidth: number) => setTableColumns(resizeColumns(index, newWidth, tableColumns, onManualColumnResize, column.minWidth))
+            onResize: (newWidth: number) =>
+              setTableColumns(resizeColumns({
+                index,
+                columnWidth: newWidth,
+                columns: tableColumns,
+                onManualColumnResize,
+                columnMinWidth: column.minWidth
+              }))
           })
         }
       }))
@@ -187,6 +168,7 @@ export const ResizableColumns = <T extends TableRecord = TableRecord> (
 ): TableComponent<T> => function ReductionsModule (props) {
   const {
     resizingMode: resizingModeFromProps = 'last',
+    overflowTransition,
     maxColumnsForAutoResizing = 1,
     defaultColumnWidth = DEFAULT_COLUMN_WIDTH
   } = props
@@ -210,8 +192,12 @@ export const ResizableColumns = <T extends TableRecord = TableRecord> (
   const [overflow, setOverflow] = useState(false)
   const [isTableVisible, setIsTableVisible] = useState<boolean>(false)
 
+  const resolvedInitialResizingMode = resizingModeFromProps === 'scroll' && !overflow && overflowTransition
+    ? 'last'
+    : resizingModeFromProps
+
   const [columns, setColumns] = useState(
-    applyResizingMode(columnsFromStorage, resizingMode, defaultColumnWidth)
+    applyResizingMode(columnsFromStorage, resolvedInitialResizingMode, defaultColumnWidth)
   )
 
   const [resizableColumns, setResizableColumns] = useState(
@@ -228,7 +214,7 @@ export const ResizableColumns = <T extends TableRecord = TableRecord> (
   useEffect(() => {
     const actualColumnsFromStorage = addWidthFromStorage({ columns: props.columns, storageKey: props.storageKey })
 
-    if (isTableVisible && hasDataSource) {
+    if (isTableVisible && hasDataSource && overflowTransition) {
       const newResizingMode = selectAutoResizingMode(
         actualColumnsFromStorage,
         resizingModeFromProps,
@@ -274,7 +260,7 @@ export const ResizableColumns = <T extends TableRecord = TableRecord> (
       const processedColumn = columns.find(col => col.key === column.key)
       return { ...column, width: processedColumn?.width ?? column?.width }
     })
-    setColumns(applyResizingMode(columnsWithSyncedWidth, resizingMode, defaultColumnWidth))
+    setColumns(applyResizingMode(columnsWithSyncedWidth, resolvedInitialResizingMode, defaultColumnWidth))
   }, [props.columns])
 
   const hasRowSelection = !!props.rowSelection
@@ -347,7 +333,7 @@ export const ResizableColumns = <T extends TableRecord = TableRecord> (
         }
       })
 
-      return applyResizingMode(columns, resizingMode, defaultColumnWidth)
+      return applyResizingMode(columns, resolvedInitialResizingMode, defaultColumnWidth)
     })
   }, [columnsFromStorage, resizingMode, defaultColumnWidth])
 
@@ -385,7 +371,8 @@ export const ResizableColumns = <T extends TableRecord = TableRecord> (
     <ResizableColumnsContext.Provider value={{
       columns: resizableColumns,
       hasRowSelection,
-      setOverflow
+      setOverflow,
+      setColumns: setColumns as SetColumns
     }}>
       <div ref={siblingRef} hidden />
       <Component

@@ -12,6 +12,6 @@
   "component": "LockGroup",
   "description": "Компонент, показывающий статус распространения и наследования настроек по иерархии серверов",
   "usage": "Замок открыт — редактировать связанные с замком настройки можно, замок закрыт — редактирование распространяемой настройки запрещено",
-  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=112315%3A375167",
-  "pixsoView": "https://pixso.net/app/design/y1rTfOAVY5_kEIL9zCuTjw"
+  "designLink": "",
+  "pixsoView": ""
 }

@@ -1,6 +1,6 @@
 import type { PropPresentationMap } from '@sb/components/Documentation'
 
-// Источник: https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=142276:329019
+// Источник: 
 export const licenseCardDesignPropPresentation: PropPresentationMap = {
   mode: {
     description: 'Статус лицензии: влияет на цветовое оформление карточки',
@@ -8,7 +8,7 @@ export const licenseCardDesignPropPresentation: PropPresentationMap = {
   }
 }
 
-// Источник: https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=142284:330289
+// Источник: 
 export const licenseCardContentDesignPropPresentation: PropPresentationMap = {
   compact: {
     description: 'Компактный режим отображения карточки',

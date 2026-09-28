@@ -1,4 +1,5 @@
 import React from 'react'
+import { act } from 'react-dom/test-utils'
 
 import { ITableProps, Table, TableRecord, TableRef } from '..'
 import { createMockDataSourceFunction } from '../__mocks__/filtersMockData'
@@ -43,9 +44,9 @@ export interface RenderByModeRefResult extends RenderByModeResult {
 }
 
 /**
- * Результат `renderByMode` — обычный объект, который к тому же можно `await`-ить.
+ * Результат `renderByModeSync` — обычный объект, который к тому же можно `await`-ить.
  *
- * - `const { table } = renderByMode(...)` — синхронно (клиентские строки уже отрисованы; так же
+ * - `const { table } = renderByModeSync(...)` — синхронно (клиентские строки уже отрисованы; так же
  *   работают старые серверные тесты, которые сами делают `await table.rows.waitForData()`).
  * - `const { table } = await renderByMode(...)` — дожидается появления строк (централизованный
  *   `waitForData`), что нужно в серверном режиме с async `dataSourceFunction` + debounce.
@@ -74,19 +75,32 @@ const makeAwaitable = <T extends RenderByModeResult> (result: T, waitForData: bo
  * Всё остальное (`columns`, `pagination`, `rowSelection`, `testId`…) переопределяется через `props`.
  * `withRef` переключает на renderElement и возвращает `ref` (нужно, напр., для RowSelection).
  */
-export function renderByMode <T extends TableRecord = TableRecord> (
+export async function renderByMode <T extends TableRecord = TableRecord> (
   mode: TableMode,
   data: T[],
   props: Partial<ITableProps<T>>,
   opts: RenderByModeOptions & { withRef: true }
-): AwaitableRenderResult<RenderByModeRefResult>
-export function renderByMode <T extends TableRecord = TableRecord> (
+): Promise<RenderByModeRefResult>
+export async function renderByMode <T extends TableRecord = TableRecord> (
   mode: TableMode,
   data: T[],
   props?: Partial<ITableProps<T>>,
   opts?: RenderByModeOptions
-): AwaitableRenderResult<RenderByModeResult>
-export function renderByMode <T extends TableRecord = TableRecord> (
+): Promise<RenderByModeResult>
+export async function renderByMode <T extends TableRecord = TableRecord> (
+  mode: TableMode,
+  data: T[],
+  props: Partial<ITableProps<T>> = {},
+  { withRef = false, waitForData = true }: RenderByModeOptions = {}
+): Promise<RenderByModeResult> {
+  const result = renderByModeSync(mode, data, props, { withRef, waitForData })
+
+  await act(async () => undefined)
+
+  return result
+}
+
+export function renderByModeSync <T extends TableRecord = TableRecord> (
   mode: TableMode,
   data: T[],
   props: Partial<ITableProps<T>> = {},
@@ -105,10 +119,10 @@ export function renderByMode <T extends TableRecord = TableRecord> (
   if (withRef) {
     const ref: React.MutableRefObject<TableRef | null> = { current: null }
     const testId = (mergedProps.testId as string) ?? DEFAULT_TEST_ID
-    const table = TableTestingClass.renderElement(<Table {...(mergedProps as ITableProps)} ref={ref} />, { testId })
+    const table = TableTestingClass.renderElementSync(<Table {...(mergedProps as ITableProps)} ref={ref} />, { testId })
     result = { table, dataSourceFunction, ref }
   } else {
-    const table = TableTestingClass.render(mergedProps)
+    const table = TableTestingClass.renderSync(mergedProps)
     result = { table, dataSourceFunction }
   }
 

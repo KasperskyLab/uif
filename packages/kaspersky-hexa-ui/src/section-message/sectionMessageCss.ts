@@ -89,6 +89,5 @@ export const sectionMessageCss = css<{
 
   .hexa-ui-section-message-close-container {
     display: flex;
-    padding: 2px;
   }
 `

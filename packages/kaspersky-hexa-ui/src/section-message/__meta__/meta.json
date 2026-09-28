@@ -11,6 +11,6 @@
   "component": "Section Message",
   "description": "Section Message используется как статичное уведомление для акцента на информации вутри контента, требующего внимания или действий.",
   "usage": "Используется для инлайн уведомлений. Размещается в теле страницы, Section Message не пропадает с течением времени.",
-  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=69315%3A242253",
-  "pixsoView": "https://pixso.net/app/design/KkB-rzGoq7IXsGE5wJyzaQ"
+  "designLink": "",
+  "pixsoView": ""
 }

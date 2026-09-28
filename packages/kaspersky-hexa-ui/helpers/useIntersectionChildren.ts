@@ -40,14 +40,14 @@ export const useIntersectionChildren = (
     const children = Array.from(wrapper.children)
     const overflowIdx = children.findIndex(child => hasOverflow(child, padding, wrapperEdge))
 
-    if (overflowIdx === -1) return children.length - 1
+    if (overflowIdx === -1) return undefined
 
     return Math.max(overflowIdx - 1, 0)
   }, [
     containerStart,
     containerEnd,
     containerWidth,
-    ref.current,
+    ref,
     padding,
     renderCounter,
     wrapperQuerySelector,

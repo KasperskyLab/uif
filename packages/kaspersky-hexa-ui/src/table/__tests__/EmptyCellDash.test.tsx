@@ -3,8 +3,8 @@ import { TableTestingClass } from '../test-utils/TableTestingClass'
 const getEmptyCellDashes = (table: TableTestingClass): HTMLElement[] => table.queryAll('.hexa-ui-empty-dash-cell')
 
 describe('Table EmptyCellDash module', () => {
-  it('should find dash in empty cell', () => {
-    const table = TableTestingClass.render({
+  it('should find dash in empty cell', async () => {
+    const table = await TableTestingClass.render({
       columns: [
         {
           title: 'table.column.name',
@@ -34,8 +34,9 @@ describe('Table EmptyCellDash module', () => {
     })
     expect(getEmptyCellDashes(table)).toHaveLength(1)
   })
-  it('should find all dashes in all empty cells', () => {
-    const table = TableTestingClass.render({
+
+  it('should find all dashes in all empty cells', async () => {
+    const table = await TableTestingClass.render({
       columns: [
         {
           title: 'table.column.name',

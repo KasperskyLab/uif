@@ -68,7 +68,7 @@ export const WithValidation: Story = {
     )
   },
   parameters: {
-    design: 'https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=39947:148357'
+    design: ''
   }
 }
 

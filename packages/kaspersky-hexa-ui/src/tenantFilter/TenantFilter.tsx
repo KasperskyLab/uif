@@ -1,7 +1,6 @@
-import { THEME_CONFIG } from '@design-system/theme'
 import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { Key, TreeCheckEvent, TreeCommonProps } from '@src/tree'
+import { TreeCommonProps } from '@src/tree'
 import debounce from 'lodash/debounce'
 import isEmpty from 'lodash/isEmpty'
 import React, {
@@ -35,6 +34,7 @@ import { ProcessedTreeDataItem, TenantFilterProps, TenantFilterTreeDataItem, Ten
 
 const StyledTenantFilterTreeView = styled(Tree)`${tenantFilterTreeCss}`
 
+/** @deprecated Use Tree with Search instead */
 export const TenantFilter: FC<TenantFilterProps> = ({
   className,
   theme,
@@ -193,7 +193,7 @@ export const TenantFilter: FC<TenantFilterProps> = ({
         <Text
           color="primary"
           type="BTM2"
-          theme={theme ? THEME_CONFIG[theme] : undefined}
+          theme={theme}
         >
           {titleText}
         </Text>
@@ -207,7 +207,7 @@ export const TenantFilter: FC<TenantFilterProps> = ({
         testId={`${props.testId}-counter`}
         color="primary"
         type="BTR3"
-        theme={theme ? THEME_CONFIG[theme] : undefined}
+        theme={theme}
       >
         {counterText}: {treeCheckedKeys.length}
       </Text>

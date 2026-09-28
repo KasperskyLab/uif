@@ -4,19 +4,22 @@ $sizes-config: (
       "padding": 0,
       "gap": 2px,
       "padding_label": 0,
-      "padding_icon": 0
+      "padding_icon": 0,
+      "size": 12px
     ),
     "medium": (
       "padding": 0,
-      "gap": 0,
+      "gap": 2px,
       "padding_label": 0,
-      "padding_icon": 0
+      "padding_icon": 0,
+      "size": 16px
     ),
     "large": (
       "padding": 0,
       "gap": 4px,
       "padding_label": 0,
-      "padding_icon": 0
+      "padding_icon": 0,
+      "size": 20px
     )
   ),
   "filled": (
@@ -24,19 +27,22 @@ $sizes-config: (
       "padding": 2px 4px,
       "gap": 2px,
       "padding_label": 2px 4px,
-      "padding_icon": 2px
+      "padding_icon": 0,
+      "size": 12px
     ),
     "medium": (
-      "padding": 0 4px 0 0,
+      "padding": 0 4px 0 2px,
       "gap": 2px,
       "padding_label": 0 4px,
-      "padding_icon": 0
+      "padding_icon": 0,
+      "size": 16px
     ),
     "large": (
       "padding": 0 4px,
       "gap": 4px,
       "padding_label": 0 4px,
-      "padding_icon": 2px
+      "padding_icon": 2px,
+      "size": 20px
     )
   )
 )

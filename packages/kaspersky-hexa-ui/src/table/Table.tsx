@@ -130,6 +130,8 @@ export const Table: <T extends TableRecord = TableRecord>(
     fullHeight,
     resizingMode,
     afterColumn,
+    fitLastColumn = true,
+    overflowTransition = false,
     useDragDrop,
     scroll,
     rowMode,
@@ -178,7 +180,7 @@ export const Table: <T extends TableRecord = TableRecord>(
   }, [columns])
 
   const commonClassNames = [
-    { 'table-col-after': afterColumn },
+    { 'table-col-after': resizingMode === 'scroll' && !overflowTransition },
     { 'table-draggable': useDragDrop },
     { 'table-row-selection': !!rowSelection },
     { 'table-sticky-selection': stickySelection && resizingMode === 'scroll' },
@@ -250,8 +252,9 @@ export const Table: <T extends TableRecord = TableRecord>(
           { 'table-sticky-header': stickyHeader !== undefined }
         )}
         resizingMode={resizingMode}
-        afterColumn={afterColumn}
+        fitLastColumn={fitLastColumn}
         columns={columns}
+        overflowTransition={overflowTransition}
         useDragDrop={useDragDrop}
         {...testAttributes}
       >

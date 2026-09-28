@@ -18,11 +18,14 @@ export type GetLeftItemsProps<T extends TableRecord = TableRecord> = {
   searchString?: string,
   sorting?: ActiveSorting<T>,
   dataSource?: T[]
-} & Partial<TableRowSelectionData>
+} & Partial<TableRowSelectionData<T>>
 
-export type GetLeftItems<T = ToolbarItems<ToolbarItemKey>> = (props: GetLeftItemsProps) => T[] | Promise<T[]>
+export type GetLeftItems<
+  T = ToolbarItems<ToolbarItemKey>,
+  Row extends TableRecord = TableRecord
+> = (props: GetLeftItemsProps<Row>) => T[] | Promise<T[]>
 
-export type ToolbarCommonProps = Omit<OriginToolbarProps, 'right'> & {
+export type ToolbarCommonProps<T extends TableRecord = TableRecord> = Omit<OriginToolbarProps, 'right'> & {
   showSearch?: boolean,
   collapsibleSearch?: boolean,
   searchPlaceholder?: string,
@@ -33,7 +36,7 @@ export type ToolbarCommonProps = Omit<OriginToolbarProps, 'right'> & {
   showSettingsSearch?: boolean,
   /** @deprecated use predefined props for right items toolbar */
   right?: (existingElements: ReactNode[]) => ReactNode[],
-  getLeftItems?: GetLeftItems
+  getLeftItems?: GetLeftItems<ToolbarItems, T>
 }
 
 export type TabConfigBase = boolean | {
@@ -49,22 +52,22 @@ export type GroupingTabConfig = TabConfigBase & {
 }
 
 // все табы, заголовки не скрыты
-export type ToolbarWithAllVisibleTabHeaders = ToolbarCommonProps & {
+export type ToolbarWithAllVisibleTabHeaders<T extends TableRecord = TableRecord> = ToolbarCommonProps<T> & {
   showColumns?: true | ColumnsTabConfig & { hideTabHeader?: false },
   showGrouping?: true | GroupingTabConfig & { hideTabHeader?: false }
 }
 
 // только один таб с явно скрытым заголовком
-export type ToolbarWithOnlyOneHiddenTabHeader =
-  (ToolbarCommonProps & {
+export type ToolbarWithOnlyOneHiddenTabHeader<T extends TableRecord = TableRecord> =
+  (ToolbarCommonProps<T> & {
     showColumns: ColumnsTabConfig & { hideTabHeader: true },
     showGrouping?: never
   }) |
-  (ToolbarCommonProps & {
+  (ToolbarCommonProps<T> & {
     showColumns?: never,
     showGrouping: GroupingTabConfig & { hideTabHeader: true }
   })
 
-export type ToolbarProps =
-  | ToolbarWithAllVisibleTabHeaders |
-  ToolbarWithOnlyOneHiddenTabHeader
+export type ToolbarProps<T extends TableRecord = TableRecord> =
+  ToolbarWithAllVisibleTabHeaders<T> |
+  ToolbarWithOnlyOneHiddenTabHeader<T>

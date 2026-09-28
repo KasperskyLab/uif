@@ -1,37 +1,100 @@
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
+import cn from 'classnames'
 import React, { FC } from 'react'
-import styled from 'styled-components'
 
-import { progressBarCss, StyledProgressBarTrack } from './progressBarCss'
-import { ProgressBarProps, ProgressBarViewProps } from './types'
-import { useThemedProgressBar } from './useThemedProgressBar'
+import { OkS } from '@kaspersky/hexa-ui-icons/16'
 
-const StyledProgressBar = styled.div.withConfig({
-  shouldForwardProp: prop => !['cssConfig'].includes(prop)
-})`${progressBarCss}`
+import { circleProps, CIRCULAR_SIZE } from './constants'
+import styles from './ProgressBar.module.scss'
+import { ProgressBarProps } from './types'
 
-export const ProgressBar: FC<ProgressBarProps> = (rawProps) => {
-  const themedProps = useThemedProgressBar(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <ProgressBarView {...props} />
-}
+export const ProgressBar: FC<ProgressBarProps> = ({ variant = 'linear', ...props }) => (
+  variant === 'circular'
+    ? <CircularProgressBar {...props} mode={props.track === 100 ? 'success' : 'accent'} />
+    : <LinearProgressBar {...props} />
+)
 
-const ProgressBarView: FC<ProgressBarViewProps> = ({
+const LinearProgressBar: FC<ProgressBarProps> = ({
   track = 0,
   background = true,
   width,
-  testAttributes,
+  mode = 'critical',
+  size = 'medium',
+  theme,
+  className,
+  style,
   ...rest
 }) => {
+  const { testAttributes, ...props } = useTestAttribute(rest)
+
+  const trackWidth = (track >= 0 && track <= 100) ? track : 0
+
+  const progressBarStyle = {
+    ...style,
+    '--progress-bar-track': trackWidth,
+    ...(width && { '--progress-bar-width': `${width}px` })
+  }
+
   return (
-    <StyledProgressBar
-      $background={background}
-      $width={width}
-      $trackWidth={(track >= 0 && track <= 100) ? track : 0}
+    <div
+      className={cn(
+        getClassNameWithTheme(className, theme),
+        styles.progressBar,
+        styles[mode],
+        styles[size],
+        { [styles.withBackground]: background }
+      )}
+      style={progressBarStyle}
       {...testAttributes}
-      {...rest}
+      {...props}
     >
-      <StyledProgressBarTrack />
-    </StyledProgressBar>
+      <div className={styles.track} />
+    </div>
+  )
+}
+
+const CircularProgressBar: FC<ProgressBarProps> = ({
+  track = 0,
+  background,
+  width,
+  size,
+  mode = 'accent',
+  theme,
+  className,
+  style,
+  ...rest
+}) => {
+  const { testAttributes, ...props } = useTestAttribute(rest)
+
+  const trackWidth = (track >= 0 && track <= 100) ? track : 0
+
+  const progressBarStyle = {
+    ...style,
+    '--progress-bar-track': trackWidth
+  }
+
+  return (
+    <div
+      className={cn(
+        getClassNameWithTheme(className, theme),
+        styles.circularProgressBar,
+        styles[mode],
+        { [styles.empty]: !trackWidth }
+      )}
+      style={progressBarStyle}
+      {...testAttributes}
+      {...props}
+    >
+      <svg viewBox={`0 0 ${CIRCULAR_SIZE} ${CIRCULAR_SIZE}`}>
+        <circle className={styles.circularBackground} {...circleProps} />
+        <circle className={styles.circularTrack} {...circleProps} />
+      </svg>
+      {trackWidth === 100 && (
+        <span className={styles.circularIcon}>
+          <OkS />
+        </span>
+      )}
+    </div>
   )
 }

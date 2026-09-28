@@ -18,11 +18,11 @@ const getDragHandle = (table: TableTestingClass, key: string | number) =>
   table.rows.getByKey(key)?.querySelector('.drag-handle-container')
 
 describe('Table Draggable module', () => {
-  it('should reset the global body userSelect on unmount when useDragDrop=true', () => {
+  it('should reset the global body userSelect on unmount when useDragDrop=true', async () => {
     document.body.style.userSelect = 'none'
 
     try {
-      const table = renderTable()
+      const table = await renderTable()
 
       expect(document.body.style.userSelect).toBe('none')
 
@@ -34,22 +34,22 @@ describe('Table Draggable module', () => {
     }
   })
 
-  it('should render drag-handle in every row when useDragDrop=true', () => {
-    const table = renderTable()
+  it('should render drag-handle in every row when useDragDrop=true', async () => {
+    const table = await renderTable()
 
     expect(table.rows.getCount()).toBe(data.length)
     expect(table.queryAll('.drag-handle-container')).toHaveLength(data.length)
   })
 
-  it('should not render drag-handle when useDragDrop=false', () => {
-    const table = renderTable({ useDragDrop: false })
+  it('should not render drag-handle when useDragDrop=false', async () => {
+    const table = await renderTable({ useDragDrop: false })
 
     expect(table.queryAll('.drag-handle-container')).toHaveLength(0)
     expect(table.query('.table-draggable')).not.toBeInTheDocument()
   })
 
-  it('should render both the drag handle and the selection checkbox in each row', () => {
-    const table = renderTable({ rowSelection: { builtInRowSelection: true } })
+  it('should render both the drag handle and the selection checkbox in each row', async () => {
+    const table = await renderTable({ rowSelection: { builtInRowSelection: true } })
 
     expect(table.query('.table-draggable.table-row-selection')).toBeInTheDocument()
     expect(table.queryAll('.drag-handle-container')).toHaveLength(data.length)
@@ -60,24 +60,24 @@ describe('Table Draggable module', () => {
 })
 
 describe('Table Draggable module - non-draggable rows', () => {
-  it('should not render a drag handle for a row with _outOfDndContext', () => {
+  it('should not render a drag handle for a row with _outOfDndContext', async () => {
     const outOfDndData = data.map((row, i) => i === 1 ? { ...row, _outOfDndContext: true } : row)
-    const table = renderTable({ dataSource: outOfDndData })
+    const table = await renderTable({ dataSource: outOfDndData })
 
     expect(getDragHandle(table, outOfDndData[1].key)).not.toBeInTheDocument()
     expect(getDragHandle(table, outOfDndData[0].key)).toBeInTheDocument()
   })
 
-  it('should not render a drag handle for a row with _disabled', () => {
+  it('should not render a drag handle for a row with _disabled', async () => {
     const disabledData = data.map((row, i) => i === 1 ? { ...row, _disabled: true } : row)
-    const table = renderTable({ dataSource: disabledData })
+    const table = await renderTable({ dataSource: disabledData })
 
     expect(getDragHandle(table, disabledData[1].key)).not.toBeInTheDocument()
     expect(getDragHandle(table, disabledData[0].key)).toBeInTheDocument()
   })
 
-  it('should not throw when rendering an empty table with useDragDrop', () => {
-    const table = renderTable({ dataSource: [] })
+  it('should not throw when rendering an empty table with useDragDrop', async () => {
+    const table = await renderTable({ dataSource: [] })
 
     expect(table.rows.getCount()).toBe(0)
   })

@@ -6,6 +6,7 @@ import React from 'react'
 import { getPreparedTenantTreeData } from '../handlers/cookie-handlers'
 import { TenantFilter } from '../TenantFilter'
 import { TenantFilterProps } from '../types'
+
 import { defaultArgs, tenantFilterPropPresentation } from './TenantFilter.controls'
 
 const treeDataMock = [
@@ -221,12 +222,13 @@ export const tenantFilterStorySettings: Meta<TenantFilterProps> = {
     klId: 'tenant-filter-kl-id'
   },
   parameters: {
-    badges: [badges.stable, badges.missingDesign]
+    badges: [badges.deprecated],
+    deprecatedLink: 'Hexa UI Components/Tree'
   }
 }
 
 const meta: Meta<typeof TenantFilter> = {
-  title: 'Other/TenantFilter',
+  title: 'Deprecated/TenantFilter',
   component: TenantFilter,
   tags: ['!autodocs'],
   includeStories: ['Playground'],

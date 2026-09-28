@@ -70,6 +70,17 @@ describe('Input - Textbox - Number ', () => {
     expect(textboxNumber).toHaveValue('10')
   })
 
+  test('should pass empty value on clear when allowEmpty is true', () => {
+    const onChange = jest.fn()
+    const { getByTestId } = render(
+      <Textbox.Number allowEmpty klId={klId} value={100} onChange={onChange} />
+    )
+    const textboxNumber = getByTestId(klId)
+
+    userEvent.clear(textboxNumber)
+    expect(onChange).toHaveBeenCalledWith('')
+  })
+
   test('should clamp to max when value exceeds max', () => {
     const { getByTestId } = render(<Textbox.Number klId={klId} max={100} />)
     const textboxNumber = getByTestId(klId)

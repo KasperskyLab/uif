@@ -17,9 +17,7 @@ export const HTag: FC<HeadingProps> = ({
     typography[textLevels[type || 'H1']].htmlTag,
     {
       ...testAttributes,
-      ...rest,
-      $color: color,
-      $themedColor: themedColor
+      ...rest
     }
   )
 }

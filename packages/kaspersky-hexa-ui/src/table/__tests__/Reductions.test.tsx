@@ -33,8 +33,8 @@ const data: TableRow[] = [
 const renderTable = () => TableTestingClass.render({ columns, dataSource: data })
 
 describe('Table Reductions module', () => {
-  it('should wrap every column title in an ellipsis reducer', () => {
-    const table = renderTable()
+  it('should wrap every column title in an ellipsis reducer', async () => {
+    const table = await renderTable()
 
     expect(table.query('th .hexa-ui-ellipsis')).toBeInTheDocument()
     expect(table.columns.getHeaders().map(h => h.textContent)).toEqual(
@@ -42,16 +42,16 @@ describe('Table Reductions module', () => {
     )
   })
 
-  it('should wrap a plain cell value in an ellipsis reducer', () => {
-    const table = renderTable()
+  it('should wrap a plain cell value in an ellipsis reducer', async () => {
+    const table = await renderTable()
 
     const cell = table.rows.getCell(0, 0)
     expect(cell?.querySelector('.hexa-ui-ellipsis')).toBeInTheDocument()
     expect(cell?.textContent).toContain('hello world')
   })
 
-  it('should use ExpandableText for a column with expandableText', () => {
-    const table = renderTable()
+  it('should use ExpandableText for a column with expandableText', async () => {
+    const table = await renderTable()
 
     const cell = table.rows.getCell(0, 1)
     expect(cell?.querySelector('.expandable-gradient')).toBeInTheDocument()
@@ -59,31 +59,31 @@ describe('Table Reductions module', () => {
     expect(cell?.textContent).toContain('hello world')
   })
 
-  it('should preserve a custom render and still wrap it in a reducer', () => {
-    const table = renderTable()
+  it('should preserve a custom render and still wrap it in a reducer', async () => {
+    const table = await renderTable()
 
     const cell = table.rows.getCell(0, 2)
     expect(cell?.querySelector('[data-testid="custom-link"]')).toBeInTheDocument()
     expect(cell?.querySelector('.hexa-ui-ellipsis')).toBeInTheDocument()
   })
 
-  it('should preserve render-cell-object props (colSpan) while reducing children', () => {
-    const table = renderTable()
+  it('should preserve render-cell-object props (colSpan) while reducing children', async () => {
+    const table = await renderTable()
 
     const spanCell = table.query('td[colspan="2"]')
     expect(spanCell).toBeInTheDocument()
     expect(spanCell?.querySelector('.hexa-ui-ellipsis')).toBeInTheDocument()
   })
 
-  it('should bypass reduction for accordion rows', () => {
-    const table = renderTable()
+  it('should bypass reduction for accordion rows', async () => {
+    const table = await renderTable()
 
     const accCell = table.rows.getByKey('acc')?.querySelectorAll('td')[0]
     expect(accCell?.textContent).toContain('accord')
     expect(accCell?.querySelector('.hexa-ui-ellipsis')).not.toBeInTheDocument()
   })
 
-  it('should dispose ResizeObserver on unmount', () => {
+  it('should dispose ResizeObserver on unmount', async () => {
     const resizeObserverSpy = jest.spyOn(window, 'ResizeObserver')
     const resizeObserverInstance = {
       observe: jest.fn(),
@@ -93,7 +93,7 @@ describe('Table Reductions module', () => {
     resizeObserverSpy.mockImplementation(() => resizeObserverInstance)
 
     try {
-      const table = TableTestingClass.render({
+      const table = await TableTestingClass.render({
         columns: [{ title: 'column', key: 'column', dataIndex: 'value', ellipsis: true }],
         dataSource: [{ key: 1, value: 'Completely arbitrary text' }]
       })

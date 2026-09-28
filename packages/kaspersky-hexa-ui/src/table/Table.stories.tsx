@@ -7,19 +7,19 @@ import React from 'react'
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
 
 import MetaData from './__meta__/meta.json'
+import { TableMockStory } from './__mocks__/filtersMockData'
 import {
   basicArgTypes,
   basicDataSource,
-  BasicTableStory,
   basicTwoColumns,
-  Story
+  Story,
+  Wrapper
 } from './stories/_commonConstants'
 import TableDocs from './stories/docs/TableDocs.md'
 import { HorizontalScroll as HorizontalScrollStory } from './stories/HorizontalScroll'
 import { InSidebar as InSidebarStory } from './stories/InSidebar'
 import { TableSettings as TableSettingsStory } from './stories/TableSettings'
 
-import { TableMockStory } from './__mocks__/filtersMockData'
 import { ITableProps, Table } from './index'
 
 const meta: Meta<ITableProps> = {
@@ -43,7 +43,11 @@ const meta: Meta<ITableProps> = {
 export default meta
 
 export const Basic: Story = {
-  render: BasicTableStory.bind({}),
+  render: (args) => (
+    <Wrapper>
+      <Table {...args} />
+    </Wrapper>
+  ),
   argTypes: { ...basicArgTypes },
   parameters: { controls: { exclude: [] } }
 }
@@ -71,5 +75,6 @@ export const InSidebar: TableMockStory = {
 }
 export const TableSettings: Story = {
   ...TableSettingsStory,
-  name: 'Table Settings'
+  name: 'Table Settings',
+  tags: ['skip-visual']
 }

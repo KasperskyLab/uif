@@ -48,7 +48,6 @@ export const groupTitleRenderer = <T extends TableRecord = TableRecord>(
           >
             {expandableGrouping && (
               <ActionButton
-                interactive={false}
                 size="small"
                 icon={expandedRowKeys.includes(row?.key) ? <ArrowDownSolid /> : <ArrowRightSolid />}
               />

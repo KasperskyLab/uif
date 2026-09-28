@@ -108,19 +108,18 @@ const useWizardFooterConfig = ({
   nextButtonText,
   finishButtonText
 }: WizardFooterProps) => {
-  const { isBackDisabled, isLastStep, back, next, isNextLoading } = useWizard()
+  const { isBackDisabled, isLastStep, totalSteps, back, next, isNextLoading } = useWizard()
   const { t } = useTranslation()
+
   return (
     [
-      ...(onCancel
-        ? [{
-            text: cancelButtonText || t('wizard.actions.cancel'),
-            mode: 'secondary',
-            onClick: onCancel,
-            testId: 'wizardCancelAction'
-          }]
-        : []),
-      {
+      onCancel && {
+        text: cancelButtonText || t('wizard.actions.cancel'),
+        mode: 'secondary',
+        onClick: onCancel,
+        testId: 'wizardCancelAction'
+      },
+      totalSteps > 1 && {
         text: backButtonText || t('wizard.actions.back'),
         mode: 'secondary',
         disabled: isBackDisabled,
@@ -136,7 +135,7 @@ const useWizardFooterConfig = ({
         loading: isNextLoading,
         testId: 'wizardNextAction'
       }
-    ] as ButtonProps[]
+    ].filter(Boolean) as ButtonProps[]
   )
 }
 

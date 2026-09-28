@@ -137,19 +137,19 @@ export const Basic: Story = {
         <Space gap={10}>
           <Text>Click to see Popover (<b>simple</b> content)</Text>
           <Popover {...args} content={SimplePopoverContent}>
-            <ActionButton interactive={false} icon={<StatusInfoOutline />} />
+            <ActionButton icon={<StatusInfoOutline />} />
           </Popover>
         </Space>
         <Space gap={10}>
           <Text>Click to see Popover (<b>complex</b> content)</Text>
           <Popover {...args} content={CompexPopoverContent}>
-            <ActionButton interactive={false} icon={<StatusInfoOutline />} />
+            <ActionButton icon={<StatusInfoOutline />} />
           </Popover>
         </Space>
         <Space gap={10}>
           <Text>Click to see Popover (<b>overflow</b> content)</Text>
           <Popover {...args} content={OverflowPopoverContent}>
-            <ActionButton interactive={false} icon={<StatusInfoOutline />} />
+            <ActionButton icon={<StatusInfoOutline />} />
           </Popover>
         </Space>
       </Space>
@@ -233,7 +233,7 @@ export const WithStickyTabs: Story = {
           height={320}
           content={StickyTabsPopoverContent}
         >
-          <ActionButton interactive={false} icon={<StatusInfoOutline />} />
+          <ActionButton icon={<StatusInfoOutline />} />
         </Popover>
       </Space>
     </div>

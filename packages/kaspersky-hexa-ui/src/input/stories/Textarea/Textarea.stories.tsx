@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   width: 400px;
 `
 
-const PIXSO_VIEW = 'https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=39947:148668'
+const PIXSO_VIEW = ''
 
 export const textareaStorySettings: Meta<TextboxTextareaProps> = {
   argTypes: buildStoryArgTypes(textareaPropPresentation),

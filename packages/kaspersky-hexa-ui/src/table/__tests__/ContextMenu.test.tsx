@@ -32,7 +32,7 @@ describe('Table ContextMenu module', () => {
   }
 
   it('should render context menu', async () => {
-    const table = TableTestingClass.render({ ...defaultProps, contextMenu: () => toolbar.left, toolbar })
+    const table = await TableTestingClass.render({ ...defaultProps, contextMenu: () => toolbar.left, toolbar })
 
     table.contextMenu.openOnCell(0)
 
@@ -70,7 +70,7 @@ describe('Table ContextMenu module', () => {
       }
     ])
 
-    const table = TableTestingClass.render({ ...defaultProps, contextMenu })
+    const table = await TableTestingClass.render({ ...defaultProps, contextMenu })
 
     table.contextMenu.openOnCell(0)
     await table.contextMenu.getMenu()
@@ -83,7 +83,7 @@ describe('Table ContextMenu module', () => {
 
   it('should render context menu for the selected rows', async () => {
     const mockContextMenu = jest.fn().mockReturnValue(toolbar.left)
-    const table = TableTestingClass.render({
+    const table = await TableTestingClass.render({
       ...defaultProps,
       contextMenu: mockContextMenu,
       rowSelection: { selectedRowKeys: [generatedData[0].key, generatedData[1].key] },
@@ -109,7 +109,7 @@ describe('Table ContextMenu module', () => {
 
   it('should render context menu for the clicked row', async () => {
     const mockContextMenu = jest.fn().mockReturnValue(toolbar.left)
-    const table = TableTestingClass.render({
+    const table = await TableTestingClass.render({
       ...defaultProps,
       contextMenu: mockContextMenu,
       rowSelection: { selectedRowKeys: [generatedData[0].key, generatedData[1].key] },

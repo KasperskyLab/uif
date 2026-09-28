@@ -1,6 +1,11 @@
 import type { PropPresentationMap } from '@sb/components/Documentation'
 
 export const progressBarDesignPropPresentation: PropPresentationMap = {
+  variant: {
+    description: 'Вариант индикатора: горизонтальная полоса или круг',
+    type: 'linear | circular',
+    defaultValue: 'linear'
+  },
   size: {
     description: 'Высота полосы прогресса',
     type: 'small | medium | large'

@@ -13,6 +13,6 @@
   "component": "Pagination",
   "description": "Компонент для отрисовки пагинации. В качестве основы используется AntdPagination из библиотеки Antd.",
   "usage": "Структурирование большого объема информации, путем ее разделения на отдельные страницы",
-  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=1063%3A4211",
-  "pixsoView": "https://pixso.net/app/design/hjHUr5zzgcXmN9y0toyllw"
+  "designLink": "",
+  "pixsoView": ""
 }

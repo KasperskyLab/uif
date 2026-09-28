@@ -30,7 +30,8 @@ export const actionButtonPropPresentation: PropPresentationMap = {
   },
   interactive: {
     control: 'boolean',
-    description: 'Включает hover и active состояния'
+    deprecated: true,
+    description: 'Use icon instead of a non-interactive ActionButton'
   },
   disabled: {
     control: 'boolean',

@@ -1,5 +1,4 @@
 import { PopupConfigProvider } from '@helpers/components/PopupConfigProvider'
-import { StatesMatrix, StatesMatrixItem } from '@sb/components/StatesMatrix'
 import { Textbox } from '@src/input'
 import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
@@ -18,57 +17,6 @@ const meta = {
 export default meta
 
 type Story = StoryObj<RadioProps>
-
-type StateRow = StatesMatrixItem & {
-  disabled?: boolean,
-  readonly?: boolean
-}
-
-type VariantColumn = StatesMatrixItem & {
-  selected: boolean,
-  invalid: boolean
-}
-
-const stateRows: StateRow[] = [
-  { key: 'default', label: 'Default' },
-  { key: 'hover', label: 'Hover' },
-  { key: 'active', label: 'Active' },
-  { key: 'readonly', label: 'Readonly', readonly: true },
-  { key: 'disabled', label: 'Disabled', disabled: true }
-]
-
-const variantColumns: VariantColumn[] = [
-  { key: 'unselected', label: 'Unselected', selected: false, invalid: false },
-  { key: 'selected', label: 'Selected', selected: true, invalid: false },
-  { key: 'invalid-unselected', label: 'Invalid Unselected', selected: false, invalid: true },
-  { key: 'invalid-selected', label: 'Invalid Selected', selected: true, invalid: true }
-]
-
-const renderStateCell = (row: StateRow, column: VariantColumn) => (
-  <Radio
-    vertical={false}
-    value={column.selected ? 'v' : undefined}
-    onChange={() => {}}
-    disabled={row.disabled}
-    readonly={row.readonly}
-    invalid={column.invalid}
-    options={[{ label: 'Radio', value: 'v' }]}
-  />
-)
-
-export const States: Story = {
-  parameters: {
-    controls: { include: [] },
-    layout: 'fullscreen'
-  },
-  render: () => (
-    <StatesMatrix
-      rows={stateRows}
-      columns={variantColumns}
-      renderCell={renderStateCell}
-    />
-  )
-}
 
 const basicOptions: RadioProps['options'] = [
   { label: 'Option 1', value: '1' },

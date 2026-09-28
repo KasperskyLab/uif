@@ -28,7 +28,7 @@ export type TableContextProviderProps <T extends TableRecord = TableRecord>= {
     shouldCountClientTotal: boolean,
   },
   useDataSourceFunction: boolean,
-  rowSelection?: TableRowSelectionData,
+  rowSelection?: TableRowSelectionData<T>,
   searchValue: string,
   sorting: ActiveSorting<T>,
   setSorting: SetState<ActiveSorting<T>>,

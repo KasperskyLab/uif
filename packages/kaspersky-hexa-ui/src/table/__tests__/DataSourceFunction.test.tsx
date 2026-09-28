@@ -22,12 +22,12 @@ const minimalColumns: TableMockProps['columns'] = [
   { key: 'fullname', dataIndex: 'fullname', title: 'Name' }
 ]
 
-const renderServerWithRef = (
+const renderServerWithRef = async (
   props: Partial<TableMockProps> = {},
   dataSourceFunction: TableMockProps['dataSourceFunction'] = spyDataSource()
 ) => {
   const ref: React.MutableRefObject<TableRef | null> = { current: null }
-  const table = TableTestingClass.renderElement(
+  const table = await TableTestingClass.renderElement(
     <Table
       testId={TABLE_TEST_ID}
       columns={minimalColumns}
@@ -44,7 +44,7 @@ const renderServerWithRef = (
 describe('Table dataSourceFunction (server-side data)', () => {
   describe('Initial fetch & args', () => {
     it('should call dataSourceFunction on mount with default paging args', async () => {
-      const { dataSourceFunction } = renderServer()
+      const { dataSourceFunction } = await renderServer()
 
       await waitFor(() => expect(dataSourceFunction).toHaveBeenCalled())
 
@@ -58,7 +58,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     })
 
     it('should render the first page of rows returned by the server', async () => {
-      const { table } = renderServer()
+      const { table } = await renderServer()
 
       await table.rows.waitForData()
 
@@ -67,7 +67,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     })
 
     it('should expose server totalCount as pagination total', async () => {
-      const { table } = renderServer()
+      const { table } = await renderServer()
 
       await table.rows.waitForData()
       await waitFor(() => expect(table.pagination.getTotal()).toBe(testRows.length))
@@ -78,7 +78,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
 
   describe('Pagination', () => {
     it('should re-fetch with the next (0-based) page on page change', async () => {
-      const { table, dataSourceFunction } = renderServer()
+      const { table, dataSourceFunction } = await renderServer()
       await table.rows.waitForData()
 
       table.pagination.next()
@@ -90,7 +90,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
 
     it('should re-fetch with the new pageSize when it changes', async () => {
       const dataSourceFunction = spyDataSource()
-      const { table } = renderServer({}, dataSourceFunction)
+      const { table } = await renderServer({}, dataSourceFunction)
       await table.rows.waitForData()
 
       table.rerender(
@@ -107,7 +107,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     })
 
     it('should not call dataSourceFunction when pagination is disabled', async () => {
-      const { table, dataSourceFunction } = renderServer({ pagination: false })
+      const { table, dataSourceFunction } = await renderServer({ pagination: false })
 
       // Ждём заведомо дольше debounce (300 мс) — вызова быть не должно (ранний возврат хука).
       await act(async () => { await new Promise(resolve => setTimeout(resolve, 400)) })
@@ -119,7 +119,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     it('should render exactly the rows returned by the server without client slicing', async () => {
       // Сервер вернул больше строк, чем pageSize — таблица не должна их обрезать.
       const dataSourceFunction: jest.Mock = jest.fn(async () => ({ rows: testRows, totalCount: testRows.length }))
-      const { table } = renderServer({}, dataSourceFunction)
+      const { table } = await renderServer({}, dataSourceFunction)
 
       await table.rows.waitForData(testRows.length)
 
@@ -128,7 +128,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
 
     it('should not refetch when pagination is controlled via onChange (current not updated)', async () => {
       const onChange = jest.fn()
-      const { table, dataSourceFunction } = renderServer({ pagination: { pageSize: PAGE_SIZE, onChange } })
+      const { table, dataSourceFunction } = await renderServer({ pagination: { pageSize: PAGE_SIZE, onChange } })
       await table.rows.waitForData()
 
       const callsBefore = dataSourceFunction.mock.calls.length
@@ -141,7 +141,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     })
 
     it('should reset to the first page when the result shrinks (restoreCurrentWhenDataChange)', async () => {
-      const { table, dataSourceFunction } = renderServer({
+      const { table, dataSourceFunction } = await renderServer({
         toolbar: { showSearch: true },
         pagination: { pageSize: PAGE_SIZE, restoreCurrentWhenDataChange: true }
       })
@@ -160,7 +160,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
       const dataSourceFunction: TableDataSourceFunction<MockRow> = jest.fn(
         async ({ page, pageSize }) => ({ rows: rows.slice(page * pageSize, (page + 1) * pageSize), totalCount: rows.length })
       )
-      const { table, ref } = renderServerWithRef({}, dataSourceFunction)
+      const { table, ref } = await renderServerWithRef({}, dataSourceFunction)
       await table.rows.waitForData()
 
       expect(table.pagination.hasPage(2)).toBe(true)
@@ -179,7 +179,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
 
   describe('Manual refetch', () => {
     it('should re-fetch with the same params via ref.triggerDataSourceFunction()', async () => {
-      const { table, ref, dataSourceFunction } = renderServerWithRef()
+      const { table, ref, dataSourceFunction } = await renderServerWithRef()
       await table.rows.waitForData()
 
       const callsBefore = (dataSourceFunction as jest.Mock).mock.calls.length
@@ -196,7 +196,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     it('should re-fetch on toolbar refresh button wired to triggerDataSourceFunction', async () => {
       const dataSourceFunction = spyDataSource()
       const ref: React.MutableRefObject<TableRef | null> = { current: null }
-      const table = TableTestingClass.renderElement(
+      const table = await TableTestingClass.renderElement(
         <Table
           testId={TABLE_TEST_ID}
           columns={minimalColumns}
@@ -222,7 +222,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     it('should apply patchDataSource to server rows before rendering', async () => {
       const patchDataSource: TableMockProps['patchDataSource'] = rows =>
         rows.map(row => ({ ...row, fullname: `★ ${row.fullname}` }))
-      const { table } = renderServer({ patchDataSource })
+      const { table } = await renderServer({ patchDataSource })
 
       await table.rows.waitForData()
 
@@ -231,7 +231,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
 
     it('should call onDataSourceChange with the fetched (patched) page rows', async () => {
       const onDataSourceChange = jest.fn()
-      renderServer({ onDataSourceChange })
+      await renderServer({ onDataSourceChange })
 
       await waitFor(() => expect(onDataSourceChange).toHaveBeenCalled())
       const rows = onDataSourceChange.mock.lastCall[0]
@@ -240,7 +240,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
 
     it('should call onDataSourceChange again on every successful refetch', async () => {
       const onDataSourceChange = jest.fn()
-      const { table } = renderServer({ onDataSourceChange })
+      const { table } = await renderServer({ onDataSourceChange })
       await waitFor(() => expect(onDataSourceChange).toHaveBeenCalled())
 
       const callsBefore = onDataSourceChange.mock.calls.length
@@ -254,7 +254,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
       const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {})
       const onDataSourceChange = jest.fn()
       const dataSourceFunction = jest.fn().mockRejectedValue(new Error('boom'))
-      renderServer({ onDataSourceChange, dataSourceFunction })
+      await renderServer({ onDataSourceChange, dataSourceFunction })
 
       await waitFor(() => expect(consoleError).toHaveBeenCalled())
       expect(onDataSourceChange).not.toHaveBeenCalled()
@@ -264,7 +264,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
 
     it('should refetch when a non-memoized patchDataSource identity changes', async () => {
       const dataSourceFunction = spyDataSource()
-      const { table } = renderServer({ patchDataSource: rows => rows }, dataSourceFunction)
+      const { table } = await renderServer({ patchDataSource: rows => rows }, dataSourceFunction)
       await table.rows.waitForData()
 
       const callsBefore = dataSourceFunction.mock.calls.length
@@ -285,7 +285,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     it('should call onDataSourceChange for client data too when both dataSource and dataSourceFunction are set', async () => {
       const clientRow = { ...generatedData[0], key: 'client-only', fullname: 'CLIENT_ONLY' }
       const onDataSourceChange = jest.fn()
-      renderServer({ dataSource: [clientRow], onDataSourceChange })
+      await renderServer({ dataSource: [clientRow], onDataSourceChange })
 
       await waitFor(() => {
         const payloads = onDataSourceChange.mock.calls.map(call => call[0])
@@ -297,7 +297,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     it('should apply a patchDataSource that rewrites row keys', async () => {
       const patchDataSource: TableMockProps['patchDataSource'] = rows =>
         rows.map(row => ({ ...row, key: `patched-${row.key}` }))
-      const { table } = renderServer({ patchDataSource })
+      const { table } = await renderServer({ patchDataSource })
 
       await table.rows.waitForData()
 
@@ -307,7 +307,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
 
     it('should render the patched row count even when it differs from totalCount', async () => {
       const patchDataSource: TableMockProps['patchDataSource'] = rows => rows.slice(0, 3)
-      const { table } = renderServer({ patchDataSource })
+      const { table } = await renderServer({ patchDataSource })
 
       await table.rows.waitForData(3)
 
@@ -323,7 +323,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
       const dataSourceFunction: TableDataSourceFunction<MockRow> = jest.fn(
         () => new Promise(resolve => { resolveFetch = resolve })
       )
-      const { table } = renderServer({ dataSourceFunction, loaderProps: {} })
+      const { table } = await renderServer({ dataSourceFunction, loaderProps: {} })
 
       await waitFor(() => expect(dataSourceFunction).toHaveBeenCalled())
       expect(table.rows.getCount()).toBe(0)
@@ -342,7 +342,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
       const dataSourceFunction: TableDataSourceFunction<MockRow> = jest.fn(
         () => new Promise(resolve => { resolvers.push(resolve) })
       )
-      const { table } = renderServer({ dataSourceFunction, loaderProps: {} })
+      const { table } = await renderServer({ dataSourceFunction, loaderProps: {} })
 
       await waitFor(() => expect(resolvers).toHaveLength(1))
       await act(async () => { resolvers[0]({ rows: testRows.slice(0, PAGE_SIZE), totalCount: testRows.length }) })
@@ -361,7 +361,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
 
     it('should apply custom loaderProps (size) to the loader', async () => {
       const dataSourceFunction: TableDataSourceFunction<MockRow> = jest.fn(() => new Promise(() => {}))
-      const { table } = renderServer({ dataSourceFunction, loaderProps: { size: 'large' } })
+      const { table } = await renderServer({ dataSourceFunction, loaderProps: { size: 'large' } })
 
       await waitFor(() => expect(table.query('.ant-spin-lg')).toBeInTheDocument())
     })
@@ -371,7 +371,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
       const dataSourceFunction: TableDataSourceFunction<MockRow> = jest.fn(
         () => new Promise(resolve => { resolveFetch = resolve })
       )
-      renderServer({ dataSourceFunction, emptyText: 'Nothing here' })
+      await renderServer({ dataSourceFunction, emptyText: 'Nothing here' })
 
       await waitFor(() => expect(dataSourceFunction).toHaveBeenCalled())
       expect(screen.queryByText('Nothing here')).not.toBeInTheDocument()
@@ -385,7 +385,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     it('should log an error and keep the table empty when dataSourceFunction rejects', async () => {
       const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {})
       const dataSourceFunction = jest.fn().mockRejectedValue(new Error('boom'))
-      const { table } = renderServer({ dataSourceFunction })
+      const { table } = await renderServer({ dataSourceFunction })
 
       await waitFor(() =>
         expect(consoleError).toHaveBeenCalledWith(
@@ -402,7 +402,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
       const dataSourceFunction = spyDataSource()
       dataSourceFunction.mockRejectedValueOnce(new Error('boom'))
 
-      const { table, ref } = renderServerWithRef({}, dataSourceFunction)
+      const { table, ref } = await renderServerWithRef({}, dataSourceFunction)
 
       await waitFor(() => expect(consoleError).toHaveBeenCalled())
       expect(table.rows.getCount()).toBe(0)
@@ -418,7 +418,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     it('should keep the previously loaded rows when a later refetch fails', async () => {
       const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {})
       const dataSourceFunction = spyDataSource()
-      const { table } = renderServer({}, dataSourceFunction)
+      const { table } = await renderServer({}, dataSourceFunction)
       await table.rows.waitForData()
 
       const firstCellBefore = table.rows.getCellText(0, 0)
@@ -439,7 +439,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
       dataSourceFunction.mockRejectedValueOnce(new Error('boom1'))
       dataSourceFunction.mockRejectedValueOnce(new Error('boom2'))
 
-      const { table } = renderServer({ toolbar: { showSearch: true } }, dataSourceFunction)
+      const { table } = await renderServer({ toolbar: { showSearch: true } }, dataSourceFunction)
 
       await waitFor(() => expect(consoleError).toHaveBeenCalled()) // маунт (boom1) упал
       expect(table.rows.getCount()).toBe(0)
@@ -459,7 +459,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     it('should catch a synchronous throw from dataSourceFunction', async () => {
       const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {})
       const dataSourceFunction = jest.fn(() => { throw new Error('sync boom') })
-      const { table } = renderServer({ dataSourceFunction: dataSourceFunction })
+      const { table } = await renderServer({ dataSourceFunction: dataSourceFunction })
 
       await waitFor(() => expect(consoleError).toHaveBeenCalled())
       expect(table.rows.getCount()).toBe(0)
@@ -473,7 +473,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
       const dataSourceFunction: TableDataSourceFunction<MockRow> = jest.fn(
         async () => ({ rows: [], totalCount: 0 })
       )
-      const { table } = renderServer({ dataSourceFunction, emptyText: 'Nothing here' })
+      const { table } = await renderServer({ dataSourceFunction, emptyText: 'Nothing here' })
 
       await waitFor(() => expect(dataSourceFunction).toHaveBeenCalled())
       await waitFor(() => expect(screen.getByText('Nothing here')).toBeInTheDocument())
@@ -484,7 +484,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
 
   describe('Combined params', () => {
     it('should combine sorting and pagination in a single request', async () => {
-      const { table, dataSourceFunction } = renderServer()
+      const { table, dataSourceFunction } = await renderServer()
       await table.rows.waitForData()
 
       await table.sorting.sortBy('fullname', 'asc')
@@ -500,7 +500,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     })
 
     it('should combine search and sorting params', async () => {
-      const { table, dataSourceFunction } = renderServer({ toolbar: { showSearch: true } })
+      const { table, dataSourceFunction } = await renderServer({ toolbar: { showSearch: true } })
       await table.rows.waitForData()
 
       table.search.type('a')
@@ -516,7 +516,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
     })
 
     it('should carry accumulated params through a search, sort and clear flow', async () => {
-      const { table, dataSourceFunction } = renderServer({ toolbar: { showSearch: true } })
+      const { table, dataSourceFunction } = await renderServer({ toolbar: { showSearch: true } })
       await table.rows.waitForData()
 
       table.search.type('a')
@@ -544,7 +544,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
         type: FilterType.Text,
         value: 'a'
       }
-      const { table, dataSourceFunction } = renderServer({
+      const { table, dataSourceFunction } = await renderServer({
         defaultFilters: [filter],
         defaultGroupBy: 'group',
         useFiltersSidebar: true,
@@ -570,7 +570,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
       jest.useFakeTimers()
       try {
         const dataSourceFunction = spyDataSource()
-        TableTestingClass.render({
+        await TableTestingClass.render({
           testId: TABLE_TEST_ID,
           columns: minimalColumns,
           dataSource: undefined,
@@ -625,7 +625,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
       jest.useFakeTimers()
       try {
         const dataSourceFunction = spyDataSource()
-        const table = TableTestingClass.renderElement(
+        const table = await TableTestingClass.renderElement(
           <Table
             testId={TABLE_TEST_ID}
             columns={minimalColumns}
@@ -647,7 +647,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
 
     it('should re-fetch when a new dataSourceFunction identity is passed', async () => {
       const first = spyDataSource()
-      const { table } = renderServer({}, first)
+      const { table } = await renderServer({}, first)
       await table.rows.waitForData()
 
       const second = spyDataSource()
@@ -683,7 +683,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
         })
 
         const ref: React.MutableRefObject<TableRef | null> = { current: null }
-        const table = TableTestingClass.renderElement(
+        const table = await TableTestingClass.renderElement(
           <Table
             testId={TABLE_TEST_ID}
             columns={minimalColumns}
@@ -716,7 +716,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
       jest.useFakeTimers()
       try {
         const dataSourceFunction = spyDataSource()
-        const table = TableTestingClass.render({
+        const table = await TableTestingClass.render({
           testId: TABLE_TEST_ID,
           columns: minimalColumns,
           dataSource: undefined,
@@ -756,7 +756,7 @@ describe('Table dataSourceFunction (server-side data)', () => {
         const dataSourceFunction: TableDataSourceFunction<MockRow> = jest.fn(
           ({ page }) => new Promise(resolve => { resolvers[page] = () => resolve({ rows: rowsByPage[page], totalCount: 2 }) })
         )
-        const table = TableTestingClass.render({
+        const table = await TableTestingClass.render({
           testId: TABLE_TEST_ID,
           columns: minimalColumns,
           dataSource: undefined,

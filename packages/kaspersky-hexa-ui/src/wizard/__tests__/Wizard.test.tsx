@@ -11,6 +11,47 @@ const DefaultWizard = (props: WizardProps) => (
   </ConfigProvider>
 )
 
+describe('Wizard', () => {
+
+  it('should hide back button when has only one step', () => {
+    const steps = [
+      {
+        name: 'Step 1',
+        Component: () => <div>Step 1 Content</div>
+      }
+    ]
+    const { queryByRole } = render(
+      <DefaultWizard
+        view="page"
+        steps={steps}
+      />
+    )
+
+    expect(queryByRole('button', { name: /back/i })).not.toBeInTheDocument()
+  })
+
+  it('should show back button when has many steps', () => {
+    const steps = [
+      {
+        name: 'Step 1',
+        Component: () => <div>Step 1 Content</div>
+      },
+      {
+        name: 'Step 2',
+        Component: () => <div>Step 2 Content</div>
+      }
+    ]
+    const { getByRole } = render(
+      <DefaultWizard
+        view="page"
+        steps={steps}
+      />
+    )
+
+    expect(getByRole('button', { name: /back/i })).toBeInTheDocument()
+  })
+})
+
 describe('WizardModal', () => {
   const steps = [
     {

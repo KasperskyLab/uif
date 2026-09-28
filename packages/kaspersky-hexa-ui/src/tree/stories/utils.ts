@@ -14,17 +14,29 @@ export function getKeys (nodes: DataNode[]) {
   return out
 }
 
+function mulberry32 (seed: number) {
+  return () => {
+    seed |= 0
+    seed = seed + 0x6D2B79F5 | 0
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed)
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t
+    return ((t ^ t >>> 14) >>> 0) / 4294967296
+  }
+}
+
 export function generateTreeData (num: number, config = { depth: 3, width: 3 }): DataNode[] {
   const nodes: DataNode[] = []
   let currentRootWidth = 0
   let currentNum = 0
+  // фиксированный seed: Math.random() давал разное дерево на каждую сборку storybook
+  const random = mulberry32(7)
 
   function isNumberOfNodesExceeded () {
     return currentNum >= num
   }
 
   function flipCoin () {
-    return Math.random() < 0.5
+    return random() < 0.5
   }
 
   function createNode (key: string, currentDepth: number): DataNode {

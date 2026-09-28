@@ -55,8 +55,7 @@ export default meta
 
 const toolbarTabsDataSource = mockData.map((el, i) => ({
   ...el,
-  age: Math.ceil(Math.random() * 100),
-  date: i === 2 ? new Date().toDateString() : new Date(Number(i.toString() + '0000000000')).toDateString()
+  date: new Date(Number(`${i}0000000000`)).toDateString()
 }))
 
 const dropdownImportExport: TableToolbarProps['importExportButton'] = {

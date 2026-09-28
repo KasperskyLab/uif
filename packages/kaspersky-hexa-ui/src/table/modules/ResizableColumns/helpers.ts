@@ -5,6 +5,8 @@ import { getPersistentStorageValue } from '../../helpers/persistentStorage'
 import { ITableProps, TableColumn, TableRecord, TableResizingMode } from '../../types'
 import { DND_COLUMN_KEY } from '../Draggable'
 
+import { ResizeColumnsArgs } from './types'
+
 const cloneColumns = <T extends TableRecord = TableRecord>(columns: TableColumn<T>[]): TableColumn<T>[] =>
   cloneDeepWith(columns, (value, key) => {
     const shouldSkip = isColumnReadonly(value) || isReactServiceParam(key as string)
@@ -157,4 +159,26 @@ export const addWidthFromStorage = <T extends TableRecord = TableRecord> ({
       width: isUserDefinedWidth ? width : column.width
     }
   })
+}
+
+export const resizeColumns = <T extends TableRecord = TableRecord>(
+  {
+    index,
+    columnWidth,
+    columns,
+    onManualColumnResize,
+    columnMinWidth
+  }: ResizeColumnsArgs<T>
+) => {
+  const nextColumns: TableColumn<T>[] = [...columns]
+  nextColumns[index] = {
+    ...nextColumns[index],
+    width: columnWidth,
+    minWidth: columnMinWidth,
+    isUserDefinedWidth: true
+  }
+
+  onManualColumnResize?.(nextColumns[index])
+
+  return nextColumns
 }

@@ -96,10 +96,10 @@ renderTable({ columns })
 
 ```ts
 // (A) Обычный случай — таблица с пропами. ДЕФОЛТНЫЙ выбор.
-const table = TableTestingClass.render({ rowSelection: { builtInRowSelection: true } })
+const table = await TableTestingClass.render({ rowSelection: { builtInRowSelection: true } })
 
 // (B) Нужен свой компонент вокруг таблицы (управляемое состояние, ref, кнопки).
-const table = TableTestingClass.renderElement(<ControllableTable dataSource={data} ref={ref} />)
+const table = await TableTestingClass.renderElement(<ControllableTable dataSource={data} ref={ref} />)
 ```
 
 ```

@@ -1,5 +1,6 @@
 /* eslint-disable security/detect-object-injection */
 import { ThemeKey } from '@design-system/types'
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { Text as BaseText } from '@src/typography'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
@@ -167,11 +168,15 @@ export const ThemedPalette: React.FC<ThemedPaletteProps> = ({ source }) => {
               <Text width={90}>{color.light.value}</Text>
               <Text width={160}>{hexToRGBA(color.light.value)}</Text>
             </ColorItemRow>
-            <ColorItemRow color={color.dark.value} theme={ThemeKey.Dark}>
+            <ColorItemRow
+              className={getClassNameWithTheme('', ThemeKey.Dark)}
+              color={color.dark.value}
+              theme={ThemeKey.Dark}
+            >
               <div className="ds-colorBox" />
-              <Text width={120} theme={ThemeKey.Dark}>{color.dark.alias}</Text>
-              <Text width={90} theme={ThemeKey.Dark}>{color.dark.value}</Text>
-              <Text width={160} theme={ThemeKey.Dark}>{hexToRGBA(color.dark.value)}</Text>
+              <Text width={120}>{color.dark.alias}</Text>
+              <Text width={90}>{color.dark.value}</Text>
+              <Text width={160}>{hexToRGBA(color.dark.value)}</Text>
             </ColorItemRow>
           </ColorItem>
         )

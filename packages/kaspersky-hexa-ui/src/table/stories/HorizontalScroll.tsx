@@ -80,10 +80,8 @@ export const HorizontalScroll: Story = {
     columns: columns as TableColumn[],
     dataSource,
     resizingMode: 'scroll',
-    afterColumn: true,
     stickyHeader: 0,
     stickyFooter: false,
-    stickySelection: true,
-    useDragDrop: true
+    stickySelection: true
   }
 }

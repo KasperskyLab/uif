@@ -1,0 +1,36 @@
+@use 'sass:map';
+
+$indicator-backgrounds: (
+  accent: var(--common--accent--enabled),
+  not-active: var(--bg--neutral--level_3_active),
+  new: var(--fg--marengo--muted),
+  update: var(--common--violet--enabled),
+  inProgress: var(--common--accent--enabled),
+  resolved: var(--fg--info--muted),
+  inIncident: var(--common--purple--enabled),
+  high: var(--fg--danger--muted),
+  critical: var(--common--danger--enabled),
+  medium: var(--fg--warning--muted),
+  info: var(--common--purple--enabled),
+  positive: var(--common--success--enabled),
+  low: var(--bg--neutral--level_4_active)
+);
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-sizing: content-box;
+  display: inline-block;
+  flex: none;
+}
+
+.border {
+  border: 2px solid var(--border--neutral--inverted_static);
+}
+
+@each $mode, $background in $indicator-backgrounds {
+  .#{$mode} {
+    background: $background;
+  }
+}

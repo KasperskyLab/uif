@@ -1,0 +1,219 @@
+.buttonIndicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+}
+
+.buttonIconWrapper.buttonIconWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  justify-content: flex-end;
+  z-index: 1;
+  padding: 4px;
+  gap: var(--spacing--gap_related);
+  background: var(--bg--neutral_transparent--level_1);
+  border-radius: 8px;
+  width: 100%;
+  min-width: max-content;
+
+  :global(.toolbar-divider) {
+    vertical-align: middle;
+    background: var(--border--neutral--bold);
+    border: 0;
+    display: inline-block;
+    height: 24px;
+    width: 1px;
+  }
+
+  :global(.kl-components-button-text) {
+    display: flex;
+  }
+
+  &:global(.sticky) {
+    position: sticky;
+    top: var(--toolbar-sticky-top, 0px);
+    z-index: 2;
+  }
+
+  &.toolbar.toolbar :global(.ant-input-affix-wrapper) {
+    width: 300px;
+    color: var(--fg--neutral--tertiary);
+    border-color: transparent;
+    margin-right: unset;
+    margin-inline-end: 4px;
+
+    &:global(.hexa-ui-collapsible-search) {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+
+    &:global(.hexa-ui-collapsible-search-hidden) {
+      opacity: 0;
+      width: 0;
+      padding: 0;
+      border: 0;
+      margin-inline-end: -4px;
+    }
+  }
+
+  &.toolbar.toolbar .toolbarButton,
+  :global(.ant-btn) {
+    &, &:focus {
+      &:hover {
+        background-color: var(--bg--neutral--level_3_hover);
+      }
+
+      &:active,
+      &.buttonPressed {
+        background-color: var(--bg--neutral--level_3_active);
+      }
+    }
+
+    &[disabled] {
+      &, &:hover, &:active, &:focus {
+        background: none;
+      }
+    }
+  }
+
+  :global(.toolbar-search-toggle-button),
+  :global(.hexa-ui-toolbar-toggle-button) {
+    border: none;
+    border-radius: 8px;
+    background: none;
+    color: var(--fg--neutral--primary);
+    cursor: pointer;
+
+    input:checked + :global(.hexa-ui-toggle-button.hexa-ui-toggle-button) {
+      background-color: var(--bg--neutral--level_4);
+      color: var(--fg--neutral--primary);
+    }
+
+    &:hover {
+      background-color: var(--bg--neutral--level_3_hover);
+    }
+
+    &:hover input:checked + :global(.hexa-ui-toggle-button.hexa-ui-toggle-button) {
+      background-color: var(--bg--neutral--level_3_hover);
+      color: var(--fg--neutral--primary);
+    }
+  }
+
+  :global(.hexa-ui-toolbar-toggle-button) {
+    :global(.hexa-ui-toggle-button) {
+      padding: 0 12px;
+    }
+
+    input:checked + :global(.hexa-ui-toggle-button) :global(.hexa-ui-toggle-button-text.hexa-ui-toggle-button-text) {
+      color: var(--fg--neutral--primary);
+    }
+
+    &:hover {
+      input:checked + :global(.hexa-ui-toggle-button.hexa-ui-toggle-button) {
+        background-color: var(--bg--neutral--level_4_hover);
+
+        &:active {
+          background-color: var(--bg--neutral--level_4_active);
+        }
+      }
+    }
+
+    &:active {
+      background-color: var(--bg--neutral--level_3_active);
+    }
+
+    input:disabled + :global(.hexa-ui-toggle-button) {
+      &, &:hover, &:active, &:focus {
+        background-color: var(--toolbar--bg);
+      }
+    }
+  }
+}
+
+.autoDropdown {
+  min-width: 0;
+}
+
+.blockLeft {
+  position: absolute;
+  inset-inline-start: 4px;
+}
+
+.blockRight {
+  position: absolute;
+  inset-inline-end: 4px;
+}
+
+.autoDropdownLeft,
+.autoDropdownRight {
+  position: relative;
+}
+
+.autoDropdownLeft {
+  min-width: 0;
+  flex-grow: 1;
+  flex-shrink: initial;
+  overflow: hidden;
+}
+
+.autoDropdownRight {
+  flex-grow: initial;
+  flex-shrink: 0;
+}
+
+.oneElement {
+  position: unset;
+  right: unset;
+  left: unset;
+
+  &, span:global(.ant-input-affix-wrapper) {
+    width: 100%;
+  }
+
+  & > * {
+    justify-content: end;
+  }
+}
+
+.toolbarItemWrap {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.toolbarItemHidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.autoDropdownPart {
+  visibility: visible;
+  flex-shrink: 0;
+  position: absolute;
+  inset-inline-end: 0;
+}
+
+.autoDropdownPartHidden {
+  visibility: hidden;
+}
+
+.wrapperToggleDropdown {
+  color: var(--fg--neutral--primary);
+}
+
+.wrapperToggleDropdownDisabled {
+  color: var(--fg--neutral--tertiary);
+
+  :global(.text-toggle) {
+    color: var(--fg--neutral--tertiary);
+  }
+}

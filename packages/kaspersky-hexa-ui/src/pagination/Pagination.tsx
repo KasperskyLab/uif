@@ -102,11 +102,10 @@ const PaginationView: FC<PaginationViewProps> = ({
 
   const onShowSizeChange = (pageSize: SelectValue) => {
     const pageSizeNum = Number(pageSize)
-    let newCurrent = current
-    if ((current * pageSizeNum) > _totalRoot) {
-      newCurrent = Math.ceil(_totalRoot / pageSizeNum)
-      onChange?.(newCurrent, pageSizeNum)
-    }
+    const maxPage = Math.max(1, Math.ceil(_totalRoot / pageSizeNum))
+    const newCurrent = current > maxPage ? maxPage : current
+
+    onChange?.(newCurrent, pageSizeNum)
 
     if (customOnShowSizeChange) {
       customOnShowSizeChange(newCurrent, pageSizeNum)

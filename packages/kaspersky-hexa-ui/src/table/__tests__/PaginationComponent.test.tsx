@@ -1,5 +1,5 @@
 import { MakeRequired } from '@helpers/index'
-import { configure, render, waitFor } from '@testing-library/react'
+import { configure, waitFor } from '@testing-library/react'
 import React, { useMemo, useState } from 'react'
 
 import { Table, TablePaginationProps } from '..'
@@ -59,7 +59,7 @@ describe('Table pagination module', () => {
         expect(table.pagination.isActivePage(page)).toBe(true)
       }
 
-      const table = TableTestingClass.renderElement(<ControllableTable dataSource={initialData} />)
+      const table = await TableTestingClass.renderElement(<ControllableTable dataSource={initialData} />)
 
       checkActivePage(1)
       expect(table.rows.getCount()).toBe(20)
@@ -71,24 +71,24 @@ describe('Table pagination module', () => {
 
       const newData = generatedData.slice(0, 31)
 
-      table.rerender(<ControllableTable dataSource={newData} />)
+      await table.rerender(<ControllableTable dataSource={newData} />)
 
       checkActivePage(2)
       expect(table.rows.getCount()).toBe(11)
     })
 
-    it('should not override controlled pageSize with default pageSize on mount', () => {
+    it('should not override controlled pageSize with default pageSize on mount', async () => {
       const initialData = generatedData.slice(0, 30)
 
-      const table = TableTestingClass.renderElement(<ControllableTable dataSource={initialData} />)
+      const table = await TableTestingClass.renderElement(<ControllableTable dataSource={initialData} />)
 
       expect(table.rows.getCount()).toBe(20)
     })
   })
 
   describe('Pagination visibility', () => {
-    it('should hide pagination when hideOnSinglePage is true and there is a single page', () => {
-      const table = TableTestingClass.render({
+    it('should hide pagination when hideOnSinglePage is true and there is a single page', async () => {
+      const table = await TableTestingClass.render({
         columns: tableColumns,
         dataSource: generatedData.slice(0, 5),
         pagination: { pageSize: 20, hideOnSinglePage: true }
@@ -97,8 +97,8 @@ describe('Table pagination module', () => {
       expect(table.query('.ant-pagination')).not.toBeInTheDocument()
     })
 
-    it('should still render pagination on a single page when hideOnSinglePage is not set', () => {
-      const table = TableTestingClass.render({
+    it('should still render pagination on a single page when hideOnSinglePage is not set', async () => {
+      const table = await TableTestingClass.render({
         columns: tableColumns,
         dataSource: generatedData.slice(0, 5),
         pagination: { pageSize: 20 }
@@ -107,8 +107,8 @@ describe('Table pagination module', () => {
       expect(table.query('.ant-pagination')).toBeInTheDocument()
     })
 
-    it('should show only the total summary without page controls when showOnlyTotalSummary is true', () => {
-      const table = TableTestingClass.render({
+    it('should show only the total summary without page controls when showOnlyTotalSummary is true', async () => {
+      const table = await TableTestingClass.render({
         columns: tableColumns,
         dataSource: generatedData.slice(0, 30),
         pagination: { pageSize: 20, showOnlyTotalSummary: true }
@@ -124,14 +124,14 @@ describe('Table pagination - server (dataSourceFunction)', () => {
   const serverRows = generatedData
 
   it('should request the initial server page from pagination.current', async () => {
-    const { table, dataSourceFunction } = renderServer({ pagination: { pageSize: 20, current: 3 } }, spyDataSource(serverRows))
+    const { table, dataSourceFunction } = await renderServer({ pagination: { pageSize: 20, current: 3 } }, spyDataSource(serverRows))
     await table.rows.waitForData()
 
     expect(dataSourceFunction.mock.calls[0][0].page).toBe(2) // current 3 → 0-based page 2
   })
 
   it('should request the default page size when pagination.pageSize is omitted', async () => {
-    const { table, dataSourceFunction } = renderServer({ pagination: {} }, spyDataSource(serverRows))
+    const { table, dataSourceFunction } = await renderServer({ pagination: {} }, spyDataSource(serverRows))
     await table.rows.waitForData()
 
     expect(dataSourceFunction.mock.calls[0][0].pageSize).toBe(DEFAULT_TABLE_PAGE_SIZE)
@@ -141,7 +141,7 @@ describe('Table pagination - server (dataSourceFunction)', () => {
     const dataSourceFunction: TableMockProps['dataSourceFunction'] = jest.fn(
       async () => ({ rows: generatedData.slice(0, 5), totalCount: 5, paginationDisabled: true })
     )
-    const { table } = renderServer({ pagination: { pageSize: 20 } }, dataSourceFunction)
+    const { table } = await renderServer({ pagination: { pageSize: 20 } }, dataSourceFunction)
     await table.rows.waitForData()
 
     await waitFor(() => expect(table.query('.ant-pagination')).not.toBeInTheDocument())
@@ -150,14 +150,14 @@ describe('Table pagination - server (dataSourceFunction)', () => {
   it('should render rows even when the server reports an inconsistent totalCount of 0', async () => {
     const rows = generatedData.slice(0, 15)
     const dataSourceFunction: TableMockProps['dataSourceFunction'] = jest.fn(async () => ({ rows, totalCount: 0 }))
-    const { table } = renderServer({ pagination: { pageSize: 20 } }, dataSourceFunction)
+    const { table } = await renderServer({ pagination: { pageSize: 20 } }, dataSourceFunction)
 
     await table.rows.waitForData(rows.length)
     expect(table.rows.getCount()).toBe(rows.length)
   })
 
   it('should let the server totalCount override the pagination.total prop', async () => {
-    const { table } = renderServer({ pagination: { pageSize: 20, total: 999 } }, spyDataSource(serverRows))
+    const { table } = await renderServer({ pagination: { pageSize: 20, total: 999 } }, spyDataSource(serverRows))
     await table.rows.waitForData()
 
     // Серверный totalCount (100) перекрывает проп total (999).
@@ -167,7 +167,7 @@ describe('Table pagination - server (dataSourceFunction)', () => {
   it('should not call onChange on mount when initialised with current > 1 & total: 0', async () => {
     const handleChange = jest.fn()
 
-    TableTestingClass.render({
+    await TableTestingClass.render({
       columns: tableColumns,
       dataSource: generatedData.slice(0, 5),
       pagination:{

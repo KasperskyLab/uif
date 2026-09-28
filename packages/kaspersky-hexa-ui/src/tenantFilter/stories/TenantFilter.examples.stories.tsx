@@ -5,10 +5,11 @@ import React, { useState } from 'react'
 
 import { TenantFilter } from '../TenantFilter'
 import { TenantFilterProps } from '../types'
+
 import { allTenantsKeys, defaultSelectedKeys, flatListArgs, tenantFilterStorySettings } from './TenantFilter.stories'
 
 const meta: Meta<typeof TenantFilter> = {
-  title: 'Other/TenantFilter/Stories',
+  title: 'Deprecated/TenantFilter/Stories',
   component: TenantFilter,
   tags: ['!autodocs'],
   ...tenantFilterStorySettings

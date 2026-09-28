@@ -35,6 +35,10 @@ $modal-modes: (
     icon: var(--common--success--enabled),
     border: var(--common--success--enabled)
   ),
+  onboarding: (
+    icon: none,
+    border: var(--fg--marina--muted)
+  ),
   ai: (
     icon: var(--modal--icon--info),
     border: linear-gradient(
@@ -136,6 +140,10 @@ $modal-modes: (
     @include apply-modal-mode(ai);
   }
 
+  &.onboarding {
+    @include apply-modal-mode(onboarding);
+  }
+
   &.showTopBorder {
     :global(.ant-modal-header) {
       border-bottom-color: var(--border--neutral--bold);
@@ -233,6 +241,10 @@ $modal-modes: (
   text-align: start;
 }
 
+.footerExtra {
+  min-width: 0;
+}
+
 .icon {
   flex-shrink: 0;
   padding: 0;
@@ -296,4 +308,3 @@ $modal-modes: (
     }
   }
 }
-

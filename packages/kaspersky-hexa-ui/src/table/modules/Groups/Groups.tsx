@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { TableComponent } from '../index'
 
 import { groupTitleRenderer } from './GroupTitle'
-import { areGroupsPropsEqual, createGroupsMap, defaultSorter, mapMap } from './helpers'
+import { createGroupsMap, defaultSorter, mapMap } from './helpers'
 import { GroupTitleItem } from './types'
 
 const EMPTY_GROUP_KEYS: Key[] = []
@@ -226,4 +226,4 @@ export const Groups = <T extends TableRecord = TableRecord> (
       }
     />
   )
-}, areGroupsPropsEqual) as TableComponent<T>
+}) as TableComponent<T>

@@ -18,12 +18,12 @@ export const getCheckboxCss = () => css`
     flex-direction: row;
 
     > :not(:first-child) {
-      margin-left: 4px;
+      margin-inline-start: 4px;
     }
   }
 
   &.ant-checkbox-wrapper + &.ant-checkbox-wrapper {
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 
   .ant-checkbox {
@@ -51,8 +51,8 @@ export const getCheckboxCss = () => css`
     &::after {
       border-color: var(--checkbox--icon--base--enabled);
       border-radius: 1px;
-      border-bottom-left-radius: 2px;
-      border-top-right-radius: 2px;
+      border-end-start-radius: 2px;
+      border-start-end-radius: 2px;
       width: 5px;
       height: 7.5px;
     }

@@ -79,7 +79,6 @@ export const SubmenuRow: FC<RowViewProps & { hasChildren: boolean }> = ({
       {collapsible && (
         <ActionButton
           className={styles.arrowButton}
-          interactive={false}
           onClick={onCollapsibleClick}
           icon={row.opened ? <ArrowDownSolid /> : <ArrowRightSolid className={styles.arrowIcon} />}
           size="small"

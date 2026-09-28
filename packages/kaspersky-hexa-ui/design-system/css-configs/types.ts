@@ -6,7 +6,6 @@ import { LinkColorConfig, LinkSize, LinkSizeConfig } from '@src/link/types'
 import { LoadingOverlayColorConfig } from '@src/loading-overlay/types'
 import { LockGroupDesignTokens } from '@src/lock-group/types'
 import { PlaceholderColorConfig, PlaceholderMode, PlaceholderSize, PlaceholderSizeConfig } from '@src/placeholder/types'
-import { ProgressBarColorConfig, ProgressBarMode, ProgressBarSize, ProgressBarSizeConfig } from '@src/progress-bar/types'
 import { SegmentedButtonColorConfig, SegmentedButtonMode, SegmentedButtonSize, SegmentedButtonSizeConfig } from '@src/segmented-button/types'
 import { SelectColorConfig } from '@src/select/types'
 import { StatusCardColorConfig, StatusCardMode, StatusCardSize, StatusCardSizeConfig } from '@src/status-card/types'
@@ -44,10 +43,6 @@ export type ComponentsConfig = {
     placeholder: ComponentConfig<
       Record<PlaceholderMode, PlaceholderColorConfig>,
       Record<PlaceholderSize, PlaceholderSizeConfig>
-    >,
-    progressBar: ComponentConfig<
-      Record<ProgressBarMode, ProgressBarColorConfig>,
-      Record<ProgressBarSize, ProgressBarSizeConfig>
     >,
     segmentedButton: ComponentConfig<
       Record<SegmentedButtonMode, SegmentedButtonColorConfig>,

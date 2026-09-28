@@ -19,11 +19,11 @@ export interface RenderServerResult {
   dataSourceFunction: jest.Mock
 }
 
-export const renderServer = (
+export const renderServer = async (
   props: Partial<TableMockProps> = {},
   dataSourceFunction: TableMockProps['dataSourceFunction'] = spyDataSource()
-): RenderServerResult => {
-  const table = TableTestingClass.render({
+): Promise<RenderServerResult> => {
+  const table = await TableTestingClass.render({
     testId: DEFAULT_SERVER_TEST_ID,
     columns: tableColumns,
     dataSource: undefined,

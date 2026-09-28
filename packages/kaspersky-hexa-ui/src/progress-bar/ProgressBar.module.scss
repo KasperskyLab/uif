@@ -1,0 +1,103 @@
+@use 'sass:math';
+
+$progress-bar-modes: (
+  'critical': var(--common--danger--enabled),
+  'warning': var(--common--warning--enabled),
+  'success': var(--common--success--enabled),
+  'accent': var(--common--accent--enabled),
+  'neutralBold': var(--bg--neutral_transparent--level_4),
+  'neutralSubtle': var(--bg--neutral--level_4),
+  'orange': var(--common--orange--enabled),
+  'grass': var(--common--grass--enabled),
+  'violet': var(--common--violet--enabled),
+  'purple': var(--common--purple--enabled),
+  'coldgray': var(--common--info--enabled)
+);
+
+$progress-bar-sizes: (
+  'small': 4px,
+  'medium': 8px,
+  'large': 12px
+);
+
+$circular-size: 24px;
+$circular-icon-size: 16px;
+$circular-stroke-width: 2px;
+$circular-icon-offset: math.div($circular-size - $circular-icon-size, 2);
+
+@each $mode, $color in $progress-bar-modes {
+  .#{$mode} {
+    --progress-bar-color: #{$color};
+  }
+}
+
+@each $size, $height in $progress-bar-sizes {
+  .#{$size} {
+    --progress-bar-height: #{$height};
+  }
+}
+
+.progressBar {
+  --progress-bar-background: transparent;
+
+  height: var(--progress-bar-height);
+  border-radius: var(--progress-bar-height);
+  width: var(--progress-bar-width, 100%);
+  background: var(--progress-bar-background);
+
+  &.withBackground {
+    --progress-bar-background: var(--border--neutral--medium);
+  }
+
+  .track {
+    background: var(--progress-bar-color); 
+    height: var(--progress-bar-height);
+    border-radius: var(--progress-bar-height);
+    width: calc(var(--progress-bar-track) * 1%);
+    transition: width 1s;
+    transition-timing-function: ease-in-out;
+  }
+}
+
+.circularProgressBar {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  color: var(--progress-bar-color);
+
+  &,
+  > svg {
+    width: $circular-size;
+    height: $circular-size;
+  }
+
+  .circularBackground,
+  .circularTrack {
+    fill: none;
+    stroke-width: $circular-stroke-width;
+  }
+
+  .circularBackground {
+    stroke: var(--border--neutral--medium);
+  }
+
+  .circularTrack {
+    stroke: var(--progress-bar-color);
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: calc(100 - var(--progress-bar-track));
+    opacity: 1;
+    transition: stroke-dashoffset 1s ease-in-out, stroke 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  }
+
+  &.empty .circularTrack {
+    opacity: 0;
+  }
+
+  .circularIcon {
+    display: flex;
+    position: absolute;
+    top: $circular-icon-offset;
+    left: $circular-icon-offset;
+  }
+}

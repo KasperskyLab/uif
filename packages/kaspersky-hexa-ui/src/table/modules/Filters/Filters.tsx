@@ -149,7 +149,7 @@ function FiltersModule<T extends TableRecord = TableRecord> ({
     const defaultFilters = defaultFiltersProps ?? predefinedFilters
     if (!externalFilters && activeFilters) {
       const filtersFromColumn = convertActiveFilterToFilterFromColumn(activeFilters)
-        .reduce<Record<string, FilterFromColumn[]>>((acc, filter) => {
+        .reduce<Record<string, FilterFromColumn<T>[]>>((acc, filter) => {
           acc[filter.name] = acc[filter.name] || []
           acc[filter.name].push(filter)
           return acc

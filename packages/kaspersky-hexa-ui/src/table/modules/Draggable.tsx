@@ -75,6 +75,22 @@ const setDragHandleHoverHidden = (isHidden: boolean, body: HTMLElement) => {
   }
 }
 
+export const DND_COLUMN = {
+  title: '',
+  key: DND_COLUMN_KEY,
+  dataIndex: DND_COLUMN_KEY,
+  width: 0,
+  resizing: {
+    disabled: true
+  },
+  render: (_: any, row: TableRecord) => (
+    !row._disabled && !row._outOfDndContext && <DragHandle />
+  ),
+  onCell: () => ({
+    className: 'hexa-ui-dnd-column'
+  })
+}
+
 export const DraggableTable = <T extends TableRecord = TableRecord> (
   Component: TableComponent<T>
 ): TableComponent<T> => function DraggableTableModule (props) {
@@ -99,21 +115,7 @@ export const DraggableTable = <T extends TableRecord = TableRecord> (
   useEffect(() => {
     if (props.useDragDrop && props.columns?.length) {
       setColumns([
-        {
-          title: '',
-          key: DND_COLUMN_KEY,
-          dataIndex: DND_COLUMN_KEY,
-          width: 0,
-          resizing: {
-            disabled: true
-          },
-          render: (_, row: TableRecord) => (
-            !row._disabled && !row._outOfDndContext && <DragHandle />
-          ),
-          onCell: () => ({
-            className: 'hexa-ui-dnd-column'
-          })
-        },
+        DND_COLUMN,
         ...props.columns
       ])
     }

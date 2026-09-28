@@ -26,16 +26,16 @@ const data: TableRow[] = [{ key: 'r1', k1: 'v1', k2: 'v2' }]
 const renderTable = () => TableTestingClass.render({ columns, dataSource: data })
 
 describe('Table LocalizeColumnTitles module', () => {
-  it('should run string column titles through i18n t()', () => {
-    const table = renderTable()
+  it('should run string column titles through i18n t()', async () => {
+    const table = await renderTable()
 
     const headers = table.columns.getHeaders().map(header => header.textContent)
     expect(headers).toContain(`T:${TITLE_KEY}`)
     expect(headers).not.toContain(TITLE_KEY)
   })
 
-  it('should leave a non-string (ReactNode) title unchanged', () => {
-    renderTable()
+  it('should leave a non-string (ReactNode) title unchanged', async () => {
+    await renderTable()
 
     const nodeTitle = screen.getByTestId('node-title')
     expect(nodeTitle).toHaveTextContent('Node title')

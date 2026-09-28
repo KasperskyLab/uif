@@ -12,6 +12,6 @@
   "component": "Tooltip",
   "description": "Компонент для отрисовки подсказок. В качестве основы используется Tooltip из библиотеки Antd.",
   "usage": "Элемент появляется при наведении на родительский элемент, к которому присвоен Tooltip",
-  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=29814%3A96714",
-  "pixsoView": "https://pixso.net/app/design/4XYVGB274R5-e8c7lGsxDA"
+  "designLink": "",
+  "pixsoView": ""
 }

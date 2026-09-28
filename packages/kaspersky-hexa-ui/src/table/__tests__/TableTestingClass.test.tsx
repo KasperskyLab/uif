@@ -20,8 +20,8 @@ const baseProps: Partial<TableMockProps> = {
 
 describe('TableTestingClass', () => {
   describe('rows', () => {
-    it('exposes rows count and cell text', () => {
-      const table = TableTestingClass.render(baseProps)
+    it('exposes rows count and cell text', async () => {
+      const table = await TableTestingClass.render(baseProps)
 
       expect(table.getInstance()).toBeInTheDocument()
       // pageSize = 3 → на странице 3 строки
@@ -34,7 +34,7 @@ describe('TableTestingClass', () => {
   describe('selection', () => {
     it('toggles a row checkbox and reports checked state', async () => {
       const processSelection = jest.fn()
-      const table = TableTestingClass.render({
+      const table = await TableTestingClass.render({
         ...baseProps,
         rowSelection: { builtInRowSelection: true, processSelection }
       })
@@ -51,7 +51,7 @@ describe('TableTestingClass', () => {
 
     it('selects all rows via header menu', async () => {
       const processSelection = jest.fn()
-      const table = TableTestingClass.render({
+      const table = await TableTestingClass.render({
         ...baseProps,
         rowSelection: { builtInRowSelection: true, processSelection }
       })
@@ -66,7 +66,7 @@ describe('TableTestingClass', () => {
 
   describe('sorting', () => {
     it('sorts a column ascending', async () => {
-      const table = TableTestingClass.render({ ...baseProps, pagination: undefined })
+      const table = await TableTestingClass.render({ ...baseProps, pagination: undefined })
 
       await table.sorting.sortBy('fullname', 'asc')
 
@@ -77,14 +77,14 @@ describe('TableTestingClass', () => {
 
   describe('filters', () => {
     it('adds and applies a sidebar filter', async () => {
-      const table = TableTestingClass.render({ ...baseProps, dataSource: generatedData, pagination: { pageSize: 20 } })
+      const table = await TableTestingClass.render({ ...baseProps, dataSource: generatedData, pagination: { pageSize: 20 } })
 
       const initialTotal = table.pagination.getTotal()
 
-      table.filters.openSidebar()
+      await table.filters.openSidebar()
       await table.filters.add()
       table.filters.setValue(0, 'Evgenija')
-      table.filters.apply()
+      await table.filters.apply()
 
       await waitFor(() => {
         expect(table.pagination.getTotal()).toBeLessThan(initialTotal)
@@ -93,8 +93,8 @@ describe('TableTestingClass', () => {
   })
 
   describe('pagination', () => {
-    it('navigates between pages', () => {
-      const table = TableTestingClass.render({ ...baseProps, dataSource: generatedData, pagination: { pageSize: 20 } })
+    it('navigates between pages', async () => {
+      const table = await TableTestingClass.render({ ...baseProps, dataSource: generatedData, pagination: { pageSize: 20 } })
 
       expect(table.pagination.getActivePage()).toBe(1)
 
@@ -104,8 +104,8 @@ describe('TableTestingClass', () => {
   })
 
   describe('toolbar', () => {
-    it('renders the toolbar with the filter sidebar button', () => {
-      const table = TableTestingClass.render(baseProps)
+    it('renders the toolbar with the filter sidebar button', async () => {
+      const table = await TableTestingClass.render(baseProps)
 
       expect(table.toolbar.getRoot()).toBeInTheDocument()
       expect(table.toolbar.getCustomItem('missing')).not.toBeInTheDocument()

@@ -152,8 +152,8 @@
           }
         },
         "resetSettingsModal": {
-          "content": "すべてのタスクは既定の設定にリセットされます。",
-          "header": "Reset columns settings?",
+          "content": "すべてのタスクは既定の設定にリセットされます",
+          "header": "列の設定をリセットしますか？",
           "firstButton": "リセット",
           "secondButton": "キャンセル"
         },

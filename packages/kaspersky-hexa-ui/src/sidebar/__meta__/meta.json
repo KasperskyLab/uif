@@ -13,6 +13,6 @@
   "component": "Sidebar",
   "description": "В качестве основы используется AntdDrawer из библиотеки Antd.",
   "usage": "Боковая панель, область навигации. Появлется при нажатии на элемент с действием.",
-  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=1250%3A8445",
-  "pixsoView": "https://pixso.net/app/design/S0zYUrTjePHNAGugTmgz5Q"
+  "designLink": "",
+  "pixsoView": ""
 }

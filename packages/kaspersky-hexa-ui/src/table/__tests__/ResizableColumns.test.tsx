@@ -42,7 +42,7 @@ describe('ResizableColumns', () => {
       }
     })
 
-    const table = TableTestingClass.render({
+    const table = await TableTestingClass.render({
       columns: tableColumns,
       dataSource: generatedData,
       storageKey: STORAGE_KEY,

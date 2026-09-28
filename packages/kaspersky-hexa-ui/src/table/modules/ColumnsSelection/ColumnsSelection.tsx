@@ -1,5 +1,4 @@
 import { Portal } from '@helpers/components/Portal'
-import { useUpdateEffect } from '@helpers/useUpdateEffect'
 import { Button } from '@src/button'
 import { Modal, ModalProps } from '@src/modal'
 import { RadioOption } from '@src/radio'
@@ -19,14 +18,18 @@ import React, {
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { isColumnReadonly } from '../../helpers/common'
-import { ITableProps } from '../../types'
 import { TableComponent } from '../index'
+import { getStringWithCondition } from '../SortingAndFilters/helpers'
 
 import ColumnSelectionActions from './ColumnSelectionActions'
 import { ColumnsSelector, hasSelected } from './ColumnsSelector'
 import { GroupingSelector } from './GroupingSelector'
-import { applyCurrentColumnsState, isSameColumnsOrder, saveColumnsState, sortColumns } from './helpers'
+import {
+  getPreparedColumns,
+  saveColumnsState,
+  SIDEBAR_SETTINGS_CLASS,
+  sortColumns
+} from './helpers'
 
 const TabsPanel = styled.div`
   .ant-tabs-nav-list {
@@ -36,33 +39,6 @@ const TabsPanel = styled.div`
     margin: 0;
   }
 `
-
-const prepareColumns = <T extends TableRecord = TableRecord> (
-  columns: TableColumn<T>[],
-  expandableConfig: ITableProps<T>['expandable']
-) =>
-  columns.map((column) => {
-    const isReadonly = isColumnReadonly(column)
-
-    if (isReadonly) {
-      return column
-    }
-
-    const result = { ...column }
-
-    if (expandableConfig?.expandColumnName === result.key) {
-      result.show = true
-      result.hideColumnAvailable = false
-    }
-
-    if (result.onlyForFiltering) {
-      result.show = false
-    } else if (result.show === undefined) {
-      result.show = true
-    }
-
-    return result
-  })
 
 const prepareGrouping = <T extends TableRecord = TableRecord> (columns: TableColumn<T>[], groupBy: string, dataSource: T[]) => {
   const columnExistsInRows = (key: TableColumn['key']) =>
@@ -97,29 +73,47 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
 
   const { t } = useTranslation()
 
-  const getInitialBaseColumns = () =>
-    sortColumns(props.columns || [], props.storageKey)
-
   const [activeTab, setActiveTab] = useState<Tab | undefined>(() => {
     if (showColumnsTab) return 'columns'
     if (showGroupingTab) return 'grouping'
     return 'columns'
   })
 
-  const [baseColumns, setBaseColumns] = useState<TableColumn<T>[]>(
-    getInitialBaseColumns
-  )
-  const [tableColumns, setTableColumnsState] = useState<TableColumn<T>[]>(prepareColumns(getInitialBaseColumns(), props.expandable))
-  const [tableGroupBy, setTableGroupBy] = useState(props.groupBy ?? props.defaultGroupBy ?? '')
-  const [draftColumns, setDraftColumns] = useState<TableColumn<T>[]>(tableColumns)
-  const [draftGroupBy, setDraftGroupBy] = useState<string>(tableGroupBy)
+  const prevPropsColumnsRef = useRef<TableColumn<T>[]>()
+  const tableColumnsRef = useRef(props.columns!)
+
+  const baseColumns = useMemo(() => (
+    getPreparedColumns({
+      nextPropsColumns: props.columns!,
+      prevPropsColumns: prevPropsColumnsRef.current,
+      tableColumns: tableColumnsRef.current,
+      storageKey: props.storageKey,
+      expandableConfig: props.expandable
+    })
+  ), [props.columns, props.storageKey, props.expandable])
+
+  const baseGroupBy = useMemo(() => {
+    let newGroupBy = props.groupBy
+    if (props.storageKey) {
+      const storageValue = getPersistentStorageValue({
+        storageKey: props.storageKey,
+        featureKey: 'groupBy'
+      })
+      newGroupBy = newGroupBy ?? storageValue
+    }
+
+    return newGroupBy ?? props.defaultGroupBy ?? ''
+  }, [props.groupBy, props.defaultGroupBy, props.storageKey])
+
+  const [draftColumns, setDraftColumns] = useState<TableColumn<T>[]>(baseColumns)
+  const [draftGroupBy, setDraftGroupBy] = useState<string>(baseGroupBy)
+
+  const [tableColumns, setTableColumnsState] = useState<TableColumn<T>[]>(baseColumns)
+  const [tableGroupBy, setTableGroupBy] = useState<string>(baseGroupBy)
+
   const [searchValue, setSearchValue] = useState('')
   const [groupingOptions, setGroupingOptions] = useState<RadioOption[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const prevPropsColumnsRef = useRef(props.columns)
-  const prevStorageKeyRef = useRef(props.storageKey)
-  const tableColumnsRef = useRef(tableColumns)
 
   const updateContext = useTableUpdate<T>()
 
@@ -131,40 +125,8 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
   }
 
   useEffect(() => {
-    const nextColumns = props.columns || []
-    const prevColumns = prevPropsColumnsRef.current || []
-
-    const storageKeyChanged = prevStorageKeyRef.current !== props.storageKey
-    const columnsChanged = !isSameColumnsOrder(prevColumns, nextColumns)
-
     prevPropsColumnsRef.current = props.columns
-    prevStorageKeyRef.current = props.storageKey
-
-    if (!storageKeyChanged && !columnsChanged) {
-      setBaseColumns(() =>
-        applyCurrentColumnsState(nextColumns, tableColumnsRef.current, prevColumns))
-
-      return
-    }
-
-    setBaseColumns(sortColumns(nextColumns, props.storageKey))
-  }, [props.columns, props.storageKey])
-
-  useEffect(() => {
-    let newGroupBy = ''
-    if (props.storageKey) {
-      const storageValue = getPersistentStorageValue({
-        storageKey: props.storageKey,
-        featureKey: 'groupBy'
-      })
-      newGroupBy = props.groupBy ?? storageValue ?? props.defaultGroupBy ?? ''
-    } else {
-      newGroupBy = props.groupBy ?? props.defaultGroupBy ?? ''
-    }
-
-    setTableGroupBy(newGroupBy)
-    props.onGroupByChange?.(newGroupBy)
-  }, [props.groupBy, props.defaultGroupBy, props.storageKey])
+  }, [props.columns])
 
   useEffect(() => {
     updateContext({ groupBy: tableGroupBy })
@@ -174,8 +136,9 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
         featureKey: 'groupBy',
         updatedValue: tableGroupBy
       })
+      saveColumnsState(tableColumns, props.storageKey)
     }
-  }, [tableGroupBy, props.storageKey, updateContext])
+  }, [tableColumns, tableGroupBy, props.storageKey, updateContext])
 
   useEffect(() => {
     if (activeTab === 'columns' && !showColumnsTab) {
@@ -190,16 +153,15 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
   }, [activeTab, showColumnsTab, showGroupingTab])
 
   useEffect(() => {
-    setTableColumns(prepareColumns(baseColumns, props.expandable))
-  }, [baseColumns, props.expandable])
+    setTableColumns(baseColumns)
+    setDraftColumns(baseColumns)
+  }, [baseColumns])
 
-  useUpdateEffect(() => {
-    setDraftColumns(tableColumns)
-  }, [tableColumns])
-
-  useUpdateEffect(() => {
-    setDraftGroupBy(tableGroupBy)
-  }, [tableGroupBy])
+  useEffect(() => {
+    setTableGroupBy(baseGroupBy)
+    setDraftGroupBy(baseGroupBy)
+    props.onGroupByChange?.(baseGroupBy)
+  }, [baseGroupBy])
 
   useEffect(() => {
     if (activeTab === 'grouping') {
@@ -211,7 +173,7 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
       setGroupingOptions(options)
       setDraftGroupBy(groupByValue)
     }
-  }, [activeTab])
+  }, [activeTab, draftColumns, draftGroupBy])
 
   const closeColumnsSelector = () => {
     setDraftGroupBy(tableGroupBy)
@@ -222,14 +184,18 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
   }
 
   const resetColumnsSettings = () => {
-    const defaultColumns = prepareColumns(baseColumns, props.expandable)
+    // set original columns with expandColumnName and onlyForFiltering handled, but without LS
+    const defaultColumns = getPreparedColumns({
+      nextPropsColumns: props.columns!,
+      prevPropsColumns: undefined,
+      tableColumns: props.columns!,
+      storageKey: undefined,
+      expandableConfig: props.expandable
+    })
     setDraftColumns(defaultColumns)
 
-    setTableColumns(defaultColumns)
-
-    const defaultGroupBy = props.groupBy ?? props.defaultGroupBy ?? ''
-    setDraftGroupBy(defaultGroupBy)
-    setTableGroupBy(defaultGroupBy)
+    // set original groupBy without LS
+    setDraftGroupBy(props.groupBy ?? props.defaultGroupBy ?? '')
 
     props.onResetColumnsSettings?.()
 
@@ -239,7 +205,6 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
 
   const saveColumnsSelector = () => {
     setTableColumns(draftColumns)
-    saveColumnsState(draftColumns, props.storageKey)
     setTableGroupBy(draftGroupBy)
     props.onGroupByChange?.(draftGroupBy)
     props.onColumnsChange?.(draftColumns)
@@ -250,27 +215,13 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
 
   const title = t('table.columnsSettings.header')
 
+  // TODO: include groupBy
   const isSaveDisabled = useMemo(
     () => activeTab === 'columns' && !hasSelected(draftColumns),
     [activeTab, draftColumns]
   )
 
   const hideTabsHeader = !showColumnsHeader && !showGroupingHeader
-
-  const handleColumnsChange = (updatedFilteredColumns: TableColumn<T>[]) => {
-    setDraftColumns((prevColumns) => {
-      if (!searchValue) {
-        return updatedFilteredColumns
-      }
-
-      return prevColumns.map((col) => {
-        const updated = updatedFilteredColumns.find(
-          (c) => c.key === col.key
-        )
-        return updated ?? col
-      })
-    })
-  }
 
   const ActionsButtons: ModalProps['actions'] = {
     FIRST_ACTION: {
@@ -288,6 +239,10 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
 
   const canShowSelector = showColumnsTab || showGroupingTab
 
+  const sortedColumns = useMemo(() => (
+    sortColumns(tableColumns)
+  ), [tableColumns])
+
   return (
     <>
       {canShowSelector && (
@@ -304,6 +259,7 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
             onClose={closeColumnsSelector}
             visible={showColumnsSelector}
             title={title}
+            className={getStringWithCondition(SIDEBAR_SETTINGS_CLASS, props.testId ?? props.klId)}
             subHeader={
               !hideTabsHeader && (
                 <TabsPanel>
@@ -371,9 +327,11 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
               {activeTab === 'columns' && (
                 <ColumnsSelector
                   columns={draftColumns}
-                  setColumns={handleColumnsChange}
+                  setColumns={setDraftColumns}
                   draggingAvailable={searchValue.trim() === ''}
                   searchValue={searchValue}
+                  testId={props.testId}
+                  klId={props.klId}
                 />
               )}
               {activeTab === 'grouping' && (
@@ -388,7 +346,7 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
           </Sidebar>
         </Portal>
       )}
-      <Component {...props} columns={tableColumns} groupBy={tableGroupBy} />
+      <Component {...props} columns={sortedColumns} groupBy={tableGroupBy} />
     </>
   )
 }

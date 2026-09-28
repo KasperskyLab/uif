@@ -1,30 +1,14 @@
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { shouldForwardProp } from '@helpers/shouldForwardProp'
 import { showDeprecationWarn } from '@helpers/showDeprecationWarn'
 import cn from 'classnames'
 import React, { FC } from 'react'
-import styled from 'styled-components'
 
-import { IndicatorModes, IndicatorProps, IndicatorViewProps } from './types'
-import { useThemedIndicator } from './useThemedIndicator'
-
-const Dot = styled.span.withConfig({ shouldForwardProp: (prop) => shouldForwardProp(prop, (p) => !['borderBackground', 'cssConfig'].includes(p)) })`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  box-sizing: content-box;
-  display: inline-block;
-  background: ${(props: IndicatorViewProps) => props.cssConfig.background};
-  ${(props: IndicatorViewProps) => {
-    if (!props.border) return null
-    const borderColor = props.borderBackground || props.cssConfig.border
-    return `border: 2px solid ${borderColor};`
-  }}
-  flex: none;
-`
+import styles from './Indicator.module.scss'
+import { IndicatorModes, IndicatorProps } from './types'
 
 export const Indicator: FC<IndicatorProps> = (rawProps: IndicatorProps) => {
-  const { mode = 'accent', ...notDeprecatedProps } = rawProps
+  const { mode = 'accent', theme, ...notDeprecatedProps } = rawProps
 
   let notDeprecatedMode = mode
   if (!IndicatorModes.includes(mode)) {
@@ -32,9 +16,22 @@ export const Indicator: FC<IndicatorProps> = (rawProps: IndicatorProps) => {
     showDeprecationWarn('mode', mode)
   }
 
-  const themedProps = useThemedIndicator({ ...notDeprecatedProps, mode: notDeprecatedMode })
-  const { testAttributes, ...props } = useTestAttribute(themedProps)
+  const { testAttributes, ...props } = useTestAttribute(notDeprecatedProps)
+  const { border, className } = props
+
   return (
-    <Dot {...testAttributes} {...props} className={cn('hexa-ui-indicator', props.className)} />
+    <span
+      {...testAttributes}
+      className={getClassNameWithTheme(
+        cn(
+          'hexa-ui-indicator',
+          styles.dot,
+          styles[notDeprecatedMode],
+          border && styles.border,
+          className
+        ),
+        theme
+      )}
+    />
   )
 }

@@ -24,7 +24,7 @@ export enum ActionsMap {
 
 type ActionConfig = Partial<Record<keyof typeof ActionsMap, ActionType>>
 
-export type ModalMode = 'default' | 'warning' | 'error' | 'success' | 'ai'
+export type ModalMode = 'default' | 'warning' | 'error' | 'success' | 'ai' | 'onboarding'
 
 export type ModalSize = 'small' | 'large'
 
@@ -53,6 +53,8 @@ export type ModalProps = Omit<AntdModalProps, AntdModalPropsToOmit> & {
   actions?: ActionConfig,
   /** More buttons for modal, need for backward compatibility with console Confirmation Popup */
   customButtons?: ActionType[],
+  /** Extra footer content. For Onboarding component only */
+  footerExtra?: ReactNode,
   /** Color mode */
   mode?: ModalMode,
   /** Size */

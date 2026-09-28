@@ -1,5 +1,5 @@
 import { TableColumn } from '@src/table'
-import { MODES, renderByMode, TableMode } from '@src/table/test-utils/renderByMode'
+import { MODES, renderByMode, renderByModeSync, TableMode } from '@src/table/test-utils/renderByMode'
 import { act, configure, render, waitFor } from '@testing-library/react'
 import React from 'react'
 
@@ -75,7 +75,7 @@ describe('Table Search module', () => {
 
 describe.each(MODES)('Table search (client vs server) - $description', ({ mode }) => {
   it('should narrow rows to the search query (server receives searchString)', async () => {
-    const { table, dataSourceFunction } = renderSearch(mode)
+    const { table, dataSourceFunction } = await renderSearch(mode)
     await table.rows.waitForData()
 
     table.search.type('Efimova')
@@ -94,7 +94,7 @@ describe.each(MODES)('Table search (client vs server) - $description', ({ mode }
   })
 
   it('should restore rows when the search is cleared', async () => {
-    const { table, dataSourceFunction } = renderSearch(mode)
+    const { table, dataSourceFunction } = await renderSearch(mode)
     await table.rows.waitForData()
 
     table.search.type('Efimova')
@@ -116,7 +116,7 @@ describe('Table search - server only', () => {
   it('should coalesce rapid keystrokes into a single request', async () => {
     jest.useFakeTimers()
     try {
-      const { table, dataSourceFunction } = renderByMode('server', data, {
+      const { table, dataSourceFunction } = renderByModeSync('server', data, {
         columns: minimalColumns,
         toolbar: { showSearch: true }
       })
@@ -140,7 +140,7 @@ describe('Table search - server only', () => {
 
   it('should refetch from context but not call onSearch while typing', async () => {
     const onSearch = jest.fn()
-    const { table, dataSourceFunction } = renderByMode('server', data, {
+    const { table, dataSourceFunction } = await renderByMode('server', data, {
       columns: tableColumns,
       toolbar: { showSearch: true },
       onSearch
@@ -159,7 +159,7 @@ describe('Table search - client only', () => {
   const lastSearchProps = () => mockSearchRender.mock.calls[mockSearchRender.mock.calls.length - 1][0]
 
   it('should coalesce keystrokes and filter only once the search is submitted', async () => {
-    const { table } = renderSearch('client')
+    const { table } = await renderSearch('client')
     await table.rows.waitForData()
 
     table.search.type('Efi')
@@ -175,7 +175,7 @@ describe('Table search - client only', () => {
 
   it('should call onSearch with an empty string when the search is cleared', async () => {
     const onSearch = jest.fn()
-    renderByMode('client', data, { columns: minimalColumns, toolbar: { showSearch: true }, onSearch })
+    await renderByMode('client', data, { columns: minimalColumns, toolbar: { showSearch: true }, onSearch })
 
     act(() => { lastSearchProps().onChange('Efimova') })
     act(() => { lastSearchProps().onClearClick() })
@@ -183,12 +183,12 @@ describe('Table search - client only', () => {
     expect(onSearch).toHaveBeenLastCalledWith('')
   })
 
-  it('should treat regex special characters in the query literally', () => {
+  it('should treat regex special characters in the query literally', async () => {
     const specialData = [
       { ...data[0], key: 'special', fullname: 'John (Admin' },
       { ...data[1], key: 'plain', fullname: 'Jane Doe' }
     ]
-    const { table } = renderByMode('client', specialData, {
+    const { table } = await renderByMode('client', specialData, {
       columns: minimalColumns,
       toolbar: { showSearch: true }
     })
@@ -202,12 +202,18 @@ describe('Table search - client only', () => {
 
   describe('clientSearchFields', () => {
     const dataSource = [
-      { ...data[0], key: 'sales', fullname: 'John Smith', group: 'Sales' },
+      {
+        ...data[0],
+        key: 'sales',
+        fullname: 'John Smith',
+        group: 'Sales',
+        details: { ...data[0].details, email: 'john_smith@somebox.com' }
+      },
       { ...data[1], key: 'hr', fullname: 'Jane Admin', group: 'HR' }
     ]
 
-    it('should restrict client search to only the listed clientSearchFields', () => {
-      const table = renderSearch('client', { clientSearchFields: ['fullname'], dataSource }).table
+    it('should restrict client search to only the listed clientSearchFields', async () => {
+      const { table } = await renderSearch('client', { clientSearchFields: ['fullname'], dataSource })
 
       table.search.type('Sales')
       table.search.submit()
@@ -221,8 +227,18 @@ describe('Table search - client only', () => {
       expect(table.rows.getByKey('hr')).toBeNull()
     })
 
-    it('should keep searching all string fields when clientSearchFields is empty', () => {
-      const table = renderSearch('client', { clientSearchFields: [], dataSource }).table
+    it('should search by a nested key passed in clientSearchFields', async () => {
+      const { table } = await renderSearch('client', { clientSearchFields: ['details.email'], dataSource })
+
+      table.search.type('john_smith')
+      table.search.submit()
+
+      expect(table.rows.getByKey('sales')).not.toBeNull()
+      expect(table.rows.getByKey('hr')).toBeNull()
+    })
+
+    it('should keep searching all string fields when clientSearchFields is empty', async () => {
+      const { table } = await renderSearch('client', { clientSearchFields: [], dataSource })
 
       table.search.type('Sales')
       table.search.submit()

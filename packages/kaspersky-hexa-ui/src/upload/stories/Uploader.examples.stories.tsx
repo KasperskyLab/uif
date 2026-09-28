@@ -13,6 +13,20 @@ import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
 
 import { type UploaderProps, type UploadFile } from '../types'
 import { Uploader } from '../Uploader'
+import {
+  downloadableFileList,
+  filesWithoutDescription,
+  longErrorFileList,
+  longNameFileList,
+  maxCountFileList,
+  overflowFileList,
+  oversizedFileList,
+  progressFileList,
+  singleDoneFileList,
+  statusFileList,
+  uploadingWithoutPercentFileList,
+  zeroSizeFileList
+} from './fileListExamples'
 import { uploaderStorySettings } from './Uploader.stories'
 
 const meta: Meta<UploaderProps> = {
@@ -25,6 +39,25 @@ const meta: Meta<UploaderProps> = {
 export default meta
 
 type Story = StoryObj<UploaderProps>
+
+function ControlledUploader ({ fileList, onChange, ...props }: UploaderProps) {
+  const [files, setFiles] = React.useState(fileList)
+
+  React.useEffect(() => {
+    setFiles(fileList)
+  }, [fileList])
+
+  return (
+    <Uploader
+      {...props}
+      fileList={files}
+      onChange={info => {
+        setFiles(info.fileList)
+        onChange?.(info)
+      }}
+    />
+  )
+}
 
 export const Size: Story = {
   render: args => renderVariants(
@@ -246,6 +279,228 @@ export const FullHeight: Story = {
   args: {
     fullHeight: true
   }
+}
+
+export const FileStatuses: Story = {
+  render: args => <ControlledUploader {...args} />,
+  args: {
+    description: 'PDF, XML, CSV and ZIP',
+    fileList: statusFileList,
+    manual: true,
+    maxCount: 8,
+    maxTotalSize: 320 * 1024
+  }
+}
+
+export const SizeWithFiles: Story = {
+  render: args => renderVariants(
+    (['small', 'medium'] as const).map(size => ({
+      label: size,
+      content: <ControlledUploader {...args} size={size} />
+    })),
+    true
+  ),
+  argTypes: {
+    size: { control: false }
+  },
+  args: {
+    description: 'Up to 8 files',
+    fileList: statusFileList,
+    manual: true,
+    maxCount: 8,
+    maxTotalSize: 320 * 1024
+  }
+}
+
+export const DisabledWithFiles: Story = {
+  ...SizeWithFiles,
+  args: {
+    ...SizeWithFiles.args,
+    disabled: true
+  }
+}
+
+export const SingleFileSelected: Story = {
+  render: args => <ControlledUploader {...args} />,
+  args: {
+    description: '1 file, size up to 100KB',
+    fileList: singleDoneFileList,
+    manual: true,
+    maxCount: 1,
+    maxTotalSize: 100 * 1024
+  }
+}
+
+export const TruncateFileName: Story = {
+  render: args => renderVariants(
+    [true, false].map(truncateFileName => ({
+      label: `truncateFileName = ${truncateFileName}`,
+      content: (
+        <div style={{ maxWidth: 480, width: '100%' }}>
+          <ControlledUploader {...args} truncateFileName={truncateFileName} />
+        </div>
+      )
+    })),
+    true
+  ),
+  argTypes: {
+    truncateFileName: { control: false }
+  },
+  args: {
+    description: 'Long file names',
+    fileList: longNameFileList,
+    manual: true
+  }
+}
+
+export const ShowProgress: Story = {
+  render: args => renderVariants(
+    [true, false].map(showProgress => ({
+      label: `showProgress = ${showProgress}`,
+      content: <ControlledUploader {...args} showProgress={showProgress} />
+    })),
+    true
+  ),
+  argTypes: {
+    showProgress: { control: false }
+  },
+  args: {
+    description: 'Upload in progress',
+    fileList: progressFileList,
+    manual: true
+  }
+}
+
+export const DownloadableFiles: Story = {
+  render: args => (
+    <ControlledUploader
+      {...args}
+      onDownload={file => {
+        args.onDownload?.(file)
+      }}
+      onDownloadAll={() => {
+        args.onDownloadAll?.()
+      }}
+    />
+  ),
+  args: {
+    description: 'Files available for download',
+    fileList: downloadableFileList,
+    manual: true,
+    maxCount: 4
+  }
+}
+
+export const FileListOverflow: Story = {
+  render: args => <ControlledUploader {...args} />,
+  args: {
+    description: 'The file list is limited to 287px and scrolls',
+    fileList: overflowFileList,
+    manual: true,
+    maxCount: 12,
+    maxTotalSize: 320 * 1024
+  }
+}
+
+export const MaxCountReached: Story = {
+  render: args => renderVariants(
+    (['small', 'medium'] as const).map(size => ({
+      label: size,
+      content: <ControlledUploader {...args} size={size} />
+    })),
+    true
+  ),
+  argTypes: {
+    size: { control: false }
+  },
+  args: {
+    description: 'Maximum number of files reached',
+    fileList: maxCountFileList,
+    manual: true,
+    maxCount: 3
+  }
+}
+
+export const EdgeCases: Story = {
+  render: args => renderVariants(
+    [
+      {
+        label: 'oversized files',
+        content: (
+          <ControlledUploader
+            {...args}
+            description="Each file up to 100 KB"
+            fileList={oversizedFileList}
+            maxCount={undefined}
+            maxFileSize={100}
+            maxTotalSize={undefined}
+          />
+        )
+      },
+      {
+        label: 'long error',
+        content: (
+          <ControlledUploader
+            {...args}
+            description="Retry or remove the file"
+            fileList={longErrorFileList}
+            maxCount={undefined}
+            maxTotalSize={undefined}
+          />
+        )
+      },
+      {
+        label: 'zero size',
+        content: (
+          <ControlledUploader
+            {...args}
+            description="Empty file"
+            fileList={zeroSizeFileList}
+            maxCount={undefined}
+            maxTotalSize={undefined}
+          />
+        )
+      },
+      {
+        label: 'uploading without percent',
+        content: (
+          <ControlledUploader
+            {...args}
+            description="Progress is hidden when percent is empty"
+            fileList={uploadingWithoutPercentFileList}
+            maxCount={undefined}
+            maxTotalSize={undefined}
+          />
+        )
+      },
+      {
+        label: 'without description',
+        content: (
+          <ControlledUploader
+            {...args}
+            description={undefined}
+            fileList={filesWithoutDescription}
+            maxCount={undefined}
+            maxTotalSize={undefined}
+          />
+        )
+      },
+      {
+        label: 'validationStatus with files',
+        content: (
+          <ControlledUploader
+            {...args}
+            description="Select a file to continue"
+            fileList={singleDoneFileList}
+            maxCount={undefined}
+            maxTotalSize={undefined}
+            validationStatus="error"
+          />
+        )
+      }
+    ],
+    true
+  )
 }
 
 export const ColorTokens: StoryObj<ThemedPaletteProps> = {

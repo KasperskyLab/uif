@@ -1,77 +1,253 @@
 {
   "translation": {
+    "common": {
+      "empty": "لا توجد بيانات",
+      "import": "استيراد",
+      "export": "تصدير",
+      "filters": "عوامل تصفية",
+      "no": "لا",
+      "yes": "نعم"
+    },
     "upload": {
-      "dropFileTitle": "Drop file here",
-      "pasteLinkTitle": "Paste link to file her",
-      "helpText": "You can add up to 6 ZIP and RAR files up to 200 MB in size",
-      "placeholder": "placeholder",
-      "addFiles": "Add files",
-      "cancel": "Cancel",
-      "selectAnotherFile": "Select another file",
-      "enterNewURL": "Enter new URL",
-      "repeat": "Repeat",
-      "loadingTitle": "Uploading {{value, number}}%",
+      "dropFileTitle": "أفلت الملف هنا",
+      "pasteLinkTitle": "الصق رابط الملف هنا",
+      "helpText": "يمكنك إضافة ما يصل إلى 6 ملفات بتنسيق ZIP أو RAR بحجم لا يتجاوز 200 ميجابايت",
+      "placeholder": "عنصر نائب",
+      "addFiles": "إضافة ملفات",
+      "cancel": "إلغاء",
+      "selectAnotherFile": "تحديد ملف آخر",
+      "enterNewURL": "إدخال عنوان URL الجديد",
+      "repeat": "تكرار",
+      "loadingTitle": "جارٍ تحميل {{value, number}}%",
       "loadingDescription": "{{file, fileName}}",
-      "successTitle": "Uploading success",
-      "successDescription": "{{file, fileName}} successfuly uploaded into the server",
-      "errorTitle": "Uploading error",
-      "errorDescription": "{{file, fileName}} could not be loaded due to a connection failure"
+      "successTitle": "نجح التحميل",
+      "successDescription": "نجح تحميل {{file, fileName}} إلى الخادم",
+      "errorTitle": "خطأ في التحميل",
+      "errorDescription": "تعذر تحميل {{file, fileName}} بسبب فشل في الاتصال"
+    },
+    "uploader": {
+      "actions": {
+        "deleteAll": "حذف كل الملفات",
+        "deleteErrors": "حذف كل الملفات التي بها خطأ ({{count}})",
+        "downloadAll": "تنزيل كل الملفات",
+        "reloadErrors": "إعادة تحميل كل الملفات التي بها خطأ ({{count}})",
+        "upload": "تحميل"
+      },
+      "dropText": {
+        "beginningMultiple": "قم بتحميل الملفات",
+        "beginningSingle": "قم بتحميل ملف",
+        "endingMultiple": "أو اسحبها وأفلتها هنا",
+        "endingSingle": "أو اسحبه وأفلته هنا"
+      },
+      "maxCountUploaded": "تم الوصول إلى الحد الأقصى للملفات التي تم تحميلها",
+      "progress": "{{progress}} من {{size}}",
+      "showFiles": "عرض الملفات",
+      "total": {
+        "files": "{{filesCount}} من {{total}} ملفًا (ملفات)",
+        "simple": "{{filesCount}} ملفًا (ملفات)",
+        "size": "{{size}} من {{total}}"
+      },
+      "validation": {
+        "maxCount": "تعذر تحميل {{count}} ملفًا (ملفات) لتجاوز الحد الأقصى المسموح به.",
+        "maxCount2": "يتجاوز إجمالي عدد الملفات التي تم تحميلها الحد المسموح به.",
+        "maxFileSize": "تعذر تحميل {{count}} ملفًا (ملفات) لتجاوز الحجم المسموح به.",
+        "maxFileSize2": "تتجاوز بعض الملفات التي تم تحميلها سابقًا الحد المسموح به للحجم حاليًا.",
+        "maxTotalSize": "تعذر تحميل {{count}} ملفًا (ملفات) لتجاوز إجمالي الحجم المسموح به.",
+        "maxTotalSize2": "يتجاوز إجمالي حجم الملفات التي تم تحميلها الحد المسموح به حاليًا.",
+        "filesDoNotMeetRequirements": "لا تستوفي الملفات المتطلبات",
+        "format": "تعذر تحميل {{count}} ملفًا (ملفات) بسبب متطلبات التنسيق."
+      }
+    },
+    "wizard": {
+      "actions": {
+        "cancel": "إلغاء",
+        "back": "العودة",
+        "next": "التالي",
+        "finish": "إنهاء"
+      },
+      "stepStack": "الخطوة {{currentStep}} من {{totalSteps}}"
     },
     "severity": {
-      "critical": "Critical",
-      "low": "Low",
-      "medium": "Medium",
-      "high": "High",
-      "info": "Info",
-      "positive": "Positive"
+      "critical": "حرج",
+      "low": "منخفض",
+      "medium": "متوسط",
+      "high": "مرتفع",
+      "info": "معلومات",
+      "positive": "إيجابي"
     },
     "select": {
-      "empty": "No Data"
+      "empty": "لا توجد بيانات",
+      "tags": {
+        "addPrefix": "إضافة: ‟",
+        "removePrefix": "إزالة: ‟",
+        "addRemovePostfix": "”"
+      }
     },
     "pagination": {
-      "total": "Total {{count}}",
-      "selected": "Selected {{count}}",
-      "page": "page",
-      "goto": "Go to"
+      "total": "الإجمالي {{count}}",
+      "selected": "تم تحديد {{count}}",
+      "page": "صفحة",
+      "goto": "الانتقال إلى الصفحة"
     },
     "search": {
-      "raw": "Search",
-      "dotted": "Search..."
+      "raw": "بحث",
+      "dotted": "بحث..."
     },
     "table": {
-      "column": {
-        "name": "First column"
-      },
-      "column2": {
-        "name": "Second column"
-      },
-      "column3": {
-        "name": "Third column"
-      },
       "columnDropdown": {
-        "ascending": "Ascending",
-        "descending": "Descending",
-        "sorting": "Sort",
-        "filters": "Filter",
-        "resetFilters": "Reset filter"
+        "ascending": "تصاعدي",
+        "descending": "تنازلي",
+        "sorting": "فرز",
+        "filters": "عامل التصفية",
+        "resetFilters": "إعادة تعيين عامل التصفية"
+      },
+      "contextMenu": {
+        "selected": "تم تحديد: {{count}}"
+      },
+      "selectAll": {
+        "selectAll": "تحديد الكل",
+        "selectCurrentPage": "تحديد الكل في الصفحة الحالية",
+        "deselectAll": "إعادة تعيين الكل"
       },
       "columnsSettings": {
-        "header": "Columns settings",
-        "selectAll": "Select all",
-        "columns": "Columns",
-        "grouping": "Grouping",
-        "clear": "Clear",
-        "noGrouping": "No grouping"
+        "header": "إعدادات الجدول",
+        "selectAll": "تحديد الكل",
+        "columns": "الأعمدة",
+        "grouping": "التجميع",
+        "clear": "مسح",
+        "noGrouping": "بدون تجميع",
+        "apply": "تطبيق",
+        "cancel": "إلغاء",
+        "columnTitles": {
+        "name": "الاسم",
+        "country": "الدولة",
+        "age": "العمر",
+        "city": "المدينة",
+        "date": "التاريخ",
+        "isSortable": "قابل للفرز",
+        "sorter": "أداة الفرز",
+        "sorterIsSortable": "الفرز متاح"
+        },
+        "filtering": {
+          "add": "إضافة",
+          "addCondition": "إضافة شرط",
+          "clearAll": "مسح الكل",
+          "property": "خاصية",
+          "attribute": "السمة",
+          "condition": "الشرط",
+          "from": "من",
+          "to": "إلى",
+          "value": "القيمة",
+          "operators": {
+            "or": "أو",
+            "and": "و"
+          },
+          "booleanFilter": {
+            "on": "في",
+            "off": "إيقاف"
+          },
+          "validation": {
+            "emptyValue": "حدد قيمة التصفية",
+            "duplicateFilters": "عوامل تصفية مكررة. تأكد من عدم تكرار أي عامل تصفية."
+          }
+        },
+        "resetSettingsModal": {
+          "content": "ستتم إعادة ضبط كل المهام على الإعدادات الافتراضية",
+          "header": "هل تريد إعادة ضبط إعدادات الأعمدة؟",
+          "firstButton": "إعادة تعيين",
+          "secondButton": "إلغاء"
+        },
+        "columnHideIsUnavailable": "إخفاء الأعمدة غير متاح",
+        "onlyForFiltering": "هذا العمود مخصص للتصفية فقط"
       },
-      "groupingEmpty": "Other"
+      "filterOperation": {
+        "⊆": "تحتوي على",
+        "⊄": "لا يحتوي على",
+        "cont_and": "يحتوي على (و)",
+        "cont_or": "واحد من",
+        "ncont_or": "لا يحتوي على",
+        "*=": "تعبير نمطي",
+        "empty": "فارغ",
+        "nempty": "غير فارغ",
+        "range": "ضمن",
+        "nrange": "خارج"
+      },
+      "filterTag": {
+        "⊆": "يحتوي على {{value}}",
+        "⊄": "لا يحتوي على {{value}}",
+        "empty": "فارغ",
+        "nempty": "غير فارغ",
+        "range": "ضمن {{from}}–{{to}}",
+        "nrange": "خارج {{from}}–{{to}}"
+      },
+      "groupingEmpty": "غير ذلك"
+    },
+    "tabs": {
+      "dropdown": {
+        "more": "المزيد"
+      }
     },
     "timeInput": {
-      "placeholder": "Select time"
+      "placeholder": "تحديد الوقت"
     },
     "actionBar": {
-      "unsavedChanges": "Pending changes",
-      "save": "Save",
-      "cancel": "Cancel"
+      "unsavedChanges": "تغييرات معلقة",
+      "save": "تطبيق",
+      "cancel": "إلغاء",
+      "resetSettings": "إعادة تعيين الإعدادات"
+    },
+    "textarea": {
+      "wordsCount": "{{count}} من {{total}}"
+    },
+    "menu": {
+      "favoritesNavItem": "الإشارات المرجعية",
+      "navUserItem": {
+        "userProps": {
+          "status": {
+            "available": "متاح",
+            "unavailable": "غير متاح"
+          }
+        }
+      }
+    },
+    "expand": {
+      "toExpand": "توسيع",
+      "toCollapse": "طي"
+    },
+    "codeCompare": {
+      "compareMode": "وضع المقارنة",
+      "unified": "موحد",
+      "split": "تقسيم",
+      "loader": "جارٍ تنزيل الإصدارات للمقارنة...",
+      "totalChanges": "إجمالي التغييرات:",
+      "collapseAll": "طي الكل",
+      "expandAll": "توسيع الكل",
+      "expandLines": "توسيع {{count}} سطرًا (أسطر)",
+      "empty": "كلا الملفين فارغ. تعذرت المقارنة.",
+      "noChanges": "لم يتم العثور على أي تغييرات بين الإصدارات",
+      "basicVersion": "الإصدار الأساسي",
+      "comparableVersion": "إصدار قابل للمقارنة"
+    },
+    "licenseCard": {
+      "status": "حالة المفتاح",
+      "number": "رقم مفتاح الترخيص",
+      "remaining": "المتبقي",
+      "activationDate": "تاريخ التفعيل",
+      "expirationDate": "تاريخ انتهاء الصلاحية",
+      "term": "الفترة",
+      "dayLeft": "{{count}} يوم متبقٍ",
+      "daysLeft": "{{count}} يومًا (أيام) متبقية",
+      "termDays": "{{count}} يومًا (أيام)",
+      "statuses": {
+        "valid": "نشط",
+        "expired": "منتهي الصلاحية"
+      }
+    },
+    "input": {
+      "password": {
+        "hide": "إخفاء",
+        "show": "إظهار"
+      }
     }
   }
 }

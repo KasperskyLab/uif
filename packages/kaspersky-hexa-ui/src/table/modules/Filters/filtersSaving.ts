@@ -19,7 +19,7 @@ export interface IFiltersSavingSettings {
 }
 
 const restorePredicates = <T extends TableRecord = TableRecord>(
-  savedFilters: UnitedFilter[],
+  savedFilters: UnitedFilter<T>[],
   allColumns: TableColumn<T>[],
   onlyUserDefined: boolean
 ): UnitedFilter<T>[] => {

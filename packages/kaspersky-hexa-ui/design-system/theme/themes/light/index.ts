@@ -9,7 +9,6 @@ import { breadcrumbs, breadcrumbsSize } from './breadcrumbs'
 import { chip, chipSize } from './chip'
 import { colors } from './colors'
 import { icon } from './icon'
-import { indicator } from './indicator'
 import { informationCard, informationCardSize } from './informationCard'
 import { keyValue } from './keyValue'
 import { menu } from './menu'
@@ -67,9 +66,6 @@ export const LIGHT_THEME: ThemeConfig = {
     },
     sectionMessage: {
       colors: sectionMessage({ colors, effects })
-    },
-    indicator: {
-      colors: indicator({ colors, effects })
     },
     status: {
       colors: status({ colors, effects })

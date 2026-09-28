@@ -83,10 +83,20 @@ export const InputNumber: FC<TextboxNumberProps> = (props: TextboxNumberProps) =
 
   const handleChange: TextboxNumberProps['onChange'] = useCallback(value => {
     setInnerValue(value)
-    if (!(typeof value === 'string' && (Number.isNaN(parseFloat(value)) || value.endsWith('.')))) {
-      onChange?.(Number(value))
+
+    if (typeof value === 'string') {
+      if (allowEmpty && value === '') {
+        onChange?.(value)
+        return
+      }
+
+      if (Number.isNaN(parseFloat(value)) || value.endsWith('.')) {
+        return
+      }
     }
-  }, [onChange, setInnerValue])
+
+    onChange?.(Number(value))
+  }, [onChange, setInnerValue, allowEmpty])
 
   const handleStep: TextboxNumberProps['onStep'] = useCallback((value, info) => {
     const valueNumber = trimmedValue(Number(value), { min, max })
@@ -125,8 +135,8 @@ export const InputNumber: FC<TextboxNumberProps> = (props: TextboxNumberProps) =
     const rawValue = e.target.value
     const parsed = parser ? parser(rawValue) : rawValue
     const newValue = normalizeValue(parsed, { allowEmpty, min, max })
-    handleChange(newValue)
     onBlur?.(e)
+    handleChange(newValue)
   }, [parser, handleChange, onBlur, allowEmpty, min, max])
 
   return (
@@ -136,7 +146,7 @@ export const InputNumber: FC<TextboxNumberProps> = (props: TextboxNumberProps) =
       aria-valuemin={min}
       aria-valuemax={max}
       aria-valuenow={innerValue}
-      autocomplete="off"
+      autoComplete="off"
       step={innerStep}
       role="spinbutton"
       value={innerValue}

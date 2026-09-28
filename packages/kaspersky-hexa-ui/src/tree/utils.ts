@@ -74,6 +74,10 @@ export function getParents (treeData: ITreeProps['treeData']): Record<Key, DataN
   return out
 }
 
+export function isRootNode (node: DataNode, treeData: ITreeProps['treeData']) {
+  return !!treeData?.some(candidate => candidate.key === node.key)
+}
+
 export function getNodes (treeData: ITreeProps['treeData']): Record<Key, DataNode> {
   const out: Record<Key, DataNode> = {}
 

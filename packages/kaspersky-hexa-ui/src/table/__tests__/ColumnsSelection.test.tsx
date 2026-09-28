@@ -9,11 +9,16 @@ import {
 import React from 'react'
 
 import { generatedData, MockRow, tableColumns, TableMockProps } from '../__mocks__/filtersMockData'
+import { getPersistentStorageValue } from '../helpers/persistentStorage'
 import { FilterOperation, FilterType } from '../modules/Filters/types'
 import { modifyColumns } from '../test-utils/helpers'
 import { TableTestingClass, TestTable } from '../test-utils/TableTestingClass'
 
 configure({ testIdAttribute: 'data-testid' })
+
+beforeEach(() => {
+  localStorage.clear()
+})
 
 const data = generatedData.slice(0, 5)
 const selectableColumns = tableColumns.map(column => ({ ...column, hideColumnAvailable: true }))
@@ -48,6 +53,7 @@ const TestComponent = () => {
         dataSource={data}
         columns={columns}
         onColumnsChange={onColumnsChange}
+        storageKey="test-key"
         toolbar={{
           showColumns: true,
           showGrouping: false
@@ -59,7 +65,7 @@ const TestComponent = () => {
 
 describe('ColumnsSelection (Table settings)', () => {
   it('should open with all checkboxes checked by default', async () => {
-    const table = renderTable()
+    const table = await renderTable()
 
     await table.columnSettings.open()
 
@@ -71,7 +77,7 @@ describe('ColumnsSelection (Table settings)', () => {
   })
 
   it('should not persist column toggle after cancel and reopen', async () => {
-    const table = renderTable()
+    const table = await renderTable()
 
     await table.columnSettings.open()
 
@@ -85,7 +91,7 @@ describe('ColumnsSelection (Table settings)', () => {
   })
 
   it('should persist column toggle after apply and reopen', async () => {
-    const table = renderTable()
+    const table = await renderTable()
 
     await table.columnSettings.open()
 
@@ -140,7 +146,7 @@ describe('ColumnsSelection (Table settings)', () => {
   })
 
   it('should call onColumnsChange when settings are applied', async () => {
-    const table = renderTable({ onColumnsChange })
+    const table = await renderTable({ onColumnsChange })
 
     await table.columnSettings.open()
     table.columnSettings.toggleColumnVisibility('salary')
@@ -149,8 +155,8 @@ describe('ColumnsSelection (Table settings)', () => {
     expect(onColumnsChange).toHaveBeenCalledTimes(1)
   })
 
-  it('should not call onColumnsChange when columns reference changes', () => {
-    const table = TableTestingClass.renderElement(<TestComponent />)
+  it('should not call onColumnsChange when columns reference changes', async () => {
+    const table = await TableTestingClass.renderElement(<TestComponent />)
 
     fireEvent.click(table.scoped.getByText('Update Columns'))
 
@@ -158,7 +164,7 @@ describe('ColumnsSelection (Table settings)', () => {
   })
 
   it('should keep column visibility state after columns render update', async () => {
-    const table = TableTestingClass.renderElement(<TestComponent />)
+    const table = await TableTestingClass.renderElement(<TestComponent />)
 
     await table.columnSettings.open()
 
@@ -178,7 +184,7 @@ describe('ColumnsSelection (Table settings)', () => {
   })
 
   it('should reset columns', async () => {
-    const table = TableTestingClass.renderElement(<TestComponent />)
+    const table = await TableTestingClass.renderElement(<TestComponent />)
 
     await table.columnSettings.open()
 
@@ -202,7 +208,7 @@ describe('ColumnsSelection (Table settings)', () => {
   })
 
   it('should hide a column from the table when toggled off in settings and show it again', async () => {
-    const table = renderTable()
+    const table = await renderTable()
     expect(table.columns.hasHeader('table.columns.salary')).toBe(true)
 
     await table.columnSettings.open()
@@ -218,7 +224,7 @@ describe('ColumnsSelection (Table settings)', () => {
 
   it('should disable the settings checkbox when hideColumnAvailable is false', async () => {
     const columns = modifyColumns(selectableColumns, 'salary', { hideColumnAvailable: false })
-    const table = renderTable({ columns })
+    const table = await renderTable({ columns })
 
     await table.columnSettings.open()
 
@@ -228,7 +234,7 @@ describe('ColumnsSelection (Table settings)', () => {
 
   it('should toggle only selectable columns via select-all and leave disabled columns intact', async () => {
     const columns = modifyColumns(selectableColumns, 'salary', { hideColumnAvailable: false })
-    const table = renderTable({ columns })
+    const table = await renderTable({ columns })
 
     await table.columnSettings.open()
     table.columnSettings.toggleSelectAll()
@@ -246,7 +252,7 @@ describe('ColumnsSelection (Table settings)', () => {
 
   it('should not render a column with show:false by default and render it after enabling in settings', async () => {
     const columns = modifyColumns(selectableColumns, 'isTrainee', { show: false })
-    const table = renderTable({ columns })
+    const table = await renderTable({ columns })
 
     expect(table.columns.hasHeader('table.columns.isTrainee')).toBe(false)
 
@@ -258,23 +264,27 @@ describe('ColumnsSelection (Table settings)', () => {
     expect(table.columns.hasHeader('table.columns.isTrainee')).toBe(true)
   })
 
-  it('should render a column that has neither dataIndex nor key without crashing', () => {
+  it('should render a column that has neither dataIndex nor key without crashing', async () => {
     const noKeyColumn = {
       title: 'NoKeyCol',
       show: true,
       render: (value: unknown, row: Record<string, unknown>) => String(row.fullname)
     } as unknown as TableColumn<MockRow>
-    const table = renderTable({ columns: [...selectableColumns, noKeyColumn] })
+    const table = await renderTable({ columns: [...selectableColumns, noKeyColumn] })
 
     expect(table.rows.getCount()).toBe(data.length)
     expect(table.columns.hasHeader('table.columns.fullname')).toBe(true)
     expect(table.columns.hasHeader('NoKeyCol')).toBe(true)
   })
+
+  // TODO: добавить тесты на поиск
+
+  // TODO: добавить тесты в браузерном окружении с перетаскивании.
 })
 
 describe('ColumnsSelection — integration', () => {
   it('should keep rendering rows after a sorted column is hidden', async () => {
-    const table = renderTable()
+    const table = await renderTable()
 
     await table.sorting.sortBy('fullname', 'asc')
 
@@ -287,7 +297,7 @@ describe('ColumnsSelection — integration', () => {
   })
 
   it('should keep a filter active when its column is hidden', async () => {
-    const table = renderTable({
+    const table = await renderTable({
       dataSource: generatedData,
       useFiltersSidebar: true,
       toolbar: { showColumns: true, showGrouping: false, showFilterSidebar: true },
@@ -306,7 +316,7 @@ describe('ColumnsSelection — integration', () => {
 
   it('should not offer a hidden column in the grouping selector', async () => {
     const columns = modifyColumns(selectableColumns, 'isTrainee', { show: false })
-    const table = renderTable({
+    const table = await renderTable({
       columns,
       dataSource: generatedData.slice(0, 10),
       toolbar: { showColumns: false, showGrouping: true }
@@ -317,5 +327,17 @@ describe('ColumnsSelection — integration', () => {
 
     expect(groupingSelector.textContent).toContain('table.columns.group')
     expect(groupingSelector.textContent).not.toContain('table.columns.isTrainee')
+  })
+
+  it('should save columns state in local storage', async () => {
+    const storageKey = 'test'
+    renderTable({ storageKey })
+
+    const columns = getPersistentStorageValue({ storageKey, featureKey: 'columns' })!
+
+    Object.entries(columns).forEach(([key, column]) => {
+      expect(column.show).toBeDefined()
+      expect(column.sortIndex).toBeDefined()
+    })
   })
 })

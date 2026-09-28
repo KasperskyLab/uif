@@ -1,6 +1,7 @@
 import { Button } from '@src/button'
 import { Dropdown, DropdownProps } from '@src/dropdown'
 import { IconResolver } from '@src/icon'
+import { Indicator } from '@src/indicator'
 import { Link } from '@src/link'
 import { Space } from '@src/space'
 import { ToggleButton } from '@src/toggle-button'
@@ -10,16 +11,10 @@ import cn from 'classnames'
 import { FC, ReactElement, useState } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { ArrowDown1, Export, Import, ImportExport } from '@kaspersky/hexa-ui-icons/16'
 
-import {
-  ButtonIconWrapper,
-  ButtonIndicator,
-  DropdownTriggerIconsWrapper,
-  ToolbarButton as StyledToolbarButton
-} from './toolbarCss'
+import styles from './Toolbar.module.scss'
 import {
   ImportExportButtonProps,
   ImportExportDropdownProps,
@@ -31,22 +26,13 @@ import {
   ToolbarVariantButtonProps
 } from './types'
 
-const WrapperToggleDropdown = styled(Space)<{ $disabled?: boolean; $loading?: boolean }>`
-  color: var(--fg--neutral--primary);
-  ${props => (props.$disabled || props.$loading) && `
-    color: var(--fg--neutral--tertiary);
-    .text-toggle {
-      color: var(--fg--neutral--tertiary);
-    }
-  `}
-`
-
 export const ToolbarButton: FC<Omit<ToolbarButtonProps, 'type'> & ToolbarVariantButtonProps> = ({
   label,
   children,
   tooltip,
   showIndicator,
   iconBefore,
+  className,
   ...rest
 }) => {
   // ToolbarButton is wrapped in a <span> tag to show tooltip even if the button is disabled.
@@ -54,20 +40,21 @@ export const ToolbarButton: FC<Omit<ToolbarButtonProps, 'type'> & ToolbarVariant
   return (
     <Tooltip text={tooltip} defaultAlign>
       <span>
-        <StyledToolbarButton
+        <Button
           mode="tertiary"
           iconBefore={
             iconBefore && (
-              <ButtonIconWrapper>
+              <span className={styles.buttonIconWrapper}>
                 {iconBefore}
-                {showIndicator && <ButtonIndicator mode="critical" />}
-              </ButtonIconWrapper>
+                {showIndicator && <Indicator className={styles.buttonIndicator} mode="critical" />}
+              </span>
             )
           }
+          className={cn(styles.toolbarButton, rest.isPressed && styles.buttonPressed, className)}
           {...rest}
         >
           {label || children}
-        </StyledToolbarButton>
+        </Button>
       </span>
     </Tooltip>
   )
@@ -129,9 +116,13 @@ export const ImportExportItemButton: FC<ImportExportButtonProps | ImportExportDr
         onVisibleChange={open => setDropdownOpened(open)}
         onOverlayClick={() => setDropdownOpened(false)}
       >
-        <DropdownTriggerIconsWrapper>
-          <Button mode="tertiary" isPressed={dropdownOpened} iconBefore={<ImportExport />} {...props} />
-        </DropdownTriggerIconsWrapper>
+        <Button
+          mode="tertiary"
+          iconBefore={<ImportExport />}
+          {...props}
+          isPressed={dropdownOpened}
+          className={cn(dropdownOpened && styles.buttonPressed, props.className)}
+        />
       </Dropdown>
     )
   } else {
@@ -184,15 +175,17 @@ export const ToolbarToggleDropdown = ({
   disabled
 }: Pick<ToolbarToggleButtonProps, 'iconBefore' | 'text' | 'elementAfter' | 'loading' | 'disabled'>) => {
   return (
-    <WrapperToggleDropdown
+    <Space
       gap="dependent"
-      $loading={loading}
-      $disabled={disabled}
+      className={cn(
+        styles.wrapperToggleDropdown,
+        (disabled || loading) && styles.wrapperToggleDropdownDisabled
+      )}
     >
       {iconBefore}
       <Text className="text-toggle">{text}</Text>
       {elementAfter}
-    </WrapperToggleDropdown>
+    </Space>
   )
 }
 

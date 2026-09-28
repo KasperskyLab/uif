@@ -48,7 +48,7 @@ export const SortingAndFilters = <T extends TableRecord = TableRecord> (
   }))
   const updateContext = useTableUpdate<T>()
 
-  const initialSorting: ActiveSorting = props.initialSorting || EMPTY_OBJ
+  const initialSorting: ActiveSorting<T> = props.initialSorting || EMPTY_OBJ
 
   const [activeSorting, setActiveSorting] = useState<ActiveSorting<T>>(initialSorting)
   const [sortingWithExternal, setSortingWithExternal] = useState<ActiveSorting<T>>(activeSorting || initialSorting)

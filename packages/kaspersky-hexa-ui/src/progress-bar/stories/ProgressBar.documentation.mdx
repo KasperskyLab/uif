@@ -23,7 +23,7 @@ import {
 
 <DocPageLayout>
 
-  <DocPageHeader title="ProgressBar" />
+  <DocPageHeader title="ProgressBar" checkUIF />
 
   <Tabs defaultActiveKey="description">
 
@@ -31,7 +31,7 @@ import {
 
       <DocExampleBlock
         description="
-          **ProgressBar** — горизонтальная полоса для отображения прогресса выполнения процесса или количественного показателя
+          **ProgressBar** — горизонтальная полоса для отображения прогресса выполнения процесса или количественного показателя.
 
           **ProgressBar** показывает, насколько выполнен процесс с известной длительностью или целевым объёмом: загрузка файла, прохождение шагов мастера, заполнение квоты, достижение цели на дашборде. Размещайте полосу рядом с контекстом операции — под заголовком секции, внутри карточки задачи или в строке таблицы, где пользователь оценивает прогресс.
 
@@ -43,7 +43,30 @@ import {
     <Tabs.TabPane tab="Структура" key="composition">
 
       <DocExampleBlock
-        description="**ProgressBar** показывает долю выполненного действия в виде заполненной полосы на фоновой дорожке. Настраиваются **mode**, **size**, **track**, **background** и **width**."
+        description="**ProgressBar** показывает долю выполненного действия в виде заполненной полосы на фоновой дорожке или круга. Настраиваются **variant**, **mode**, **size**, **track**, **background** и **width**."
+      />
+
+      <DocExampleBlock
+        title="variant"
+        description="Форма индикатора прогресса. Доступные значения: `linear` — горизонтальная полоса, `circular` — круг (используется только в компоненте Onboarding). По умолчанию — `linear`. Круговой вариант имеет единственный цвет (синий), пропы **background**, **mode**, **size** и **width** не имеют эффекта."
+        previewGap={16}
+        code={`
+          <ProgressBar variant="linear" track={50} width={200} />
+          <ProgressBar variant="circular" track={50} />
+        `}
+      />
+
+      <DocExampleBlock
+        title="variant=&quot;circular&quot;"
+        description="Круг заполняется по часовой стрелке от 0 до 100 процентов. При значении `100` линия круга становится зелёной, а в центре появляется иконка об успешном завершении."
+        previewGap={16}
+        code={`
+          <ProgressBar variant="circular" track={0} />
+          <ProgressBar variant="circular" track={25} />
+          <ProgressBar variant="circular" track={50} />
+          <ProgressBar variant="circular" track={75} />
+          <ProgressBar variant="circular" track={100} />
+        `}
       />
 
       <DocExampleBlock
@@ -117,7 +140,7 @@ import {
       <DocExampleBlock
         title="Компонент в Pixso"
         titleSize="H5"
-        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=116679:416085)"
+        description=""
       />
       <Space direction="vertical" gap={40} align="start">
         <Space direction="vertical" gap={16} align="start">

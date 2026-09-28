@@ -44,14 +44,6 @@ export const TableStickyHeader = styled.div.withConfig({
       z-index: 3;
     }
   }
-
-  &.table-draggable {
-    .ant-table-selection-column {
-      .ant-checkbox-wrapper {
-        transform: translate(8px, 0px);  
-      }
-    }
-  }
 `
 
 export function StickyHeaderWrapper ({ children, className }: {

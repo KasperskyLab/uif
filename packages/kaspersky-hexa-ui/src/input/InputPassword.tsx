@@ -61,7 +61,6 @@ export const InputPassword: FC<TextboxPasswordProps> = (props: TextboxPasswordPr
         return (
           <Tooltip text={visible ? t('input.password.hide') : t('input.password.show')}>
             <ActionButton
-              interactive={false}
               icon={visible ? <PasswordHide /> : <PasswordShow />}
               klId={props.klId ? `${props.klId}-input-password-icon` : undefined}
               testId={props.testId ? `${props.testId}-input-password-icon` : undefined}

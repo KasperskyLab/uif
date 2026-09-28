@@ -30,8 +30,11 @@ export const InSidebar: TableMockStory = {
     )
   },
   args: {
-    columns: tableColumns,
+    columns: tableColumns.map(column => ({ ...column, hideColumnAvailable: true })),
     rowSelection: { builtInRowSelection: true },
-    useDragDrop: true
+    useDragDrop: true,
+    toolbar: {
+      showColumns: true
+    }
   }
 }

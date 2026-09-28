@@ -29,16 +29,13 @@ const defaultProps = {
 
 const modifiedColumns = modifyColumns(tableColumns, 'group', { showEnumFiltersInColumn: true })
 
-const renderTable = (props: TableMockProps) => {
-  const table = TableTestingClass.render({ ...defaultProps, ...props })
-  return { table }
-}
+const renderTable = (props: TableMockProps) => TableTestingClass.render({ ...defaultProps, ...props })
 
 describe('Table column dropdown filters', () => {
   describe('Basic rendering', () => {
     it('should render filters in column with custom filters', async () => {
       const dataIndex = 'fullname'
-      const { table } = renderTable({ columns: modifiedColumns })
+      const table = await renderTable({ columns: modifiedColumns })
 
       const popup = await table.header.openColumnDropdown(dataIndex)
       expect(popup).toBeInTheDocument()
@@ -51,7 +48,7 @@ describe('Table column dropdown filters', () => {
 
     it('should render enum filters in column with enum options', async () => {
       const dataIndex = 'group'
-      const { table } = renderTable({ columns: modifiedColumns })
+      const table = await renderTable({ columns: modifiedColumns })
 
       const popup = await table.header.openColumnDropdown(dataIndex)
       expect(popup).toBeInTheDocument()
@@ -65,7 +62,7 @@ describe('Table column dropdown filters', () => {
 
     it('should not render dropdown for column without filters and sorting', async () => {
       const dataIndex = 'dateHired'
-      const { table } = renderTable({ columns: modifiedColumns })
+      const table = await renderTable({ columns: modifiedColumns })
 
       const title = screen.getByText('table.columns.dateHired')
       fireEvent.click(title)
@@ -109,7 +106,7 @@ describe('Table column dropdown filters', () => {
     ]
 
     test.each(filterTestCases)('$name', async ({ allowMultiple, dataIndex, filterNames }) => {
-      const { table } = renderTable({ columns: modifyColumns(modifiedColumns, dataIndex, { allowMultipleFilters: allowMultiple }) })
+      const table = await renderTable({ columns: modifyColumns(modifiedColumns, dataIndex, { allowMultipleFilters: allowMultiple }) })
 
       const isEnum = dataIndex === 'group'
 
@@ -186,14 +183,14 @@ describe('Table column dropdown filters', () => {
     }
 
     it('should sync filters when added from column', async () => {
-      const { table } = renderTable({ columns: modifiedColumns, ...additionalProps })
+      const table = await renderTable({ columns: modifiedColumns, ...additionalProps })
 
       await table.header.openColumnDropdown(dataIndex)
       table.columnFilters.selectFilter(dataIndex, filterLabel, false, true)
 
       expect(table.filters.getChip({ dataIndex, condition: '=', value: filterLabel })).toBeInTheDocument()
 
-      table.filters.openSidebar()
+      await table.filters.openSidebar()
 
       expect(table.filters.getItem(0)).toBeInTheDocument()
 
@@ -205,7 +202,7 @@ describe('Table column dropdown filters', () => {
 
       expect(table.filters.getCount()).toBe(0)
 
-      table.filters.apply()
+      await table.filters.apply()
 
       expect(table.filters.getChip({ dataIndex, condition: '=', value: filterLabel })).not.toBeInTheDocument()
 
@@ -214,14 +211,14 @@ describe('Table column dropdown filters', () => {
     })
 
     it('should sync filters when added from sidebar', async () => {
-      const { table } = renderTable({
+      const table = await renderTable({
         columns: modifyColumns(modifiedColumns, 'fullname', { filteringAvailable: false }),
         ...additionalProps
       })
 
-      table.filters.openSidebar()
+      await table.filters.openSidebar()
       await table.filters.add()
-      table.filters.apply()
+      await table.filters.apply()
 
       expect(table.filters.getChip({ dataIndex, condition: '=', value: filterLabel })).toBeInTheDocument()
 
@@ -241,7 +238,7 @@ describe.each(MODES)('Table column filters - $description', ({ mode }) => {
 
   it('should apply a column enum filter', async () => {
     const columns = modifyColumns(tableColumns, 'group', { showEnumFiltersInColumn: true })
-    const { table, dataSourceFunction } = renderByMode(mode, data, {
+    const { table, dataSourceFunction } = await renderByMode(mode, data, {
       columns,
       useFiltersSidebar: true,
       toolbar: { showFilterSidebar: true },
@@ -260,7 +257,7 @@ describe.each(MODES)('Table column filters - $description', ({ mode }) => {
   })
 
   it('should apply a predicate column filter on the client but not send it to the server', async () => {
-    const { table, dataSourceFunction } = renderByMode(mode, data, {
+    const { table, dataSourceFunction } = await renderByMode(mode, data, {
       columns: tableColumns,
       pagination: { pageSize: 20 }
     })

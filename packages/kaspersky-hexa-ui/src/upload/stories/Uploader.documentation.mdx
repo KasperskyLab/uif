@@ -9,17 +9,78 @@ import {
   DocumentationArgsTable,
   DocumentationTabs as Tabs,
 } from '@sb/components/Documentation'
-import { Text } from '@src/typography'
 
 import { Uploader } from '../Uploader'
 import * as UploaderStories from './Uploader.stories'
 import { uploaderDesignPropPresentation } from './Uploader.design.properties'
+
+export const selectedFile = { uid: '1', name: 'заметки.txt', size: 18432 }
+export const uploadingFile = {
+  uid: '2',
+  name: 'события.csv',
+  percent: 45,
+  size: 12582912,
+  status: 'uploading',
+}
+export const doneFile = {
+  uid: '3',
+  name: 'политика.xml',
+  size: 98304,
+  status: 'done',
+}
+export const successFile = {
+  uid: '4',
+  name: 'снимок.png',
+  size: 880640,
+  status: 'success',
+}
+export const errorFile = {
+  uid: '5',
+  name: 'образец.zip',
+  size: 4194304,
+  status: 'error',
+  error: 'Не удалось загрузить файл',
+}
+export const longNameFile = {
+  uid: '6',
+  name: 'ежеквартальный-сводный-отчёт-по-политикам-защиты-конечных-точек-для-филиалов-центрального-северо-западного-и-приволжского-федеральных-округов-с-реестром-исключений-и-приложениями.pdf',
+  size: 2097152,
+  status: 'done',
+}
+export const downloadableFile = {
+  uid: '7',
+  name: 'резервная-копия.tar',
+  size: 50331648,
+  status: 'done',
+  url: 'https://example.com/backup.tar',
+}
+export const oversizedFile = {
+  uid: '8',
+  name: 'дамп.bin',
+  size: 524288000,
+  status: 'done',
+}
+
+export const statusFileList = [
+  errorFile,
+  uploadingFile,
+  selectedFile,
+  doneFile,
+  successFile,
+]
+export const singleFileList = [doneFile]
+export const maxCountFileList = [doneFile, successFile, errorFile]
+export const longNameFileList = [longNameFile, doneFile]
+export const progressFileList = [uploadingFile]
+export const downloadableFileList = [downloadableFile, successFile]
+export const oversizedFileList = [oversizedFile, doneFile]
 
 <Meta of={UploaderStories} name="Uploader Docs" />
 
 <DocPageLayout>
   <DocPageHeader
     title="Uploader"
+    description="**Uploader** — область выбора, проверки и загрузки файлов со списком выбранных файлов"
     rtlSupported
   />
 
@@ -41,89 +102,280 @@ import { uploaderDesignPropPresentation } from './Uploader.design.properties'
     <Tabs.TabPane tab="Структура" key="composition">
 
       <DocExampleBlock
-        description="**Uploader** отображает область выбора файлов, список выбранных файлов и ход загрузки. Компонент поддерживает автоматическую и ручную загрузку, проверку ограничений и управление списком через **fileList**. Внешний вид и поведение определяют **size**, **maxCount**, **maxFileSize**, **maxTotalSize**, **manual**, **showProgress**, **validationStatus** и **fullHeight**."
+        description="**Uploader** отображает область выбора файлов, список выбранных файлов и ход загрузки. Строка файла меняется в зависимости от **status**: выбранный файл, загрузка, успех или ошибка. Компонент поддерживает автоматическую и ручную загрузку, проверку ограничений и управление списком через **fileList**."
       />
 
       <DocExampleBlock
-
         title="size"
-        description="Размер области загрузки: `medium` выводит зону перетаскивания, а `small` — компактную кнопку выбора файла."
+        description="Размер области загрузки. Доступные значения: `medium`, `small`. По умолчанию — `medium`. `medium` выводит зону перетаскивания, `small` — компактную кнопку выбора файла."
+        previewDirection="vertical"
         code={`
           <Uploader
             manual
             size="medium"
             description="Перетащите файлы или выберите их"
-          />{' '}
+          />
           <Uploader manual size="small" description="Выберите файл" />
         `}
       />
 
       <DocExampleBlock
-        title="maxCount, maxFileSize и maxTotalSize"
-        description="Ограничивают количество файлов, размер одного файла и суммарный размер списка. Размеры **maxFileSize** и **maxTotalSize** задаются в килобайтах."
+        title="disabled"
+        description="Отключает выбор, удаление и повторную загрузку файлов. Доступные значения: `true`, `false`. По умолчанию — `false`."
+        previewDirection="vertical"
+        code={`
+          <Uploader disabled manual description="Выберите файлы" />
+          <Uploader
+            disabled
+            manual
+            fileList={statusFileList}
+            description="Выберите файлы"
+          />
+        `}
+        scope={{ statusFileList }}
+      />
+
+      <DocExampleBlock
+        title="description"
+        description="Текст или узел с требованиями к файлам. Отображается под списком и областью выбора. Если **description** не задан, блок требований скрывается."
+        previewDirection="vertical"
+        code={`
+          <Uploader manual description="До 8 файлов, общий размер до 320 МБ" />
+          <Uploader manual fileList={singleFileList} />
+        `}
+        scope={{ singleFileList }}
+      />
+
+      <DocExampleBlock
+        title="fileList"
+        description="Контролируемый список файлов. Каждый элемент — объект **UploadFile** с обязательными **uid**, **name** и **size**. **status** задаёт вид строки: без статуса — выбранный файл, `uploading` — загрузка, `done` — загруженный файл, `success` — успешная загрузка с иконкой успеха, `error` — ошибка. **percent** показывает прогресс, **error** — текст ошибки, **url** — ссылку для скачивания. Если список не помещается, для **size**=`medium` появляется прокрутка высотой до 287px, пока не задан **fullHeight**."
+        previewDirection="vertical"
         code={`
           <Uploader
             manual
-            maxCount={3}
-            maxFileSize={1024}
-            maxTotalSize={2048}
-            description="До 3 файлов, не более 1 МБ каждый"
+            maxCount={8}
+            maxTotalSize={320 * 1024}
+            fileList={statusFileList}
+            description="PDF, XML, CSV и ZIP"
           />
         `}
+        scope={{ statusFileList }}
+      />
+
+      <DocExampleBlock
+        title="maxCount"
+        description="Ограничивает число файлов в списке. Если **maxCount** больше `1` или не задан, можно выбрать несколько файлов. При **maxCount**=`1` после выбора файла область перетаскивания скрывается и остаётся только строка файла. Когда число файлов достигает **maxCount**, заголовок сообщает, что лимит исчерпан."
+        previewDirection="vertical"
+        code={`
+          <Uploader
+            manual
+            maxCount={1}
+            fileList={singleFileList}
+            description="Один файл"
+          />
+          <Uploader
+            manual
+            maxCount={3}
+            fileList={maxCountFileList}
+            description="До 3 файлов"
+          />
+        `}
+        scope={{ singleFileList, maxCountFileList }}
+      />
+
+      <DocExampleBlock
+        title="maxFileSize и maxTotalSize"
+        description="Ограничивают размер одного файла и суммарный размер списка. Задаются в килобайтах."
+        previewDirection="vertical"
+        code={`
+          <Uploader
+            manual
+            maxFileSize={100}
+            fileList={oversizedFileList}
+            description="Каждый файл не больше 100 КБ"
+          />
+          <Uploader
+            manual
+            maxTotalSize={1024}
+            fileList={statusFileList}
+            description="Общий размер до 1 МБ"
+          />
+        `}
+        scope={{ oversizedFileList, statusFileList }}
       />
 
       <DocExampleBlock
         title="manual"
-        description="Переключает ручной режим: выбранные файлы остаются в списке до явного запуска загрузки через ref компонента."
+        description="Отключает автоматическую отправку. При `true` выбранные файлы остаются в списке, пока загрузку не запустят через ref методом `upload()`. Метод отправляет файлы, у которых нет статуса `error`, `uploading`, `done` или `success`. Доступные значения: `true`, `false`. По умолчанию — `false`."
+        codeBlock="collapsed"
         code={`
-          <Uploader manual description="Загрузка начнётся после подтверждения" />
+          function App() {
+            const ref = React.useRef()
+
+            return (
+              <>
+                <Uploader
+                  ref={ref}
+                  manual
+                  customRequest={demoRequest}
+                  description="Выберите файлы, затем нажмите «Загрузить»"
+                />
+                <Button
+                  text="Загрузить"
+                  onClick={() => ref.current.upload()}
+                  style={{ marginTop: 16 }}
+                />
+              </>
+            )
+          }
+        `}
+        setupCode={`
+          const demoRequest = ({ onProgress, onSuccess }) => {
+            let percent = 0
+            const timer = setInterval(() => {
+              percent += 50
+              if (percent < 100) {
+                onProgress?.({ percent })
+              } else {
+                clearInterval(timer)
+                onSuccess?.({})
+              }
+            }, 400)
+            return {
+              abort() {
+                clearInterval(timer)
+              },
+            }
+          }
         `}
       />
 
       <DocExampleBlock
         title="showProgress"
-        description="Управляет отображением прогресса загрузки в элементах списка. По умолчанию — `true`."
+        description="Показывает объём загруженных данных в строке файла. Доступные значения: `true`, `false`. По умолчанию — `true`. Если **percent** у файла не задан, отображается только размер."
+        previewDirection="vertical"
         code={`
           <Uploader
             manual
+            showProgress
+            fileList={progressFileList}
+            description="С индикатором прогресса"
+          />
+          <Uploader
+            manual
             showProgress={false}
-            description="Файлы без индикатора прогресса"
+            fileList={progressFileList}
+            description="Без индикатора прогресса"
           />
         `}
+        scope={{ progressFileList }}
       />
 
       <DocExampleBlock
         title="validationStatus"
-        description="Передаёт внешний статус валидации. При значении `error` область загрузки отображается в состоянии ошибки."
+        description="Внешний статус валидации области загрузки. Доступные значения: `default`, `error`. При `error` рамка отображается в состоянии ошибки независимо от проверки файлов."
+        previewDirection="vertical"
         code={`
           <Uploader
             manual
             validationStatus="error"
             description="Выберите файл для продолжения"
           />
+          <Uploader
+            manual
+            validationStatus="error"
+            fileList={singleFileList}
+            description="Выберите файл для продолжения"
+          />
         `}
+        scope={{ singleFileList }}
       />
 
       <DocExampleBlock
         title="accept и directory"
-        description="**accept** ограничивает доступные для выбора типы файлов, а **directory** разрешает выбрать целую папку."
+        description="**accept** ограничивает типы файлов в системном диалоге выбора, как у HTML-атрибута `accept`. **directory** разрешает выбрать папку: файлы из неё попадают в список плоско, без дерева каталогов."
+        previewDirection="vertical"
         code={`
-          <Uploader
-            accept=".pdf,.docx"
-            directory
-            manual
-            description="Документы PDF или DOCX"
-          />
+          <Uploader accept=".pdf,.docx" manual description="Документы PDF или DOCX" />
+          <Uploader directory manual description="Выберите папку с файлами" />
         `}
       />
 
       <DocExampleBlock
-        title="fullHeight и truncateFileName"
-        description="**fullHeight** растягивает вариант `medium` по высоте контейнера. **truncateFileName** сокращает длинное имя файла многоточием, когда оно не помещается в строку."
+        title="fullHeight"
+        description="Растягивает вариант **size**=`medium` по высоте контейнера. Для `small` не действует. Если выбран один файл при **maxCount**=`1`, область сворачивается до строки файла и **fullHeight** не применяется."
         code={`
-          <Uploader fullHeight manual truncateFileName description="Файлы проекта" />
+          <div style={{ height: 360 }}>
+            <Uploader
+              fullHeight
+              manual
+              fileList={statusFileList}
+              description="Файлы проекта"
+            />
+          </div>
         `}
+        scope={{ statusFileList }}
+      />
 
+      <DocExampleBlock
+        title="truncateFileName"
+        description="Сокращает длинное имя файла многоточием, если оно не помещается в строку. Доступные значения: `true`, `false`. По умолчанию — `true`. Имена короче 15 символов не сокращаются."
+        previewDirection="vertical"
+        code={`
+          <div style={{ maxWidth: 480 }}>
+            <Uploader
+              manual
+              truncateFileName
+              fileList={longNameFileList}
+              description="Длинные имена сокращаются"
+            />
+          </div>
+          <div style={{ maxWidth: 480 }}>
+            <Uploader
+              manual
+              truncateFileName={false}
+              fileList={longNameFileList}
+              description="Длинные имена переносятся"
+            />
+          </div>
+        `}
+        scope={{ longNameFileList }}
+      />
+
+      <DocExampleBlock
+        title="onChange и onRemove"
+        description="**onChange** вызывается при изменении списка и получает объект с текущим **file** и **fileList**. **onRemove** вызывается при удалении файла из списка."
+        code={`
+          <Uploader
+            manual
+            fileList={statusFileList}
+            description="Удалите файл или добавьте новый"
+            onChange={(info) => alert(info.file.name)}
+            onRemove={(file) => alert(file.name)}
+          />
+        `}
+        scope={{ statusFileList }}
+      />
+
+      <DocExampleBlock
+        title="onDownload и onDownloadAll"
+        description="**onDownload** вызывается по клику на загруженный файл. Если колбэк не задан, но у файла есть **url**, файл открывается в новой вкладке. При наличии **onDownload** или **url** в строке появляется иконка скачивания. **onDownloadAll** добавляет пункт «Скачать все файлы» в меню итога."
+        code={`
+          <Uploader
+            manual
+            maxCount={4}
+            fileList={downloadableFileList}
+            description="Файлы доступны для скачивания"
+            onDownload={(file) => alert(file.name)}
+            onDownloadAll={() => alert('Скачать все файлы')}
+          />
+        `}
+        scope={{ downloadableFileList }}
+      />
+
+      <DocExampleBlock
+        title="action, method, headers и customRequest"
+        description="**action**, **method** и **headers** задают URL, HTTP-метод и заголовки стандартного запроса загрузки. **customRequest** подменяет стандартную отправку: компонент вызывает переданную функцию вместо запроса на **action**."
       />
 
     </Tabs.TabPane>
@@ -140,7 +392,7 @@ import { uploaderDesignPropPresentation } from './Uploader.design.properties'
       <DocExampleBlock
         title="Компонент в Pixso"
         titleSize="H5"
-        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=107611:414575)"
+        description=""
       />
       <DocumentationArgsTable rows={buildPresentationOnlyRows(uploaderDesignPropPresentation)} />
 
