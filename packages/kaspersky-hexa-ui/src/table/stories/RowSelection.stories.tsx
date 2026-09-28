@@ -5,6 +5,7 @@ import { Button } from '@src/button'
 import { Field } from '@src/field'
 import { SectionMessage } from '@src/section-message'
 import { SegmentedButton } from '@src/segmented-button'
+import { ToolbarItems } from '@src/toolbar'
 import { Meta } from '@storybook/react'
 import React, { useRef, useState } from 'react'
 
@@ -13,6 +14,7 @@ import MetaData from '../__meta__/meta.json'
 import {
   createMockDataSourceFunction,
   generatedData,
+  MockRow,
   tableColumns,
   TableMockProps,
   TableMockStory
@@ -138,7 +140,7 @@ export const ResetSelectionViaRef: TableMockStory = {
   }
 }
 
-const getSelectionToolbarItems: GetLeftItems = ({ selectedRowKeys, isSelectedAll, deselectedRowKeys }) => {
+const getSelectionToolbarItems: GetLeftItems<ToolbarItems, MockRow> = ({ selectedRowKeys, isSelectedAll, deselectedRowKeys }) => {
   const selectedCount = selectedRowKeys?.length ?? 0
   const hasSelection = isSelectedAll || selectedCount > 0
 

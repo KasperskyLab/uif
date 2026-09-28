@@ -20,7 +20,9 @@ type DataWindow = {
   next?: PageData
 }
 
-const useInfiniteScrollPageGetter = ({ infiniteScrollPageGetter }: Required<Pick<TablePaginationProps, 'infiniteScrollPageGetter'>>) => (
+const useInfiniteScrollPageGetter = <T extends TableRecord>({
+  infiniteScrollPageGetter
+}: Required<Pick<TablePaginationProps<T>, 'infiniteScrollPageGetter'>>) => (
   useCallback(async (page: number) => {
     const result = infiniteScrollPageGetter(page)
 
@@ -75,7 +77,7 @@ export const useVirtualInfiniteScroll = <T extends TableRecord = TableRecord>({
   const isProgramScroll = useRef(false)
   const hardReset = useRef(false)
 
-  const pageGetter = useInfiniteScrollPageGetter({ infiniteScrollPageGetter })
+  const pageGetter = useInfiniteScrollPageGetter<T>({ infiniteScrollPageGetter })
 
   const totalPages = Math.ceil(total / pageSize)
 

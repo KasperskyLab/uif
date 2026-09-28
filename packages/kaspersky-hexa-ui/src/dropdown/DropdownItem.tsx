@@ -1,3 +1,4 @@
+import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import Menu from 'rc-menu'
 import React, { FC } from 'react'
 
@@ -14,10 +15,12 @@ export const DropdownItem: FC<DropdownItemProps> = ({
   title,
   truncateItemWidth,
   icon,
-  ...rest
+  ...props
 }: DropdownItemProps) => {
+  const { testAttributes, ...rest } = useTestAttribute(props)
+
   return (
-    <Menu.Item {...rest} title={typeof title === 'string' ? title : undefined}>
+    <Menu.Item {...testAttributes} {...rest} title={typeof title === 'string' ? title : undefined}>
       <DropdownItemInner
         componentsBefore={componentsBefore}
         componentsAfter={componentsAfter}

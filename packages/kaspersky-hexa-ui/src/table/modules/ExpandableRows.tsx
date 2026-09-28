@@ -163,7 +163,6 @@ export const defaultExpandConfig: ITableProps['expandable'] = {
             onClick={(e: React.MouseEvent<HTMLElement, MouseEvent>) => onExpand(record, e)}
           >
             <ActionButton
-              interactive={false}
               testId="hexa-ui-table-row-expand-icon"
               data-expanded={expanded}
               size="small"

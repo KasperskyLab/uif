@@ -10,100 +10,97 @@ import {
   DocumentationTabs as Tabs,
 } from '@sb/components/Documentation'
 import { actionButtonDesignPropPresentation } from './ActionButton.design.properties'
+import { actionButtonPropPresentation } from './ActionButton.controls'
 import { Text } from '@src/typography'
 
 import { ActionButton } from '../ActionButton'
 import * as ActionButtonStories from './ActionButton.stories'
 
-<Meta of={ActionButtonStories} name='ActionButton Docs' />
+<Meta of={ActionButtonStories} name="ActionButton Docs" />
 
 <DocPageLayout>
 
-  <DocPageHeader
-    title='ActionButton'
-    rtlSupported
-    checkUIF
-  />
+  <DocPageHeader title="ActionButton" rtlSupported checkUIF />
 
-  <Tabs defaultActiveKey='description'>
+  <Tabs defaultActiveKey="description">
 
-    <Tabs.TabPane tab='Описание' key='description'>
+    <Tabs.TabPane tab="Описание" key="description">
 
       <DocExampleBlock
-        description='
+        description="
           **ActionButton** — компактная кнопка действия с иконкой, опциональной подписью и дополнительным контентом
 
           **ActionButton** — компактное действие второго порядка в ограниченном пространстве: закрытие **Modal**, **Panel**, **Card**, **Alert** и **Notification**, очистка значения в **Search** и полях ввода, снятие **Tag** или **Chip**, операции в строке **Menu** или **Select**, действия в шапке **Card** и в панели фильтров таблицы, дополнительная иконка в **FormLabel** или **SectionMessage**. Часто достаточно одной узнаваемой иконки без подписи; короткую подпись добавляют, если без текста действие неочевидно.
 
-          Для основного шага сценария — сохранение, подтверждение, отправка — выбирайте **Button**. Если в одной зоне (например, шапка **Card**) нужно несколько равнозначных операций, сводите их к одной точке входа с меню, а не к ряду одинаковых иконок. Не подменяйте **ActionButton** ключевые действия формы и диалога и не используйте его вместо **Alert** или **SectionMessage**, когда пользователю нужно прочитать важное сообщение целиком.'
+          Для основного шага сценария — сохранение, подтверждение, отправка — выбирайте **Button**. Если в одной зоне (например, шапка **Card**) нужно несколько равнозначных операций, сводите их к одной точке входа с меню, а не к ряду одинаковых иконок. Не подменяйте **ActionButton** ключевые действия формы и диалога и не используйте его вместо **Alert** или **SectionMessage**, когда пользователю нужно прочитать важное сообщение целиком."
       />
 
       <DocExampleBlock
-        title='Закрытие и очистка'
-        description='Для закрытия оверлея или очистки поля обычно достаточно иконки без текстовой подписи — действие считывается по контексту (крестик в углу окна, очистка в конце строки ввода).'
-        codeBlock='hidden'
+        title="Закрытие и очистка"
+        description="Для закрытия оверлея или очистки поля обычно достаточно иконки без текстовой подписи — действие считывается по контексту (крестик в углу окна, очистка в конце строки ввода)."
+        codeBlock="hidden"
         code={`
-          <ActionButton aria-label='Закрыть' />
+          <ActionButton aria-label="Закрыть" />
         `}
       />
 
       <DocExampleBlock
-        title='Основное действие сценария'
-        description='Подтверждение, сохранение и другие ключевые шаги оформляйте **Button** с понятной подписью.'
+        title="Основное действие сценария"
+        description="Подтверждение, сохранение и другие ключевые шаги оформляйте **Button** с понятной подписью."
         previewGap={8}
-        codeBlock='hidden'
+        codeBlock="hidden"
         code={`
-          <Button mode='primary' text='Сохранить' />
+          <Button mode="primary" text="Сохранить" />
         `}
       />
 
       <DocExampleBlock
-        description='Не используйте **ActionButton** как единственную или главную кнопку сценария — пользователь может не распознать компактную иконку как основной призыв к действию.'
+        description="Не используйте **ActionButton** как единственную или главную кнопку сценария — пользователь может не распознать компактную иконку как основной призыв к действию."
         previewGap={8}
-        codeBlock='hidden'
-        mode='dont'
+        codeBlock="hidden"
+        mode="dont"
         code={`
           <ActionButton>Сохранить</ActionButton>
         `}
       />
 
       <DocExampleBlock
-        title='Несколько операций в шапке Card'
-        description='При одной дополнительной операции в шапке **Card** — отдельная иконка; при нескольких равнозначных пунктах — одна кнопка, открывающая меню.'
+        title="Несколько операций в шапке Card"
+        description="При одной дополнительной операции в шапке **Card** — отдельная иконка; при нескольких равнозначных пунктах — одна кнопка, открывающая меню."
         previewGap={8}
-        codeBlock='hidden'
+        codeBlock="hidden"
         code={`
-          <ActionButton size='large' icon={<Menu2 />} aria-label='Действия' />
+          <ActionButton size="large" icon={<Menu2 />} aria-label="Действия" />
         `}
       />
 
       <DocExampleBlock
-        description='Не выстраивайте в шапке **Card** несколько иконок без группировки — сложнее понять назначение каждой и выше риск ошибочного нажатия.'
+        description="Не выстраивайте в шапке **Card** несколько иконок без группировки — сложнее понять назначение каждой и выше риск ошибочного нажатия."
         previewGap={8}
-        codeBlock='hidden'
-        mode='dont'
+        codeBlock="hidden"
+        mode="dont"
         code={`
           <div style={{ display: 'flex', gap: 4 }}>
-            <ActionButton icon={<Edit />} aria-label='Изменить' />
-            <ActionButton icon={<Delete />} aria-label='Удалить' />
-            <ActionButton icon={<Settings />} aria-label='Настройки' />
+            <ActionButton icon={<Edit />} aria-label="Изменить" />
+            <ActionButton icon={<Delete />} aria-label="Удалить" />
+            <ActionButton icon={<Settings />} aria-label="Настройки" />
           </div>
         `}
       />
 
       <DocExampleBlock
-        title='Короткая подпись'
-        description='Если нужна подпись, формулируйте её кратко — компонент рассчитан на компактную типографику в одну строку.'
-        codeBlock='hidden'
+        title="Короткая подпись"
+        description="Если нужна подпись, формулируйте её кратко — компонент рассчитан на компактную типографику в одну строку."
+        codeBlock="hidden"
         code={`
           <ActionButton icon={<PlusS />}>Добавить условие</ActionButton>
         `}
       />
 
       <DocExampleBlock
-        description='Избегайте длинных подписей, которые не помещаются в компактную кнопку или переносятся на вторую строку.'
-        codeBlock='hidden'
-        mode='dont'
+        description="Избегайте длинных подписей, которые не помещаются в компактную кнопку или переносятся на вторую строку."
+        codeBlock="hidden"
+        mode="dont"
         code={`
           <ActionButton noIcon>
             Удалить выбранные элементы из списка фильтров
@@ -113,59 +110,78 @@ import * as ActionButtonStories from './ActionButton.stories'
 
     </Tabs.TabPane>
 
-    <Tabs.TabPane tab='Структура' key='composition'>
+    <Tabs.TabPane tab="Структура" key="composition">
 
       <DocExampleBlock
-        description='
+        description="
           **ActionButton** предназначен для компактных вторичных и контекстных действий: закрытие, очистка, дополнительные операции в панелях, строках таблицы и полях ввода. По умолчанию рендерится как `button` с иконкой крестика (размер иконки зависит от **size**). 
-           Настраиваются **mode**, **size**, **icon**, **noIcon**, подпись через **children**, дополнительный узел **elementAfter**, состояния **disabled** и **interactive**, а также **theme**, **className** и **style**.'
+          Настраиваются **mode**, **size**, **icon**, **noIcon**, подпись через **children**, дополнительный узел **elementAfter**, состояние **disabled**."
       />
 
       <DocExampleBlock
-        title='mode'
-        description='Цветовой режим кнопки. 
-        Доступные значения: `ghost`, `ghostInverted`, `filled`, `filledInverted`, `onLight`. По умолчанию — `ghost`.'
+        title="mode"
+        description="
+          Цветовой режим кнопки. 
+          Доступные значения: `ghost`, `ghostInverted`, `filled`, `filledInverted`, `onLight`. По умолчанию — `ghost`."
         code={`
-          <ActionButton mode='ghost'>Action</ActionButton>
-          <ActionButton mode='ghostInverted'>Action</ActionButton>
-          <ActionButton mode='filled'>Action</ActionButton>
-          <ActionButton mode='filledInverted'>Action</ActionButton>
-          <ActionButton mode='onLight'>Action</ActionButton>
+          <ActionButton mode="ghost">Action</ActionButton>
+          <ActionButton mode="ghostInverted">Action</ActionButton>
+          <ActionButton mode="filled">Action</ActionButton>
+          <ActionButton mode="filledInverted">Action</ActionButton>
+          <ActionButton mode="onLight">Action</ActionButton>
         `}
       />
 
       <DocExampleBlock
-        title='size'
-        description='Размер кнопки: влияет на габариты, типографику подписи и размер стандартной иконки крестика. 
-        Доступные значения: `small`, `medium`, `large`. По умолчанию — `medium`.'
+        title="size"
+        description="
+          Размер кнопки: влияет на габариты, типографику подписи и размер стандартной иконки крестика. 
+          Доступные значения: `small`, `medium`, `large`. По умолчанию — `medium`."
         code={`
-          <ActionButton size='small'>Action</ActionButton>
-          <ActionButton size='medium'>Action</ActionButton>
-          <ActionButton size='large'>Action</ActionButton>
+          <ActionButton size="small">Action</ActionButton>
+          <ActionButton size="medium">Action</ActionButton>
+          <ActionButton size="large">Action</ActionButton>
+          <ActionButton size="small" mode="filled">
+            Action
+          </ActionButton>
+          <ActionButton size="medium" mode="filled">
+            Action
+          </ActionButton>
+          <ActionButton size="large" mode="filled">
+            Action
+          </ActionButton>
         `}
       />
 
       <DocExampleBlock
-        title='icon'
-        description='Кастомная иконка вместо стандартного крестика. Если **icon** не задан, отображается встроенная иконка: **Close** при **size**=`small`, **CrossXs** при `medium`, **CrossS** при `large`.'
+        title="icon"
+        description="Кастомная иконка вместо стандартного крестика. Если **icon** не задан, отображается встроенная иконка: **Close** при **size**=`small`, **CrossXs** при `medium`, **CrossS** при `large`."
         code={`
-          <ActionButton icon={<Placeholder />} />
-          <ActionButton icon={<Settings />} />
+          <ActionButton icon={<Placeholder />} size="small" />
+          <ActionButton icon={<Placeholder />} size="medium" />
+          <ActionButton icon={<Placeholder />} size="large" />
+          <ActionButton icon={<Placeholder />} mode="filled" size="small" />
+          <ActionButton icon={<Placeholder />} mode="filled" size="medium" />
+          <ActionButton icon={<Placeholder />} mode="filled" size="large" />
         `}
       />
 
       <DocExampleBlock
-        title='noIcon'
-        description='Скрывает иконку. 
-        Доступные значения: `true`, `false`. По умолчанию — `false`.'
+        title="noIcon"
+        description="
+          Скрывает иконку. 
+          Доступные значения: `true`, `false`. По умолчанию — `false`."
         code={`
           <ActionButton noIcon>Action</ActionButton>
+          <ActionButton noIcon mode="filled">
+            Action
+          </ActionButton>
         `}
       />
 
       <DocExampleBlock
-        title='children'
-        description='Текстовая подпись кнопки. Без **children** отображается только иконка (или только **elementAfter**, если задан **noIcon**).'
+        title="children"
+        description="Текстовая подпись кнопки. Без **children** отображается только иконка (или только **elementAfter**, если задан **noIcon**)."
         code={`
           <ActionButton icon={<PlusS />} />
           <ActionButton icon={<PlusS />}>With label</ActionButton>
@@ -175,63 +191,53 @@ import * as ActionButtonStories from './ActionButton.stories'
       />
 
       <DocExampleBlock
-        title='elementAfter'
-        description='Произвольный React-узел после иконки и подписи **children**.'
+        title="elementAfter"
+        description="Произвольный React-узел после иконки и подписи **children**."
         code={`
           <ActionButton elementAfter={<Placeholder />}>Action</ActionButton>
         `}
       />
 
       <DocExampleBlock
-        title='interactive'
-        description='Включает стили hover/active. 
-        Доступные значения: `true`, `false`. По умолчанию — `true`. При **interactive**=`false` кнопка выглядит статично.'
-        code={`
-          <ActionButton icon={<StatusInfoOutline />}>Interactive</ActionButton>
-          <ActionButton interactive={false} icon={<StatusInfoOutline />}>
-            Non-interactive
-          </ActionButton>
-        `}
-      />
-
-      <DocExampleBlock
-        title='disabled'
-        description='Отключённая кнопка не реагирует на клики и получает нативный атрибут **disabled**. 
-        Доступные значения: `true`, `false`. По умолчанию — `false`.'
+        title="disabled"
+        description="
+          Отключённая кнопка не реагирует на клики и получает нативный атрибут **disabled**. 
+          Доступные значения: `true`, `false`. По умолчанию — `false`."
         code={`
           <ActionButton disabled>Disabled ActionButton</ActionButton>
         `}
       />
 
       <DocExampleBlock
-        title='_wrapInSpan'
-        description='Рендерит `span` вместо `button`. 
-        Доступные значения: `true`, `false`. По умолчанию — `false`. 
-        Применяется при встраивании в уже интерактивный родитель — например, **closeIcon** в **Modal** или навигационную иконку в **DatePicker**, чтобы избежать вложенных `button`.'
+        title="_wrapInSpan"
+        description="
+          Рендерит `span` вместо `button`. 
+          Доступные значения: `true`, `false`. По умолчанию — `false`. 
+          Применяется при встраивании в уже интерактивный родитель — например, **closeIcon** в **Modal** или навигационную иконку в **DatePicker**, чтобы избежать вложенных `button`."
         code={`
           <ActionButton>button</ActionButton>
           <ActionButton _wrapInSpan>span</ActionButton>
-          <button type='button' aria-label='Close'>
-            <ActionButton _wrapInSpan size='large' />
+          <button type="button" aria-label="Close">
+            <ActionButton _wrapInSpan size="large" />
           </button>
         `}
       />
 
     </Tabs.TabPane>
 
-    <Tabs.TabPane tab='Properties' key='properties'>
+    <Tabs.TabPane tab="Properties" key="properties">
 
       <Description of={ActionButtonStories} />
-      <AutodocArgsTable />
+      <AutodocArgsTable presentation={actionButtonPropPresentation} />
 
     </Tabs.TabPane>
 
-    <Tabs.TabPane tab='Дизайн' key='design'>
+    <Tabs.TabPane tab="Дизайн" key="design">
 
       <DocExampleBlock
-        title='Компонент в Pixso'
-        titleSize='H5'
-        description='[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=37390:134547)'
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description=""
       />
 
       <DocumentationArgsTable rows={buildPresentationOnlyRows(actionButtonDesignPropPresentation)} />

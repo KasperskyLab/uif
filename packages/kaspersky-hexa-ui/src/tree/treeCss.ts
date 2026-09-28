@@ -94,8 +94,8 @@ export const treeCss = css<{ checkable?: boolean, interactive?: boolean, disable
     }
 
     .ant-tree-switcher {
-      width: 22px;
-      padding-right: 4px;
+      width: 16px;
+      padding-right: 2px;
       background: none;
     }
 

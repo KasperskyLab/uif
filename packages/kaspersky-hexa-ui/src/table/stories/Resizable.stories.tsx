@@ -74,7 +74,7 @@ const dataSource = Array(20).fill(null).map((_, i) => ({
   name: `Name ${i + 1}`,
   status: `Status ${i + 1}`,
   rights: `Rights ${i + 1}`,
-  profile: `Profile ${i + 1}`
+  profile: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed ${i + 1}`
 }))
 
 const meta: Meta<ITableProps> = {

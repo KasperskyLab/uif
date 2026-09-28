@@ -49,9 +49,9 @@ const createToolbarElements = (nodes: ReactNode[]): ToolbarItems<ToolbarItemKey>
   }))
 }
 
-type ToolbarContextSyncProps = {
-  dataSource?: TableRecord[],
-  getLeftItems?: GetLeftItems,
+type ToolbarContextSyncProps<T extends TableRecord = TableRecord> = {
+  dataSource?: T[],
+  getLeftItems?: GetLeftItems<ToolbarItems<ToolbarItemKey>, T>,
   setCustomActions: Dispatch<SetStateAction<ToolbarItems<ToolbarItemKey>[]>>
 }
 
@@ -62,7 +62,7 @@ type ToolbarContextSyncProps = {
  * не ре-рендерит: единственный потребитель (ContextMenu) читает toolbarContext из стора императивно в момент клика.
  * customActions пересобираются только при наличии `getLeftItems` (их результат зависит от строки поиска).
  */
-function ToolbarContextSync ({ dataSource, getLeftItems, setCustomActions }: ToolbarContextSyncProps) {
+function ToolbarContextSync <T extends TableRecord> ({ dataSource, getLeftItems, setCustomActions }: ToolbarContextSyncProps<T>) {
   const { filterApi, sorting, rowSelection, searchValue } = useTableContext(state => ({
     filterApi: state.filterApi,
     sorting: state.sorting,

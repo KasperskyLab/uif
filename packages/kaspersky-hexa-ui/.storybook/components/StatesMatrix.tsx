@@ -4,22 +4,39 @@ import { ThemeKey } from '@design-system/types'
 import React, { Fragment, ReactNode, useLayoutEffect } from 'react'
 
 export type StatesMatrixItem = {
-  /** Подставляется в класс ячейки как sb-state-<key> */
+  /** Подставляется в класс ячейки как sb-state-<key>; ключ loading замораживает анимации в ячейке */
   key: string,
   label: string
 }
 
-export type StatesMatrixProps<R extends StatesMatrixItem, C extends StatesMatrixItem> = {
+type StatesMatrixBase<R extends StatesMatrixItem, C extends StatesMatrixItem> = {
   /** Строки — состояния компонента */
   rows: R[],
   /** Колонки — варианты компонента */
   columns: C[],
-  renderCell: (row: R, column: C) => ReactNode,
   /** По умолчанию — обе темы */
   themes?: ThemeKey[],
-  /** Ширина колонки с подписями строк */
+  /** Ширина колонки с подписями строк и колонки размеров */
   labelWidth?: number
 }
+
+export type StatesMatrixProps<
+  R extends StatesMatrixItem,
+  C extends StatesMatrixItem,
+  S extends StatesMatrixItem = StatesMatrixItem
+> = StatesMatrixBase<R, C> & (
+  | {
+    /** Подстроки размера внутри каждого состояния. Без пропа сетка двумерная */
+    sizes?: undefined,
+    renderCell: (row: R, column: C) => ReactNode
+  } |
+  {
+    sizes: S[],
+    /** Заголовок колонки размеров */
+    sizeColumnLabel?: string,
+    renderCell: (row: R, column: C, size: S) => ReactNode
+  }
+)
 
 // Состояния, которые нельзя выставить пропами: их правила берутся
 // из css самого компонента (см. useSimulatedPseudoStates)
@@ -39,7 +56,7 @@ const PSEUDO_BY_STATE: Record<string, RegExp> = {
  * порядку перебивает исходное, поэтому ячейка выглядит так, будто на неё навели
  * мышь. Меняются токены в компоненте — меняется и раскладка, править нечего.
  */
-function useSimulatedPseudoStates (stateKeys: string[]) {
+export function useSimulatedPseudoStates (stateKeys: string[]) {
   useLayoutEffect(() => {
     const pseudos = stateKeys
       .map((key) => [key, PSEUDO_BY_STATE[key]] as const)
@@ -87,69 +104,119 @@ function useSimulatedPseudoStates (stateKeys: string[]) {
   }, [stateKeys.join(',')])
 }
 
+/**
+ * Строки с ключом loading содержат анимированные индикаторы (Loader, спиннер
+ * antd): без заморозки скриншот каждый раз ловил бы спиннер под другим углом.
+ * animation: none показывает индикатор в начальном угле — детерминированно.
+ */
+const FREEZE_LOADING_STYLE = '.sb-state-loading, .sb-state-loading * { animation: none !important; }'
+
 const THEME_LABELS: Record<ThemeKey, string> = {
   [ThemeKey.Light]: 'Light theme',
   [ThemeKey.Dark]: 'Dark theme'
 }
 
 const cellStyle: React.CSSProperties = {
-  padding: '4px 12px',
   display: 'flex',
   alignItems: 'center',
-  minHeight: 32
+  justifyContent: 'center',
+  minHeight: 24
 }
 
 const headerStyle: React.CSSProperties = {
   ...cellStyle,
   fontSize: 12,
-  fontWeight: 600,
+  fontWeight: 500,
   color: 'var(--fg--neutral--secondary)',
-  textAlign: 'left'
+  justifyContent: 'center'
 }
 
-function Grid<R extends StatesMatrixItem, C extends StatesMatrixItem> ({
-  rows,
+function VariantCells<R extends StatesMatrixItem, C extends StatesMatrixItem> ({
+  rowKey,
   columns,
-  renderCell,
-  labelWidth = 100
-}: Pick<StatesMatrixProps<R, C>, 'rows' | 'columns' | 'renderCell' | 'labelWidth'>) {
+  renderColumn
+}: {
+  rowKey: string,
+  columns: C[],
+  renderColumn: (column: C) => ReactNode
+}) {
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: `${labelWidth}px repeat(${columns.length}, min-content)`
-    }}
-    >
+    <>
+      {columns.map(column => (
+        <div key={column.key} style={cellStyle}>
+          <div className={`sb-state-${rowKey}`}>{renderColumn(column)}</div>
+        </div>
+      ))}
+    </>
+  )
+}
+
+function Grid<R extends StatesMatrixItem, C extends StatesMatrixItem, S extends StatesMatrixItem> (
+  props: StatesMatrixProps<R, C, S>
+) {
+  const { rows, columns, labelWidth = 100 } = props
+  const gridTemplateColumns = props.sizes
+    ? `${labelWidth}px ${labelWidth}px repeat(${columns.length}, max-content)`
+    : `${labelWidth}px repeat(${columns.length}, max-content)`
+
+  return (
+    <div style={{ display: 'grid', gap: 16, gridTemplateColumns }}>
       <div style={headerStyle} />
+      {props.sizes && <div style={headerStyle}>{props.sizeColumnLabel ?? 'Size'}</div>}
       {columns.map(column => <div key={column.key} style={headerStyle}>{column.label}</div>)}
 
-      {rows.map(row => (
-        <Fragment key={row.key}>
-          <div style={headerStyle}>{row.label}</div>
-          {columns.map(column => (
-            <div key={column.key} style={cellStyle}>
-              <div className={`sb-state-${row.key}`}>{renderCell(row, column)}</div>
-            </div>
+      {props.sizes
+        ? rows.map(row => (
+            <Fragment key={row.key}>
+              {props.sizes.map((size, index) => (
+                <Fragment key={`${row.key}-${size.key}`}>
+                  {index === 0 ? <div style={headerStyle}>{row.label}</div> : <div />}
+                  <div style={headerStyle}>{size.label}</div>
+                  <VariantCells
+                    rowKey={row.key}
+                    columns={columns}
+                    renderColumn={column => props.renderCell(row, column, size)}
+                  />
+                </Fragment>
+              ))}
+            </Fragment>
+          ))
+        : rows.map(row => (
+            <Fragment key={row.key}>
+              <div style={headerStyle}>{row.label}</div>
+              <VariantCells
+                rowKey={row.key}
+                columns={columns}
+                renderColumn={column => props.renderCell(row, column)}
+              />
+            </Fragment>
           ))}
-        </Fragment>
-      ))}
     </div>
   )
 }
 
 /**
  * Раскладка компонента по состояниям: строки — состояния, колонки — варианты,
- * каждая тема отдельным блоком. Строки с ключами hover, active, focus и
- * focus-visible показываются без вмешательства в стори — их правила берутся
- * из css компонента.
+ * каждая тема отдельным блоком. Проп sizes добавляет подстроки размера
+ * внутри каждого состояния и колонку Size. Строки с ключами hover, active,
+ * focus и focus-visible показываются без вмешательства в стори — их правила
+ * берутся из css компонента. В строках с ключом loading анимации заморожены.
  */
-export function StatesMatrix<R extends StatesMatrixItem, C extends StatesMatrixItem> ({
+export function StatesMatrix<
+  R extends StatesMatrixItem,
+  C extends StatesMatrixItem,
+  S extends StatesMatrixItem = StatesMatrixItem
+> ({
   themes = [ThemeKey.Light, ThemeKey.Dark],
   ...gridProps
-}: StatesMatrixProps<R, C>) {
+}: StatesMatrixProps<R, C, S>) {
   useSimulatedPseudoStates(gridProps.rows.map(row => row.key))
 
   return (
     <div style={{ display: 'inline-flex', flexDirection: 'column', gap: 32, padding: 24 }}>
+      <style>{FREEZE_LOADING_STYLE}</style>
+      {/* #storybook-root равен ширине вьюпорта и обрезает широкую матрицу */}
+      <style>{'#storybook-root { width: max-content; }'}</style>
       {themes.map(theme => (
         <div key={theme} className={theme === ThemeKey.Dark ? 'theme-dark' : 'theme-light'}>
           <ConfigProvider theme={theme}>
@@ -157,17 +224,11 @@ export function StatesMatrix<R extends StatesMatrixItem, C extends StatesMatrixI
             <div style={{
               padding: 24,
               borderRadius: 8,
-              background: 'var(--bg--global)',
+              background: 'var(--bg--neutral--level_0)',
               border: '1px solid var(--border--neutral--medium)'
             }}
             >
-              <h2 style={{
-                margin: '0 0 16px 0',
-                fontSize: 16,
-                fontWeight: 600,
-                color: 'var(--fg--neutral--primary)'
-              }}
-              >
+              <h2 style={{ color: 'var(--fg--neutral--primary)' }}>
                 {THEME_LABELS[theme]}
               </h2>
               <Grid {...gridProps} />

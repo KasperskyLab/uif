@@ -6,8 +6,8 @@ import { STICKY_HEADER_CLASS, StickyHeaderWrapper } from '../helpers/stickyHeade
 import { TableTestingClass } from '../test-utils/TableTestingClass'
 
 describe('Table StickyHeader', () => {
-  it('removes the sticky-header portal table on unmount', () => {
-    const table = TableTestingClass.render({ columns: tableColumns, dataSource: generatedData, stickyHeader: 0 })
+  it('removes the sticky-header portal table on unmount', async () => {
+    const table = await TableTestingClass.render({ columns: tableColumns, dataSource: generatedData, stickyHeader: 0 })
 
     const stickyHost = table.query(`.${STICKY_HEADER_CLASS} .ant-table`) as HTMLElement
     const portalTable = stickyHost?.querySelector('table')

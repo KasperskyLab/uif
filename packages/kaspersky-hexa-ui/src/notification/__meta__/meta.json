@@ -13,6 +13,6 @@
   "component": "Notification",
   "description": "Компонент Notification используетсс длс отображенис временных глобальных уведомлений. Накладываетсс поверх всей страницы.",
   "usage": "Чтобы показать уведомление необходимо вызвать функцию `openNotification`. Так же необходимо отрендерить компонент `Notification`. В dom ноду стого компонента будут складыватьсс все уведомленис.",
-  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=69315%3A242254",
-  "pixsoView": "https://pixso.net/app/design/OF-jWk_0q7j2S48U-ldnAQ"
+  "designLink": "",
+  "pixsoView": ""
 }

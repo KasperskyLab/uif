@@ -9,8 +9,6 @@ import {
   DocumentationArgsTable,
   DocumentationTabs as Tabs,
 } from '@sb/components/Documentation'
-import { Text } from '@src/typography'
-
 import { TextDiff } from '../TextDiff'
 import * as TextDiffStories from './TextDiff.stories'
 import { textDiffDesignPropPresentation } from './TextDiff.design.properties'
@@ -27,19 +25,193 @@ import { textDiffDesignPropPresentation } from './TextDiff.design.properties'
 
       <DocExampleBlock
         description="
-          **TextDiff** — компонент для отображения добавленных и удалённых фрагментов текста
+          **TextDiff** показывает различия между двумя текстовыми значениями, выделяя добавленные, удалённые и изменённые фрагменты. Используйте его в карточках свойств, истории изменений и формах, когда нужно сравнить старое и новое значение в том же поле."
+        previewDirection="vertical"
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Field
+            label="Version"
+            required
+            labelPosition="before"
+            control={<TextDiff newText="1.0.0" oldText="0.0.99 alpha" />}
+          />
+          <Field
+            label="Model"
+            required
+            labelPosition="before"
+            control={
+              <TextDiff
+                newText="MikroTik RouterBOARD M33G"
+                oldText="MikroTik RouterBOARD M31A release candidate"
+              />
+            }
+          />
+          <Field
+            label="MitigationTitle"
+            required
+            labelPosition="before"
+            control={
+              <TextDiff
+                newText="grub2-common 2.06-94.el9_5 — tarasevichmb.local"
+                oldText="grub2-common 2.06-94.el9_4 — tarasevichmb.local"
+              />
+            }
+          />
+        `}
+      />
 
-          Используйте TextDiff, когда важно показать пользователю изменение текста без отдельного экрана сравнения: при редактировании настроек, просмотре истории или согласовании правок. Компонент помогает быстро отличить добавленное содержание от удалённого в компактных контекстах.
+      <DocExampleBlock
+        title="Изменение параметра"
+        description="При изменении параметра старое значение отображается после нового."
+        codeBlock="hidden"
+        code={`
+          <Field
+            label="Version"
+            required
+            labelPosition="before"
+            control={<TextDiff newText="1.0.0" oldText="0.0.99 alpha" />}
+          />
+        `}
+      />
 
-          Для сравнения больших документов, исходного кода или длинных многострочных блоков выбирайте специализированное представление различий, в котором удобно просматривать изменения целиком." />
+      <DocExampleBlock
+        description="Если места на строке недостаточно для двух значений, старое значение переносится под новое."
+        codeBlock="hidden"
+        code={`
+          <Field
+            style={{ maxWidth: 360 }}
+            label="Model"
+            required
+            labelPosition="before"
+            control={
+              <TextDiff
+                newText="MikroTik RouterBOARD M33G"
+                oldText="MikroTik RouterBOARD M31A release candidate"
+              />
+            }
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        description="Если значение не умещается на одной строке, оно отображается как блочный элемент."
+        codeBlock="hidden"
+        code={`
+          <Field
+            style={{ maxWidth: 480 }}
+            label="MitigationTitle"
+            required
+            labelPosition="before"
+            control={
+              <TextDiff
+                newText="grub2-common 2.06-94.el9_5 — tarasevichmb.local"
+                oldText="grub2-common 2.06-94.el9_4 — tarasevichmb.local"
+              />
+            }
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="Добавление параметра"
+        description="При добавлении выделяется только текст самого значения."
+        codeBlock="hidden"
+        previewGap={8}
+        previewDirection="vertical"
+        code={`
+          <Field
+            label="Version"
+            required
+            labelPosition="before"
+            control={<TextDiff newText="1.0.0" />}
+          />
+          <Field
+            label="Model"
+            required
+            labelPosition="before"
+            control={<TextDiff newText="MikroTik RouterBOARD M33G" />}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        description="При добавлении блока параметров выделяется заголовок блока и текстовая часть добавленных значений."
+        previewDirection="vertical"
+        codeBlock="hidden"
+        previewGap={8}
+        code={`
+          <TextDiff newText="grub2-common 2.06-94.el9_5" textType="H6" />
+          <Field
+            label="Version"
+            required
+            labelPosition="before"
+            control={<TextDiff newText="1.0.0" />}
+          />
+          <Field
+            label="Model"
+            required
+            labelPosition="before"
+            control={<TextDiff newText="MikroTik RouterBOARD M33G" />}
+          />
+          <Field
+            label="MitigationTitle"
+            required
+            labelPosition="before"
+            control={
+              <TextDiff newText="grub2-common 2.06-94.el9_5 — tarasevichmb.local" />
+            }
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="Удаление параметра"
+        description="При удалении выделяется только текст самого значения."
+        codeBlock="hidden"
+        code={`
+          <Field
+            label="Version"
+            required
+            labelPosition="before"
+            control={<TextDiff oldText="1.0.0" />}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        description="При удалении блока параметров выделяется заголовок блока и текстовая часть удалённых значений."
+        previewDirection="vertical"
+        codeBlock="hidden"
+        previewGap={8}
+        code={`
+          <TextDiff oldText="grub2-common 2.06-94.el9_5" textType="H6" />
+          <Field
+            label="Version"
+            required
+            labelPosition="before"
+            control={<TextDiff oldText="1.0.0" />}
+          />
+          <Field
+            label="Model"
+            required
+            labelPosition="before"
+            control={<TextDiff oldText="MikroTik RouterBOARD M33G" />}
+          />
+          <Field
+            label="MitigationTitle"
+            required
+            labelPosition="before"
+            control={
+              <TextDiff oldText="grub2-common 2.06-94.el9_5 — tarasevichmb.local" />
+            }
+          />
+        `}
+      />
 
     </Tabs.TabPane>
 
     <Tabs.TabPane tab="Структура" key="composition">
-
-      <DocExampleBlock
-        description="**TextDiff** показывает различия между двумя версиями текста: добавленный фрагмент выделяется, а удалённый перечёркивается. Компонент поддерживает настройки **newText**, **oldText** и **textType**."
-      />
 
       <DocExampleBlock
         title="newText"
@@ -79,8 +251,15 @@ import { textDiffDesignPropPresentation } from './TextDiff.design.properties'
       <DocExampleBlock
         title="Компонент в Pixso"
         titleSize="H5"
-        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=147673:321514)"
+        description=""
       />
+
+      <DocExampleBlock
+        title="Использование в Pixso"
+        titleSize="H5"
+        description="Для отображения пары параметров используется field/space. Если при переключении слетело зачеркивание текста, то оно возвращается комбинацией CMD + SHIFT + X"
+      />
+
       <DocumentationArgsTable rows={buildPresentationOnlyRows(textDiffDesignPropPresentation)} />
 
     </Tabs.TabPane>

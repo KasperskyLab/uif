@@ -91,7 +91,6 @@ export const Field: FC<FieldProps> = ({
                 width={popoverWidth}
               >
                 <ActionButton
-                  interactive={false}
                   icon={<StatusInfoOutline />}
                 />
               </Popover>

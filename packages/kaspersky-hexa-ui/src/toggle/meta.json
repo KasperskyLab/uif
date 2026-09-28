@@ -13,6 +13,6 @@
   "component": "Toggle",
   "description": "Компонент для отрисовки переключателей. В качестве основы используется AntdSwitch из библиотеки Antd.",
   "usage": "Элемент, при нажатии на который происходит переключение Boolean состояния",
-  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=32959%3A116557",
-  "pixsoView": "https://pixso.net/app/design/u7KQ8mwSPSbdesEcdJJlsQ"
+  "designLink": "",
+  "pixsoView": ""
 }

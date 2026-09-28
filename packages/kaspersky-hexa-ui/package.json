@@ -1,7 +1,7 @@
 {
   "name": "@kaspersky/hexa-ui",
   "author": "AO Kaspersky Lab",
-  "version": "6.430.1",
+  "version": "6.436.2",
   "description": "Kaspersky Hexa UI Design System UI Kit",
   "license": "Apache-2.0",
   "homepage": "https://github.com/KasperskyLab/uif#readme",
@@ -75,12 +75,14 @@
     }
   },
   "dependencies": {
+    "@codemirror/autocomplete": "6.18.4",
     "@codemirror/commands": "6.7.1",
     "@codemirror/lang-html": "6.4.9",
     "@codemirror/lang-javascript": "6.2.2",
     "@codemirror/lang-json": "6.0.1",
     "@codemirror/lang-xml": "6.1.0",
     "@codemirror/language": "6.10.8",
+    "@codemirror/lint": "6.8.4",
     "@codemirror/state": "6.5.0",
     "@codemirror/view": "6.36.1",
     "@kaspersky/hexa-ui-core": "0.22.0",
@@ -109,9 +111,14 @@
     "rc-collapse": "4.0.0",
     "rc-dropdown": "4.2.1",
     "rc-menu": "9.16.1",
+    "rc-motion": "2.9.2",
+    "rc-picker": "2.5.19",
     "rc-select": "14.1.2",
+    "rc-table": "7.23.2",
     "rc-tooltip": "6.4.0",
+    "rc-tree": "5.4.4",
     "rc-upload": "4.8.1",
+    "rc-util": "5.44.4",
     "react-custom-scrollbars-2": "4.5.0",
     "react-diff-view": "3.3.1",
     "react-i18next": "12.3.1",
@@ -134,6 +141,7 @@
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
     "@kaspersky/dev-tools": "3.11.0",
+    "@playwright/test": "1.60.0",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-replace": "6.0.2",
     "@rollup/plugin-typescript": "12.1.2",
@@ -178,8 +186,8 @@
     "less": "4.1.2",
     "less-loader": "10.2.0",
     "lint-staged": "12.3.4",
-    "prism-react-renderer": "2.4.1",
     "prettier": "3.8.1",
+    "prism-react-renderer": "2.4.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-live": "3.2.0",
@@ -203,6 +211,7 @@
     "@kaspersky/hexa-ui-icons": "^2.22.0",
     "react": "16.x || 17.x || 18.x",
     "react-dom": "16.x || 17.x || 18.x",
-    "typescript": ">=4.0.0"
+    "typescript": ">=4.0.0",
+    "moment": "2.30.1"
   }
 }

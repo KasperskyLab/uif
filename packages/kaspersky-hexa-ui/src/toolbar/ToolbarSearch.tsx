@@ -48,7 +48,7 @@ export const ToolbarSearch: FC<SearchProps> = (props: SearchProps) => {
           className="icon"
           indicator={isFilterApplied && !visible}
           borderBackground={backgroundIndicator}
-          modeIndicator="high"
+          modeIndicator="critical"
         />
       )}
       className="toolbar-search-toggle-button"

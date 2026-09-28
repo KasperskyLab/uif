@@ -1,7 +1,7 @@
 import { SetState, useStateProps } from '@helpers/hooks/useStateProps'
 import { MakeRequired } from '@helpers/typesHelpers'
 import { PaginationProps } from '@src/pagination'
-import { ITableProps, TablePaginationProps, TableRecord } from '@src/table'
+import { ITableProps, TablePaginationProps, TableRecord, useTableContext } from '@src/table'
 import { getPersistentStorageValue, updatePersistentStorage } from '@src/table/helpers/persistentStorage'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -21,7 +21,7 @@ export type TablePaginationConfigExtended<T extends TableRecord = TableRecord> =
 }
 
 type UseExistingPaginationProps<T extends TableRecord = TableRecord> =
-  Pick<ITableProps, 'storageKey'> & { pagination?: TablePaginationProps<T>, serverPagination: boolean }
+  Pick<ITableProps<T>, 'storageKey'> & { pagination?: TablePaginationProps<T>, serverPagination: boolean }
 
 type UseExistingPaginationReturn<T extends TableRecord = TableRecord> = {
   pagination: TablePaginationConfig<T>,
@@ -36,7 +36,7 @@ type UsePaginationConfigProps<T extends TableRecord = TableRecord> = Pick<ITable
 
 export type UsePaginationConfigReturn<T extends TableRecord = TableRecord> = {
   pagination: TablePaginationConfigExtended<T>,
-  additional?: UseExistingPaginationReturn['additional']
+  additional?: UseExistingPaginationReturn<T>['additional']
 }
 
 export const usePaginationConfig = <T extends TableRecord = TableRecord> ({
@@ -89,6 +89,7 @@ const useExistingPagination = <T extends TableRecord = TableRecord> ({
   const [total, setTotal] = useState(propsTotal)
   const [selected, setSelected] = useStateProps(propsSelected)
   const [hideOnSinglePage, setHideOnSinglePage] = useStateProps(hideOnSinglePageProps)
+  const filterApi = useTableContext(state => state.filterApi)
 
   useEffect(() => {
     const persistentPageSize = storageKey && getPersistentStorageValue({
@@ -131,16 +132,28 @@ const useExistingPagination = <T extends TableRecord = TableRecord> ({
     }
   }, [isCurrentPageOutOfRange, restoreCurrentWhenDataChange])
 
+  useEffect(() => {
+    if (!filterApi) return
+
+    const resetToFirstPageOnFilterChange = () => {
+      if (Number(current) > 1) {
+        setCurrent(FIRST_PAGE)
+      }
+    }
+
+    return filterApi.subscribe(resetToFirstPageOnFilterChange)
+  }, [filterApi, current, pageSize])
+
   const paginationConfig: UseExistingPaginationReturn<T> = useMemo(() => {
-    const onCurrentPageChange: NonNullable<PaginationProps['onChange']> = (current) => {
+    const onCurrentPageChange: NonNullable<PaginationProps['onChange']> = (current, size) => {
       if (propsOnChange) {
-        propsOnChange(current, pageSize)
+        propsOnChange(current, size)
       } else {
         setCurrent(current)
       }
     }
 
-    const onPageSizeChange: NonNullable<PaginationProps['onShowSizeChange']> = (_, size) => {
+    const onPageSizeChange: NonNullable<PaginationProps['onShowSizeChange']> = (current, size) => {
       if (propsOnShowSizeChange) {
         propsOnShowSizeChange(current, size)
       } else {

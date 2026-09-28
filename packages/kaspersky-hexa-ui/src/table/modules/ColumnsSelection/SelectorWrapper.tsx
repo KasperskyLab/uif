@@ -1,40 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Wrapper = styled.div`
+export const SelectorWrapper = styled.div`
   width: 100%;
+  overflow: auto;
+  user-select: none;
+
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+
   padding: 0 24px 0 0;
+  gap: 12px;
 
   .select-all-item {
     align-items: center;
     margin-left: 20px;
-    margin-top: 0;
-
-    p {
-      margin-left: var(--spacing--gap_grouped);
-    }
-  }
-
-  .grouping-item {
-    p {
-      display: contents;
-    }
   }
 `
-
-const Content = styled.div`
-  flex-grow: 1;
-  overflow: auto;
-`
-
-export const SelectorWrapper: React.FC = ({ children }) => {
-  return (
-    <Wrapper>
-      <Content>
-        {children}
-      </Content>
-    </Wrapper>
-  )
-}

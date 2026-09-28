@@ -74,7 +74,7 @@ export interface FilterChipQuery {
  * глобальный `screen`, т.к. они рендерятся в `document.body`.
  *
  * @example
- * const table = TableTestingClass.render({ dataSource, columns, testId: 'my-table' })
+ * const table = await TableTestingClass.render({ dataSource, columns, testId: 'my-table' })
  * expect(table.rows.getCount()).toBe(3)
  * table.selection.toggleRow(1)
  * await table.sorting.sortBy('name', 'asc')
@@ -97,7 +97,28 @@ export class TableTestingClass {
    * Рендерит {@link TestTable} (BaseTable с дефолтными данными из filtersMockData) и возвращает harness.
    * `testId` подставляется в пропы, чтобы селекторы дропдаунов/сортировки работали.
    */
-  static render <T extends TableRecord = TableRecord> (props: Partial<ITableProps<T>> = {}, opts: TableTestingClassOptions = {}): TableTestingClass {
+  static async render <T extends TableRecord = TableRecord> (
+    props: Partial<ITableProps<T>> = {},
+    opts: TableTestingClassOptions = {}
+  ): Promise<TableTestingClass> {
+    const table = TableTestingClass.renderSync(props, opts)
+
+    /**
+     * тригеррит отложенные асинхронные обновления (напр., выбор enum-опций из `FilterItems`),
+     * чтобы не всплывал ворнинг «not wrapped in act(...)» в дальнейшем ходе теста
+     */
+    await act(async () => undefined)
+
+    return table
+  }
+
+  /**
+  * @deprecated use TableTestingClass.render instead
+  */
+  static renderSync <T extends TableRecord = TableRecord> (
+    props: Partial<ITableProps<T>> = {},
+    opts: TableTestingClassOptions = {}
+  ): TableTestingClass {
     const testId = opts.testId ?? (props.testId as string | undefined) ?? DEFAULT_TEST_ID
     const klId = opts.klId ?? (props.klId as string | undefined)
     const result = render(<TestTable testId={testId} klId={klId} {...props} />)
@@ -112,7 +133,18 @@ export class TableTestingClass {
    * дефолтной обёрткой провайдеров ({@link TestProviders} — ConfigProvider) и возвращает harness.
    * `rerender` сохраняет ту же обёртку.
    */
-  static renderElement (ui: ReactElement, opts: TableTestingClassOptions = {}): TableTestingClass {
+  static async renderElement (ui: ReactElement, opts: TableTestingClassOptions = {}): Promise<TableTestingClass> {
+    const table = TableTestingClass.renderElementSync(ui, opts)
+
+    await act(async () => undefined)
+
+    return table
+  }
+
+  /**
+  * @deprecated use TableTestingClass.renderElement instead
+  */
+  static renderElementSync (ui: ReactElement, opts: TableTestingClassOptions = {}): TableTestingClass {
     const result = render(ui, { wrapper: TestProviders })
     const harness = new TableTestingClass(result.container, opts)
     harness._rerender = result.rerender
@@ -357,7 +389,9 @@ export class TableTestingClass {
 
   readonly filters = {
     /** Открыть сайдбар фильтров (кнопка `table-filter-sidebar`). */
-    openSidebar: (): void => openFiltersSidebar(this.container),
+    openSidebar: async (): Promise<void> => {
+      await act(async () => openFiltersSidebar(this.container))
+    },
 
     /** Элемент сайдбара фильтров (`${testId}-filters-sidebar`, в портале). */
     getSidebar: (): HTMLElement | null =>
@@ -369,7 +403,9 @@ export class TableTestingClass {
     },
 
     /** Применить фильтры (кнопка «Apply»). */
-    apply: (): void => applyFilters(),
+    apply: async (): Promise<void> => {
+      await act(async () => { applyFilters() })
+    },
 
     /** Отменить фильтрацию (кнопка «Cancel»). */
     cancel: (): void => { fireEvent.click(screen.getByText('Cancel')) },

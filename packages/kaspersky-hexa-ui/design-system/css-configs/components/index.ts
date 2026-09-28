@@ -10,7 +10,6 @@ import { loadingOverlay } from './loadingOverlay'
 import { lockGroup } from './lockGroup'
 import { picker } from './picker'
 import { placeholder, placeholderSize } from './placeholder'
-import { progressBar, progressBarSize } from './progressBar'
 import { segmentedButton, segmentedButtonSize } from './segmentedButton'
 import { select } from './select'
 import { statusCard, statusCardSize } from './statusCard'
@@ -48,10 +47,6 @@ export const COMPONENTS_CONFIG: ComponentsConfig = {
     placeholder: {
       colors: placeholder(),
       sizes: placeholderSize
-    },
-    progressBar: {
-      colors: progressBar(),
-      sizes: progressBarSize
     },
     segmentedButton: {
       colors: segmentedButton({ effects }),

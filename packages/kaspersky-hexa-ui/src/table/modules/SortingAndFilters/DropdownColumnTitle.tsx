@@ -46,7 +46,6 @@ const StyledColumn = styled.div.withConfig<{
 })`
   color: var(--table_cell--text--enabled);
   cursor: pointer;
-  padding: 10px 0;
   max-width: 100%;
   
   &:hover {

@@ -1,14 +1,13 @@
 import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { shouldForwardProp } from '@helpers/shouldForwardProp'
 import { useImmutableRef } from '@helpers/useImmutableRef'
 import { useIntersectionChildren } from '@helpers/useIntersectionChildren'
 import { Dropdown } from '@src/dropdown'
 import { Search } from '@src/search'
+import { Space } from '@src/space'
 import cn from 'classnames'
 import isNumber from 'lodash/isNumber'
 import React, { FC, useState } from 'react'
-import styled from 'styled-components'
 
 import {
   Export as ExportIcon,
@@ -21,12 +20,7 @@ import {
 } from '@kaspersky/hexa-ui-icons/16'
 
 import { mapToolbarItemsIntoDropdownItems } from './helpers'
-import {
-  AutoDropdownPart,
-  StyledBlock,
-  toolbarCss,
-  ToolbarItemWrap
-} from './toolbarCss'
+import styles from './Toolbar.module.scss'
 import {
   Divider,
   ImportExportItemButton,
@@ -40,10 +34,6 @@ import {
   ToolbarVariants
 } from './types'
 
-const StyledToolbar = styled.div.withConfig({ shouldForwardProp })`
-  ${toolbarCss}
-`
-
 const toolbarItemsRender = (items: ToolbarItems[], wrapKeyed = false, hasIntersection = false, lastFittingItemIndex = 0) => {
   const visibleItems = items.filter(({ visible }) => visible !== false)
   return visibleItems.map((itemProps, index) => {
@@ -54,25 +44,25 @@ const toolbarItemsRender = (items: ToolbarItems[], wrapKeyed = false, hasInterse
       const Item = ToolbarComponentMapping[type] as FC<unknown>
       return wrapKeyed
         ? (
-            <ToolbarItemWrap
+            <div
+              className={cn(styles.toolbarItemWrap, shouldHide && styles.toolbarItemHidden)}
               data-toolbarkey={itemProps.key}
-              $isHidden={shouldHide}
               data-hidden={shouldHide}
             >
               <Item {...itemProps} />
-            </ToolbarItemWrap>
+            </div>
           )
         : <Item {...itemProps} />
     }
     return wrapKeyed
       ? (
-          <ToolbarItemWrap
+          <div
+            className={cn(styles.toolbarItemWrap, shouldHide && styles.toolbarItemHidden)}
             data-toolbarkey={(itemProps as ToolbarItems).key}
-            $isHidden={shouldHide}
             data-hidden={shouldHide}
           >
             {children}
-          </ToolbarItemWrap>
+          </div>
         )
       : children
   })
@@ -108,91 +98,91 @@ export const Toolbar: FC<ToolbarProps> & ToolbarVariants = (props: ToolbarProps)
     : []
 
   return (
-    <>
-      <StyledToolbar
-        {...testAttributes}
-        {...rest}
-        className={cn(
-          getClassNameWithTheme(props),
-          Number(sticky) > -1000 ? 'sticky' : 'toolbar-wrapper'
-        )}
-        $sticky={sticky}
-        $autoDropdown={autoDropdown}
-      >
-        {leftVisible.length > 0 && (
-          <StyledBlock
-            gap="dependent"
-            align="center"
-            direction="horizontal"
-            width="initial"
-            wrap="nowrap"
-            $side="left"
-            style={styleLeft}
-            $oneElement={false}
-            $autoDropdown={autoDropdown}
-            ref={setContainerRef}
-          >
-            {toolbarItemsRender(autoDropdown ? leftVisible : leftVisible.slice(0, leftLimit), autoDropdown, hasIntersection, lastFittingItemIndex)}
-            {leftVisible.length > leftLimit && !autoDropdown && (
-              <Dropdown
-                trigger={['click']}
-                testId="toolbar-rest-items"
-                klId="toolbar-dropdown"
-                overlay={mapToolbarItemsIntoDropdownItems(leftVisible.slice(leftLimit, leftVisible.length))}
-                selectedItemsKeys={[]}
-              >
-                <ToolbarButton
-                  mode="tertiary"
-                  testId="toolbar-show-rest-items"
-                  klId="toolbar-dropdown-button"
-                  iconBefore={<Menu2 />}
-                />
-              </Dropdown>
-            )}
-            {autoDropdown
-              ? (
-                  <AutoDropdownPart $isHidden={!shouldShowMoreButton}>
-                    <Dropdown
-                      trigger={['click']}
-                      testId="toolbar-rest-items"
-                      klId="toolbar-dropdown"
-                      overlay={mapToolbarItemsIntoDropdownItems(dropdownItems)}
-                      onVisibleChange={open => setDropdownOpened(open)}
-                      onOverlayClick={() => setDropdownOpened(false)}
-                      selectedItemsKeys={[]}
-                    >
-                      <ToolbarButton
-                        mode="tertiary"
-                        testId="toolbar-show-rest-items"
-                        klId="toolbar-dropdown-button"
-                        iconBefore={<Menu2 />}
-                        isPressed={dropdownOpened}
-                      />
-                    </Dropdown>
-                  </AutoDropdownPart>
-                )
-              : null
-            }
-          </StyledBlock>
-        )}
-        {right && (
-          <StyledBlock
-            gap="dependent"
-            align="center"
-            direction="horizontal"
-            width="initial"
-            wrap="nowrap"
-            $side="right"
-            style={styleRight}
-            $oneElement={!left && right.length === 1}
-            $oneElementSelector="span.ant-input-affix-wrapper"
-            $autoDropdown={autoDropdown}
-          >
-            {toolbarItemsRender(right)}
-          </StyledBlock>
-        )}
-      </StyledToolbar>
-    </>
+    <div
+      {...testAttributes}
+      {...rest}
+      className={cn(
+        getClassNameWithTheme(props),
+        styles.toolbar,
+        autoDropdown && styles.autoDropdown,
+        Number(sticky) > -1000 ? 'sticky' : 'toolbar-wrapper'
+      )}
+      style={{
+        ...(rest as React.HTMLAttributes<HTMLDivElement>).style,
+        '--toolbar-sticky-top': `${sticky ? sticky : 0}px`
+      } as React.CSSProperties}
+    >
+      {leftVisible.length > 0 && (
+        <Space
+          gap="dependent"
+          align="center"
+          direction="horizontal"
+          width="initial"
+          wrap="nowrap"
+          style={styleLeft}
+          className={autoDropdown ? styles.autoDropdownLeft : styles.blockLeft}
+          ref={setContainerRef}
+        >
+          {toolbarItemsRender(autoDropdown ? leftVisible : leftVisible.slice(0, leftLimit), autoDropdown, hasIntersection, lastFittingItemIndex)}
+          {leftVisible.length > leftLimit && !autoDropdown && (
+            <Dropdown
+              trigger={['click']}
+              testId="toolbar-rest-items"
+              klId="toolbar-dropdown"
+              overlay={mapToolbarItemsIntoDropdownItems(leftVisible.slice(leftLimit, leftVisible.length))}
+              selectedItemsKeys={[]}
+            >
+              <ToolbarButton
+                mode="tertiary"
+                testId="toolbar-show-rest-items"
+                klId="toolbar-dropdown-button"
+                iconBefore={<Menu2 />}
+              />
+            </Dropdown>
+          )}
+          {autoDropdown
+            ? (
+                <div className={cn(styles.autoDropdownPart, !shouldShowMoreButton && styles.autoDropdownPartHidden)}>
+                  <Dropdown
+                    trigger={['click']}
+                    testId="toolbar-rest-items"
+                    klId="toolbar-dropdown"
+                    overlay={mapToolbarItemsIntoDropdownItems(dropdownItems)}
+                    onVisibleChange={open => setDropdownOpened(open)}
+                    onOverlayClick={() => setDropdownOpened(false)}
+                    selectedItemsKeys={[]}
+                  >
+                    <ToolbarButton
+                      mode="tertiary"
+                      testId="toolbar-show-rest-items"
+                      klId="toolbar-dropdown-button"
+                      iconBefore={<Menu2 />}
+                      isPressed={dropdownOpened}
+                    />
+                  </Dropdown>
+                </div>
+              )
+            : null
+          }
+        </Space>
+      )}
+      {right && (
+        <Space
+          gap="dependent"
+          align="center"
+          direction="horizontal"
+          width="initial"
+          wrap="nowrap"
+          style={styleRight}
+          className={cn(
+            autoDropdown ? styles.autoDropdownRight : styles.blockRight,
+            !left && right.length === 1 && styles.oneElement
+          )}
+        >
+          {toolbarItemsRender(right)}
+        </Space>
+      )}
+    </div>
   )
 }
 

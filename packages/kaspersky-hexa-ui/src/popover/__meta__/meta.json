@@ -12,6 +12,6 @@
   "component": "Popover",
   "description": "Немодальный диалог, который имеет функциональную вложенность. В качестве основы используется Popover из библиотеки Antd.",
   "usage": "Элемент появляется при наведении на родительский элемент, к которому присвоен Popover",
-  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=36112%3A133325",
-  "pixsoView": "https://pixso.net/app/design/PHPHITQ2KtQY9vcutiWXbg"
+  "designLink": "",
+  "pixsoView": ""
 }

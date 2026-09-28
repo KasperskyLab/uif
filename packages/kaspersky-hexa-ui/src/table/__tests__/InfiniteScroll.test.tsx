@@ -59,7 +59,7 @@ describe('Table InfiniteScroll module', () => {
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
 
     try {
-      const table = TableTestingClass.render({
+      const table = await TableTestingClass.render({
         dataSource: generatedData,
         columns: tableColumns,
         pagination: { infiniteScrollPageGetter: pageGetter }
@@ -89,7 +89,7 @@ describe('Table InfiniteScroll module', () => {
     const pageGetter = jest.fn(async (page: number) => (page < 2 ? [{ key: `p${page}`, fullname: `Row ${page}` }] : []))
 
     try {
-      const table = TableTestingClass.render({
+      const table = await TableTestingClass.render({
         columns,
         dataSource: initialRows,
         pagination: { infiniteScrollPageGetter: pageGetter }
@@ -111,7 +111,7 @@ describe('Table InfiniteScroll module', () => {
     const pageGetter = jest.fn(async () => [])
 
     try {
-      TableTestingClass.render({
+      await TableTestingClass.render({
         columns,
         dataSource: initialRows,
         pagination: { infiniteScrollPageGetter: pageGetter },
@@ -138,7 +138,7 @@ describe('Table InfiniteScroll module', () => {
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
 
     try {
-      const table = TableTestingClass.render({
+      const table = await TableTestingClass.render({
         columns,
         dataSource: initialRows,
         pagination: { infiniteScrollPageGetter: pageGetter },
@@ -161,8 +161,8 @@ describe('Table InfiniteScroll module', () => {
     }
   })
 
-  it('should render a plain table without a sentinel when no page getter is provided', () => {
-    const table = TableTestingClass.render({ columns, dataSource: initialRows })
+  it('should render a plain table without a sentinel when no page getter is provided', async () => {
+    const table = await TableTestingClass.render({ columns, dataSource: initialRows })
 
     expect(table.rows.getCount()).toBe(1)
     expect(screen.queryByText('No more rows')).not.toBeInTheDocument()
@@ -177,7 +177,7 @@ describe('Table InfiniteScroll module', () => {
     })
 
     try {
-      const table = TableTestingClass.render({
+      const table = await TableTestingClass.render({
         columns,
         dataSource: initialRows,
         pagination: { infiniteScrollPageGetter: pageGetter }

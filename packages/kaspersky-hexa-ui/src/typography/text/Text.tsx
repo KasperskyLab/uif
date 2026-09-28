@@ -1,3 +1,4 @@
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import cn from 'classnames'
 import React, { forwardRef } from 'react'
@@ -12,6 +13,7 @@ export const TextTag = forwardRef<HTMLParagraphElement, TextProps>(({
   color,
   htmlTag,
   className,
+  theme,
   ...props
 }, ref): JSX.Element => {
   const { testAttributes, ...rest } = useTestAttribute<TextProps>(props)
@@ -20,11 +22,11 @@ export const TextTag = forwardRef<HTMLParagraphElement, TextProps>(({
     htmlTag || typography[textLevels[type]].htmlTag,
     {
       ref,
-      className: cn(className, 'kl6-text'),
-      $color: color,
-      $themedColor: themedColor,
+      className: cn(getClassNameWithTheme(className, theme), 'kl6-text'),
       ...testAttributes,
       ...rest
     }
   )
 })
+
+TextTag.displayName = 'TextTag'

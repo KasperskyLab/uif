@@ -26,22 +26,22 @@ const data: TableRow[] = [
 const renderTable = (props = {}) => TableTestingClass.render({ columns, dataSource: data, useAccordion: true, ...props })
 
 describe('Table Accordion module', () => {
-  it('should not render accordion when useAccordion=false', () => {
-    const table = renderTable({ useAccordion: false })
+  it('should not render accordion when useAccordion=false', async () => {
+    const table = await renderTable({ useAccordion: false })
 
     expect(table.queryAll('.table-accordion-icon')).toHaveLength(0)
     expect(screen.queryByText('Acc One')).not.toBeInTheDocument()
   })
 
-  it('should show the accordion title collapsed by default', () => {
-    renderTable()
+  it('should show the accordion title collapsed by default', async () => {
+    await renderTable()
 
     expect(screen.getByText('Acc One')).toBeInTheDocument()
     expect(screen.queryByText('Content One')).not.toBeInTheDocument()
   })
 
-  it('should expand and collapse content on header click', () => {
-    renderTable()
+  it('should expand and collapse content on header click', async () => {
+    await renderTable()
 
     fireEvent.click(screen.getByText('Acc One'))
     expect(screen.getByText('Content One')).toBeInTheDocument()
@@ -50,8 +50,8 @@ describe('Table Accordion module', () => {
     expect(screen.queryByText('Content One')).not.toBeInTheDocument()
   })
 
-  it('should keep accordion rows independent', () => {
-    renderTable()
+  it('should keep accordion rows independent', async () => {
+    await renderTable()
 
     fireEvent.click(screen.getByText('Acc One'))
 
@@ -59,16 +59,16 @@ describe('Table Accordion module', () => {
     expect(screen.queryByText('Content Two')).not.toBeInTheDocument()
   })
 
-  it('should span the accordion row first cell across all columns', () => {
-    const table = renderTable()
+  it('should span the accordion row first cell across all columns', async () => {
+    const table = await renderTable()
 
     const firstCell = table.rows.getByKey('acc1')?.querySelectorAll('td')[0]
     expect(firstCell?.getAttribute('colspan')).toBe(String(columns.length))
     expect(firstCell?.className).toContain('accordeon-row')
   })
 
-  it('should render normal rows with regular cell content', () => {
-    const table = renderTable()
+  it('should render normal rows with regular cell content', async () => {
+    const table = await renderTable()
 
     const normalRow = table.rows.getByKey('normal')
     expect(normalRow?.textContent).toContain('Normal A')

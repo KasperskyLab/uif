@@ -13,6 +13,6 @@
     "component": "Input",
     "description": "Поле текстового ввода. Имеет различные модификации. Основано на [Input](https://ant.design/components/input/) из библиотеки Antd",
     "usage": "Предполагается использование внутри Field. Textbox можно использовать для маркировки по измерению или свойству а так же при категоризации.",
-    "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?page-id=53702%3A192722",
-    "pixsoView": "https://pixso.net/app/design/_sPgo1NucjS4_IGFQMsHTA"
+    "designLink": "",
+    "pixsoView": ""
   }

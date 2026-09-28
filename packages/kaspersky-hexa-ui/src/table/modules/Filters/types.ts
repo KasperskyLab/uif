@@ -213,7 +213,7 @@ export type FilterGroup<T extends TableRecord = TableRecord> = {
 export type SidebarFilter<T extends TableRecord = TableRecord> = FilterConfig | SidebarFilterGroup<T>
 
 /** Recursive structure that groups only sidebar filters with a logical operation */
-export type SidebarFilterGroup<T extends TableRecord = TableRecord> = Omit<FilterGroup, 'items'> & {
+export type SidebarFilterGroup<T extends TableRecord = TableRecord> = Omit<FilterGroup<T>, 'items'> & {
   items: SidebarFilter<T>[]
 }
 
@@ -269,7 +269,7 @@ export type FilterConfigInternal = WithId<FilterConfig>
 export type UnitedFilterInternal<T extends TableRecord> = FilterConfigInternal | FilterFromColumn<T> | FilterGroupInternal<T>
 
 /** Internal version of `FilterGroup` where every nested filter has an `id` */
-export type FilterGroupInternal<T extends TableRecord> = Omit<FilterGroup, 'items'> & {
+export type FilterGroupInternal<T extends TableRecord> = Omit<FilterGroup<T>, 'items'> & {
   items: UnitedFilterInternal<T>[]
 }
 
@@ -277,7 +277,7 @@ export type FilterGroupInternal<T extends TableRecord> = Omit<FilterGroup, 'item
 export type SidebarFilterInternal<T extends TableRecord> = FilterConfigInternal | SidebarFilterGroupInternal<T>
 
 /** Internal version of `SidebarFilterGroup` where every nested filter has an `id` */
-export type SidebarFilterGroupInternal<T extends TableRecord> = Omit<SidebarFilterGroup, 'items'> & {
+export type SidebarFilterGroupInternal<T extends TableRecord> = Omit<SidebarFilterGroup<T>, 'items'> & {
   items: SidebarFilterInternal<T>[]
 }
 

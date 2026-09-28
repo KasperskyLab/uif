@@ -22,7 +22,7 @@ export type ActionButtonCustomProps = {
   icon?: React.ReactNode,
   /** Without icon */
   noIcon?: boolean,
-  /** If interactive */
+  /** @deprecated Use icon instead of a non-interactive ActionButton */
   interactive?: boolean,
   /** Any react node after all **/
   elementAfter?: React.ReactNode

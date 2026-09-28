@@ -1,5 +1,5 @@
 import { Theme } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingProps } from '@helpers/typesHelpers'
 
 export const IndicatorModes = [
   'accent',
@@ -19,11 +19,6 @@ export const IndicatorModes = [
 
 export type IndicatorMode = typeof IndicatorModes[number]
 
-export type IndicatorCssConfig = {
-  background: string,
-  border: string
-}
-
 export type IndicatorThemeProps = {
   /** Color mode */
   mode?: IndicatorMode,
@@ -35,8 +30,7 @@ export type IndicatorProps = {
   /** Show border */
   border?: boolean
   /** Change border color if border={true} */
+  /** @deprecated No effect */
   borderBackground?: string
   className?: string
 } & IndicatorThemeProps & TestingProps
-
-export type IndicatorViewProps = ToViewProps<IndicatorProps, IndicatorCssConfig, IndicatorThemeProps>

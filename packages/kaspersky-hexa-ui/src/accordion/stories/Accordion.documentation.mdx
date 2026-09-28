@@ -284,6 +284,21 @@ import { Space } from '@src/space'
               Содержимое
             </AccordionPanel>
           </Accordion>
+          <Accordion withBorder>
+            <AccordionPanel
+              key={1}
+              title="Заголовок"
+              elementBefore={
+                <Toggle
+                  onChange={(_, e) => {
+                    e.stopPropagation()
+                  }}
+                />
+              }
+            >
+              Содержимое
+            </AccordionPanel>
+          </Accordion>
         `}
       />
 
@@ -379,7 +394,7 @@ import { Space } from '@src/space'
       <DocExampleBlock
         title="Компонент в Pixso"
         titleSize="H5"
-        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=48323:348834)"
+        description=""
       />
       <DocumentationArgsTable rows={buildPresentationOnlyRows(accordionDesignPropPresentation)} />
 

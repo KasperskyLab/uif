@@ -143,7 +143,7 @@ export class FiltersStateManager<T extends TableRecord = TableRecord> {
   }
 
   // TODO: добавить как аргумент itemsToGroup, и еѝли они еѝть, то удалѝть их из ѝвоих групп и добавлѝть в новую
-  public createGroup (groupProps: MakePartial<FilterGroup, 'items'>, parentGroupId: string = 'root'): void {
+  public createGroup (groupProps: MakePartial<FilterGroup<T>, 'items'>, parentGroupId: string = 'root'): void {
     const targetGroup = this.findGroup(this.rootGroup, parentGroupId)
     if (!targetGroup) {
       console.warn(
@@ -227,7 +227,7 @@ export class FiltersStateManager<T extends TableRecord = TableRecord> {
       return
     }
 
-    const groupItems = (parentGroup.items[groupIndex] as FilterGroup).items
+    const groupItems = (parentGroup.items[groupIndex] as FilterGroup<T>).items
     parentGroup.items.splice(groupIndex, 1, ...groupItems)
     this.notifyListeners()
   }

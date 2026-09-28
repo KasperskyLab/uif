@@ -85,6 +85,7 @@ addons.setConfig({
       isDocumentationStory(state.storyId) ? false : defaultShowPanel
   },
   sidebar: {
+    collapsedRoots: ['deprecated', 'other', 'screenshot-tests'],
     renderLabel: (item) => {
       if (item.type === 'component' && isStoriesGroup(item.id)) {
         return (

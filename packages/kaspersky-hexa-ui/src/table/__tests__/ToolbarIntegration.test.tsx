@@ -1,8 +1,8 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 
-import { generatedData, tableColumns } from '../__mocks__/filtersMockData'
+import { generatedData, MockRow, tableColumns } from '../__mocks__/filtersMockData'
 import { TableTestingClass } from '../test-utils/TableTestingClass'
 import { TableToolbarProps } from '../types'
 
@@ -12,7 +12,7 @@ const defaultProps = {
 }
 
 describe('Table ToolbarIntegration module', () => {
-  const toolbarWithAllElements: TableToolbarProps = {
+  const getToolbarWithAllElements = (): TableToolbarProps<MockRow> => ({
     left: [
       {
         type: 'button',
@@ -42,16 +42,17 @@ describe('Table ToolbarIntegration module', () => {
       onImport: jest.fn(),
       onExport: jest.fn()
     }
-  }
+  })
+  const toolbarWithAllElements = getToolbarWithAllElements()
 
-  it('should not render toolbar', () => {
-    const table = TableTestingClass.render(defaultProps)
+  it('should not render toolbar', async () => {
+    const table = await TableTestingClass.render(defaultProps)
 
     expect(table.toolbar.getRoot()).not.toBeInTheDocument()
   })
 
-  it('should render toolbar with all elements', () => {
-    const table = TableTestingClass.render({ ...defaultProps, toolbar: toolbarWithAllElements })
+  it('should render toolbar with all elements', async () => {
+    const table = await TableTestingClass.render<MockRow>({ ...defaultProps, toolbar: toolbarWithAllElements })
 
     expect(table.toolbar.getRoot()).toBeInTheDocument()
     expect(table.toolbar.getCustomItem(1)).toBeInTheDocument()
@@ -62,8 +63,8 @@ describe('Table ToolbarIntegration module', () => {
     expect(table.toolbar.getImportExportButton()).toBeInTheDocument()
   })
 
-  it('should render toolbar without refresh button', () => {
-    const table = TableTestingClass.render({
+  it('should render toolbar without refresh button', async () => {
+    const table = await TableTestingClass.render<MockRow>({
       ...defaultProps,
       toolbar: {
         ...toolbarWithAllElements,
@@ -74,10 +75,10 @@ describe('Table ToolbarIntegration module', () => {
     expect(table.toolbar.getRefreshButton()).not.toBeInTheDocument()
   })
 
-  it('should call refresh callback when refresh button is clicked', () => {
+  it('should call refresh callback when refresh button is clicked', async () => {
     const refreshCallback = jest.fn()
 
-    const table = TableTestingClass.render({
+    const table = await TableTestingClass.render<MockRow>({
       ...defaultProps,
       toolbar: {
         ...toolbarWithAllElements,
@@ -90,12 +91,12 @@ describe('Table ToolbarIntegration module', () => {
     expect(refreshCallback).toHaveBeenCalledTimes(1)
   })
 
-  it('should call import export callbacks when buttons are clicked', () => {
+  it('should call import export callbacks when buttons are clicked', async () => {
     const onClick = jest.fn()
     const onImport = jest.fn()
     const onExport = jest.fn()
 
-    const table = TableTestingClass.render({
+    const table = await TableTestingClass.render<MockRow>({
       ...defaultProps,
       toolbar: {
         ...toolbarWithAllElements,
@@ -108,33 +109,33 @@ describe('Table ToolbarIntegration module', () => {
       }
     })
 
-    userEvent.click(table.toolbar.getImportExportButton() as Element)
+    await act(async () => userEvent.click(table.toolbar.getImportExportButton()!))
 
     expect(onClick).toHaveBeenCalledTimes(1)
 
     userEvent.click(screen.getByText('Import'))
     expect(onImport).toHaveBeenCalledTimes(1)
 
-    userEvent.click(table.toolbar.getImportExportButton() as Element)
+    await act(async () => userEvent.click(table.toolbar.getImportExportButton()!))
 
     userEvent.click(screen.getByText('Export'))
     expect(onExport).toHaveBeenCalledTimes(1)
   })
 
-  it('should render the settings button when only the grouping tab is enabled', () => {
-    const table = TableTestingClass.render({ ...defaultProps, toolbar: { showColumns: false, showGrouping: true } })
+  it('should render the settings button when only the grouping tab is enabled', async () => {
+    const table = await TableTestingClass.render({ ...defaultProps, toolbar: { showColumns: false, showGrouping: true } })
 
     expect(table.toolbar.getSettingsButton()).toBeInTheDocument()
   })
 
-  it('should not render the settings button when both columns and grouping tabs are disabled', () => {
-    const table = TableTestingClass.render({ ...defaultProps, toolbar: { showColumns: false, showGrouping: false } })
+  it('should not render the settings button when both columns and grouping tabs are disabled', async () => {
+    const table = await TableTestingClass.render({ ...defaultProps, toolbar: { showColumns: false, showGrouping: false } })
 
     expect(table.toolbar.getSettingsButton()).not.toBeInTheDocument()
   })
 
   it('should render async getLeftItems in the toolbar', async () => {
-    const getLeftItems: TableToolbarProps['getLeftItems'] = async () => ([
+    const getLeftItems: TableToolbarProps<MockRow>['getLeftItems'] = async () => ([
       {
         type: 'button',
         key: 'x',
@@ -142,13 +143,13 @@ describe('Table ToolbarIntegration module', () => {
         testId: 'item-99'
       }
     ])
-    const table = TableTestingClass.render({ ...defaultProps, toolbar: { getLeftItems } })
+    const table = await TableTestingClass.render<MockRow>({ ...defaultProps, toolbar: { getLeftItems } })
 
     await waitFor(() => expect(table.toolbar.getCustomItem(99)).toBeInTheDocument())
   })
 
-  it('should collapse the search behind a toggle icon when collapsibleSearch is true', () => {
-    TableTestingClass.render({ ...defaultProps, toolbar: { showSearch: true, collapsibleSearch: true } })
+  it('should collapse the search behind a toggle icon when collapsibleSearch is true', async () => {
+    await TableTestingClass.render({ ...defaultProps, toolbar: { showSearch: true, collapsibleSearch: true } })
 
     expect(document.querySelector('.hexa-ui-collapsible-search-hidden')).toBeInTheDocument()
     expect(document.querySelector('.hexa-ui-collapsible-search')).not.toBeInTheDocument()
@@ -160,12 +161,12 @@ describe('Table ToolbarIntegration module', () => {
     expect(document.querySelector('.hexa-ui-collapsible-search')).toBeInTheDocument()
   })
 
-  it('should append custom elements returned by the right callback', () => {
+  it('should append custom elements returned by the right callback', async () => {
     const right: TableToolbarProps['right'] = existing => [
       ...existing,
       <button key="custom" data-testid="right-custom">Custom right</button>
     ]
-    const table = TableTestingClass.render({ ...defaultProps, toolbar: { showColumns: true, right } })
+    const table = await TableTestingClass.render({ ...defaultProps, toolbar: { showColumns: true, right } })
 
     expect(table.query('[data-testid="right-custom"]')).toBeInTheDocument()
   })

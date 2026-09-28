@@ -2,7 +2,9 @@ import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { sbFixArrayArgs, sbMergeActions } from '@sb/helpers'
+import { Dropdown } from '@src/dropdown'
 import { Panel } from '@src/panel'
+import { Space } from '@src/space'
 import {
   applyDropToTreeData,
   DataNode,
@@ -16,13 +18,13 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { componentColors } from '@kaspersky/hexa-ui-core/colors/js'
+import { CheckPoint, Menu2 } from '@kaspersky/hexa-ui-icons/16'
 
 import MetaData from '../__meta__/meta.json'
 
-import { treeDataMock, treeDataMockWithIcons } from './mocks'
+import { flatListMock, treeDataMock, treeDataMockWithIcons } from './mocks'
 import { generateTreeData, getKeys } from './utils'
-import { Dropdown } from '@src/dropdown'
-import { CheckPoint, Menu2 } from '@kaspersky/hexa-ui-icons/16'
+import { TreeWithSearch, TreeWithSearchInfo } from './WithSearch'
 
 type ActionIconType = 'DEFAULT' | 'THREE_DOTS' | 'CHECK'
 
@@ -174,6 +176,33 @@ export const TreeListLoadDataAsynchronously: Story<typeof TreeList> = {
   }
 }
 
+export const TreeListWithSearch: Story<typeof TreeList> = {
+  render: (args) => (
+    <Space gap="separated">
+      <TreeWithSearchInfo />
+      <TreeWithSearch
+        {...args}
+        treeData={treeDataMock}
+      />
+    </Space>
+  ),
+  name: 'Tree List With Search'
+}
+
+export const TreeListWithSearchFlatList: Story<typeof TreeList> = {
+  render: (args) => (
+    <Space gap="separated">
+      <TreeWithSearchInfo />
+      <TreeWithSearch
+        {...args}
+        treeData={flatListMock}
+        showFoundCount
+      />
+    </Space>
+  ),
+  name: 'Tree List With Search - Flat List'
+}
+
 export const TreeNavBasic: Story<typeof TreeNav> = {
   render: (args) => <TreeWrapper {...args} Component={TreeNav} />,
   args: {
@@ -241,8 +270,6 @@ export const TreeNavLoadDataAsynchronously: Story<typeof TreeNav> = {
   }
 }
 
-const defaultData: DataNode[] = generateTreeData(20)
-
 export const TreeNavDraggable: Story<typeof TreeNav> = {
   ...TreeNavBasic,
   render: (args) => {
@@ -261,10 +288,10 @@ export const TreeNavDraggable: Story<typeof TreeNav> = {
   },
   args: {
     blockNode: true,
-    defaultExpandedKeys: ['0-0', '0-0-0', '0-0-0-0'],
+    defaultExpandedKeys: ['0-1', '0-1-0', '0-2-2-0'],
     draggable: true,
     checkParents: true,
-    treeData: defaultData
+    treeData: treeDataMock
   }
 }
 

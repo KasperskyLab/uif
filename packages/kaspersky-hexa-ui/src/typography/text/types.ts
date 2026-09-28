@@ -1,5 +1,5 @@
 import { themeColors } from '@design-system/tokens'
-import { ThemeConfig } from '@design-system/types'
+import { Theme } from '@design-system/types'
 import { TestingProps } from '@helpers/typesHelpers'
 import { HTMLAttributes } from 'react'
 
@@ -18,7 +18,7 @@ export type TextProps = HTMLAttributes<Omit<HTMLSpanElement, 'color'>> & Testing
   /** Color: primary or secondary */
   color?: Exclude<keyof typeof productColors['text'], 'link'>,
   /** Custom theme */
-  theme?: ThemeConfig,
+  theme?: Theme,
   /** @deprecated Use 'color' prop instead */
   themedColor?: TextIconsElements | CriticalityStatuses,
   htmlTag?: TextTag

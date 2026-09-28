@@ -1,3 +1,4 @@
+import { TableRecord } from '..'
 import { TabConfigBase, ToolbarProps } from '../modules/ToolbarIntegration'
 
 type ParsedTabConfig = {
@@ -17,7 +18,7 @@ function parseTabConfig (config?: TabConfigBase): ParsedTabConfig {
   return { enabled: true, showHeader }
 }
 
-export function getTabsConfig (toolbar?: ToolbarProps) {
+export function getTabsConfig <T extends TableRecord = TableRecord> (toolbar?: ToolbarProps<T>) {
   const {
     enabled: showColumnsTab,
     showHeader: showColumnsHeader

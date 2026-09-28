@@ -23,14 +23,12 @@ type MockRowModified = MockRow & {
   }
 }
 
-const renderTable = <T extends TableRecord = TableRecord> (props: Partial<ITableProps<T>> = {}): { table: TableTestingClass } => {
-  const table = TableTestingClass.render<T>({
+const renderTable = <T extends TableRecord = TableRecord> (props: Partial<ITableProps<T>> = {}) =>
+  TableTestingClass.render<T>({
     pagination: false,
     groupBy: 'group',
     ...props
   })
-  return { table }
-}
 
 const defaultProps = {
   dataSource: generatedData,
@@ -38,8 +36,8 @@ const defaultProps = {
 }
 
 describe('Groups module', () => {
-  it('should render table without groups when groupBy is not provided', () => {
-    const { table } = renderTable({ ...defaultProps, groupBy: undefined })
+  it('should render table without groups when groupBy is not provided', async () => {
+    const table = await renderTable({ ...defaultProps, groupBy: undefined })
 
     const tableRows = table.rows.getAll()
     expect(tableRows.length).toBeGreaterThan(0)
@@ -47,8 +45,8 @@ describe('Groups module', () => {
     expect(table.rows.getGroupTitles()).toHaveLength(0)
   })
 
-  it('should group rows by specified field when defaultGroupBy is provided', () => {
-    const { table } = renderTable({ ...defaultProps, groupBy: undefined, defaultGroupBy: 'group' })
+  it('should group rows by specified field when defaultGroupBy is provided', async () => {
+    const table = await renderTable({ ...defaultProps, groupBy: undefined, defaultGroupBy: 'group' })
 
     const groupTitles = table.rows.getGroupTitles()
 
@@ -57,8 +55,8 @@ describe('Groups module', () => {
     })
   })
 
-  it('should group rows by specified field when both groupBy and defaultGroupBy are provided', () => {
-    const { table } = renderTable({ ...defaultProps, defaultGroupBy: 'isTrainee' })
+  it('should group rows by specified field when both groupBy and defaultGroupBy are provided', async () => {
+    const table = await renderTable({ ...defaultProps, defaultGroupBy: 'isTrainee' })
 
     const groupTitles = table.rows.getGroupTitles()
 
@@ -67,10 +65,10 @@ describe('Groups module', () => {
     })
   })
 
-  it('should render custom group titles when groupTitleRender is provided', () => {
+  it('should render custom group titles when groupTitleRender is provided', async () => {
     const customGroupTitleRender = (title: string) => <div kl-id="custom-group-title">{title}</div>
 
-    const { table } = renderTable({ ...defaultProps, groupTitleRender: customGroupTitleRender })
+    const table = await renderTable({ ...defaultProps, groupTitleRender: customGroupTitleRender })
 
     const customTitles = screen.getAllByTestId('custom-group-title')
     expect(customTitles.length).toBeGreaterThan(0)
@@ -79,37 +77,37 @@ describe('Groups module', () => {
     expect(customTitlesInContainer.length).toBeGreaterThan(0)
   })
 
-  it('should show a group counter in the title when showGroupsCounter is true', () => {
+  it('should show a group counter in the title when showGroupsCounter is true', async () => {
     const columns = modifyColumns(tableColumns, 'group', { showGroupsCounter: true })
-    const { table } = renderTable({ ...defaultProps, columns })
+    const table = await renderTable({ ...defaultProps, columns })
 
     const titles = table.rows.getGroupTitles()
     expect(titles.length).toBeGreaterThan(0)
     expect(titles.every(title => /\d/.test(title))).toBe(true)
   })
 
-  it('should render a group title icon when renderGroupTitleIcon is provided', () => {
+  it('should render a group title icon when renderGroupTitleIcon is provided', async () => {
     const columns = modifyColumns(tableColumns, 'group', {
       renderGroupTitleIcon: () => <span data-testid="grp-icon" />
     })
-    const { table } = renderTable({ ...defaultProps, columns })
+    const table = await renderTable({ ...defaultProps, columns })
 
     expect(table.queryAll('[data-testid="grp-icon"]').length).toBeGreaterThan(0)
   })
 
-  it('should handle group text using resolveGroupingValue', () => {
+  it('should handle group text using resolveGroupingValue', async () => {
     const patchedColumns = modifyColumns<MockRow, MockRowModified>(tableColumns, 'group', {
       resolveGroupingValue: (row) => row.group.someInnerValue,
       render: (value) => value?.someInnerValue
     })
     const patchedData = generatedData.map(({ group, ...row }) => ({ ...row, group: { someInnerValue: group } } as MockRowModified))
-    const { table } = renderTable({ columns: patchedColumns, dataSource: patchedData })
+    const table = await renderTable({ columns: patchedColumns, dataSource: patchedData })
 
     const groupTitle = table.query('.group-title-item')?.textContent
     expect(groupTitle).toBe('Unmanaged')
   })
 
-  it('should use a HIDDEN grouping column config (resolveGroupingValue), not fall back to the raw value', () => {
+  it('should use a HIDDEN grouping column config (resolveGroupingValue), not fall back to the raw value', async () => {
     // group column is hidden (show: false) but still groupable (forceGroupingAvailable). Its config
     // must reach Groups so grouping resolves via resolveGroupingValue instead of falling back to the
     // raw row value. Without the full column set flowing down, findColumn misses the hidden column
@@ -121,14 +119,14 @@ describe('Groups module', () => {
       render: (value) => value?.someInnerValue
     })
     const patchedData = generatedData.map(({ group, ...row }) => ({ ...row, group: { someInnerValue: group } } as MockRowModified))
-    const { table } = renderTable({ columns: patchedColumns, dataSource: patchedData })
+    const table = await renderTable({ columns: patchedColumns, dataSource: patchedData })
 
     expect(table.rows.getGroupTitles().length).toBeGreaterThan(0)
     expect(table.query('.group-title-item')?.textContent).toBe('Unmanaged')
   })
 
-  it('should sort groups alphabetically by default when groupComparer is not provided', () => {
-    const { table } = renderTable({ ...defaultProps })
+  it('should sort groups alphabetically by default when groupComparer is not provided', async () => {
+    const table = await renderTable({ ...defaultProps })
 
     const displayedGroupTitles = table.rows.getGroupTitles()
     const ascSortedGroups = [...groups].sort()
@@ -138,10 +136,10 @@ describe('Groups module', () => {
     })
   })
 
-  it('should sort groups using custom comparer', () => {
+  it('should sort groups using custom comparer', async () => {
     const descendingComparer = (valueA: any, valueB: any): number => -valueA.localeCompare(valueB)
 
-    const { table } = renderTable({ ...defaultProps, customGroupSorter: descendingComparer })
+    const table = await renderTable({ ...defaultProps, customGroupSorter: descendingComparer })
 
     const displayedGroupTitles = table.rows.getGroupTitles()
     const descSortedGroups = [...groups].sort((a, b) => -a.localeCompare(b))
@@ -151,7 +149,7 @@ describe('Groups module', () => {
     })
   })
 
-  it('should handle empty group values with default title', () => {
+  it('should handle empty group values with default title', async () => {
     const dataWithEmptyValues: MockRow[] = [
       ...generatedData,
       {
@@ -180,7 +178,7 @@ describe('Groups module', () => {
       }
     ]
 
-    const { table } = renderTable({ ...defaultProps, dataSource: dataWithEmptyValues })
+    const table = await renderTable({ ...defaultProps, dataSource: dataWithEmptyValues })
 
     const groupTitles = table.rows.getGroupTitles()
 
@@ -188,7 +186,7 @@ describe('Groups module', () => {
   })
 
   it('should list only groupingAvailable columns in the grouping selector', async () => {
-    const table = TableTestingClass.render({
+    const table = await TableTestingClass.render({
       columns: tableColumns,
       dataSource: generatedData.slice(0, 10),
       toolbar: { showColumns: false, showGrouping: true }
@@ -204,7 +202,7 @@ describe('Groups module', () => {
 
   it('should call onGroupByChange when groupBy is set via the settings grouping selector', async () => {
     const onGroupByChange = jest.fn()
-    const table = TableTestingClass.render({
+    const table = await TableTestingClass.render({
       columns: tableColumns,
       dataSource: generatedData.slice(0, 10),
       groupBy: undefined,
@@ -222,7 +220,7 @@ describe('Groups module', () => {
 
   it('should reset grouping to none via the settings grouping selector', async () => {
     const onGroupByChange = jest.fn()
-    const table = TableTestingClass.render({
+    const table = await TableTestingClass.render({
       columns: tableColumns,
       dataSource: generatedData.slice(0, 10),
       pagination: false,
@@ -248,7 +246,7 @@ describe('Grouping — expandableGrouping', () => {
   const columns = modifyColumns(tableColumns, 'group', { expandableGrouping: true })
 
   it('should toggle a group open/closed on title click', async () => {
-    const { table } = renderTable({ columns, dataSource: data })
+    const table = await renderTable({ columns, dataSource: data })
 
     const groupTitle = () => table.queryAll('.group-title-item').find(el => el.textContent?.includes(data[0].group))
 
@@ -261,10 +259,10 @@ describe('Grouping — expandableGrouping', () => {
     await table.rows.findByKey(data[0].key)
   })
 
-  it('should apply sortGroupsFunction', () => {
+  it('should apply sortGroupsFunction', async () => {
     const sortGroupsFunction = jest.fn(() => 0)
 
-    renderTable({ columns: modifyColumns(columns, 'group', { sortGroupsFunction }), dataSource: data })
+    await renderTable({ columns: modifyColumns(columns, 'group', { sortGroupsFunction }), dataSource: data })
 
     expect(sortGroupsFunction).toHaveBeenCalled()
   })
@@ -274,8 +272,8 @@ describe('Grouping — isClientGroupSortingDisabled (data pre-grouped by server)
   const data = generatedData.slice(0, 30)
   const dataOrder = [...new Set(data.map(row => row.group))]
 
-  it('should keep groups in data order when set via the isClientGroupSortingDisabled prop', () => {
-    const { table } = renderTable({ ...defaultProps, dataSource: data, isClientGroupSortingDisabled: true })
+  it('should keep groups in data order when set via the isClientGroupSortingDisabled prop', async () => {
+    const table = await renderTable({ ...defaultProps, dataSource: data, isClientGroupSortingDisabled: true })
 
     expect(table.rows.getGroupTitles()).toEqual(dataOrder)
   })
@@ -286,7 +284,7 @@ describe('Grouping — isClientGroupSortingDisabled (data pre-grouped by server)
       totalCount: data.length,
       isClientGroupsSortingDisabled: true
     }))
-    const table = TableTestingClass.render({
+    const table = await TableTestingClass.render({
       columns: tableColumns,
       dataSource: undefined,
       dataSourceFunction,

@@ -9,26 +9,23 @@ import React from 'react'
 import styles from './ToggleButton.module.scss'
 import { ToggleButtonProps } from './types'
 
-export const ToggleButton: FC<ToggleButtonProps> = (props) => {
-  const {
-    disabled,
-    loading,
-    onChange,
-    className,
-    size = 'medium',
-    style,
-    iconBefore,
-    elementAfter,
-    text,
-    mode = 'marina',
-    tooltip,
-    testId,
-    value,
-    selected,
-    ...rest
-  } = props
-
-  const { testAttributes } = useTestAttribute(props)
+export const ToggleButton: FC<ToggleButtonProps> = ({
+  disabled,
+  loading,
+  onChange,
+  className,
+  size = 'medium',
+  style,
+  iconBefore,
+  elementAfter,
+  text,
+  mode = 'marina',
+  tooltip,
+  value,
+  selected,
+  ...props
+}) => {
+  const { testAttributes, ...rest } = useTestAttribute(props)
   const inputId = useMemo(() => generateId(), [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +73,7 @@ export const ToggleButton: FC<ToggleButtonProps> = (props) => {
         disabled={disabled || loading}
         onChange={handleChange}
         checked={selected}
-        data-testid={testId ? `${testId}-input` : undefined}
+        data-testid={props.testId ? `${props.testId}-input` : undefined}
       />
       <label
         htmlFor={inputId}
@@ -87,7 +84,7 @@ export const ToggleButton: FC<ToggleButtonProps> = (props) => {
           loading && styles.toggleBtnLoading,
           className
         )}
-        data-testid={testId ? `${testId}-label` : undefined}
+        data-testid={props.testId ? `${props.testId}-label` : undefined}
       >
         {tooltip
           ? (

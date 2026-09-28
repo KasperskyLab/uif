@@ -51,8 +51,6 @@ export class FilterApi<T extends TableRecord = TableRecord> extends FiltersState
     this.initColumnGroups(columns)
     if (defaultFilters) this.initDefaultFilters(prepareFilters(defaultFilters, columns))
     if (customFilterFunction) this.customFilterFunction = customFilterFunction
-
-    console.log(`${prefix} FilterApi initialized`)
   }
 
   initColumnGroups (columns: TableColumn<T>[]) {

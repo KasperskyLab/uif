@@ -191,7 +191,7 @@
 }
 
 // Group class: layout only, paints nothing.
-.radioGroup {
+.radioGroup.radioGroup {
   display: flex;
   flex-direction: row;
   gap: 12px;

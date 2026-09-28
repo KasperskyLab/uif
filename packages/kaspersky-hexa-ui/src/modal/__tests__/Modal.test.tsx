@@ -83,6 +83,22 @@ describe('Modal', () => {
       expect(baseElement.querySelector(`[kl-id="${SECOND_CUSTOM_TEST_ID}"]`)).toBeInTheDocument())
   })
 
+  test('should render footer extra content', async () => {
+    const { baseElement } = render(
+      <Modal
+        klId={klId}
+        actions={actionsButtons}
+        footerExtra={<span data-testid="footer-extra">Extra</span>}
+        visible
+      />
+    )
+
+    await waitFor(() =>
+      expect(baseElement.querySelector('[data-testid="footer-extra"]')).toBeInTheDocument())
+
+    expect(baseElement.querySelector('.ant-modal-footer button')).toHaveTextContent('OK')
+  })
+
   test('should receive testId prop', async () => {
     const { baseElement } = render(
       <Modal testId={testId} mode="default" content="" visible />

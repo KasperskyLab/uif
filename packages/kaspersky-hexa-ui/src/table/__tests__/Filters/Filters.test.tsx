@@ -44,41 +44,38 @@ const defaultProps: TableMockProps = {
   }
 }
 
-const renderTable = (props: Partial<TableMockProps> = {}) => {
-  const table = TableTestingClass.render({ ...defaultProps, ...props })
-  return { table }
-}
+const renderTable = (props?: Partial<TableMockProps>) => TableTestingClass.render({ ...defaultProps, ...props })
 
 describe('Table filters module', () => {
-  it('should render by default', () => {
-    const { table } = renderTable()
+  it('should render by default', async () => {
+    const table = await renderTable()
     const instance = table.getInstance()
     expect(instance).toHaveAttribute('kl-id', defaultProps.klId)
     expect(instance).toHaveAttribute('data-testid', defaultProps.testId)
   })
 
-  it('should render filters sidebar with correct test id', () => {
-    const { table } = renderTable()
-    table.filters.openSidebar()
+  it('should render filters sidebar with correct test id', async () => {
+    const table = await renderTable()
+    await table.filters.openSidebar()
     expect(table.filters.getSidebar()).toBeInTheDocument()
   })
 
-  it('should have initial size of dataSource without filters', () => {
-    const { table } = renderTable()
+  it('should have initial size of dataSource without filters', async () => {
+    const table = await renderTable()
     table.pagination.expectTotal(100, pageSize)
   })
 
-  it('should hide clear all button if there are no filters', () => {
-    const { table } = renderTable()
+  it('should hide clear all button if there are no filters', async () => {
+    const table = await renderTable()
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
 
     expect(table.filters.getCount()).toBe(0)
     expect(screen.queryByText('Clear all')).toBeNull()
   })
 
-  it('should filter by one initial filter', () => {
-    const { table } = renderTable({
+  it('should filter by one initial filter', async () => {
+    const table = await renderTable({
       defaultSidebarFilters: [
         {
           name: 'fullname',
@@ -92,8 +89,8 @@ describe('Table filters module', () => {
     table.pagination.expectTotal(60, pageSize)
   })
 
-  it('should filter by multiple initial filters', () => {
-    const { table } = renderTable({
+  it('should filter by multiple initial filters', async () => {
+    const table = await renderTable({
       defaultSidebarFilters: [
         {
           name: 'fullname',
@@ -113,8 +110,8 @@ describe('Table filters module', () => {
     table.pagination.expectTotal(6, pageSize)
   })
 
-  it('should hide condition select when filter item is boolean', () => {
-    const { table } = renderTable({
+  it('should hide condition select when filter item is boolean', async () => {
+    const table = await renderTable({
       defaultFilters: [
         {
           name: 'isTrainee',
@@ -125,14 +122,14 @@ describe('Table filters module', () => {
       ]
     })
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
 
     expect(table.filters.getItem(0)).toBeInTheDocument()
     expect(table.filters.getConditionSelect(0)).not.toBeInTheDocument()
   })
 
-  it('should clear all filters', () => {
-    const { table } = renderTable({
+  it('should clear all filters', async () => {
+    const table = await renderTable({
       defaultSidebarFilters: [
         {
           name: 'fullname',
@@ -151,20 +148,20 @@ describe('Table filters module', () => {
 
     table.pagination.expectTotal(6, pageSize)
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
     expect(table.filters.getCount()).toBe(2)
 
     table.filters.clearAll()
 
     expect(table.filters.getCount()).toBe(0)
 
-    table.filters.apply()
+    await table.filters.apply()
 
     table.pagination.expectTotal(100, pageSize)
   })
 
-  it('should change existing filter', () => {
-    const { table } = renderTable({
+  it('should change existing filter', async () => {
+    const table = await renderTable({
       defaultSidebarFilters: [
         {
           name: 'fullname',
@@ -183,17 +180,32 @@ describe('Table filters module', () => {
 
     table.pagination.expectTotal(6, pageSize)
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
     table.filters.setValue(0, 'ova')
     expect(table.filters.getCount()).toBe(2)
 
-    table.filters.apply()
+    await table.filters.apply()
 
     table.pagination.expectTotal(3, pageSize)
   })
 
+  it('should reset current page to 1 when a filter is applied on a non-first page', async () => {
+    const table = await renderTable()
+
+    table.pagination.goToPage(2)
+    expect(table.pagination.getActivePage()).toBe(2)
+
+    await table.filters.openSidebar()
+    await table.filters.add()
+    table.filters.setValue(0, 'Egor Kuznetsov')
+    await table.filters.apply()
+
+    await waitFor(() => expect(table.pagination.getActivePage()).toBe(1))
+    table.pagination.expectTotal(1, pageSize)
+  })
+
   it('should add filter', async () => {
-    const { table } = renderTable({
+    const table = await renderTable({
       defaultSidebarFilters: [
         {
           name: 'fullname',
@@ -212,7 +224,7 @@ describe('Table filters module', () => {
 
     table.pagination.expectTotal(6, pageSize)
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
 
     expect(table.filters.getCount()).toBe(2)
 
@@ -221,13 +233,13 @@ describe('Table filters module', () => {
     expect(table.filters.getCount()).toBe(3)
 
     table.filters.setValue(2, 'Egor Kuznetsov')
-    table.filters.apply()
+    await table.filters.apply()
 
     table.pagination.expectTotal(1, pageSize)
   })
 
-  it('should clear filter', () => {
-    const { table } = renderTable({
+  it('should clear filter', async () => {
+    const table = await renderTable({
       defaultSidebarFilters: [
         {
           name: 'fullname',
@@ -246,7 +258,7 @@ describe('Table filters module', () => {
 
     table.pagination.expectTotal(6, pageSize)
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
 
     expect(table.filters.getCount()).toBe(2)
 
@@ -254,22 +266,22 @@ describe('Table filters module', () => {
 
     expect(table.filters.getCount()).toBe(1)
 
-    table.filters.apply()
+    await table.filters.apply()
 
     table.pagination.expectTotal(60, pageSize)
   })
 
   it('should disable client filtering if isServerFiltering = true', async () => {
     const onSidebarFiltersChangeMock = jest.fn()
-    const { table } = renderTable({
+    const table = await renderTable({
       isServerFiltering: true,
       onSidebarFiltersChange: onSidebarFiltersChangeMock
     })
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
     await table.filters.add()
     table.filters.setValue(0, 'test')
-    table.filters.apply()
+    await table.filters.apply()
 
     expect(onSidebarFiltersChangeMock).toHaveBeenCalledTimes(2)
     expect(table.pagination.getTotal()).toBe(100)
@@ -277,18 +289,18 @@ describe('Table filters module', () => {
 
   it('should call onSidebarFiltersChange with applied filters', async () => {
     const onSidebarFiltersChangeMock = jest.fn()
-    const { table } = renderTable({
+    const table = await renderTable({
       isServerFiltering: true,
       onSidebarFiltersChange: onSidebarFiltersChangeMock
     })
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
 
     await table.filters.add()
 
     table.filters.setValue(0, 'test')
 
-    table.filters.apply()
+    await table.filters.apply()
 
     expect(onSidebarFiltersChangeMock).toHaveBeenCalledTimes(2)
     expect(onSidebarFiltersChangeMock).toHaveBeenCalledWith([
@@ -304,16 +316,16 @@ describe('Table filters module', () => {
 
   it('should call onFiltersChange with filter with custom column filter name (column.filterName)', async () => {
     const onFiltersChange = jest.fn()
-    const { table } = renderTable({
+    const table = await renderTable({
       columns: modifyColumns(tableColumns, 'fullname', { filterName: 'custom_fullname' }),
       onFiltersChange
     })
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
     await table.filters.add()
     table.filters.setValue(0, 'Test name')
 
-    table.filters.apply()
+    await table.filters.apply()
 
     await waitFor(() => {
       const lastCall: UnitedFilter[] = onFiltersChange.mock.lastCall[0]
@@ -324,9 +336,9 @@ describe('Table filters module', () => {
   })
 
   it('should disable filtering when there are duplicate filters', async () => {
-    const { table } = renderTable()
+    const table = await renderTable()
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
 
     await table.filters.add()
     table.filters.setValue(0, 'test')
@@ -334,7 +346,7 @@ describe('Table filters module', () => {
     await table.filters.add()
     table.filters.setValue(1, 'test')
 
-    table.filters.apply()
+    await table.filters.apply()
 
     expect(
       screen.queryAllByText(localization['en-us']
@@ -353,13 +365,13 @@ describe('Table filters module', () => {
   })
 
   it('should disable filtering when there are empty filters', async () => {
-    const { table } = renderTable()
+    const table = await renderTable()
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
 
     await table.filters.add()
 
-    table.filters.apply()
+    await table.filters.apply()
 
     expect(
       screen.queryAllByText(localization['en-us']
@@ -385,7 +397,7 @@ describe('Table filters module', () => {
       value: 1
     }
     const ref: MutableRefObject<TableRef | null> = { current: null }
-    const table = TableTestingClass.render({ ...defaultProps, defaultFilters: [predefinedFilter], ref })
+    const table = await TableTestingClass.render({ ...defaultProps, defaultFilters: [predefinedFilter], ref })
 
     const chip = table.filters.getChip(predefinedFilter)
     expect(chip).toBeInTheDocument()
@@ -409,7 +421,7 @@ describe('Table filters module', () => {
       value: 1
     }
 
-    const table = TableTestingClass.render({ ...defaultProps, defaultFilters: undefined })
+    const table = await TableTestingClass.render({ ...defaultProps, defaultFilters: undefined })
 
     expect(table.filters.getChip(defaultFilter)).not.toBeInTheDocument()
 
@@ -430,7 +442,7 @@ describe('Table filters module', () => {
       value: 1
     }
 
-    const table = TableTestingClass.render({ ...defaultProps, defaultFilters: undefined })
+    const table = await TableTestingClass.render({ ...defaultProps, defaultFilters: undefined })
     expect(initDefaultFilters).not.toHaveBeenCalled()
 
     table.rerender(<TestTable {...defaultProps} defaultFilters={[defaultFilter]} />)
@@ -455,9 +467,9 @@ describe('Table filters module', () => {
       }]
     }
 
-    const { table } = renderTable({ getFiltersSidebarToolbarButtons })
+    const table = await renderTable({ getFiltersSidebarToolbarButtons })
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
 
     const customButton = await screen.findByTestId(customButtonTestId)
     expect(customButton).toBeInTheDocument()
@@ -490,9 +502,9 @@ describe('Table filters module', () => {
       ]
     }
 
-    const { table } = renderTable(props)
+    const table = await renderTable(props)
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
 
     const conditionSelect = table.filters.getSelectedItem(0, 'filter-item-condition-select-0')!
     await userEvent.click(conditionSelect)
@@ -508,7 +520,7 @@ describe('Table filters module', () => {
 
 describe.each(MODES)('Table sidebar filters - $description', ({ mode }) => {
   it('should apply a default sidebar filter', async () => {
-    const { table, dataSourceFunction } = renderByMode(mode, generatedData, {
+    const { table, dataSourceFunction } = await renderByMode(mode, generatedData, {
       columns: tableColumns,
       useFiltersSidebar: true,
       toolbar: { showFilterSidebar: true },
@@ -527,7 +539,7 @@ describe.each(MODES)('Table sidebar filters - $description', ({ mode }) => {
   })
 
   it('should reflect adding and removing a sidebar filter', async () => {
-    const { table, dataSourceFunction } = renderByMode(mode, generatedData, {
+    const { table, dataSourceFunction } = await renderByMode(mode, generatedData, {
       columns: tableColumns,
       useFiltersSidebar: true,
       toolbar: { showFilterSidebar: true },
@@ -535,10 +547,10 @@ describe.each(MODES)('Table sidebar filters - $description', ({ mode }) => {
     })
     await table.rows.waitForData()
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
     await table.filters.add()
     table.filters.setValue(0, 'Egor Kuznetsov')
-    table.filters.apply()
+    await table.filters.apply()
 
     await waitFor(() => table.pagination.expectTotal(1, pageSize))
     if (mode === 'server') {
@@ -546,9 +558,9 @@ describe.each(MODES)('Table sidebar filters - $description', ({ mode }) => {
       await waitFor(() => expect((dsf.mock.lastCall?.[0]?.params.filters ?? []).length).toBeGreaterThan(0))
     }
 
-    table.filters.openSidebar()
+    await table.filters.openSidebar()
     table.filters.remove(0)
-    table.filters.apply()
+    await table.filters.apply()
 
     await waitFor(() => table.pagination.expectTotal(100, pageSize))
     if (mode === 'server') {

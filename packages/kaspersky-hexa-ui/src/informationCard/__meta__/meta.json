@@ -12,6 +12,6 @@
   "component": "InformationCard",
   "description": "Компонент InformationCard. Карточка может содержать заголовок, описание, иконку, любой контент и элементы управления.",
   "usage": "Компонент InformationCard используется для группировки информации и опций для одной сущности.",
-  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=67551%3A253068",
-  "pixsoView": "https://pixso.net/app/design/gdaroKaKFmT3xNMf_pagrw"
+  "designLink": "",
+  "pixsoView": ""
 }

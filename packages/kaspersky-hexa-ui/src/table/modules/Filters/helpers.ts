@@ -345,7 +345,7 @@ export const removeId = <T extends TableRecord = TableRecord> (filterItems: Side
 
 export const isEmptyValue = (value: any) => {
   return value === undefined || value === null || value === '' ||
-    (Array.isArray(value) && value.length === 0)
+    Number.isNaN(value) || (Array.isArray(value) && value.length === 0)
 }
 
 export const validate = <T extends TableRecord = TableRecord> (filters: SidebarFilterInternal<T>[]): InvalidFilter[] => {
@@ -360,7 +360,7 @@ export const validate = <T extends TableRecord = TableRecord> (filters: SidebarF
 
         if (!isEmptyFilterValue || [FilterOperation.empty, FilterOperation.nempty].includes(condition)) return
 
-        if ([FilterType.Text, FilterType.Number, FilterType.Enum].includes(type)) {
+        if ([FilterType.Text, FilterType.Number, FilterType.Enum, FilterType.DateTime].includes(type)) {
           invalidFilters.push({ id: filter.id, validationMessage })
         }
       })

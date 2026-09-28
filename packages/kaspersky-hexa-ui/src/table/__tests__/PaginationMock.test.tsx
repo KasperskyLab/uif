@@ -25,19 +25,19 @@ const defaultProps = {
 }
 
 describe('Table pagination module', () => {
-  it('should render by default', () => {
-    const table = TableTestingClass.render(defaultProps)
+  it('should render by default', async () => {
+    const table = await TableTestingClass.render(defaultProps)
     expect(table.pagination.getRoot()).toBeInTheDocument()
   })
 
-  it('should not render if it is disabled', () => {
-    const table = TableTestingClass.render({ ...defaultProps, pagination: false })
+  it('should not render if it is disabled', async () => {
+    const table = await TableTestingClass.render({ ...defaultProps, pagination: false })
     expect(table.pagination.getRoot()).not.toBeInTheDocument()
   })
 
   describe('when called Pagination component', () => {
-    it('should set correct default props', () => {
-      TableTestingClass.render(defaultProps)
+    it('should set correct default props', async () => {
+      await TableTestingClass.render(defaultProps)
 
       const { props, context } = getPaginationParamsToCheck({
         simple: false,
@@ -47,8 +47,8 @@ describe('Table pagination module', () => {
       expect(Pagination).toHaveBeenCalledWith(props, context)
     })
 
-    it('should set prop \'simple\' to true if it is specified in config', () => {
-      TableTestingClass.render({ ...defaultProps, pagination: { simple: true } })
+    it('should set prop \'simple\' to true if it is specified in config', async () => {
+      await TableTestingClass.render({ ...defaultProps, pagination: { simple: true } })
 
       const { props, context } = getPaginationParamsToCheck({
         simple: true
@@ -56,8 +56,8 @@ describe('Table pagination module', () => {
       expect(Pagination).toHaveBeenCalledWith(props, context)
     })
 
-    it('should set prop \'showSelected\' to true if selection is possible', () => {
-      TableTestingClass.render({ ...defaultProps, rowSelection: {} })
+    it('should set prop \'showSelected\' to true if selection is possible', async () => {
+      await TableTestingClass.render({ ...defaultProps, rowSelection: {} })
 
       const { props, context } = getPaginationParamsToCheck({
         showSelected: true
@@ -65,8 +65,8 @@ describe('Table pagination module', () => {
       expect(Pagination).toHaveBeenCalledWith(props, context)
     })
 
-    it('should set prop \'showSizeChanger\' to true if it is specified in config', () => {
-      TableTestingClass.render({ ...defaultProps, pagination: { showSizeChanger: true } })
+    it('should set prop \'showSizeChanger\' to true if it is specified in config', async () => {
+      await TableTestingClass.render({ ...defaultProps, pagination: { showSizeChanger: true } })
 
       const { props, context } = getPaginationParamsToCheck({
         showSizeChanger: true
@@ -74,8 +74,8 @@ describe('Table pagination module', () => {
       expect(Pagination).toHaveBeenCalledWith(props, context)
     })
 
-    it('should set prop \'showSizeChanger\' to false if pagination is simple', () => {
-      TableTestingClass.render({ ...defaultProps, pagination: { simple: true, showSizeChanger: true } })
+    it('should set prop \'showSizeChanger\' to false if pagination is simple', async () => {
+      await TableTestingClass.render({ ...defaultProps, pagination: { simple: true, showSizeChanger: true } })
 
       const { props, context } = getPaginationParamsToCheck({
         simple: true,

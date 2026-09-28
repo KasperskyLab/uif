@@ -33,19 +33,16 @@ describe('Table virtualizedtableforantd4 (VTable)', () => {
     ))
 
     try {
-      let table: TableTestingClass
-      await act(async () => {
-        table = TableTestingClass.render({
-          columns: tableColumns,
-          pagination: {
-            virtualInfiniteScroll: true,
-            total: 100,
-            pageSize: 10,
-            rowHeight: 40,
-            tableBodyHeight: 400,
-            infiniteScrollPageGetter: pageGetter as any
-          }
-        })
+      const table = await TableTestingClass.render({
+        columns: tableColumns,
+        pagination: {
+          virtualInfiniteScroll: true,
+          total: 100,
+          pageSize: 10,
+          rowHeight: 40,
+          tableBodyHeight: 400,
+          infiniteScrollPageGetter: pageGetter as any
+        }
       })
 
       const body = table!.getBody()

@@ -84,10 +84,7 @@ const getDateTo = <T>(date?: T): T | number => date || parseDate(new Date(new Da
 
 export const getDefaultDateTimeFilter = (filter: WithId<DateTimeFilter>): WithId<DateTimeFilter> => {
   if (filter.value === null || typeof filter.value === 'number')
-    return {
-      ...filter,
-      value: getDateFrom<number | null>(filter.value)
-    }
+    return filter
   else
     return {
       ...filter,

@@ -5,7 +5,7 @@ import {
 
 import { sharedPropConfig } from '@sb/resolveDesignControls'
 
-import { progressBarModes, progressBarSizes } from '../types'
+import { progressBarModes, progressBarSizes, progressBarVariants } from '../types'
 
 const fromSharedProp = (
   propName: keyof typeof sharedPropConfig,
@@ -13,6 +13,7 @@ const fromSharedProp = (
 ) => extendPropPresentation(sharedPropConfig[propName], overrides)
 
 export const defaultArgs = {
+  variant: 'linear' as const,
   mode: 'critical' as const,
   size: 'medium' as const,
   track: 50,
@@ -21,13 +22,18 @@ export const defaultArgs = {
 }
 
 export const progressBarPropPresentation: PropPresentationMap = {
+  variant: {
+    control: 'inline-radio',
+    options: [...progressBarVariants],
+    description: 'Вариант индикатора: горизонтальная полоса или круг'
+  },
   mode: fromSharedProp('mode', {
     options: [...progressBarModes],
-    description: 'Семантический цвет активной полосы прогресса'
+    description: 'Семантический цвет активной полосы прогресса. Не применяется к варианту circular'
   }),
   size: fromSharedProp('size', {
     options: [...progressBarSizes],
-    description: 'Высота полосы прогресса'
+    description: 'Высота полосы прогресса. Не применяется к варианту circular'
   }),
   track: {
     control: { type: 'range', min: 0, max: 100, step: 1 },
@@ -35,10 +41,10 @@ export const progressBarPropPresentation: PropPresentationMap = {
   },
   background: {
     control: 'boolean',
-    description: 'Показывать фоновую дорожку под активной полосой'
+    description: 'Показывать фоновую дорожку под активной полосой. Не применяется к варианту circular'
   },
   width: {
     control: 'number',
-    description: 'Ширина в пикселях; без значения полоса растягивается на 100% родителя'
+    description: 'Ширина в пикселях; без значения полоса растягивается на 100% родителя. Не применяется к варианту circular'
   }
 }

@@ -5,7 +5,6 @@ import { BadgeColorConfig, BadgeMode, BadgeSize, BadgeSizeConfig } from '@src/ba
 import { BreadcrumbsColorConfig, BreadcrumbsSize, BreadcrumbsSizeConfig } from '@src/breadcrumbs/types'
 import { ChipColorConfig, ChipSize, ChipSizeConfig } from '@src/chip/types'
 import { IconColorConfig } from '@src/icon/types'
-import { IndicatorCssConfig, IndicatorMode } from '@src/indicator/types'
 import {
   InformationCardColorConfig,
   InformationCardSize,
@@ -82,7 +81,6 @@ export type ThemeConfig = Readonly<{
     severity: { colors: Record<SeverityMode, SeverityColorConfig> },
     notification: ComponentConfig<Record<NotificationMode, NotificationColorConfig>>,
     sectionMessage: { colors: Record<SectionMessageMode, SectionMessageColorConfig> },
-    indicator: { colors: Record<IndicatorMode, IndicatorCssConfig> },
     status: { colors: Record<StatusMode, StatusColorConfig> },
     pagination: { colors: PaginationColorConfig },
     keyValue: { colors: KeyValueCssConfig },

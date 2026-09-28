@@ -3,6 +3,15 @@ import React from 'react'
 
 import { Cloud, Folder, Server } from '@kaspersky/hexa-ui-icons/16'
 
+export const flatListMock: DataNode[] = [
+  { title: 'Main', key: 'tenant-main' },
+  { title: 'KUMA Updater', key: 'tenant-kuma-updater' },
+  { title: 'Shared', key: 'tenant-shared' },
+  { title: 'Root tenant', key: 'tenant-root' },
+  { title: 'Sandbox tenant', key: 'tenant-sandbox' },
+  { title: 'Support tenant', key: 'tenant-support' }
+]
+
 export const treeDataMock: DataNode[] = [
   {
     title: 'Main',

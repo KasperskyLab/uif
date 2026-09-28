@@ -35,6 +35,7 @@ import * as ToolbarStories from './Toolbar.stories'
     rtlSupported
     inBuilder
     builderInfo="Используется под названием «Тулбар»"
+    checkUIF
   />
 
   <Tabs defaultActiveKey="description">
@@ -61,7 +62,7 @@ import * as ToolbarStories from './Toolbar.stories'
 
       <DocExampleBlock
         title="left и right"
-        description="Массивы элементов для левой и правой части панели. В элементах указывают тип: `button`, `dropdown`, `toggleButton`, `link`, `divider` или `children`; у каждого элемента обязателен уникальный **key**. Если **visible**=`false`, элемент не отображается. По умолчанию **left** — пустой массив."
+        description="Массивы элементов для левой и правой части панели. В элементах указывают тип: `button`, `dropdown`, `toggleButton`, `link`, `divider` или `children`; у каждого элемента обязателен уникальный **key**. Если **visible**=`false`, элемент не отображается и не попадает в меню переполнения. По умолчанию **left** — пустой массив."
         code={`
           <Toolbar
             left={[
@@ -93,7 +94,7 @@ import * as ToolbarStories from './Toolbar.stories'
 
       <DocExampleBlock
         title="leftLimit"
-        description="Ограничивает количество видимых элементов левой части. Остальные доступные элементы открываются через выпадающее меню. По умолчанию — `4`."
+        description="Ограничивает количество видимых элементов левой части. Остальные доступные элементы открываются через выпадающее меню. По умолчанию — `4`. Применяется только при **autoDropdown**=`false`."
         code={`
           <Toolbar
             leftLimit={2}
@@ -297,12 +298,12 @@ import * as ToolbarStories from './Toolbar.stories'
         title="Компоновка частей панели"
         description="Toolbar можно использовать с обеими группами, только с **left** или только с **right**."
         code={`
-          <Toolbar left={[{ type: 'button', key: 'filter', label: 'Фильтры' }]} />
-          <Toolbar
-            right={[
-              { type: 'children', key: 'settings', children: <Toolbar.SettingsItem /> },
-            ]}
-          />
+            <Toolbar left={[{ type: 'button', key: 'filter', label: 'Фильтры' }]} />
+            <Toolbar
+              right={[
+                { type: 'children', key: 'settings', children: <Toolbar.SettingsItem /> },
+              ]}
+            />
         `}
       />
 
@@ -320,7 +321,7 @@ import * as ToolbarStories from './Toolbar.stories'
       <DocExampleBlock
         title="Компонент в Pixso"
         titleSize="H5"
-        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=40522:169099)"
+        description=""
       />
       <Space direction="vertical" gap={32} >
         <Space direction="vertical" gap={8} align="stretch">

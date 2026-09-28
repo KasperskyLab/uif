@@ -15,7 +15,7 @@ type UseDataSourceProps<T extends TableRecord = TableRecord> =
   Pick<ITableProps<T>, 'dataSourceFunction' | 'patchDataSource' | 'onDataSourceChange' | 'loading'> & {
     additional: UsePaginationConfigReturn<T>['additional'],
     dataSourceClient: ITableProps<T>['dataSource'],
-    pagination: TablePaginationConfigExtended,
+    pagination: TablePaginationConfigExtended<T>,
     setIsInited: SetState<ITableProps<T>['isInited']>,
     setIsClientGroupSortingDisabled: SetState<boolean | undefined>,
     setIsDefaultSortDisabled: SetState<boolean | undefined>,
@@ -77,7 +77,7 @@ export const useDataSource = <T extends TableRecord = TableRecord> ({
   }, [filterApi])
 
   const debouncedFetchDataSource = useCallback(
-    debounce(async (args: TableDataSourceFunctionArgs) => {
+    debounce(async (args: TableDataSourceFunctionArgs<T>) => {
       if (!dataSourceFunction) return
 
       setIsInited(false)
@@ -115,7 +115,7 @@ export const useDataSource = <T extends TableRecord = TableRecord> ({
 
   const [dataSourceFunctionTrigger, setDataSourceFunctionTrigger] = useState(false)
 
-  const params: TableDataSourceFunctionArgs = useMemo(() => ({
+  const params: TableDataSourceFunctionArgs<T> = useMemo(() => ({
     page: pagination.current - 1,
     pageSize: pagination.pageSize,
     params: {

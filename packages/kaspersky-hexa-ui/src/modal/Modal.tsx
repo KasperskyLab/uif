@@ -27,7 +27,7 @@ import {
   ModalProps
 } from './types'
 
-const iconMap: Record<Exclude<ModalMode, 'default'>, React.FC> = {
+const iconMap: Partial<Record<ModalMode, React.FC>> = {
   warning: () => <StatusWarningOutline testId="modal-warning-icon" klId="icon-warning" />,
   error: () => <StatusDangerOutline1 testId="modal-error-icon" klId="icon-error" />,
   success: () => <StatusOkOutline testId="modal-success-icon" klId="icon-success" />,
@@ -51,6 +51,7 @@ export const Modal: FC<ModalProps> = (rawProps: ModalProps) => {
     closable = true,
     testAttributes,
     customButtons,
+    footerExtra,
     style,
     className,
     wrapClassName,
@@ -60,7 +61,7 @@ export const Modal: FC<ModalProps> = (rawProps: ModalProps) => {
   } = useTestAttribute(rawProps)
 
   const resolvedSize = dialog ? 'small' : size
-  const IconComponent = useMemo(() => mode !== 'default' && iconMap[mode], [iconMap, mode])
+  const IconComponent = iconMap[mode]
 
   const [titleElement, setTitleElement] = useState<HTMLDivElement | null>(null)
   const [footerElement, setFooterElement] = useState<HTMLDivElement | null>(null)
@@ -93,13 +94,13 @@ export const Modal: FC<ModalProps> = (rawProps: ModalProps) => {
   ), [header, IconComponent])
 
   const footerMemoized = useMemo(() => {
-    if (!actions && !customButtons) {
+    if (!actions && !customButtons && !footerExtra) {
       return null
     }
 
     return (
-      <div ref={setFooterElement}>
-        <Space direction="horizontal" gap={8}>
+      <Space ref={setFooterElement} width="unset" gap="related">
+        <Space direction="horizontal" gap={8} width="unset">
           {actions?.FIRST_ACTION && (
             <Button
               size="medium"
@@ -134,9 +135,10 @@ export const Modal: FC<ModalProps> = (rawProps: ModalProps) => {
             </Button>
           ))}
         </Space>
-      </div>
+        {footerExtra}
+      </Space>
     )
-  }, [actions, customButtons, mode])
+  }, [actions, customButtons, footerExtra, mode])
 
   const [showTopBorder, setShowTopBorder] = useState(false)
   const [showBottomBorder, setShowBottomBorder] = useState(false)

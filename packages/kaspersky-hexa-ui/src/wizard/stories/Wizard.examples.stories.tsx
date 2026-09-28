@@ -8,7 +8,9 @@ import { Wizard as WizardComponent } from '../Wizard'
 
 const footerText = <div style={{ textAlign: 'right' }}>Footer Text Element</div>
 
-const useStepsWithValidation = () => {
+const useStepsWithValidation = (
+  stepsToShow?: number[]
+) => {
   const [isValid, setIsValid] = useState(true)
   const [value, setValue] = useState('')
   const [message, setMessage] = useState<string>()
@@ -54,7 +56,9 @@ const useStepsWithValidation = () => {
     { name: 'Step 2', render: () => <div>Step 2 content</div> },
     { name: 'Step 3', description: 'Long long long long long long long long description', render: () => <div>Step 3 content</div> },
     { name: 'Step 4', description: 'Description', render: () => <div>Step 4 content</div> }
-  ]
+  ].filter((_item, index) => {
+    return stepsToShow ? stepsToShow.includes(index) : true
+  })
 }
 
 const meta = {
@@ -169,6 +173,30 @@ export const Modal: StoryObj<WizardModalProps> = {
           footerAdditionalElement={footerText}
         />
       </>
+    )
+  }
+}
+
+export const PageOneStep: StoryObj<WizardPageProps> = {
+  render: (args) => {
+    const steps = useStepsWithValidation([0])
+    const handleFinish = () => {
+      args.onFinish?.()
+      alert('Finished')
+    }
+    const handleCancel = () => {
+      args.onCancel?.()
+      alert('Cancelled')
+    }
+    return (
+      <WizardComponent
+        view="page"
+        {...args}
+        steps={steps}
+        onFinish={handleFinish}
+        onCancel={handleCancel}
+        footerAdditionalElement={footerText}
+      />
     )
   }
 }

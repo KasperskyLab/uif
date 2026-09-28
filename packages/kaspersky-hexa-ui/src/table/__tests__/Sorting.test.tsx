@@ -1,6 +1,12 @@
 import { modifyColumns } from '@src/table/test-utils/helpers'
 import { MODES, renderByMode, TableMode } from '@src/table/test-utils/renderByMode'
-import { configure, fireEvent, screen, waitFor } from '@testing-library/react'
+import {
+  act,
+  configure,
+  fireEvent,
+  screen,
+  waitFor
+} from '@testing-library/react'
 
 import { generatedData, tableColumns, TableMockProps } from '../__mocks__/filtersMockData'
 
@@ -35,7 +41,7 @@ describe.each(MODES)('Table sorting - $description', ({ mode }) => {
 
   scenarios.forEach(({ direction, attribute, dataIndex }) => {
     it(`should sort ${dataIndex} column in ${direction} order${attribute ? ` with attribute ${attribute}` : ''}`, async () => {
-      const { table, dataSourceFunction } = renderSorting(mode)
+      const { table, dataSourceFunction } = await renderSorting(mode)
       await table.rows.waitForData()
 
       await table.sorting.sortBy(dataIndex, direction, attribute)
@@ -75,7 +81,7 @@ describe('Table sorting - client-only', () => {
     expect(values).toEqual(sortData.map(row => row.fullname))
   })
 
-  it('should call column sorter with rows and sort direction when sortable column header is clicked', () => {
+  it('should call column sorter with rows and sort direction when sortable column header is clicked', async () => {
     const sorterFunction = jest.fn(() => 0)
 
     const mockData = [
@@ -83,7 +89,7 @@ describe('Table sorting - client-only', () => {
       { key: '2', fullname: 'Петр Петров', salary: 60000 }
     ]
 
-    renderByMode('client', mockData, {
+    await renderByMode('client', mockData, {
       columns: [
         {
           key: 'fullname',
@@ -95,7 +101,7 @@ describe('Table sorting - client-only', () => {
       ]
     })
 
-    fireEvent.click(screen.getByText('Title'))
+    await act(async () => { fireEvent.click(screen.getByText('Title')) })
     fireEvent.click(screen.getByText('Ascending'))
 
     expect(sorterFunction).toHaveBeenCalledWith(
@@ -109,7 +115,7 @@ describe('Table sorting - client-only', () => {
 describe('Table sorting - server data specifics', () => {
   it('should send columnServerField as sorting.field when configured', async () => {
     const columns = modifyColumns(modifiedColumns, 'fullname', { columnServerField: 'server_fullname' })
-    const { table, dataSourceFunction } = renderSorting('server', { columns })
+    const { table, dataSourceFunction } = await renderSorting('server', { columns })
     await table.rows.waitForData()
 
     await table.sorting.sortBy('fullname', 'asc')
@@ -119,7 +125,7 @@ describe('Table sorting - server data specifics', () => {
   })
 
   it('should switch the request sorting attribute from email to city within one session', async () => {
-    const { table, dataSourceFunction } = renderSorting('server')
+    const { table, dataSourceFunction } = await renderSorting('server')
     await table.rows.waitForData()
     const dsf = dataSourceFunction as jest.Mock
 

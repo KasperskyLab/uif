@@ -21,7 +21,7 @@ export const inputPasswordStorySettings: Meta<TextboxPasswordProps> = {
   },
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
-    design: 'https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=80545:342493'
+    design: ''
   },
   decorators: [
     (Story, context) => (

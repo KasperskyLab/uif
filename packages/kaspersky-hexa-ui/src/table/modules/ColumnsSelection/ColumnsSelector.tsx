@@ -1,51 +1,38 @@
-import { Checkbox } from '@src/checkbox'
+import { SetState } from '@helpers/hooks/useStateProps'
+import { Checkbox, CheckboxProps } from '@src/checkbox'
+import { Space } from '@src/space'
 import { TableColumn, TableRecord } from '@src/table'
 import { Tooltip } from '@src/tooltip'
-import { Text } from '@src/typography'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   SortableContainer as sortableContainer,
   SortableElement as sortableElement,
-  SortableHandle as sortableHandle
+  SortableHandle as sortableHandle,
+  SortEndHandler
 } from 'react-sortable-hoc'
 import styled from 'styled-components'
 
 import { DragDrop } from '@kaspersky/hexa-ui-icons/16'
 
-import { isColumnReadonly } from '../../helpers/common'
+import { findColumnByKey, isColumnReadonly } from '../../helpers/common'
+import { getStringWithCondition } from '../SortingAndFilters/helpers'
 
+import { SIDEBAR_SETTINGS_CLASS, sortColumns } from './helpers'
 import { SelectorWrapper } from './SelectorWrapper'
 
-const DragHandleIcon = styled(DragDrop)`
-  display: block;
-`
-
-const DragHandle = sortableHandle(() => <DragHandleIcon name="DragDrop" />)
-
-const ItemsContainer = styled.div`
-  padding-top: 4px;
-`
+const DragHandle = sortableHandle(() => <DragDrop name="DragDrop" />)
 
 const Dragger = styled.div`
   cursor: pointer;
   justify-self: flex-end;
   color: var(--action_button--icon--ghost--enabled);
 `
-const ItemLabel = styled.div`
-  flex-grow: 1;
-
-  span{
-    font-weight: 400;
-    user-select: none;
-  }
-`
 
 const Item = styled.label`
   cursor: pointer;
   display: flex;
   z-index: 700;
-  margin-top: 8px;
   align-items: center;
   line-height: 1;
   gap: 4px;
@@ -53,17 +40,6 @@ const Item = styled.label`
   &.selector-item-dragging {
     z-index: 1200;
   }
-
-  p {
-    margin-top: 2px;
-    margin-left: 8px;
-  }
-`
-
-const CheckboxRow = styled.div`
-  display: flex;
-  gap: 4px;
-  align-items: center;
 `
 
 const NoDragIcon = styled.div`
@@ -91,16 +67,13 @@ const BaseItem = <T extends TableRecord> ({ value, prefix }: BaseItemProps<T>) =
     }
   } = value
   const CheckboxRowComponent = (
-    <CheckboxRow>
-      <Checkbox
-        checked={show}
-        disabled={!hideColumnAvailable || onlyForFiltering}
-        onChange={() => value.onChange(column)}
-      />
-      <ItemLabel>
-        <Text type="BTM3">{title}</Text>
-      </ItemLabel>
-    </CheckboxRow>
+    <Checkbox
+      checked={show}
+      disabled={!hideColumnAvailable || onlyForFiltering}
+      onChange={() => value.onChange(column)}
+    >
+      {title}
+    </Checkbox>
   )
 
   let tooltipTextKey = ''
@@ -145,41 +118,25 @@ const getItem = <T extends TableRecord> (draggingAvailable: boolean) =>
 
 const SortableContainer = sortableContainer(
   ({ children, draggingAvailable }: { children: React.ReactNode, draggingAvailable?: boolean }) => {
+    const Container = (
+      <Space gap="related" direction="vertical" align="start">
+        {children}
+      </Space>
+    )
+
     if (!draggingAvailable) {
       return (
-        <ItemsContainer>
-          <NoDragIcon>
-            {children}
-          </NoDragIcon>
-        </ItemsContainer>
+        <NoDragIcon>
+          {Container}
+        </NoDragIcon>
       )
     }
-    return <ItemsContainer>{children}</ItemsContainer>
+    return Container
   }
 )
 
-const arrayMoveMutate = (array: any[], from: number, to: number) => {
-  const startIndex = from < 0 ? array.length + from : from
-
-  if (startIndex >= 0 && startIndex < array.length) {
-    const endIndex = to < 0 ? array.length + to : to
-
-    const [item] = array.splice(from, 1)
-    array.splice(endIndex, 0, item)
-  }
-}
-
-const arrayMove = (array: any[], from: number, to: number) => {
-  array = [...array]
-  arrayMoveMutate(array, from, to)
-  return array
-}
-
 export function hasSelected <T extends TableRecord> (columns: TableColumn<T>[]) {
-  return columns.reduce(
-    (acc: boolean, current: TableColumn<T>) => (acc = acc || Boolean(current.show)),
-    false
-  )
+  return columns.some(({ show }) => show)
 }
 
 function isColumnSelectable <T extends TableRecord> (column: TableColumn<T>) {
@@ -198,131 +155,121 @@ function areAllSelected <T extends TableRecord> (columns: TableColumn<T>[]) {
 function isPartiallySelected <T extends TableRecord> (columns: TableColumn<T>[]) {
   const filteredColumns = columns.filter(isColumnSelectable)
   const allSelected = filteredColumns.every(({ show }) => show)
-  const hasSelected = filteredColumns.some(({ show }) => show)
-  return hasSelected && !allSelected
+  const someSelected = hasSelected(filteredColumns)
+  return someSelected && !allSelected
+}
+
+const filterColumnsBySearch = <T extends TableRecord>(columns: TableColumn<T>[], searchValue: string) => {
+  if (!searchValue.trim()) return columns
+
+  return columns.filter((column) => {
+    if (typeof column.title === 'string') {
+      return column.title.toLowerCase().trim().includes(searchValue.toLowerCase().trim())
+    }
+    return String(column.key)?.toLowerCase().trim().includes(searchValue.toLowerCase().trim())
+  })
 }
 
 export interface ColumnsSelectorProps <T extends TableRecord> {
   columns: TableColumn<T>[],
-  setColumns: (value: TableColumn<T>[]) => void,
+  setColumns: SetState<TableColumn<T>[]>,
   draggingAvailable?: boolean,
-  searchValue?: string
+  searchValue: string
+  testId?: string,
+  klId?: string
 }
 
 export const ColumnsSelector = <T extends TableRecord> ({
   columns,
   setColumns,
   draggingAvailable = true,
-  searchValue
+  searchValue,
+  testId,
+  klId
 }: ColumnsSelectorProps<T>) => {
   const { t } = useTranslation()
+
+  const filteredColumns = useMemo(() => {
+    const columnsFiltered = columns.filter((column) => !isColumnReadonly(column))
+    return sortColumns(filterColumnsBySearch(columnsFiltered, searchValue))
+  }, [columns, searchValue])
+
   const [selectAll, setAllSelected] = useState(areAllSelected(columns))
   const [indeterminate, setIndeterminate] = useState(isPartiallySelected(columns))
 
-  const filterColumnsBySearch = (columns: TableColumn<T>[], searchValue: string) => {
-    if (!searchValue.trim()) return columns
+  useEffect(() => {
+    setAllSelected(areAllSelected(filteredColumns))
+    setIndeterminate(isPartiallySelected(filteredColumns))
+  }, [filteredColumns])
 
-    return columns.filter((column) => {
-      if (typeof column.title === 'string') {
-        return column.title.toLowerCase().trim().includes(searchValue.toLowerCase().trim())
-      }
-      return String(column.key)?.toLowerCase().trim().includes(searchValue.toLowerCase().trim())
-    })
-  }
-
-  const updateSelectionStates = (newColumns: TableColumn<T>[]) => {
-    const visibleColumns = filterColumnsBySearch(newColumns, searchValue || '')
-    setAllSelected(areAllSelected(visibleColumns))
-    setIndeterminate(isPartiallySelected(visibleColumns))
-  }
-
-  const onSortEnd = ({
+  const onSortEnd: SortEndHandler = ({
     oldIndex,
     newIndex
-  }: {
-    oldIndex: number,
-    newIndex: number
   }) => {
-    setColumns(arrayMove(columns, oldIndex, newIndex))
+    if (oldIndex === newIndex) return
+
+    const keys = filteredColumns.map(column => column.key)
+    const [moved] = keys.splice(oldIndex, 1)
+    keys.splice(newIndex, 0, moved)
+
+    const nextIndexByKey = new Map(keys.map((key, index) => [key, index]))
+
+    setColumns(prev => prev.map(column => (
+      nextIndexByKey.has(column.key)
+        ? { ...column, sortIndex: nextIndexByKey.get(column.key)! }
+        : column
+    )))
+
   }
 
-  const onSelectAll = () => {
+  const selectColumn = (selectedColumn: TableColumn<T>, isSelected: boolean): TableColumn<T> => {
+    if (!isColumnSelectable(selectedColumn)) return selectedColumn
+
+    const targetColumn = findColumnByKey(columns, String(selectedColumn.key))!
+
+    return {
+      ...targetColumn,
+      show: isSelected
+    }
+  }
+
+  const onSelectAll: CheckboxProps['onChange'] = (e) => {
     const visibleIndexes = new Set(
       filteredColumns.map((column) => column.key)
     )
 
-    const newColumns = columns.map((column) => {
-      if (!visibleIndexes.has(column.key)) {
-        return column
-      }
-
-      return !isColumnSelectable(column)
-        ? column
-        : {
-            ...column,
-            show: !selectAll
-          }
-    })
+    const newColumns = columns.map(column => (
+      visibleIndexes.has(column.key)
+        ? selectColumn(column, e.target.checked)
+        : column
+    ))
 
     setColumns(newColumns)
-    updateSelectionStates(newColumns)
   }
 
   const onColumnSelect = (selectedColumn: TableColumn<T>) => {
-    const columnIndex = columns.findIndex(
-      (column) =>
-        String(column.key).localeCompare(String(selectedColumn.key)) === 0
-    )
-    const newColumns = columns.map((column, index) => {
-      if (index === columnIndex) {
-        let columnShow = !column.show
-
-        if (selectedColumn.onlyForFiltering) {
-          columnShow = false
-        } else if (!selectedColumn.hideColumnAvailable) {
-          columnShow = true
-        }
-
-        return {
-          ...column,
-          show: columnShow
-        }
-      }
+    const newColumns = columns.map((column) => {
+      if (column.key === selectedColumn.key) return selectColumn(selectedColumn, !selectedColumn.show)
       return column
     })
 
     setColumns(newColumns)
-    updateSelectionStates(newColumns)
   }
-
-  const filteredColumns = useMemo(() => {
-    const columnsFiltered = columns.filter((column) => !isColumnReadonly(column))
-    return filterColumnsBySearch(columnsFiltered, searchValue || '')
-  }, [columns, searchValue])
 
   const isAnyColsSelectable = useMemo(
     () => filteredColumns.some(isColumnSelectable),
     [filteredColumns]
   )
 
-  useEffect(() => {
-    updateSelectionStates(columns)
-  }, [columns, searchValue])
-
   const ColumnItem = useMemo(() => getItem<T>(draggingAvailable), [draggingAvailable])
-  const getScrollContainer = () => document.querySelector('.ant-drawer-body') as HTMLElement || document.body
+  const getScrollContainer = () => document.querySelector(`.${getStringWithCondition(SIDEBAR_SETTINGS_CLASS, testId ?? klId)} .ant-drawer-body`) as HTMLElement || document.body
 
   return (
     <SelectorWrapper>
       <Item className="selector-item select-all-item">
-        <CheckboxRow>
-          <Checkbox checked={selectAll} indeterminate={indeterminate} disabled={!isAnyColsSelectable} onChange={onSelectAll} />
-          <ItemLabel>
-            <Text type="BTM3">
-              {t('table.columnsSettings.selectAll')}
-            </Text>
-          </ItemLabel>
-        </CheckboxRow>
+        <Checkbox checked={selectAll} indeterminate={indeterminate} disabled={!isAnyColsSelectable} onChange={onSelectAll}>
+          {t('table.columnsSettings.selectAll')}
+        </Checkbox>
       </Item>
       <SortableContainer
         distance={2}

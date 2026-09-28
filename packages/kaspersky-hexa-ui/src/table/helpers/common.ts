@@ -112,6 +112,9 @@ export const checkExpandableRows = (rows: TableRecord[]) =>
 export const findColumn = <T extends TableRecord = TableRecord>(columns: TableColumn<T>[], dataIndex: TableColumn<T>['dataIndex']) =>
   columns.find(column => column.dataIndex === dataIndex)
 
+export const findColumnByKey = <T extends TableRecord = TableRecord>(columns: TableColumn<T>[], key?: TableColumn<T>['key']) =>
+  columns.find(column => column.key === key)
+
 export const isRenderCellObject = (node: unknown): node is { children: React.ReactNode, props?: Record<string, unknown> } => (
   Boolean(node) &&
   typeof node === 'object' &&

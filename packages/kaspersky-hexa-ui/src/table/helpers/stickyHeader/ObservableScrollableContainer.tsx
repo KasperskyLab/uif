@@ -4,13 +4,15 @@ import React, { ReactNode } from 'react'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import styled, { css } from 'styled-components'
 
+import { resizeColumns } from './../../modules/ResizableColumns/helpers'
 import { useResizableColumnsContext } from './ResizableColumnsContext'
 
 type ScrollableContainerCssProps<T extends TableRecord = TableRecord> =
-  Pick<ITableProps<T>, 'className' | 'resizingMode' | 'afterColumn' | 'useDragDrop'> & { columns: Pick<TableColumn, 'minWidth'>[] }
+  Pick<ITableProps<T>, 'className' | 'resizingMode' | 'fitLastColumn' | 'overflowTransition' | 'useDragDrop'> &
+  { columns: Pick<TableColumn, 'minWidth'>[] }
 
 export const ScrollableContainer = styled.div.withConfig<Omit<ScrollableContainerCssProps, 'columns'>>({
-  shouldForwardProp: prop => !['resizingMode', 'afterColumn', 'useDragDrop'].includes(prop)
+  shouldForwardProp: prop => !['resizingMode', 'fitLastColumn', 'overflowTransition', 'useDragDrop'].includes(prop)
 })`
   &.table-height-full {
     display: flex;
@@ -77,11 +79,13 @@ export const ObservableScrollableContainer = forwardRef(
     props: ScrollableContainerCssProps<T> & { children: ReactNode },
     ref: React.Ref<HTMLDivElement>
   ) {
-    const { afterColumn, columns, useDragDrop } = props
+    const { resizingMode, fitLastColumn, overflowTransition, useDragDrop } = props
     const containerRef = useRef<HTMLDivElement | null>(null)
     useImperativeHandle(ref, () => containerRef.current as HTMLDivElement)
 
-    const { setOverflow, hasRowSelection } = useResizableColumnsContext()
+    const { setOverflow, hasRowSelection, columns, setColumns } = useResizableColumnsContext()
+    const columnsRef = useRef(columns)
+    Object.assign(columnsRef.current, columns)
     const plusDNDcol = useDragDrop ? 1 : 0
     const plusSelection = hasRowSelection ? 1 : 0
 
@@ -89,7 +93,7 @@ export const ObservableScrollableContainer = forwardRef(
       const colGroup = containerRef.current?.querySelector('table colgroup')
       if (!colGroup) return
 
-      columns?.forEach((column, index) => {
+      columnsRef.current?.forEach((column, index) => {
         const { minWidth } = column
         const colGroupIndex = index + plusSelection + plusDNDcol
         const colGroupElement = colGroup.childNodes[colGroupIndex] as HTMLElement | undefined
@@ -108,6 +112,27 @@ export const ObservableScrollableContainer = forwardRef(
       let tableWidth = 0
       let cachedOverflow = false
 
+      const resolveLastColWidth = (colGroup: HTMLElement) => {
+        if (resizingMode !== 'scroll' || fitLastColumn === false || overflowTransition) return
+        const lastCol = colGroup.lastChild as HTMLElement
+        const { style: { minWidth: lastColMinWidth, width: lastColWidth } } = lastCol
+        const newWidth = { width: parseInt(lastColWidth), minWidth: parseInt(lastColMinWidth) }
+        if (lastColMinWidth && lastColMinWidth < lastColWidth) {
+          newWidth.width = parseInt(lastColMinWidth)
+        }
+        if (colGroup.clientWidth >= containerWidth) return
+        const emptySpace = containerWidth - colGroup.clientWidth
+        if (!lastColMinWidth) newWidth.minWidth = lastCol.clientWidth
+        newWidth.width = lastCol.clientWidth + emptySpace
+
+        setColumns(prev => resizeColumns({
+          index: prev.length-1,
+          columnWidth: newWidth.width,
+          columns: prev,
+          columnMinWidth: newWidth.minWidth
+        }))
+      }
+
       const resizeObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
           switch (entry.target) {
@@ -116,8 +141,10 @@ export const ObservableScrollableContainer = forwardRef(
               break
             case container:
               containerWidth = entry.contentRect.width
+              resolveLastColWidth(colGroup)
               break
             case colGroup:
+              resolveLastColWidth(colGroup)
               break
           }
         }
@@ -127,15 +154,19 @@ export const ObservableScrollableContainer = forwardRef(
           getTableMaxContentWidth(table, props.resizingMode)
         )
 
-        const overflow = afterColumn || (tableContentWidth > containerWidth)
+        if (overflowTransition) {
+          const overflow = (tableContentWidth > containerWidth)
 
-        if (overflow !== cachedOverflow) {
-          cachedOverflow = overflow
-          setOverflow(overflow)
+          if (overflow !== cachedOverflow) {
+            cachedOverflow = overflow
+            setOverflow(overflow)
+          }
         }
+
       })
       resizeObserver.observe(container)
       resizeObserver.observe(table)
+      resizeObserver.observe(colGroup)
 
       return () => {
         resizeObserver.disconnect()

@@ -12,6 +12,6 @@
   "component": "Loader",
   "description": "В качестве основы используется AntdSpin из библиотеки Antd.",
   "usage": "Компонент отвечающий за загрузку и запуск новых процессов",
-  "designLink": "https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?icon_type=1&page-id=33851%3A105411",
-  "pixsoView": "https://pixso.net/app/design/d3TkLc_A__Df0mBKigHugA"
+  "designLink": "",
+  "pixsoView": ""
 }

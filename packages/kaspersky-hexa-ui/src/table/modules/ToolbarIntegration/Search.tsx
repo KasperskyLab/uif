@@ -1,6 +1,7 @@
 import { Search } from '@src/search'
 import { useTableContext, useTableUpdate } from '@src/table'
 import { Toolbar } from '@src/toolbar'
+import get from 'lodash/get'
 import Mark from 'mark.js'
 import React, {
   Key,
@@ -46,7 +47,7 @@ interface ISearchModuleProps<T extends TableRecord = TableRecord> {
   dataSource?: readonly T[],
   onSearch?: (searchString: string) => void,
   onClientSearch?: (searchString: string, row: T, index: number) => boolean,
-  clientSearchFields?: (keyof T)[]
+  clientSearchFields?: string[],
   columns?: any[],
   tableContainer?: HTMLDivElement | null,
   collapsibleSearch?: boolean,
@@ -129,13 +130,16 @@ const SearchModule = <T extends TableRecord = TableRecord>({
         currentLevelRows.forEach((currentLevelRow) => {
           const row = { ...currentLevelRow }
           let isPassFilter = false
-          for (const key in row) {
-            if (key === 'key' || clientSearchFields?.length && !clientSearchFields.includes(key)) {
-              continue
-            }
 
-            if (row[key] && typeof row[key] === 'string') {
-              const parts = row[key].split(new RegExp(`(${escapeRegexp(valueToSearch)})`, 'gi'))
+          const searchKeys = clientSearchFields?.length
+            ? clientSearchFields as string[]
+            : Object.keys(row).filter(key => key !== 'key')
+
+          for (const key of searchKeys) {
+            const fieldValue = get(row, key)
+
+            if (fieldValue && typeof fieldValue === 'string') {
+              const parts = fieldValue.split(new RegExp(`(${escapeRegexp(valueToSearch)})`, 'gi'))
 
               if (parts.length > 1) {
                 isPassFilter = true
@@ -145,7 +149,7 @@ const SearchModule = <T extends TableRecord = TableRecord>({
                 const res = columnsRenders[key]
                   .reduce(
                     (result: boolean, render: renderFunction) =>
-                      result || findInColumnRender(render, row[key], row, searchValue),
+                      result || findInColumnRender(render, fieldValue, row, searchValue),
                     false
                   )
 

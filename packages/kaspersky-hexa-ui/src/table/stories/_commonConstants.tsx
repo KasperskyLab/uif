@@ -12,6 +12,7 @@ import { StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
+import { MockRow } from '../__mocks__/filtersMockData'
 import { GetLeftItems } from '../modules/ToolbarIntegration'
 
 // Components
@@ -130,7 +131,8 @@ export const basicArgTypes = {
     options: ['standard', 'compact']
   },
   disabled: genArgType('If rowSelection is disabled', 'boolean', 'false'),
-  afterColumn: genArgType('Add fake column to compensate short cols with wide screen', 'boolean', 'true')
+  overflowTransition: genArgType('Enable resizingMode transtion from \'scroll\' to \'last\' on containerWidth > tableWidth', 'boolean', 'false'),
+  fitLastColumn: genArgType('Fit last column if container > table width (resizingMode: \'scroll\' only)', 'boolean', 'true')
 }
 
 // Data
@@ -161,7 +163,7 @@ export const generateDataSource = (length: number) => (
   }))
 )
 
-export const mockGetLeftItems: GetLeftItems = async (args) => {
+export const mockGetLeftItems: GetLeftItems<ToolbarItems, MockRow> = async (args) => {
   const {
     sidebarFilters,
     sorting,

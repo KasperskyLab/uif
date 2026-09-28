@@ -138,7 +138,7 @@ export const LockGroup = (rawProps: LockGroupProps & React.ComponentProps<typeof
               checked={isLockClosed} />
             {informationText && (
               <Popover placement="bottomLeft" content={informationText}>
-                <ActionButton interactive={false} icon={<StatusInfoOutline className="information-text-icon" />} />
+                <ActionButton icon={<StatusInfoOutline className="information-text-icon" />} />
               </Popover>
             )}
           </div>

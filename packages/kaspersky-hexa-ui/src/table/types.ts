@@ -70,7 +70,7 @@ export type TablePaginationProps<T extends TableRecord = TableRecord> = Paginati
 export const DEFAULT_TABLE_PAGE_SIZE = 50
 export const DEFAULT_TABLE_PAGE_SIZE_OPTIONS = ['20', '50', '100']
 
-export type TableToolbarProps = ToolbarProps
+export type TableToolbarProps<T extends TableRecord = TableRecord> = ToolbarProps<T>
 
 export type TableRowSelectionData<T extends TableRecord = TableRecord> = {
   selectedRowKeys: string[],
@@ -88,13 +88,12 @@ export type TableRowSelectionAdditionalProps<T extends TableRecord = TableRecord
   /** Should render "Select all" checkbox and dropdown. Works only with builtInRowSelection: true */
   hasSelectAll?: boolean,
   /** Callback executes on every change of selection. Works only with builtInRowSelection: true */
-  processSelection?: (rowSelectionData: TableRowSelectionData) => void,
+  processSelection?: (rowSelectionData: TableRowSelectionData<T>) => void,
   /** Flag that enables the built-in functionality of row selection  */
   builtInRowSelection?: boolean
 }
 
 export type TableRowSelection<T extends TableRecord = TableRecord> = Omit<RowSelectionAntd<T>, 'selections'> & TableRowSelectionAdditionalProps<T>
-export type TableRowSelectionInternal<T extends TableRecord = TableRecord> = Omit<RowSelectionAntd<T>, 'selectedRowKeys'> & TableRowSelectionData<T>
 
 export type CustomSorter<T extends TableRecord = TableRecord> = (a: T, b: T, isAsc: boolean) => number
 
@@ -204,7 +203,7 @@ export type TableColumn<T extends TableRecord = TableRecord> = Omit<
    */
   expandableText?: boolean,
   /** Function to render tooltip for truncated text */
-  ellipsisTooltip?: (value: any, record: TableRecord, index: number) => string
+  ellipsisTooltip?: (value: any, record: T, index: number) => string
   isSortable?: boolean,
   allowMultipleFilters?: boolean,
   sorter?: CustomSorter,
@@ -301,7 +300,7 @@ export type TableDataSourceFunctionArgs<T extends TableRecord = TableRecord> = {
     searchString?: string,
     groupBy?: string
   },
-  sorting?: Pick<ActiveSorting, 'attribute' | 'field' | 'isDefaultSortDisabled'> & {
+  sorting?: Pick<ActiveSorting<T>, 'attribute' | 'field' | 'isDefaultSortDisabled'> & {
     isAsc: boolean
   }
 }
@@ -316,7 +315,7 @@ type TableDataSourceFunctionReturn<T> = {
 }
 
 export type TableDataSourceFunction<T extends TableRecord = TableRecord> =
-  (config: TableDataSourceFunctionArgs) => Promise<TableDataSourceFunctionReturn<T>>
+  (config: TableDataSourceFunctionArgs<T>) => Promise<TableDataSourceFunctionReturn<T>>
 
 export type TableRef = {
   /** Resets selection. Works only if rowSelection.builtInRowSelection = true */
@@ -389,17 +388,21 @@ export type ITableProps<T extends TableRecord = TableRecord> = Omit<
   stickyFooter?: boolean,
   /** Sticky selection column, available only with resizingMode: scroll */
   stickySelection?: boolean,
-  toolbar?: TableToolbarProps,
+  toolbar?: TableToolbarProps<T>,
   /** Search is done from the product side. For example, when using server-side filtering */
   onSearch?: (searchString: string) => void,
   /** Custom search using internal state of the component for filtered data */
   onClientSearch?: (searchString: string, row: T, index: number) => boolean,
-  /** List of record fields to which the client search should be applied. */
-  clientSearchFields?: (keyof T)[]
+  /** List of record fields to which the client search should be applied. Supports nested fields via dot-notation, e.g. 'details.email'. */
+  clientSearchFields?: string[],
   groupTitleRender?: (data: string) => ReactNode,
   resizingMode?: TableResizingMode,
-  /** render :after as last column to compensate width in case table-width < screen-width */
-  afterColumn?: boolean
+  /** @deprecated render :after as last column to compensate width in case table-width < screen-width */
+  afterColumn?: boolean,
+  /** Enable table resizingMode transtion from 'scroll' to 'last' on containerWidth > tableWidth */
+  overflowTransition?: boolean,
+  /** calculate width for last column if table-width < screen-width */
+  fitLastColumn?: boolean,
   /** Config for controllable row selection */
   rowSelection?: TableRowSelection<T>,
   /** Background pattern that will be visible on rows with _blendedBackground */

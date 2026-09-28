@@ -19,7 +19,11 @@ import { indicatorDesignPropPresentation } from './Indicator.design.properties'
 
 <DocPageLayout>
 
-  <DocPageHeader title="Indicator" rtlSupported />
+  <DocPageHeader 
+    title="Indicator" 
+    rtlSupported 
+    checkUIF
+  />
 
   <Tabs defaultActiveKey="description">
 
@@ -77,7 +81,7 @@ import { indicatorDesignPropPresentation } from './Indicator.design.properties'
 
       <DocExampleBlock
         title="Отображение результата или состояния"
-        description="Используйте для отображения семантического состояния объекта: `positive` (успешное состояние), `critical` (ошибка или критичное состояние), `info`. Например, `positive` может обозначать успешное выполнение задачи, `critical` — наличие ошибки или критической проблемы."
+        description="Используйте для отображения семантического состояния объекта: `positive` (успешное состояние), `critical` (ошибка или критичное состояние), `info` (информационное состояние). Например, `positive` может обозначать успешное выполнение задачи, `critical` — наличие ошибки или критической проблемы."
         codeBlock="hidden"
         code={`
           <Space gap={'dependent'}>
@@ -240,7 +244,7 @@ import { indicatorDesignPropPresentation } from './Indicator.design.properties'
       <DocExampleBlock
         title="Компонент в Pixso"
         titleSize="H5"
-        description="[Открыть компонент в Pixso](https://pixso.net/app/design/_JQDYkYJW0yUZVsKeoSybw?item-id=81752:621714)"
+        description=""
       />
       <DocumentationArgsTable rows={buildPresentationOnlyRows(indicatorDesignPropPresentation)} />
 

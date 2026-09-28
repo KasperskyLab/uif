@@ -18,7 +18,7 @@ const meta: Meta<FileItemProps> = {
         error: { control: 'text' },
         status: {
           control: { type: 'radio' },
-          options: ['done', 'uploading', 'error']
+          options: ['done', 'uploading', 'success', 'error']
         }
       },
       args: {
@@ -49,10 +49,14 @@ export const FileItemStory: StoryObj<FileItemProps> = {
 
 export const Status: StoryObj<FileItemProps> = {
   render: args => renderVariants([
-    { label: 'default', content: <StyledFileItem {...args} status="done" /> },
+    { label: 'selected', content: <StyledFileItem {...args} status={undefined} /> },
     { label: 'uploading', content: <StyledFileItem {...args} percent={50} status="uploading" /> },
+    { label: 'done', content: <StyledFileItem {...args} status="done" /> },
     { label: 'success', content: <StyledFileItem {...args} status="success" /> },
     { label: 'error', content: <StyledFileItem {...args} status="error" /> },
-    { label: 'disabled', content: <StyledFileItem {...args} disabled status="done" /> }
+    { label: 'downloadable', content: <StyledFileItem {...args} onDownload={() => undefined} status="done" /> },
+    { label: 'disabled', content: <StyledFileItem {...args} disabled status="done" /> },
+    { label: 'disabled success', content: <StyledFileItem {...args} disabled status="success" /> },
+    { label: 'disabled error', content: <StyledFileItem {...args} disabled status="error" /> }
   ], true)
 }

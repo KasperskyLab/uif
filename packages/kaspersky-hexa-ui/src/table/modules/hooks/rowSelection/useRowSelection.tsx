@@ -134,13 +134,18 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
 
   useEffect(() => {
     if (!builtInRowSelection) return
-    // isSelectedAll for server pagination can be set only from SelectAll dropdown or if it is equals to defined total
-    if (!useDataSourceFunction) {
-      setIsSelectedAll(dataSource.length !== 0 && selectedRowKeys.length === dataSource.length)
-    } else if (dataSource.length !== 0 && typeof total === 'number' && total > 0 && selectedRowKeys.length === total) {
-      setIsSelectedAll(true)
+
+    switch (paginationMode) {
+      case 'client':
+        setIsSelectedAll(dataSource.length !== 0 && selectedRowKeys.length === dataSource.length)
+        return
+      case 'server':
+      case 'pseudo-server':
+        setIsSelectedAll(prevIsSelectedAll => (
+          prevIsSelectedAll || dataSource.length !== 0 && !!total && selectedRowKeys.length === total
+        ))
     }
-  }, [useDataSourceFunction, selectedRowKeys.length, dataSource.length, total])
+  }, [useDataSourceFunction, selectedRowKeys.length, deselectedRowKeys.length, dataSource.length, total])
 
   useEffect(() => {
     if (!builtInRowSelection || !setSelected) return
@@ -159,7 +164,7 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
   useEffect(() => {
     if (!builtInRowSelection) return
 
-    const rowSelectionData: TableRowSelectionData = {
+    const rowSelectionData: TableRowSelectionData<T> = {
       selectedRowKeys,
       selectedRows,
       deselectedRowKeys,
