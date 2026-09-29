@@ -27,6 +27,8 @@ import {
   TableStickyHeaderWrapper,
   useSyncTableScroll
 } from './helpers/stickyHeader'
+import { useCellTooltip } from './helpers/reductions/CellTooltip'
+import { getClippingStyle } from './helpers/stylesHelpers'
 import { toggleHorizontalScrollbarVisibility } from './helpers/toggleHorizontalScrollbarVisibility'
 import { useBodyWithoutHover } from './helpers/useBodyWithoutHover'
 import { useStableRows } from './helpers/useStableRows'
@@ -175,6 +177,8 @@ export const Table: <T extends TableRecord = TableRecord>(
     columnVerticalAlign
   }
 
+  const clippingStyle = getClippingStyle(tableCssProps)
+
   useEffect(() => {
     onPatchedColumnsChange?.(columns)
   }, [columns])
@@ -192,6 +196,7 @@ export const Table: <T extends TableRecord = TableRecord>(
     ? createPortal(
         <RowDraggingContainer
           {...tableCssProps}
+          style={clippingStyle}
           className={cn(
             'table-dragging-row',
             ...commonClassNames
@@ -215,6 +220,11 @@ export const Table: <T extends TableRecord = TableRecord>(
   const stableRows = useStableRows(tableProps.dataSource)
   const componentsWithoutJsHover = useBodyWithoutHover(tableProps.components)
 
+  /** One tooltip for everything the table clips — body cells and column titles alike. It lives here
+   *  rather than inside the body because the sticky header is a sibling of the table, not part of it,
+   *  so there is no single subtree to listen on. */
+  const { tooltip, containerProps } = useCellTooltip()
+
   return (
     <>
       {
@@ -222,6 +232,7 @@ export const Table: <T extends TableRecord = TableRecord>(
           ? (
               <TableStickyHeaderWrapper
                 {...tableCssProps}
+                {...containerProps}
                 ref={stickyHeaderRef}
               >
                 <TableStickyHeader
@@ -256,16 +267,18 @@ export const Table: <T extends TableRecord = TableRecord>(
         columns={columns}
         overflowTransition={overflowTransition}
         useDragDrop={useDragDrop}
+        {...containerProps}
         {...testAttributes}
       >
         <StyledTableContainer
           hasSelectionColumn={Boolean(rowSelection)}
           useDragDrop={useDragDrop}
-          $previewTableWidth={previewTableWidth ?? scrollableContainerRef.current?.offsetWidth}
+          $previewTableWidth={previewTableWidth}
         >
           <StyledTable<ComponentType<ITableProps<T>>>
             {...tableProps}
             {...tableCssProps}
+            style={{ ...clippingStyle, ...tableProps.style }}
             className={cn(
               tableProps.className,
               { 'table-height-full': fullHeight },
@@ -287,6 +300,7 @@ export const Table: <T extends TableRecord = TableRecord>(
           {rowDraggingContainer}
         </StyledTableContainer>
       </ObservableScrollableContainer>
+      {tooltip}
       {/* TODO: подумать над заменой скролла на наш компонент  */}
       <CustomScrollContainer
         ref={horizontalScrollbarRef}

@@ -1,29 +1,20 @@
 /* eslint-disable max-lines */
-import { getTextSizes } from '@design-system/tokens'
 import styled, { css } from 'styled-components'
-
-import { TextTypes } from '@kaspersky/hexa-ui-core/typography/js'
 
 import { getCheckboxCss } from '../checkbox/checkboxCss'
 
+import { getCellPadding, tableSizes } from './helpers/stylesHelpers'
 import { ITableProps } from './types'
 
-const tableSizes = {
-  headSizes: getTextSizes(TextTypes.BTS4),
-  cellSizes: getTextSizes(TextTypes.BTR3),
-  dragHandler: {
-    size: 20
-  }
-}
+// The same padding the clipping overlay is positioned against, so the two cannot drift apart:
+// `getClippingStyle` places the fade and the toggle relative to these very values.
+const getRowModePaddingCss = (rowMode: TableCssProps['rowMode'] = 'standard') => {
+  const { top, bottom } = getCellPadding({ rowMode })
 
-const getRowModePaddingCss = (rowMode: TableCssProps['rowMode'] = 'standard') =>
-  rowMode === 'compact'
-    ? css`
-      padding: 4px var(--spacing--padding_m) 3px var(--spacing--padding_m);
-    `
-    : css`
-      padding: 10px var(--spacing--padding_m) 9px var(--spacing--padding_m);
-    `
+  return css`
+    padding: ${top} var(--spacing--padding_m) ${bottom} var(--spacing--padding_m);
+  `
+}
 
 const getRowModeCss = (props: Pick<TableCssProps, 'rowMode'>) => {
   const { rowMode = 'standard' } = props
@@ -31,11 +22,11 @@ const getRowModeCss = (props: Pick<TableCssProps, 'rowMode'>) => {
     ${rowMode === 'standard'
       ? css`
         height: 40px;
-        padding: 10px var(--spacing--padding_m) 9px var(--spacing--padding_m);
+        ${getRowModePaddingCss(rowMode)}
       `
       : css`
         height: 28px;
-        padding: 4px var(--spacing--padding_m) 3px var(--spacing--padding_m);
+        ${getRowModePaddingCss(rowMode)}
       `}
 
     &:first-child:not(.ant-table-selection-column) {
@@ -127,12 +118,15 @@ export const scrollShadowCss = css`
 `
 
 export const tableCss = css<TableCssProps>`
-  &.table-sticky-selection {
+  // Doubled on purpose: these two columns are deliberately stuck, and that has to win
+  // against the blanket static positioning the body cells get further down — which carries
+  // one class more than it looks, because it excludes the clipping cell with :not().
+  &&.table-sticky-selection {
     ${scrollShadowCss}
 
     .ant-table-tbody > tr > td.ant-table-selection-column {
       position: sticky;
-      z-index: 1;
+      z-index: 3;
       left: 0;
       top: 0;
     }
@@ -141,7 +135,7 @@ export const tableCss = css<TableCssProps>`
       position: sticky;
       top: 0;
       left: 34px;
-      z-index: 1;
+      z-index: 3;
       background: transparent;
     }
   }
@@ -203,7 +197,12 @@ export const tableCss = css<TableCssProps>`
       font-weight: ${tableSizes.cellSizes.fontWeight};
       font-style: ${tableSizes.cellSizes.fontStyle};
       letter-spacing: ${tableSizes.cellSizes.letterSpacing};
-      position: static;
+
+      // Undoes antd's own relative positioning. A clipping cell is exempt: its fade and
+      // its toggle are placed against the cell, so it has to stay the positioning context.
+      &:not(.hexa-ui-expandable-cell) {
+        position: static;
+      }
 
       border-bottom-color: var(--border--neutral--medium);
 
@@ -302,6 +301,10 @@ export const tableCss = css<TableCssProps>`
 
   .ant-table-tbody > tr.ant-table-placeholder:after {
     display: none;
+  }
+
+  .ant-table-tbody textarea:not(:focus) {
+    overflow: hidden;
   }
 
   // antd fades the row background over 0.3s. Every frame of that fade re-layerizes
@@ -527,7 +530,12 @@ export const tableCss = css<TableCssProps>`
 
     && .ant-table-thead > tr > th,
     && .ant-table-tbody > tr > td {
-      &.ant-table-cell-with-append {
+      // Keeps the tree indent and the value on one line. An expanded cell is the one
+      // case that wants the opposite, and this block sits deep enough that its selector
+      // carries the component class six times over — it beat the expanded rule outright,
+      // so a first column with expandableText set its attribute, opened its overflow and
+      // then never wrapped: clicking the toggle appeared to do nothing at all.
+      &.ant-table-cell-with-append:not([data-expanded]) {
         white-space: nowrap;
       }
 

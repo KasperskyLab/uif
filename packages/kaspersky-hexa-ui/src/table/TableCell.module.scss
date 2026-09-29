@@ -1,0 +1,30 @@
+.expandableCell {
+  position: relative;
+
+  &::after {
+    top: var(--table-clip-line-top);
+    bottom: var(--table-clip-line-bottom);
+
+    margin-top: var(--table-clip-line-margin-top);
+
+    height: var(--table-clip-line-height);
+    background-color: inherit;
+  }
+
+  :global(.hexa-ui-expander) {
+    top: var(--table-clip-toggle-top);
+    bottom: var(--table-clip-toggle-bottom);
+    margin-top: var(--table-clip-toggle-margin-top);
+  }
+
+  &[data-expanded] {
+    word-break: break-word;
+
+    :global(.hexa-ui-expander) {
+      top: calc(var(--table-clip-padding-top) + 2px);
+      bottom: auto;
+      margin-top: 0;
+    }
+  }
+}
+
