@@ -33,6 +33,31 @@ describe('Sidebar', () => {
     expect(container.parentElement?.querySelector(`.${className}`)).toBeInTheDocument()
   })
 
+  /**
+   * Anything inside a sidebar that looks itself up in the document on mount has to find itself.
+   * The column selector does exactly that — it asks for `.ant-drawer-body` from `componentDidMount`
+   * to learn what scrolls — and a portal attached from the sidebar's own layout effect is still
+   * detached at that moment, because React runs a parent's layout effect after its children's.
+   */
+  test('should be in the document by the time its content mounts', () => {
+    const seen: { connected: boolean, foundByQuery: boolean } = { connected: false, foundByQuery: false }
+
+    const Probe = () => {
+      React.useLayoutEffect(() => {
+        const body = document.querySelector('.probe-sidebar .ant-drawer-body')
+        seen.foundByQuery = Boolean(body)
+        seen.connected = Boolean(body?.isConnected)
+      }, [])
+
+      return <div>content</div>
+    }
+
+    render(<Sidebar visible className="probe-sidebar"><Probe /></Sidebar>)
+
+    expect(seen.foundByQuery).toBe(true)
+    expect(seen.connected).toBe(true)
+  })
+
   test('should render close button', () => {
     const klId = 'close-icon'
     render(<DefaultSidebar />)
