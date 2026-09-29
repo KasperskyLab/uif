@@ -52,6 +52,7 @@
     "build-storybook": "storybook build",
     "test": "npm run lint && jest --transformIgnorePatterns --maxWorkers=1 --forceExit --logHeapUsage",
     "test:only": "jest --transformIgnorePatterns --maxWorkers=1 --forceExit --logHeapUsage",
+    "test:virtual": "jest --config jest.virtual.config.js --transformIgnorePatterns --maxWorkers=1 --forceExit",
     "test:watch": "jest --watch",
     "test:format:mdx": "node --test tools/format-mdx-doc.test.mjs",
     "format:mdx": "node tools/format-mdx-doc.mjs",

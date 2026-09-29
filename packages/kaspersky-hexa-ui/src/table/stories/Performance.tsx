@@ -457,7 +457,6 @@ export const Performance: Story = {
     const [search, setSearch] = useState<string>('')
     const debouncedSearch = useDebounce(search, 500)
     const columns = useMemo(() => getColumns(setFilteredData), [])
-    const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
 
     const handleSortChange = useCallback(() => {
       //
@@ -481,12 +480,6 @@ export const Performance: Story = {
     }, [])
     const onShowSizeChange = useCallback((_, size: number) => {
       setPageSize(size)
-    }, [])
-    const onSelect = useCallback((_: TableRecord, __: boolean, selectedRows: TableRecord[]) => {
-      setSelectedRowKeys(selectedRows.map(row => row.key))
-    }, [])
-    const onSelectAll = useCallback((_: boolean, selectedRows: TableRecord[]) => {
-      setSelectedRowKeys(selectedRows.map(row => row.key))
     }, [])
 
     useEffect(() => {
@@ -538,11 +531,10 @@ export const Performance: Story = {
           onManualColumnResize={handleManualColumnResize}
           onSearch={handleSearchChange}
           onSortChange={handleSortChange}
+          // The table's own selection, which is what row virtualization needs: antd works selection
+          // out from the rows it was handed, and a windowed table hands it a screenful.
           rowSelection={{
-            onSelect,
-            onSelectAll,
-            preserveSelectedRowKeys: true,
-            selectedRowKeys
+            builtInRowSelection: true
           }}
           toolbar={{
             autoDropdown: true,
@@ -585,6 +577,9 @@ export const Performance: Story = {
     rowMode: 'compact',
     stickyHeader: 0,
     stickySelection: true,
-    useFiltersSidebar: true
+    useFiltersSidebar: true,
+    // Declared so it can be switched from the Storybook controls and from the URL
+    // (&args=virtualization:!true) — Storybook drops url args a story does not declare.
+    virtualization: false
   }
 }

@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components'
 import { getCheckboxCss } from '../checkbox/checkboxCss'
 
 import { getCellPadding, tableSizes } from './helpers/stylesHelpers'
+import { VIRTUAL_SPACER_CLASS } from './modules/Virtualization/constants'
 import { ITableProps } from './types'
 
 // The same padding the clipping overlay is positioned against, so the two cannot drift apart:
@@ -165,8 +166,31 @@ export const tableCss = css<TableCssProps>`
       border-bottom: 1px solid var(--border--neutral--bold);
     }
 
-    .ant-table-tbody > tr:not(.ant-table-measure-row):after {
+    // The virtual spacers stand in for rows that were not rendered; a separator on them would
+    // draw a stray line across the table at each end of the window.
+    .ant-table-tbody > tr:not(.ant-table-measure-row):not(.${VIRTUAL_SPACER_CLASS}):after {
       border-bottom: 1px solid var(--border--neutral--medium);
+    }
+
+    // A spacer is out of sight almost always — it stands in for rows nobody is looking at. It shows
+    // for a moment when the reader outruns what has been rendered, and left plain it reads as a hole
+    // torn in the table. Ruled at the height a row is expected to be, it reads as rows on their way.
+    //
+    // On the cell, which spans the row: a table paints its own background through any grid slot no
+    // cell covers, so a row's background never reaches past the cells it has. The pitch itself is
+    // set on the row and inherited from there. Its fallback is deliberately larger than any screen:
+    // until a row has been measured there is nothing to rule at, and a pitch of zero would make the
+    // gradient degenerate.
+    .${VIRTUAL_SPACER_CLASS} > td {
+      --hexa-ui-virtual-rule: var(--hexa-ui-virtual-row-height, 100000px);
+
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent calc(var(--hexa-ui-virtual-rule) - 1px),
+        var(--table_row--border) calc(var(--hexa-ui-virtual-rule) - 1px),
+        var(--table_row--border) var(--hexa-ui-virtual-rule)
+      );
     }
 
     .ant-table-thead > tr > th {

@@ -1,5 +1,5 @@
 import Table from 'antd/es/table'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 import { ITableProps, TableRecord } from '../../types'
 import { getDefaultExpandConfig } from '../ExpandableRows'
@@ -16,13 +16,10 @@ export const useExpandColumnName = <T extends TableRecord = TableRecord> ({
   const hasRowSelection = !!rowSelection
   const defaultExpandConfig = useMemo(() => getDefaultExpandConfig<T>({ hasRowSelection, useDragDrop }), [])
 
-  const [expandableConfig, setExpandableConfig] = useState<ITableProps<T>['expandable']>({ ...defaultExpandConfig, ...expandable })
+  return useMemo(() => {
+    const config = { ...defaultExpandConfig, ...expandable }
 
-  useEffect(() => {
-    if (!(expandable?.expandColumnName && columns)) {
-      setExpandableConfig({ ...defaultExpandConfig, ...expandable })
-      return
-    }
+    if (!(expandable?.expandColumnName && columns)) return config
 
     if (expandable?.expandIconColumnIndex) {
       console.warn(
@@ -33,27 +30,18 @@ export const useExpandColumnName = <T extends TableRecord = TableRecord> ({
 
     const currentExpandColumnIndex = columns.findIndex(({ key }) => key === expandable.expandColumnName)
 
-    if (currentExpandColumnIndex < 0) {
-      setExpandableConfig({ ...defaultExpandConfig, ...expandable })
-      return
+    if (currentExpandColumnIndex < 0) return config
+
+    let expandIconColumnIndex = currentExpandColumnIndex
+
+    if (hasRowSelection) {
+      expandIconColumnIndex += 1
+
+      // the selection column is not always in `columns` — when antd adds it itself, it takes a place
+      // of its own and everything after it shifts by one more
+      if (columns.findIndex(column => column === Table.SELECTION_COLUMN) < 0) expandIconColumnIndex += 1
     }
 
-    const result = { ...defaultExpandConfig, ...expandable, expandIconColumnIndex: currentExpandColumnIndex }
-
-    if (!rowSelection) {
-      setExpandableConfig({ ...defaultExpandConfig, ...result })
-      return
-    }
-
-    result.expandIconColumnIndex += 1
-    const selectRowIndex = columns.findIndex(column => column === Table.SELECTION_COLUMN)
-
-    if (selectRowIndex < 0) {
-      result.expandIconColumnIndex += 1
-    }
-
-    setExpandableConfig({ ...defaultExpandConfig, ...result })
-  }, [columns, expandable, hasRowSelection, useDragDrop])
-
-  return expandableConfig
+    return { ...config, expandIconColumnIndex }
+  }, [defaultExpandConfig, expandable, columns, hasRowSelection])
 }

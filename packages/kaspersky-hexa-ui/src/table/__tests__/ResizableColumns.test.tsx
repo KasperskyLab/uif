@@ -11,15 +11,19 @@ describe('ResizableColumns', () => {
     localStorage.clear()
 
     window.ResizeObserver = jest.fn((callback) => ({
-      observe: jest.fn(() => {
-        callback([
+      // Two things a real ResizeObserver does that this mock has to do as well: name the element it
+      // measured, and deliver after the call rather than inside it. Anything that measures an element
+      // and observes it in the same breath — the row virtualizer does — otherwise recurses forever.
+      observe: jest.fn((target) => {
+        queueMicrotask(() => callback([
           {
+            target,
             contentRect: {
               width: 1000,
               height: 500
             }
           }
-        ])
+        ]))
       }),
       unobserve: jest.fn(),
       disconnect: jest.fn()

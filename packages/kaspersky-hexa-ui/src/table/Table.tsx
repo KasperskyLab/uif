@@ -79,7 +79,7 @@ export const Table: <T extends TableRecord = TableRecord>(
   const scrollableContainerRef = useRef<HTMLDivElement>(null)
   const stickyHeaderRef = useRef<HTMLDivElement>(null)
   const horizontalScrollbarRef = useRef<HTMLDivElement>(null)
-  const [previewTableWidth, setPreviewTableWidth] = useState(scrollableContainerRef.current?.offsetWidth)
+  const [previewTableWidth, setPreviewTableWidth] = useState<number>()
 
   useSyncTableScroll({
     horizontalScrollbarRef,
@@ -91,7 +91,17 @@ export const Table: <T extends TableRecord = TableRecord>(
     const tableBody = scrollableContainerRef.current?.querySelector('.ant-table') as HTMLElement
     if (!tableBody) return
 
-    const observer = new ResizeObserver(() => {
+    /** Both of these depend on widths alone, and both cost a forced layout: they write a style and
+     *  then read `offsetWidth` back out. A height change must not pay for that — rows grow and
+     *  shrink for all sorts of reasons (a row expanding, virtualization resizing its spacers as it
+     *  scrolls), and that used to re-measure the whole table every time. */
+    let lastWidth = -1
+
+    const observer = new ResizeObserver(entries => {
+      const width = Math.round(entries[entries.length - 1].contentRect.width)
+      if (width === lastWidth) return
+      lastWidth = width
+
       recalculateStickyHeaderWidth({ tableBody, horizontalScrollbarRef, stickyHeaderRef })
       toggleHorizontalScrollbarVisibility(horizontalScrollbarRef)
     })
@@ -144,12 +154,16 @@ export const Table: <T extends TableRecord = TableRecord>(
     ...tableProps
   } = props
 
+  /** Measured here rather than read while rendering. It is only used to size the placeholder shown
+   *  in place of an empty table, but it used to be read straight off the DOM in the JSX below — and
+   *  since nothing set it until the first window resize, every single render of the table forced the
+   *  browser to lay the page out again. */
   useLayoutEffect(() => {
-    const handleResize = () => {
-      setPreviewTableWidth(scrollableContainerRef.current?.offsetWidth)
-    }
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    const measure = () => setPreviewTableWidth(scrollableContainerRef.current?.offsetWidth)
+
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
   }, [])
 
   const columns = useMemo(() => {
