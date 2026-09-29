@@ -1,6 +1,6 @@
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { TestingProps } from '@helpers/typesHelpers'
-import reducer from '@helpers/components/TextReducer.module.scss'
+import { textReducerStyles as reducer } from '@helpers/components/TextReducer'
 import cn from 'classnames'
 import React, { ReactNode } from 'react'
 

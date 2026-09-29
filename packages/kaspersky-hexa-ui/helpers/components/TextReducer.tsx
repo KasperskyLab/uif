@@ -14,6 +14,10 @@ import React, {
 
 import styles from './TextReducer.module.scss'
 
+/** Handed out so a column title can keep this layout without going through the component; see
+ *  `clippingStyles` for why a stylesheet is not imported across the alias. */
+export const textReducerStyles = styles
+
 export type TextReducerProps = Pick<TooltipProps, 'placement'> & TestingProps & {
   children?: ReactNode,
   lineClamp?: number,

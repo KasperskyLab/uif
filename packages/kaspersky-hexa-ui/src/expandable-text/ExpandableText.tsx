@@ -1,7 +1,7 @@
 import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { EXPANDER_CLASS } from '@helpers/overflow/components/clipping'
-import clippingStyles from '@helpers/overflow/components/clipping.module.scss'
+import { clippingStyles } from '@helpers/overflow/components/clipping'
 import { textExpander } from '@helpers/overflow/components/textExpander'
 import { useOverflowToggle } from '@helpers/overflow/useOverflowToggle'
 import { Text } from '@src/typography'

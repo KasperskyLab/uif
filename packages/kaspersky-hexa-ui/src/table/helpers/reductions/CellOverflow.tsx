@@ -1,5 +1,5 @@
 import { EXPANDER_CLASS } from '@helpers/overflow/components/clipping'
-import clipping from '@helpers/overflow/components/clipping.module.scss'
+import { clippingStyles as clipping } from '@helpers/overflow/components/clipping'
 import { textExpander } from '@helpers/overflow/components/textExpander'
 import { useOverflowToggle } from '@helpers/overflow/useOverflowToggle'
 import cn from 'classnames'
