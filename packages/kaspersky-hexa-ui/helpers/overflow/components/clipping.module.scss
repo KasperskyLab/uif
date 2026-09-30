@@ -7,6 +7,22 @@
     overflow: visible;
     white-space: normal;
   }
+
+  // Pinned to the right edge rather than left in the flow: the container clips its overflow, so an
+  // arrow sitting after the text is cut off with it. These rules used to live under the fade, which
+  // is only applied when a gradient is asked for — so without one the arrow was rendered and then
+  // clipped out of sight. Both places that clip carry this class and a positioning context of their
+  // own (`.expandableText`, `.expandableCell`).
+  :global(.hexa-ui-expander) {
+    position: absolute;
+    right: 0;
+    z-index: 2;
+    justify-content: center;
+  }
+
+  &[data-expanded] :global(.hexa-ui-expander) {
+    transform: rotate(180deg);
+  }
 }
 
 
@@ -23,16 +39,5 @@
 
   &[data-hide]::after {
     display: none;
-  }
-
-  :global(.hexa-ui-expander) {
-    position: absolute;
-    right: 0;
-    z-index: 2;
-    justify-content: center;
-  }
-
-  &[data-expanded] :global(.hexa-ui-expander) {
-    transform: rotate(180deg);
   }
 }
