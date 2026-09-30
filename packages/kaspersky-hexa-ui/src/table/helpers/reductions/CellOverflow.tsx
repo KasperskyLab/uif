@@ -3,7 +3,7 @@ import { clippingStyles as clipping } from '@helpers/overflow/components/clippin
 import { textExpander } from '@helpers/overflow/components/textExpander'
 import { useOverflowToggle } from '@helpers/overflow/useOverflowToggle'
 import cn from 'classnames'
-import React, { ReactNode, TdHTMLAttributes } from 'react'
+import React, { CSSProperties, ReactNode, TdHTMLAttributes, useCallback } from 'react'
 
 import tableCell from '../../TableCell.module.scss'
 
@@ -16,13 +16,53 @@ type CellComponent = React.ComponentType<CellProps> | 'td'
 
 const getTBody = (element: HTMLTableCellElement) => element.closest('tbody') ?? undefined
 
+/** Hidden so it cannot be seen, measured or read out; it exists only to point at its own cell. */
+const MARKER_STYLE: CSSProperties = { display: 'none' }
+
+const FORWARD_REF = Symbol.for('react.forward_ref')
+const MEMO = Symbol.for('react.memo')
+
+/**
+ * Whether a ref put on this component would reach a DOM node.
+ *
+ * A consumer may hand us any component as `components.body.cell`, and a plain function component
+ * cannot receive a ref: React drops it with a warning in development and nothing at all in
+ * production. The cell would then never be measured, so a clipped one would never get its expander
+ * and `expandableText` would quietly stop working — with no error anywhere to say why.
+ */
+const takesRef = (component: CellComponent): boolean => {
+  if (typeof component === 'string') return true
+  if (typeof component === 'function') {
+    return Boolean((component as { prototype?: { isReactComponent?: unknown } }).prototype?.isReactComponent)
+  }
+
+  const kind = (component as { $$typeof?: symbol } | null)?.$$typeof
+  if (kind === FORWARD_REF) return true
+  if (kind === MEMO) return takesRef((component as unknown as { type: CellComponent }).type)
+
+  return false
+}
+
 const hasClass = (props: CellProps, name: string) => String(props.className ?? '').includes(name)
 
 export const createOverflowCell = (Base: CellComponent = 'td') => {
+  /** Decided once per cell component, not per cell: `Base` is fixed for the life of this one. */
+  const baseTakesRef = takesRef(Base)
+
   const ExpandableCell = ({ children, ...props }: CellProps) => {
     const { clipped, expanded, onToggle, observedRef } = useOverflowToggle<HTMLTableCellElement>({
       getContentRoot: getTBody
     })
+
+    /**
+     * The way in when the cell component cannot take a ref: a hidden child finds its own cell.
+     *
+     * `closest` rather than `parentElement` because the component is free to put its children
+     * inside something of its own — what has to be measured is the cell, wherever it sits above.
+     */
+    const fromMarker = useCallback((node: HTMLElement | null) => {
+      observedRef(node?.closest('td, th') as HTMLTableCellElement ?? null)
+    }, [observedRef])
 
     return (
       <Base
@@ -30,8 +70,9 @@ export const createOverflowCell = (Base: CellComponent = 'td') => {
         className={cn(props.className, clipping.expandableContainer, clipping.expandableFade, tableCell.expandableCell)}
         data-expanded={expanded ? '' : undefined}
         data-hide={clipped && !expanded ? undefined : ''}
-        ref={observedRef}
+        ref={baseTakesRef ? observedRef : undefined}
       >
+        {!baseTakesRef && <span aria-hidden ref={fromMarker} style={MARKER_STYLE} />}
         {children}
         {clipped && textExpander({ expanded, onToggle, className: EXPANDER_CLASS })}
       </Base>
