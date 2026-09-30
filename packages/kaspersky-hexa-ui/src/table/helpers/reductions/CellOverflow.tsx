@@ -22,15 +22,7 @@ const MARKER_STYLE: CSSProperties = { display: 'none' }
 const FORWARD_REF = Symbol.for('react.forward_ref')
 const MEMO = Symbol.for('react.memo')
 
-/**
- * Whether a ref put on this component would reach a DOM node.
- *
- * A consumer may hand us any component as `components.body.cell`, and a plain function component
- * cannot receive a ref: React drops it with a warning in development and nothing at all in
- * production. The cell would then never be measured, so a clipped one would never get its expander
- * and `expandableText` would quietly stop working — with no error anywhere to say why.
- */
-const takesRef = (component: CellComponent): boolean => {
+const isComponentTakesRef = (component: CellComponent) => {
   if (typeof component === 'string') return true
   if (typeof component === 'function') {
     return Boolean((component as { prototype?: { isReactComponent?: unknown } }).prototype?.isReactComponent)
@@ -38,7 +30,7 @@ const takesRef = (component: CellComponent): boolean => {
 
   const kind = (component as { $$typeof?: symbol } | null)?.$$typeof
   if (kind === FORWARD_REF) return true
-  if (kind === MEMO) return takesRef((component as unknown as { type: CellComponent }).type)
+  if (kind === MEMO) return isComponentTakesRef((component as unknown as { type: CellComponent }).type)
 
   return false
 }
@@ -47,7 +39,7 @@ const hasClass = (props: CellProps, name: string) => String(props.className ?? '
 
 export const createOverflowCell = (Base: CellComponent = 'td') => {
   /** Decided once per cell component, not per cell: `Base` is fixed for the life of this one. */
-  const baseTakesRef = takesRef(Base)
+  const isTakesRef = isComponentTakesRef(Base)
 
   const ExpandableCell = ({ children, ...props }: CellProps) => {
     const { clipped, expanded, onToggle, observedRef } = useOverflowToggle<HTMLTableCellElement>({
@@ -70,9 +62,9 @@ export const createOverflowCell = (Base: CellComponent = 'td') => {
         className={cn(props.className, clipping.expandableContainer, clipping.expandableFade, tableCell.expandableCell)}
         data-expanded={expanded ? '' : undefined}
         data-hide={clipped && !expanded ? undefined : ''}
-        ref={baseTakesRef ? observedRef : undefined}
+        ref={isTakesRef ? observedRef : undefined}
       >
-        {!baseTakesRef && <span aria-hidden ref={fromMarker} style={MARKER_STYLE} />}
+        {!isTakesRef && <span aria-hidden ref={fromMarker} style={MARKER_STYLE} />}
         {children}
         {clipped && textExpander({ expanded, onToggle, className: EXPANDER_CLASS })}
       </Base>
