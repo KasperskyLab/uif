@@ -1,6 +1,5 @@
 import { TableColumn, TableRecord } from '..'
 import { blockRangeExtractor } from '../modules/Virtualization/blockRange'
-import { CellCache } from '../modules/Virtualization/cellMemo'
 import { canVirtualizeColumns, getRenderedWidths, windowColumns } from '../modules/Virtualization/columns'
 
 type Row = TableRecord & { name: string }
@@ -117,69 +116,5 @@ describe('block ranges — why scrolling stays smooth', () => {
     const tail = extract({ startIndex: 95, endIndex: 99, overscan: 5, count: 100 })
     expect(tail[tail.length - 1]).toBe(99)
     expect(extract({ startIndex: 0, endIndex: 2, overscan: 5, count: 100 })[0]).toBe(0)
-  })
-})
-
-describe('the cell cache — what it keeps and what it lets go', () => {
-  const rows = ['rows']
-  const columns = ['columns']
-
-  /** Fills one window's worth of cells, as a render would. */
-  const fill = (cache: CellCache, window: string, from: number, count: number) => {
-    cache.keepFor(rows, columns, window)
-
-    for (let index = from; index < from + count; index++) {
-      const key = `col ${index}`
-      if (!cache.get(key, index, rows, index)) cache.set(key, { value: index, record: rows, index, node: null })
-    }
-  }
-
-  it('hands back the very same element while nothing about the cell changed', () => {
-    const cache = new CellCache()
-    const node = { marker: true }
-
-    cache.keepFor(rows, columns, '0:9')
-    cache.set('a', { value: 1, record: rows, index: 0, node: node as never })
-
-    expect(cache.get('a', 1, rows, 0)?.node).toBe(node)
-    expect(cache.get('a', 2, rows, 0)).toBeUndefined()
-    expect(cache.get('a', 1, columns, 0)).toBeUndefined()
-  })
-
-  it('keeps what is still on screen across a window move', () => {
-    const cache = new CellCache()
-
-    cache.keepFor(rows, columns, '0:9')
-    cache.set('kept', { value: 1, record: rows, index: 0, node: null })
-
-    cache.keepFor(rows, columns, '5:14')
-
-    expect(cache.get('kept', 1, rows, 0)).toBeDefined()
-  })
-
-  /**
-   * The reason this matters is not memory in the abstract: a cached element holds on to the fiber
-   * that made it, and the fiber holds the row's DOM. Keeping one per cell ever rendered left six
-   * thousand detached nodes behind after scrolling two hundred rows.
-   */
-  it('does not grow as the reader scrolls on and on', () => {
-    const cache = new CellCache()
-    const perWindow = 40
-
-    for (let step = 0; step < 50; step++) fill(cache, `window ${step}`, step * perWindow, perWindow)
-
-    expect(cache.size).toBeLessThanOrEqual(perWindow * 2)
-  })
-
-  it('forgets everything when the data or the columns are not the ones it was filled for', () => {
-    const cache = new CellCache()
-
-    cache.keepFor(rows, columns, '0:9')
-    cache.set('a', { value: 1, record: rows, index: 0, node: null })
-
-    cache.keepFor(['other rows'], columns, '0:9')
-
-    expect(cache.get('a', 1, rows, 0)).toBeUndefined()
-    expect(cache.size).toBe(0)
   })
 })

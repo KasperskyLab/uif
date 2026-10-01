@@ -10,7 +10,6 @@ import { TableComponent } from '..'
 import { ITableProps, TableRecord } from '../../types'
 
 import {
-  CellCache,
   flatIndexOf,
   rowClassNameInPlace,
   RowPositions,
@@ -47,8 +46,7 @@ const DEFAULTS = {
    *  mounted without making a crossing any cheaper, because rc-table re-renders every cell in the
    *  window whenever the columns array changes. */
   rowBlock: 5,
-  columnBlock: 2,
-  memoizeCells: true
+  columnBlock: 2
 }
 
 const EMPTY_ROWS: never[] = []
@@ -256,18 +254,10 @@ export const Virtualization = <T extends TableRecord = TableRecord>(
     ? { start: columnItems[0].index, end: columnItems[columnItems.length - 1].index }
     : { start: 0, end: widths.length - 1 }
 
-  /** Cells that did not change are handed back as the same element, so moving the window costs the
-   *  cells that appeared rather than every cell on screen. Entries are kept for the window they were
-   *  made in and the one before it — a cached element holds the row's DOM alive through the fiber
-   *  that made it, so keeping them all would be a leak. */
-  const cache = useRef(new CellCache())
-  const memo = config.memoizeCells ? cache.current : null
-  memo?.keepFor(rows, columns, `${rowWindow.start}:${rowWindow.end}:${columnWindow.start}:${columnWindow.end}`)
-
   /** Wrapped once per columns identity so the objects keep their identity while scrolling. */
   const offsetColumns = useMemo(() => (
-    rowsOn || columnsOn ? withCellMemo(columns, positions, memo) : columns
-  ), [rowsOn, columnsOn, columns, memo])
+    rowsOn || columnsOn ? withCellMemo(columns, positions) : columns
+  ), [rowsOn, columnsOn, columns])
 
   const windowedColumns = useMemo(() => (
     columnsWindowed

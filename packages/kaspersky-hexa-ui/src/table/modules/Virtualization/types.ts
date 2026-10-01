@@ -21,15 +21,6 @@ export type TableVirtualization = {
    *  same cost per crossing, because rc-table re-renders the whole window either way. */
   columnBlock?: number
   /**
-   * Hand a cell back as the very same React element when nothing about it changed, so moving the
-   * window costs the cells that appeared instead of every cell on screen. Default: on.
-   *
-   * The cache is emptied whenever the rows or the columns change identity. The one case it cannot
-   * see is a `render` that depends on something outside `(value, record, index)` and changes without
-   * the columns array being rebuilt; turn this off for such a table.
-   */
-  memoizeCells?: boolean
-  /**
    * Height assumed for a row that has not been measured yet. Only a seed: every mounted row
    * reports its real height back. Default: derived from `rowMode`.
    */
