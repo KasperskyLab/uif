@@ -3,16 +3,20 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 
+  // A collapsed line does not wrap at all, so there is nothing to decide about breaking words —
+  // this is here to pin it against an inherited `word-break` from somewhere above.
+  word-break: normal;
+
   &[data-expanded] {
     overflow: visible;
     white-space: normal;
+
+    // Expanded, it does wrap, and a run without spaces — an id, a hash, a path — has to be allowed
+    // to break or it runs out past the edge. `overflow-wrap` breaks only what cannot fit, where
+    // `word-break: break-all` would chop ordinary words mid-character.
+    overflow-wrap: break-word;
   }
 
-  // Pinned to the right edge rather than left in the flow: the container clips its overflow, so an
-  // arrow sitting after the text is cut off with it. These rules used to live under the fade, which
-  // is only applied when a gradient is asked for — so without one the arrow was rendered and then
-  // clipped out of sight. Both places that clip carry this class and a positioning context of their
-  // own (`.expandableText`, `.expandableCell`).
   :global(.hexa-ui-expander) {
     position: absolute;
     right: 0;
@@ -27,6 +31,11 @@
 
 
 .expandableFade {
+  // The fade is the sign that the text goes on, so an ellipsis under it says the same thing twice —
+  // and it used to be cancelled on the inner wrapper that no longer exists. Both places that fade
+  // carry this class after `.expandableContainer`, so this is what wins.
+  text-overflow: clip;
+
   &::after {
     content: '';
     position: absolute;

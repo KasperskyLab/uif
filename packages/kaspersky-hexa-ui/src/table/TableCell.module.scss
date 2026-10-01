@@ -18,7 +18,6 @@
   }
 
   &[data-expanded] {
-    word-break: break-word;
 
     :global(.hexa-ui-expander) {
       top: calc(var(--table-clip-padding-top) + 2px);
