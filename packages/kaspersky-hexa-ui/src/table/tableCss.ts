@@ -451,15 +451,9 @@ export const tableCss = css<TableCssProps>`
       width: 100%;
     }
 
-    .ant-table-cell-with-append .hexa-ui-ellipsis,
-    .ant-table-cell-with-append .hexa-ui-expandable {
-      display: inline-grid;
-      width: auto;
-    }
-
     // The tree's expand icon floats in a clipping cell, the way antd floats its own icon and the
-    // indent beside it. It used to sit inline and lean on the rule above: the clipping wrapper was
-    // inline-grid, so whatever the column rendered stayed on the icon's line. With clipping on the
+    // indent beside it. It used to sit inline and lean on the clipping wrapper being inline-grid, so
+    // whatever the column rendered stayed on the icon's line. With clipping on the
     // cell itself there is no wrapper any more, and content that renders as a block — a <div>, the
     // usual case — dropped onto the next line under the icon. A float lets any content flow beside
     // it. Only data cells clip, so this never reaches the selection cell, where ExpandableRows lays
