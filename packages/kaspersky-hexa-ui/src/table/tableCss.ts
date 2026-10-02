@@ -462,10 +462,11 @@ export const tableCss = css<TableCssProps>`
     // inline-grid, so whatever the column rendered stayed on the icon's line. With clipping on the
     // cell itself there is no wrapper any more, and content that renders as a block — a <div>, the
     // usual case — dropped onto the next line under the icon. A float lets any content flow beside
-    // it. The rtl layout of rows with an expanded-row renderer places the icon its own way.
+    // it. Only data cells clip, so this never reaches the selection cell, where ExpandableRows lays
+    // the icon out beside the checkbox with a layout of its own.
     td.ant-table-cell-with-append.hexa-ui-expandable-cell,
     td.ant-table-cell-with-append.hexa-ui-ellipsis-cell {
-      &:not(:has(.table-row-has-expandable)) > .kl-components-expandable-icon {
+      > .kl-components-expandable-icon {
         float: left;
       }
     }
