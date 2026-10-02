@@ -457,6 +457,19 @@ export const tableCss = css<TableCssProps>`
       width: auto;
     }
 
+    // The tree's expand icon floats in a clipping cell, the way antd floats its own icon and the
+    // indent beside it. It used to sit inline and lean on the rule above: the clipping wrapper was
+    // inline-grid, so whatever the column rendered stayed on the icon's line. With clipping on the
+    // cell itself there is no wrapper any more, and content that renders as a block — a <div>, the
+    // usual case — dropped onto the next line under the icon. A float lets any content flow beside
+    // it. The rtl layout of rows with an expanded-row renderer places the icon its own way.
+    td.ant-table-cell-with-append.hexa-ui-expandable-cell,
+    td.ant-table-cell-with-append.hexa-ui-ellipsis-cell {
+      &:not(:has(.table-row-has-expandable)) > .kl-components-expandable-icon {
+        float: left;
+      }
+    }
+
     .ant-table-tbody > tr:not(.ant-table-placeholder) > td.ant-table-cell {
       vertical-align: ${({ columnVerticalAlign }) => columnVerticalAlign || 'top'};
       ${props => getRowModeCss(props)}
