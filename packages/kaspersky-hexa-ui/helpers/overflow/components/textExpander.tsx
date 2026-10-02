@@ -4,25 +4,27 @@ import React from 'react'
 import { ArrowDown1 } from '@kaspersky/hexa-ui-icons/16'
 
 type TextExpanderProps = {
-  onClick: () => void
+  expanded: boolean
+  onToggle: () => void
   className?: string
 }
 
-export const TextExpander: React.FC<TextExpanderProps> = ({ onClick, className }) => {
+export const textExpander = ({ expanded, onToggle, className }: TextExpanderProps): JSX.Element => {
   return (
     <ActionButton
       className={className}
       onClick={e => {
         e.stopPropagation()
-        onClick()
+        onToggle()
       }}
       onKeyDown={e => {
-        if (e.key === 'Enter') {
-          onClick()
-        }
+        if (e.key !== 'Enter') return
+        e.preventDefault()
+        onToggle()
       }}
       size="large"
       icon={<ArrowDown1 />}
+      aria-expanded={expanded}
     />
   )
 }

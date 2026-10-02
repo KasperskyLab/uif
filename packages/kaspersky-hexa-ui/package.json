@@ -52,6 +52,7 @@
     "build-storybook": "storybook build",
     "test": "npm run lint && jest --transformIgnorePatterns --maxWorkers=1 --forceExit --logHeapUsage",
     "test:only": "jest --transformIgnorePatterns --maxWorkers=1 --forceExit --logHeapUsage",
+    "test:virtual": "jest --config jest.virtual.config.js --transformIgnorePatterns --maxWorkers=1 --forceExit",
     "test:watch": "jest --watch",
     "test:format:mdx": "node --test tools/format-mdx-doc.test.mjs",
     "format:mdx": "node tools/format-mdx-doc.mjs",
@@ -138,6 +139,11 @@
     "uuid": "9.0.0"
   },
   "devDependencies": {
+    "@babel/plugin-transform-logical-assignment-operators": "^7.25.9",
+    "@babel/plugin-transform-nullish-coalescing-operator": "^7.26.6",
+    "@babel/plugin-transform-optional-chaining": "^7.25.9",
+    "@babel/plugin-transform-runtime": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
     "@kaspersky/dev-tools": "3.11.0",
@@ -209,9 +215,9 @@
   },
   "peerDependencies": {
     "@kaspersky/hexa-ui-icons": "^2.22.0",
+    "moment": "2.30.1",
     "react": "16.x || 17.x || 18.x",
     "react-dom": "16.x || 17.x || 18.x",
-    "typescript": ">=4.0.0",
-    "moment": "2.30.1"
+    "typescript": ">=4.0.0"
   }
 }
