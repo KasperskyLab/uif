@@ -42,9 +42,9 @@ const DEFAULTS = {
   columnOverscan: 1,
   /** How many rows / columns the window edges snap to. See blockRangeExtractor: the rendered set
    *  then changes once per block instead of once per row, which is what keeps wheel scrolling
-   *  smooth. The column block is deliberately small — measured, a bigger one keeps more columns
-   *  mounted without making a crossing any cheaper, because rc-table re-renders every cell in the
-   *  window whenever the columns array changes. */
+   *  smooth. The two trade against each other — measured, a bigger column block makes horizontal
+   *  scrolling cheaper and vertical dearer, because every row-window move re-renders the wider
+   *  column window, and a bigger row block the other way round. See the README. */
   rowBlock: 5,
   columnBlock: 2
 }

@@ -14,11 +14,11 @@ export type TableVirtualization = {
   columnOverscan?: number
   /**
    * How many rows the window snaps to. The set of rendered rows changes once per block rather than
-   * once per row, which is what keeps scrolling with the wheel smooth. Default: 10.
+   * once per row, which is what keeps scrolling with the wheel smooth. Default: 5.
    */
   rowBlock?: number
-  /** The same for columns. Default: 2 — measured: a larger block renders more columns for the
-   *  same cost per crossing, because rc-table re-renders the whole window either way. */
+  /** The same for columns. Default: 2. A larger block makes horizontal scrolling cheaper and
+   *  vertical scrolling dearer; see the module README. */
   columnBlock?: number
   /**
    * Height assumed for a row that has not been measured yet. Only a seed: every mounted row

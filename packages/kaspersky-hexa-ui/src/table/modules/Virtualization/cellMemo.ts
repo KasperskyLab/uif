@@ -31,8 +31,8 @@ export const flatIndexOf = (positions: RowPositions, record: unknown, index: num
   positions.flatIndexOf?.get(record) ?? index + positions.offset
 
 /**
- * Wraps the callbacks that take a row index so they keep seeing the index in the data, and routes
- * every cell through the cache above.
+ * Wraps the callbacks that take a row index so they keep seeing the index in the data, and lets
+ * rc-table skip the cells that did not change.
  *
  * Created once per columns identity and reading the offset from a ref: rc-table rebuilds every cell
  * when a column object changes, so wrapping afresh on each scroll step would undo what we came for.
@@ -50,9 +50,10 @@ export const withCellMemo = <T extends TableRecord>(
     /**
      * rc-table wraps every cell in `React.memo`, but without this its comparator falls back to a
      * shallow compare that can never pass: `onCell` hands it a freshly built props object on every
-     * render. With it, a cell whose record has not changed is skipped outright — and that is the
-     * bulk of what moving the window costs, since rc-table walks every cell in the window and
-     * builds its props whether or not anything about it changed.
+     * render. With it, a cell whose record has not changed is skipped — its own render and the
+     * column's `render` both. Measured: without it the vertical scroll loses 47% more frames and the
+     * horizontal 15%. What it cannot skip is rc-table building an element per cell of the window,
+     * which it does on every window move; see the module README.
      *
      * A column that brings its own rule keeps it.
      */
