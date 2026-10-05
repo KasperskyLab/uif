@@ -28,6 +28,7 @@ import {
   UnitedFilter
 } from './modules/Filters'
 import { GroupTitleItem } from './modules/Groups/types'
+import { TableVirtualization } from './modules/Virtualization/types'
 import {
   ActiveSorting,
   IFiltersSavingSettings
@@ -526,6 +527,22 @@ export type ITableProps<T extends TableRecord = TableRecord> = Omit<
   filterItems?: TableInternalFilterItems,
   /** @deprecated Use storageKey instead. Object with key name of saved filters: saveFilters.storageKey */
   saveFilters?: IFiltersSavingSettings,
+
+  /**
+   * Render only the rows and columns that are in view.
+   *
+   * `true` turns both axes on with the defaults; an object tunes them.
+   *
+   * Row windowing requires that the table own row selection: with `rowSelection` set and
+   * `builtInRowSelection` not on, the rows are left alone and only the columns are windowed.
+   * antd derives selection from the rows it was handed, so a windowed table would quietly narrow
+   * what "selected" and "select all" mean; the built-in selection keeps its own list against the
+   * whole data and is unaffected. A table with no selection at all windows its rows either way.
+   *
+   * Column windowing needs every visible column to have a numeric width, which
+   * `resizingMode: 'scroll'` provides, and is held back while `stickyHeader` is set.
+   */
+  virtualization?: boolean | TableVirtualization,
 
   /** Experimental flag to enable group selection. Not ready to use in production. Group selection works only if builtInRowSelection is set to true */
   __EXPERIMENTAL__GROUP__SELECTION?: boolean

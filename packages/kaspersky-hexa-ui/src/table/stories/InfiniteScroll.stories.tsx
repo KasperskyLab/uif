@@ -221,7 +221,12 @@ export const LazyScrollLoading: Story = {
       </div>
     )
   },
-  args: { infiniteScrollEndTableText: 'End table text' },
+  args: {
+    infiniteScrollEndTableText: 'End table text',
+    // declared so the windowed body can be switched on from the controls and from the url
+    // (&args=virtualization:!true) — Storybook drops url args a story does not declare
+    virtualization: false
+  },
   argTypes: {
     infiniteScrollEndTableText: basicArgTypes.infiniteScrollEndTableText,
     pagination: { description: paginationDescription }

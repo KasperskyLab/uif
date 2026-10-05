@@ -22,6 +22,7 @@ import { SortingAndFilters } from './SortingAndFilters'
 // import { ExpandableRows } from './ExpandableRows'
 import { ToolbarIntegration } from './ToolbarIntegration'
 import { VirtualTanstack as Virtual } from './Virtual'
+import { Virtualization } from './Virtualization'
 
 export type TableComponent<T extends TableRecord = TableRecord> = FC<ITableProps<T> & React.RefAttributes<TableRef>>
 export type TableModule<T extends TableRecord = TableRecord> = (Component: TableComponent<T>) => TableComponent<T>
@@ -43,9 +44,13 @@ export const composeWithModules = (Component: TableComponent, modules: TableModu
  * -ToolbarIntegration must be below SidebarFilters
  * -LocalizeColumnTitles must be below SortingAndFilters and SidebarFilters
  * -Groups must be above ColumnsSelection
+ * -Virtualization must be first: it must see the final rows and columns
  * -to be continued...
  */
 export const tableModules: TableModule[] = [
+  // Innermost on purpose: it wraps the antd table directly, so it receives the columns and rows
+  // every other module has already finished transforming, and windows only what gets rendered.
+  Virtualization,
   Groups,
   // ExpandableRows,
   Pagination,

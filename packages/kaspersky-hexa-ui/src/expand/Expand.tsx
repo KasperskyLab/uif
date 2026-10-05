@@ -1,8 +1,8 @@
 import { getChildTestProps, useTestAttribute } from '@helpers/hooks/useTestAttribute'
-import { useResizeObserver } from '@helpers/useResizeObserver'
+import { useWatchOverflow } from '@helpers/overflow/overflowWatcher'
 import { ActionButton } from '@src/action-button'
 import cn from 'classnames'
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -38,15 +38,18 @@ export const Expand = ({
   const textRef = useRef<HTMLDivElement | null>(null)
   const [visible, setVisible] = useState(false)
 
-  const textRect = useResizeObserver(textRef, 150)
+  const collapsedHeightRef = useRef(collapsedHeight)
+  collapsedHeightRef.current = collapsedHeight
 
-  useLayoutEffect(() => {
-    const element = textRef.current
-    if (!element || !textRect) return
+  const measureOverflow = useCallback((element: Element) => (
+    element.scrollHeight > collapsedHeightRef.current
+  ), [])
 
-    const isOverflow = element.scrollHeight > collapsedHeight
-    setVisible(isOverflow)
-  }, [collapsedHeight, textRect])
+  const onMeasured = useCallback((next: boolean) => {
+    setVisible(current => (current === next ? current : next))
+  }, [])
+
+  useWatchOverflow(textRef, onMeasured, measureOverflow, collapsedHeight)
 
   return (
     <StyledExpander className={cn(
