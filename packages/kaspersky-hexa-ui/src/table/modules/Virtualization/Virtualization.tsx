@@ -309,26 +309,44 @@ export const Virtualization = <T extends TableRecord = TableRecord>(
     spacerRef
   }), [props.components, padding.top, padding.bottom, estimatedRowHeight, spacerRef])
 
+  const tableExpandable = isTree && rowsOn ? expansion.expandable : props.expandable
+  const tableOnRow = rowsOn ? onRow : props.onRow
+  // Fixed layout is what keeps column widths from being recomputed out of whatever cells happen to
+  // be rendered: with windowed columns, content-based widths would shift on every horizontal scroll
+  // step. Every visible column has a width here — `canVirtualizeColumns` is what let us get this far.
+  const tableLayout = columnsOn ? 'fixed' : props.tableLayout
+
+  /**
+   * The table, built only when something it is handed has changed.
+   *
+   * The virtualizers re-render this component far more often than the window moves: tanstack
+   * notifies on every change of the raw visible range and of its scrolling flag, while the blocks
+   * above keep what we hand the table the same for most of those. Re-rendering the table each time
+   * all the same costs as much as a real window move — antd and rc-table rebuild an element for
+   * every cell of the window before the cell memo can skip it. Measured on a sideways scroll of the
+   * performance story: 168 commits, of which 16 had anything new in them. Handing React the very
+   * same element lets it skip the whole subtree instead.
+   */
+  const table = useMemo(() => (
+    <Component
+      {...props}
+      dataSource={windowedRows}
+      columns={windowedColumns}
+      components={components}
+      onRow={tableOnRow}
+      rowClassName={rowClassName}
+      expandable={tableExpandable}
+      tableLayout={tableLayout}
+    />
+  ), [Component, props, windowedRows, windowedColumns, components, tableOnRow, rowClassName, tableExpandable, tableLayout])
+
   if (!rowsOn && !columnsOn) {
     return <Component {...props} />
   }
 
   return (
     <VirtualBodyProvider value={bodyValue}>
-      <Component
-        {...props}
-        dataSource={windowedRows}
-        columns={windowedColumns}
-        components={components}
-        onRow={rowsOn ? onRow : props.onRow}
-        rowClassName={rowClassName}
-        expandable={isTree && rowsOn ? expansion.expandable : props.expandable}
-        // Fixed layout is what keeps column widths from being recomputed out of whatever cells
-        // happen to be rendered: with windowed columns, content-based widths would shift on every
-        // horizontal scroll step. Every visible column has a width here — `canVirtualizeColumns`
-        // is what let us get this far.
-        tableLayout={columnsOn ? 'fixed' : props.tableLayout}
-      />
+      {table}
     </VirtualBodyProvider>
   )
 }
