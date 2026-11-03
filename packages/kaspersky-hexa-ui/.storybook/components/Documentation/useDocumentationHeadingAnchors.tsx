@@ -5,7 +5,7 @@ import {
   ensureDocumentationHeadingId,
   isDocumentationHeadingExcluded
 } from './documentationHeadings'
-import { scrollToDocumentationSectionWithRetry } from './documentationSectionScroll'
+import { revealDocumentationLocation } from './documentationSectionScroll'
 import {
   getDocumentationPageHash,
   getDocumentationSectionUrl,
@@ -199,12 +199,7 @@ export const useDocumentationHeadingAnchors = (contentRef: RefObject<HTMLElement
 
     const scrollToHashFromLocation = () => {
       const { tabKey, sectionId } = parseDocumentationHash(getDocumentationPageHash())
-
-      if (!sectionId) {
-        return
-      }
-
-      scrollToDocumentationSectionWithRetry(sectionId, tabKey)
+      revealDocumentationLocation(tabKey, sectionId)
     }
 
     let debounceId: ReturnType<typeof setTimeout> | undefined

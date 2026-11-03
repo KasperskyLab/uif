@@ -1,0 +1,168 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { InteractiveTour } from '../interactive-tour/InteractiveTour'
+import * as OnboardingStories from './Onboarding.stories'
+import { interactiveTourStepDesignPropPresentation } from './Onboarding.controls'
+import { TourStepPreview } from './TourStep.demo'
+import stepImage from './assets/step.png'
+
+<Meta of={OnboardingStories} name="Interactive Tour Docs" />
+
+<DocPageLayout>
+
+  <DocPageHeader title="Interactive Tour" checkUIF rtlSupported />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **Interactive tour** — элемент интерфейса, который последовательно показывает ключевые элементы страницы и объясняет их назначение.
+
+          Может использоваться в рамках обучения нового пользователя, а также в качестве обучения вышедшего обновления. Основной сценарий — провести пользователя по ключевым элементам страницы, последовательно объясняя их назначение. Каждый шаг подсвечивает конкретный элемент интерфейса и содержит заголовок, опционально пояснительный текст и изображение.
+
+          Рекомендуется использовать максимум 3–5 шага. Длинные туры перегружают пользователя — он получает слишком много информации до начала работы и забывает ранние шаги. Если контента больше, разбейте на несколько коротких туров по разным сценариям.
+
+          Тур настраивается пропом **tour** компонента [**Onboarding Modal**](/?path=/docs/hexa-ui-components-onboarding--onboarding-modal-docs) в вариации `tour`."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="Шаги задаются массивом **steps**. Шаг подсвечивает элемент **target** и показывает рядом с ним подсказку с заголовком **title**, текстом **text** и изображением **image**. Сторону подсказки задаёт **placement**, общие настройки тура — **width**, **hideOverlay**, **closeOnEsc**. В футере подсказки — прогресс и кнопки перехода между шагами; они формируются автоматически по количеству шагов."
+      />
+
+      <DocExampleBlock
+        title="title"
+        description="Заголовок шага — обязательный элемент, несет пользу или обучает пользователя."
+        scope={{ TourStepPreview }}
+        code={`
+          <TourStepPreview
+            title="Заголовок"
+            index={0}
+            size={4}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="text"
+        description="Текстовый блок — опциональный элемент компонента. Его отображение можно отключить, если контекст онбординга полностью раскрывается изображением."
+        scope={{ TourStepPreview, stepImage }}
+        code={`
+          <TourStepPreview
+            text="Опциональный текст"
+            title="Заголовок"
+            index={0}
+            size={4}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="image"
+        description="Иллюстрация над заголовком."
+        scope={{ TourStepPreview, stepImage }}
+        code={`
+          <TourStepPreview
+            image={<img src={stepImage} alt="Image" />}
+            text="Опциональный текст"
+            title="Заголовок"
+            index={0}
+            size={4}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="footer"
+        description="Футер шага собирается автоматически: прогресс показывает номер шага из общего количества, кнопка «Back» появляется со второго шага, а на последнем шаге основная кнопка меняется с «Next» на «Complete». Закрыть тур можно крестиком в подсказке."
+        scope={{ TourStepPreview }}
+        previewDirection="vertical"
+        previewGap={24}
+        code={`
+          <TourStepPreview
+            title="Первый шаг"
+            text="Кнопки «Back» ещё нет"
+            index={0}
+            size={3}
+          />
+          <TourStepPreview
+            title="Второй шаг"
+            text="Появилась кнопка «Back»"
+            index={1}
+            size={3}
+          />
+          <TourStepPreview
+            title="Последний шаг"
+            text="Основная кнопка — «Complete»"
+            index={2}
+            size={3}
+          />
+        `}
+      />
+
+      <DocExampleBlock
+        title="placement"
+        description="
+          Свойство позволяет выбрать позиционирование компонента Interactive tour относительно выбранного объекта. Доступные значения: `auto`, `center`, `top`, `top-start`, `top-end`, `right`, `right-start`, `right-end`, `bottom`, `bottom-start`, `bottom-end`, `left`, `left-start`, `left-end`. По умолчанию — `auto`.
+
+          При `auto` компонент автоматически определяет сторону рендеринга относительно целевого элемента. **placement** можно задать сразу для всего тура и переопределить в отдельном шаге."
+      />
+
+      <DocExampleBlock
+        title="target"
+        description="Подсвечиваемый элемент шага: CSS-селектор, **HTMLElement**, React **ref** или функция, возвращающая элемент. Элемент должен присутствовать в DOM к моменту показа шага."
+      />
+
+      <DocExampleBlock
+        title="hideOverlay"
+        description="Свойство убирает затемнение страницы."
+      />
+
+      <DocExampleBlock
+        title="closeOnEsc"
+        description="Свойство (по умолчанию `true`) завершает тур по клавише Escape."
+      />
+
+      <DocExampleBlock
+        title="width"
+        description="Свойство определяет ширину подсказки."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+      <AutodocArgsTable components={InteractiveTour} />
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description=""
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(interactiveTourStepDesignPropPresentation)} />
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+      <ComponentChangelog component="Onboarding" />
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

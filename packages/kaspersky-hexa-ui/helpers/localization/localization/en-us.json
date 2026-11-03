@@ -1,12 +1,19 @@
 {
   "translation": {
     "common": {
+      "back": "Back",
+      "cancel": "Cancel",
+      "delete": "Delete",
       "empty": "No data",
       "import": "Import",
       "export": "Export",
       "filters": "Filters",
+      "next": "Next",
       "no": "No",
-      "yes": "Yes"
+      "ok": "OK",
+      "rename": "Rename",
+      "yes": "Yes",
+      "save": "Save"
     },
     "upload": {
       "dropFileTitle": "Drop file here",
@@ -56,6 +63,21 @@
         "maxTotalSize2": "The total size of all uploaded files exceeds the currently allowed size limit",
         "filesDoNotMeetRequirements": "Files do not meet the requirements",
         "format": "{{count}} file(s) cannot be uploaded due to format requirements."
+      }
+    },
+    "onboarding": {
+      "modal": {
+        "actions": {
+          "tryNow": "Try now",
+          "skip": "Skip"
+        },
+        "dontShowAgain": "Do not show again"
+      },
+      "interactiveTour": {
+        "actions": {
+          "complete": "Complete"
+        },
+        "stepStack": "Step {{currentStep}} of {{totalSteps}}"
       }
     },
     "wizard": {
@@ -181,6 +203,38 @@
         "nrange": "Outside {{from}}–{{to}}"
       },
       "groupingEmpty": "Other"
+    },
+    "tablePresets": {
+      "actions": {
+        "createPreset": "Save as a new preset",
+        "updatePreset": "Update preset"
+      },
+      "createFirstPresetTip": "You can save selected columns, their order, filters, or the entire table configuration as a custom preset. Configure the table and filters as needed, and then save the configuration as a new preset.",
+      "createPresetModal": {
+        "header": "Save table settings as a new preset",
+        "presetName": "Preset name",
+        "tip": "The preset includes column order and visibility, applied filters, and sorting. If you change any of these parameters, you can update the preset."
+      },
+      "renamePresetModal": {
+        "header": "Rename preset"
+      },
+      "deletePresetModal": {
+        "header": "Delete preset?",
+        "message": "Delete preset \"{{name}}\"? This action cannot be undone."
+      },
+      "errors": {
+        "presetCreate": "Failed to create the preset {{name}}",
+        "presetDelete": "Failed to delete the preset {{name}}",
+        "presetUpdate": "Failed to update the preset {{name}}"
+      },
+      "presetCreated": "Preset {{name}} saved",
+      "presetDeleted": "Preset {{name}} deleted",
+      "presetUpdated": "Preset {{name}} saved",
+      "presets": "Presets",
+      "validation": {
+        "presetNameEmpty": "Enter a preset name",
+        "presetNameExists": "A preset with this name already exists"
+      }
     },
     "tabs": {
       "dropdown": {

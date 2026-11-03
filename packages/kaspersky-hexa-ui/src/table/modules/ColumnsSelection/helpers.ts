@@ -2,6 +2,8 @@ import { ITableProps, TableColumn, TableRecord } from '@src/table'
 import { findColumnByKey, isColumnReadonly } from '@src/table/helpers/common'
 import { getPersistentStorageValue, updatePersistentStorage } from '@src/table/helpers/persistentStorage'
 
+import { TablePresetColumns } from '../Presets/types'
+
 export const SIDEBAR_SETTINGS_CLASS = 'table-settings-sidebar'
 
 export const sortColumns = <T extends TableRecord>(columns: TableColumn<T>[]) => (
@@ -15,7 +17,8 @@ type GetPreparedColumnsProps<T extends TableRecord> = {
   prevPropsColumns?: TableColumn<T>[],
   tableColumns: TableColumn<T>[],
   storageKey: ITableProps<T>['storageKey'],
-  expandableConfig: ITableProps<T>['expandable']
+  expandableConfig: ITableProps<T>['expandable'],
+  columnsState?: TablePresetColumns
 }
 
 export const getPreparedColumns = <T extends TableRecord>({
@@ -23,7 +26,8 @@ export const getPreparedColumns = <T extends TableRecord>({
   prevPropsColumns,
   tableColumns,
   storageKey,
-  expandableConfig
+  expandableConfig,
+  columnsState
 }: GetPreparedColumnsProps<T>) => {
   const columnsSettings = getPersistentStorageValue({
     storageKey: storageKey!,
@@ -35,15 +39,25 @@ export const getPreparedColumns = <T extends TableRecord>({
 
     const newPropsColumnKey = String(nextPropsColumn.key)
     const tableColumn = findColumnByKey(tableColumns, newPropsColumnKey)
+    const presetColumn = columnsState?.[newPropsColumnKey]
+    const savedColumn = columnsSettings?.[newPropsColumnKey]
 
     const result: TableColumn<T> = {
       ...nextPropsColumn,
-      // 1. LS 2. Current changed state 3. original state 4. default value
-      show: columnsSettings?.[newPropsColumnKey]?.show ?? tableColumn?.show ?? nextPropsColumn.show ?? true,
-      sortIndex: columnsSettings?.[newPropsColumnKey]?.sortIndex ?? tableColumn?.sortIndex ?? nextPropsColumn.sortIndex ?? index
+      // 1. Preset 2. LS 3. Current state 4. Original props 5. Default
+      show: presetColumn?.show ??
+        savedColumn?.show ??
+        tableColumn?.show ??
+        nextPropsColumn.show ??
+        true,
+      sortIndex: presetColumn?.sortIndex ??
+        savedColumn?.sortIndex ??
+        tableColumn?.sortIndex ??
+        nextPropsColumn.sortIndex ??
+        index
     }
 
-    // Change of external state should rewrite LS and current state
+    // Changed external props take priority over preset, LS and current state.
     const oldPropsColumn = prevPropsColumns && findColumnByKey(prevPropsColumns, newPropsColumnKey)
 
     const showChangedFromProps = oldPropsColumn && oldPropsColumn.show !== nextPropsColumn.show

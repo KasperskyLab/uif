@@ -13,10 +13,6 @@ export const accordionDesignPropPresentation: PropPresentationMap = {
     description: 'Интерактивное состояние компонента.',
     type: 'enabled | disabled'
   },
-  disabled: {
-    description: 'Неактивное состояние: панель недоступна для раскрытия и взаимодействия.',
-    type: 'false | true'
-  },
   expanded: {
     description: 'Состояние панели: развёрнута (true) или свёрнута (false).',
     type: 'true | false'

@@ -1,0 +1,194 @@
+import { Description, Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  ComponentChangelog,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+import { Text } from '@src/typography'
+
+import { Onboarding } from '../Onboarding'
+import * as OnboardingStories from './Onboarding.stories'
+import { onboardingDesignPropPresentation } from './Onboarding.controls'
+
+<Meta of={OnboardingStories} name="Onboarding Modal Docs" />
+
+<DocPageLayout>
+
+  <DocPageHeader title="Onboarding Modal" checkUIF rtlSupported />
+
+  <Tabs defaultActiveKey="description">
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="
+          **Onboarding modal** — диалоговое окно, которое открывается поверх интерфейса и временно блокирует взаимодействие с основным контентом.
+
+          Используется для последовательного знакомства пользователя с ключевыми функциями, сценариями или изменениями в продукте. Рекомендуется применять на ранних этапах работы с сервисом (например, при первом входе) или после крупных обновлений.
+
+          Если после окна нужно провести пользователя по элементам страницы, используйте вариацию `tour`: кнопка «Try now» запускает [**Interactive tour**](/?path=/docs/hexa-ui-components-onboarding--interactive-tour-docs). Если знакомство исчерпывается одним окном — вариацию `info`."
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**Onboarding** построен на [**Modal**](/?path=/docs/hexa-ui-components-modal--modal-docs) и принимает его пропы, кроме тех, что задаёт сам компонент (**mode**, **size**, **actions**, **customButtons**, **footerExtra**, **dialog**, **closable**). Заголовок задаётся через **header**, содержимое — через **content**. Набор кнопок в футере определяет **variant**: `tour` или `info`."
+      />
+
+      <DocExampleBlock
+        title="variant"
+        description="Вариация футера. `tour` — кнопки «Try now» и «Skip» с чекбоксом «Don't show again». `info` — кнопка «OK» с необязательной ссылкой, тур не запускается."
+        code={`
+          <Onboarding
+            visible
+            getContainer={false}
+            variant="info"
+            header="Заголовок"
+            content="С помощью модального окна можно оповестить пользователя о каком-либо скрытом функционале, который не лежит на поверхности."
+          />
+        `}
+        minHeight={320}
+      />
+
+      <DocExampleBlock
+        title="header"
+        description="Заголовок диалога. Он обязан нести пользу и обучать пользователя."
+        setupCode={`
+          const onboardingHeader = (
+            <Space>
+              <Tag mode="marina" outlined>
+                New
+              </Tag>
+              Заголовок
+            </Space>
+          )
+        `}
+        code={`
+          <Onboarding
+            visible
+            getContainer={false}
+            variant="info"
+            header={(
+            <Space>
+              <Tag mode="marina" outlined>
+                New
+              </Tag>
+              Заголовок
+            </Space>
+          )}
+            content="С помощью модального окна можно оповестить пользователя о каком-либо скрытом функционале, который не лежит на поверхности."
+          />
+        `}
+        minHeight={320}
+      />
+
+      <DocExampleBlock
+        title="content"
+        description="Основное содержимое окна."
+        setupCode={`
+          const onboardingContent = (
+            <Text>
+              <P>
+                С помощью модального окна можно оповестить пользователя о скрытом
+                функционале, который не лежит на поверхности.
+              </P>
+              <P>
+                Если пользователь пропустил обучение, он может вернуться к нему через
+                баннер в сайдбаре.
+              </P>
+            </Text>
+          )
+        `}
+        code={`
+          <Onboarding
+            visible
+            getContainer={false}
+            variant="info"
+            header="Заголовок"
+            content={onboardingContent}
+          />
+        `}
+        minHeight={360}
+      />
+
+      <DocExampleBlock
+        title="link"
+        description="Необязательная ссылка для детального информирования об обновлениях."
+        code={`
+          <Onboarding
+            visible
+            getContainer={false}
+            variant="info"
+            header="Заголовок"
+            content="С помощью модального окна можно оповестить пользователя о каком-либо скрытом функционале, который не лежит на поверхности."
+            link={{
+              text: 'Learn more',
+              href: 'https://www.kaspersky.com',
+              target: '_blank',
+            }}
+          />
+        `}
+        minHeight={320}
+      />
+
+      <DocExampleBlock
+        title="tour"
+        description="В вариации `tour` обязателен проп **tour** — настройки интерактивного тура, который запускается кнопкой «Try now». **defaultDontShowAgain** задаёт начальное состояние чекбокса «Don't show again»; актуальное состояние приходит в **onTryNow**, **onSkip** и **onDontShowAgainChange**."
+        setupCode={`
+          const onboardingTour = {
+            steps: [
+              {
+                target: 'body',
+                placement: 'center',
+                title: 'Шаг',
+              },
+            ],
+          }
+        `}
+        code={`
+          <Onboarding
+            visible
+            getContainer={false}
+            variant="tour"
+            header="Заголовок"
+            content="С помощью модального окна можно оповестить пользователя о каком-либо скрытом функционале, который не лежит на поверхности."
+            tour={onboardingTour}
+            defaultDontShowAgain={false}
+            link={{ text: 'Learn more', href: '#' }}
+          />
+        `}
+        minHeight={360}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+      <Description of={OnboardingStories} />
+      <AutodocArgsTable components={Onboarding} />
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description=""
+      />
+      <DocumentationArgsTable rows={buildPresentationOnlyRows(onboardingDesignPropPresentation)} />
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Изменения" key="changelog">
+
+      <ComponentChangelog component="Onboarding" />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

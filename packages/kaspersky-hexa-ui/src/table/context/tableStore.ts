@@ -4,12 +4,14 @@ import {
   createContext,
   DependencyList,
   MutableRefObject,
+  useCallback,
   useContext,
   useEffect
 } from 'react'
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector'
 
 import { FilterApi } from '../modules/Filters'
+import { TablePreset, TablePresetColumns, TableView } from '../modules/Presets/types'
 import { ActiveSorting } from '../modules/SortingAndFilters'
 import { GetLeftItemsProps } from '../modules/ToolbarIntegration/types'
 import {
@@ -19,11 +21,30 @@ import {
   TableRowSelectionData
 } from '../types'
 
+export type PresetStoreValue<T extends TableRecord = TableRecord> = {
+  availablePresets?: TablePreset<T>[],
+  columnsState?: TablePresetColumns,
+  currentPreset?: TablePreset<T>, // set currentPresetId to change currentPreset
+  prevCurrentPresetRef?: MutableRefObject<TablePreset<T> | undefined>,
+  currentPresetId?: string,
+  currentView?: TableView<T>, // set currentViewId to change currentView
+  currentViewId?: string,
+  isCreatePresetOpen?: boolean,
+  isPresetDirty?: boolean,
+  onPresetUpdated?: (preset: TablePreset<T>) => void,
+  presetToDelete?: TablePreset<T>,
+  presetToRename?: TablePreset<T>,
+  saveCurrentPreset?: () => void,
+  setGroupBy?: (value: string) => void,
+  views?: TableView<T>[]
+}
+
 export type TableContextProviderProps <T extends TableRecord = TableRecord>= {
   filterApi?: FilterApi<T> | null,
   groupBy: string,
   groupsMap?: Map<string, string[]>,
   pagination: {
+    setPageSize?: SetState<number>,
     setTotal?: SetState<number | undefined>,
     shouldCountClientTotal: boolean,
   },
@@ -35,6 +56,9 @@ export type TableContextProviderProps <T extends TableRecord = TableRecord>= {
   toolbarContext: GetLeftItemsProps<T>,
   showFilterSidebar?: boolean,
   showColumnsSelector?: boolean,
+  currentPageRows: T[],
+  presets: PresetStoreValue<T>,
+  isServerFiltering: boolean
 } & Pick<ITableProps<T>, 'useV3TestId' | 'filterVersion' | 'enableNestedFilters' | 'dateFormat'>
 
 export type UpdateTableContext<T extends TableRecord = TableRecord> =
@@ -53,10 +77,13 @@ export const getDefaultContextData = <T extends TableRecord = TableRecord>(): Ta
   pagination: {
     shouldCountClientTotal: false
   },
+  presets: {},
   useDataSourceFunction: false,
   showFilterSidebar: false,
   showColumnsSelector: false,
-  toolbarContext: {}
+  currentPageRows: [],
+  toolbarContext: {},
+  isServerFiltering: false
 })
 
 export type TableStore<T extends TableRecord = TableRecord> = {
@@ -146,4 +173,16 @@ export const useRefMethod = <T extends keyof TableRef>(name: T, method?: TableRe
   useEffect(() => (
     addMethodToRef(name, method)
   ), [name, addMethodToRef, ...(deps || [])])
+}
+
+export type UpdatePresetsTableContext<T extends TableRecord = TableRecord> =
+  (updates: Partial<PresetStoreValue<T>>) => void
+
+export const usePresetsUpdate = <T extends TableRecord = TableRecord>(): UpdatePresetsTableContext<T> => {
+  const { getSnapshot, update } = useTableStore<T>()
+
+  return useCallback(
+    patch => update({ presets: { ...getSnapshot().presets, ...patch } }),
+    [getSnapshot, update]
+  )
 }

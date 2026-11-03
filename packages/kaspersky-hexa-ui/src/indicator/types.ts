@@ -30,7 +30,6 @@ export type IndicatorProps = {
   /** Show border */
   border?: boolean
   /** Change border color if border={true} */
-  /** @deprecated No effect */
   borderBackground?: string
   className?: string
 } & IndicatorThemeProps & TestingProps

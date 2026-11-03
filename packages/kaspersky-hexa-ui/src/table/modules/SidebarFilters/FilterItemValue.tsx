@@ -74,6 +74,7 @@ export function FilterItemValue <T extends TableRecord = TableRecord> ({
         <NumberItem
           filter={filter}
           min={column?.filterType?.type === FilterType.Number ? column?.filterType?.min : undefined}
+          units={column?.filterType?.type === FilterType.Number ? column?.filterType?.units : undefined}
           validationStatus={validationStatus}
           {...rest}
         />

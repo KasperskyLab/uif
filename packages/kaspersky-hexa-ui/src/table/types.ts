@@ -28,11 +28,13 @@ import {
   UnitedFilter
 } from './modules/Filters'
 import { GroupTitleItem } from './modules/Groups/types'
+import { TablePresetsProp } from './modules/Presets/types'
 import {
   ActiveSorting,
   IFiltersSavingSettings
 } from './modules/SortingAndFilters'
 import { GetLeftItemsProps, ToolbarProps } from './modules/ToolbarIntegration'
+import { TableVirtualization } from './modules/Virtualization'
 
 export type TableThemeProps = {
   theme?: ThemeKey
@@ -145,6 +147,20 @@ export type BooleanFilterType = {
   offStateName?: string
 } & SharedFilterType<FilterType.Boolean>
 
+export type TableFilterUnitsOption = {
+  /** Value of the unit */
+  value: string,
+  /** Text shown in the unit control and in the filter chip */
+  label?: string
+}
+
+export type TableFilterUnits = {
+  /** Control used to pick the units */
+  control: 'select' | 'segmented-button',
+  /** Available units to choose from */
+  options: TableFilterUnitsOption[]
+}
+
 type TableFilterType =
   {
     type: FilterType.DateTime,
@@ -157,7 +173,9 @@ type TableFilterType =
   {
     type: FilterType.Number,
     /** The min value */
-    min?: number
+    min?: number,
+    /** Units of measure for the filter value. Works only with isServerFiltering: true */
+    units?: TableFilterUnits
   } & SharedFilterType<FilterType.Number> |
   { type: FilterType.DateRange } & SharedFilterType<FilterType.DateRange> |
   { type: FilterType.DaysBefore } & SharedFilterType<FilterType.DaysBefore> |
@@ -230,6 +248,12 @@ export type TableColumn<T extends TableRecord = TableRecord> = Omit<
    * Example: `groupBy = 'status'` and `row = { a: 1, status: { value: 1, text: 'active' }, c: 2 }`
    */
   resolveGroupingValue?: (row: T, groupBy: string) => string,
+  /**
+   * Path to get inner property witch chosen for grouping
+   * Example: `groupBy = 'status'` and `row = { a: 1, status: { value: 1, text: 'active' }, c: 2 }`
+   * for correct DND support should be provided path as string 'status.value'
+  */
+  groupingPropertyPath?: string,
   /** Custom group title renderer */
   renderGroupTitle?: (text: string, row: T) => ReactNode,
   /** Group title icon renderer */
@@ -397,7 +421,7 @@ export type ITableProps<T extends TableRecord = TableRecord> = Omit<
   clientSearchFields?: string[],
   groupTitleRender?: (data: string) => ReactNode,
   resizingMode?: TableResizingMode,
-  /** @deprecated render :after as last column to compensate width in case table-width < screen-width */
+  /** render :after as last column to compensate width in case table-width < screen-width */
   afterColumn?: boolean,
   /** Enable table resizingMode transtion from 'scroll' to 'last' on containerWidth > tableWidth */
   overflowTransition?: boolean,
@@ -421,6 +445,8 @@ export type ITableProps<T extends TableRecord = TableRecord> = Omit<
   isInited?: boolean,
   /** Config object for spinner while loading */
   loaderProps?: SpinProps,
+  /** Show a default skeleton during the first dataSourceFunction request, including debounce */
+  skeleton?: boolean,
   useV3TestId?: boolean,
   useDragDrop?: boolean,
   onDragStart?: (rows: T[]) => void,
@@ -441,8 +467,27 @@ export type ITableProps<T extends TableRecord = TableRecord> = Omit<
   fullHeight?: boolean,
   /** Date format for filters */
   dateFormat?: string,
-  /** Key for localStorage to store different settings - column width, sorting, filters, etc... */
+  /** Key for localStorage to store different settings - column width, sorting, filters, etc...
+   * Ignored (treated as undefined) when `presets` is set: presets fully own the settings. */
   storageKey?: string,
+  /** Configures the presets feature. When set, `storageKey` is ignored so localStorage */
+  presets?: TablePresetsProp<T>,
+
+  /**
+   * Render only the rows and columns that are in view.
+   *
+   * `true` turns both axes on with the defaults; an object tunes them.
+   *
+   * Row windowing requires that the table own row selection: with `rowSelection` set and
+   * `builtInRowSelection` not on, the rows are left alone and only the columns are windowed.
+   * antd derives selection from the rows it was handed, so a windowed table would quietly narrow
+   * what "selected" and "select all" mean; the built-in selection keeps its own list against the
+   * whole data and is unaffected. A table with no selection at all windows its rows either way.
+   *
+   * Column windowing needs every visible column to have a numeric width, which
+   * `resizingMode: 'scroll'` provides, and is held back while `stickyHeader` is set.
+   */
+  virtualization?: boolean | TableVirtualization,
 
   // Filters
   /** Filters to set by default. Prop is applied only once, further changes won't change the filters. If you want to

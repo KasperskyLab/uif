@@ -32,12 +32,12 @@ describe('Calendar', () => {
 
     // DatePicer
     fireEvent.click(input)
-    expect(onChangeHandler).toBeCalledTimes(0)
+    expect(onChangeHandler).toHaveBeenCalledTimes(0)
     fireEvent.click(baseDom.queryAllByText('4')[0])
-    expect(onChangeHandler).toBeCalledTimes(1)
+    expect(onChangeHandler).toHaveBeenCalledTimes(1)
     fireEvent.click(input)
     fireEvent.click(baseDom.queryAllByText('1')[0])
-    expect(onChangeHandler).toBeCalledTimes(2)
+    expect(onChangeHandler).toHaveBeenCalledTimes(2)
   })
 
   // ToDo: remove skip. In storubook works fine but test not work
@@ -47,19 +47,19 @@ describe('Calendar', () => {
     const inputWithTime = baseDom.getByPlaceholderText('onChangeWithTime')
 
     fireEvent.click(inputWithTime)
-    expect(onChangeHandler).toBeCalledTimes(0)
+    expect(onChangeHandler).toHaveBeenCalledTimes(0)
     fireEvent.click(baseDom.queryAllByText('4')[0])
-    expect(onChangeHandler).toBeCalledTimes(1)
+    expect(onChangeHandler).toHaveBeenCalledTimes(1)
     fireEvent.click(baseDom.queryAllByText('00')[0])
-    expect(onChangeHandler).toBeCalledTimes(2)
+    expect(onChangeHandler).toHaveBeenCalledTimes(2)
     fireEvent.click(baseDom.queryAllByText('00')[1])
-    expect(onChangeHandler).toBeCalledTimes(3)
+    expect(onChangeHandler).toHaveBeenCalledTimes(3)
     fireEvent.click(baseDom.queryAllByText('00')[2])
-    expect(onChangeHandler).toBeCalledTimes(4)
+    expect(onChangeHandler).toHaveBeenCalledTimes(4)
     fireEvent.click(inputWithTime)
-    expect(onChangeHandler).toBeCalledTimes(4)
+    expect(onChangeHandler).toHaveBeenCalledTimes(4)
     fireEvent.click(baseDom.queryAllByText('1')[0])
-    expect(onChangeHandler).toBeCalledTimes(5)
+    expect(onChangeHandler).toHaveBeenCalledTimes(5)
   })
 
   it('should render placeholder', () => {
@@ -158,7 +158,7 @@ describe('Calendar', () => {
       expect(document.querySelector('.ant-picker-dropdown')).toBeInTheDocument()
     })
 
-    expect(console.warn).not.toBeCalled()
+    expect(console.warn).not.toHaveBeenCalled()
   })
 
   // Codium AI

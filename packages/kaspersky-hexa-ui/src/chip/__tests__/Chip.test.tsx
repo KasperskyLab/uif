@@ -65,6 +65,7 @@ describe('Chip', () => {
   test('should be disabled with disabled prop', () => {
     render(<DefaultChip disabled />)
     expect(getChip()).toHaveAttribute('disabled')
+    expect(getChip().querySelector('.ant-tag-close-icon')).toBeNull()
   })
 
   // Codium AI

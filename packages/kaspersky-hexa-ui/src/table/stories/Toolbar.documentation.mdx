@@ -1,0 +1,642 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import {
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
+
+import { Table } from '@src/table'
+import { Toolbar } from '@src/toolbar'
+import { Toggle } from '@src/toggle'
+
+import { Reload, Table as TableIcon } from '@kaspersky/hexa-ui-icons/16'
+
+import * as ToolbarStories from './Toolbar.stories'
+
+<Meta of={ToolbarStories} name="Toolbar Docs" />
+
+<DocPageLayout>
+
+  <DocPageHeader title="Toolbar" />
+
+  <Tabs defaultActiveKey="description" destroyInactiveTabPane>
+
+    <Tabs.TabPane tab="Описание" key="description">
+
+      <DocExampleBlock
+        description="Тулбар объединяет действия над таблицей и управление её видом. Тулбар нужен, когда в таблице есть действия со строками, поиск, фильтры, пресеты или настройки таблицы."
+        setupCode={`
+          const columns = [
+            { title: 'Имя', dataIndex: 'name' },
+            { title: 'Возраст', dataIndex: 'age' },
+          ]
+          const dataSource = [
+            { key: '1', name: 'Анна', age: 30 },
+            { key: '2', name: 'Борис', age: 25 },
+            { key: '3', name: 'Вера', age: 41 },
+          ]
+        `}
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            pagination={false}
+            rowSelection={{ builtInRowSelection: true }}
+            toolbar={{
+              showSearch: true,
+              autoDropdown: true,
+              showFilterSidebar: true,
+              importExportButton: {
+                dropdown: true,
+                onImport: () => alert('Импорт'),
+                onExport: () => alert('Экспорт'),
+              },
+              onRefresh: () => alert('Обновление'),
+              left: [
+                { type: 'button', key: 'add', label: 'Добавить', iconBefore: <PlusM /> },
+                { type: 'button', key: 'edit', label: 'Изменить', iconBefore: <Edit /> },
+                {
+                  type: 'button',
+                  key: 'delete',
+                  label: 'Удалить',
+                  disabled: true,
+                  iconBefore: <Delete />,
+                },
+              ],
+            }}
+          />
+        `}
+        scope={{ Table }}
+      />
+
+      <DocExampleBlock
+        title="Структура и расположение"
+        description="
+          Тулбар занимает всю ширину страницы. Он расположен под быстрыми фильтрами и над таблицей. Высота тулбара фиксированная. При скролле тулбар может прижиматься к верхней части экрана и фиксироваться там.
+
+          Тулбар делится на левую и правую части.
+
+          Левая часть содержит действия над данными таблицы и показывает их кнопками. Если действий нет, левая часть пустая.
+
+          Правая часть содержит поиск и блок кнопок. Правая часть всегда прижата к правому краю, в том числе когда слева пусто."
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Toolbar
+            autoDropdown={true}
+            leftLimit={6}
+            left={[
+              { type: 'button', key: 'add', label: 'Добавить', iconBefore: <PlusM /> },
+              { type: 'button', key: 'edit', label: 'Изменить', iconBefore: <Edit /> },
+              {
+                type: 'button',
+                key: 'delete',
+                label: 'Удалить',
+                iconBefore: <Delete />,
+              },
+              {
+                type: 'button',
+                key: 'copy',
+                label: 'Копировать',
+                iconBefore: <Copy />,
+              },
+              {
+                type: 'button',
+                key: 'move',
+                label: 'Переместить',
+                iconBefore: <Move />,
+              },
+              {
+                type: 'button',
+                key: 'export',
+                label: 'Экспорт',
+                iconBefore: <Export />,
+              },
+            ]}
+            right={[
+              {
+                type: 'children',
+                key: 'search',
+                children: <Toolbar.Search placeholder="Поиск" />,
+              },
+              { type: 'children', key: 'filters', children: <Toolbar.FilterSidebar /> },
+              {
+                type: 'children',
+                key: 'import-export',
+                children: (
+                  <Toolbar.ImportExportItem
+                    dropdown
+                    onImport={() => alert('Импорт')}
+                    onExport={() => alert('Экспорт')}
+                  />
+                ),
+              },
+              {
+                type: 'children',
+                key: 'refresh',
+                children: <Toolbar.Button iconBefore={<Reload />} />,
+              },
+              {
+                type: 'children',
+                key: 'presets',
+                children: <Toolbar.Button iconBefore={<TableIcon />} />,
+              },
+              { type: 'children', key: 'settings', children: <Toolbar.SettingsItem /> },
+            ]}
+          />
+          <Toolbar
+            right={[
+              {
+                type: 'children',
+                key: 'search',
+                children: <Toolbar.Search placeholder="Поиск" />,
+              },
+              { type: 'children', key: 'filters', children: <Toolbar.FilterSidebar /> },
+              { type: 'children', key: 'settings', children: <Toolbar.SettingsItem /> },
+            ]}
+          />
+        `}
+        scope={{ Toolbar, Reload, TableIcon }}
+      />
+
+      <DocExampleBlock
+        title="Левая часть тулбара"
+        description="
+          В левой части можно размещать четыре вида элементов:
+
+          * обычная кнопка — выполняет действие по нажатию;
+          * кнопка с выпадающим списком — открывает меню;
+          * кнопка-переключатель — включает или выключает действие;
+          * разделитель — отделяет группы кнопок.
+
+          У каждой кнопки действия есть подпись. Иконка необязательна. У кнопки с выпадающим списком справа стоит шеврон.
+
+          Порядок и группировку кнопок задают отдельно для каждой таблицы."
+        setupCode={`
+          const columns = [
+            { title: 'Имя', dataIndex: 'name' },
+            { title: 'Возраст', dataIndex: 'age' },
+          ]
+          const dataSource = [
+            { key: '1', name: 'Анна', age: 30 },
+            { key: '2', name: 'Борис', age: 25 },
+          ]
+        `}
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            pagination={false}
+            toolbar={{
+              left: [
+                { type: 'button', key: 'add', label: 'Добавить', iconBefore: <PlusM /> },
+                {
+                  type: 'dropdown',
+                  key: 'actions',
+                  label: 'Действия',
+                  iconBefore: <MorePoints />,
+                  overlay: [
+                    { children: 'Изменить', onClick: () => alert('Изменить') },
+                    { children: 'Удалить', onClick: () => alert('Удалить') },
+                  ],
+                },
+                {
+                  type: 'toggleButton',
+                  key: 'toggle',
+                  value: 'toggle',
+                  text: 'Переключатель',
+                  iconBefore: <Flag />,
+                  onChange: (value, selected) => console.log(value, selected),
+                },
+                { type: 'divider', key: 'divider' },
+              ],
+            }}
+          />
+        `}
+        scope={{ Table }}
+      />
+
+      <DocExampleBlock
+        description="В левой части может стоять один переключатель быстрых фильтров. Он идёт первым, отображается тогглом и отделён от кнопок разделителем."
+        setupCode={`
+          const columns = [
+            { title: 'Имя', dataIndex: 'name' },
+            { title: 'Возраст', dataIndex: 'age' },
+          ]
+          const dataSource = [
+            { key: '1', name: 'Анна', age: 30 },
+            { key: '2', name: 'Борис', age: 25 },
+          ]
+        `}
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            pagination={false}
+            toolbar={{
+              left: [
+                {
+                  type: 'children',
+                  key: 'quick-filter',
+                  children: (
+                    <span style={{ padding: '0 8px' }}>
+                      <Toggle defaultChecked>Быстрые фильтры</Toggle>
+                    </span>
+                  ),
+                },
+                { type: 'divider', key: 'divider' },
+                { type: 'button', key: 'add', label: 'Добавить', iconBefore: <PlusM /> },
+              ],
+            }}
+          />
+        `}
+        scope={{ Table, Toggle }}
+      />
+
+      <DocExampleBlock
+        title="Доступность кнопок"
+        titleSize="H4"
+        description="
+          Кнопка, которая не зависит от выбранных строк, всегда доступна. Например, кнопка добавления нового элемента.
+
+          Кнопка, которая зависит от выбранных строк, доступна, если действие можно выполнить для этих строк. Если нельзя, кнопка недоступна.
+
+          Если таблица открыта только для чтения, выбор строк недоступен и действия со строками недоступны. Кнопки этих действий тоже недоступны.
+
+          При выборе других строк набор кнопок не меняется. Меняется только то, какие из них недоступны."
+        setupCode={`
+          const columns = [
+            { title: 'Имя', dataIndex: 'name' },
+            { title: 'Возраст', dataIndex: 'age' },
+          ]
+          const dataSource = [
+            { key: '1', name: 'Анна', age: 30 },
+            { key: '2', name: 'Борис', age: 25 },
+            { key: '3', name: 'Вера', age: 41 },
+          ]
+        `}
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            pagination={false}
+            rowSelection={{ builtInRowSelection: true }}
+            toolbar={{
+              getLeftItems: ({ selectedRowKeys }) => [
+                { type: 'button', key: 'add', label: 'Добавить', iconBefore: <PlusM /> },
+                { type: 'divider', key: 'divider' },
+                {
+                  type: 'button',
+                  key: 'edit',
+                  label: 'Изменить',
+                  disabled: !selectedRowKeys?.length,
+                  iconBefore: <Edit />,
+                },
+                {
+                  type: 'button',
+                  key: 'delete',
+                  label: 'Удалить',
+                  disabled: !selectedRowKeys?.length,
+                  iconBefore: <Delete />,
+                },
+              ],
+            }}
+          />
+        `}
+        scope={{ Table }}
+      />
+
+      <DocExampleBlock
+        title="Переполнение левой части"
+        titleSize="H4"
+        description="Если кнопки слева не помещаются, они уходят в меню «Ещё». Кнопка «Ещё» появляется только в таком случае. Правая часть при этом не сужается."
+        setupCode={`
+          const columns = [
+            { title: 'Имя', dataIndex: 'name' },
+            { title: 'Возраст', dataIndex: 'age' },
+          ]
+          const dataSource = [
+            { key: '1', name: 'Анна', age: 30 },
+            { key: '2', name: 'Борис', age: 25 },
+          ]
+        `}
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            pagination={false}
+            toolbar={{
+              autoDropdown: true,
+              left: [
+                {
+                  type: 'button',
+                  key: 'one',
+                  label: 'Создать отчёт по заражениям',
+                  iconBefore: <Star />,
+                },
+                {
+                  type: 'button',
+                  key: 'two',
+                  label: 'Экспортировать результаты',
+                  iconBefore: <BookmarkOutline />,
+                },
+                {
+                  type: 'button',
+                  key: 'three',
+                  label: 'Автоматизации',
+                  iconBefore: <Flag />,
+                },
+                {
+                  type: 'button',
+                  key: 'four',
+                  label: 'Показать историю изменений',
+                  iconBefore: <Clock />,
+                },
+                {
+                  type: 'button',
+                  key: 'five',
+                  label: 'Скопировать ссылку на выбранное',
+                  iconBefore: <Copy />,
+                },
+                {
+                  type: 'button',
+                  key: 'six',
+                  label: 'Сравнить с предыдущей версией',
+                  iconBefore: <Edit />,
+                },
+                {
+                  type: 'button',
+                  key: 'seven',
+                  label: 'Отправить на проверку',
+                  iconBefore: <Delete />,
+                },
+                {
+                  type: 'button',
+                  key: 'eight',
+                  label: 'Добавить в избранное',
+                  iconBefore: <PlusM />,
+                },
+                {
+                  type: 'button',
+                  key: 'nine',
+                  label: 'Просмотреть параметры подключения',
+                  iconBefore: <Reload />,
+                },
+                {
+                  type: 'button',
+                  key: 'ten',
+                  label: 'Запустить проверку безопасности',
+                  iconBefore: <TableIcon />,
+                },
+              ],
+            }}
+          />
+        `}
+        scope={{ Table, TableIcon }}
+      />
+
+      <DocExampleBlock
+        title="Правая часть тулбара"
+        description="
+          Элементы справа всегда идут в одном порядке:
+
+          1. Поиск.
+          2. Кнопка фильтров.
+          3. Кнопка «Импорт и экспорт».
+          4. Кнопка обновления.
+          5. Кнопка «Пресеты».
+          6. Кнопка настроек таблицы.
+
+          Какие из этих элементов показать, задают для каждой таблицы.
+
+          У кнопок справа только иконка, без подписи."
+        setupCode={`
+          const columns = [
+            { title: 'Имя', dataIndex: 'name' },
+            { title: 'Возраст', dataIndex: 'age' },
+          ]
+          const dataSource = [
+            { key: '1', name: 'Анна', age: 30 },
+            { key: '2', name: 'Борис', age: 25 },
+            { key: '3', name: 'Вера', age: 41 },
+          ]
+          const presets = {
+            presets: [{ id: '1', name: 'Мой пресет', settings: {} }],
+            onCreatePreset: async (draft) => ({
+              id: 'new',
+              name: draft.name,
+              settings: {},
+            }),
+            onDeletePreset: async () => {},
+            onUpdatePreset: async (preset) => preset,
+            onPresetSelected: async () => {},
+            onViewSelected: async () => {},
+          }
+        `}
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            pagination={false}
+            presets={presets}
+            toolbar={{
+              showSearch: true,
+              showFilterSidebar: true,
+              importExportButton: {
+                dropdown: true,
+                onImport: () => alert('Импорт'),
+                onExport: () => alert('Экспорт'),
+              },
+              onRefresh: () => alert('Обновление'),
+              showColumns: true,
+            }}
+          />
+        `}
+        scope={{ Table }}
+      />
+
+      <DocExampleBlock
+        title="Поиск"
+        titleSize="H4"
+        description="
+          Поле поиска может быть открыто сразу или свёрнуто в кнопку. Вид задают заранее для каждой таблицы. Тулбар сам его не переключает. Если слева хватает места для кнопок, поле лучше оставить открытым.
+
+          Ширина открытого поля всегда 300px."
+        setupCode={`
+          const columns = [
+            { title: 'Имя', dataIndex: 'name' },
+            { title: 'Возраст', dataIndex: 'age' },
+          ]
+          const dataSource = [
+            { key: '1', name: 'Анна', age: 30 },
+            { key: '2', name: 'Борис', age: 25 },
+          ]
+        `}
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            pagination={false}
+            toolbar={{ showSearch: true, searchPlaceholder: 'Поиск' }}
+          />
+        `}
+        scope={{ Table }}
+      />
+
+      <DocExampleBlock
+        description="
+          В свёрнутом виде видна только кнопка поиска. По нажатию открывается поле, и курсор сразу встаёт в него. Из-за изменения ширины поля часть кнопок слева может уйти в меню «Ещё».
+
+          Поиск начинается после нажатия Enter. Если запрос не пустой и поиск уже выполнен, в правом верхнем углу кнопки поиска появляется индикатор. Индикатор виден, только когда поле свёрнуто.
+
+          При сворачивании введённый текст не стирается. Если Enter ещё не нажат, новый поиск не запускается: остаётся прежний результат и его индикатор. При следующем открытии текст остается на месте.
+
+          Кнопка очистки стоит внутри открытого поля. Она стирает текст, отменяет поиск и убирает индикатор. Поле при этом остаётся открытым. Если свернуть пустое поле, поиск отменяется и индикатор пропадает."
+        setupCode={`
+          const columns = [
+            { title: 'Имя', dataIndex: 'name' },
+            { title: 'Возраст', dataIndex: 'age' },
+          ]
+          const dataSource = [
+            { key: '1', name: 'Анна', age: 30 },
+            { key: '2', name: 'Борис', age: 25 },
+          ]
+        `}
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            pagination={false}
+            toolbar={{ showSearch: true, collapsibleSearch: true }}
+          />
+        `}
+        scope={{ Table }}
+      />
+
+      <DocExampleBlock
+        title="Кнопка «Фильтры»"
+        titleSize="H4"
+        description="Кнопка фильтров обозначает место, где открывается сайдбар с условиями отбора строк."
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Toolbar
+            right={[
+              { type: 'children', key: 'filters', children: <Toolbar.FilterSidebar /> },
+            ]}
+          />
+        `}
+        scope={{ Toolbar }}
+      />
+
+      <DocExampleBlock
+        title="Кнопка «Импорт и экспорт»"
+        titleSize="H4"
+        description="Кнопка сама данные не загружает и не выгружает. Для каждой таблицы задают, что откроется по нажатию: окно, боковая панель или меню. В меню два пункта: импорт и экспорт. Названия пунктов и иконки можно изменить."
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Toolbar
+            right={[
+              {
+                type: 'children',
+                key: 'import-export',
+                children: (
+                  <Toolbar.ImportExportItem
+                    dropdown
+                    onImport={() => alert('Импорт')}
+                    onExport={() => alert('Экспорт')}
+                    buttonImportText="Импорт"
+                    buttonExportText="Экспорт"
+                  />
+                ),
+              },
+            ]}
+          />
+        `}
+        scope={{ Toolbar }}
+      />
+
+      <DocExampleBlock
+        title="Кнопка «Обновление»"
+        titleSize="H4"
+        description="Кнопка перезагружает таблицу. Номер открытой страницы таблицы при этом не меняется."
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Toolbar
+            right={[
+              {
+                type: 'children',
+                key: 'refresh',
+                children: (
+                  <Toolbar.Button
+                    iconBefore={<Reload />}
+                    onClick={() => alert('Таблица обновлена')}
+                  />
+                ),
+              },
+            ]}
+          />
+        `}
+        scope={{ Toolbar, Reload }}
+      />
+
+      <DocExampleBlock
+        title="Кнопка «Пресеты»"
+        titleSize="H4"
+        description="Кнопка открывает список пресетов."
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Toolbar
+            right={[
+              {
+                type: 'children',
+                key: 'presets',
+                children: <Toolbar.Button iconBefore={<TableIcon />} />,
+              },
+            ]}
+          />
+        `}
+        scope={{ Toolbar, TableIcon }}
+      />
+
+      <DocExampleBlock
+        title="Кнопка «Настройки»"
+        titleSize="H4"
+        description="Кнопка открывает сайдбар с настройками таблицы."
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Toolbar
+            right={[
+              { type: 'children', key: 'settings', children: <Toolbar.SettingsItem /> },
+            ]}
+          />
+        `}
+        scope={{ Toolbar }}
+      />
+
+    </Tabs.TabPane>
+
+  </Tabs>
+
+</DocPageLayout>

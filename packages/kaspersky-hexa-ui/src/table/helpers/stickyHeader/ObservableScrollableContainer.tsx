@@ -93,6 +93,11 @@ export const ObservableScrollableContainer = forwardRef(
       const colGroup = containerRef.current?.querySelector('table colgroup')
       if (!colGroup) return
 
+      if (useDragDrop) {
+        const dndColElement = colGroup.childNodes[plusSelection] as HTMLElement | undefined
+        dndColElement?.setAttribute('class', 'hexa-ui-dnd-cell')
+      }
+
       columnsRef.current?.forEach((column, index) => {
         const { minWidth } = column
         const colGroupIndex = index + plusSelection + plusDNDcol
@@ -130,7 +135,7 @@ export const ObservableScrollableContainer = forwardRef(
           columnWidth: newWidth.width,
           columns: prev,
           columnMinWidth: newWidth.minWidth
-        }))
+        }, false))
       }
 
       const resizeObserver = new ResizeObserver((entries) => {

@@ -87,7 +87,7 @@ const preview: Preview = {
       // @ts-expect-error Storybook does not provide contextual typing for inline storySort params here.
       storySort: (left, right) => {
         const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' })
-        const topLevelOrder = ['Intro', 'Changelog', 'Design', 'Docs', 'Hexa UI Components', 'Other', 'Deprecated']
+        const topLevelOrder = ['Introduction', 'Intro', 'Changelog', 'Design', 'Docs', 'Hexa UI Components', 'Other', 'Deprecated']
         const nameOrder = ['Docs', 'Playground']
 
         // Storybook evals storySort as raw JS — nested helpers must stay untyped in source.
@@ -119,6 +119,13 @@ const preview: Preview = {
             if (aSeg === 'Витрина компонентов') return -1
             if (bSeg === 'Витрина компонентов') return 1
 
+            if (i === 1 && aSegs[0] === 'Introduction' && bSegs[0] === 'Introduction') {
+              const pages = ['Welcome', 'Для дизайнеров', 'Для разработчиков', 'Changelog']
+              const aIndex = pages.indexOf(aSeg)
+              const bIndex = pages.indexOf(bSeg)
+              const diff = (aIndex < 0 ? pages.length : aIndex) - (bIndex < 0 ? pages.length : bIndex)
+              if (diff !== 0) return diff
+            }
             return collator.compare(aSeg, bSeg)
           }
 

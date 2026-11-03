@@ -68,7 +68,7 @@ export const WithValidation: Story = {
     )
   },
   parameters: {
-    design: ''
+    design: '
   }
 }
 

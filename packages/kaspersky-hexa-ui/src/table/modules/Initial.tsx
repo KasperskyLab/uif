@@ -65,14 +65,15 @@ export const Initial = <T extends TableRecord = TableRecord> (
   useEffect(() => {
     updateContext({
       pagination: {
+        setPageSize: additional?.setPageSize,
         setTotal: additional?.setTotal,
         shouldCountClientTotal: shouldCountClientTotal(paginationProps, !!dataSourceFunction)
       },
       useDataSourceFunction: !!dataSourceFunction
     })
-  }, [dataSourceFunction])
+  }, [dataSourceFunction, updateContext])
 
-  const dataSource = useDataSource<T>({
+  const { dataSource, isInitialLoading } = useDataSource<T>({
     additional,
     dataSourceClient,
     dataSourceFunction,
@@ -108,6 +109,7 @@ export const Initial = <T extends TableRecord = TableRecord> (
       loading={loading}
       columns={columns}
       isInited={isInited}
+      skeleton={props.skeleton && isInitialLoading}
       dataSource={dataSource}
       pagination={pagination}
       rowSelection={rowSelection}

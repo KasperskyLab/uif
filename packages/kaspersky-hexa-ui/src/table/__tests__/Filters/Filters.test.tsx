@@ -13,7 +13,7 @@ import {
 import userEvent from '@testing-library/user-event'
 import React, { MutableRefObject } from 'react'
 
-import { generatedData, tableColumns, TableMockProps } from '../../__mocks__/filtersMockData'
+import { fileSizeColumn, generatedData, tableColumns, TableMockProps } from '../../__mocks__/filtersMockData'
 import { FilterApi } from '../../modules/Filters/FilterApi'
 import {
   CustomFilterOperations,
@@ -567,5 +567,230 @@ describe.each(MODES)('Table sidebar filters - $description', ({ mode }) => {
       const dsf = dataSourceFunction as jest.Mock
       await waitFor(() => expect((dsf.mock.lastCall?.[0]?.params.filters ?? []).length).toBe(0))
     }
+  })
+})
+
+describe('Table filters: units of measure', () => {
+  const unitsOptions = [
+    { value: 'r', label: '₽' },
+    { value: 'd', label: '$' },
+    { value: 'e', label: '€' }
+  ]
+
+  const columnWithUnits = (control: 'select' | 'segmented-button'): TableMockProps['columns'] =>
+    modifyColumns(tableColumns, 'salary', {
+      filterType: { type: FilterType.Number, min: 0, units: { control, options: unitsOptions } }
+    })
+
+  const unitsDefaultFilter: NumberFilter = {
+    name: 'salary',
+    type: FilterType.Number,
+    condition: FilterOperation.gt,
+    value: 100,
+    unit: 'r'
+  }
+
+  it('should enable unit select for server-side filtering and show the unit in the chip', async () => {
+    const table = await renderTable({
+      isServerFiltering: true,
+      columns: columnWithUnits('select'),
+      defaultSidebarFilters: [unitsDefaultFilter]
+    })
+
+    await table.filters.openSidebar()
+
+    const unitSelect = table.filters.getItemPart(0, 'filter-item-unit-select')
+    expect(unitSelect).toBeInTheDocument()
+    expect(unitSelect).not.toHaveClass('ant-select-disabled')
+
+    const chip = table.filters.getChip(unitsDefaultFilter)
+    expect(chip).toBeInTheDocument()
+    expect(chip!.textContent).toContain('₽')
+  })
+
+  it('should render segmented unit control for a number column', async () => {
+    const table = await renderTable({
+      isServerFiltering: true,
+      columns: columnWithUnits('segmented-button'),
+      defaultSidebarFilters: [unitsDefaultFilter]
+    })
+
+    await table.filters.openSidebar()
+
+    const unitSegmented = table.filters.getItemPart(0, 'filter-item-unit-segmented')
+    expect(unitSegmented).toBeInTheDocument()
+
+    const chip = table.filters.getChip(unitsDefaultFilter)
+    expect(chip).toBeInTheDocument()
+    expect(chip!.textContent).toContain('₽')
+  })
+
+  it('should send the filter unit to the server', async () => {
+    const { table, dataSourceFunction } = await renderByMode('server', generatedData, {
+      columns: columnWithUnits('select'),
+      useFiltersSidebar: true,
+      toolbar: { showFilterSidebar: true },
+      defaultSidebarFilters: [unitsDefaultFilter],
+      pagination: { pageSize }
+    })
+    await table.rows.waitForData()
+
+    const dsf = dataSourceFunction as jest.Mock
+    await waitFor(() => {
+      const filters = (dsf.mock.lastCall?.[0]?.params.filters ?? []) as NumberFilter[]
+      expect(filters.some(filter => filter.type === FilterType.Number && filter.unit === 'r')).toBe(true)
+    })
+  })
+
+  it('should filter server-side by units', async () => {
+    const { table } = await renderByMode('server', generatedData, {
+      columns: [...tableColumns, fileSizeColumn('select')],
+      useFiltersSidebar: true,
+      toolbar: { showFilterSidebar: true },
+      defaultSidebarFilters: [
+        {
+          name: 'fileSize',
+          type: FilterType.Number,
+          condition: FilterOperation.gt,
+          value: 1,
+          unit: 'gb'
+        }
+      ],
+      pagination: { pageSize: 100 }
+    })
+    await table.rows.waitForData()
+
+    const expectedCount = generatedData.filter(row => (row.fileSize ?? 0) > 1000).length
+    table.pagination.expectTotal(expectedCount, 100)
+  })
+})
+
+describe.each([
+  { control: 'select', unitTestId: 'filter-item-unit-select' },
+  { control: 'segmented-button', unitTestId: 'filter-item-unit-segmented' }
+] as const)('Table filters: units of measure interactions ($control)', ({ control, unitTestId }) => {
+  const UNITS = [
+    { value: 'r', label: '₽' },
+    { value: 'd', label: '$' },
+    { value: 'e', label: '€' }
+  ]
+
+  const salaryFilter = (unit: 'r' | 'd' | 'e' = 'r'): NumberFilter => ({
+    name: 'salary',
+    type: FilterType.Number,
+    condition: FilterOperation.gt,
+    value: 100,
+    unit
+  })
+
+  const columnsWithSalaryFirst = (): TableMockProps['columns'] => [
+    {
+      ...tableColumns.find(column => column.dataIndex === 'salary')!,
+      filterType: { type: FilterType.Number, min: 0, units: { control, options: UNITS } }
+    },
+    ...tableColumns.filter(column => column.dataIndex !== 'salary')
+  ]
+
+  const getUnitSelectedValue = (table: TableTestingClass, index: number): string => {
+    const unitControl = table.filters.getItemPart(index, unitTestId)
+    if (!unitControl) return ''
+
+    if (control === 'segmented-button') {
+      return unitControl.querySelector<HTMLInputElement>('input:checked')?.value ?? ''
+    }
+
+    const label = table.filters.getSelectedText(index, unitTestId) ?? ''
+    return UNITS.find(option => option.label === label)?.value ?? ''
+  }
+
+  const switchUnitTo = async (table: TableTestingClass, index: number, unit: 'r' | 'd' | 'e'): Promise<void> => {
+    const unitControl = table.filters.getItemPart(index, unitTestId)!
+
+    if (control === 'segmented-button') {
+      userEvent.click(unitControl.querySelector(`input[value="${unit}"]`)!)
+      return
+    }
+
+    userEvent.click(table.filters.getSelectedItem(index, unitTestId)!)
+    const dropdown = await screen.findByTestId(`${unitTestId}-select-dropdown`)
+    const label = UNITS.find(option => option.value === unit)!.label
+    const option = [...dropdown.querySelectorAll('.ant-select-item-option')]
+      .find(option => option.textContent?.trim() === label)
+    userEvent.click(option!)
+  }
+
+  it('should set the first unit option as default when adding a new number filter', async () => {
+    const onSidebarFiltersChange = jest.fn()
+    const table = await renderTable({
+      isServerFiltering: true,
+      columns: columnsWithSalaryFirst(),
+      onSidebarFiltersChange
+    })
+
+    await table.filters.openSidebar()
+    expect(table.filters.getCount()).toBe(0)
+
+    await table.filters.add()
+    await waitFor(() => expect(getUnitSelectedValue(table, 0)).toBe('r'))
+
+    table.filters.setValue(0, '100')
+    await table.filters.apply()
+
+    expect(onSidebarFiltersChange).toHaveBeenLastCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'salary', type: FilterType.Number, unit: 'r' })
+      ])
+    )
+  })
+
+  it('should switch the unit of a newly added number filter', async () => {
+    const onSidebarFiltersChange = jest.fn()
+    const table = await renderTable({
+      isServerFiltering: true,
+      columns: columnsWithSalaryFirst(),
+      onSidebarFiltersChange
+    })
+
+    await table.filters.openSidebar()
+    await table.filters.add()
+    await waitFor(() => expect(getUnitSelectedValue(table, 0)).toBe('r'))
+
+    await switchUnitTo(table, 0, 'd')
+
+    expect(getUnitSelectedValue(table, 0)).toBe('d')
+
+    table.filters.setValue(0, '100')
+    await table.filters.apply()
+
+    expect(onSidebarFiltersChange).toHaveBeenLastCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'salary', type: FilterType.Number, unit: 'd' })
+      ])
+    )
+  })
+
+  it('should switch the unit of an existing number filter', async () => {
+    const onSidebarFiltersChange = jest.fn()
+    const table = await renderTable({
+      isServerFiltering: true,
+      columns: columnsWithSalaryFirst(),
+      defaultSidebarFilters: [salaryFilter('r')],
+      onSidebarFiltersChange
+    })
+
+    await table.filters.openSidebar()
+    expect(getUnitSelectedValue(table, 0)).toBe('r')
+
+    await switchUnitTo(table, 0, 'd')
+    expect(getUnitSelectedValue(table, 0)).toBe('d')
+
+    table.filters.setValue(0, '100')
+    await table.filters.apply()
+
+    expect(onSidebarFiltersChange).toHaveBeenLastCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'salary', type: FilterType.Number, unit: 'd' })
+      ])
+    )
   })
 })

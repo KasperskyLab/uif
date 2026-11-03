@@ -4,52 +4,7 @@ import { Meta } from '@storybook/addon-docs/blocks'
 
 # Шаблон документации компонентов
 
-### Документация компонента должна состоять из следующих пунктов:
-
-1. Список `Defenition of Done`, добавленный с помощью hoс `WithMeta`:
-
-- `designTokens` - использованы ли дизайн-токены,
-
-- `useThemedHook` - использован ли хук для темизации,
-
-- `unitTests` - написаны ли юнит-тесты,
-
-- `screenshotTests` - написаны ли скриншот-тесты,
-
-- `migration` - описана ли миграция с другой библиотеки компонентов,
-
-- `apiTable` - добавлена ли таблица с описанием интерфейса компонента,
-
-- `storybook` - есть ли `stories` с основными видами использования компонента,
-
-- `pixsoView` - добавлена ли документация из pixso
-
-2. Название компонента, назначение с техническими особенностями, ссылка на дизайн и ссылка на `Pixso View`.
-В описание следует указать, был ли взят за основу компонент из **antd** или был использован нативный элемент.
-
-#### Пример
-
-```
-{
-  "dod": {
-    "designTokens": true,
-    "useThemedHook": true,
-    "unitTests": true,
-    "screenshotTests": false,
-    "migration": true,
-    "apiTable": true,
-    "storybook": true,
-    "pixsoView": true
-  },
-  "component": "Button",
-  "description": "Компонент для отрисовки кнопок. В качестве основы используется AntdButton из библиотеки Antd.",
-  "usage": "Элемент, при нажатии на который происходит какое-то действие",
-  "designLink": "https://example-link",
-  "pixsoView": "https://example-link"
-}
-```
-
-Также необходимо добавить `badge`-ы:
+В документацию компонента необходимо добавить `badge`-ы:
 
 1. `stable`: The component is used in real projects, no major known issues
 

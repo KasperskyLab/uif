@@ -80,7 +80,7 @@ $textarea-statuses: (
   }
   &:focus-within {
     border-color: var(--border--neutral--bold);
-    outline: var(--focus--stroke) solid 2px;
+    outline: var(--border--color--focus) solid 2px;
   }
 
   &.disabled, &.readOnly {
@@ -115,11 +115,11 @@ $textarea-statuses: (
     }
     
     &:hover {
-      outline: var(--focus--stroke) solid 1px;
+      outline: var(--border--color--focus) solid 1px;
     }
     
     &:focus, &:focus-visible {
-      outline: var(--focus--stroke) solid 2px;
+      outline: var(--border--color--focus) solid 2px;
     }
   }
 

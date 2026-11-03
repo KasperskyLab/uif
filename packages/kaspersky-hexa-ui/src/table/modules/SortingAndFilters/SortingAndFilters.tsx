@@ -1,4 +1,6 @@
+import { SetState } from '@helpers/hooks/useStateProps'
 import React, {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -58,12 +60,17 @@ export const SortingAndFilters = <T extends TableRecord = TableRecord> (
     setSortingWithExternal(activeSorting || initialSorting)
   }, [props.initialSorting, activeSorting])
 
+  const setSortingFromContext = useCallback<SetState<ActiveSorting<T>>>(sorting => {
+    setSortingWithExternal(sorting)
+    setActiveSorting(sorting)
+  }, [])
+
   useEffect(() => {
     updateContext({
       sorting: sortingWithExternal,
-      setSorting: setSortingWithExternal
+      setSorting: setSortingFromContext
     })
-  }, [sortingWithExternal])
+  }, [sortingWithExternal, setSortingFromContext])
 
   useEffect(() => {
     if (!props.initialSorting && !externalSorting && storageKey) {

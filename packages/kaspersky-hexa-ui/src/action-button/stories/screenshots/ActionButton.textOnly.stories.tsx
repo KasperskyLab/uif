@@ -1,14 +1,24 @@
-import { StatesMatrix, StatesMatrixItem } from '@sb/components/StatesMatrix'
-import { Meta, StoryObj } from '@storybook/react'
+import { StatesMatrix } from '@sb/components/StatesMatrix'
+import { Meta } from '@storybook/react'
 import React from 'react'
 
 import { ActionButton } from '../../ActionButton'
-import { ActionButtonMode, ActionButtonSize } from '../../types'
+
+import {
+  SizeRow,
+  sizeRows,
+  StateRow,
+  stateRows,
+  Story,
+  VariantColumn,
+  variantColumns,
+  wrapperStyles
+} from './common'
 
 const meta = {
   title: 'Screenshot Tests/ActionButton',
   component: ActionButton,
-  tags: ['!autodocs'],
+  tags: ['!autodocs', '!manifest'],
   parameters: {
     controls: { include: [] },
     layout: 'fullscreen'
@@ -17,52 +27,17 @@ const meta = {
 
 export default meta
 
-type Story = StoryObj<typeof ActionButton>
-
-type StateRow = StatesMatrixItem & {
-  disabled?: boolean
-}
-
-type VariantColumn = StatesMatrixItem & {
-  mode: ActionButtonMode
-}
-
-type SizeRow = StatesMatrixItem & {
-  key: ActionButtonSize
-}
-
-// Строки readonly и loading нет: у ActionButton нет этих пропов в API.
-// Отдельного правила :focus нет — ring задаёт :focus-visible.
-const stateRows: StateRow[] = [
-  { key: 'default', label: 'Default' },
-  { key: 'hover', label: 'Hover' },
-  { key: 'active', label: 'Active' },
-  { key: 'focus-visible', label: 'Focus visible' },
-  { key: 'disabled', label: 'Disabled', disabled: true }
-]
-
-const variantColumns: VariantColumn[] = [
-  { key: 'ghost', label: 'Ghost', mode: 'ghost' },
-  { key: 'ghostInverted', label: 'Ghost Inverted', mode: 'ghostInverted' },
-  { key: 'filled', label: 'Filled', mode: 'filled' },
-  { key: 'filledInverted', label: 'Filled Inverted', mode: 'filledInverted' },
-  { key: 'onLight', label: 'On Light', mode: 'onLight' }
-]
-
-const sizeRows: SizeRow[] = (['small', 'medium', 'large'] as ActionButtonSize[]).map(size => ({
-  key: size,
-  label: size
-}))
-
 const renderStateCell = (row: StateRow, column: VariantColumn, size: SizeRow) => (
-  <ActionButton
-    disabled={row.disabled}
-    mode={column.mode}
-    noIcon
-    size={size.key}
-  >
-    Text value
-  </ActionButton>
+  <div style={{ ...wrapperStyles, background: column.background }}>
+    <ActionButton
+      disabled={row.disabled}
+      mode={column.mode}
+      noIcon
+      size={size.key}
+    >
+      Text value
+    </ActionButton>
+  </div>
 )
 
 export const TextOnly: Story = {

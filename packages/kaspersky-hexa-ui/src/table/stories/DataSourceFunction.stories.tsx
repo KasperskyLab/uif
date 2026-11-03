@@ -54,12 +54,26 @@ const meta: Meta<TableMockProps> = {
   },
   decorators: [
     (Story, context) => <Wrapper><Story {...context} /></Wrapper>
-  ],
-  tags: ['!autodocs']
+  ]
 }
 export default meta
 
 export const DataSourceFunction: TableMockStory = {}
+
+const MOCK_RESPONSE_DELAY_MS = 1500
+
+const delayedDataSourceFunction = createMockDataSourceFunction(
+  generatedData,
+  tableColumns,
+  MOCK_RESPONSE_DELAY_MS
+)
+
+export const InitialSkeleton: TableMockStory = {
+  args: {
+    skeleton: true,
+    dataSourceFunction: delayedDataSourceFunction
+  }
+}
 
 export const TriggerDataSourceFunction: TableMockStory = {
   render: (args) => {

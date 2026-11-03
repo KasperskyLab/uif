@@ -28,7 +28,7 @@ export const CustomScrollContainer = styled.div<CustomScrollContainerProps>`
     overflow: hidden;
     overflow-x: auto;
     bottom: ${props => props.stickyScrollbarOffset || '0'}px;
-    z-index: 3;
+    z-index: 4;
     border-top: 3px solid transparent;
     border-bottom: 4px solid transparent;
     outline: transparent solid 1px;

@@ -7,7 +7,6 @@ import {
 } from '@src/chip/types'
 
 import { ComponentThemeContext } from '../config'
-import { SPACES } from '../variables'
 
 export const chip = ({ colors, effects }: ComponentThemeContext): ChipColorConfig => ({
   enabled: {
@@ -29,11 +28,11 @@ export const chip = ({ colors, effects }: ComponentThemeContext): ChipColorConfi
 
 export const chipSize: Record<ChipSize, ChipSizeConfig> = {
   [Size.Medium]: {
-    height: `${SPACES[12]}px`,
-    padding: `${SPACES[2]}px ${SPACES[4]}px`
+    height: '24px',
+    padding: '4px 8px'
   },
   [Size.Large]: {
-    height: `${SPACES[16]}px`,
-    padding: `${SPACES[2]}px ${SPACES[6]}px`
+    height: '32px',
+    padding: '4px 12px'
   }
 }

@@ -10,7 +10,7 @@ import { FileItem, FileItemProps } from '../UploadList/FileItem'
 const meta: Meta<FileItemProps> = {
   title: 'Hexa UI Components/Uploader/Stories',
   component: FileItem,
-  tags: ['!autodocs'],
+  tags: ['!autodocs', '!manifest'],
   ...withDesignControls<FileItemProps>({
     componentName: 'uploaderFileItem',
     meta: {

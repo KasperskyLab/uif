@@ -55,8 +55,10 @@ $toggle-tokens: (
 }
 
 .toggle {
-  background-color: var(--bg--neutral--level_5);
-  box-shadow: none;
+  &:global(.ant-switch) {
+    background-color: var(--bg--neutral--level_5);
+    box-shadow: none;
+  }
 
   [dir="rtl"] & {
     transform: rotate(180deg);

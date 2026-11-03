@@ -14,108 +14,195 @@ import { Text } from '@src/typography'
 import { LoadingOverlay } from '../LoadingOverlay'
 import * as LoadingOverlayStories from './LoadingOverlay.stories'
 import { loadingOverlayInheritedFromLoaderDesignPropPresentation } from './LoadingOverlay.design.properties'
+import { Table } from '@src/table'
+import {
+  basicTwoColumns,
+  basicDataSource,
+} from '@src/table/stories/_commonConstants'
 
 <Meta of={LoadingOverlayStories} name="LoadingOverlay Docs" />
 
 <DocPageLayout>
 
-  <DocPageHeader title="LoadingOverlay" />
+  <DocPageHeader
+    title="LoadingOverlay"
+  />
 
   <Tabs defaultActiveKey="description">
-
     <Tabs.TabPane tab="Описание" key="description">
 
       <DocExampleBlock
-        description="
-          **LoadingOverlay** — полупрозрачный оверлей с индикатором загрузки поверх блокируемого контента
-
-          **LoadingOverlay** блокирует область контента на время загрузки и показывает индикатор по центру перекрытой области. Применяйте для страниц, сайдбаров, таблиц, карточек и виджетов, пока раздел или данные ещё не готовы."
-      />
-
-      <Text type="H4" style={{ marginTop: 24 }}>Как использовать?</Text>
-
-      <DocExampleBlock
-        description="Расположите компонент поверх контента и растяните по высоте и ширине контейнера."
-        code={`
-          <div
-            style={{
-              position: 'relative',
-              width: '40%',
-              height: 160,
-              border: '1px solid #eee',
-            }}
-          >
-            <LoadingOverlay />
-          </div>
-        `}
+        description="**LoadingOverlay** — компонент для временной блокировки области интерфейса во время загрузки. Отображенный контент перекрывается полупрозрачным фоном, а по центру области отображается **Loader**."
       />
 
       <DocExampleBlock
-        description="При необходимости добавьте поясняющий текст."
-        code={`
-          <div
-            style={{
-              position: 'relative',
-              width: '40%',
-              height: 160,
-              border: '1px solid #eee',
-            }}
-          >
-            <LoadingOverlay description="Поясняющий текст" />
-          </div>
-        `}
+        title="Когда использовать"
+        titleSize="H4"
+        description="**LoadingOverlay** используется, когда данные в области загружаются или обновляются, а взаимодействие с её содержимым должно быть временно недоступно.
+
+**LoadingOverlay** подходит для сценариев, в которых:
+
+- отображённый контент должен оставаться на экране во время загрузки;
+- взаимодействие с областью должно быть заблокировано до завершения операции."
       />
 
       <DocExampleBlock
-        description="Не используйте **Loader** отдельно от **LoadingOverlay**, если нужно показать статус загрузки поверх заблокированной области."
-        mode="dont"
-        minHeight={100}
-        code={`
-          <div
-            style={{
-              position: 'relative',
-              width: '40%',
-              height: 48,
-              border: '1px solid #eee',
-            }}
-          >
-            <Loader size="medium" />
-          </div>
-        `}
+        title="Когда не использовать"
+        titleSize="H4"
+        description="Если во время загрузки интерфейс должен оставаться доступным, используется **Loader** или встроенное состояние `loading` компонента.
+
+Если структура будущего содержимого известна, но сам контент ещё не отображён, используется [**Skeleton**](?path=/docs/hexa-ui-components-skeleton--skeleton-docs)."
       />
 
       <DocExampleBlock
-        title="Размер лоадера"
-        description="Для загрузки целых страниц и сайдбаров выбирайте pазмер `large`."
-        code={`
-          <div
-            style={{
-              position: 'relative',
-              width: '40%',
-              height: 200,
-              border: '1px solid #eee',
-            }}
-          >
-            <LoadingOverlay size="large" />
-          </div>
-        `}
+  title="Размещение и композиция"
+  titleSize="H4"
+  description="**LoadingOverlay** размещается поверх области родительского контейнера. Содержимое под оверлеем остается видимым, но взаимодействие с ним блокируется до завершения загрузки.
+
+Встроенный **Loader** отображается по центру перекрытой области."
+  previewGap={16}
+  codeBlock="hidden"
+  scope={{
+    Table,
+    LoadingOverlay,
+    basicTwoColumns,
+    basicDataSource,
+  }}
+  code={`
+<div
+  style={{
+    position: 'relative',
+    width: '100%',
+  }}
+>
+  <Table
+    borderedStyle
+    columns={basicTwoColumns}
+    dataSource={basicDataSource.slice(0, 8)}
+  />
+
+  <LoadingOverlay />
+</div>
+`}
+/>
+
+      <DocExampleBlock
+        title="Размер"
+        titleSize="H4"
+        description="Для **LoadingOverlay** предусмотрены размеры `medium` и `large`. Размер **LoadingOverlay** определяет размер встроенного **Loader**.
+
+Правила выбора размера описаны в документации [**Loader**](?path=/docs/hexa-ui-components-loader)."
       />
 
       <DocExampleBlock
-        title=""
-        description="Для загрузки таблиц, карточек и виджетов используйте `medium`."
+        title="Medium"
+        titleSize="H5"
+        description="При размере `medium` внутри **LoadingOverlay** отображается **Loader** размера `medium`."
+        previewGap={16}
+        codeBlock="hidden"
+        scope={{
+          LoadingOverlay,
+        }}
         code={`
-          <div
-            style={{
-              position: 'relative',
-              width: '40%',
-              height: 160,
-              border: '1px solid #eee',
-            }}
-          >
-            <LoadingOverlay size="medium" />
-          </div>
-        `}
+<div
+  style={{
+    position: 'relative',
+    width: '100%',
+    maxWidth: 560,
+    height: 160,
+    border: '1px solid #eee',
+  }}
+>
+  <LoadingOverlay size="medium" />
+</div>
+`}
+      />
+
+      <DocExampleBlock
+        title="Large"
+        titleSize="H5"
+        description="При размере `large` внутри **LoadingOverlay** отображается **Loader** размера `large`."
+        previewGap={16}
+        codeBlock="hidden"
+        scope={{
+          LoadingOverlay,
+        }}
+        code={`
+<div
+  style={{
+    position: 'relative',
+    width: '100%',
+    maxWidth: 560,
+    height: 200,
+    border: '1px solid #eee',
+  }}
+>
+  <LoadingOverlay size="large" />
+</div>
+`}
+      />
+
+      <DocExampleBlock
+        title="Использование с другими компонентами"
+        titleSize="H5"
+        description="**LoadingOverlay** размещается поверх области другого компонента, когда во время загрузки его содержимое должно оставаться видимым, но недоступным для взаимодействия.
+
+**Примеры использования**"
+        previewGap={24}
+        codeBlock="hidden"
+        code={`
+<div
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+    gap: 16,
+  }}
+>
+  <a
+    href="?path=/docs/hexa-ui-components-table--docs"
+    target="_blank"
+    rel="noreferrer"
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      padding: 20,
+      border: '1px solid #D9DDE7',
+      borderRadius: 8,
+      textDecoration: 'none',
+      color: 'inherit',
+    }}
+  >
+    <strong>Table</strong>
+
+    <span>
+      Блокировка содержимого таблицы во время загрузки или обновления данных.
+    </span>
+  </a>
+
+  <a
+    href="?path=/docs/hexa-ui-components-codecompare--codecompare-docs"
+    target="_blank"
+    rel="noreferrer"
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      padding: 20,
+      border: '1px solid #D9DDE7',
+      borderRadius: 8,
+      textDecoration: 'none',
+      color: 'inherit',
+    }}
+  >
+    <strong>CodeCompare</strong>
+
+    <span>
+      Блокировка области сравнения кода во время загрузки содержимого.
+    </span>
+  </a>
+</div>
+`}
       />
 
     </Tabs.TabPane>
@@ -123,52 +210,53 @@ import { loadingOverlayInheritedFromLoaderDesignPropPresentation } from './Loadi
     <Tabs.TabPane tab="Структура" key="composition">
 
       <DocExampleBlock
-        description="**LoadingOverlay** накладывается на область с `position: relative` и перекрывает её полупрозрачным фоном с центрированным [**Loader**](/?path=/docs/hexa-ui-components-loader). Пока оверлей активен, пользователь не взаимодействует с содержимым под ним. Настраиваются **size** и **description**."
+        description="**LoadingOverlay** накладывается на область с `position: relative` и перекрывает её полупрозрачным фоном. В центре области отображается [**Loader**](?path=/docs/hexa-ui-components-loader). Пока **LoadingOverlay** активен, взаимодействие с содержимым под ним недоступно.
+
+Поведение настраивается свойствами **size** и **description**."
       />
 
       <DocExampleBlock
         title="size"
-        description="Размер встроенного индикатора загрузки. Доступные значения: `medium`, `large`. По умолчанию — `medium`."
+        description="Свойство **size** задаёт размер встроенного индикатора загрузки. Доступные значения: `medium`, `large`. По умолчанию используется `medium`."
         code={`
-          <div
-            style={{
-              position: 'relative',
-              width: '40%',
-              height: 160,
-              border: '1px solid #eee',
-            }}
-          >
-            <LoadingOverlay size="medium" />
-          </div>
-          <div
-            style={{
-              position: 'relative',
-              width: '40%',
-              height: 160,
-              border: '1px solid #eee',
-            }}
-          >
-            <LoadingOverlay size="large" />
-          </div>
-        `}
+<div
+  style={{
+    position: 'relative',
+    width: '40%',
+    height: 160,
+    border: '1px solid #eee',
+  }}
+>
+  <LoadingOverlay size="medium" />
+</div>
+
+<div
+  style={{
+    position: 'relative',
+    width: '40%',
+    height: 160,
+    border: '1px solid #eee',
+  }}
+>
+  <LoadingOverlay size="large" />
+</div>
+`}
       />
 
       <DocExampleBlock
         title="description"
-        description="Текстовая подсказка под индикатором. Необязательная строка; передаётся во внутренний **Loader** как **tip**. Без **description** отображается только спиннер."
+        description="Свойство **description** задаёт текст под индикатором загрузки. Значение передаётся во встроенный **Loader** как **tip**. Без **description** отображается только индикатор."
         minHeight={120}
         code={`
-          <LoadingOverlay description="help text" />
-        `}
+<LoadingOverlay description="Preparing report..." />
+`}
       />
 
     </Tabs.TabPane>
 
     <Tabs.TabPane tab="Properties" key="properties">
-
       <Description of={LoadingOverlayStories} />
       <AutodocArgsTable components={LoadingOverlay} />
-
     </Tabs.TabPane>
 
     <Tabs.TabPane tab="Дизайн" key="design">
@@ -180,18 +268,23 @@ import { loadingOverlayInheritedFromLoaderDesignPropPresentation } from './Loadi
       />
 
       <Text color="secondary" type="BTR3" style={{ marginTop: 8 }}>
-      **LoadingOverlay** содержит вложенный компонент **Loader**. В панели Component properties доступны свойства Loader — они наследуются без изменения имён и значений.
+        **LoadingOverlay** содержит вложенный компонент **Loader**. В панели Component properties доступны свойства **Loader** — они наследуются без изменения имён и значений.
       </Text>
 
-      <Text type="H4" style={{ marginTop: 24 }}>Loader (наследуемые свойства)</Text>
-      <DocumentationArgsTable rows={buildPresentationOnlyRows(loadingOverlayInheritedFromLoaderDesignPropPresentation)} />
+      <Text type="H4" style={{ marginTop: 24 }}>
+        Loader (наследуемые свойства)
+      </Text>
+
+      <DocumentationArgsTable
+        rows={buildPresentationOnlyRows(
+          loadingOverlayInheritedFromLoaderDesignPropPresentation
+        )}
+      />
 
     </Tabs.TabPane>
 
     <Tabs.TabPane tab="Изменения" key="changelog">
-
       <ComponentChangelog component="LoadingOverlay" />
-
     </Tabs.TabPane>
 
   </Tabs>

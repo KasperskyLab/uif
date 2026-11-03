@@ -3,6 +3,7 @@ import { TableRowSelectionData } from '@src/table/types'
 import {
   ImportExportButtonProps,
   ImportExportDropdownProps,
+  ToolbarButtonProps,
   ToolbarItemKey,
   ToolbarItems,
   ToolbarProps as OriginToolbarProps
@@ -36,7 +37,11 @@ export type ToolbarCommonProps<T extends TableRecord = TableRecord> = Omit<Origi
   showSettingsSearch?: boolean,
   /** @deprecated use predefined props for right items toolbar */
   right?: (existingElements: ReactNode[]) => ReactNode[],
-  getLeftItems?: GetLeftItems<ToolbarItems, T>
+  getLeftItems?: GetLeftItems<ToolbarItems, T>,
+  /** EXPERIMENTAL. DO NOT USE. A placeholder for a custom button on the right side of the toolbar filter icon. */
+  TEMP_DONT_USE_customButton?: ToolbarButtonProps,
+  /** EXPERIMENTAL. DONT USE. Custom ReactNode rendered between the toolbar and the table */
+  TEMP_DONT_USE_customComponent?: ReactNode
 }
 
 export type TabConfigBase = boolean | {

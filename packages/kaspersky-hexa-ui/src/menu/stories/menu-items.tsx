@@ -595,6 +595,55 @@ export const navItems: Record<string, unknown>[] = [
         target: '_blank'
       }
     ]
+  },
+  {
+    state: 'with-child-icons',
+    weight: 1100,
+    icon: Placeholder,
+    key: 'With child icons',
+    klId: 'navigation.with-child-icons',
+    isRoot: true,
+    expanded: true,
+    items: [
+      {
+        state: 'child-icon-store',
+        key: 'Store',
+        icon: Store,
+        klId: 'navigation.with-child-icons.store',
+        expanded: true,
+        onClick: () => clickHandler('Menu item click'),
+        items: [
+          {
+            state: 'child-icon-store-downloads',
+            key: 'Downloads',
+            icon: Store,
+            klId: 'navigation.with-child-icons.store.downloads',
+            onClick: () => clickHandler('Menu item click')
+          },
+          {
+            state: 'child-icon-store-updates',
+            key: 'Updates',
+            icon: AppUpdate,
+            klId: 'navigation.with-child-icons.store.updates',
+            onClick: () => clickHandler('Menu item click')
+          }
+        ]
+      },
+      {
+        state: 'child-icon-shield',
+        key: 'Shield',
+        icon: Shield,
+        klId: 'navigation.with-child-icons.shield',
+        onClick: () => clickHandler('Menu item click')
+      },
+      {
+        state: 'child-icon-user-group',
+        key: 'User group',
+        icon: UserGroup,
+        klId: 'navigation.with-child-icons.userGroup',
+        onClick: () => clickHandler('Menu item click')
+      }
+    ]
   }
 ]
 

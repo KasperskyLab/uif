@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDir": ".",
     "sourceMap": true,
     "target": "ES2019",
     "module": "ESNext",
@@ -11,6 +12,8 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
     "outDir": "esm",
     "paths": {
       "@src/*": ["./src/*"],
@@ -30,7 +33,8 @@
     "./helpers/**/*",
     "./docs",
     "./.storybook/**/*",
-    "./setupTests.ts"
+    "./.changelog/scripts/*",
+    "./setup*.ts"
   ],
   "exclude": [
     "node_modules",

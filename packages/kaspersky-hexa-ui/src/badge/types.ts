@@ -1,7 +1,5 @@
 import { Size, Theme } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
-
-import { TextSizes } from '@kaspersky/hexa-ui-core/typography/js'
+import { TestingProps } from '@helpers/typesHelpers'
 
 export const badgeTransparentModes = [
   'neutral_transparent',
@@ -30,16 +28,9 @@ export type BadgeMediumMode = typeof badgeModes[number]
 
 export type BadgeMode = BadgeMediumMode | BadgeLargeMode
 
-export type BadgeColorConfig = {
-  background?: string,
-  color?: string
-}
-
 export const badgeSizes = [`${Size.Medium}`, `${Size.Large}`] as const
 
 export type BadgeSize = typeof badgeSizes[number]
-
-export type BadgeSizeConfig = TextSizes
 
 export type BadgeLargeConfig = {
   /** Size */
@@ -55,15 +46,10 @@ export type BadgeMediumConfig = {
   mode?: BadgeMediumMode
 }
 
-export type BadgeCssConfig = BadgeColorConfig & BadgeSizeConfig
-
-export type BadgeThemeProps = (BadgeLargeConfig | BadgeMediumConfig) & {
-  /** Custom theme */
-  theme?: Theme
-}
-
 export type BadgeProps = {
-  /** CSS Class name */
+  /** Custom theme */
+  theme?: Theme,
+  /** Custom class name */
   className?: string,
   /** Displayed number */
   count?: number,
@@ -75,8 +61,4 @@ export type BadgeProps = {
   title?: string,
   /** Whether to show badge when count is zero */
   showZero?: boolean
-} & BadgeThemeProps & TestingProps
-
-export type BadgeViewProps = ToViewProps<BadgeProps, BadgeCssConfig, BadgeThemeProps> & {
-  dot?: boolean
-}
+} & TestingProps & (BadgeLargeConfig | BadgeMediumConfig)

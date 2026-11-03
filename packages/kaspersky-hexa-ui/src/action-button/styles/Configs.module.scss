@@ -45,4 +45,97 @@ $sizes-config: (
       "size": 20px
     )
   )
-)
+);
+
+$modes-config: (
+  ghost: (
+    enabled: (
+      bg: transparent,
+      text: var(--fg--neutral--secondary)
+    ),
+    hover: (
+      bg: transparent,
+      text: var(--fg--neutral--secondary_hover)
+    ),
+    active: (
+      bg: transparent,
+      text: var(--fg--neutral--secondary_active)
+    ),
+    disabled: (
+      bg: transparent,
+      text: var(--fg--neutral--tertiary)
+    )
+  ),
+  ghostInverted: (
+    enabled: (
+      bg: transparent,
+      text: var(--fg--neutral_inverted--secondary_overlay)
+    ),
+    hover: (
+      bg: transparent,
+      text: var(--fg--neutral_inverted--secondary_overlay_hover)
+    ),
+    active: (
+      bg: transparent,
+      text: var(--fg--neutral_inverted--secondary_overlay_active)
+    ),
+    disabled: (
+      bg: transparent,
+      text: var(--fg--neutral--tertiary)
+    )
+  ),
+  filled: (
+    enabled: (
+      bg: var(--bg--neutral_transparent--level_1),
+      text: var(--fg--neutral--secondary)
+    ),
+    hover: (
+      bg: var(--bg--neutral_transparent--level_2),
+      text: var(--fg--neutral--secondary_hover)
+    ),
+    active: (
+      bg: var(--bg--neutral_transparent--level_3),
+      text: var(--fg--neutral--secondary_active)
+    ),
+    disabled: (
+      bg: var(--bg--neutral_transparent--disabled),
+      text: var(--fg--neutral--tertiary)
+    )
+  ),
+  filledInverted: (
+    enabled: (
+      bg: var(--bg--neutral_transparent--level_1),
+      text: var(--fg--neutral_inverted--secondary_overlay)
+    ),
+    hover: (
+      bg: var(--bg--neutral_transparent--level_2),
+      text: var(--fg--neutral_inverted--secondary_overlay_hover)
+    ),
+    active: (
+      bg: var(--bg--neutral_transparent--level_3),
+      text: var(--fg--neutral_inverted--secondary_overlay_active)
+    ),
+    disabled: (
+      bg: var(--bg--neutral_transparent--disabled),
+      text: var(--fg--neutral--tertiary)
+    )
+  ),
+  onLight: (
+    enabled: (
+      bg: transparent,
+      text: var(--fg--neutral--secondary_overlay_static)
+    ),
+    hover: (
+      bg: transparent,
+      text: var(--fg--neutral--secondary_overlay_static_hover)
+    ),
+    active: (
+      bg: transparent,
+      text: var(--fg--neutral--secondary_overlay_static_active)
+    ),
+    disabled: (
+      bg: transparent,
+      text: var(--fg--neutral--tertiary_overlay_static)
+    )
+  )
+);

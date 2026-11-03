@@ -1,4 +1,3 @@
-import { CardColorConfig, CardMode, CardSize, CardSizeConfig } from '@src/card/types'
 import { CodeViewerColorConfig } from '@src/code-viewer/types'
 import { PickerColorConfig } from '@src/datepicker/types'
 import { InputColorConfig } from '@src/input/types'
@@ -27,10 +26,6 @@ type ComponentConfig<Colors, Sizes = undefined> = {
 
 export type ComponentsConfig = {
   components: {
-    card: ComponentConfig<
-      Record<CardMode, CardColorConfig>,
-      Record<CardSize, CardSizeConfig>
-    >,
     codeViewer: { colors: CodeViewerColorConfig },
     input: ComponentConfig<InputColorConfig>,
     link: ComponentConfig<

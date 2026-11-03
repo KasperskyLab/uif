@@ -6,6 +6,7 @@ import {
   DocExampleBlock,
   DocPageHeader,
   DocPageLayout,
+  DocRulesBlock,
   DocumentationArgsTable,
   PropsTable,
   DocumentationTabs as Tabs,
@@ -28,34 +29,59 @@ import { chipDesignPropPresentation } from './Chip.design.properties'
       <DocExampleBlock
         title="Описание компонента"
         description="
-          **Чип (Chip)** — это специализированный интерактивный компонент, предназначенный исключительно для отображения и быстрого удаления выбранных параметров или данных. Он выполняет роль динамического элемента управления контентом: чип содержит текст и опциональную иконку удаления. 
-
-          В отличие от полностью статического информационного бейджа и универсального тега (который может отвечать за фильтрацию или переход по ссылкам), Chip используется в строго определенных сценариях. Его главное назначение — визуализация сущностей, которые пользователь может мгновенно отменить. Типичными примерами использования чипа являются сброс примененных фильтров или очистка списка выбранных категорий."
+          **Chip** показывает выбранное условие и даёт возможность его снять. Chip используется там, где значение уже выбрано и его можно убрать сразу: сбросить один фильтр или убрать категорию из списка."
+        codeBlock="hidden"
+        code={`
+          <Chip label="Status: active" />
+          <Chip label="Speed > 100 Mbps" />
+        `}
       />
 
-      <DocExampleBlock
-        title="Когда использовать"
-        description="Используйте Chip, чтобы показать применённые фильтры и дать пользователю возможность снять отдельное условие. Например, Chip подходит для фильтров таблицы: «Статус: активен» или «Ответственный: Иван Петров»."
-      />
-
-      <DocExampleBlock
-        title="Когда не использовать"
-        description="Не используйте Chip для статуса или счётчика, которые нельзя снять: для этого выберите **Badge**. Не заменяйте Chip элементом управления для выбора значения: сначала пользователь задаёт условие в поле фильтра или списке значений, затем Chip показывает выбранный результат."
+      <DocRulesBlock
+        title="Правила использования"
+        useTitle="Когда использовать"
+        doNotUseTitle="Когда не использовать"
+        use="Chip используется, чтобы показать применённые фильтры и дать снять отдельное условие. Например, в фильтрах таблицы: «Статус: активен» или «Ответственный: Иван Петров»."
+        doNotUse={["Chip не используется для статуса или счётчика, которые нельзя снять: для этого используется **Badge**", "Chip не используется для статусов или меток, для этого используется **Tag**"]}
       />
 
       <DocExampleBlock
         title="Контент"
-        description="Называйте Chip так, чтобы по метке было понятно выбранное условие. Для фильтра используйте пару «параметр: значение», например «Приоритет: высокий». Иконка и счётчик дополняют метку, но не должны заменять её смысл. Чип обязательно должен содержать текст и иконку удаления, чтобы пользователь понимал, что условие можно снять. Если Chip используется для фильтра, счётчик показывает количество выбранных значений."
+        description="В фильтрах таблиц лейбл Chip содержит выбранное условие. Используется пара «параметр: значение», например «Приоритет: высокий». В Chip всегда есть текст и иконка удаления: по ним видно, что условие можно снять. Счётчик показывает, сколько значений выбрано в фильтре, но обычно Chip применяется без счётчика."
+        codeBlock="hidden"
+        code={`
+          <Chip label="Priority: high" counter={7} />
+        `}
+      />
+
+      <DocExampleBlock
+        description="Длинный текст обрезается в многоточие."
+        codeBlock="hidden"
+        code={`
+          <Chip label="label with long text value" truncationWidth={150} />
+        `}
+      />
+
+      <DocExampleBlock
+        description="Chip имеет два размера —`medium` и `large`. Сейчас используется только `medium`."
+        codeBlock="hidden"
+        code={`
+          <Chip label="medium" size="medium" />
+          <Chip label="large" size="large" />
+        `}
       />
 
       <DocExampleBlock
         title="Использование в других компонентах"
-        description="Chip можно использовать самостоятельно. Обычно несколько чипов объединяются в группу. В **Table** он показывает применённые фильтры."
-      />
-
-      <DocExampleBlock
-        title="Связанные компоненты"
-        description="Используйте **Badge** для отображения количества, статуса или короткой информационной метки без действия удаления. Для снятия всех выбранных фильтров рядом с группой Chip используйте **Link** с понятной подписью, например «Очистить»."
+        description="В **Table** Chip показывает применённые фильтры. Чтобы снять все выбранные фильтры, рядом с группой Chip стоит компонент **Link** "
+        previewDirection="horizontal"
+        previewGap={8}
+        codeBlock="hidden"
+        code={`
+          <Chip label="Priority: high" counter={7} />
+          <Chip label="Speed > 100 Mbps" counter={15} />
+          <Link>Clear</Link>
+        `}
       />
 
     </Tabs.TabPane>
@@ -63,14 +89,8 @@ import { chipDesignPropPresentation } from './Chip.design.properties'
     <Tabs.TabPane tab="Структура" key="composition">
 
       <DocExampleBlock
-        description="
-          **Chip** предназначен для отображения выбранных фильтров, тегов или других компактных меток с возможностью закрытия. В основе лежит Ant Design Tag с темизацией Hexa UI. 
-          Компонент поддерживает размеры `medium` и `large`, метку **label**, иконку **icon**, счётчик, обрезку длинного текста через **truncationWidth**, состояние **disabled**."
-      />
-
-      <DocExampleBlock
         title="label"
-        description="Метка внутри Chip. Принимает строку или ReactNode, поэтому может содержать основной и вторичный текст."
+        description="Метка внутри Chip. Принимает строку или ReactNode и может содержать основной и вторичный текст."
         code={`
           <Chip label="Label" />
           <Chip
@@ -88,7 +108,7 @@ import { chipDesignPropPresentation } from './Chip.design.properties'
 
       <DocExampleBlock
         title="size"
-        description="Размер chip. Доступные значения: `medium`, `large`. По умолчанию — `medium`."
+        description="Размер Chip. Доступные значения: `medium` и `large`. По умолчанию — `medium`."
         code={`
           <Chip label="medium" size="medium" />
           <Chip label="large" size="large" />
@@ -97,16 +117,15 @@ import { chipDesignPropPresentation } from './Chip.design.properties'
 
       <DocExampleBlock
         title="icon"
-        description="Иконка перед меткой. Передаётся как ReactElement из @kaspersky/hexa-ui-icons/16"
+        description="Иконка перед меткой. Передаётся как ReactElement из `@kaspersky/hexa-ui-icons/16`."
         code={`
           <Chip label="Label" icon={<Plus />} />
-          <Chip label="With icon" icon={<Settings />} counter={5} />
         `}
       />
 
       <DocExampleBlock
         title="counter"
-        description="Числовой счётчик справа от метки. Отображается через **Badge**."
+        description="Числовой счётчик справа от метки. Показывается через **Badge**."
         code={`
           <Chip label="Label" counter={5} />
           <Chip label="Label" counter={9999} />
@@ -115,9 +134,7 @@ import { chipDesignPropPresentation } from './Chip.design.properties'
 
       <DocExampleBlock
         title="disabled"
-        description="
-          Отключённый chip не реагирует на закрытие: клик по кнопке закрытия блокируется.
-          Доступные значения: `true`, `false`. По умолчанию — `false`."
+        description="Отключённый Chip не показывает иконку удаления, поэтому условие снять нельзя. Доступные значения: `true` и `false`. По умолчанию — `false`."
         code={`
           <Chip label="Label" disabled />
         `}
@@ -125,9 +142,7 @@ import { chipDesignPropPresentation } from './Chip.design.properties'
 
       <DocExampleBlock
         title="truncationWidth"
-        description="
-          Максимальная ширина метки в пикселях. 
-          При превышении текст обрезается с многоточием через TextReducer."
+        description="Максимальная ширина метки в пикселях. Если текст длиннее, он обрезается многоточием через TextReducer."
         code={`
           <Chip label="Short label" />
           <Chip label="label with long text value" truncationWidth={150} />
@@ -136,7 +151,7 @@ import { chipDesignPropPresentation } from './Chip.design.properties'
 
       <DocExampleBlock
         title="onClose"
-        description="Callback при закрытии chip. Компонент всегда closable; после закрытия получает класс ant-tag-hidden."
+        description="Вызывается, когда пользователь закрывает Chip и тем самым снимает условие. У отключённого Chip иконки удаления нет. После закрытия компонент получает класс `ant-tag-hidden`."
         code={`
           <Chip label="Label" onClose={() => alert('closed')} />
         `}

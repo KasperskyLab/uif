@@ -1,13 +1,18 @@
-/* eslint-disable max-lines */
 import { Text } from '@src/typography'
 import { StoryObj } from '@storybook/react'
 import React from 'react'
 
 import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 
-import { FilterType, ITableProps, TableColumn, TableRecord } from '..'
-import { FilterApi, TableCustomFilterFunction } from '../modules/Filters'
-import { isGroup } from '../modules/Filters/helpers'
+import {
+  FilterType,
+  ITableProps,
+  TableColumn,
+  TableFilterUnitsOption,
+  TableRecord
+} from '..'
+import { FilterApi, SidebarFilter, TableCustomFilterFunction } from '../modules/Filters'
+import { isFilterConfig, isGroup } from '../modules/Filters/helpers'
 import { TableDataSourceFunction } from '../types'
 
 export const groups = [
@@ -40,6 +45,45 @@ export const cities = [
   'Volgograd'
 ] as const
 
+const FILE_SIZE_UNIT_FACTORS: Record<string, number> = {
+  b: 1e-6,
+  kb: 1e-3,
+  mb: 1,
+  gb: 1e3,
+  tb: 1e6
+}
+
+const SIZE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB']
+
+const formatFileSize = (valueInMb: number): string => {
+  let value = valueInMb * 1e6
+  let unitIndex = 0
+  while (value >= 1000 && unitIndex < SIZE_UNITS.length - 1) {
+    value /= 1000
+    unitIndex += 1
+  }
+  return `${Math.round(value)} ${SIZE_UNITS[unitIndex]}`
+}
+
+const FILE_SIZE_UNIT_FACTORS_LIST = [
+  { value: 'b', factor: 1e-6 },
+  { value: 'kb', factor: 1e-3 },
+  { value: 'mb', factor: 1 },
+  { value: 'gb', factor: 1e3 },
+  { value: 'tb', factor: 1e6 }
+]
+
+const getFileSizeMb = (uniqueId: string): number => {
+  let hash = 0
+  for (let i = 0; i < uniqueId.length; i += 1) {
+    hash = (hash * 31 + uniqueId.charCodeAt(i)) | 0
+  }
+  const absHash = Math.abs(hash)
+  const { factor } = FILE_SIZE_UNIT_FACTORS_LIST[absHash % FILE_SIZE_UNIT_FACTORS_LIST.length]
+  const amount = 1 + (absHash >> 8) % 999
+  return Number((amount * factor).toFixed(6))
+}
+
 const createColumn = (dataIndex: string): TableColumn<MockRow> => ({
   title: `table.columns.${dataIndex}`,
   key: dataIndex,
@@ -47,9 +91,57 @@ const createColumn = (dataIndex: string): TableColumn<MockRow> => ({
   show: true
 })
 
+export const fileSizeUnitsOptionsSelect: TableFilterUnitsOption[] = [
+  { value: 'b', label: 'B' },
+  { value: 'kb', label: 'KB' },
+  { value: 'mb', label: 'MB' },
+  { value: 'gb', label: 'GB' },
+  { value: 'tb', label: 'TB' }
+]
+
+export const fileSizeUnitsOptionsSegmented: TableFilterUnitsOption[] = [
+  { value: 'kb', label: 'KB' },
+  { value: 'mb', label: 'MB' },
+  { value: 'gb', label: 'GB' }
+]
+
+export const fileSizeColumn = (control: 'select' | 'segmented-button' = 'segmented-button'): TableColumn<MockRow> => ({
+  ...createColumn('fileSize'),
+  title: 'Storage space',
+  filterType: {
+    type: FilterType.Number,
+    min: 0,
+    units: { control, options: control === 'select' ? fileSizeUnitsOptionsSelect : fileSizeUnitsOptionsSegmented }
+  },
+  render: function FileSizeCell (value) {
+    return value == null ? undefined : formatFileSize(Number(value))
+  },
+  width: 100
+})
+
+const normalizeFilterUnits = <T extends TableRecord = TableRecord> (
+  filters: SidebarFilter<T>[],
+  columns: TableColumn<T>[]
+): SidebarFilter<T>[] => filters.map(filter => {
+  if (!isFilterConfig(filter) || filter.type !== FilterType.Number) return filter
+  if (filter.unit == null || filter.value == null) return filter
+
+  const unitColumn = columns.find(column => column.key === filter.name)
+  const units = unitColumn?.filterType?.type === FilterType.Number ? unitColumn?.filterType?.units : undefined
+
+  if (!units) return filter
+
+  const unitFactor = FILE_SIZE_UNIT_FACTORS[filter.unit]
+  const canonicalFactor = FILE_SIZE_UNIT_FACTORS['mb']
+
+  if (unitFactor == null) return filter
+  return { ...filter, value: (filter.value as number) * unitFactor / canonicalFactor }
+})
+
 export const createMockDataSourceFunction = <T extends TableRecord = TableRecord> (
   dataSource: T[],
-  columns: TableColumn<T>[]
+  columns: TableColumn<T>[],
+  delayMs = 0
 ): TableDataSourceFunction<T> => {
   return async ({
     page,
@@ -57,6 +149,10 @@ export const createMockDataSourceFunction = <T extends TableRecord = TableRecord
     params,
     sorting
   }) => {
+    if (delayMs > 0) {
+      await new Promise(resolve => setTimeout(resolve, delayMs))
+    }
+
     let processedData = [...dataSource]
 
     if (params?.searchString) {
@@ -65,7 +161,7 @@ export const createMockDataSourceFunction = <T extends TableRecord = TableRecord
 
     if (params?.filters && params.filters.length > 0) {
       // use your filter system instead of FilterApi
-      const filterApi = new FilterApi<T>({ defaultFilters: params.filters, columns })
+      const filterApi = new FilterApi<T>({ defaultFilters: normalizeFilterUnits(params.filters, columns), columns })
       processedData = filterApi.filterRows(processedData)
     }
 
@@ -276,6 +372,7 @@ export type MockRow = TableRecord & {
   group: typeof groups[number] | string,
   fullname: string,
   salary: number,
+  fileSize?: number,
   isTrainee: boolean,
   dateHired: string,
   datetime: string | number | Date,
@@ -1691,4 +1788,4 @@ export const generatedData: MockRow[] = [
       city: 'Chelyabinsk'
     }
   }
-].map(row => ({ ...row, key: row._uniqueId, dateHired: row.dateHired.split('T')[0] })) as MockRow[]
+].map(row => ({ ...row, key: row._uniqueId, fileSize: getFileSizeMb(row._uniqueId), dateHired: row.dateHired.split('T')[0] })) as MockRow[]

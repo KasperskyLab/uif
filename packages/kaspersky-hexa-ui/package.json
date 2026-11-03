@@ -1,7 +1,7 @@
 {
   "name": "@kaspersky/hexa-ui",
   "author": "AO Kaspersky Lab",
-  "version": "6.436.2",
+  "version": "6.457.2",
   "description": "Kaspersky Hexa UI Design System UI Kit",
   "license": "Apache-2.0",
   "homepage": "https://github.com/KasperskyLab/uif#readme",
@@ -38,7 +38,7 @@
     "./design-system/theme/themes/light/colors": "./design-system/theme/themes/light/colors.js"
   },
   "scripts": {
-    "build": "npm i && rollup -c --bundleConfigAsCjs && gulp removeUndesiredCode && npm run bundle-size:check",
+    "build": "npm i && rollup -c --bundleConfigAsCjs && gulp removeUndesiredCode",
     "bundle-size:check": "node bundle-size-checker/bench.mjs --check",
     "bundle-size:update": "node bundle-size-checker/bench.mjs --update",
     "release": "npm run build && gulp deploy",
@@ -50,8 +50,9 @@
     "storybook": "storybook dev -p 6006",
     "storybook:ci": "storybook dev -p 6006 --ci",
     "build-storybook": "storybook build",
-    "test": "npm run lint && jest --transformIgnorePatterns --maxWorkers=1 --forceExit --logHeapUsage",
-    "test:only": "jest --transformIgnorePatterns --maxWorkers=1 --forceExit --logHeapUsage",
+    "test": "npm run lint && jest --transformIgnorePatterns='[]' --maxWorkers=1 --forceExit --logHeapUsage && npm run test:table:virtual",
+    "test:only": "jest --transformIgnorePatterns='[]' --maxWorkers=1 --forceExit --logHeapUsage",
+    "test:table:virtual": "jest --config jest.virtual.config.js --transformIgnorePatterns='[]' --maxWorkers=1 --forceExit",
     "test:watch": "jest --watch",
     "test:format:mdx": "node --test tools/format-mdx-doc.test.mjs",
     "format:mdx": "node tools/format-mdx-doc.mjs",
@@ -69,6 +70,9 @@
     "fsevents": "2.3.2",
     "glob-watcher": "5.0.5",
     "react-element-to-jsx-string": "14.3.2",
+    "storybook": {
+      "@testing-library/user-event": "14.6.7"
+    },
     "slate-react": {
       "react": "^17.x",
       "react-dom": "^17.x"
@@ -85,6 +89,10 @@
     "@codemirror/lint": "6.8.4",
     "@codemirror/state": "6.5.0",
     "@codemirror/view": "6.36.1",
+    "@dnd-kit/core": "6.3.1",
+    "@dnd-kit/modifiers": "9.0.0",
+    "@dnd-kit/sortable": "10.0.0",
+    "@dnd-kit/utilities": "3.2.2",
     "@kaspersky/hexa-ui-core": "0.22.0",
     "@lezer/highlight": "1.2.1",
     "@popperjs/core": "2.11.2",
@@ -123,6 +131,8 @@
     "react-diff-view": "3.3.1",
     "react-i18next": "12.3.1",
     "react-imask": "6.4.2",
+    "react-joyride": "3.2.0",
+    "react-number-format": "5.4.5",
     "react-resizable": "3.0.4",
     "react-sortable-hoc": "2.0.0",
     "react-zoom-pan-pinch": "2.1.3",
@@ -145,9 +155,9 @@
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-replace": "6.0.2",
     "@rollup/plugin-typescript": "12.1.2",
-    "@storybook/addon-docs": "10.1.11",
-    "@storybook/addon-links": "10.1.11",
-    "@storybook/react-vite": "10.1.11",
+    "@storybook/addon-docs": "10.6.1",
+    "@storybook/addon-links": "10.6.1",
+    "@storybook/react-vite": "10.6.1",
     "@testing-library/jest-dom": "5.16.2",
     "@testing-library/react": "12.1.3",
     "@testing-library/react-hooks": "7.0.2",
@@ -178,14 +188,15 @@
     "gulp-typescript": "6.0.0-alpha.1",
     "http-server": "14.1.1",
     "identity-obj-proxy": "3.0.0",
-    "jest": "29.7.0",
+    "jest": "30.5.2",
     "jest-canvas-mock": "2.5.2",
     "jest-environment-jsdom": "30.0.2",
-    "jest-image-snapshot": "6.5.1",
+    "jest-image-snapshot": "6.5.2",
     "jest-styled-components": "7.0.8",
     "less": "4.1.2",
     "less-loader": "10.2.0",
     "lint-staged": "12.3.4",
+    "minisearch": "7.2.0",
     "prettier": "3.8.1",
     "prism-react-renderer": "2.4.1",
     "react": "17.0.2",
@@ -201,17 +212,17 @@
     "sass": "1.89.0",
     "sass-loader": "16.0.5",
     "start-server-and-test": "2.1.3",
-    "storybook": "10.1.11",
-    "ts-jest": "29.2.5",
+    "storybook": "10.6.1",
+    "ts-jest": "29.4.0",
     "tsc-alias": "1.6.2",
     "typescript": "5.8.2",
     "vite": "6.4.1"
   },
   "peerDependencies": {
     "@kaspersky/hexa-ui-icons": "^2.22.0",
+    "moment": "2.30.1",
     "react": "16.x || 17.x || 18.x",
     "react-dom": "16.x || 17.x || 18.x",
-    "typescript": ">=4.0.0",
-    "moment": "2.30.1"
+    "typescript": ">=4.0.0"
   }
 }

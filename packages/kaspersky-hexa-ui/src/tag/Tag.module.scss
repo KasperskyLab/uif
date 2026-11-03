@@ -406,7 +406,7 @@ $size-tokens: (
   opacity: 0;
 }
 
-.tagWithReduction {
+:global(.ant-tag).tagWithReduction {
   display: flex;
   margin: 0;
   white-space: nowrap;

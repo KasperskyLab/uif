@@ -1,8 +1,15 @@
+import { getChildTestAttr } from '@helpers/hooks/useTestAttribute'
 import { act, configure, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 
 import { FilterConfig, Table, TableRef } from '..'
-import { generatedData, MockRow, tableColumns, TableMockProps } from '../__mocks__/filtersMockData'
+import {
+  createMockDataSourceFunction,
+  generatedData,
+  MockRow,
+  tableColumns,
+  TableMockProps
+} from '../__mocks__/filtersMockData'
 import { FilterOperation, FilterType } from '../modules/Filters'
 import { renderServer, spyDataSource } from '../test-utils/renderServer'
 import { TableTestingClass, TestTable } from '../test-utils/TableTestingClass'
@@ -16,6 +23,8 @@ jest.setTimeout(15000)
 
 const TABLE_TEST_ID = 'test-table'
 const PAGE_SIZE = 20
+const RESPONSE_DELAY_MS = 1500
+
 const testRows = generatedData.slice(0, 25)
 
 const minimalColumns: TableMockProps['columns'] = [
@@ -378,6 +387,32 @@ describe('Table dataSourceFunction (server-side data)', () => {
 
       await act(async () => { resolveFetch({ rows: [], totalCount: 0 }) })
       await waitFor(() => expect(screen.getByText('Nothing here')).toBeInTheDocument())
+    })
+
+    it('should replace the skeleton with data after a delayed response', async () => {
+      const dataSourceFunction = createMockDataSourceFunction(
+        testRows.slice(0, 1),
+        minimalColumns,
+        RESPONSE_DELAY_MS
+      )
+      const { table } = await renderServerWithRef(
+        { skeleton: true },
+        dataSourceFunction
+      )
+
+      const attributes = getChildTestAttr('skeleton', {
+        'data-testid': TABLE_TEST_ID
+      })
+      const skeleton = table.query(
+        `[data-testid="${attributes['data-testid']}"]`
+      )
+
+      expect(skeleton).toBeInTheDocument()
+
+      await table.rows.waitForData()
+
+      expect(skeleton).not.toBeInTheDocument()
+      expect(table.rows.getCellText(0, 0)).toBe(testRows[0].fullname)
     })
   })
 

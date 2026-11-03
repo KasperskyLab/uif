@@ -12,7 +12,7 @@
   transition: all .15s ease-in;
 
   &:focus-visible {
-    box-shadow: 0px 0px 0px 2px var(--focus--stroke);
+    box-shadow: 0px 0px 0px 2px var(--border--color--focus);
   }
 
   &.ghost {

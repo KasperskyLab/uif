@@ -8,7 +8,7 @@ import { ButtonMode, ButtonSize } from '../../types'
 const meta = {
   title: 'Screenshot Tests/Button',
   component: Button,
-  tags: ['!autodocs'],
+  tags: ['!autodocs', '!manifest'],
   parameters: {
     controls: { include: [] },
     layout: 'fullscreen'

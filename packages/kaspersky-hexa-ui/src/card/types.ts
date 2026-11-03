@@ -1,5 +1,5 @@
 import { Theme } from '@design-system/types'
-import { TestingProps, ToViewProps } from '@helpers/typesHelpers'
+import { TestingProps } from '@helpers/typesHelpers'
 import { CheckboxProps } from '@src/checkbox'
 import { IconResolverProps } from '@src/icon'
 import { RadioProps } from '@src/radio'
@@ -7,39 +7,11 @@ import { ToggleProps } from '@src/toggle'
 import { TextProps } from '@src/typography'
 import { CSSProperties, ReactNode } from 'react'
 
-type StateConfig = {
-  color?: string,
-  icon?: string,
-  border?: string,
-  background?: string
-}
-
-export type CardColorConfig = {
-  enabled?: StateConfig,
-  hover?: StateConfig,
-  active?: StateConfig
-}
-
-export type CardSizeConfig = {
-  padding: string
-}
-
-export type CardCssConfig = CardColorConfig & CardSizeConfig
-
 export type CardSize = 'small' | 'medium' | 'large'
 
 export type CardMode = 'filled' | 'base' | 'selected'
 
 export type CardTitleSize = 'small' | 'medium'
-
-export type CardThemeProps = {
-  /** Custom theme */
-  theme?: Theme,
-  /** Color mode */
-  mode?: CardMode,
-  /** Size */
-  size?: CardSize
-}
 
 type TitleElement = ({ component: 'toggle' } & ToggleProps) | ({ component: 'radio' } & RadioProps)
 
@@ -63,7 +35,13 @@ export type CardTitleProps = {
   elementAfter?: ElementAfter
 }
 
-export type CardProps = CardThemeProps & {
+export type CardProps = {
+  /** Custom theme */
+  theme?: Theme,
+  /** Color mode */
+  mode?: CardMode,
+  /** Size */
+  size?: CardSize,
   /** Card title */
   title?: CardTitleProps,
   /** Actions */
@@ -85,5 +63,3 @@ export type CardProps = CardThemeProps & {
   /** Custom class name */
   className?: string
 } & TestingProps
-
-export type CardViewProps = ToViewProps<CardProps, CardCssConfig, Omit<CardThemeProps, 'size'>>

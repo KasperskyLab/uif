@@ -26,7 +26,7 @@ export const wizardStorySettings: Meta<WizardPageProps> = {
 
 const meta = {
   title: 'Hexa UI Components/Wizard',
-  component: WizardComponent as React.FC<WizardPageProps>,
+  component: WizardComponent,
   tags: ['!autodocs'],
   includeStories: ['Playground'],
   excludeStories: ['steps', 'wizardStorySettings'],
@@ -34,7 +34,7 @@ const meta = {
   decorators: [
     (Story, context) => <div style={{ width: '100%', height: '100%' }}><Story {...context} /></div>
   ]
-} satisfies Meta<WizardPageProps>
+} as Meta<WizardPageProps>
 
 export default meta
 

@@ -22,7 +22,8 @@ const config: StorybookConfig = {
   ],
   addons: [
     '@storybook/addon-docs',
-    '@storybook/addon-links'
+    '@storybook/addon-links',
+    path.join(__dirname, 'manifestPreset.ts')
   ],
   core: {
     disableTelemetry: true
@@ -46,12 +47,18 @@ const config: StorybookConfig = {
     </style>
   `,
   framework: '@storybook/react-vite',
+  features: {
+    componentsManifest: true
+  },
   typescript: {
     reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
       shouldExtractLiteralValuesFromEnum: true,
       shouldRemoveUndefinedFromOptional: true,
-      skipChildrenPropWithoutDoc: false
+      skipChildrenPropWithoutDoc: false,
+      // The plugin globs `**/*.tsx` without dot-directories, then warns for every
+      // `.storybook` file Vite still transforms. Those files are docs chrome, not components.
+      exclude: ['**/*.stories.tsx', '**/.storybook/**']
     }
   },
   viteFinal: async (config) => {

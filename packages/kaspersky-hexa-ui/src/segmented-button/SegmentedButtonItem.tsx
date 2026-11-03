@@ -67,6 +67,7 @@ const SegmentedButtonItemView: FC<SegmentedButtonItemViewProps> = (props) => {
           }
           data-testid={testId + '-input'}
           data-checked={isChecked}
+          checked={isChecked}
           value={value}
           disabled={disabled}
           className="kl6-segmentedButton-item-input"

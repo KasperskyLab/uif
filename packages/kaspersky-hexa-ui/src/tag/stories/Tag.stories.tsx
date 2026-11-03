@@ -28,14 +28,14 @@ const tagStorySettings: Meta<TagStoryProps> = {
   }
 }
 
-const meta: Meta<TagStoryProps> = {
+const meta = {
   title: 'Hexa UI Components/Tag',
-  component: Tag as React.ComponentType<TagStoryProps>,
+  component: Tag,
   tags: ['!autodocs'],
   includeStories: ['Playground'],
   excludeStories: ['tagStorySettings'],
   ...tagStorySettings
-}
+} as Meta<TagStoryProps>
 
 export default meta
 

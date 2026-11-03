@@ -6,6 +6,7 @@ import { TableColumn, TableRecord } from '../../types'
 type ResizableColumnsContextValue<T extends TableRecord = TableRecord> = {
   columns: TableColumn<T>[],
   hasRowSelection?: boolean,
+  hasDragDrop?: boolean,
   setOverflow: (overflow: boolean) => void
   setColumns: SetState<TableColumn[]>
 }

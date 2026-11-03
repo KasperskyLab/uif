@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   width: 300px;
 `
 
-const PIXSO_VIEW = ''
+const PIXSO_VIEW = '
 
 export const textboxStorySettings: Meta<TextboxProps> = {
   argTypes: buildStoryArgTypes(textboxPropPresentation),

@@ -1,5 +1,5 @@
 @use "sass:map";
-@use '../../design-system/tokens/typography.module.scss';
+@use '../../design-system/tokens/typography.module.scss' as typography;
 
 $button-tokens: (
   primary: (
@@ -14,15 +14,15 @@ $button-tokens: (
     bg: var(--bg--neutral--level_0),
     color: var(--fg--neutral--primary),
     hover: var(--bg--neutral--level_0_hover),
-    active: var(--bg--neutral--level_0--active),
+    active: var(--bg--neutral--level_0_active),
     border: 1px solid var(--border--neutral--bold),
     disabled-border: 1px solid var(--border--neutral--subtle_overlay)
   ),
   tertiary: (
     bg: none,
     color: var(--fg--neutral--primary),
-    hover: var(--bg--neutral--level_0_hover),
-    active: var(--bg--neutral--level_0--active),
+    hover: var(--bg--neutral_transparent--level_1),
+    active: var(--bg--neutral_transparent--level_2),
     border: none,
     disabled-border: none
   ),
@@ -35,7 +35,7 @@ $button-tokens: (
     disabled-border: none
   ),
   dangerOutlined: (
-    bg: none,
+    bg: var(--bg--neutral--level_0),
     color: var(--common--danger--enabled),
     hover: var(--bg--danger_subtle--hover),
     active: var(--bg--danger_subtle--active),
@@ -47,7 +47,7 @@ $button-tokens: (
       linear-gradient(90deg, var(--brand--solid--kaspersky_green_300) 0%, var(--brand--transparent--kaspersky_green_300_0) 42.475%),
       linear-gradient(188.86deg, var(--common--violet--enabled) 6.222%, var(--common--marina--enabled) 69.82%)
     ),
-    color: var(--fg--neutralinverted--primary),
+    color: var(--fg--neutral_inverted--primary),
     hover: (
       linear-gradient(90deg, var(--brand--solid--kaspersky_green_300) 0%, var(--brand--transparent--kaspersky_green_300_0) 42.475%),
       linear-gradient(188.86deg, var(--common--violet--hover) 6.222%, var(--common--marina--hover) 69.82%)
@@ -97,13 +97,27 @@ $button-tokens: (
       border: map.get($theme, disabled-border);
 
       svg {
-        color: var(--fg--neutral--tertiary);
+        color: var(--fg--neutral--secondary);
       }
     }
   }
 
   &:global(.ant-dropdown-trigger):global(.ant-dropdown-open) {
     background: map.get($theme, active);
+  }
+}
+
+@mixin apply-sizes($size) {
+  border-radius: var(--geometry--button--#{$size}--radius);
+  height: var(--geometry--button--#{$size}--dimension);
+
+  &.iconOnly {
+    width: var(--geometry--button--#{$size}--dimension);
+  }
+  &:not(.iconOnly) {
+    min-width: var(--geometry--button--#{$size}--min_width);
+    padding-inline-start: var(--geometry--button--#{$size}--padding_x);
+    padding-inline-end: var(--geometry--button--#{$size}--padding_x);
   }
 }
 
@@ -146,6 +160,7 @@ $button-tokens: (
   max-width: 100%;
   outline: none;
   transition: none;
+  padding: unset;
 
   .iconWrapper {
     display: flex;
@@ -211,6 +226,18 @@ $button-tokens: (
 
 :global(.ant-btn):global(.ant-btn).dangerOutlined {
   @include apply-colors(dangerOutlined);
+
+  &:not([disabled]):not(:global(.ant-btn-loading)) {
+    &:hover {
+      color: var(--common--danger--hover);
+      border-color: var(--common--danger--hover);
+    }
+
+    &:active {
+      color: var(--common--danger--active);
+      border-color: var(--common--danger--active);
+    }
+  }
 }
 
 :global(.ant-btn):global(.ant-btn).ai {
@@ -219,7 +246,6 @@ $button-tokens: (
 
 :global(.ant-btn).iconOnly {
   line-height: unset;
-  padding: unset;
 
   > svg {
     min-width: min-content;
@@ -228,16 +254,7 @@ $button-tokens: (
 
 /* Button Size */
 :global(.ant-btn).small {
-  border-radius: var(--radius--s);
-  height: 24px;
-  min-width: 64px;
-  padding: var(--spacing--padding_xs) var(--spacing--padding_m);
-
-
-  &.iconOnly {
-    min-width: 24px;
-    width: 24px;
-  }
+  @include apply-sizes(small);
 
   .buttonText {
     @extend .btm4;
@@ -245,16 +262,7 @@ $button-tokens: (
 }
 
 :global(.ant-btn).medium {
-  border-radius: var(--radius--m);
-  height: 32px;
-  min-width: 80px;
-  padding: var(--spacing--padding_sm) var(--spacing--padding_ml);
-
-
-  &.iconOnly {
-    min-width: 32px;
-    width: 32px;
-  }
+  @include apply-sizes(medium);
 
   .buttonText {
     @extend .btm3;
@@ -262,15 +270,7 @@ $button-tokens: (
 }
 
 :global(.ant-btn).large {
-  border-radius: var(--radius--m);
-  height: 40px;
-  min-width: 80px;
-  padding: var(--spacing--padding_m) var(--spacing--padding_lg);
-
-  &.iconOnly {
-    min-width: 40px;
-    width: 40px;
-  }
+  @include apply-sizes(large);
 
   .buttonText {
     @extend .btm3;
@@ -278,15 +278,7 @@ $button-tokens: (
 }
 
 :global(.ant-btn).extraLarge {
-  border-radius: var(--radius--m);
-  height: 48px;
-  min-width: 80px;
-  padding: var(--spacing--padding_ml) var(--spacing--padding_xl);
-
-  &.iconOnly {
-    min-width: 48px;
-    width: 48px;
-  }
+  @include apply-sizes(extra_large);
 
   .buttonText {
     @extend .btm2;
@@ -297,4 +289,10 @@ $button-tokens: (
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@media (max-width: 767px) {
+  :global(.ant-btn).button .buttonText {
+    @include typography.apply-font-styles(btm3);
+  }
 }

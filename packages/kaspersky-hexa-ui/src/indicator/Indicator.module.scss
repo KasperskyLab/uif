@@ -26,7 +26,7 @@ $indicator-backgrounds: (
 }
 
 .border {
-  border: 2px solid var(--border--neutral--inverted_static);
+  border: 2px solid var(--indicator-border-color, var(--border--neutral--inverted_static));
 }
 
 @each $mode, $background in $indicator-backgrounds {

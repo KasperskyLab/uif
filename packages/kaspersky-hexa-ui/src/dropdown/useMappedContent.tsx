@@ -63,14 +63,14 @@ const mapOverlay = (items: DropdownItemProps[], overlayClassName?: string) => {
         case 'group':
           return (
             <>
-              <DropdownGroup data-dropdown-item-group key={key}>{title}</DropdownGroup>
+              <DropdownGroup data-dropdown-item-group {...testAttributes} key={key}>{title}</DropdownGroup>
               {mapOverlay(children as DropdownItemProps[], overlayClassName)}
             </>
           )
         case 'divider':
           return <DropdownDivider key={key} />
         case 'innerActions':
-          return <DropdownInnerActions key={key}>{children}</DropdownInnerActions>
+          return <DropdownInnerActions key={key} className={rest.className}>{children}</DropdownInnerActions>
         case 'toggle':
           return (
             <DropdownToggle

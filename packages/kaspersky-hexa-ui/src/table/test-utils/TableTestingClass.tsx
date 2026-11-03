@@ -7,11 +7,11 @@ import {
   waitFor,
   within
 } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import React, { FC, ReactElement, ReactNode } from 'react'
 import { act } from 'react-dom/test-utils'
 
-import { ITableProps, Table as BaseTable, TableColumn, TableRecord } from '..'
-import { generatedData, tableColumns } from '../__mocks__/filtersMockData'
+import { ITableProps, Table as BaseTable, TableRecord } from '..'
 
 import {
   addFilter,
@@ -21,6 +21,7 @@ import {
   openDropdown,
   openFiltersSidebar
 } from './helpers'
+import { withVirtualization } from './virtualMode'
 
 export interface TableTestingClassOptions {
   /** testId, переданный в таблицу — префикс для дропдаунов колонок, сортировки и select-all чекбокса */
@@ -121,7 +122,7 @@ export class TableTestingClass {
   ): TableTestingClass {
     const testId = opts.testId ?? (props.testId as string | undefined) ?? DEFAULT_TEST_ID
     const klId = opts.klId ?? (props.klId as string | undefined)
-    const result = render(<TestTable testId={testId} klId={klId} {...props} />)
+    const result = render(<TestTable testId={testId} klId={klId} {...withVirtualization(props)} />)
     const harness = new TableTestingClass(result.container, { testId, klId })
     harness._rerender = result.rerender
     harness._unmount = result.unmount
@@ -264,6 +265,34 @@ export class TableTestingClass {
       this.queryAll('.group-title-row')
         .map(el => el.textContent)
         .filter((text): text is string => !!text)
+  }
+
+  // --- virtual: оконный рендер строк и колонок -----------------------------
+
+  readonly virtual = {
+    /** Строки-распорки, стоящие вместо неотрисованных (`.hexa-ui-virtual-spacer`). */
+    getSpacers: (): HTMLTableRowElement[] =>
+      this.queryAll<HTMLTableRowElement>('.hexa-ui-virtual-spacer'),
+
+    /** Высоты распорок в порядке следования — из инлайнового стиля их ячейки. */
+    getSpacerHeights: (): number[] => this.virtual.getSpacers().map(row => (
+      // Высота стоит на самой строке: строка красит фон во всю ширину таблицы, а её единственная
+      // ячейка при фиксированной раскладке шире первой колонки не бывает.
+      Number.parseInt(row.style.height, 10) || 0
+    )),
+
+    /** Абсолютные индексы отрисованных строк (атрибут `data-index`, по нему же меряет виртуализатор). */
+    getRenderedIndexes: (): number[] => this.rows.getAll()
+      .map(row => Number(row.getAttribute('data-index')))
+      .filter(index => !Number.isNaN(index)),
+
+    /** Ячейки колонок-распорок (`.hexa-ui-virtual-spacer-cell`). */
+    getSpacerCells: (): HTMLTableCellElement[] =>
+      this.queryAll<HTMLTableCellElement>('.hexa-ui-virtual-spacer-cell'),
+
+    /** Ширины колонок из `<colgroup>` — сумма должна совпадать с полной шириной таблицы. */
+    getColumnWidths: (): number[] => this.queryAll<HTMLTableColElement>('colgroup col')
+      .map(col => Number.parseInt(col.style.width ?? '0', 10) || 0)
   }
 
   // --- selection: выбор строк / чекбоксы ----------------------------------
@@ -610,13 +639,27 @@ export class TableTestingClass {
     },
 
     /** Следующая страница. */
-    next: (): void => {
-      fireEvent.click(screen.getByTitle('Next Page'))
+    next: async () => {
+      const currentPage = this.pagination.getActivePage()
+
+      await fireEvent.click(screen.getByTitle('Next Page'))
+
+      await waitFor(() => {
+        const active = document.querySelector('.ant-pagination-item-active')
+        expect(active).toHaveTextContent(String(currentPage + 1))
+      }, { timeout: 5000 })
     },
 
     /** Предыдущая страница. */
-    prev: (): void => {
-      fireEvent.click(screen.getByTitle('Previous Page'))
+    prev: async () => {
+      const currentPage = this.pagination.getActivePage()
+
+      await fireEvent.click(screen.getByTitle('Previous Page'))
+
+      await waitFor(() => {
+        const active = document.querySelector('.ant-pagination-item-active')
+        expect(active).toHaveTextContent(String(currentPage - 1))
+      }, { timeout: 5000 })
     },
 
     /** Существует ли страница с данным номером. */
@@ -631,6 +674,11 @@ export class TableTestingClass {
       expect(this.pagination.getItem(lastPage)).toBeInTheDocument()
       expect(this.pagination.getItem(lastPage + 1)).not.toBeInTheDocument()
       expect(this.pagination.getTotal()).toBe(total)
+    },
+
+    selectPageSize: (pageSize: number): void => {
+      fireEvent.mouseDown(this.pagination.getRoot()!.querySelector('[data-testid="select"]')!.firstElementChild!)
+      fireEvent.click(screen.getByText(`${pageSize} / page`))
     }
   }
 
@@ -658,11 +706,115 @@ export class TableTestingClass {
     /** Кнопка импорта/экспорта (`table-import-export`). */
     getImportExportButton: (): HTMLElement | null => this.toolbar.getButton('table-import-export'),
 
+    /** Кнопка выбора пресета (`table-presets`). */
+    getPresetsButton: (): HTMLElement | null => this.toolbar.getButton('table-presets'),
+
     /** Поиск (`table-search`). */
     getSearch: (): HTMLElement | null => this.toolbar.getButton('table-search'),
 
     /** Кастомный элемент тулбара (`item-${id}`). */
     getCustomItem: (id: string | number): HTMLElement | null => this.toolbar.getButton(`item-${id}`)
+  }
+
+  // --- presets -------------------------------------------------------------
+
+  readonly presets = {
+    selectPreset: async (name: string): Promise<void> => {
+      await this.presets.openPresetList()
+      await act(async () => { fireEvent.click(screen.getByText(name)) })
+    },
+
+    createPreset: async (name: string): Promise<void> => {
+      await waitFor(() => expect(this.presets.hasDirtyIndicator()).toBe(true))
+      await this.presets.openPresetList()
+      await act(async () => { userEvent.click(screen.getByTestId(`${this.testId}-create-table-preset`)!) })
+      await waitFor(() => expect(screen.getByText('Save table settings as a new preset')).toBeInTheDocument())
+      fireEvent.change(
+        screen.getByTestId('table-preset-name')!,
+        { target: { value: name } }
+      )
+      await act(async () => { userEvent.click(screen.getByTestId('modal-confirm')!) })
+    },
+
+    renamePreset: async (name: string, newName: string): Promise<void> => {
+      if (!screen.queryByText(name)) {
+        await this.presets.openPresetList()
+      }
+
+      await this.presets.openPresetMenu(name)
+      await act(async () => { fireEvent.click(screen.getByTestId('rename-table-preset')!) })
+
+      expect(screen.getByTestId('table-preset-name')).toHaveValue(name)
+
+      fireEvent.change(
+        screen.getByTestId('table-preset-name')!,
+        { target: { value: newName } }
+      )
+      await act(async () => { fireEvent.click(screen.getByTestId('modal-confirm')!) })
+    },
+
+    deletePreset: async (name: string): Promise<void> => {
+      if (!screen.queryByText(name)) {
+        await this.presets.openPresetList()
+      }
+
+      await this.presets.openPresetMenu(name)
+      await act(async () => { fireEvent.click(screen.getByTestId('delete-table-preset')!) })
+      await act(async () => { fireEvent.click(screen.getByTestId('modal-confirm')!) })
+    },
+
+    selectView: async (name: string): Promise<void> => {
+      await this.presets.openPresetList()
+
+      await act(async () => {
+        const menu = screen.getByTestId(`${this.testId}-presets-menu`)
+        fireEvent.mouseDown(within(menu).getByTestId(`${this.testId}-select-table-view`)!.firstElementChild!)
+      })
+      await act(async () => {
+        const menu = screen.getByTestId(`${this.testId}-select-table-view-select-dropdown`)
+        fireEvent.click(within(menu).getByText(name))
+      })
+    },
+
+    openPresetList: async (): Promise<void> => {
+      await act(async () => { fireEvent.click(this.toolbar.getPresetsButton()!) })
+    },
+
+    openPresetMenu: async (name: string): Promise<void> => {
+      await this.presets.openPresetList()
+      await act(async () => { fireEvent.click(this.presets.getPresetMenuButton(name)!) })
+    },
+
+    hasDirtyIndicator: (): boolean => {
+      return !!this.toolbar.getPresetsButton()?.querySelector('.hexa-ui-indicator')
+    },
+
+    isPresetSelected: (name: string): boolean => {
+      return screen.getByText(name)
+        .closest('.ant-dropdown-menu-item')!
+        .classList.contains('ant-dropdown-menu-item-selected')
+    },
+
+    isViewSelected: (name: string): boolean => {
+      return !!within(screen.getByTestId(`${this.testId}-presets-menu`)).getByText(name)
+    },
+
+    getPresetMenuButton: (name: string) => {
+      return screen.getByText(name)
+        .closest('.ant-dropdown-menu-item')!
+        .querySelector('[data-testid="preset-actions"]')
+    }
+  }
+
+  // --- grouping ------------------------------------------------------------
+
+  readonly grouping = {
+    selectGrouping: async (name: string): Promise<void> => {
+      await this.columnSettings.open()
+      await act(async () => { fireEvent.click(document.querySelector('[data-testid="table-settings-grouping-tab"]')!) })
+      fireEvent.click(within(document.querySelector('.grouping-item')!).getByText(name))
+      this.columnSettings.apply()
+    }
   }
 
   // --- search: строка поиска в тулбаре -------------------------------------

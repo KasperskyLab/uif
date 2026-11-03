@@ -1,7 +1,6 @@
 import { BORDER_RADIUS, SPACES } from '@design-system/theme'
 import { AnchorColorConfig } from '@src/anchor-links/Anchor/types'
 import { AnchorLinkColorConfig } from '@src/anchor-links/AnchorLink/types'
-import { BadgeColorConfig, BadgeMode, BadgeSize, BadgeSizeConfig } from '@src/badge/types'
 import { BreadcrumbsColorConfig, BreadcrumbsSize, BreadcrumbsSizeConfig } from '@src/breadcrumbs/types'
 import { ChipColorConfig, ChipSize, ChipSizeConfig } from '@src/chip/types'
 import { IconColorConfig } from '@src/icon/types'
@@ -57,10 +56,6 @@ export type ThemeConfig = Readonly<{
       SegmentedControlColorConfig,
       Record<SegmentedControlSize, SegmentedControlSizeConfig>
     >,
-    badge: {
-      colors: Record<BadgeMode, BadgeColorConfig>,
-      sizes: Record<BadgeSize, BadgeSizeConfig>
-    },
     breadcrumbs: ComponentConfig<
       BreadcrumbsColorConfig,
       Record<BreadcrumbsSize, BreadcrumbsSizeConfig>

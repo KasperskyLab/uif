@@ -86,6 +86,8 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
   const [selectedRows, setSelectedRows] = useState<T[]>([])
   const [deselectedRows, setDeselectedRows] = useState<T[]>([])
 
+  const currentPageRows = useTableContext((state) => state.currentPageRows)
+
   useEffect(() => {
     if (!builtInRowSelection) return
     setSelectedRows(prevRows => updateRows(prevRows, selectedRowKeys, dataSource))
@@ -273,11 +275,17 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
   }
 
   const onSelectCurrentPage = () => {
-    selectAllRows(
-      useDataSourceFunction
-        ? dataSource
-        : dataSource.slice((current - 1) * pageSize, current * pageSize)
-    )
+    let rowsToSelect: T[]
+    switch (paginationMode) {
+      case 'client':
+        rowsToSelect = currentPageRows
+        break
+      case 'server':
+      case 'pseudo-server':
+        rowsToSelect = dataSource
+    }
+
+    selectAllRows(rowsToSelect)
   }
 
   if (!rowSelectionProps) return
@@ -296,8 +304,9 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
 
   const disableSelectAllOnCurrentPage = dataSource.slice(0, pageSize).every(row => getCheckboxProps(row).disabled)
 
-  const rowSelection: RowSelectionAntd<T> = {
+  const rowSelection: RowSelectionAntd<T> & Pick<TableRowSelection<T>, 'builtInRowSelection'> = {
     ...restRowSelection,
+    builtInRowSelection: true,
     columnWidth: 0,
     columnTitle: hasSelectAll && restRowSelection.type !== 'radio' && (
       <HeaderCheckbox

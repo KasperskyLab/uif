@@ -28,14 +28,14 @@ const lockGroupStorySettings: Meta<LockGroupStoryProps> = {
   }
 }
 
-const meta: Meta<LockGroupStoryProps> = {
+const meta = {
   title: 'Hexa UI Components/LockGroup',
-  component: LockGroupComponent as React.ComponentType<LockGroupStoryProps>,
+  component: LockGroupComponent,
   tags: ['!autodocs'],
   includeStories: ['Playground'],
   excludeStories: ['lockGroupStorySettings'],
   ...lockGroupStorySettings
-}
+} as Meta<LockGroupStoryProps>
 
 export default meta
 

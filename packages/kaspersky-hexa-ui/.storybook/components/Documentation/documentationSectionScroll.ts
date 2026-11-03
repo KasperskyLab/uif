@@ -66,3 +66,15 @@ export const scrollToDocumentationSectionWithRetry = (
 
   tryScroll()
 }
+
+/** Opens the docs tab and, when the hash names a section, scrolls to it. */
+export const revealDocumentationLocation = (tabKey?: string, sectionId?: string) => {
+  if (sectionId) {
+    scrollToDocumentationSectionWithRetry(sectionId, tabKey)
+    return
+  }
+
+  if (tabKey) {
+    clickDocumentationTab(tabKey)
+  }
+}

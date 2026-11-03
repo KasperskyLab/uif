@@ -44,6 +44,31 @@
   min-width: unset;
 }
 
+.numberWithUnits {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--spacing--gap_related);
+  width: 100%;
+  min-width: 0;
+}
+
+.numberTextBox {
+  min-width: 0;
+}
+
+:global(.ant-select).unitSelect {
+  width: 110px;
+}
+
+.unitSegmented {
+  align-items: stretch;
+
+  :global(.kl6-segmentedButton-item-text) {
+    display: flex;
+    align-items: center;
+  }
+}
+
 .addFilterRowButton {
   display: flex;
 }

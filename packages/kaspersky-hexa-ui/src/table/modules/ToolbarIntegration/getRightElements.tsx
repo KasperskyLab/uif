@@ -7,6 +7,7 @@ import { Filter, FilterWithIndicator, Reload } from '@kaspersky/hexa-ui-icons/16
 import { ITableProps, TableRecord, useTableUpdate } from '../../'
 import { getTabsConfig } from '../../helpers/getTabsConfig'
 import { FilterApi } from '../Filters/FilterApi'
+import { ToolbarPresetsButton } from '../Presets'
 
 import { Search } from './Search'
 
@@ -17,9 +18,11 @@ type GetRightElementsProps<T extends TableRecord> =
     'dataSource' |
     'clientSearchFields' |
     'columns' |
+    'presets' |
     'onSearch' |
     'onClientSearch' |
-    'enableSearchHighlighting'
+    'enableSearchHighlighting' |
+    'testId'
   > & {
     table?: HTMLDivElement | null
     filterApi?: FilterApi<T> | null
@@ -32,13 +35,15 @@ export const getRightElements = <T extends TableRecord>({
   dataSource,
   clientSearchFields,
   columns,
+  presets,
   table,
   filterApi,
   setFilteredRows,
   setExpandedRowKeys,
   onSearch,
   onClientSearch,
-  enableSearchHighlighting
+  enableSearchHighlighting,
+  testId
 }: GetRightElementsProps<T>): ReactNode[] => {
   const updateContext = useTableUpdate<T>()
 
@@ -79,6 +84,14 @@ export const getRightElements = <T extends TableRecord>({
     )
   }
 
+  if (toolbar.TEMP_DONT_USE_customButton) {
+    rightElements.push(
+      <Toolbar.Button
+        {...toolbar.TEMP_DONT_USE_customButton}
+      />
+    )
+  }
+
   if (toolbar.importExportButton) {
     rightElements.push(
       <Toolbar.ImportExportItem
@@ -96,6 +109,18 @@ export const getRightElements = <T extends TableRecord>({
         iconBefore={<Reload />}
         onClick={toolbar.onRefresh}
         testId="table-refresh-button"
+      />
+    )
+  }
+
+  if (presets) {
+    rightElements.push(
+      <ToolbarPresetsButton
+        key="presets"
+        columns={columns}
+        loading={presets.loading}
+        presets={presets.presets}
+        testId={testId}
       />
     )
   }

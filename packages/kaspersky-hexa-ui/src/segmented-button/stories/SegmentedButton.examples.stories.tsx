@@ -1,5 +1,6 @@
 import { ThemedPalette, ThemedPaletteProps } from '@design-system/palette'
 import { StoryColumn } from '@sb/StoryComponents'
+import { Modal } from '@src/modal'
 import { Meta, StoryObj } from '@storybook/react'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -155,6 +156,46 @@ export const Overflow: Story = {
       }
     ]
   }
+}
+
+export const PreventChangeValue: Story = {
+  render: (args) => {
+    const [value, setValue] = useState(args.value)
+    const [pending, setPending] = useState<string[] | null>(null)
+
+    const closeModal = () => setPending(null)
+
+    return (
+      <>
+        <SegmentedButton
+          {...args}
+          value={value}
+          onChange={setPending}
+        />
+        <Modal
+          visible={!!pending}
+          header="Confirm selection change"
+          content="Are you sure you want to change the selection?"
+          onCancel={closeModal}
+          actions={{
+            FIRST_ACTION: {
+              text: 'OK',
+              onClick: () => {
+                if (pending) setValue(pending)
+                closeModal()
+              }
+            },
+            SECOND_ACTION: {
+              text: 'Cancel',
+              mode: 'secondary',
+              onClick: closeModal
+            }
+          }}
+        />
+      </>
+    )
+  },
+  args: Basic.args
 }
 
 type PaletteStory = StoryObj<ThemedPaletteProps>

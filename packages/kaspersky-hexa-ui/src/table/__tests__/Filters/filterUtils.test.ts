@@ -6,13 +6,15 @@ const createFilter = ({
   value,
   condition = FilterOperation.eq,
   type = FilterType.Number,
-  attribute
-}: Partial<FilterConfig>): FilterConfig => ({
+  attribute,
+  unit
+}: Partial<FilterConfig> & { unit?: string }): FilterConfig => ({
   name,
   value,
   condition,
   type,
-  attribute
+  attribute,
+  unit
 }) as FilterConfig
 
 describe('mergeFilterStructures', () => {
@@ -69,6 +71,16 @@ describe('mergeFilterStructures', () => {
       })
       const result = mergeFilterStructures([filterA], [filterWithAttr])
       expect(result).toEqual([filterA, filterWithAttr])
+    })
+
+    describe('filters with units of measure', () => {
+      it('should keep filters with same value but different units as unique and merge on same unit', () => {
+        const filterMb = createFilter({ name: 'A', value: 1, unit: 'mb' })
+        const filterKb = createFilter({ name: 'A', value: 1, unit: 'kb' })
+
+        expect(mergeFilterStructures([filterMb], [filterKb])).toEqual([filterMb, filterKb])
+        expect(mergeFilterStructures([filterMb], [filterMb])).toEqual([filterMb])
+      })
     })
 
     it('should merge groups with same ID and same filters', () => {

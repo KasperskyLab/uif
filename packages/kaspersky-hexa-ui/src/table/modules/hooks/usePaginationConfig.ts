@@ -27,6 +27,7 @@ type UseExistingPaginationReturn<T extends TableRecord = TableRecord> = {
   pagination: TablePaginationConfig<T>,
   additional: {
     setHideOnSinglePage: SetState<boolean | undefined>,
+    setPageSize: SetState<number>,
     setSelected: SetState<number | undefined>,
     setTotal: SetState<number | undefined>
   }
@@ -122,7 +123,7 @@ const useExistingPagination = <T extends TableRecord = TableRecord> ({
   useEffect(() => {
     if (isCurrentPageOutOfRange && propsOnChange && !shouldSliceDataSource) {
       setCurrent(FIRST_PAGE)
-      propsOnChange(current, pageSize)
+      propsOnChange(FIRST_PAGE, pageSize)
     }
   }, [isCurrentPageOutOfRange, shouldSliceDataSource, pageSize])
 
@@ -193,6 +194,7 @@ const useExistingPagination = <T extends TableRecord = TableRecord> ({
       },
       additional: {
         setHideOnSinglePage,
+        setPageSize,
         setTotal,
         setSelected
       }

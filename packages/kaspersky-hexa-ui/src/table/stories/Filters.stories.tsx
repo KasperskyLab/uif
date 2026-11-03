@@ -12,6 +12,8 @@ import { Placeholder } from '@kaspersky/hexa-ui-icons/16'
 import { FilterConfig, Table } from '..'
 import MetaData from '../__meta__/meta.json'
 import {
+  createMockDataSourceFunction,
+  fileSizeColumn,
   generatedData,
   groups,
   mockCustomFilterFunction,
@@ -196,14 +198,60 @@ export const SavingFilters: TableMockStory = {
 }
 
 export const ServerFiltering: TableMockStory = {
+  // не хватает таймаута для загрузки при скриншотном тестировании
+  tags: ['skip-visual'],
   args: {
-    isServerFiltering: true
+    isServerFiltering: true,
+    dataSourceFunction: createMockDataSourceFunction(generatedData, tableColumns)
   }
 }
 
 export const CustomFilterFunction: TableMockStory = {
   args: {
     customFilterFunction: mockCustomFilterFunction
+  }
+}
+
+const fileSizeColumns = (control: 'select' | 'segmented-button') => [
+  ...tableColumns,
+  fileSizeColumn(control)
+]
+
+export const FilterWithUnitSelect: TableMockStory = {
+  // не хватает таймаута для загрузки при скриншотном тестировании
+  tags: ['skip-visual'],
+  args: {
+    isServerFiltering: true,
+    columns: fileSizeColumns('select'),
+    dataSourceFunction: createMockDataSourceFunction(generatedData, fileSizeColumns('select')),
+    defaultSidebarFilters: [
+      {
+        name: 'fileSize',
+        type: FilterType.Number,
+        condition: FilterOperation.gt,
+        value: 1,
+        unit: 'gb'
+      }
+    ]
+  }
+}
+
+export const FilterWithUnitSegmented: TableMockStory = {
+  // не хватает таймаута для загрузки при скриншотном тестировании
+  tags: ['skip-visual'],
+  args: {
+    isServerFiltering: true,
+    columns: fileSizeColumns('segmented-button'),
+    dataSourceFunction: createMockDataSourceFunction(generatedData, fileSizeColumns('segmented-button')),
+    defaultSidebarFilters: [
+      {
+        name: 'fileSize',
+        type: FilterType.Number,
+        condition: FilterOperation.gt,
+        value: 100,
+        unit: 'mb'
+      }
+    ]
   }
 }
 

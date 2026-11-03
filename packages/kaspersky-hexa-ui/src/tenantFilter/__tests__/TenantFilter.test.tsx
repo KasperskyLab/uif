@@ -127,8 +127,8 @@ describe('TenantFilter', () => {
 
     await clickOnNodeCheckbox(container, '0-0-0-0')
 
-    expect(applyHandler).toBeCalledTimes(1)
-    expect(applyHandler).toBeCalledWith(['0-0-0-0'])
+    expect(applyHandler).toHaveBeenCalledTimes(1)
+    expect(applyHandler).toHaveBeenCalledWith(['0-0-0-0'])
   })
 
   it('should check multiple nodes', async () => {
@@ -137,8 +137,8 @@ describe('TenantFilter', () => {
 
     await clickOnNodeCheckbox(container, '0-0-0')
 
-    expect(applyHandler).toBeCalledTimes(1)
-    expect(applyHandler).toBeCalledWith(['0-0-0', '0-0-0-0', '0-0-0-1'])
+    expect(applyHandler).toHaveBeenCalledTimes(1)
+    expect(applyHandler).toHaveBeenCalledWith(['0-0-0', '0-0-0-0', '0-0-0-1'])
   })
 
   it('should uncheck multiple nodes', async () => {
@@ -148,7 +148,7 @@ describe('TenantFilter', () => {
     await clickOnNodeCheckbox(container, '0-0')
     await clickOnNodeCheckbox(container, '0-0-0')
 
-    expect(applyHandler).toBeCalledWith(['0-0', '0-0-1', '0-0-1-0', '0-0-1-1'])
+    expect(applyHandler).toHaveBeenCalledWith(['0-0', '0-0-1', '0-0-1-0', '0-0-1-1'])
   })
 
   it('should not uncheck parent node', async () => {
@@ -159,6 +159,6 @@ describe('TenantFilter', () => {
     await clickOnNodeCheckbox(container, '0-0-0-0')
     await clickOnNodeCheckbox(container, '0-0-0-1')
 
-    expect(applyHandler).toBeCalledWith(['0-0-0'])
+    expect(applyHandler).toHaveBeenCalledWith(['0-0-0'])
   })
 })

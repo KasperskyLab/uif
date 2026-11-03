@@ -2,12 +2,12 @@
 @use "./Configs.module.scss" as *;
 
 @mixin base($mode, $state) {
-  background: var(--action_button--bg--#{$mode}--#{$state});
+  background: map.get($modes-config, $mode, $state, "bg");
   &, .label {
-    color: var(--action_button--text--#{$mode}--#{$state});
+    color: map.get($modes-config, $mode, $state, "text");
   }
   > svg {
-    color: var(--action_button--icon--#{$mode}--#{$state});
+    color: map.get($modes-config, $mode, $state, "text");
   }
 }
 
@@ -87,7 +87,7 @@
 }
 
 @mixin mode-ghostInverted() {
-  @include base-mode(ghost_inverted);
+  @include base-mode(ghostInverted);
   @include size-by-mode("ghost");
 }
 
@@ -97,11 +97,11 @@
 }
 
 @mixin mode-filledInverted() {
-  @include base-mode(filled_inverted);
+  @include base-mode(filledInverted);
   @include size-by-mode("filled");
 }
 
 @mixin mode-onLight() {
-  @include base-mode(on_light);
+  @include base-mode(onLight);
   @include size-by-mode("ghost");
 }

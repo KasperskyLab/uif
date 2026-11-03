@@ -79,6 +79,8 @@ export const getNewFilter = async <T extends TableRecord = TableRecord>(
     resultFilter.condition = operations[0].operation
   }
 
+  const units = column.filterType?.type === FilterType.Number ? column.filterType.units : undefined
+
   switch (resultFilter.type) {
     case FilterType.Enum: {
       const enumFilter = resultFilter as EnumFilter & { id: string }
@@ -114,7 +116,8 @@ export const getNewFilter = async <T extends TableRecord = TableRecord>(
       return {
         ...resultFilter,
         type: FilterType.Number,
-        value: null
+        value: null,
+        unit: units?.options[0]?.value
       } as FilterConfigInternal
     case FilterType.Text:
     default:

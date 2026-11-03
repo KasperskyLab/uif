@@ -6,9 +6,12 @@ import { Search } from '@src/search'
 import { Sidebar } from '@src/sidebar'
 import { Space } from '@src/space'
 import { TableColumn, TableRecord, useTableContext, useTableUpdate } from '@src/table'
+import { PresetStoreValue, usePresetsUpdate } from '@src/table/context/tableStore'
+import { isColumnReadonly } from '@src/table/helpers/common'
 import { getTabsConfig } from '@src/table/helpers/getTabsConfig'
 import { getPersistentStorageValue, updatePersistentStorage } from '@src/table/helpers/persistentStorage'
 import { Tabs } from '@src/tabs'
+import isEqual from 'lodash/isEqual'
 import React, {
   useEffect,
   useMemo,
@@ -19,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { TableComponent } from '../index'
+import { isColumnsStateEqual } from '../Presets/helpers'
 import { getStringWithCondition } from '../SortingAndFilters/helpers'
 
 import ColumnSelectionActions from './ColumnSelectionActions'
@@ -82,15 +86,26 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
   const prevPropsColumnsRef = useRef<TableColumn<T>[]>()
   const tableColumnsRef = useRef(props.columns!)
 
+  const [
+    storeColumnsState,
+    showColumnsSelector,
+    prevCurrentPresetRef
+  ] = useTableContext(state => [
+    state.presets.columnsState,
+    state.showColumnsSelector,
+    state.presets.prevCurrentPresetRef
+  ])
+
   const baseColumns = useMemo(() => (
     getPreparedColumns({
       nextPropsColumns: props.columns!,
       prevPropsColumns: prevPropsColumnsRef.current,
       tableColumns: tableColumnsRef.current,
       storageKey: props.storageKey,
-      expandableConfig: props.expandable
+      expandableConfig: props.expandable,
+      columnsState: storeColumnsState
     })
-  ), [props.columns, props.storageKey, props.expandable])
+  ), [props.columns, props.storageKey, props.expandable, storeColumnsState])
 
   const baseGroupBy = useMemo(() => {
     let newGroupBy = props.groupBy
@@ -116,13 +131,21 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const updateContext = useTableUpdate<T>()
-
-  const showColumnsSelector = useTableContext(state => state.showColumnsSelector)
+  const updatePresetsContext = usePresetsUpdate()
 
   const setTableColumns = (nextColumns: TableColumn<T>[]) => {
     tableColumnsRef.current = nextColumns
     setTableColumnsState(nextColumns)
   }
+
+  useEffect(() => {
+    const setGroupBy: PresetStoreValue<T>['setGroupBy'] = value => {
+      setDraftGroupBy(value)
+      setTableGroupBy(value)
+    }
+
+    updatePresetsContext({ setGroupBy })
+  }, [updatePresetsContext])
 
   useEffect(() => {
     prevPropsColumnsRef.current = props.columns
@@ -153,9 +176,18 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
   }, [activeTab, showColumnsTab, showGroupingTab])
 
   useEffect(() => {
-    setTableColumns(baseColumns)
+    if (!isEqual(tableColumns, baseColumns)) {
+      setTableColumns(baseColumns)
+    }
     setDraftColumns(baseColumns)
   }, [baseColumns])
+
+  useEffect(() => {
+    if (showColumnsSelector) {
+      setDraftColumns(tableColumnsRef.current)
+      setDraftGroupBy(tableGroupBy)
+    }
+  }, [showColumnsSelector])
 
   useEffect(() => {
     setTableGroupBy(baseGroupBy)
@@ -192,10 +224,24 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
       storageKey: undefined,
       expandableConfig: props.expandable
     })
-    setDraftColumns(defaultColumns)
+
+    const presetSettings = prevCurrentPresetRef?.current?.settings
+
+    setDraftColumns(defaultColumns.map(column => {
+      const presetColumn = presetSettings?.columns?.[column.key]
+
+      if (!presetColumn) return column
+
+      return {
+        ...column,
+        show: presetColumn.show ?? column.show,
+        sortIndex: presetColumn.sortIndex ?? column.sortIndex,
+        width: presetColumn.width ?? column.width
+      }
+    }))
 
     // set original groupBy without LS
-    setDraftGroupBy(props.groupBy ?? props.defaultGroupBy ?? '')
+    setDraftGroupBy(presetSettings?.groupBy ?? props.groupBy ?? props.defaultGroupBy ?? '')
 
     props.onResetColumnsSettings?.()
 
@@ -242,6 +288,25 @@ export const ColumnsSelection = <T extends TableRecord = TableRecord> (
   const sortedColumns = useMemo(() => (
     sortColumns(tableColumns)
   ), [tableColumns])
+
+  useEffect(() => {
+    const nextColumnsState: PresetStoreValue<T>['columnsState'] = { ... storeColumnsState }
+
+    sortedColumns.forEach((column => {
+      if (isColumnReadonly(column)) return
+
+      nextColumnsState[column.key] = {
+        ...nextColumnsState[column.key],
+        show: column.show,
+        sortIndex: column.sortIndex
+      }
+    }))
+
+    if (isColumnsStateEqual(storeColumnsState, nextColumnsState))
+      return
+
+    updatePresetsContext({ columnsState: nextColumnsState })
+  }, [sortedColumns, updatePresetsContext])
 
   return (
     <>

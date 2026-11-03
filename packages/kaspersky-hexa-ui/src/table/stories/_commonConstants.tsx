@@ -112,7 +112,8 @@ export const basicArgTypes = {
       'Go to Hexa UI Components/Toolbar. External fields:<br/>' +
       'toolbar.showSearch - is search enabled<br/>' +
       'toolbar.showColumns - is columns selector shown<br/>' +
-      'toolbar.showGrouping - is grouping selector shown'
+      'toolbar.showGrouping - is grouping selector shown<br/>' +
+      'toolbar.sticky - sticky toolbar'
     )
   },
   enableSearchHighlighting: genArgType('Should the found text be highlighted', 'boolean', 'false'),

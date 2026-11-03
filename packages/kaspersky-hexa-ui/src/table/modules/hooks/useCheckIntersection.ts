@@ -11,7 +11,9 @@ export function useCheckIntersection (
   useEffect(() => {
     const checkIntersection = () => {
       if (!contentRef.current || !paginationRef.current) return
-      const contentBottom = contentRef.current.getBoundingClientRect().bottom
+      const content = contentRef.current.querySelector('.table-scrolling-wrapper')
+      if (!content) return
+      const contentBottom = content.getBoundingClientRect().bottom
       const paginationTop = paginationRef.current.getBoundingClientRect().top
       setIsIntersects(contentBottom > paginationTop)
     }

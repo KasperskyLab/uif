@@ -50,12 +50,12 @@ const ValueContainer = styled.div<{ theme: ThemeKey }>`
   }}
 `
 
-const meta: Meta<CodeViewerPropsStory> = {
+const meta = {
   title: 'Hexa UI Components/CodeViewer/Stories',
-  component: CodeViewerComponent as React.ComponentType<CodeViewerPropsStory>,
+  component: CodeViewerComponent,
   tags: ['!autodocs'],
   ...codeViewerStorySettings
-}
+} as Meta<CodeViewerPropsStory>
 
 export default meta
 

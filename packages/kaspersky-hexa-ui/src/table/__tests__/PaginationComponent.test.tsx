@@ -117,6 +117,25 @@ describe('Table pagination module', () => {
       expect(table.pagination.getTotal()).toBe(30)
       expect(table.query('.ant-pagination-item')).not.toBeInTheDocument()
     })
+
+    it('should go to the first page after pageSize change ', async () => {
+      const table = await TableTestingClass.render({
+        columns: tableColumns,
+        dataSource: generatedData.slice(0, 25),
+        pagination: { pageSize: 20, showSizeChanger: true }
+      })
+
+      await table.pagination.next()
+      // wait until loaded
+      await table.rows.findByKey(generatedData[20].key)
+
+      await table.pagination.selectPageSize(50)
+
+      await table.rows.findByKey(generatedData[0].key)
+
+      expect(table.pagination.getActivePage()).toBe(1)
+      expect(table.rows.getCount()).toBe(25)
+    })
   })
 })
 

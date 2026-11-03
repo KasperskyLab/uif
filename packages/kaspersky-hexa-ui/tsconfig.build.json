@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "noEmit": false,
     "declaration": true,
     "emitDeclarationOnly": true
   },
@@ -9,10 +10,12 @@
     "**/*.stories.tsx",
     "**/__tests__",
     "**/*.test.ts*",
+    ".changelog",
     ".storybook",
     "docs",
     "screenshots",
     "setupTests.ts",
+    "tests",
     "**/__mocks__",
     "**/test-utils"
   ]

@@ -1,4 +1,6 @@
 import { Button } from '@src/button'
+import { Card } from '@src/card'
+import { Checkbox } from '@src/checkbox'
 import { FieldSet } from '@src/field-set'
 import { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
@@ -7,6 +9,26 @@ import { WizardModalProps, WizardPageProps, WizardSidebarProps } from '../types'
 import { Wizard as WizardComponent } from '../Wizard'
 
 const footerText = <div style={{ textAlign: 'right' }}>Footer Text Element</div>
+
+const Agreement = () => {
+  return (
+    <>
+      <div style={{ display: 'flex', flexDirection: 'column', height: 'inherit', minHeight: '0px' }}>
+        <Card style={{ overflow: 'auto' }} mode="filled">
+          <div style={{ whiteSpace: 'pre-wrap', overflow: 'auto' }}>
+            {'Agreement '.repeat(500).trim()}
+          </div>
+        </Card>
+
+        <div style={{ marginTop: '8px' }}>
+          <Checkbox>
+            Some text
+          </Checkbox>
+        </div>
+      </div>
+    </>
+  )
+}
 
 const useStepsWithValidation = (
   stepsToShow?: number[]
@@ -53,7 +75,7 @@ const useStepsWithValidation = (
         </div>
       )
     },
-    { name: 'Step 2', render: () => <div>Step 2 content</div> },
+    { name: 'Step 2', render: () => <Agreement /> },
     { name: 'Step 3', description: 'Long long long long long long long long description', render: () => <div>Step 3 content</div> },
     { name: 'Step 4', description: 'Description', render: () => <div>Step 4 content</div> }
   ].filter((_item, index) => {

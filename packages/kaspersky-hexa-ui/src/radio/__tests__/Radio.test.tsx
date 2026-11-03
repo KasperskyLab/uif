@@ -297,6 +297,6 @@ describe('Radio', () => {
       />
     )
     expect(screen.queryAllByRole('radio').length).toBe(2)
-    expect(console.error).toBeCalled()
+    expect(console.error).toHaveBeenCalled()
   })
 })

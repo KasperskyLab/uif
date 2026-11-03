@@ -10,7 +10,7 @@ import styles from './ValidationRules.module.scss'
 
 export function ValidationRules ({ rules = [] }: { rules?: ValidationRule[] }) {
   return (
-    <Space gap="related">
+    <Space gap="related" direction="vertical" align="start">
       {rules.map((rule) => (
         <Space
           gap="related"

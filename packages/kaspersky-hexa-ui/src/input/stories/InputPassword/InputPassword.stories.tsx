@@ -21,7 +21,7 @@ export const inputPasswordStorySettings: Meta<TextboxPasswordProps> = {
   },
   parameters: {
     badges: [badges.stable, badges.reviewedByDesign],
-    design: ''
+    design: '
   },
   decorators: [
     (Story, context) => (

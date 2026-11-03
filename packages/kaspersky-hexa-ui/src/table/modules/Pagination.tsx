@@ -29,13 +29,13 @@ const StyledPaginationContainer = styled.div<StyledPaginationProps>`
     margin-top: 0;
     margin-bottom: 8px;
     position: sticky;
-    z-index: 1;
+    z-index: 3;
     bottom: 0;
     clip-path: inset(-100vw 0 0 0);
     > div {
       padding: 8px 0;
       background: var(--pagination_area--bg);
-      box-shadow: ${props.$enableShadow ? '0 3px 12px 0 var(--elevation--overlap)' : 'none'};
+      box-shadow: ${props.$enableShadow ? '0 3px 12px 0 var(--elevation--shadow_drop)' : 'none'};
     }
   `}
 `

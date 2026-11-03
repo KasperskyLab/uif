@@ -5,6 +5,7 @@ import { ITableProps, Table, TableRecord, TableRef } from '..'
 import { createMockDataSourceFunction } from '../__mocks__/filtersMockData'
 
 import { TableTestingClass } from './TableTestingClass'
+import { withVirtualization } from './virtualMode'
 
 export type TableMode = 'client' | 'server'
 
@@ -107,13 +108,13 @@ export function renderByModeSync <T extends TableRecord = TableRecord> (
   { withRef = false, waitForData = true }: RenderByModeOptions = {}
 ): AwaitableRenderResult<RenderByModeResult> {
   const dataSourceFunction = mode === 'server' ? jest.fn(createMockDataSourceFunction(data, props.columns!)) : undefined
-  const mergedProps: Partial<ITableProps<T>> = {
+  const mergedProps: Partial<ITableProps<T>> = withVirtualization({
     testId: DEFAULT_TEST_ID,
     pagination: { pageSize: 20 },
     dataSource: mode === 'client' ? data : undefined,
     dataSourceFunction,
     ...props
-  }
+  })
 
   let result: RenderByModeResult
   if (withRef) {

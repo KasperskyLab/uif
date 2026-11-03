@@ -9,8 +9,9 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { ArrowRight } from '@kaspersky/hexa-ui-icons/16'
 
+import { DropdownItem } from './DropdownItem'
 import styles from './styles/Dropdown.module.scss'
-import { DropdownItemActionsProps } from './types'
+import { DropdownItemActionsProps, DropdownItemProps } from './types'
 
 type EventWarnKey = Pick<MenuItemProps, 'eventKey' | 'warnKey'>
 
@@ -94,5 +95,18 @@ export const DropdownToggle: FC<ToggleProps> = ({
         </Space>
       </Tooltip>
     </li>
+  )
+}
+
+export const DropdownMenuFooter: FC<DropdownItemProps & { sticky?: boolean }> = ({
+  className,
+  sticky = true,
+  ...props
+}) => {
+  return (
+    <DropdownItem
+      {...props}
+      className={cn(className, sticky && styles.dropdownItemStickyFooter)}
+    />
   )
 }

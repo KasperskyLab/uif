@@ -1,6 +1,6 @@
 import { ValidationStatus } from '@helpers/index'
 import { TextboxNumberProps } from '@src/input/types'
-import { BooleanFilterType, EnumFilterType } from '@src/table/types'
+import { BooleanFilterType, EnumFilterType, TableFilterUnits } from '@src/table/types'
 
 import {
   BooleanFilter,
@@ -36,6 +36,9 @@ export type DateTimeItemProps = BaseItemProps<DateTimeFilter> & {
   dateOnly?: boolean,
 }
 
-export type NumberItemProps = BaseItemProps<NumberFilter> & Pick<TextboxNumberProps, 'min'>
+export type NumberItemProps = BaseItemProps<NumberFilter> & Pick<TextboxNumberProps, 'min'> & {
+  /** Units of measure configured on the column */
+  units?: TableFilterUnits
+}
 
 export type StringItemProps = BaseItemProps<TextFilter>

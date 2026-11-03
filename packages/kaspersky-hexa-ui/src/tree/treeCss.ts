@@ -16,6 +16,14 @@ export const treeCss = css<{ checkable?: boolean, interactive?: boolean, disable
     border: none;
     border-radius: 8px;
 
+    &&.ant-tree-block-node {
+      width: 100%;
+
+      .hexa-ui-tree-node-title > span:first-child {
+        flex: 1;
+      }
+    }
+
     &.ant-tree-show-line {
       .anticon-file {
         opacity: 0;

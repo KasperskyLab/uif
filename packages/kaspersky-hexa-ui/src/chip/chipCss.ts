@@ -1,4 +1,3 @@
-import { SPACES } from '@design-system/theme'
 import { getTextSizes } from '@design-system/tokens'
 import { getFromProps } from '@helpers/getFromProps'
 import { css } from 'styled-components'
@@ -21,10 +20,10 @@ export const chipCss = css<{
   display: flex;
   align-items: center;
   height: ${fromProps('height')};
-  gap: ${SPACES[2]}px;
+  gap: 2px;
   margin: 0;
   padding: ${fromProps('padding')};
-  border-radius: ${SPACES[10]}px;
+  border-radius: 20px;
   background: ${fromProps('enabled.background')};
   color: ${fromProps('enabled.color')};
   cursor: default;

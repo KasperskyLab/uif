@@ -3,6 +3,7 @@ import { TestingProps } from '@helpers/typesHelpers'
 import { ButtonProps } from '@src/button/types'
 import { DropdownItemProps, DropdownProps } from '@src/dropdown/types'
 import { IconProps } from '@src/icon/types'
+import { IndicatorMode } from '@src/indicator/types'
 import { LinkProps } from '@src/link/types'
 import { SearchProps } from '@src/search/types'
 import { ToggleButtonProps } from '@src/toggle-button/types'
@@ -36,6 +37,7 @@ type ToolbarButtonCommonProps = {
   className?: string,
   iconBefore?: ReactNode,
   iconAfter?: ReactNode,
+  indicatorMode?: IndicatorMode,
   disabled?: boolean,
   onClick?: MouseEventHandler<HTMLElement>,
   tooltip?: string,

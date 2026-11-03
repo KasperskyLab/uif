@@ -29,7 +29,11 @@ const StyledTableContainer = styled.div<Pick<ITableProps, 'fullHeight'>>`
   gap: 16px;
 
   [data-testid="table-toolbar"] {
-    z-index: 3;
+    z-index: 4;
+
+    &.sticky {
+      background-color: var(--bg--neutral--level_1);
+    }
   }
 
   .hexa-ui-table-ref {
@@ -109,8 +113,8 @@ function ToolbarContextSync <T extends TableRecord> ({ dataSource, getLeftItems,
 export const ToolbarIntegration = <T extends TableRecord = TableRecord> (
   Component: TableComponent<T>
 ): TableComponent<T> => function ToolbarIntegrationModule (props) {
-  const filterApi = useTableContext(state => state.filterApi)
-  const getLeftItems = props.toolbar?.getLeftItems
+  const [filterApi, currentView] = useTableContext(state => [state.filterApi, state.presets.currentView])
+  const getLeftItems = currentView?.settings?.toolbarActions ?? props.toolbar?.getLeftItems
   const [filteredRows, setFilteredRows] = useState(props.dataSource)
   const [expandedRowKeys, setExpandedRowKeys] = useState<Key[]>([])
   const [table, setTable] = useState(null as HTMLDivElement | null)
@@ -121,13 +125,15 @@ export const ToolbarIntegration = <T extends TableRecord = TableRecord> (
     dataSource: props.dataSource,
     clientSearchFields: props.clientSearchFields,
     columns: props.columns,
+    presets: props.presets,
     table: table,
     filterApi: filterApi as FilterApi<T> | null,
     setFilteredRows,
     setExpandedRowKeys,
     onSearch: props.onSearch,
     onClientSearch: props.onClientSearch,
-    enableSearchHighlighting: props.enableSearchHighlighting
+    enableSearchHighlighting: props.enableSearchHighlighting,
+    testId: props.testId
   })
   const tableRef = useRef(null as HTMLDivElement | null)
 
@@ -158,7 +164,7 @@ export const ToolbarIntegration = <T extends TableRecord = TableRecord> (
           testId="table-toolbar"
           sticky={props.toolbar.sticky}
           leftLimit={props.toolbar.leftLimit}
-          left={props.toolbar.getLeftItems ? customActions : (props.toolbar.left ?? [])}
+          left={getLeftItems ? customActions : (props.toolbar.left ?? [])}
           right={
             props.toolbar.right
               ? createToolbarElements(props.toolbar.right(predefinedActions))
@@ -166,6 +172,7 @@ export const ToolbarIntegration = <T extends TableRecord = TableRecord> (
           }
           autoDropdown={props.toolbar.autoDropdown}
         />
+        {props.toolbar.TEMP_DONT_USE_customComponent}
         <FilterItems
           items={props?.filterItems?.items}
           clearLinkText={props?.filterItems?.clearLinkText}

@@ -1,12 +1,19 @@
 {
   "translation": {
     "common": {
+      "back": "Atrás",
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
       "empty": "No hay datos",
       "import": "Importar",
       "export": "Exportar",
       "filters": "Filtros",
+      "next": "Siguiente",
       "no": "No",
-      "yes": "Sí"
+      "ok": "Sin inconvenientes",
+      "rename": "Cambiar nombre",
+      "yes": "Sí",
+      "save": "Guardar"
     },
     "upload": {
       "dropFileTitle": "Soltar el archivo aquí",
@@ -56,6 +63,21 @@
         "maxTotalSize2": "El tamaño total de los archivos cargados excede el límite de tamaño permitido actual",
         "filesDoNotMeetRequirements": "Los archivos no cumplen con los requisitos",
         "format": "No se puede(n) cargar {{count}} archivo(s) debido a requisitos de formato."
+      }
+    },
+    "onboarding": {
+      "modal": {
+        "actions": {
+          "tryNow": "Probar ahora",
+          "skip": "Omitir"
+        },
+        "dontShowAgain": "No volver a mostrar"
+      },
+      "interactiveTour": {
+        "actions": {
+          "complete": "Completar"
+        },
+        "stepStack": "Paso {{currentStep}} de {{totalSteps}}"
       }
     },
     "wizard": {
@@ -182,6 +204,38 @@
       },
       "groupingEmpty": "Otro"
     },
+    "tablePresets": {
+      "actions": {
+        "createPreset": "Guardar como nuevo valor preestablecido",
+        "updatePreset": "Actualizar valor preestablecido"
+      },
+      "createFirstPresetTip": "Puede guardar las columnas seleccionadas, su orden, los filtros o toda la configuración de la tabla como un valor preestablecido personalizado. Configure la tabla y los filtros según sea necesario y, luego, guarde la configuración como un nuevo valor preestablecido.",
+      "createPresetModal": {
+        "header": "Guardar la configuración de la tabla como un nuevo valor preestablecido",
+        "presetName": "Nombre del valor preestablecido",
+        "tip": "El valor preestablecido incluye el orden y la visibilidad de las columnas, los filtros aplicados y el orden de clasificación. Si cambia alguno de estos parámetros, puede actualizar el valor preestablecido."
+      },
+      "renamePresetModal": {
+        "header": "Cambiar el nombre del valor preestablecido"
+      },
+      "deletePresetModal": {
+        "header": "¿Eliminar el valor preestablecido?",
+        "message": "¿Eliminar el valor preestablecido \"{{name}}\"? Esta acción no se puede deshacer."
+      },
+      "errors": {
+        "presetCreate": "No se pudo crear el valor preestablecido {{name}}",
+        "presetDelete": "No se pudo eliminar la configuración preestablecida {{name}}",
+        "presetUpdate": "No se pudo actualizar la configuración preestablecida {{name}}"
+      },
+      "presetCreated": "Se guardó la configuración preestablecida {{name}}",
+      "presetDeleted": "Se eliminó la configuración preestablecida {{name}}",
+      "presetUpdated": "Se guardó la configuración preestablecida {{name}}",
+      "presets": "Configuraciones preestablecidas",
+      "validation": {
+        "presetNameEmpty": "Ingrese un nombre para la configuración preestablecida",
+        "presetNameExists": "Ya existe una configuración preestablecida con este nombre"
+      }
+    },
     "tabs": {
       "dropdown": {
         "more": "Más"
@@ -239,7 +293,7 @@
       "daysLeft": "{{count}} días restantes",
       "termDays": "{{count}} días",
       "statuses": {
-        "valid": "Activa",
+        "valid": "Activo",
         "expired": "Caducada"
       }
     },

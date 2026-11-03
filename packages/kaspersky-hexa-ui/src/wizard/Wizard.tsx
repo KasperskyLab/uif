@@ -272,7 +272,7 @@ const WizardSidebar: FC<WizardSidebarProps> = (props) => {
       klId={props.klId}
       testId={props.testId}
     >
-      <Space height="100%" width="unset" wrap="nowrap" align="normal" className={props.className}>
+      <Space height="100%" width="unset" wrap="nowrap" align="normal" className={cn(props.className, styles.overflowAuto)}>
         <StepStack
           vertical={true}
           steps={steps}

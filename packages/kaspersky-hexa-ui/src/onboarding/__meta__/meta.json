@@ -1,0 +1,15 @@
+{
+  "dod": {
+    "designTokens": true,
+    "useThemedHook": false,
+    "unitTests": true,
+    "screenshotTests": true,
+    "migration": false,
+    "apiTable": true,
+    "storybook": true,
+    "pixsoView": false
+  },
+  "component": "Onboarding",
+  "description": "Диалоговое окно поверх интерфейса, которое знакомит пользователя с ключевыми функциями, сценариями или изменениями в продукте.",
+  "usage": "Рекомендуется применять на ранних этапах работы с сервисом (например, при первом входе) или после крупных обновлений."
+}

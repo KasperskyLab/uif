@@ -4,14 +4,9 @@ import { Tag } from '@src/tag'
 import { H3, Text } from '@src/typography'
 import cn from 'classnames'
 import React from 'react'
-import styled from 'styled-components'
 
-import { pageHeaderCss, prefixClass } from './pageHeaderCss'
+import styles from './PageHeader.module.scss'
 import { PageHeaderProps } from './types'
-
-const StyledPageHeader = styled.div`
-  ${pageHeaderCss}
-`
 
 export const PageHeader = (props: PageHeaderProps): JSX.Element => {
   const {
@@ -26,16 +21,16 @@ export const PageHeader = (props: PageHeaderProps): JSX.Element => {
   } = useTestAttribute(props)
 
   return (
-    <StyledPageHeader className={cn(prefixClass, className)} {...testAttributes}>
+    <div className={cn('hexa-ui-page-header', className, styles.pageHeader)} {...testAttributes}>
       {breadcrumbs && <Breadcrumbs {...breadcrumbs} size="small" />}
-      <div className={`${prefixClass}-content`}>
-        <div className={`${prefixClass}-content-left`}>
-          {iconBefore && <div className={`${prefixClass}-content-left-before`}>{iconBefore}</div>}
-          <div className={`${prefixClass}-content-left-main`}>
-            <div className={`${prefixClass}-content-left-main-title`}>
+      <div className={styles.content}>
+        <div className={styles.contentLeft}>
+          {iconBefore && <div className={styles.contentLeftBefore}>{iconBefore}</div>}
+          <div className={styles.contentLeftMain}>
+            <div className={styles.contentLeftMainTitle}>
               <H3>{title}</H3>
               {tagsAfter && tagsAfter.length && (
-                <div className={`${prefixClass}-content-left-main-title-tags`}>
+                <div className={styles.contentLeftMainTitleTags}>
                   <Tag.Group items={tagsAfter} />
                 </div>
               )}
@@ -43,8 +38,8 @@ export const PageHeader = (props: PageHeaderProps): JSX.Element => {
             {description && <Text type="BTR2">{description}</Text>}
           </div>
         </div>
-        {elementAfter && <div className={`${prefixClass}-content-right`}>{elementAfter}</div>}
+        {elementAfter && <div className={styles.contentRight}>{elementAfter}</div>}
       </div>
-    </StyledPageHeader>
+    </div>
   )
 }

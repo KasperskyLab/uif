@@ -2,6 +2,28 @@
   color: var(--fg--neutral--secondary);
 }
 
+.loadingSkeleton {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .skeletonRow {
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--spacing--gap_grouped);
+    padding: var(--spacing--padding_s) 0;
+
+    .skeletonCell {
+      height: 32px;
+    }
+
+    .skeletonSelectionCell {
+      width: 22px;
+      flex-shrink: 0;
+    }
+  }
+}
+
 .customScrollContainer {
   &.hidden {
     height: 0;

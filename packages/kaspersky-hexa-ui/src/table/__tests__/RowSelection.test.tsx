@@ -225,12 +225,46 @@ describe.each(testConfigs)('Row Selection - $description', (config) => {
           expect(lastCall.isSelectedAll).toBe(false)
         })
 
-        table.pagination.next()
+        await table.pagination.next()
 
         await waitFor(() => {
           testRows.slice(pageSize, pageSize * 2).forEach(row => {
             const checkbox = table.selection.getRowCheckbox(row.key)
             expect(checkbox).not.toBeChecked()
+          })
+        })
+      })
+
+      it('should select rows at second page', async () => {
+        const { processSelection, table } = await renderTable(config)
+        await table.rows.waitForData()
+
+        await table.pagination.next()
+        await table.rows.findByKey(testRows[pageSize].key)
+
+        await table.selection.selectCurrentPage()
+
+        await waitFor(() => {
+          const lastCall = processSelection.mock.lastCall[0]
+
+          if (config.mode === 'client') {
+            const length = testRows.slice(pageSize).length
+            expect(lastCall.selectedRowKeys).toHaveLength(length)
+            expect(lastCall.selectedRows).toHaveLength(length)
+          } else {
+            expect(lastCall.selectedRowKeys.length).toBeGreaterThan(0)
+            expect(lastCall.selectedRows.length).toBeGreaterThan(0)
+          }
+
+          expect(lastCall.isSelectedAll).toBe(false)
+        })
+
+        await table.pagination.prev()
+        await table.rows.findByKey(testRows[0].key)
+
+        await waitFor(() => {
+          testRows.slice(0, pageSize).forEach(row => {
+            expect(table.selection.isRowChecked(row.key)).toBe(false)
           })
         })
       })
@@ -404,8 +438,41 @@ describe('Client pagination specific tests', () => {
   })
 })
 
+describe('Select current page with client sorting', () => {
+  const pageSize = 20
+  const rawRows: MockRow[] = Array.from({ length: 40 }, (_, i) => ({
+    ...generatedData[i % generatedData.length],
+    key: i + 1,
+    fullname: `Name ${String(40 - i).padStart(2, '0')}`
+  }))
+  const sortedPageKeys = [...rawRows]
+    .sort((a, b) => a.fullname.localeCompare(b.fullname))
+    .slice(0, pageSize)
+    .map(row => row.key)
+
+  it('selects the sorted (visible) current page rows, not the raw dataSource slice', async () => {
+    const processSelection = jest.fn()
+    const { table } = await renderByMode('client', rawRows, {
+      columns: tableColumns,
+      pagination: { pageSize },
+      testId: 'sorted-table',
+      initialSorting: { field: 'fullname', direction: 'asc' },
+      rowSelection: { processSelection, builtInRowSelection: true }
+    })
+    await table.rows.waitForData()
+
+    await table.selection.selectCurrentPage()
+
+    await waitFor(() => {
+      const { selectedRowKeys } = processSelection.mock.lastCall[0]
+      expect(selectedRowKeys).toEqual(sortedPageKeys)
+      expect(selectedRowKeys).not.toEqual(rawRows.slice(0, pageSize).map(row => row.key))
+    })
+  })
+})
+
 describe('Server pagination specific tests', () => {
-  const serverConfig = testConfigs[1]
+  const serverConfig = testConfigs.find(config => config.mode === 'server')!
 
   it('should re-apply getPreselectedRows after a server page change', async () => {
     const getPreselectedRows = jest.fn(async () => [] as string[])
@@ -443,11 +510,10 @@ describe('Server pagination specific tests', () => {
     table.selection.toggleRow(row.key)
     await waitFor(() => expect(processSelection.mock.lastCall[0].selectedRowKeys).toContain(row.key))
 
-    table.pagination.next()
-    await waitFor(() => expect(table.rows.getByKey(row.key)).toBeNull())
+    await table.pagination.next()
 
-    table.pagination.prev()
-    await table.rows.findByKey(row.key)
+    await table.pagination.prev()
+
     expect(table.selection.isRowChecked(row.key)).toBe(true)
   })
 })

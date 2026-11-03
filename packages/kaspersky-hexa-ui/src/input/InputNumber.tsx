@@ -1,53 +1,21 @@
 import { useStateProps } from '@helpers/hooks/useStateProps'
+import { useLocale } from '@helpers/localization/useLocale'
 import { ActionButton } from '@src/action-button'
 import cn from 'classnames'
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import React from 'react'
 
 import { ArrowDownMicro, ArrowUpMicro } from '@kaspersky/hexa-ui-icons/16'
 
 import {
   getDecimalPrecision,
-  getValidator,
+  getNumberSeparators,
   normalizeValue,
-  trimmedValue,
-  UseHandleKeyDownProps
+  toExactNumber,
+  trimmedValue
 } from './helpers'
 import { TextboxInternal } from './TextboxInternal'
 import { TextboxNumberProps } from './types'
-
-const useHandleKeyDown = ({
-  min,
-  integerOnly,
-  decimalSeparator,
-  precision
-}: UseHandleKeyDownProps) =>
-  useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
-    const allowedKeys = [
-      'Enter',
-      'Backspace',
-      'Delete',
-      'ArrowLeft',
-      'ArrowRight',
-      'Home',
-      'End',
-      'Tab',
-      'Escape'
-    ]
-
-    if (
-      allowedKeys.includes(event.key) ||
-      event.ctrlKey ||
-      event.metaKey ||
-      event.altKey ||
-      event.key.length > 1
-    ) return
-
-    const currentValue = (event.target as HTMLInputElement).value + event.key
-    if (!getValidator({ decimalSeparator, integerOnly, min, precision }).test(currentValue)) {
-      event.preventDefault()
-    }
-  }, [decimalSeparator, integerOnly, min, precision])
 
 export const InputNumber: FC<TextboxNumberProps> = (props: TextboxNumberProps) => {
   const {
@@ -65,21 +33,26 @@ export const InputNumber: FC<TextboxNumberProps> = (props: TextboxNumberProps) =
     allowEmpty = false,
     integerOnly = false,
     parser,
+    useGrouping = false,
     onBlur,
     onChange,
     onStep,
     ...rest
   } = props
 
+  const locale = useLocale()
+
+  const separators = useMemo(
+    () => getNumberSeparators(locale),
+    [locale]
+  )
+
+  const decimal = decimalSeparator ?? (
+    useGrouping ? separators.decimal : '.'
+  )
+
   const [innerValue, setInnerValue] = useStateProps<TextboxNumberProps['value']>(value)
   const [innerStep, setInnerStep] = useStateProps<NonNullable<TextboxNumberProps['step']>>(step)
-
-  const keyDownValidator = useHandleKeyDown({
-    decimalSeparator,
-    integerOnly,
-    min,
-    precision
-  })
 
   const handleChange: TextboxNumberProps['onChange'] = useCallback(value => {
     setInnerValue(value)
@@ -95,7 +68,7 @@ export const InputNumber: FC<TextboxNumberProps> = (props: TextboxNumberProps) =
       }
     }
 
-    onChange?.(Number(value))
+    onChange?.(toExactNumber(value))
   }, [onChange, setInnerValue, allowEmpty])
 
   const handleStep: TextboxNumberProps['onStep'] = useCallback((value, info) => {
@@ -127,25 +100,38 @@ export const InputNumber: FC<TextboxNumberProps> = (props: TextboxNumberProps) =
       )
       return
     }
-
-    keyDownValidator(e)
-  }, [keyboard, keyDownValidator, innerValue, innerStep, handleStep])
+  }, [keyboard, innerValue, innerStep, handleStep])
 
   const handleBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value
+    const rawValue = String(innerValue ?? '')
     const parsed = parser ? parser(rawValue) : rawValue
     const newValue = normalizeValue(parsed, { allowEmpty, min, max })
     onBlur?.(e)
     handleChange(newValue)
-  }, [parser, handleChange, onBlur, allowEmpty, min, max])
+  }, [parser, handleChange, onBlur, allowEmpty, min, max, innerValue])
 
   return (
     <TextboxInternal
       // @ts-expect-error Should pass `null` to prevent type='text' in input, `undefined` does not work properly
       type={null}
+      numberFormat={{
+        thousandSeparator:
+          useGrouping && separators.group !== decimal
+            ? separators.group
+            : false,
+        decimalSeparator: decimal,
+        decimalScale: integerOnly ? 0 : precision,
+        allowNegative: min === undefined || min < 0
+      }}
       aria-valuemin={min}
       aria-valuemax={max}
-      aria-valuenow={innerValue}
+      aria-valuenow={
+        innerValue != null &&
+        innerValue !== '' &&
+        Number.isFinite(Number(innerValue))
+          ? Number(innerValue)
+          : undefined
+      }
       autoComplete="off"
       step={innerStep}
       role="spinbutton"

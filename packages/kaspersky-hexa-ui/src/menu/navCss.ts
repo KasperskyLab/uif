@@ -99,10 +99,6 @@ export const navItemCss = css`
     transition: grid-template-rows ease 150ms;
     display: grid;
     grid-template-rows: 0fr;
-
-    .uif-nav-item-entry-icon {
-      display: none;
-    }
   }
 
   .uif-nav-item-child-wrapper {
@@ -113,11 +109,13 @@ export const navItemCss = css`
     display: none;
   }
 
-  .uif-nav-item-child .uif-nav-item-entry-title {
+  .uif-nav-item-child .uif-nav-item-entry-icon,
+  .uif-nav-item-child .uif-nav-item-entry-title.title-wo-icon {
     margin-left: var(--menu-level-offset-2);
   }
 
-  .uif-nav-item-child .uif-nav-item-child .uif-nav-item-entry-title {
+  .uif-nav-item-child .uif-nav-item-child .uif-nav-item-entry-icon,
+  .uif-nav-item-child .uif-nav-item-child .uif-nav-item-entry-title.title-wo-icon {
     margin-left: var(--menu-level-offset-3);
   }
   
@@ -238,7 +236,8 @@ export const navItemCss = css`
         translate: 1px 0;
       }
         
-      .uif-nav-item-entry-title {
+      .uif-nav-item-entry-title,
+      .uif-nav-item-entry-icon {
         margin: 0;
         translate: 0;
       }

@@ -32,7 +32,7 @@ import { uploaderStorySettings } from './Uploader.stories'
 const meta: Meta<UploaderProps> = {
   title: 'Hexa UI Components/Uploader/Stories',
   component: Uploader,
-  tags: ['!autodocs'],
+  tags: ['!autodocs', '!manifest'],
   ...uploaderStorySettings
 }
 

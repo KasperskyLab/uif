@@ -1,0 +1,16 @@
+{
+  "dod": {
+    "designTokens": false,
+    "useThemedHook": false,
+    "unitTests": true,
+    "screenshotTests": false,
+    "migration": false,
+    "apiTable": false,
+    "storybook": true,
+    "pixsoView": true
+  },
+  "component": "Hexadecimal View",
+  "description": "Hexadecimal View — компонент для отображения сырых данных. Принимает как ArrayBuffer (view для ArrayBuffer), так и сырые данные в формате строки",
+  "designLink": "",
+  "pixsoView": ""
+}

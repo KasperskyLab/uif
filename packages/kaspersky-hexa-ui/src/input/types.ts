@@ -13,6 +13,7 @@ import {
   RefObject
 } from 'react'
 import { IMaskInputProps } from 'react-imask'
+import type { NumericFormatProps } from 'react-number-format'
 
 export type ISizeType = Extract<
   SizingType,
@@ -79,7 +80,8 @@ export type TextboxInternalProps = Omit<TextboxProps, 'onChange' | 'value'> & {
   /** Handler */
   onChange?: (value: string | number, mask?: IMaskInputProps) => void,
   /** Controlled Value */
-  value?: string | number
+  value?: string | number,
+  numberFormat?: Pick<NumericFormatProps, 'thousandSeparator' | 'decimalSeparator' | 'decimalScale' | 'allowNegative'>
 }
 
 export type TextboxViewProps = TextboxToViewProps<TextboxProps>
@@ -171,7 +173,9 @@ export type TextboxNumberProps = Omit<
   /** Prefix before the value */
   prefix?: string,
   /** Suffix after the value */
-  suffix?: string
+  suffix?: string,
+  /** Enable locale-based digit grouping */
+  useGrouping?: boolean
 } & BaseTextboxProps
 
 // Textbox.Textarea

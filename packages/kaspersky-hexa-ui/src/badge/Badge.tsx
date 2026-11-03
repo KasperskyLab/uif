@@ -1,50 +1,36 @@
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import AntdBadge from 'antd/es/badge'
 import cn from 'classnames'
 import React, { FC } from 'react'
-import styled from 'styled-components'
 
-import { badgeCss } from './bagdeCss'
+import styles from './Badge.module.scss'
 import { useOverflowCount } from './hooks'
-import { BadgeProps, badgeTransparentModes, BadgeViewProps } from './types'
-import { useThemedBadge } from './useThemedBadge'
+import { BadgeProps, badgeTransparentModes } from './types'
 
-const StyledBadge = styled(AntdBadge).withConfig({
-  shouldForwardProp: prop => !['cssConfig'].includes(prop)
-})`${badgeCss}`
-
-export const Badge: FC<BadgeProps> = ({ className, ...rawProps }: BadgeProps) => {
-  const themedProps = useThemedBadge(rawProps)
-  const props = useTestAttribute(themedProps)
-  return (
-    <BadgeView
-      className={cn(
-        className,
-        { 'is-transparent': badgeTransparentModes.some((transparentMode) => transparentMode === rawProps.mode) }
-      )}
-      {...props}
-    />
-  )
-}
-
-Badge.defaultProps = {
-  mode: 'neutral',
-  overflowCount: 99,
-  size: 'medium'
-}
-
-const BadgeView: FC<BadgeViewProps> = ({
+export const Badge: FC<BadgeProps> = ({
+  className,
+  theme,
   count,
   overflowCount = 99,
   text,
-  testAttributes,
   title,
+  mode = 'neutral',
+  size = 'medium',
   ...rest
-}: BadgeViewProps) => {
+}: BadgeProps) => {
+  const { testAttributes } = useTestAttribute(rest)
   const countText = useOverflowCount(count, overflowCount)
 
   return (
-    <StyledBadge
+    <AntdBadge
+      className={cn(
+        getClassNameWithTheme(className, theme),
+        styles.badge,
+        styles[`${size}Size`],
+        styles[mode],
+        { [styles.isTransparent]: badgeTransparentModes.some((transparentMode) => transparentMode === mode) }
+      )}
       count={text || countText}
       title={title || ''}
       overflowCount={overflowCount}

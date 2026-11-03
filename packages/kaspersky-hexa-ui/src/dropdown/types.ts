@@ -41,7 +41,7 @@ export type DropdownProps = {
   /** Called when the visible state is changed. Not trigger when hidden by click item */
   onVisibleChange?: (visible: boolean) => void,
   /** Called when overlay is clicked */
-  onOverlayClick?: () => void,
+  onOverlayClick?: (event: Event) => void,
   /** Called when menu item is selected */
   onOverlaySelect?: MenuProps['onSelect'],
   /** Whether the dropdown menu is currently visible */

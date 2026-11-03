@@ -11,7 +11,7 @@ export type ActionButtonThemeProps = {
   theme?: Theme,
   /** Size */
   size?: ActionButtonSize,
-  /** Color mode */
+  /** Color mode, mode `filledInverted` is deprecated */
   mode?: ActionButtonMode
 }
 

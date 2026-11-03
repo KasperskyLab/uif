@@ -2,7 +2,6 @@ import { ComponentsConfig } from '@design-system/css-configs/types'
 
 import { effects } from '@kaspersky/hexa-ui-core/colors/js'
 
-import { card, cardSize } from './card'
 import { codeViewer } from './codeViewer'
 import { input } from './input'
 import { link, linkSize } from './link'
@@ -21,10 +20,6 @@ import { upload } from './upload'
 /* eslint sort-keys: "error" */
 export const COMPONENTS_CONFIG: ComponentsConfig = {
   components: {
-    card: {
-      colors: card(),
-      sizes: cardSize
-    },
     codeViewer: {
       colors: codeViewer({ effects })
     },

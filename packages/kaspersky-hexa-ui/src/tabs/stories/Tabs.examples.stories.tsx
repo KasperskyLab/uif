@@ -57,7 +57,7 @@ export const Basic: Story = {
 }
 
 export const WithIconAndNumber: Story = {
-  render: (args) => <Tabs {...args}>{pane('1', <Tabs.TabPaneHead text="Tab" iconBefore={<Placeholder />} />)}{pane('2', <Tabs.TabPaneHead text="Tab" iconAfter={<Placeholder />} />)}{pane('3', <Tabs.TabPaneHead text="Tab" iconBefore={<Placeholder />} iconAfter={<Placeholder />} number={5} />)}</Tabs>
+  render: (args) => <Tabs {...args}>{pane('1', <Tabs.TabPaneHead text="Tab" iconBefore={<Placeholder />} />)}{pane('2', <Tabs.TabPaneHead text="Tab" iconAfter={<Placeholder />} />)}{pane('3', <Tabs.TabPaneHead text="Tab" iconBefore={<Placeholder />} iconAfter={<Placeholder />} number={5} />)}{pane('4', <Tabs.TabPaneHead text="Tab" iconBefore={<Placeholder />} iconAfter={<Placeholder />} number={1100} overflowCount={999} />)}</Tabs>
 }
 
 export const WithIndicator: StoryObj<StoryTabsProps> = {

@@ -168,14 +168,15 @@ export const resizeColumns = <T extends TableRecord = TableRecord>(
     columns,
     onManualColumnResize,
     columnMinWidth
-  }: ResizeColumnsArgs<T>
+  }: ResizeColumnsArgs<T>,
+  isUserDefinedWidth: boolean = true
 ) => {
   const nextColumns: TableColumn<T>[] = [...columns]
   nextColumns[index] = {
     ...nextColumns[index],
-    width: columnWidth,
+    width: Math.round(columnWidth),
     minWidth: columnMinWidth,
-    isUserDefinedWidth: true
+    isUserDefinedWidth: isUserDefinedWidth
   }
 
   onManualColumnResize?.(nextColumns[index])

@@ -1,9 +1,12 @@
 export * from './TenantFilter'
 export type {
+  ProcessedTreeDataItem,
   Tenant,
   TenantFilterData,
   TenantFilterProps,
-  TenantFilterTreeDataItem
+  TenantFilterTreeDataItem,
+  TenantFilterTreeDataMap,
+  TenantFilterTreeDataMapItem
 } from './types'
 export {
   getActualSelectedTenantsIds,

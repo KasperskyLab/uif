@@ -166,7 +166,8 @@ export const PreviewContent = styled.div<{
       $direction === 'vertical' ? 'column' : 'row'};
     flex-wrap: ${({ $direction = 'horizontal' }) =>
       $direction === 'vertical' ? 'nowrap' : 'wrap'};
-    align-items: flex-start;
+    align-items: ${({ $direction = 'horizontal' }) =>
+      $direction === 'vertical' ? 'flex-start' : 'center'};
     min-height: 100%;
     gap: ${({ $gap = 16 }) => $gap}px;
   }

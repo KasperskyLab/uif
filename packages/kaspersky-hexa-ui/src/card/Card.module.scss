@@ -1,0 +1,183 @@
+@use 'sass:map';
+@use '../../design-system/tokens/typography.module.scss';
+
+$card-tokens: (
+  base: (
+    enabled: (
+      background: var(--bg--neutral--level_0),
+      color: var(--fg--neutral--primary),
+      border: var(--border--neutral--bold)
+    ),
+    hover: (
+      background: var(--bg--neutral--level_0),
+      border: var(--common--accent--hover)
+    ),
+    active: (
+      background: var(--bg--neutral--level_0),
+      border: var(--common--accent--active)
+    )
+  ),
+  filled: (
+    enabled: (
+      background: var(--bg--neutral--level_1),
+      color: var(--fg--neutral--primary),
+      border: var(--border--neutral--bold)
+    ),
+    hover: (
+      background: var(--bg--neutral--level_1_hover),
+      border: var(--border--neutral--bold)
+    ),
+    active: (
+      background: var(--bg--neutral--level_1_active),
+      border: var(--border--neutral--bold)
+    )
+  ),
+  selected: (
+    enabled: (
+      background: var(--bg--accent_subtle--enabled),
+      color: var(--fg--neutral--primary),
+      border: var(--border--color--accent)
+    ),
+    hover: (
+      background: var(--bg--accent_subtle--enabled),
+      border: var(--border--color--accent_hover)
+    ),
+    active: (
+      background: var(--bg--accent_subtle--enabled),
+      border: var(--border--color--accent_active)
+    )
+  )
+);
+
+@mixin apply-colors($colors) {
+  background: map.get($colors, background);
+  border: 1px solid map.get($colors, border);
+}
+
+.cardTitleWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: var(--spacing--gap_related);
+}
+
+.cardTitle {
+  display: flex;
+  gap: var(--spacing--gap_related);
+  width: 100%;
+}
+
+.cardTitleElement {
+  display: flex;
+  align-items: center;
+  height: 24px;
+}
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing--gap_dependent);
+  height: 24px;
+
+  :global(.card-action-button) {
+    height: max-content;
+  }
+}
+
+.scrollableContent {
+  &.scrollable {
+    overflow: auto;
+
+    ::-webkit-scrollbar {
+      height: 8px;
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+    }
+
+    &.medium {
+      margin-inline-end: -15px;
+    }
+
+    &.large {
+      margin-inline-end: -19px;
+    }
+  }
+}
+
+.card {
+  @extend .btr3;
+
+  position: relative;
+  border-radius: var(--radius--ml);
+  display: flex;
+  gap: var(--spacing--gap_grouped);
+  flex-direction: column;
+
+  &.small {
+    padding: var(--spacing--padding_m);
+  }
+
+  &.medium {
+    padding: var(--spacing--padding_l);
+  }
+
+  &.large {
+    padding: var(--spacing--padding_xl);
+  }
+
+  &.scrollable {
+    display: flex;
+    flex: 1 1 auto;
+    max-height: var(--max-height);
+    flex-direction: column;
+  }
+
+  &.draggable {
+    margin-inline-start: 16px;
+  }
+
+  @each $mode, $states in $card-tokens {
+    &.#{$mode} {
+      color: map.get(map.get($states, enabled), color);
+
+      @include apply-colors(map.get($states, enabled));
+
+      &.interactive {
+        &:hover {
+          @include apply-colors(map.get($states, hover));
+        }
+        &:active {
+          @include apply-colors(map.get($states, active));
+        }
+      }
+    }
+  }
+
+  &:focus-visible {
+    box-shadow: none;
+    outline: none;
+  }
+
+  .dndActionButton {
+    position: absolute;
+    top: 6px;
+    inset-inline-start: -16px;
+  }
+
+  .cardActionsWrapper {
+    position: absolute;
+    top: 4px;
+    inset-inline-end: 4px;
+
+    .cardActions {
+      height: unset;
+    }
+  }
+}

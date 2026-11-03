@@ -1,10 +1,14 @@
 import { PopupConfigProvider } from '@helpers/components/PopupConfigProvider'
+import { generateId } from '@helpers/generateId'
 import { badges } from '@sb/badges'
 import { withMeta } from '@sb/components/Meta'
 import { CodeViewer } from '@src/code-viewer'
 import { Markdown } from '@src/markdown'
+import { SectionMessage } from '@src/section-message'
 import { Meta } from '@storybook/react'
 import React, { useState } from 'react'
+
+import { Filter, FilterWithIndicator } from '@kaspersky/hexa-ui-icons/16'
 
 import { Table } from '..'
 import MetaData from '../__meta__/meta.json'
@@ -18,6 +22,7 @@ import {
   Story,
   Wrapper
 } from './_commonConstants'
+import { Performance as WOTagPerformanceStory } from './Performance'
 
 const meta: Meta<ITableProps> = {
   title: 'Hexa UI Components/Table/[DEV]',
@@ -61,8 +66,10 @@ import { PopupConfigProvider } from '@kaspersky/hexa-ui'
   <Table {...props} />
 </PopupConfigProvider>
 `
-
-export { Performance } from './Performance'
+export const Performance: Story = {
+  ...WOTagPerformanceStory,
+  tags: ['skip-visual']
+}
 
 export const CustomDropdownContainer: Story = {
   render: args => {
@@ -110,4 +117,66 @@ export const CustomDropdownContainer: Story = {
     },
     borderedStyle: false
   }
+}
+
+const experimentalInfo = `
+Это временные пропы для прототипирования, они скоро будут удалены:
+- \`toolbar.TEMP_DONT_USE_customButton\` - кастомная кнопка в правой части тулбара (после шестеренки), может показывать индикатор
+- \`toolbar.TEMP_DONT_USE_customComponent\` - кастомный ReactNode между тулбаром и таблицей (например, query-builder)
+`
+
+export const ExperimentalDontUseToolbarSlots: Story = {
+  parameters: {
+    badges: [badges.notProdReady]
+  },
+  render: args => {
+    const [isQueryBuilderOpen, setIsQueryBuilderOpen] = useState(false)
+
+    return (
+      <>
+        <Wrapper>
+          <SectionMessage mode="error">
+            Пропы TEMP_DONT_USE_customButton и TEMP_DONT_USE_customComponent — временные и скоро будут удалены.
+            Пример показывает прототип кнопки с индикатором, которая открывает
+            и скрывает слот с query-builder.
+          </SectionMessage>
+          <Table
+            {...args}
+            presets={{
+              onCreatePreset: async preset => ({ ...preset, id: generateId() }),
+              onDeletePreset: async () => {},
+              onUpdatePreset: async preset => preset,
+              onPresetSelected: async () => {},
+              onViewSelected: async () => {}
+            }}
+            toolbar={{
+              ...args.toolbar,
+              onRefresh: () => {},
+              TEMP_DONT_USE_customButton: {
+                type: 'button',
+                iconBefore: isQueryBuilderOpen ? <FilterWithIndicator /> : <Filter />,
+                showIndicator: isQueryBuilderOpen,
+                onClick: () => setIsQueryBuilderOpen(prev => !prev)
+              },
+              TEMP_DONT_USE_customComponent: isQueryBuilderOpen && (
+                <div style={{ padding: '12px 16px', border: '1px dashed var(--content--neutral--level_3, #b3b3b3)', borderRadius: '4px' }}>
+                  query-builder placeholder (временный слот)
+                </div>
+              )
+            }}
+          />
+        </Wrapper>
+        <Markdown value={experimentalInfo} />
+      </>
+    )
+  },
+  args: {
+    toolbar: {
+      showColumns: true,
+      showGrouping: true,
+      showFilterSidebar: false,
+      showSearch: true
+    }
+  },
+  tags: ['skip-visual']
 }

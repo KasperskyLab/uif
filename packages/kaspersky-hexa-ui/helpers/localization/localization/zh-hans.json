@@ -1,12 +1,19 @@
 {
   "translation": {
     "common": {
+      "back": "后退",
+      "cancel": "取消",
+      "delete": "删除",
       "empty": "无数据",
       "import": "导入",
       "export": "导出",
       "filters": "过滤器",
+      "next": "下一个",
       "no": "否",
-      "yes": "是"
+      "ok": "正常",
+      "rename": "重命名",
+      "yes": "是",
+      "save": "保存"
     },
     "upload": {
       "dropFileTitle": "将文件放到此处",
@@ -56,6 +63,21 @@
         "maxTotalSize2": "所有上传文件的总大小超过了当前允许的大小限制",
         "filesDoNotMeetRequirements": "文件不符合要求",
         "format": "由于格式要求，无法上传 {{count}} 个文件。"
+      }
+    },
+    "onboarding": {
+      "modal": {
+        "actions": {
+          "tryNow": "立即尝试",
+          "skip": "跳过"
+        },
+        "dontShowAgain": "不再显示"
+      },
+      "interactiveTour": {
+        "actions": {
+          "complete": "完成"
+        },
+        "stepStack": "第 {{currentStep}} 步，共 {{totalSteps}} 步"
       }
     },
     "wizard": {
@@ -181,6 +203,38 @@
         "nrange": "不位于 {{from}}–{{to}}"
       },
       "groupingEmpty": "其他"
+    },
+    "tablePresets": {
+      "actions": {
+        "createPreset": "另存为新预设",
+        "updatePreset": "更新预设"
+      },
+      "createFirstPresetTip": "您可以将选定的列、列顺序、过滤器或整个表格配置保存为自定义预设。根据需要配置表格和过滤器，然后将配置保存为新预设。",
+      "createPresetModal": {
+        "header": "将表格设置保存为新预设",
+        "presetName": "预设名称",
+        "tip": "预设包括列顺序和可见性、已应用的过滤器以及排序方式。如果您更改了其中任何参数，便可以更新预设。"
+      },
+      "renamePresetModal": {
+        "header": "重命名预设"
+      },
+      "deletePresetModal": {
+        "header": "删除预设？",
+        "message": "删除预设“{{name}}”？此操作无法撤销。"
+      },
+      "errors": {
+        "presetCreate": "创建预设 {{name}} 失败",
+        "presetDelete": "删除预设 {{name}} 失败",
+        "presetUpdate": "更新预设 {{name}} 失败"
+      },
+      "presetCreated": "预设 {{name}} 已保存",
+      "presetDeleted": "预设 {{name}} 已删除",
+      "presetUpdated": "预设 {{name}} 已保存",
+      "presets": "预设",
+      "validation": {
+        "presetNameEmpty": "输入预设名称",
+        "presetNameExists": "已存在同名预设"
+      }
     },
     "tabs": {
       "dropdown": {

@@ -9,11 +9,12 @@ import {
   DocumentationArgsTable,
   DocumentationTabs as Tabs,
 } from '@sb/components/Documentation'
-import { Text } from '@src/typography'
 
 import { Loader } from '../Loader'
 import * as LoaderStories from './Loader.stories'
 import { loaderDesignPropPresentation } from './Loader.design.properties'
+import { Button } from '@src/button'
+import { Select } from '@src/select'
 
 <Meta of={LoaderStories} name="Loader Docs" />
 
@@ -22,16 +23,416 @@ import { loaderDesignPropPresentation } from './Loader.design.properties'
   <DocPageHeader title="Loader" rtlSupported />
 
   <Tabs defaultActiveKey="description">
-
     <Tabs.TabPane tab="Описание" key="description">
 
       <DocExampleBlock
-        description="
-          **Loader** — анимированный индикатор загрузки с опциональной текстовой подписью&quot;
+        description="**Loader** — индикатор неопределённой загрузки. Компонент сообщает, что содержимое ещё не загружено или операция выполняется."
+      />
 
-          **Loader** сообщает пользователю, что данные или процесс ещё не готовы: загрузка страницы или секции, выполнение запроса, инициализация приложения. Размещайте индикатор в области, содержимое которой временно недоступно, или по центру экрана и панели при полной блокировке контента.
+      <DocExampleBlock
+        title="Когда использовать"
+        titleSize="H4"
+        description="**Loader** используется, когда:
 
-          Для загрузки внутри кнопки или поля ввода используйте встроенное состояние loading у **Button** и других интерактивных компонентов, а не отдельный **Loader**. Для компактной точечной индикации статуса без блокировки области — **Indicator**."
+- загружается содержимое страницы, раздела или отдельной области, а его структуру нельзя показать заранее;
+- выполняется операция без известной продолжительности и пользователю требуется обратная связь."
+      />
+
+      <DocExampleBlock
+        title="Когда не использовать"
+        titleSize="H4"
+        description="Если структура будущего содержимого известна заранее, вместо **Loader** используется [**Skeleton**](?path=/docs/hexa-ui-components-skeleton--skeleton-docs). Он сохраняет композицию интерфейса и показывает расположение содержимого до его загрузки.
+
+Для временной блокировки взаимодействия с уже отображённым содержимым используется [**LoadingOverlay**](hexa-ui/?path=/docs/hexa-ui-components-loadingoverlay--loadingoverlay-docs)."
+      />
+
+      <DocExampleBlock
+        title="Встроенное состояние loading"
+        titleSize="H5"
+        description="Если компонент дизайн-системы поддерживает состояние `loading`, оно включается в свойствах самого компонента.
+
+В таком случае **Loader** отдельно внутрь компонента не добавляется."
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ Button }}
+        code={`
+<Button
+  loading
+  text="Save changes"
+/>
+`}
+      />
+
+      <DocExampleBlock
+        title="Правила выбора вариантов"
+        titleSize="H4"
+        description="Размер **Loader** определяется масштабом области, которую он замещает во время загрузки:
+
+- `small` — компактная локальная область внутри интерфейса;
+- `medium` — самостоятельная ограниченная область страницы;
+- `large` — страница целиком или область, занимающая основную часть контента."
+      />
+
+      <DocExampleBlock
+  description="Размер `small` используется внутри компактных компонентов. В примере **Loader** отображается в **Select** во время загрузки вариантов."
+  previewGap={8}
+  codeBlock="hidden"
+  scope={{ Loader, Select }}
+  code={`
+<div
+  style={{
+    width: '100%',
+    minHeight: 180,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    padding: 24,
+    boxSizing: 'border-box',
+  }}
+>
+  <div style={{ width: '100%', maxWidth: 320 }}>
+    <Select
+      placeholder="Выберите значение"
+      options={[]}
+      loading
+      open
+      style={{ width: '100%' }}
+    />
+  </div>
+</div>
+`}
+/>
+
+<DocExampleBlock
+  description="Размер `medium` используется при загрузке самостоятельной ограниченной области. В примере показана загрузка данных виджета."
+  previewGap={8}
+  codeBlock="hidden"
+  scope={{ Loader }}
+  code={`
+<div
+  style={{
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    padding: 24,
+    boxSizing: 'border-box',
+  }}
+>
+  <div
+    style={{
+      width: '100%',
+      maxWidth: 320,
+      minHeight: 240,
+      display: 'flex',
+      flexDirection: 'column',
+      border: '1px solid #d9dde7',
+      borderRadius: 8,
+      overflow: 'hidden',
+    }}
+  >
+    <div style={{ padding: '20px 24px' }}>
+      <div
+        style={{
+          marginBottom: 8,
+          fontSize: 18,
+          fontWeight: 600,
+        }}
+      >
+        Статистика угроз
+      </div>
+
+      <div
+        style={{
+          fontSize: 14,
+          color: '#6b7280',
+        }}
+      >
+        Данные за последние 30 дней
+      </div>
+    </div>
+
+    <div
+      style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Loader size="medium" />
+    </div>
+  </div>
+</div>
+`}
+/>
+
+      <DocExampleBlock
+        description="Размер `large` используется при загрузке страницы целиком или крупной области, занимающей основную часть контента."
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ Loader }}
+        code={`
+<div
+  style={{
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+  }}
+>
+  <div
+    style={{
+      width: 640,
+      minHeight: 360,
+      display: 'flex',
+      flexDirection: 'column',
+      border: '1px solid #d9dde7',
+      borderRadius: 8,
+      overflow: 'hidden',
+    }}
+  >
+    <div
+      style={{
+        padding: 24,
+        fontSize: 24,
+        fontWeight: 600,
+        borderBottom: '1px solid #d9dde7',
+      }}
+    >
+      Reports
+    </div>
+
+    <div
+      style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Loader size="large" />
+    </div>
+  </div>
+</div>
+`}
+      />
+
+      <DocExampleBlock
+        title="Размещение и композиция"
+        titleSize="H4"
+        description="**Loader** размещается внутри области, содержимое которой загружается, как правило — по центру. Размер и положение области определяются родительским контейнером. Такое размещение помогает соотнести **Loader** с загружаемым содержимым."
+      />
+
+      <DocExampleBlock
+        previewDirection="vertical"
+        previewGap={16}
+        codeBlock="hidden"
+        scope={{ Loader }}
+        code={`
+<div
+  style={{
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+  }}
+>
+  <div
+    style={{
+      width: 320,
+      minHeight: 160,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      border: '1px solid #d9dde7',
+      borderRadius: 8,
+    }}
+  >
+    <Loader size="small" />
+  </div>
+</div>
+`}
+      />
+
+      <DocExampleBlock
+        title="Контент"
+        titleSize="H4"
+        description="Описание может дополнять Loader, если требуется пояснить выполняемую операцию или подтвердить, что загрузка продолжается.
+
+По возможности рекомендуется называть конкретный процесс, например Preparing report..., Connecting to server... или Importing data.... Для универсального обозначения загрузки может использоваться текст Loading....
+
+Если назначение Loader понятно по его расположению, например внутри таблицы, списка или карточки, дополнительное описание обычно не требуется."
+      />
+
+      <DocExampleBlock
+        description="**Без описания**"
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ Loader }}
+        code={`
+<div
+  style={{
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+  }}
+>
+  <div
+    style={{
+      width: 560,
+      minHeight: 360,
+      display: 'flex',
+      flexDirection: 'column',
+      border: '1px solid #d9dde7',
+      borderRadius: 8,
+      overflow: 'hidden',
+    }}
+  >
+    <div
+      style={{
+        padding: 24,
+        fontSize: 24,
+        fontWeight: 600,
+        borderBottom: '1px solid #d9dde7',
+      }}
+    >
+      Reports
+    </div>
+
+    <div
+      style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Loader size="large" />
+    </div>
+  </div>
+</div>
+`}
+      />
+
+      <DocExampleBlock
+        description="**С описанием**"
+        previewGap={8}
+        codeBlock="hidden"
+        scope={{ Loader }}
+        code={`
+<div
+  style={{
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+  }}
+>
+  <div
+    style={{
+      width: 560,
+      minHeight: 360,
+      display: 'flex',
+      flexDirection: 'column',
+      border: '1px solid #d9dde7',
+      borderRadius: 8,
+      overflow: 'hidden',
+    }}
+  >
+    <div
+      style={{
+        padding: 24,
+        fontSize: 24,
+        fontWeight: 600,
+        borderBottom: '1px solid #d9dde7',
+      }}
+    >
+      Reports
+    </div>
+
+    <div
+      style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Loader
+        size="large"
+        tip="Preparing report..."
+      />
+    </div>
+  </div>
+</div>
+`}
+      />
+
+      <DocExampleBlock
+        title="Использование в других компонентах"
+        titleSize="H4"
+        description="**Loader** может отображаться самостоятельно внутри области загрузки.
+
+Если компонент поддерживает встроенное состояние `loading`, оно используется вместо отдельного **Loader**. Размер, положение и поведение индикатора определяются родительским компонентом.
+
+**Loader** не получает отдельный фокус и не обрабатывает действия пользователя. Взаимодействие выполняется с родительским компонентом.
+
+**Примеры использования**"
+        previewGap={24}
+        codeBlock="hidden"
+        code={`
+<div
+  style={{
+    width: '100%',
+    maxWidth: 760,
+    margin: '0 auto',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+    gap: 16,
+  }}
+>
+  <a
+    href="?path=/docs/hexa-ui-components-button--button-docs"
+    target="_blank"
+    rel="noreferrer"
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      padding: 20,
+      border: '1px solid #D9DDE7',
+      borderRadius: 8,
+      textDecoration: 'none',
+      color: 'inherit',
+    }}
+  >
+    <strong>Button</strong>
+
+    <span>
+      Состояние загрузки во время выполнения действия.
+    </span>
+  </a>
+
+  <a
+    href="?path=/docs/hexa-ui-components-select--select-docs"
+    target="_blank"
+    rel="noreferrer"
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      padding: 20,
+      border: '1px solid #D9DDE7',
+      borderRadius: 8,
+      textDecoration: 'none',
+      color: 'inherit',
+    }}
+  >
+    <strong>Select</strong>
+
+    <span>
+      Состояние загрузки при получении данных для выбора.
+    </span>
+  </a>
+</div>
+`}
       />
 
     </Tabs.TabPane>
@@ -39,72 +440,89 @@ import { loaderDesignPropPresentation } from './Loader.design.properties'
     <Tabs.TabPane tab="Структура" key="composition">
 
       <DocExampleBlock
-        description="**Loader** показывает, что операция или контент ещё загружается: анимированный спиннер и при необходимости подпись (**tip**). Настраиваются **mode**, **size**, **spinning**, **centered** и **delay**."
+        description="**Loader** отображает состояние загрузки с помощью анимированного индикатора и при необходимости текстовой подписи (**tip**). Поведение настраивается свойствами **mode**, **size**, **spinning**, **centered** и **delay**."
       />
 
       <DocExampleBlock
         title="mode"
-        description="Цветовой режим индикатора. Доступные значения: `default`, `inverted`. По умолчанию — `default`. Режим `inverted` используйте на тёмном или инвертированном фоне."
+        description="Свойство **mode** определяет цветовой режим индикатора. Доступные значения: `default`, `inverted`. По умолчанию используется `default`. Режим `inverted` предназначен для тёмного или инвертированного фона."
+        previewDirection="vertical"
+        scope={{ Loader }}
         code={`
-          <Loader mode="default" />
-          <Loader mode="inverted" />
-        `}
+<Loader mode="default" />
+<Loader mode="inverted" />
+`}
       />
 
       <DocExampleBlock
         title="size"
-        description="Размер спиннера и типографики подписи. Доступные значения: `extraSmall`, `small`, `medium`, `large`, `extraLarge`. По умолчанию — `small`."
+        description="Свойство **size** определяет размер индикатора и типографики подписи. Доступные значения: `extraSmall`, `small`, `medium`, `large`, `extraLarge`. По умолчанию используется `small`."
+        previewDirection="vertical"
+        previewGap={8}
+        scope={{ Loader }}
         code={`
-          <Loader size="extraSmall" />
-          <Loader size="small" />
-          <Loader size="medium" />
-          <Loader size="large" />
-          <Loader size="extraLarge" />
-        `}
+<Loader size="extraSmall" />
+<Loader size="small" />
+<Loader size="medium" />
+<Loader size="large" />
+<Loader size="extraLarge" />
+`}
       />
 
       <DocExampleBlock
         title="spinning"
-        description="Управляет видимостью индикатора. Доступные значения: `true`, `false`. По умолчанию — `true`. При `false` спиннер скрыт."
+        description="Свойство **spinning** определяет видимость индикатора. Доступные значения: `true`, `false`. По умолчанию используется `true`. При значении `false` индикатор скрывается."
+        previewDirection="vertical"
+        scope={{ Loader }}
         code={`
-          <Loader spinning />
-          <Loader spinning={false} />
-        `}
+<Loader spinning />
+<Loader spinning={false} />
+`}
       />
 
       <DocExampleBlock
         title="centered"
-        description="Центрирует индикатор внутри родительского контейнера. Доступные значения: `true`, `false`. По умолчанию — `false`. Родителю нужна заданная высота или область с позиционированием."
+        description="Свойство **centered** располагает индикатор по центру родительского контейнера. Доступные значения: `true`, `false`. По умолчанию используется `false`. Для центрирования родительский контейнер должен иметь заданную область."
+        scope={{ Loader }}
         code={`
-          <div style={{ height: 200, position: 'relative', border: '1px dashed #ccc' }}>
-            <Loader centered />
-          </div>
-        `}
+<div
+  style={{
+    height: 200,
+    position: 'relative',
+    border: '1px dashed #ccc',
+  }}
+>
+  <Loader centered />
+</div>
+`}
       />
 
       <DocExampleBlock
         title="tip"
-        description="Текстовая подпись рядом с индикатором. Необязательный `ReactNode`. Без **tip** отображается только спиннер."
+        description="Свойство **tip** задаёт текстовую подпись рядом с индикатором. Значением может быть `ReactNode`. Без **tip** отображается только индикатор."
+        scope={{ Loader }}
         code={`
-          <Loader tip="Loading..." />
-        `}
+<Loader tip="Preparing report..." />
+`}
       />
 
       <DocExampleBlock
         title="delay"
-        description="Задержка в миллисекундах перед показом индикатора — снижает мигание при быстрых операциях. Необязательное число; без **delay** индикатор появляется сразу."
+        description="Свойство **delay** задаёт задержку в миллисекундах перед появлением индикатора. Задержка предотвращает кратковременное появление **Loader** при быстро завершающихся операциях. Без **delay** индикатор отображается сразу."
+        scope={{ Loader }}
         code={`
-          <Loader delay={500} tip="Loading..." />
-        `}
+<Loader
+  delay={500}
+  tip="Preparing report..."
+/>
+`}
       />
 
     </Tabs.TabPane>
 
     <Tabs.TabPane tab="Properties" key="properties">
-
       <Description of={LoaderStories} />
       <AutodocArgsTable components={Loader} />
-
     </Tabs.TabPane>
 
     <Tabs.TabPane tab="Дизайн" key="design">
@@ -115,14 +533,16 @@ import { loaderDesignPropPresentation } from './Loader.design.properties'
         description=""
       />
 
-      <DocumentationArgsTable rows={buildPresentationOnlyRows(loaderDesignPropPresentation)} />
+      <DocumentationArgsTable
+        rows={buildPresentationOnlyRows(
+          loaderDesignPropPresentation
+        )}
+      />
 
     </Tabs.TabPane>
 
     <Tabs.TabPane tab="Изменения" key="changelog">
-
       <ComponentChangelog component="Loader" />
-
     </Tabs.TabPane>
 
   </Tabs>

@@ -1,67 +1,41 @@
+import { getClassNameWithTheme } from '@helpers/getClassNameWithTheme'
 import { useTestAttribute } from '@helpers/hooks/useTestAttribute'
 import { ActionButton } from '@src/action-button'
 import { Dropdown } from '@src/dropdown'
 import { Heading } from '@src/typography'
 import cn from 'classnames'
 import React, { FC } from 'react'
-import styled from 'styled-components'
 
 import { Delete, DragDrop, Menu2 } from '@kaspersky/hexa-ui-icons/16'
 
-import { useThemedScrollbar } from '../scrollbar/useThemedScrollbar'
-
-import {
-  CardActions,
-  CardActionsWrapper,
-  cardCss,
-  CardTitle,
-  CardTitleElement,
-  CardTitleWrapper,
-  CloseActionButton,
-  DnDActionButton,
-  ScrollableContent
-} from './cardCss'
+import styles from './Card.module.scss'
 import { getMappedElement } from './getMappedElement'
-import { CardProps, CardViewProps } from './types'
-import { useThemedCard } from './useThemedCard'
+import { CardProps } from './types'
 
 const MENU_ICON_TEST_ID = 'menu-icon'
 const DND_ICON_TEST_ID = 'dnd-icon'
 const CLOSE_ICON_TEST_ID = 'close-icon'
 
-const StyledCard = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['cssConfig', 'draggable', 'interactive'].includes(prop)
-})`${cardCss}`
-
 export const Card: FC<CardProps> = (rawProps) => {
-  const themedProps = useThemedCard(rawProps)
-  const props = useTestAttribute(themedProps)
-  return <CardView {...props} testId={themedProps.testId} klId={themedProps.klId} />
-}
+  const { mode = 'base', size = 'medium', theme, ...restProps } = rawProps
+  const { testAttributes, ...props } = useTestAttribute(restProps)
+  const {
+    style,
+    children,
+    className,
+    draggable,
+    closable,
+    interactive,
+    onCloseButtonClick,
+    title,
+    actions,
+    maxHeight,
+    ...rest
+  } = props
+  const { klId, testId } = rawProps
 
-Card.defaultProps = {
-  mode: 'base',
-  size: 'medium'
-}
-
-const CardView: FC<CardViewProps> = ({
-  style,
-  children,
-  className,
-  draggable,
-  closable,
-  onCloseButtonClick,
-  size = 'medium',
-  title,
-  actions,
-  maxHeight,
-  testAttributes,
-  klId,
-  testId,
-  ...rest
-}) => {
   const cardActions = (
-    <CardActions>
+    <div className={styles.cardActions}>
       {actions && actions.length === 1 && <ActionButton size="large" icon={actions[0].icon} onClick={actions[0].onClick} />}
       {actions && actions.length > 1 && (
         <Dropdown
@@ -78,7 +52,7 @@ const CardView: FC<CardViewProps> = ({
         </Dropdown>
       )}
       {closable && (
-        <CloseActionButton
+        <ActionButton
           size="large"
           icon={<Delete />}
           onClick={onCloseButtonClick}
@@ -87,63 +61,74 @@ const CardView: FC<CardViewProps> = ({
           className="card-action-button"
         />
       )}
-    </CardActions>
+    </div>
   )
 
   const isScrollable = !!maxHeight && size !== 'small'
 
-  const { cssConfig } = useThemedScrollbar({})
-
   return (
-    <StyledCard
-      className={cn(
-        className,
-        'hexa-ui-card',
-        { 'hexa-ui-card-scrollable': isScrollable }
+    <div
+      className={getClassNameWithTheme(
+        cn(
+          className,
+          'hexa-ui-card',
+          styles.card,
+          styles[mode],
+          styles[size],
+          {
+            'hexa-ui-card-scrollable': isScrollable,
+            [styles.scrollable]: isScrollable,
+            [styles.draggable]: draggable,
+            [styles.interactive]: interactive
+          }
+        ),
+        theme
       )}
-
       style={{
         ...style,
-        ...(isScrollable && { '--max-height': maxHeight })
+        ...(isScrollable && {
+          '--max-height': maxHeight
+        })
       }}
-      draggable={draggable}
       {...testAttributes}
       {...rest}
     >
       {draggable && (
-        <DnDActionButton
+        <ActionButton
+          className={styles.dndActionButton}
           icon={<DragDrop />}
           testId={testId ? `${testId}-${DND_ICON_TEST_ID}` : `${DND_ICON_TEST_ID}`}
           klId={klId ? `${klId}-${DND_ICON_TEST_ID}` : `${DND_ICON_TEST_ID}`}
         />
       )}
       {title && (
-        <CardTitleWrapper>
-          <CardTitle>
-            {title.elementBefore && <CardTitleElement>{getMappedElement(title.elementBefore)}</CardTitleElement>}
+        <div className={styles.cardTitleWrapper}>
+          <div className={styles.cardTitle}>
+            {title.elementBefore && <span className={styles.cardTitleElement}>{getMappedElement(title.elementBefore)}</span>}
             <Heading
               type={title.size === 'medium' ? 'H5' : 'H6'}
               style={{ width: '100%' }}
             >
               {title.value}
             </Heading>
-            {title.elementAfter && <CardTitleElement>{getMappedElement(title.elementAfter)}</CardTitleElement>}
-          </CardTitle>
+            {title.elementAfter && <span className={styles.cardTitleElement}>{getMappedElement(title.elementAfter)}</span>}
+          </div>
           {(actions || closable) && cardActions}
-        </CardTitleWrapper>
+        </div>
       )}
       {!title && size === 'large' && (actions || closable) && (
-        <CardActionsWrapper>
+        <div className={styles.cardActionsWrapper}>
           {cardActions}
-        </CardActionsWrapper>
+        </div>
       )}
-      <ScrollableContent
-        $isScrollable={isScrollable}
-        cssConfig={cssConfig}
-        $size={size}
+      <div
+        className={cn(styles.scrollableContent, {
+          [styles.scrollable]: isScrollable,
+          [styles[size]]: isScrollable
+        })}
       >
         {children}
-      </ScrollableContent>
-    </StyledCard>
+      </div>
+    </div>
   )
 }

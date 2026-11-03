@@ -34,10 +34,10 @@ const ChipView: FC<ChipViewProps> = ({
 }: ChipViewProps) => {
   return (
     <StyledChip
-      closable
+      closable={!disabled}
       disabled={disabled}
-      onClose={disabled ? (e: React.MouseEvent<HTMLElement>) => e.preventDefault() : onClose}
-      closeIcon={<ActionButton disabled={disabled} size={size === 'large' ? 'medium' : 'small'} />}
+      onClose={onClose}
+      closeIcon={<ActionButton size="medium" />}
       tabIndex={0}
       {...testAttributes}
       {...rest}

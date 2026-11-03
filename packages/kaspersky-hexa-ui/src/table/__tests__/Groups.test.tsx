@@ -36,6 +36,8 @@ const defaultProps = {
 }
 
 describe('Groups module', () => {
+  const locale = localization['en-us'].translation
+
   it('should render table without groups when groupBy is not provided', async () => {
     const table = await renderTable({ ...defaultProps, groupBy: undefined })
 
@@ -230,11 +232,7 @@ describe('Groups module', () => {
     })
     expect(table.rows.getGroupTitles().length).toBeGreaterThan(0)
 
-    await table.columnSettings.open()
-    const groupingSelector = document.querySelector('.grouping-item') as HTMLElement
-    const noGroupingText = localization['en-us'].translation.table.columnsSettings.noGrouping
-    fireEvent.click(within(groupingSelector).getByText(noGroupingText))
-    table.columnSettings.apply()
+    await table.grouping.selectGrouping(locale.table.columnsSettings.noGrouping)
 
     await waitFor(() => expect(table.rows.getGroupTitles()).toHaveLength(0))
     expect(onGroupByChange).toHaveBeenCalledWith('')

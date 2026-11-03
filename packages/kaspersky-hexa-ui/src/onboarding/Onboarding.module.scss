@@ -1,0 +1,64 @@
+.modal {
+  :global(.ant-modal-footer) > div {
+    &, > div {
+      flex-wrap: nowrap;
+    }
+  }
+}
+
+.tooltip {
+  position: relative;
+  text-align: start;
+  width: var(--interactive-tour--width, 320px);
+  max-width: 100%;
+  padding: var(--spacing--padding_l);
+  border-radius: var(--radius--m);
+  color: var(--fg--neutral--primary);
+  background: var(--bg--neutral--level_0);
+}
+
+.closeButton {
+  position: absolute;
+  inset-block-start: var(--spacing--padding_l);
+  inset-inline-end: var(--spacing--padding_l);
+}
+
+.image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: var(--spacing--gap_grouped);
+  border-radius: var(--radius--s);
+
+  img, svg {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+.title {
+  margin-bottom: var(--spacing--gap_related);
+  color: var(--fg--neutral--primary);
+  padding-inline-end: 20px;
+}
+
+.text {
+  display: block;
+  white-space: pre-wrap;
+  color: var(--fg--neutral--secondary);
+  margin-top: var(--spacing--gap_related);
+}
+
+.footer {
+  margin-top: var(--spacing--gap_grouped);
+
+  .progressText {
+    color: var(--fg--neutral--tertiary);
+    white-space: nowrap;
+  }
+
+  .actions {
+    margin-inline-start: auto;
+  }
+}

@@ -66,6 +66,7 @@ export const getEnumOptionLabel = (
 type GetFilterItemProps = {
   dateFormat?: string,
   enumOptionsMap?: EnumOptionsMap,
+  locale: string,
   t: TFunction
 }
 
@@ -73,8 +74,6 @@ type GetFilterItemLabelProps = <T extends TableRecord> (config: {
   columns: TableColumn<T>[],
   filter: SidebarFilter<T>
 } & GetFilterItemProps) => ReactNode
-
-type GetFilterItemConditionProps = (config: { filter: FilterConfig } & GetFilterItemProps) => ReactNode
 
 function joinReactNodes (nodes: ReactNode[], joiner: string) {
   const temp = [...nodes]
@@ -90,8 +89,9 @@ function joinReactNodes (nodes: ReactNode[], joiner: string) {
 const getFilterItemLabel: GetFilterItemLabelProps = ({
   columns,
   filter,
-  dateFormat = 'MM/DD/YYYY',
+  dateFormat,
   enumOptionsMap,
+  locale,
   t
 }) => {
   if (isFilterConfig(filter)) {
@@ -100,7 +100,16 @@ const getFilterItemLabel: GetFilterItemLabelProps = ({
     const filterTitle = getFilterTitle(columns, filter.name, filter.attribute?.name)
     const name = filterTitle || attribute?.name || filterName
 
-    return <>{name} {getFilterItemCondition({ filter, dateFormat, enumOptionsMap, t })}</>
+    return (
+      <>{name} {getFilterItemCondition({
+        filter,
+        columns,
+        dateFormat,
+        enumOptionsMap,
+        locale,
+        t
+      })}</>
+    )
   } else if (isGroup(filter) && filter.items.length && isFilterConfig(filter.items[0])) {
     const itemInGroup: FilterConfig = filter.items[0]
     const { name: filterName, attribute } = itemInGroup
@@ -113,7 +122,14 @@ const getFilterItemLabel: GetFilterItemLabelProps = ({
         {name} {
           filter.items.filter(isFilterConfig).map((item, index) => (
             <>
-              {getFilterItemCondition({ filter: item, dateFormat, enumOptionsMap, t })}
+              {getFilterItemCondition({
+                filter: item,
+                columns,
+                dateFormat,
+                enumOptionsMap,
+                locale,
+                t
+              })}
               {index !== filter.items.filter(isFilterConfig).length - 1 && <> {t('table.columnsSettings.filtering.operators.or')} </>}
             </>
           ))
@@ -123,12 +139,14 @@ const getFilterItemLabel: GetFilterItemLabelProps = ({
   }
 }
 
-const getFilterItemCondition: GetFilterItemConditionProps = ({
+const getFilterItemCondition = <T extends TableRecord = TableRecord>({
   filter,
-  dateFormat = 'MM/DD/YYYY',
+  columns,
+  dateFormat,
   enumOptionsMap,
+  locale,
   t
-}) => {
+}: { filter: FilterConfig, columns: TableColumn<T>[] } & GetFilterItemProps): ReactNode => {
   const { condition, type, value } = filter
 
   if (condition === FilterOperation.empty || condition === FilterOperation.nempty) {
@@ -139,19 +157,19 @@ const getFilterItemCondition: GetFilterItemConditionProps = ({
     case FilterType.Boolean:
       return `${condition} ${value ? t('common.yes') : t('common.no')}`
     case FilterType.DateRange:
-      return `${condition} ${formatDate(value.from, dateFormat)}-${formatDate(value.to, dateFormat)}`
+      return `${condition} ${formatDate(value.from, locale, dateFormat)}-${formatDate(value.to, locale, dateFormat)}`
     case FilterType.DateTime:
       if (isRangeValue(value)) {
         return (
           t(`table.filterTag.${condition}`, {
-            from: formatDate(value.from, dateFormat),
-            to: formatDate(value.to, dateFormat),
+            from: formatDate(value.from, locale, dateFormat),
+            to: formatDate(value.to, locale, dateFormat),
             interpolation: { escapeValue: false }
           })
         )
       }
 
-      return `${condition} ${formatDate(value, dateFormat)}`
+      return `${condition} ${formatDate(value, locale, dateFormat)}`
     case FilterType.Enum: {
       if (isMultipleOp(filter.condition)) {
         const labels = filter.value.map((v: any) => getEnumOptionLabel({ ...filter, value: v } as EnumFilter, enumOptionsMap))
@@ -182,11 +200,23 @@ const getFilterItemCondition: GetFilterItemConditionProps = ({
       if (condition === FilterOperation.cont || condition === FilterOperation.ncont) {
         return t(`table.filterTag.${condition}`, { value })
       }
+      {
+        const unit = getUnitLabel(columns, filter)
 
-      return `${condition} ${value}`
+        return unit ? `${condition} ${value} ${unit}` : `${condition} ${value}`
+      }
   }
   assertUnreachable(type, 'Incorrect filter item')
   return ''
+}
+
+const getUnitLabel = <T extends TableRecord = TableRecord>(columns: TableColumn<T>[], filter: FilterConfig): ReactNode => {
+  if (!('unit' in filter) || !filter.unit) return ''
+
+  const column = findColumnByName(columns, filter.name)
+  const options = column?.filterType?.type === FilterType.Number ? column?.filterType?.units?.options : undefined
+
+  return options?.find(option => option.value === filter.unit)?.label ?? filter.unit
 }
 
 const getFilterTestId = <T extends TableRecord = TableRecord> (filter: SidebarFilter<T>) => {
@@ -225,7 +255,7 @@ export function FilterItems <T extends TableRecord = TableRecord> (props: Filter
     filterApi: state.filterApi,
     dateFormat: state.dateFormat
   }))
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const klId = 'table-filters-reset-button'
 
   const [filterItems, setFilterItems] = useState<SidebarFilter<T>[]>([])
@@ -260,6 +290,7 @@ export function FilterItems <T extends TableRecord = TableRecord> (props: Filter
         filter,
         dateFormat,
         enumOptionsMap,
+        locale: i18n.language,
         t
       }),
       key: getFilterTestId<T>(filter),

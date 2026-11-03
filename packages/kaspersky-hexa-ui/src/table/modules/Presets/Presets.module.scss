@@ -1,0 +1,27 @@
+.presetsListItem > :first-child > :first-child {
+  max-width: calc(100% - 20px);
+}
+
+.presetsListItem:hover .presetMenuButton {
+  visibility: visible;
+}
+
+.presetMenuButton {
+  visibility: hidden;
+}
+
+.viewSelectorItem {
+  margin-top: 4px;
+}
+
+.loaderItem {
+  height: 75px;
+}
+
+.turnOffPointer { 
+  cursor: auto !important;
+}
+
+.createFirstPresetTip {
+  color: var(--fg--neutral--secondary);
+}

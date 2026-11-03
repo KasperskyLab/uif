@@ -101,6 +101,8 @@ export type TabPaneHeadProps = {
   /** Indicator mode,  */
   indicatorMode?: Extract<IndicatorMode, 'critical' | 'accent'>,
   cssConfig?: TabsCssConfig
+  /** Max count to show */
+  overflowCount?: number,
 } & TestingProps
 
 export type StyledTabPanedHeadProps = { cssConfig: TabsCssConfig }

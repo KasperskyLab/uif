@@ -9,8 +9,10 @@ import {
   DocumentationArgsTable,
   DocumentationTabs as Tabs,
 } from '@sb/components/Documentation'
+import { ConfigProvider } from '@design-system/context/provider/ConfigProvider'
 import { Text } from '@src/typography'
 import { ArrowDownMicro, ArrowUpMicro } from '@kaspersky/hexa-ui-icons/16'
+import i18next from 'i18next'
 
 import { InputNumber } from '../../InputNumber'
 import { inputNumberDesignPropPresentation } from './InputNumber.design.properties'
@@ -20,27 +22,350 @@ import * as InputNumberStories from './InputNumber.stories'
 
 <DocPageLayout>
 
-  <DocPageHeader
-    title="InputNumber"
-    rtlSupported
-    inBuilder
-    builderInfo="Используется под названием «Текстовое поле» с настройкой «Использовать InputNumber для числового поля»"
-  />
+  <DocPageHeader title="InputNumber" />
 
   <Tabs defaultActiveKey="description">
+<Tabs.TabPane tab="Описание" key="description">
 
-    <Tabs.TabPane tab="Описание" key="description">
+  <DocExampleBlock
+    description="**InputNumber** — поле для ввода и изменения числового значения. Используйте компонент, когда значение участвует в вычислениях или пользователь изменяет его в пределах заданного сценария."
+  />
 
-      <DocExampleBlock
-        description="
-          **InputNumber** — поле числового ввода со стрелками увеличения и уменьшения значения
+  <DocExampleBlock
+    title="Когда использовать"
+    titleSize="H4"
+    description="Используйте **InputNumber**:
 
-          **InputNumber** применяют в формах и панелях настроек, когда пользователю нужно указать количество, лимит, процент или другую числовую величину с возможностью точной корректировки стрелками. Компонент удобен там, где важен шаг изменения и нижняя граница значения.
+- для ввода количества объектов — например, 2 билетов или 5 пользователей;
+- для ввода денежных сумм — например, суммы пополнения 10 000 ₽;
+- для ввода веса, объёма, процентов и других числовых величин — например, 75 кг, 20 л или 15%;
+- для пошагового изменения значения — например, количества товаров с шагом 1;
+- для ввода значения в заданном диапазоне — например, объёма хранилища от 1 до 100 ГБ."
+    previewGap={16}
+    codeBlock="hidden"
+    scope={{ InputNumber }}
+    code={`
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 16,
+    width: '100%',
+    padding: '8px 0',
+  }}
+>
+  <div style={{ width: 320 }}>
+    <div style={{ marginBottom: 8 }}>Количество объектов</div>
+    <InputNumber
+      integerOnly
+      min={0}
+      value={2}
+      style={{ width: '100%' }}
+    />
+  </div>
 
-          Для произвольного текстового ввода без числовых ограничений используйте **Textbox**. Для выбора из фиксированного набора значений — **Select** или **SegmentedButton**. Для ввода времени — **TimeInput**, для даты — **DatePicker**."
+  <div style={{ width: 320 }}>
+    <div style={{ marginBottom: 8 }}>Денежная сумма</div>
+    <InputNumber
+      min={0}
+      suffix="₽"
+      value={10000}
+      style={{ width: '100%' }}
+    />
+  </div>
+
+  <div style={{ width: 320 }}>
+    <div style={{ marginBottom: 8 }}>Процент</div>
+    <InputNumber
+      min={0}
+      suffix="%"
+      value={15}
+      style={{ width: '100%' }}
+    />
+  </div>
+
+  <div style={{ width: 320 }}>
+    <div style={{ marginBottom: 8 }}>Пошаговое изменение</div>
+    <InputNumber
+      integerOnly
+      min={0}
+      step={1}
+      value={5}
+      style={{ width: '100%' }}
+    />
+  </div>
+
+  <div style={{ width: 320 }}>
+    <div style={{ marginBottom: 8 }}>Значение в диапазоне</div>
+    <InputNumber
+      integerOnly
+      min={1}
+      max={100}
+      suffix="ГБ"
+      value={50}
+      style={{ width: '100%' }}
+    />
+  </div>
+</div>
+`}
+  />
+
+  <DocExampleBlock
+    title="Когда не использовать"
+    titleSize="H4"
+    description="Не используйте **InputNumber** для значений, которые состоят из цифр, но не участвуют в вычислениях: телефонных номеров, индексов, номеров документов и счетов, кодов. Для таких значений выбирайте [**Textbox**](?path=/docs/hexa-ui-components-inputs-textbox--textbox-docs).
+
+Для выбора значения из фиксированного набора используйте [**Select**](?path=/docs/hexa-ui-components-select--select-docs) или [**SegmentedButton**](?path=/docs/hexa-ui-components-segmentedbutton--segmentedbutton-docs), для ввода времени — [**TimeInput**](?path=/docs/hexa-ui-components-datetime-pickers-timeinput--timeinput-docs), для выбора даты — [**DatePicker**](?path=/docs/hexa-ui-components-datetime-pickers-datepicker--datepicker-docs)."
+  />
+
+  <DocExampleBlock
+    title="Форматирование значения"
+    titleSize="H4"
+    description="Выбирайте формат отображения с учётом локали пользователя и смысла значения. Учитывайте разделение числа по разрядам, а также расположение обозначений валют и единиц измерения."
+  />
+
+  <DocExampleBlock
+  title="Разделение по разрядам"
+  titleSize="H5"
+  description="Если целая часть значения содержит большое количество цифр, она автоматически разделяется на группы в соответствии с правилами текущей локали пользователя.
+
+Вид разделителя также определяется локалью:
+
+- для RU, FR, PL и KZ используется пробельный разделитель — 150 000;
+- для en-US, MX, JP, KR используется запятая — 150,000;
+- для DE, ES, IT, BR и TR используется точка — 150.000;
+- для AE используются арабо-индийские цифры и локальный разделитель разрядов — ١٥٠٬٠٠٠.
+
+Форматирование применяется только к отображаемому значению. Числовые данные, которые компонент получает и передаёт приложению, не изменяются."
+  previewGap={16}
+  codeBlock="hidden"
+  scope={{ InputNumber, ConfigProvider, i18next }}
+  setupCode={`
+const ruI18n = i18next.createInstance()
+ruI18n.init({ lng: 'ru-ru', resources: {}, initImmediate: false })
+
+const enI18n = i18next.createInstance()
+enI18n.init({ lng: 'en-us', resources: {}, initImmediate: false })
+
+const deI18n = i18next.createInstance()
+deI18n.init({ lng: 'de-de', resources: {}, initImmediate: false })
+
+const arI18n = i18next.createInstance()
+arI18n.init({ lng: 'ar-ae', resources: {}, initImmediate: false })
+`}
+  code={`
+<div
+  style={{
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 16,
+    padding: '8px 0',
+  }}
+>
+  <div
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      width: 320,
+    }}
+  >
+    <ConfigProvider locale="ru-ru" i18n={ruI18n}>
+      <InputNumber
+        value={150000}
+        useGrouping
+        style={{ width: '100%' }}
       />
+    </ConfigProvider>
 
-    </Tabs.TabPane>
+    <span style={{ color: '#6D7485', fontSize: 12 }}>
+      RU / FR / PL / KZ
+    </span>
+  </div>
+
+  <div
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      width: 320,
+    }}
+  >
+    <ConfigProvider locale="en-us" i18n={enI18n}>
+      <InputNumber
+        value={150000}
+        useGrouping
+        style={{ width: '100%' }}
+      />
+    </ConfigProvider>
+
+    <span style={{ color: '#6D7485', fontSize: 12 }}>
+      US / MX / JP / KR
+    </span>
+  </div>
+
+  <div
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      width: 320,
+    }}
+  >
+    <ConfigProvider locale="de-de" i18n={deI18n}>
+      <InputNumber
+        value={150000}
+        useGrouping
+        style={{ width: '100%' }}
+      />
+    </ConfigProvider>
+
+    <span style={{ color: '#6D7485', fontSize: 12 }}>
+      DE / ES / IT / BR / TR
+    </span>
+  </div>
+
+  <div
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      width: 320,
+    }}
+  >
+    <ConfigProvider locale="ar-ae" i18n={arI18n}>
+      <div dir="rtl">
+        <InputNumber
+          value="١٥٠٬٠٠٠"
+          useGrouping
+          style={{ width: '100%' }}
+        />
+      </div>
+    </ConfigProvider>
+
+    <span style={{ color: '#6D7485', fontSize: 12 }}>
+      AE
+    </span>
+  </div>
+</div>
+`}
+ />
+
+  <DocExampleBlock
+    title="Единицы измерения и валюты"
+    titleSize="H5"
+    description="Размещайте обозначение валюты или единицы измерения рядом со значением с учётом локали и формата продукта. Используйте одинаковое расположение для одинаковых величин во всём интерфейсе."
+    previewGap={16}
+    codeBlock="hidden"
+    scope={{ InputNumber }}
+    code={`
+<div
+  style={{
+    width: '100%',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 320px)',
+    justifyContent: 'center',
+    gap: 24,
+    padding: '8px 0',
+  }}
+>
+  <InputNumber
+    prefix="$"
+    value={150}
+    style={{ width: 320 }}
+  />
+
+  <InputNumber
+    suffix="₽"
+    value={10000}
+    style={{ width: 320 }}
+  />
+
+  <InputNumber
+    suffix="кг"
+    value={75}
+    style={{ width: 320 }}
+  />
+
+  <InputNumber
+    suffix="%"
+    value={15}
+    style={{ width: 320 }}
+  />
+</div>
+`}
+  />
+
+  <DocExampleBlock
+    title="Валидация и ограничения"
+    titleSize="H4"
+    description="Заранее задайте допустимый диапазон и укажите, может ли пользователь оставить поле пустым. Не приравнивайте пустое поле к значению 0 и не подставляйте 0 без явного действия пользователя.
+
+Если значение не соответствует требованиям, покажите состояние ошибки и поясняющее сообщение. Укажите в сообщении причину ошибки и способ её исправить."
+  />
+
+  <DocExampleBlock
+    title="Размещение и композиция"
+    titleSize="H4"
+    description="Размещайте **InputNumber** в составе формы рядом с подписью, которая объясняет назначение поля. Располагайте подсказку или сообщение об ошибке непосредственно под связанным полем. Не разделяйте их другими элементами.
+
+Выбирайте ширину поля с учётом композиции родительского контейнера и ожидаемой длины значения."
+  />
+
+  <DocExampleBlock
+    title="Контент"
+    titleSize="H4"
+    description="Объясните назначение поля и ожидаемое значение в подписи. Укажите единицы измерения и ограничения до начала ввода.
+
+Используйте плейсхолдер, чтобы показать ожидаемый формат или пример значения, но не заменяйте им подпись поля. Не используйте общие сообщения об ошибках, например «Ошибка» или «Неправильное значение»."
+  />
+
+  <DocExampleBlock
+    title="Использование с другими компонентами"
+    titleSize="H5"
+    description="Используйте **InputNumber** внутри других компонентов, если пользователю нужно ввести или изменить числовое значение. Настраивайте ограничения, состояние валидации и единицы измерения с учётом контекста родительского компонента.
+
+**Примеры использования**"
+    previewGap={24}
+    codeBlock="hidden"
+    code={`
+<div
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+    gap: 16,
+  }}
+>
+  <a
+    href="?path=/docs/hexa-ui-components-fieldset--docs"
+    target="_blank"
+    rel="noreferrer"
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      padding: 20,
+      border: '1px solid #D9DDE7',
+      borderRadius: 8,
+      textDecoration: 'none',
+      color: 'inherit',
+    }}
+  >
+    <strong>FieldSet</strong>
+
+    <span>
+      Ввод числовых значений в формах и группах полей.
+    </span>
+  </a>
+</div>
+`}
+  />
+
+
+</Tabs.TabPane>
 
     <Tabs.TabPane tab="Структура" key="composition">
 
@@ -118,6 +443,15 @@ import * as InputNumberStories from './InputNumber.stories'
         description="Разрешает пустое значение в поле: при `null` отображается пустая строка вместо `0`. Доступные значения: `true`, `false`. По умолчанию — `false`."
         code={`
           <InputNumber allowEmpty />
+        `}
+        scope={{ InputNumber }}
+      />
+
+      <DocExampleBlock
+        title="useGrouping"
+        description="Разделяет разряды целой части по правилам текущей локали пользователя. Доступные значения: `true`, `false`. По умолчанию — `false`."
+        code={`
+          <InputNumber value={150000} useGrouping />
         `}
         scope={{ InputNumber }}
       />

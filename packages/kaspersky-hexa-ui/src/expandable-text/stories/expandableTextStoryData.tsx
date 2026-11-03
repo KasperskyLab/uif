@@ -12,7 +12,21 @@ export const EXPANDABLE_TEXT_MOCK_WITH_BREAKS = Array(3)
 
 /** setupCode для react-live в ExpandableText.documentation.mdx */
 export const expandableTextLongExampleCode = `const expandableTextLong = ${JSON.stringify(EXPANDABLE_TEXT_MOCK_BODY)}
-const expandableTextPreviewStyle = { minWidth: 100, maxWidth: 400 }`
+const expandableTextWithBreaks = ${JSON.stringify(EXPANDABLE_TEXT_MOCK_WITH_BREAKS)}
+const expandableTextPreviewStyle = { minWidth: 100, maxWidth: 400 }
+const ExpandableTextLineBreaksExample = () => {
+  const [expanded, setExpanded] = React.useState(false)
+  return (
+    <div style={expandableTextPreviewStyle}>
+      <ExpandableText
+        onExpand={setExpanded}
+        style={{ whiteSpace: expanded ? 'pre-wrap' : 'pre' }}
+      >
+        {expandableTextWithBreaks}
+      </ExpandableText>
+    </div>
+  )
+}`
 
 /** setupCode для блока onExpand: игнорирует программный onExpand(false) при монтировании */
 export const expandableTextOnExpandExampleSetupCode = `${expandableTextLongExampleCode}

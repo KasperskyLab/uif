@@ -1,7 +1,23 @@
-import { ArgTypes, Description, Meta } from '@storybook/addon-docs/blocks'
-import { AutodocArgsTable, buildPresentationOnlyRows, DocExampleBlock, DocPageHeader, DocPageLayout, DocumentationArgsTable, PropsTable, DocumentationTabs as Tabs } from '@sb/components/Documentation'
-import { Text } from '@src/typography'
+import { Meta } from '@storybook/addon-docs/blocks'
+import {
+  AutodocArgsTable,
+  buildPresentationOnlyRows,
+  DocExampleBlock,
+  DocPageHeader,
+  DocPageLayout,
+  DocumentationArgsTable,
+  DocumentationTabs as Tabs,
+} from '@sb/components/Documentation'
 
+import React from 'react'
+
+import {
+  File,
+  Message,
+  Reports,
+  Shield,
+} from '@kaspersky/hexa-ui-icons/16'
+import { Dropdown } from '@src/dropdown'
 import { Badge } from '../Badge'
 import * as BadgeStories from './Badge.stories'
 import { badgeDesignPropPresentation } from './Badge.design.properties'
@@ -10,211 +26,734 @@ import { badgeDesignPropPresentation } from './Badge.design.properties'
 
 <DocPageLayout>
 
-<DocPageHeader checkUIF title="Badge" />
+  <DocPageHeader checkUIF title="Badge" />
 
-<Tabs>
-  <Tabs.TabPane tab="Описание" key="description">
-<DocExampleBlock
-      description="**Badge** — компактная метка для количества, статуса или короткой подписи рядом с элементом интерфейса: иконкой меню, вкладкой, строкой таблицы, аватаром. Используйте для вторичной информации, которая не требует отдельного блока контента.
+  <Tabs defaultActiveKey="description">
 
-Для важных сообщений на уровне страницы или раздела используйте **Alert**, а не **Badge**."
-    />
-    <DocExampleBlock
-  title="Счётчик уведомлений"
-  description="Используется для отображения количества уведомлений, сообщений или объектов рядом с иконкой или элементом управления.
+    <Tabs.TabPane tab="Описание" key="description">
 
-`overflowCount` ограничивает максимальное отображаемое значение (например, +99)."
-  previewGap={24}
-  codeBlock="hidden"
-  code={`
-<Space gap={24}>
-  <Badge count={1} />
-  <Badge count={12} />
-  <Badge count={105} overflowCount={99} />
-</Space>`}
-/>
-<DocExampleBlock
-  title="Текстовая метка / статус"
-  description="Если задан **text**, Badge отображается как короткая текстовая метка или статус.
+      <DocExampleBlock
+        description="**Badge** — компактный элемент для отображения дополнительной информации об объекте: количества, короткого статуса или характеристики."
+      />
 
-**text** имеет приоритет над **count** — при наличии текста счётчик не отображается."
-  previewGap={24}
-  codeBlock="hidden"
-  code={`
-<Space gap={16}>
-  <Badge text="NEW" mode="new" />
-  <Badge text="UPDATE" mode="update" />
-  <Badge text="INFO" mode="info" />
-</Space>`}
-/>
-<DocExampleBlock
-  title="Размер large только для transparent"
-  description="**size=large** поддерживается только для `neutralTransparent` и `criticalTransparent`.
+      <DocExampleBlock
+        title="Когда использовать"
+        titleSize="H4"
+        description="**Badge** используется для отображения компактного уведомления рядом с объектом. Уведомление может содержать число, например количество непрочитанных сообщений, или короткую текстовую метку, например `NEW` или `High`."
+        previewGap={24}
+        codeBlock="hidden"
+        scope={{
+          React,
+          Dropdown,
+          Badge,
+          Message,
+          Reports,
+        }}
+        code={`
+function App() {
+  const containerRef = React.useRef(null)
 
-Для остальных режимов используется **size=medium**."
-  previewGap={24}
-  codeBlock="hidden"
-  code={`
-<Space gap={16}>
-  <Badge mode="neutral_transparent" size="large" text="Label" />
-  <Badge mode="critical_transparent" size="large" text="Warning" />
-</Space>`}
-/>
-<DocExampleBlock
-  title="Семантика mode"
-  description="Выбирайте `mode` в соответствии со смыслом события:
+  const itemStyle = {
+    width: 240,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 16,
+  }
 
-`positive`, `resolved` — успешные состояния
+  const labelStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+  }
 
-`ritical`, `inIncident` — ошибки и инциденты
+  return (
+    <div
+      style={{
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <div
+        ref={containerRef}
+        style={{
+          position: 'relative',
+          width: 280,
+          height: 94,
+        }}
+      >
+        <Dropdown
+          visible
+          trigger={[]}
+          placement="bottomLeft"
+          getPopupContainer={() => containerRef.current}
+          overlay={[
+            {
+              children: (
+                <div style={itemStyle}>
+                  <div style={labelStyle}>
+                    <Message />
+                    <span>Messages</span>
+                  </div>
 
-`low`, `medium`, `high` — приоритеты
+                  <Badge
+                    mode="accent"
+                    count={12}
+                  />
+                </div>
+              ),
+            },
+            {
+              children: (
+                <div style={itemStyle}>
+                  <div style={labelStyle}>
+                    <Reports />
+                    <span>Reports</span>
+                  </div>
 
-`info`, `new`, `update` — нейтральные уведомления и изменения
+                  <Badge
+                    mode="new"
+                    text="NEW"
+                  />
+                </div>
+              ),
+            },
+          ]}
+        >
+          <span
+            style={{
+              display: 'block',
+              width: 1,
+              height: 1,
+            }}
+          />
+        </Dropdown>
+      </div>
+    </div>
+  )
+}
 
-Не используйте `critical` как декоративный акцент — это сигнал ошибки или тревоги."
-  previewGap={16}
-  codeBlock="hidden"
-  code={`
-<Space gap={16}>
-  <Badge mode="positive" count={1} />
-  <Badge mode="critical" count={1} />
-  <Badge mode="high" count={1} />
-  <Badge mode="info" count={1} />
-</Space>`}
-/>
-<DocExampleBlock
-  title="Badge внутри других компонентов"
-  description="Badge может использоваться рядом с текстом, иконкой или элементом навигации для отображения количества уведомлений или дополнительного статуса.
+render(<App />)
+`}
+      />
 
-Часто применяется в tab navigation, списках и navigation item."
-  previewGap={8}
-  codeBlock="hidden"
-  code={`
-<Tabs defaultActiveKey="messages">
-  <Tabs.TabPane
-    tab={
-      <span>
-        Сообщения
-      </span>
-    }
-    key="messages"
-  />
+      <DocExampleBlock
+        title="Когда не использовать"
+        titleSize="H4"
+        description="**Badge** не используется для длинных и подробных сообщений. Он отображает краткую информацию о текущем состоянии объекта, например количество ошибок в разделе или уровень приоритета. Для постоянного пояснения используется обычный текст, а для сообщения, которое пользователь должен заметить в момент возникновения события, — [**Notification**](hexa-ui/?path=/docs/hexa-ui-components-notification--notification-docs)."
+      />
 
-  <Tabs.TabPane
-    tab={
-      <span>
-        Задачи <Badge count={12} mode="accent" />
-      </span>
-    }
-    key="tasks"
-  />
+      <DocExampleBlock
+        title="Правила выбора вариантов"
+        titleSize="H4"
+        description="Вариант **Badge** выбирается по смыслу отображаемой информации, а не по цвету."
+      />
 
-  <Tabs.TabPane
-    tab="Архив"
-    key="archive"
-  />
-</Tabs>`}
-/>
+      <DocExampleBlock
+        title="Статус и результат"
+        titleSize="H5"
+        description="Варианты используются для отображения состояния объекта или результата действия:
 
-  </Tabs.TabPane>
-  <Tabs.TabPane tab="Структура" key="composition">
+- `positive` — успешный результат действия или операции;
+- `resolved` — завершённая работа, которая не требует дальнейших действий;
+- `critical` — ошибка, критическая проблема или состояние, требующее внимания;
+- `in-incident` — зарегистрированный инцидент или проблема, требующая обработки."
+        previewGap={16}
+        codeBlock="hidden"
+        scope={{
+          React,
+          Badge,
+          Dropdown,
+        }}
+        code={`
+function App() {
+  const containerRef = React.useRef(null)
 
-    <DocExampleBlock
-      
-      description="**Badge** отображает число (**count**) или текст (**text**): уведомления, статусы, метки. Настраиваются **mode**, **size**, **overflowCount**, **showZero**, **theme** и **className**. При **count**=0 badge скрывается, если не задан **showZero**."
-    />
+  const itemStyle = {
+    width: 240,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 16,
+  }
 
-    <DocExampleBlock
-      title="mode"
-      description="Семантический цветовой режим. Доступные значения: `neutral`, `info`, `new`, `update`, `in-progress`, `resolved`, `positive`, `accent`, `low`, `medium`, `high`, `in-incident`, `critical`, `neutral_transparent`, `critical_transparent`. По умолчанию — `neutral`. Неподдерживаемое значение заменяется на `neutral`, в консоль выводится предупреждение."
-      code='
-    <Badge mode="neutral" text="neutral" />
-    <Badge mode="info" text="info" />
-    <Badge mode="new" text="new" />
-    <Badge mode="update" text="update" />
-    <Badge mode="in-progress" text="in-progress" />
-    <Badge mode="resolved" text="resolved" />
-    <Badge mode="positive" text="positive" />
-    <Badge mode="accent" text="accent" />
-    <Badge mode="low" text="low" />
-    <Badge mode="medium" text="medium" />
-    <Badge mode="high" text="high" />
-    <Badge mode="in-incident" text="in-incident" />
-    <Badge mode="critical" text="critical" />
-    <Badge mode="neutral_transparent" text="neutral_transparent" size="large" />
-    <Badge mode="critical_transparent" text="critical_transparent" size="large" />'
-    />
+  return (
+    <div
+      style={{
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <div
+        ref={containerRef}
+        style={{
+          position: 'relative',
+          width: 280,
+          height: 160,
+        }}
+      >
+        <Dropdown
+          visible
+          trigger={[]}
+          placement="bottomLeft"
+          getPopupContainer={() => containerRef.current}
+          overlay={[
+            {
+              children: (
+                <div style={itemStyle}>
+                  <span>Data export</span>
+                  <Badge mode="positive" text="Completed" />
+                </div>
+              ),
+            },
+            {
+              children: (
+                <div style={itemStyle}>
+                  <span>Incident</span>
+                  <Badge mode="resolved" text="Resolved" />
+                </div>
+              ),
+            },
+            {
+              children: (
+                <div style={itemStyle}>
+                  <span>Configuration</span>
+                  <Badge mode="critical" text="Error" />
+                </div>
+              ),
+            },
+            {
+              children: (
+                <div style={itemStyle}>
+                  <span>Security event</span>
+                  <Badge mode="in-incident" text="In incident" />
+                </div>
+              ),
+            },
+          ]}
+        >
+          <span
+            style={{
+              display: 'block',
+              width: 1,
+              height: 1,
+            }}
+          />
+        </Dropdown>
+      </div>
+    </div>
+  )
+}
 
-    <DocExampleBlock
-      title="size"
-      description="Размер badge. Доступные значения: `medium`, `large`. По умолчанию — `medium`. `large` допустим только для **mode** `neutral_transparent` и `critical_transparent`; для остальных режимов в типах задан `medium`. Если передан **size**=`large` без **mode**, используется `neutral_transparent`."
-      code='
-    <Badge mode="info" size="medium" text="medium" />
-    <Badge mode="neutral_transparent" size="medium" text="medium" />
-    <Badge mode="critical_transparent" size="medium" text="medium" />
-    <Badge mode="neutral_transparent" size="large" text="large" />
-    <Badge mode="critical_transparent" size="large" text="large" />'
-    />
+render(<App />)
+`}
+      />
 
-    <DocExampleBlock
-      title="count"
-      description="Число внутри badge. При **count**=0 badge скрывается, если **showZero** не задан. Игнорируется, если задан **text**."
-      code='
-    <Badge count={10} />
-    <Badge count={0} />
-    <Badge count={99} text="Text" />'
-    />
+      <DocExampleBlock
+        title="Приоритет"
+        titleSize="H5"
+        description="Варианты `low`, `medium` и `high` используются для отображения приоритета объекта или задачи:
 
-    <DocExampleBlock
-      title="text"
-      description="Текстовая метка вместо числа. Имеет приоритет над **count**: при одновременной передаче отображается **text**."
-      code='
-    <Badge text="Badge text" />
-    <Badge text="Badge text" count={99} />'
-    />
+- `low` — низкий приоритет;
+- `medium` — средний приоритет;
+- `high` — высокий приоритет.
 
-    <DocExampleBlock
-      title="overflowCount"
-      description="Верхняя граница для **count**. По умолчанию — `99`. Если **count** больше **overflowCount**, отображается значение вида 99+ (с числом **overflowCount** и плюсом)."
-      code='
-    <Badge count={100} overflowCount={99} />
-    <Badge count={1000} overflowCount={999} mode="critical" />'
-    />
+Уровень определяется продуктовой логикой, а не визуальной выразительностью цвета."
+        previewGap={16}
+        codeBlock="hidden"
+        scope={{
+          React,
+          Badge,
+          Dropdown,
+        }}
+        code={`
+function App() {
+  const containerRef = React.useRef(null)
 
-    <DocExampleBlock
-      title="showZero"
-      description="Показывает badge при **count**=0. Доступные значения: `true`, `false`. По умолчанию — `false`. Без **showZero** при нуле badge скрыт."
-      code='
-    <Badge count={0} />
-    <Badge count={0} showZero />'
-    />
+  const itemStyle = {
+    width: 240,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 16,
+  }
 
-    <DocExampleBlock
-      title="title"
-      description="Устаревший HTML-атрибут **title** для нативной подсказки при наведении. Для кастомной подсказки оберните badge в **Tooltip** — отдельного пропа tooltip у компонента нет."
-      code={`
-  <Tooltip text="3 new notifications">
-    <span><Badge count={3} mode="info" /></span>
-  </Tooltip>`}
-    />
+  return (
+    <div
+      style={{
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <div
+        ref={containerRef}
+        style={{
+          position: 'relative',
+          width: 280,
+          height: 120,
+        }}
+      >
+        <Dropdown
+          visible
+          trigger={[]}
+          placement="bottomLeft"
+          getPopupContainer={() => containerRef.current}
+          overlay={[
+            {
+              children: (
+                <div style={itemStyle}>
+                  <span>Low priority</span>
+                  <Badge mode="low" text="Low" />
+                </div>
+              ),
+            },
+            {
+              children: (
+                <div style={itemStyle}>
+                  <span>Medium priority</span>
+                  <Badge mode="medium" text="Medium" />
+                </div>
+              ),
+            },
+            {
+              children: (
+                <div style={itemStyle}>
+                  <span>High priority</span>
+                  <Badge mode="high" text="High" />
+                </div>
+              ),
+            },
+          ]}
+        >
+          <span
+            style={{
+              display: 'block',
+              width: 1,
+              height: 1,
+            }}
+          />
+        </Dropdown>
+      </div>
+    </div>
+  )
+}
 
-  </Tabs.TabPane>
+render(<App />)
+`}
+      />
 
+      <DocExampleBlock
+        title="Дополнительная информация и изменения"
+        titleSize="H5"
+        description="Варианты используются для отображения дополнительной информации, изменений или специальных меток:
 
-  <Tabs.TabPane tab="Properties" key="properties">
-    <AutodocArgsTable components={Badge}/>
-  </Tabs.TabPane>
+- `accent` — количество объектов, на котором требуется сделать акцент;
+- `info` — дополнительная информация, которая не требует действия пользователя;
+- `new` — новый объект или изменение;
+- `update` — обновлённое содержимое или новая версия."
+        previewGap={16}
+        codeBlock="hidden"
+        scope={{
+          React,
+          Badge,
+          Dropdown,
+          File,
+          Message,
+          Shield,
+          Reports,
+        }}
+        code={`
+function App() {
+  const containerRef = React.useRef(null)
 
-  <Tabs.TabPane tab="Дизайн" key="design">
-    <DocExampleBlock
-      title="Компонент в Pixso"
-      titleSize='H5'
-      description=""
-    />
+  const itemStyle = {
+    width: 240,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 16,
+  }
 
-    <DocumentationArgsTable rows={buildPresentationOnlyRows(badgeDesignPropPresentation)} />
-  </Tabs.TabPane>
-</Tabs>
+  const labelStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+  }
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <div
+        ref={containerRef}
+        style={{
+          position: 'relative',
+          width: 280,
+          height: 160,
+        }}
+      >
+        <Dropdown
+          visible
+          trigger={[]}
+          placement="bottomLeft"
+          getPopupContainer={() => containerRef.current}
+          overlay={[
+            {
+              children: (
+                <div style={itemStyle}>
+                  <div style={labelStyle}>
+                    <Reports />
+                    <span>Reports</span>
+                  </div>
+
+                  <Badge
+                    mode="accent"
+                    count={12}
+                  />
+                </div>
+              ),
+            },
+            {
+              children: (
+                <div style={itemStyle}>
+                  <div style={labelStyle}>
+                    <Message />
+                    <span>Messages</span>
+                  </div>
+
+                  <Badge
+                    mode="info"
+                    count={8}
+                  />
+                </div>
+              ),
+            },
+            {
+              children: (
+                <div style={itemStyle}>
+                  <div style={labelStyle}>
+                    <File />
+                    <span>Document</span>
+                  </div>
+
+                  <Badge
+                    mode="new"
+                    text="NEW"
+                  />
+                </div>
+              ),
+            },
+            {
+              children: (
+                <div style={itemStyle}>
+                  <div style={labelStyle}>
+                    <Shield />
+                    <span>Security</span>
+                  </div>
+
+                  <Badge
+                    mode="update"
+                    count={6}
+                  />
+                </div>
+              ),
+            },
+          ]}
+        >
+          <span
+            style={{
+              display: 'block',
+              width: 1,
+              height: 1,
+            }}
+          />
+        </Dropdown>
+      </div>
+    </div>
+  )
+}
+
+render(<App />)
+`}
+      />
+
+      <DocExampleBlock
+        title="Размер"
+        titleSize="H4"
+        description="По умолчанию **Badge** используется в размере `medium`.
+
+Размер `large` с текстовым содержимым поддерживается только вариантами `neutral_transparent` и `critical_transparent`."
+      />
+
+      <DocExampleBlock
+        title="Размещение и композиция"
+        titleSize="H4"
+        description="**Badge** размещается рядом с элементом, к которому относится дополнительная информация. Компонент может входить в состав вкладок, пунктов меню, карточек и других элементов навигации или управления.
+
+Положение **Badge**, заданное родительским компонентом, нельзя изменять вручную."
+      />
+
+      <DocExampleBlock
+        title="Контент"
+        titleSize="H5"
+        description="Содержимое **Badge** определяется задачей:
+
+* числовой счётчик отображает количество объектов;
+* короткая текстовая метка отображает статус или характеристику объекта.
+
+Значение текстовой метки должно быть понятным без дополнительного пояснения.
+"
+      />
+
+      <DocExampleBlock
+        title="Использование внутри компонентов"
+        titleSize="H5"
+        description="**Badge** может входить в состав других компонентов для отображения дополнительной информации. Отдельный фокус **Badge** не получает, действия пользователя не обрабатываются. Взаимодействие выполняется с родительским компонентом.
+
+**Примеры использования**"
+        previewGap={24}
+        codeBlock="hidden"
+        code={`
+<div
+  style={{
+    width: '100%',
+    maxWidth: 760,
+    margin: '0 auto',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+    gap: 16,
+  }}
+>
+  <a
+    href="?path=/docs/hexa-ui-components-informationcard--informationcard-docs"
+    target="_blank"
+    rel="noreferrer"
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      padding: 20,
+      border: '1px solid #D9DDE7',
+      borderRadius: 8,
+      textDecoration: 'none',
+      color: 'inherit',
+    }}
+  >
+    <strong>Information Card</strong>
+    <span>Статусы и счётчики внутри карточек.</span>
+  </a>
+
+  <a
+    href="?path=/docs/hexa-ui-components-tabs--tabs-docs"
+    target="_blank"
+    rel="noreferrer"
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      padding: 20,
+      border: '1px solid #D9DDE7',
+      borderRadius: 8,
+      textDecoration: 'none',
+      color: 'inherit',
+    }}
+  >
+    <strong>Tabs</strong>
+    <span>Количество объектов на вкладках.</span>
+  </a>
+
+  <a
+    href="?path=/docs/hexa-ui-components-segmentedcontrol--segmentedcontrol-docs"
+    target="_blank"
+    rel="noreferrer"
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      padding: 20,
+      border: '1px solid #D9DDE7',
+      borderRadius: 8,
+      textDecoration: 'none',
+      color: 'inherit',
+    }}
+  >
+    <strong>Segmented Control</strong>
+    <span>Счётчики внутри сегментов.</span>
+  </a>
+
+  <a
+    href="?path=/docs/hexa-ui-components-menu--docs"
+    target="_blank"
+    rel="noreferrer"
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      padding: 20,
+      border: '1px solid #D9DDE7',
+      borderRadius: 8,
+      textDecoration: 'none',
+      color: 'inherit',
+    }}
+  >
+    <strong>Menu</strong>
+    <span>Статусы и счётчики в элементах меню.</span>
+  </a>
+
+  <a
+    href="?path=/docs/hexa-ui-components-dropdown--dropdown-docs"
+    target="_blank"
+    rel="noreferrer"
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      padding: 20,
+      border: '1px solid #D9DDE7',
+      borderRadius: 8,
+      textDecoration: 'none',
+      color: 'inherit',
+    }}
+  >
+    <strong>Dropdown</strong>
+    <span>Статусы и счётчики в выпадающем меню.</span>
+  </a>
+
+  <a
+    href="?path=/docs/hexa-ui-components-submenu--submenu-docs"
+    target="_blank"
+    rel="noreferrer"
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      padding: 20,
+      border: '1px solid #D9DDE7',
+      borderRadius: 8,
+      textDecoration: 'none',
+      color: 'inherit',
+    }}
+  >
+    <strong>Submenu</strong>
+    <span>Статусы и счётчики в элементах вложенной навигации.</span>
+  </a>
+</div>
+`}
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Структура" key="composition">
+
+      <DocExampleBlock
+        description="**Badge** отображает число (**count**) или текст (**text**): уведомления, статусы, метки. Настраиваются **mode**, **size**, **overflowCount**, **showZero**, **theme** и **className**. При **count**=0 Badge скрывается, если не задан **showZero**."
+      />
+
+      <DocExampleBlock
+        title="mode"
+        description="Семантический цветовой режим. Доступные значения: `neutral`, `info`, `new`, `update`, `in-progress`, `resolved`, `positive`, `accent`, `low`, `medium`, `high`, `in-incident`, `critical`, `neutral_transparent`, `critical_transparent`. По умолчанию — `neutral`. Неподдерживаемое значение заменяется на `neutral`, в консоль выводится предупреждение."
+        code='
+<Badge mode="neutral" text="neutral" />
+<Badge mode="info" text="info" />
+<Badge mode="new" text="new" />
+<Badge mode="update" text="update" />
+<Badge mode="in-progress" text="in-progress" />
+<Badge mode="resolved" text="resolved" />
+<Badge mode="positive" text="positive" />
+<Badge mode="accent" text="accent" />
+<Badge mode="low" text="low" />
+<Badge mode="medium" text="medium" />
+<Badge mode="high" text="high" />
+<Badge mode="in-incident" text="in-incident" />
+<Badge mode="critical" text="critical" />
+<Badge mode="neutral_transparent" text="neutral_transparent" size="large" />
+<Badge mode="critical_transparent" text="critical_transparent" size="large" />'
+      />
+
+      <DocExampleBlock
+        title="size"
+        description={"Свойство **size** определяет размер **Badge**. Доступные значения: `medium`, `large`. По умолчанию используется `medium`.\n\nРазмер `large` поддерживается только для **mode** `neutral_transparent` и `critical_transparent`. Если `size=\"large\"` передан без **mode**, используется `neutral_transparent`."}
+        code='
+<Badge mode="info" size="medium" text="Info" />
+<Badge mode="neutral_transparent" size="medium" text="Draft" />
+<Badge mode="critical_transparent" size="medium" text="Critical" />
+<Badge mode="neutral_transparent" size="large" text="Draft" />
+<Badge mode="critical_transparent" size="large" text="Critical" />'
+      />
+
+      <DocExampleBlock
+        title="count"
+        description="Число внутри Badge. При **count**=0 Badge скрывается, если **showZero** не задан. Игнорируется, если задан **text**."
+        code='
+<Badge count={10} />
+<Badge count={0} />
+<Badge count={99} text="Text" />'
+      />
+
+      <DocExampleBlock
+        title="text"
+        description="Текстовая метка вместо числа. Имеет приоритет над **count**: при одновременной передаче отображается **text**."
+        code='
+<Badge text="Badge text" />
+<Badge text="Badge text" count={99} />'
+      />
+
+      <DocExampleBlock
+        title="overflowCount"
+        description="Верхняя граница для **count**. По умолчанию — `99`. Если **count** больше **overflowCount**, отображается значение вида `99+`."
+        code='
+<Badge count={100} overflowCount={99} />
+<Badge count={1000} overflowCount={999} mode="critical" />'
+      />
+
+      <DocExampleBlock
+        title="showZero"
+        description="Показывает Badge при **count**=0. Доступные значения: `true`, `false`. По умолчанию — `false`. Без **showZero** при нуле Badge скрыт."
+        code='
+<Badge count={0} />
+<Badge count={0} showZero />'
+      />
+
+      <DocExampleBlock
+        title="title"
+        description="Устаревший HTML-атрибут **title** для нативной подсказки при наведении. Для отдельной визуальной подсказки используется компонент **Tooltip**."
+        code='
+<Badge
+  count={3}
+  mode="info"
+  title="3 new notifications"
+/>'
+      />
+
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Properties" key="properties">
+      <AutodocArgsTable components={Badge} />
+    </Tabs.TabPane>
+
+    <Tabs.TabPane tab="Дизайн" key="design">
+
+      <DocExampleBlock
+        title="Компонент в Pixso"
+        titleSize="H5"
+        description=""
+      />
+
+      <DocumentationArgsTable
+        rows={buildPresentationOnlyRows(
+          badgeDesignPropPresentation
+        )}
+      />
+
+    </Tabs.TabPane>
+
+  </Tabs>
 
 </DocPageLayout>

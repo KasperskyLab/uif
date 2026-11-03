@@ -16,7 +16,8 @@ export const defaultArgs = {
   readOnly: false,
   validationStatus: 'default' as const,
   integerOnly: false,
-  allowEmpty: false
+  allowEmpty: false,
+  useGrouping: false
 }
 
 export const inputNumberPropPresentation: PropPresentationMap = {
@@ -45,6 +46,10 @@ export const inputNumberPropPresentation: PropPresentationMap = {
   },
   allowEmpty: {
     description: 'Разрешить пустое значение в поле',
+    control: 'boolean'
+  },
+  useGrouping: {
+    description: 'Разделять разряды по правилам текущей локали. По умолчанию — false',
     control: 'boolean'
   },
   keyboard: {

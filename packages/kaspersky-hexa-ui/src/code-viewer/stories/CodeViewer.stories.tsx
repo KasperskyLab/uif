@@ -5,7 +5,6 @@ import {
 } from '@sb/components/Documentation'
 import { withMeta } from '@sb/components/Meta'
 import { Meta, StoryObj } from '@storybook/react'
-import React from 'react'
 
 import MetaData from '../__meta__/meta.json'
 import { CodeViewer as CodeViewerComponent } from '../CodeViewer'
@@ -51,14 +50,14 @@ export const codeViewerStorySettings: Meta<CodeViewerPropsStory> = {
   }
 }
 
-const meta: Meta<CodeViewerPropsStory> = {
+const meta = {
   title: 'Hexa UI Components/CodeViewer',
-  component: CodeViewerComponent as React.ComponentType<CodeViewerPropsStory>,
+  component: CodeViewerComponent,
   tags: ['!autodocs'],
   includeStories: ['Playground'],
   excludeStories: ['codeViewerStorySettings'],
   ...codeViewerStorySettings
-}
+} as Meta<CodeViewerPropsStory>
 
 export default meta
 

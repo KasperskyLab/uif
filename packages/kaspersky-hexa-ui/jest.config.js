@@ -23,15 +23,19 @@ module.exports = {
     '^@src(.*)$': '<rootDir>/src/$1',
     '^@design-system(.*)$': '<rootDir>/design-system/$1',
     '^@helpers(.*)$': '<rootDir>/helpers/$1',
-    '^@sb(.*)$': '<rootDir>/.storybook/$1'
+    '^@sb(.*)$': '<rootDir>/.storybook/$1',
+    '^minisearch$': '<rootDir>/node_modules/minisearch/dist/cjs/index.cjs'
   },
   preset: 'ts-jest',
   roots: [
     '<rootDir>/src',
     '<rootDir>/helpers',
-    '<rootDir>/.storybook/components/Documentation'
+    '<rootDir>/.storybook/components/Documentation',
+    '<rootDir>/.storybook/docsSearch',
+    '<rootDir>/.storybook/manifest'
   ],
   setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
   testPathIgnorePatterns: ['/src/table/__tests__/Filters/helpers.ts'],
-  transformIgnorePatterns: ['/node_modules/(?!@xtem/xtem|other-module)', '/node_modules/', '\\.pnp\\.[^\\/]+$']
+  transformIgnorePatterns: ['/node_modules/(?!@xtem/xtem|other-module)', '/node_modules/', '\\.pnp\\.[^\\/]+$'],
+  workerIdleMemoryLimit: '1GB'
 }

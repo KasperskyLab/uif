@@ -17,6 +17,7 @@ import {
 export type { AddMethodToRef, TableContextProviderProps, TableStore, UpdateTableContext } from './tableStore'
 export {
   TableStoreContext as TableContext,
+  usePresetsUpdate,
   useRefMethod,
   useTableContext,
   useTableStore,
@@ -41,20 +42,30 @@ export const TableContextProvider = <T extends TableRecord = TableRecord>(
       dateFormat,
       filterVersion,
       enableNestedFilters,
-      useV3TestId
+      useV3TestId,
+      isServerFiltering: !!props.isServerFiltering
     }, methodsRef)
   }
   const store = storeRef.current
 
   useEffect(() => {
-    store.update({ dateFormat, filterVersion, useV3TestId })
-  }, [dateFormat, filterVersion, useV3TestId])
+    store.update({
+      dateFormat,
+      filterVersion,
+      useV3TestId,
+      isServerFiltering: !!props.isServerFiltering
+    })
+  }, [dateFormat, filterVersion, useV3TestId, props.isServerFiltering])
 
   useImperativeHandle(ref, () => methodsRef.current, [])
 
+  const tableProps = props.presets
+    ? { ...props, storageKey: undefined }
+    : props
+
   return (
     <TableStoreContext.Provider value={store}>
-      <Component {...(props as ITableProps<T>)} ref={ref} />
+      <Component {...(tableProps as ITableProps<T>)} ref={ref} />
     </TableStoreContext.Provider>
   )
 })

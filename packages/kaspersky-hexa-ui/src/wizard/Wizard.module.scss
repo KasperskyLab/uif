@@ -47,6 +47,7 @@
   }
   :global(.ant-drawer-body) {
     padding: 0;
+    overflow-y: auto;
   }
 }
 
@@ -78,4 +79,8 @@
   border-right: 1px solid var(--sidebar--border);
   flex-shrink: 0;
   overflow-y: auto;
+}
+
+.overflowAuto {
+  overflow: auto;
 }

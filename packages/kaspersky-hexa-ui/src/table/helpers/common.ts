@@ -121,3 +121,9 @@ export const isRenderCellObject = (node: unknown): node is { children: React.Rea
   !React.isValidElement(node) &&
   'children' in (node as Record<string, unknown>)
 )
+
+export const sort = (a: string, b: string) =>
+  String(a).localeCompare(String(b), undefined, {
+    numeric: true,
+    sensitivity: 'base'
+  })

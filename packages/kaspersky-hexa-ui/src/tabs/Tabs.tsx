@@ -87,6 +87,7 @@ export const TabPaneHead: FC<TabPaneHeadProps> = ({
   number,
   indicator,
   indicatorMode,
+  overflowCount,
   ...rest
 }: TabPaneHeadProps) => {
   const { cssConfig, testAttributes } = useContext(TabsContext)
@@ -104,7 +105,7 @@ export const TabPaneHead: FC<TabPaneHeadProps> = ({
           />
         </Tooltip>
       )}
-      {number !== undefined && (<Badge count={number} showZero mode="neutral" />)}
+      {number !== undefined && (<Badge count={number} showZero mode="neutral" overflowCount={overflowCount} />)}
       {indicator && (
         <Indicator mode={indicatorMode ?? 'critical'} testId={`${testAttributes?.['data-testid'] ?? 'tabs'}-tab-indicator`} />
       )}

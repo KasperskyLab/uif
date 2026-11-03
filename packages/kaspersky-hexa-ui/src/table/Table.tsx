@@ -19,6 +19,7 @@ import styled from 'styled-components'
 import { Loader } from '../loader'
 
 import { isColumnVisible, safeColumns } from './helpers/common'
+import { useCellTooltip } from './helpers/reductions/CellTooltip'
 import {
   ObservableScrollableContainer,
   recalculateStickyHeaderWidth,
@@ -27,6 +28,7 @@ import {
   TableStickyHeaderWrapper,
   useSyncTableScroll
 } from './helpers/stickyHeader'
+import { getClippingStyle } from './helpers/stylesHelpers'
 import { toggleHorizontalScrollbarVisibility } from './helpers/toggleHorizontalScrollbarVisibility'
 import { useBodyWithoutHover } from './helpers/useBodyWithoutHover'
 import { useStableRows } from './helpers/useStableRows'
@@ -35,6 +37,7 @@ import { CustomScrollContainer } from './modules/CustomScrollContainer'
 import { StyledTableContainer } from './modules/ExpandableRows'
 import styles from './Table.module.scss'
 import { tableCss, TableCssProps } from './tableCss'
+import { TableSkeleton } from './TableSkeleton'
 import {
   ITableProps,
   TableRecord,
@@ -77,9 +80,10 @@ export const Table: <T extends TableRecord = TableRecord>(
   const scrollableContainerRef = useRef<HTMLDivElement>(null)
   const stickyHeaderRef = useRef<HTMLDivElement>(null)
   const horizontalScrollbarRef = useRef<HTMLDivElement>(null)
-  const [previewTableWidth, setPreviewTableWidth] = useState(scrollableContainerRef.current?.offsetWidth)
+  const [previewTableWidth, setPreviewTableWidth] = useState<number>()
 
   useSyncTableScroll({
+    disabled: props.skeleton,
     horizontalScrollbarRef,
     scrollableContainerRef,
     stickyHeaderRef
@@ -89,13 +93,19 @@ export const Table: <T extends TableRecord = TableRecord>(
     const tableBody = scrollableContainerRef.current?.querySelector('.ant-table') as HTMLElement
     if (!tableBody) return
 
-    const observer = new ResizeObserver(() => {
+    let lastWidth = -1
+
+    const observer = new ResizeObserver(entries => {
+      const width = Math.round(entries[entries.length - 1].contentRect.width)
+      if (width === lastWidth) return
+      lastWidth = width
+
       recalculateStickyHeaderWidth({ tableBody, horizontalScrollbarRef, stickyHeaderRef })
       toggleHorizontalScrollbarVisibility(horizontalScrollbarRef)
     })
     observer.observe(tableBody)
     return () => observer.disconnect()
-  }, [])
+  }, [props.skeleton])
 
   const hasDataSource = !!props.dataSource?.length
 
@@ -105,17 +115,18 @@ export const Table: <T extends TableRecord = TableRecord>(
 
     recalculateStickyHeaderWidth({ tableBody, horizontalScrollbarRef, stickyHeaderRef })
     toggleHorizontalScrollbarVisibility(horizontalScrollbarRef)
-  }, [hasDataSource])
+  }, [hasDataSource, props.skeleton])
 
   useEffect(() => {
     if (tableRef.current) {
       setTableWidth(tableRef.current.offsetWidth)
     }
-  }, [])
+  }, [props.skeleton])
 
   const {
     loaderProps = { indicator: <Loader /> },
     loading: loadingProp,
+    skeleton = false,
     isInited = false,
     expandable,
     emptyText = EMPTY_DATA,
@@ -129,7 +140,7 @@ export const Table: <T extends TableRecord = TableRecord>(
     isValid,
     fullHeight,
     resizingMode,
-    afterColumn,
+    afterColumn = true,
     fitLastColumn = true,
     overflowTransition = false,
     useDragDrop,
@@ -146,6 +157,8 @@ export const Table: <T extends TableRecord = TableRecord>(
     const handleResize = () => {
       setPreviewTableWidth(scrollableContainerRef.current?.offsetWidth)
     }
+
+    handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
@@ -175,12 +188,14 @@ export const Table: <T extends TableRecord = TableRecord>(
     columnVerticalAlign
   }
 
+  const clippingStyle = getClippingStyle(tableCssProps)
+
   useEffect(() => {
     onPatchedColumnsChange?.(columns)
   }, [columns])
 
   const commonClassNames = [
-    { 'table-col-after': resizingMode === 'scroll' && !overflowTransition },
+    { 'table-col-after': afterColumn && resizingMode === 'scroll' && !overflowTransition },
     { 'table-draggable': useDragDrop },
     { 'table-row-selection': !!rowSelection },
     { 'table-sticky-selection': stickySelection && resizingMode === 'scroll' },
@@ -192,6 +207,7 @@ export const Table: <T extends TableRecord = TableRecord>(
     ? createPortal(
         <RowDraggingContainer
           {...tableCssProps}
+          style={clippingStyle}
           className={cn(
             'table-dragging-row',
             ...commonClassNames
@@ -215,6 +231,16 @@ export const Table: <T extends TableRecord = TableRecord>(
   const stableRows = useStableRows(tableProps.dataSource)
   const componentsWithoutJsHover = useBodyWithoutHover(tableProps.components)
 
+  const { tooltip, containerProps } = useCellTooltip()
+
+  if (skeleton) {
+    return (
+      <TableSkeleton
+        testAttributes={getChildTestAttr('skeleton', testAttributes)}
+      />
+    )
+  }
+
   return (
     <>
       {
@@ -222,6 +248,7 @@ export const Table: <T extends TableRecord = TableRecord>(
           ? (
               <TableStickyHeaderWrapper
                 {...tableCssProps}
+                {...containerProps}
                 ref={stickyHeaderRef}
               >
                 <TableStickyHeader
@@ -256,16 +283,18 @@ export const Table: <T extends TableRecord = TableRecord>(
         columns={columns}
         overflowTransition={overflowTransition}
         useDragDrop={useDragDrop}
+        {...containerProps}
         {...testAttributes}
       >
         <StyledTableContainer
           hasSelectionColumn={Boolean(rowSelection)}
           useDragDrop={useDragDrop}
-          $previewTableWidth={previewTableWidth ?? scrollableContainerRef.current?.offsetWidth}
+          $previewTableWidth={previewTableWidth}
         >
           <StyledTable<ComponentType<ITableProps<T>>>
             {...tableProps}
             {...tableCssProps}
+            style={{ ...clippingStyle, ...tableProps.style }}
             className={cn(
               tableProps.className,
               { 'table-height-full': fullHeight },
@@ -287,6 +316,7 @@ export const Table: <T extends TableRecord = TableRecord>(
           {rowDraggingContainer}
         </StyledTableContainer>
       </ObservableScrollableContainer>
+      {tooltip}
       {/* TODO: подумать над заменой скролла на наш компонент  */}
       <CustomScrollContainer
         ref={horizontalScrollbarRef}

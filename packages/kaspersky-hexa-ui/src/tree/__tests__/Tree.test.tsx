@@ -138,7 +138,7 @@ describe('Tree', () => {
 
       await clickOnNodeCheckbox(container, keyToBeClicked)
 
-      expect(onCheck).toBeCalledWith(expected, expect.anything())
+      expect(onCheck).toHaveBeenCalledWith(expected, expect.anything())
     })
 
     it.each([
@@ -156,7 +156,7 @@ describe('Tree', () => {
 
       await clickOnNodeCheckbox(container, keyToBeClicked)
 
-      expect(onCheck).toBeCalledWith(expected, expect.anything())
+      expect(onCheck).toHaveBeenCalledWith(expected, expect.anything())
     })
   })
 
@@ -167,7 +167,7 @@ describe('Tree', () => {
 
       await clickOnNodeCheckbox(container, '0-0-0')
 
-      expect(onCheck).toBeCalledWith(['0-0-0'], expect.anything())
+      expect(onCheck).toHaveBeenCalledWith(['0-0-0'], expect.anything())
     })
 
     it('should uncheck a single node only', async () => {
@@ -182,7 +182,7 @@ describe('Tree', () => {
 
       await clickOnNodeCheckbox(container, '0-0-0')
 
-      expect(onCheck).toBeCalledWith(['0-0-0-0', '0-0-0-1'], expect.anything())
+      expect(onCheck).toHaveBeenCalledWith(['0-0-0-0', '0-0-0-1'], expect.anything())
     })
   })
 
@@ -196,7 +196,7 @@ describe('Tree', () => {
 
       await clickOnNodeCheckbox(container, keyToBeClicked)
 
-      expect(onCheck).toBeCalledWith(expected, expect.anything())
+      expect(onCheck).toHaveBeenCalledWith(expected, expect.anything())
     })
 
     it.each([
@@ -215,7 +215,7 @@ describe('Tree', () => {
 
       await clickOnNodeCheckbox(container, keyToBeClicked)
 
-      expect(onCheck).toBeCalledWith(expected, expect.anything())
+      expect(onCheck).toHaveBeenCalledWith(expected, expect.anything())
     })
   })
 
@@ -226,7 +226,7 @@ describe('Tree', () => {
 
       await clickOnNodeCheckbox(container, '0-0')
 
-      expect(onCheck).toBeCalledWith(['0-0'], expect.anything())
+      expect(onCheck).toHaveBeenCalledWith(['0-0'], expect.anything())
     })
 
     it('should uncheck a single node only', async () => {
@@ -240,7 +240,7 @@ describe('Tree', () => {
 
       await clickOnNodeCheckbox(container, '0-0')
 
-      expect(onCheck).toBeCalledWith(['0-0'], expect.anything())
+      expect(onCheck).toHaveBeenCalledWith(['0-0'], expect.anything())
     })
   })
 

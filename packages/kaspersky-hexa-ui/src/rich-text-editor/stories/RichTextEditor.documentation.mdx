@@ -24,7 +24,7 @@ import {
 <Meta of={RichTextEditorStories} name="RichTextEditor Docs" />
 
 <DocPageLayout>
-  <DocPageHeader title="RichTextEditor" />
+  <DocPageHeader title="RichTextEditor" checkUIF />
 
   <Tabs defaultActiveKey="description">
 
@@ -70,8 +70,22 @@ import {
       />
 
       <DocExampleBlock
-        title="readOnly и enabled"
-        description="**readOnly** включает режим чтения: редактирование и панель форматирования недоступны. **enabled** управляет возможностью изменять текст; по умолчанию — `true`."
+        title="enabled"
+        description="**enabled** управляет возможностью изменять текст через панель форматирования; по умолчанию — `true`."
+        code={`
+          <RichTextEditor
+            plugins={allPlugins}
+            initialValue={initialValue}
+            enabled={false}
+            onChange={() => undefined}
+          />
+        `}
+        scope={{ RichTextEditor, allPlugins, initialValue }}
+      />
+
+      <DocExampleBlock
+        title="readOnly"
+        description="**readOnly** включает режим чтения: редактирование и панель форматирования недоступны."
         code={`
           <RichTextEditor
             plugins={allPlugins}
@@ -111,12 +125,32 @@ import {
         title="textareaMode"
         description="Добавление функциональности компонента Textarea в RichTextEditor. Можно задать следующие пропы: 'validationStatus', 'disabled', 'readOnly' и 'showCount'."
         code={`
-          <RichTextEditor
-            plugins={allPlugins}
-            initialValue={initialValue}
-            limitTextSize={1000}
-            textareaMode={{ showCount: true }}
-          />
+          <>
+            <RichTextEditor
+              plugins={allPlugins}
+              initialValue={initialValue}
+              limitTextSize={1000}
+              textareaMode={{ disabled: true }}
+            />
+            <RichTextEditor
+              plugins={allPlugins}
+              initialValue={initialValue}
+              limitTextSize={1000}
+              textareaMode={{ readOnly: true }}
+            />
+            <RichTextEditor
+              plugins={allPlugins}
+              initialValue={initialValue}
+              limitTextSize={1000}
+              textareaMode={{ validationStatus: 'error' }}
+            />
+            <RichTextEditor
+              plugins={allPlugins}
+              initialValue={initialValue}
+              limitTextSize={1000}
+              textareaMode={{ showCount: true }}
+            />
+          </>
         `}
         scope={{ RichTextEditor, allPlugins, initialValue }}
       />

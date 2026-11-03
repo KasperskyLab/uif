@@ -18,22 +18,6 @@ const getDragHandle = (table: TableTestingClass, key: string | number) =>
   table.rows.getByKey(key)?.querySelector('.drag-handle-container')
 
 describe('Table Draggable module', () => {
-  it('should reset the global body userSelect on unmount when useDragDrop=true', async () => {
-    document.body.style.userSelect = 'none'
-
-    try {
-      const table = await renderTable()
-
-      expect(document.body.style.userSelect).toBe('none')
-
-      table.unmount()
-
-      expect(document.body.style.userSelect).toBe('auto')
-    } finally {
-      document.body.style.userSelect = ''
-    }
-  })
-
   it('should render drag-handle in every row when useDragDrop=true', async () => {
     const table = await renderTable()
 

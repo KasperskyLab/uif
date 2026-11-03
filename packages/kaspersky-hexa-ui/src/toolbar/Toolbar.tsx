@@ -7,7 +7,7 @@ import { Search } from '@src/search'
 import { Space } from '@src/space'
 import cn from 'classnames'
 import isNumber from 'lodash/isNumber'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import {
   Export as ExportIcon,
@@ -69,11 +69,12 @@ const toolbarItemsRender = (items: ToolbarItems[], wrapKeyed = false, hasInterse
 }
 
 const INTERSECTION_PADDING = 36
+const leftEmpty: ToolbarItems[] = []
 
 export const Toolbar: FC<ToolbarProps> & ToolbarVariants = (props: ToolbarProps) => {
   const {
     autoDropdown = false,
-    left = [],
+    left = leftEmpty,
     leftLimit = 4,
     right,
     styleLeft,
@@ -87,8 +88,9 @@ export const Toolbar: FC<ToolbarProps> & ToolbarVariants = (props: ToolbarProps)
   const [dropdownOpened, setDropdownOpened] = useState(false)
 
   const [containerRef, setContainerRef] = useImmutableRef<HTMLDivElement>()
+  const [renderTrigger, setRenderTrigger] = useState<number>(0)
 
-  const lastFittingItemIndex = useIntersectionChildren(containerRef, INTERSECTION_PADDING, undefined, undefined, 0)
+  const lastFittingItemIndex = useIntersectionChildren(containerRef, INTERSECTION_PADDING, undefined, renderTrigger, 0)
   const hasIntersection = isNumber(lastFittingItemIndex)
   const shouldShowMoreButton =
     hasIntersection && lastFittingItemIndex < leftVisible.length - 1
@@ -96,6 +98,8 @@ export const Toolbar: FC<ToolbarProps> & ToolbarVariants = (props: ToolbarProps)
   const dropdownItems = hasIntersection
     ? leftVisible.slice(lastFittingItemIndex + 1, leftVisible.length)
     : []
+
+  useEffect(() => setRenderTrigger(prev => prev+1), [left])
 
   return (
     <div

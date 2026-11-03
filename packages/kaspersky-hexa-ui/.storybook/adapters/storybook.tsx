@@ -5,8 +5,8 @@ import {
   WithTooltip as InternalWithTooltip
 } from 'storybook/internal/components'
 import type { Addon_ArgType as InternalAddonArgType } from 'storybook/internal/types'
-import { addons, types } from 'storybook/manager-api'
-import { create, ensure, ThemeProvider } from 'storybook/theming'
+import { addons, types, useStorybookApi } from 'storybook/manager-api'
+import { create, ensure, ThemeProvider, useTheme } from 'storybook/theming'
 import { PureArgsTable, useOf } from '@storybook/addon-docs/blocks'
 
 /**
@@ -15,7 +15,9 @@ import { PureArgsTable, useOf } from '@storybook/addon-docs/blocks'
  */
 export const StorybookManager = {
   addons,
-  types
+  types,
+  useStorybookApi,
+  useTheme
 }
 
 export const StorybookManagerUI = {

@@ -46,7 +46,7 @@ import { expandableTextDesignPropPresentation } from './ExpandableText.design.pr
 
       <DocExampleBlock
         title="children"
-        description="Содержимое блока: строка или произвольный React-узел. Кнопка разворачивания появляется только при переполнении по ширине контейнера."
+        description="Содержимое блока: строка или произвольный React-узел. Кнопка разворачивания появляется только при переполнении по ширине контейнера. Текст с переносами строк остаётся одним блоком: до разворота переносы сохраняются, кнопка стоит у первой строки. После разворота строки переносятся по ширине контейнера."
         setupCode={expandableTextLongExampleCode}
         code={`
           <div style={expandableTextPreviewStyle}>
@@ -59,6 +59,7 @@ import { expandableTextDesignPropPresentation } from './ExpandableText.design.pr
               </Link>
             </ExpandableText>
           </div>
+          <ExpandableTextLineBreaksExample />
         `}
       />
 

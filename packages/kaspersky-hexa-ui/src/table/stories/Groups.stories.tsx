@@ -111,7 +111,8 @@ const meta: Meta<ITableProps> = {
     },
     dataSource,
     columns,
-    groupBy: GROUP_BY
+    groupBy: GROUP_BY,
+    useDragDrop: true
   },
   argTypes: {
     groupBy: {
@@ -309,11 +310,15 @@ export const ResolveGroupingValue: Story = {
   args: {
     columns: modifyColumns(columns, 'name', {
       resolveGroupingValue: (row, groupBy) => row[groupBy].someInnerField,
-      sortGroupsFunction: undefined
+      sortGroupsFunction: undefined,
+      groupingPropertyPath: 'name.someInnerField'
     }),
     dataSource: dataSource.map(({ name, ...row }) => ({
       ...row,
-      name: { someInnerField: name }
+      name: {
+        someInnerField: name,
+        anotherInnerField: `anotherValue ${name}`
+      }
     }))
   }
 }

@@ -1,12 +1,19 @@
 {
   "translation": {
     "common": {
+      "back": "Voltar",
+      "cancel": "Cancelar",
+      "delete": "Excluir",
       "empty": "Sem dados",
       "import": "Importar",
       "export": "Exportar",
       "filters": "Filtros",
+      "next": "Avançar",
       "no": "Não",
-      "yes": "Sim"
+      "ok": "OK",
+      "rename": "Renomear",
+      "yes": "Sim",
+      "save": "Salvar"
     },
     "upload": {
       "dropFileTitle": "Solte o arquivo aqui",
@@ -56,6 +63,21 @@
         "maxTotalSize2": "O tamanho total dos arquivos carregados excede o limite de tamanho atualmente permitido",
         "filesDoNotMeetRequirements": "Os arquivos não atendem aos requisitos",
         "format": "{{count}} arquivo(s) não pode(m) ser carregado(s) não podem ser carregados devido a requisitos de formato."
+      }
+    },
+    "onboarding": {
+      "modal": {
+        "actions": {
+          "tryNow": "Experimentar agora",
+          "skip": "Ignorar"
+        },
+        "dontShowAgain": "Não mostrar novamente"
+      },
+      "interactiveTour": {
+        "actions": {
+          "complete": "Concluída"
+        },
+        "stepStack": "Etapa {{currentStep}} de {{totalSteps}}"
       }
     },
     "wizard": {
@@ -181,6 +203,38 @@
         "nrange": "Fora de {{from}}-{{to}}"
       },
       "groupingEmpty": "Outro"
+    },
+    "tablePresets": {
+      "actions": {
+        "createPreset": "Salvar como uma nova predefinição",
+        "updatePreset": "Atualizar predefinição"
+      },
+      "createFirstPresetTip": "Você pode salvar as colunas, a ordem, os filtros ou toda a configuração da tabela como uma predefinição personalizada. Para isso, configure a tabela e os filtros desejados e salve a configuração como nova predefinição.",
+      "createPresetModal": {
+        "header": "Salvar as configurações da tabela como uma nova predefinição",
+        "presetName": "Nome da predefinição",
+        "tip": "A predefinição inclui a ordem e a visibilidade das colunas, os filtros aplicados e a ordenação. Se você alterar qualquer um desses parâmetros, poderá atualizar a predefinição."
+      },
+      "renamePresetModal": {
+        "header": "Renomear predefinição"
+      },
+      "deletePresetModal": {
+        "header": "Excluir predefinição?",
+        "message": "Excluir a predefinição \"{{name}}\"? Esta ação não pode ser desfeita."
+      },
+      "errors": {
+        "presetCreate": "Não foi possível criar a predefinição {{name}}",
+        "presetDelete": "Não foi possível excluir a predefinição {{name}}",
+        "presetUpdate": "Não foi possível atualizar a predefinição {{name}}"
+      },
+      "presetCreated": "Predefinição {{name}} salva",
+      "presetDeleted": "Predefinição {{name}} excluída",
+      "presetUpdated": "Predefinição {{name}} salva",
+      "presets": "Predefinições",
+      "validation": {
+        "presetNameEmpty": "Insira um nome para a predefinição",
+        "presetNameExists": "Já existe uma predefinição com esse nome"
+      }
     },
     "tabs": {
       "dropdown": {

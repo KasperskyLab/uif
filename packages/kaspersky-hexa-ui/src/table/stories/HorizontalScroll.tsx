@@ -8,7 +8,7 @@ import { BasicTableStory, Story } from './_commonConstants'
 
 type StoryColumn = {
   name: string,
-  width?: number,
+  width?: number | string,
   show?: boolean,
   minWidth?: number,
   hideColumnAvailable?: boolean
@@ -38,7 +38,7 @@ export const columns = [
   createColumn({ name: 'city', width: 270, minWidth: 240 }),
   createColumn({ name: 'date', width: 180 }),
   createColumn({ name: 'isSortable', width: 150 }),
-  createColumn({ name: 'sorter', width: 150 }),
+  createColumn({ name: 'sorter', width: 140 }),
   createColumn({ name: 'sorterIsSortable', width: 150 })
 ]
 
@@ -82,6 +82,7 @@ export const HorizontalScroll: Story = {
     resizingMode: 'scroll',
     stickyHeader: 0,
     stickyFooter: false,
-    stickySelection: true
+    stickySelection: true,
+    useDragDrop: false
   }
 }

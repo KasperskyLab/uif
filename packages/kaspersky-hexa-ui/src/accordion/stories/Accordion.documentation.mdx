@@ -7,265 +7,805 @@ import {
   DocPageHeader,
   DocPageLayout,
   DocumentationArgsTable,
-  PropsTable,
   DocumentationTabs as Tabs,
 } from '@sb/components/Documentation'
 import { Text } from '@src/typography'
-
 import { Accordion } from '../Accordion'
 import { AccordionPanel } from '../AccordionPanel'
 import * as AccordionStories from './Accordion.stories'
 import { accordionDesignPropPresentation } from './Accordion.design.properties'
 import { Space } from '@src/space'
+import { Tag } from '@src/tag'
+import { Button } from '@src/button'
 
 <Meta of={AccordionStories} name="Accordion Docs" />
 
 <DocPageLayout>
 
-  <DocPageHeader
-    title="Accordion"
-    rtlSupported
-    inBuilder
-    builderInfo="Используется под названием «Аккордеон»"
-    checkUIF
-  />
+<DocPageHeader
+ title="Accordion"
+ rtlSupported
+ inBuilder
+ builderInfo="Используется под названием «Аккордеон»"
+ checkUIF
+/>
 
   <Tabs>
 
-    <Tabs.TabPane tab="Описание" key="description">
+<Tabs.TabPane tab="Описание" key="description">
 
-      <DocExampleBlock
-        description="
-          **Accordion** — группа панелей со сворачиваемым содержимым и настраиваемым заголовком
+  <DocExampleBlock
+    description="**Accordion** — группа связанных разделов, которые раскрываются и сворачиваются по мере необходимости. Компонент сокращает объём одновременно отображаемой информации и позволяет сосредоточиться на нужном содержимом."
+/>
 
-          **Accordion** группирует связанный контент, который пользователь раскрывает и сворачивает по секциям: настройки, фильтры, детали сущности, блоки формы. Каждая секция — **AccordionPanel** с заголовком (**title**, **titleSize**) и опциональными **Tag**, **additionalText** и **actions** в шапке.
+  <DocExampleBlock
+    title="Когда использовать"
+    titleSize="H4"
+    description="**Accordion** используется в следующих сценариях:
 
-          **withBorder** задаёт карточный вид панелей; без рамки — компактный список секций (**elementAfter** в макете только с рамкой). Если нужно переключение между равнозначными разделами без одновременного показа нескольких блоков, используйте **Tabs**. Для меню в заголовке — **actions** через **Dropdown**; клик по пункту не должен раскрывать панель (**stopPropagation** в **onClick**)."
+* связанное содержимое группируется по темам или категориям;
+
+* дополнительная информация раскрывается по мере необходимости;
+
+* независимые разделы скрываются для сокращения длины страницы."
+previewGap={16}
+codeBlock="hidden"
+scope={{ Accordion, AccordionPanel }}
+code={`
+
+<div
+  style={{
+    width: '100%',
+    maxWidth: 864,
+    margin: '0 auto',
+  }}
+>
+  <Accordion defaultActiveKey="main">
+    <AccordionPanel
+      key="main"
+      title="Основная информация"
+    >
+      Содержимое раздела
+    </AccordionPanel>
+
+<AccordionPanel
+  key="additional"
+  title="Дополнительные параметры"
+>
+  Содержимое раздела
+</AccordionPanel>
+
+  </Accordion>
+</div>
+`}
       />
 
-    </Tabs.TabPane>
+  <DocExampleBlock
+    title="Когда не использовать"
+    titleSize="H4"
+    description="**Accordion** не рекомендуется использовать в следующих сценариях:
 
-    <Tabs.TabPane tab="Структура" key="composition">
+* содержимое должно оставаться видимым на протяжении основного сценария;
 
-      <DocExampleBlock
-        description="
-          **Accordion** группирует связанный контент, который можно разворачивать и сворачивать. Состоит из контейнера **Accordion** и одной или нескольких панелей **AccordionPanel**."
+* для сравнения требуется одновременно видеть разделы в фиксированном расположении;
+
+* содержимое представляет собой один короткий блок и сворачивание не упрощает страницу;
+
+* скрытие информации может привести к пропуску обязательного действия или важного сообщения."
+/>
+
+  <DocExampleBlock
+    title="Правила выбора вариантов"
+    titleSize="H4"
+    description="Вариант **Accordion** определяется сценарием:
+
+* одиночное раскрытие — для работы только с одним разделом за раз;
+
+* множественное раскрытие — для одновременной работы с несколькими разделами;
+
+* вариант с рамкой — для визуального отделения группы от окружающего содержимого;
+
+* вариант без рамки — если **Accordion** размещён внутри визуально выделенного контейнера, например блока с фоном или собственной рамкой. Это позволяет избежать лишних границ в интерфейсе."
+/>
+
+<DocExampleBlock
+  title="Размер заголовка"
+  titleSize="H5"
+  description="Размер заголовка выбирается в зависимости от расположения и значимости группы:
+
+* `extraSmall` используется в компактных областях с высокой плотностью содержимого;
+
+* `small` используется по умолчанию в большинстве групп;
+
+* `medium` используется для самостоятельных разделов страницы;
+
+* `large` используется для крупных разделов верхнего уровня.
+
+Внутри одной группы применяется одинаковый размер заголовков. Размер не используется для выделения отдельной панели среди остальных."
+previewGap={16}
+codeBlock="hidden"
+scope={{ Accordion, AccordionPanel }}
+code={`
+
+<div
+  style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 16,
+    width: '100%',
+    maxWidth: 864,
+    margin: '0 auto',
+  }}
+>
+  <Accordion>
+    <AccordionPanel
+      key="extra-small"
+      title="Компактные параметры"
+      titleSize="extraSmall"
+    >
+      Содержимое раздела
+    </AccordionPanel>
+  </Accordion>
+
+  <Accordion>
+    <AccordionPanel
+      key="small"
+      title="Основные параметры"
+      titleSize="small"
+    >
+      Содержимое раздела
+    </AccordionPanel>
+  </Accordion>
+
+  <Accordion>
+    <AccordionPanel
+      key="medium"
+      title="Настройки раздела"
+      titleSize="medium"
+    >
+      Содержимое раздела
+    </AccordionPanel>
+  </Accordion>
+
+  <Accordion>
+    <AccordionPanel
+      key="large"
+      title="Настройки продукта"
+      titleSize="large"
+    >
+      Содержимое раздела
+    </AccordionPanel>
+  </Accordion>
+</div>
+`}
       />
 
-      <DocExampleBlock
-        title="withBorder"
-        description="Рамка и фон вокруг каждой панели. Доступные значения: `true`, `false`. По умолчанию — `true`."
-        previewDirection="vertical"
-        previewGap={24}
-        code={`
-          <Accordion>
-            <AccordionPanel key={1} title="С рамкой (withBorder = true)">
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
+  <DocExampleBlock
+    title="Одиночное раскрытие"
+    titleSize="H5"
+    description="При раскрытии новой панели ранее открытая панель автоматически сворачивается."
+    previewGap={16}
+    codeBlock="hidden"
+    scope={{ Accordion, AccordionPanel }}
+    code={`
 
-          <Accordion withBorder={false}>
-            <AccordionPanel key={1} title="Без рамки (withBorder = false)">
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
-        `}
+<div
+  style={{
+    width: '100%',
+    maxWidth: 864,
+    margin: '0 auto',
+  }}
+>
+  <Accordion
+    accordion
+    defaultActiveKey="general"
+  >
+    <AccordionPanel
+      key="general"
+      title="Общие настройки"
+    >
+      Содержимое раздела
+    </AccordionPanel>
+
+<AccordionPanel
+  key="access"
+  title="Параметры доступа"
+>
+  Содержимое раздела
+</AccordionPanel>
+
+  </Accordion>
+</div>
+`}
       />
 
-      <DocExampleBlock
-        title="disabled"
-        description="Отключённая панель не раскрывается (**collapsible** = `disabled`). **disabled** на **Accordion** отключает всю группу; на **AccordionPanel** — только эту панель."
-        previewGap={32}
-        previewDirection="vertical"
-        code={`
-          <Accordion>
-            <AccordionPanel key={1} disabled title="Отключённая панель">
-              Содержимое
-            </AccordionPanel>
-            <AccordionPanel key={2} title="Активная панель">
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
+  <DocExampleBlock
+    title="Множественное раскрытие"
+    titleSize="H5"
+    description="Несколько панелей могут оставаться раскрытыми одновременно. При раскрытии новой панели состояние остальных панелей не изменяется."
+    previewGap={16}
+    codeBlock="hidden"
+    scope={{ Accordion, AccordionPanel }}
+    code={`
 
-          <Accordion disabled withBorder={true}>
-            <AccordionPanel key={1} title="Вся группа отключена">
-              Содержимое
-            </AccordionPanel>
-            <AccordionPanel key={2} title="Ничего не откроется">
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
-        `}
+<div
+  style={{
+    width: '100%',
+    maxWidth: 864,
+    margin: '0 auto',
+  }}
+>
+  <Accordion
+    defaultActiveKey={[
+      'general',
+      'access',
+    ]}
+  >
+    <AccordionPanel
+      key="general"
+      title="Общие настройки"
+    >
+      Содержимое раздела
+    </AccordionPanel>
+
+<AccordionPanel
+  key="access"
+  title="Параметры доступа"
+>
+  Содержимое раздела
+</AccordionPanel>
+
+  </Accordion>
+</div>
+`}
       />
 
-      <DocExampleBlock
-        title="title"
-        description="Текст или узел заголовка панели. Отображается компонентом **Text** в шапке **AccordionPanel**."
-        code={`
-          <Accordion>
-            <AccordionPanel key={1} title="Заголовок панели">
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
-        `}
+  <DocExampleBlock
+    title="Поведение и состояния"
+    titleSize="H4"
+    description="Панель раскрывается и сворачивается при нажатии на заголовок или индикатор.
+
+Недоступная панель не раскрывается и не принимает взаимодействие."
+previewGap={16}
+codeBlock="hidden"
+scope={{ Accordion, AccordionPanel }}
+code={`
+
+<div
+  style={{
+    width: '100%',
+    maxWidth: 864,
+    margin: '0 auto',
+  }}
+>
+  <Accordion defaultActiveKey="opened">
+    <AccordionPanel
+      key="opened"
+      title="Раскрытая панель"
+    >
+      Содержимое раскрытой панели
+    </AccordionPanel>
+
+<AccordionPanel
+  key="closed"
+  title="Свёрнутая панель"
+>
+  Содержимое свёрнутой панели
+</AccordionPanel>
+
+<AccordionPanel
+  key="disabled"
+  title="Недоступная панель"
+  additionalText="Недоступно"
+  disabled
+>
+  Содержимое недоступной панели
+</AccordionPanel>
+
+  </Accordion>
+</div>
+`}
       />
 
-      <DocExampleBlock
-        title="titleSize"
-        description="Типографика заголовка панели. Доступные значения: `extraSmall`, `small`, `medium`, `large`. По умолчанию — `small`."
-        code={`
-          <Accordion>
-            <AccordionPanel key={1} title="extraSmall" titleSize="extraSmall">
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
-          <Accordion>
-            <AccordionPanel key={1} title="small" titleSize="small">
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
-          <Accordion>
-            <AccordionPanel key={1} title="medium" titleSize="medium">
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
-          <Accordion>
-            <AccordionPanel key={1} title="large" titleSize="large">
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
-        `}
+        <DocExampleBlock
+    title="Размещение и композиция"
+    titleSize="H4"
+    description="Связанные по смыслу панели объединяются внутри одного **Accordion** и располагаются последовательно друг под другом. Панели одной группы относятся к общей теме или задаче.
+
+Для несвязанных наборов содержимого используются отдельные группы **Accordion**. Если панелей становится много, их разделяют на тематические группы. Внутри одной группы сохраняются одинаковые ширина, правило раскрытия и положение индикатора.
+
+Вложение одного **Accordion** в другой не рекомендуется: такая структура усложняет просмотр содержимого и навигацию."
+previewGap={16}
+codeBlock="hidden"
+scope={{ Accordion, AccordionPanel }}
+code={`
+
+<div
+  style={{
+    width: '100%',
+    maxWidth: 864,
+    margin: '0 auto',
+  }}
+>
+  <Accordion defaultActiveKey="general">
+    <AccordionPanel
+      key="general"
+      title="Основные параметры"
+    >
+      Содержимое раздела
+    </AccordionPanel>
+
+<AccordionPanel
+  key="additional"
+  title="Дополнительные параметры"
+>
+  Содержимое раздела
+</AccordionPanel>
+
+<AccordionPanel
+  key="notifications"
+  title="Настройки уведомлений"
+>
+  Содержимое раздела
+</AccordionPanel>
+
+  </Accordion>
+</div>
+`}
       />
 
-      <DocExampleBlock
-        title="accordion"
-        description="Режим «только одна открытая панель». Доступные значения: `true`, `false`. По умолчанию — `false`: можно раскрыть несколько панелей одновременно. При **accordion**=`true` раскрыта только одна панель, остальные автоматически сворачиваются"
-        code={`
-          <Accordion accordion defaultActiveKey={1}>
-            <AccordionPanel key={1} title="Панель 1">
-              Содержимое 1
-            </AccordionPanel>
-            <AccordionPanel key={2} title="Панель 2">
-              Содержимое 2
-            </AccordionPanel>
-            <AccordionPanel key={3} title="Панель 3">
-              Содержимое 3
-            </AccordionPanel>
-          </Accordion>
-        `}
+  <DocExampleBlock
+    title="Контент"
+    titleSize="H4"
+    description="Заголовок панели кратко описывает ее содержимое. Формулировки заголовков внутри одной группы строятся единообразно.
+
+Если заголовок не помещается в одну строку, текст переносится без обрезания многоточием. Дополнительный текст уточняет заголовок, но не заменяет его.
+
+Внутри панели могут размещаться текст, формы, списки и другие компоненты. Содержимое одной панели относится к одной теме."
+previewGap={16}
+codeBlock="hidden"
+scope={{ Accordion, AccordionPanel }}
+code={`
+
+<div
+  style={{
+    width: '100%',
+    maxWidth: 864,
+    margin: '0 auto',
+  }}
+>
+  <Accordion defaultActiveKey="notifications">
+    <AccordionPanel
+      key="notifications"
+      title="Уведомления"
+      additionalText="3 канала"
+    >
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 16,
+        }}
+      >
+        <div>
+          <div style={{ fontWeight: 600 }}>
+            Каналы уведомлений
+          </div>
+          <div>
+            Электронная почта, push-уведомления и SMS
+          </div>
+        </div>
+
+    <div>
+      <div style={{ fontWeight: 600 }}>
+        События
+      </div>
+      <div>
+        Изменение статуса и критические события
+      </div>
+    </div>
+  </div>
+</AccordionPanel>
+
+  </Accordion>
+</div>
+`}
       />
 
-      <DocExampleBlock
-        title="key"
-        description="Обязательный проп. Уникальный ключ панели **AccordionPanel** (строка или число). По нему **Accordion** определяет активные панели в **defaultActiveKey**, **activeKey** и в колбэке **onChange**."
-        code={`
-          <Accordion defaultActiveKey={1}>
-            <AccordionPanel key={1} title="Панель 1">
-              Содержимое 1
-            </AccordionPanel>
-            <AccordionPanel key={2} title="Панель 2">
-              Содержимое 2
-            </AccordionPanel>
-          </Accordion>
-        `}
+  <DocExampleBlock
+    title="Элементы заголовка"
+    titleSize="H5"
+    description="Кроме основного заголовка, в панели могут отображаться дополнительные элементы:
+
+* **Текст** — короткое пояснение или количественное значение;
+
+* **Тег** — статус или компактная текстовая метка;
+
+* **Элемент слева** — иконка, индикатор или другой элемент перед заголовком;
+
+* **Элемент справа** — дополнительное содержимое в правой части заголовка.
+
+Дополнительные элементы используются только тогда, когда помогают различать панели или оценивать их состояние без раскрытия. Внутри одной группы их назначение и расположение остаются единообразными."
+previewGap={16}
+codeBlock="hidden"
+scope={{ Accordion, AccordionPanel, Tag }}
+code={`
+
+<div
+  style={{
+    width: '100%',
+    maxWidth: 864,
+    margin: '0 auto',
+  }}
+>
+  <Accordion>
+    <AccordionPanel
+      key="reports"
+      title="Отчёты"
+      tagAfter={<Tag label="NEW" />}
+    >
+      Содержимое раздела
+    </AccordionPanel>
+
+<AccordionPanel
+  key="notifications"
+  title="Уведомления"
+  additionalText="32 события"
+>
+  Содержимое раздела
+</AccordionPanel>
+
+<AccordionPanel
+  key="users"
+  title="Пользователи"
+  elementAfter={<span>10/10</span>}
+>
+  Содержимое раздела
+</AccordionPanel>
+
+  </Accordion>
+</div>
+`}
       />
 
-      <DocExampleBlock
-        title="defaultActiveKey"
-        description="Ключ или массив ключей панелей, открытых при первом рендере. Тип совпадает с **key** панели: строка, число или массив строк/чисел."
-        code={`
-          <Accordion defaultActiveKey={1}>
-            <AccordionPanel key={1} title="Открыта по умолчанию">
-              Содержимое 1
-            </AccordionPanel>
-            <AccordionPanel key={2} title="Свёрнута">
-              Содержимое 2
-            </AccordionPanel>
-          </Accordion>
-        `}
+  <DocExampleBlock
+    title="Действия в заголовке"
+    titleSize="H5"
+    description="Если в разделе доступно несколько действий, их объединяют в меню справа от заголовка. Например, в него можно добавить редактирование, копирование или удаление.
+
+Открытие меню и выбор действия не раскрывают и не сворачивают раздел. Чтобы не перегружать заголовок, рядом с меню не размещают другие элементы."
+previewGap={16}
+codeBlock="hidden"
+scope={{ Accordion, AccordionPanel }}
+code={`
+
+<div
+  style={{
+    width: '100%',
+    maxWidth: 864,
+    margin: '0 auto',
+  }}
+>
+  <Accordion defaultActiveKey="access">
+    <AccordionPanel
+      key="access"
+      title="Параметры доступа"
+      actions={[
+        {
+          value: 'Редактировать',
+          onClick: (e) => e.domEvent.stopPropagation(),
+        },
+        {
+          value: 'Удалить',
+          onClick: (e) => e.domEvent.stopPropagation(),
+        },
+      ]}
+    >
+      Настройки ролей и разрешений
+    </AccordionPanel>
+  </Accordion>
+</div>
+`}
       />
 
-      <DocExampleBlock
-        title="activeKey"
-        description="Контролируемый ключ или массив ключей активных панелей. Используйте вместе с **onChange** для управления состоянием снаружи."
-        previewDirection="vertical"
-        previewGap={16}
-        code={`
-          function App() {
-            const [activeKey, setActiveKey] = React.useState(1)
+  <DocExampleBlock
+    title="Связанные компоненты"
+    titleSize="H4"
+    description="Для переключения между равнозначными самостоятельными разделами применяется [**Tabs**](?path=/docs/hexa-ui-components-tabs--tabs-docs), а для отображения самостоятельного блока содержимого — [**Panel**](?path=/docs/hexa-ui-components-panel--docs)."
+/>
 
-            return (
-              <>
-                <Space gap={8}>
-                  <Button
-                    mode="tertiary"
-                    size="small"
-                    text="Открыть панель 1"
-                    onClick={() => setActiveKey(1)}
-                  />
-                  <Button
-                    mode="tertiary"
-                    size="small"
-                    text="Открыть панель 2"
-                    onClick={() => setActiveKey(2)}
-                  />
-                </Space>
-                <Accordion activeKey={activeKey} onChange={setActiveKey}>
-                  <AccordionPanel key={1} title="Активная панель">
-                    Содержимое
-                  </AccordionPanel>
-                  <AccordionPanel key={2} title="Неактивная">
-                    Содержимое
-                  </AccordionPanel>
-                </Accordion>
-              </>
-            )
-          }
-        `}
+</Tabs.TabPane>
+
+<Tabs.TabPane tab="Структура" key="composition">
+
+  <DocExampleBlock
+    description="**Accordion** группирует связанное содержимое, которое можно раскрывать и сворачивать. Компонент состоит из контейнера **Accordion** и одной или нескольких панелей **AccordionPanel**."
+  />
+
+  <DocExampleBlock
+  title="withBorder"
+  description="Рамка и фон вокруг каждой панели. Доступные значения: `true`, `false`. По умолчанию — `true`."
+  previewDirection="vertical"
+  previewGap={24}
+  code={`
+<Accordion>
+  <AccordionPanel
+    key={1}
+    title="С рамкой (withBorder = true)"
+  >
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+
+<Accordion withBorder={false}>
+  <AccordionPanel
+    key={1}
+    title="Без рамки (withBorder = false)"
+  >
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+`}
+/>
+
+<DocExampleBlock
+  title="disabled"
+  description="Отключенная панель не раскрывается (**collapsible** = `disabled`). **disabled** на **Accordion** отключает всю группу; на **AccordionPanel** — только эту панель."
+  previewGap={32}
+  previewDirection="vertical"
+  code={`
+<Accordion>
+  <AccordionPanel
+    key={1}
+    disabled
+    title="Отключённая панель"
+  >
+    Содержимое
+  </AccordionPanel>
+
+  <AccordionPanel
+    key={2}
+    title="Активная панель"
+  >
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+
+<Accordion disabled withBorder={true}>
+  <AccordionPanel
+    key={1}
+    title="Вся группа отключена"
+  >
+    Содержимое
+  </AccordionPanel>
+
+  <AccordionPanel
+    key={2}
+    title="Ничего не откроется"
+  >
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+`}
+/>
+
+  <DocExampleBlock
+    title="title"
+    description="Текст или узел заголовка панели. Отображается компонентом **Text** в шапке **AccordionPanel**."
+    code={`
+
+<Accordion>
+  <AccordionPanel
+    key={1}
+    title="Параметры доступа"
+  >
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+`}
       />
 
-      <DocExampleBlock
-        title="expandIconPosition"
-        description="Позиция иконки раскрытия (**ArrowRight**). Доступные значения: `left`, `right`. По умолчанию — `right`."
-        code={`
-          <Accordion expandIconPosition="right">
-            <AccordionPanel key={1} title="Иконка справа">
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
-          <Accordion expandIconPosition="left">
-            <AccordionPanel key={1} title="Иконка слева">
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
-        `}
+  <DocExampleBlock
+    title="titleSize"
+    description="Типографика заголовка панели. Доступные значения: `extraSmall`, `small`, `medium`, `large`. По умолчанию — `small`."
+    code={`
+
+<Accordion>
+  <AccordionPanel key={1} title="Extra small" titleSize="extraSmall">
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+
+<Accordion>
+  <AccordionPanel key={1} title="Small" titleSize="small">
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+
+<Accordion>
+  <AccordionPanel key={1} title="Medium" titleSize="medium">
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+
+<Accordion>
+  <AccordionPanel key={1} title="Large" titleSize="large">
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+`}
       />
 
-      <DocExampleBlock
-        title="additionalText"
-        description="Дополнительный текст в заголовке справа от **title** и **tagAfter** — например, счётчик или пояснение."
-        code={`
-          <Accordion>
-            <AccordionPanel key={1} title="Заголовок" additionalText="События: 32">
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
-        `}
+  <DocExampleBlock
+    title="accordion"
+    description="Режим «только одна открытая панель». Доступные значения: `true`, `false`. По умолчанию — `false`: можно раскрыть несколько панелей одновременно. При **accordion**=`true` раскрыта только одна панель, остальные автоматически сворачиваются."
+    code={`
+
+<Accordion accordion defaultActiveKey={1}>
+  <AccordionPanel key={1} title="Общие настройки">
+    Содержимое
+  </AccordionPanel>
+
+  <AccordionPanel key={2} title="Параметры доступа">
+    Содержимое
+  </AccordionPanel>
+
+  <AccordionPanel key={3} title="Уведомления">
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+`}
       />
 
-      <DocExampleBlock
-        title="tagAfter"
-        description="Элемент **Tag** сразу после заголовка. При **disabled** панели в **Tag** пробрасывается **disabled**. Вместо **Tag** можно передать ReactNode."
-        code={`
-          <Accordion>
-            <AccordionPanel key={1} title="Заголовок" tagAfter={<Tag label="after" />}>
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
-        `}
+  <DocExampleBlock
+    title="key"
+    description="Обязательный проп. Уникальный ключ панели **AccordionPanel** (строка или число). По нему **Accordion** определяет активные панели в **defaultActiveKey**, **activeKey** и в колбэке **onChange**."
+    code={`
+
+<Accordion defaultActiveKey={1}>
+  <AccordionPanel key={1} title="Общие настройки">
+    Содержимое
+  </AccordionPanel>
+
+  <AccordionPanel key={2} title="Параметры доступа">
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+`}
       />
 
-      <DocExampleBlock
+  <DocExampleBlock
+    title="defaultActiveKey"
+    description="Ключ или массив ключей панелей, открытых при первом рендере. Тип совпадает с **key** панели: строка, число или массив строк/чисел."
+    code={`
+
+<Accordion defaultActiveKey={1}>
+  <AccordionPanel key={1} title="Открыта по умолчанию">
+    Содержимое
+  </AccordionPanel>
+
+  <AccordionPanel key={2} title="Свёрнута">
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+`}
+      />
+
+ <DocExampleBlock
+  title="activeKey"
+  description="Контролируемый ключ или массив ключей активных панелей. Используйте вместе с **onChange** для управления состоянием снаружи."
+  previewDirection="vertical"
+  previewGap={16}
+  scope={{
+    Accordion,
+    AccordionPanel,
+    Button,
+    Space,
+  }}
+  code={`
+function App() {
+  const [activeKey, setActiveKey] = React.useState(1)
+
+  return (
+    <>
+      <Space gap={8}>
+        <Button
+          mode="tertiary"
+          size="small"
+          text="Открыть панель 1"
+          onClick={() => setActiveKey(1)}
+        />
+
+        <Button
+          mode="tertiary"
+          size="small"
+          text="Открыть панель 2"
+          onClick={() => setActiveKey(2)}
+        />
+      </Space>
+
+      <Accordion
+        activeKey={activeKey}
+        onChange={setActiveKey}
+      >
+        <AccordionPanel
+          key={1}
+          title="Панель 1"
+        >
+          Содержимое
+        </AccordionPanel>
+
+        <AccordionPanel
+          key={2}
+          title="Панель 2"
+        >
+          Содержимое
+        </AccordionPanel>
+      </Accordion>
+    </>
+  )
+}
+`}
+/>
+
+  <DocExampleBlock
+    title="expandIconPosition"
+    description="Позиция иконки раскрытия (**ArrowRight**). Доступные значения: `left`, `right`. По умолчанию — `right`."
+    code={`
+
+<Accordion expandIconPosition="right">
+  <AccordionPanel key={1} title="Иконка справа">
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+
+<Accordion expandIconPosition="left">
+  <AccordionPanel key={1} title="Иконка слева">
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+`}
+      />
+
+  <DocExampleBlock
+    title="additionalText"
+    description="Дополнительный текст в заголовке справа от **title** и **tagAfter** — например, счетчик или пояснение."
+    code={`
+
+<Accordion>
+  <AccordionPanel
+    key={1}
+    title="Уведомления"
+    additionalText="События: 32"
+  >
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+`}
+      />
+
+ <DocExampleBlock
+  title="tagAfter"
+  description="Элемент **Tag** сразу после заголовка. При **disabled** панели в **Tag** пробрасывается **disabled**. Вместо **Tag** можно передать ReactNode."
+  scope={{
+    Accordion,
+    AccordionPanel,
+    Tag,
+  }}
+  code={`
+<Accordion>
+  <AccordionPanel
+    key={1}
+    title="Отчёт"
+    tagAfter={<Tag label="NEW" />}
+  >
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+`}
+/>
+
+<DocExampleBlock
         title="elementBefore и elementAfter"
         description="**elementBefore** — узел перед заголовком (иконка, Indicator или ReactNode). **elementAfter** — элемент после **additionalText**. **elementAfter** и **actions** взаимоисключающие: одновременно в заголовке рендерится только один из них. Пропы **tagBefore** и **indicator** устарели — замените на **elementBefore**."
         code={`
@@ -302,109 +842,148 @@ import { Space } from '@src/space'
         `}
       />
 
-      <DocExampleBlock
-        title="actions"
-        description="Массив пунктов меню (компонент **Dropdown**) справа в заголовке. Кнопка меню не переключает панель; в **onClick** пункта вызывайте **stopPropagation** на событии, чтобы клик не раскрывал панель."
-        code={`
-          <Accordion>
+  <DocExampleBlock
+    title="actions"
+    description="Массив пунктов меню (компонент **Dropdown**) справа в заголовке. Кнопка меню не переключает панель; в **onClick** пункта вызывайте **stopPropagation** на событии, чтобы клик не раскрывал панель."
+    code={`
+
+<Accordion>
+  <AccordionPanel
+    key={1}
+    title="Параметры доступа"
+    actions={[
+      {
+        value: 'Редактировать',
+        onClick: (e) => e.domEvent.stopPropagation(),
+      },
+      {
+        value: 'Удалить',
+        onClick: (e) => e.domEvent.stopPropagation(),
+      },
+    ]}
+  >
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+          <Accordion withBorder>
             <AccordionPanel
               key={1}
               title="Заголовок"
-              actions={[
-                { value: 'Действие 1', onClick: (e) => e.domEvent.stopPropagation() },
-                { value: 'Действие 2', onClick: (e) => e.domEvent.stopPropagation() },
-              ]}
+              elementBefore={
+                <Toggle
+                  onChange={(_, e) => {
+                    e.stopPropagation()
+                  }}
+                />
+              }
             >
               Содержимое
             </AccordionPanel>
           </Accordion>
-        `}
+`}
       />
 
-      <DocExampleBlock
-        title="shouldDisableActions"
-        description="Отключение меню **actions** вместе с панелью. Доступные значения: `true`, `false`. По умолчанию — `true`. При `false` пункты меню остаются доступными, даже если панель **disabled**."
-        code={`
-          <Accordion>
-            <AccordionPanel
-              key={1}
-              disabled
-              shouldDisableActions={false}
-              title="Панель отключена, меню активно"
-              actions={[
-                { value: 'Действие', onClick: (e) => e.domEvent.stopPropagation() },
-              ]}
-            >
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
+  <DocExampleBlock
+  title="shouldDisableActions"
+  description="Отключение меню **actions** вместе с панелью. Доступные значения: `true`, `false`. По умолчанию — `true`. При `false` пункты меню остаются доступными, даже если панель **disabled**."
+  code={`
+<Accordion>
+  <AccordionPanel
+    key={1}
+    disabled
+    shouldDisableActions={false}
+    title="Панель отключена, меню активно"
+    actions={[
+      {
+        value: 'Действие',
+        onClick: (e) => e.domEvent.stopPropagation(),
+      },
+    ]}
+  >
+    Содержимое
+  </AccordionPanel>
+</Accordion>
 
-          <Accordion>
-            <AccordionPanel
-              key={1}
-              disabled
-              shouldDisableActions={true}
-              title="Панель и меню отключены"
-              actions={[
-                { value: 'Действие', onClick: (e) => e.domEvent.stopPropagation() },
-              ]}
-            >
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
-        `}
-      />
+<Accordion>
+  <AccordionPanel
+    key={1}
+    disabled
+    shouldDisableActions={true}
+    title="Панель и меню отключены"
+    actions={[
+      {
+        value: 'Действие',
+        onClick: (e) => e.domEvent.stopPropagation(),
+      },
+    ]}
+  >
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+`}
+/>
 
-      <DocExampleBlock
-        title="onChange"
-        description={'Колбэк при смене активных панелей. Аргумент — **key** открытой панели или массив ключей, если разрешено несколько открытых панелей (**accordion**=`false`).'}
-        code={`
-          <Accordion onChange={(key) => console.log(key)}>
-            <AccordionPanel key={1} title="Панель 1">
-              Содержимое
-            </AccordionPanel>
-          </Accordion>
-        `}
-      />
+  <DocExampleBlock
+  title="onChange"
+  description={'Колбэк при смене активных панелей. Аргумент — **key** открытой панели или массив ключей, если разрешено несколько открытых панелей (**accordion**=`false`).'}
+  code={`
+<Accordion onChange={(key) => console.log(key)}>
+  <AccordionPanel key={1} title="Панель 1">
+    Содержимое
+  </AccordionPanel>
+</Accordion>
+`}
+/>
 
-    </Tabs.TabPane>
+</Tabs.TabPane>
 
-    <Tabs.TabPane tab="Properties" key="properties">
+<Tabs.TabPane tab="Properties" key="properties">
 
-      <Space direction="vertical" gap={32} align="stretch" width="100%">
+  <Space direction="vertical" gap={32} align="stretch" width="100%">
 
-        <Space direction="vertical" gap={8} align="stretch" width="100%">
-          <Text type="H3">Accordion</Text>
-          <Description of={AccordionStories} />
-          <AutodocArgsTable components={Accordion}/>
-        </Space>
+    <Space direction="vertical" gap={8} align="stretch" width="100%">
+      <Text type="H3">Accordion</Text>
+      <Description of={AccordionStories} />
+      <AutodocArgsTable components={Accordion}/>
+    </Space>
 
-        <Space direction="vertical" gap={8} align="stretch" width="100%">
-          <Text type="H3">AccordionPanel</Text>
-          <Description of={AccordionStories} />
-          <AutodocArgsTable components={AccordionPanel}/>
-        </Space>
+    <Space direction="vertical" gap={8} align="stretch" width="100%">
+      <Text type="H3">AccordionPanel</Text>
+      <Description of={AccordionStories} />
+      <AutodocArgsTable components={AccordionPanel}/>
+    </Space>
 
-      </Space>
+  </Space>
 
-    </Tabs.TabPane>
+</Tabs.TabPane>
 
-    <Tabs.TabPane tab="Дизайн" key="design">
+   <Tabs.TabPane tab="Дизайн" key="design">
 
-      <DocExampleBlock
-        title="Компонент в Pixso"
-        titleSize="H5"
-        description=""
-      />
-      <DocumentationArgsTable rows={buildPresentationOnlyRows(accordionDesignPropPresentation)} />
+  <DocExampleBlock
+    title="Компонент в Pixso"
+    titleSize="H5"
+    description=""
+  />
 
-    </Tabs.TabPane>
+  <DocExampleBlock
+    title="Размещение и композиция"
+    titleSize="H5"
+    description="Внутри одной группы сохраняются одинаковые ширина, правила раскрытия и положение индикатора. Между отдельными группами **Accordion** используется расстояние 16 px."
+  />
 
-    <Tabs.TabPane tab="Изменения" key="changelog">
+  <DocumentationArgsTable
+    rows={buildPresentationOnlyRows(
+      accordionDesignPropPresentation
+    )}
+  />
 
-      <ComponentChangelog component="Accordion" />
+</Tabs.TabPane>
 
-    </Tabs.TabPane>
+<Tabs.TabPane tab="Изменения" key="changelog">
+
+  <ComponentChangelog component="Accordion" />
+
+</Tabs.TabPane>
 
   </Tabs>
 

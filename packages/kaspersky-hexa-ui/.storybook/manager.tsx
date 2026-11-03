@@ -6,6 +6,7 @@ import { version } from '../package.json'
 
 import { StorybookManager, StorybookManagerUI } from './adapters/storybook'
 import { links } from './components/Links'
+import { DocsSearchPanel } from './docsSearch/DocsSearchPanel'
 import theme from './kaspersky-theme'
 
 const { addons, types } = StorybookManager
@@ -99,6 +100,14 @@ addons.setConfig({
       return item.name
     }
   }
+})
+
+addons.register('kl-ui-kit/docsSearch', () => {
+  addons.add('kl-ui-kit/docsSearch/tool', {
+    type: types.TOOL,
+    title: 'Поиск по документации',
+    render: () => <DocsSearchPanel />
+  })
 })
 
 addons.register('kl-ui-kit/versions', () => {

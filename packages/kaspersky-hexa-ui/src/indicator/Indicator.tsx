@@ -17,7 +17,7 @@ export const Indicator: FC<IndicatorProps> = (rawProps: IndicatorProps) => {
   }
 
   const { testAttributes, ...props } = useTestAttribute(notDeprecatedProps)
-  const { border, className } = props
+  const { border, borderBackground, className } = props
 
   return (
     <span
@@ -32,6 +32,7 @@ export const Indicator: FC<IndicatorProps> = (rawProps: IndicatorProps) => {
         ),
         theme
       )}
+      style={border && borderBackground ? { '--indicator-border-color': borderBackground } as React.CSSProperties : undefined}
     />
   )
 }

@@ -9,10 +9,6 @@ export const chipDesignPropPresentation: PropPresentationMap = {
     description: 'Интерактивное состояние компонента',
     type: 'active | hover | disabled | enabled'
   },
-  disabled: {
-    description: 'Неактивное состояние: chip недоступен для взаимодействия',
-    type: 'false | true'
-  },
   IconBefore: {
     description: 'Отображение иконки перед лейблом',
     type: 'Boolean',

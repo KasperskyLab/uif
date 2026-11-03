@@ -1,5 +1,950 @@
 [
   {
+    "date": "2026-10-29",
+    "title": "fix:add docs for pipelines",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлена подробная Markdown‑документация, описывающая три Azure‑pipelines для скриншотных тестов Hexa UI: обязательный пайплайн регрессии на каждый PR, опциональный пайплайн обновления эталонов по метке `Screenshots` и автоматический пайплайн пересборки эталонов после слияния в master. Описаны шаги скачивания пакета через TFS REST, сборка storybook, запуск тестов в Docker‑контейнере, обработка результатов, работа с LFS‑файлами и автоматическое коммит‑пуш изменений, а также механизмы уведомления и снятия меток. Документация поясняет, как эти пайплайны устраняют недетерминированность локальных запусков и автоматизируют поддержание актуальных скриншотов.",
+    "affectedFilesOrComponents": [
+      "VISUAL_TESTS.md"
+    ]
+  },
+  {
+    "date": "2026-10-28",
+    "title": "fix: KSC loc kk update lin17",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлены файлы локализации kk‑kz: добавлены новые секции defaultError и certificateError, уточнены сообщения об ошибках подключения и истечении сертификатов. Переведены и согласованы названия новых продуктов (Kaspersky Next EDR Expert, Kaspersky Next XDR Expert), изменены формулировки параметров, предупреждений о лицензиях и элементов интерфейса (тексты экспорта, переключатели, описания правил). Добавлены уточнённые сообщения о состоянии сертификатов Web Console и внутренних сертификатов, а также новые подсказки и ссылки. В целом повышена точность и согласованность казахского пользовательского интерфейса.",
+    "affectedFilesOrComponents": [
+      "helpers"
+    ]
+  },
+  {
+    "date": "2026-10-27",
+    "title": "feat:add pipelines for update screenshot",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлена новая Azure‑pipeline `osmp‑hexa‑ui‑screens‑update‑after‑merge`, автоматически запускаемая при изменениях в `kl‑hexa‑ui` и активируемая меткой `Screenshots` в PR; в её шагах определяется короткое имя ветки, проверяется наличие метки, формируются пути к результатам и делается публикация артефактов. В конфигурации CI‑проверок добавлен пункт, включающий эту пайплайн в группу опциональных сборок. Тесты визуального UI теперь проверяют существование базового снимка — при отсутствии он создаётся и сохраняется, а при наличии проводится сравнение. В справочнике `VISUAL_TESTS.md` обновлена документация о работе пайплайна и рекомендациях по использованию.",
+    "affectedFilesOrComponents": [
+      "package.json",
+      "tests",
+      "VISUAL_TESTS.md"
+    ]
+  },
+  {
+    "date": "2026-10-27",
+    "title": "fix: (hexa-ui):resize width less than 100px fix",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Внесены исправления расчёта ширины таблицы: теперь ширина контейнера учитывается непосредственно из `entry.contentRect.width`, а изменения ширины обрабатываются только при реальном изменении, что устраняет проблемы при размерах менее 100 px. Добавлена поддержка строковых значений свойства `width` в компоненте горизонтального скролла, ширина столбцов теперь округляется (`Math.round`) и по умолчанию включён параметр `afterColumn`, что гарантирует корректный рендер после‑колонки при прокрутке. Обновлены стили‑правила: снят `min‑width: unset` у `<col>`, заданы минимальные ширины 0 и почти нулевая ширина для ячеек DnD, а также поправлен CSS‑селектор для `table-col-after`, улучшая отображение при узких столбцах.",
+    "affectedFilesOrComponents": [
+      "Table",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-27",
+    "title": "fix:Fix content positioning inside the password validation popover",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "В компоненте ValidationRules изменён элемент <Space>: добавлены свойства direction=\"vertical\" и align=\"start\", что переключает расположение вложенного контента на вертикальное с выравниванием по началу. Это корректирует позиционирование текста внутри всплывающего окна проверки пароля, улучшая читаемость и визуальную согласованность UI.",
+    "affectedFilesOrComponents": [
+      "Input"
+    ]
+  },
+  {
+    "date": "2026-10-27",
+    "title": "fix: update @kaspersky/hexa-ui-core to 0.24.1",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "В данном обновлении не внесено функциональных изменений; пакетный файл остаётся без изменений, а обновление версии зависимости считается игнорируемым.",
+    "affectedFilesOrComponents": [
+      "package.json"
+    ]
+  },
+  {
+    "date": "2026-10-27",
+    "title": "feat:Add skeleton for dataSourceFunction",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен скелетон‑компонент TableSkeleton и соответствующие стили, а также новое булево свойство `skeleton` в типах таблицы для отображения загрузочного шаблона во время первого вызова dataSourceFunction. Хук useDataSource теперь возвращает объект { dataSource, isInitialLoading } и управляет состоянием начальной загрузки, а Table использует его для условного рендеринга скелетона. В тестах реализованы имитация задержки dataSourceFunction и проверка замены скелетона на реальные данные, а также добавлен параметр disabled в useSyncTableScroll для возможности отключения синхронизации прокрутки.",
+    "affectedFilesOrComponents": [
+      "Table",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-26",
+    "title": "feat:Add skeleton for dataSourceFunction",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен скелетон‑заполнитель для таблицы: внедрён новый компонент `TableSkeleton`, стили `loadingSkeleton` и поддержка свойства `skeleton` в типах таблицы. Хук `useDataSource` теперь возвращает `isInitialLoading`, позволяя `Table` отображать скелетон до получения данных из `dataSourceFunction`. В тесты добавлена имитация функции‑источника с задержкой и проверка замены скелетона на реальные строки. Обновлены связанные хуки и параметры для корректного отключения загрузки и синхронизации скролла.",
+    "affectedFilesOrComponents": [
+      "Table",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-26",
+    "title": "feat: add new prop overflowCount",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "В компонент Tabs добавлен необязательный проп overflowCount, который передаётся в Badge для ограничения отображаемого счёта. Обновлена типизация, включив новое свойство в интерфейс. В примерах stories добавлен новый TabPaneHead, демонстрирующий работу overflowCount при превышении указанного порога.",
+    "affectedFilesOrComponents": [
+      "Tabs"
+    ]
+  },
+  {
+    "date": "2026-10-26",
+    "title": "feat:add react-number-format for number separation",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлена поддержка локального разделения разрядов через интеграцию react-number-format: реализованы функции `toExactNumber`, `getNumberSeparators` и хук `useLocale`, а также новый проп `useGrouping` для компонента InputNumber. Компонент теперь использует `NumericFormat` для отображения чисел с группировкой, поддерживая настройки `thousandSeparator`, `decimalSeparator`, `decimalScale` и `allowNegative`. Обновлены типы (`numberFormat`, `useGrouping`) и внутренний ввод `TextboxInternal` для передачи формата, а также расширена документация и истории Storybook, демонстрирующие группировку цифр в разных локалях. Всё это улучшает пользовательский ввод чисел, делая его более читаемым и соответствующим локальным правилам.",
+    "affectedFilesOrComponents": [
+      "Input",
+      "helpers",
+      "package.json",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-26",
+    "title": "fix: updated pt-br translations for cxdr",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлены переводы pt‑BR: исправлен текст метки защиты («Última atualização da proteção») и статус MDR («Status do MDR»), уточнено сообщение о деактивации приложений, а также добавлены новые ключи «sendFile» (отправка файла на устройство) и «CLOUDSB» (Kaspersky Cloud Sandbox). Эти изменения улучшают точность и консистентность пользовательского интерфейса для бразильских пользователей.",
+    "affectedFilesOrComponents": [
+      "helpers"
+    ]
+  },
+  {
+    "date": "2026-10-26",
+    "title": "feat: Add Introduction section with Welcome and getting started pages",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Расширен набор разделов Storybook: в top‑level‑order добавлен пункт «Introduction», а для сравнения страниц введён кастомный порядок («Welcome», «Для дизайнеров», «Для разработчиков», «Changelog»). Создано новое дерево документации «Introduction» — заменён старый Intro на MDX‑страницы Welcome, Design и Development с мета‑заголовками «Introduction/…». Реализован полноценный стартовый интерфейс: добавлены компоненты HexaHero, WelcomePage, DesignStartPage, DevelopmentStartPage, вспомогательные модули маршрутизации и стили (Welcome.css, HexaHeroWhite.css) плюс набор PNG‑изображений и типы для CSS/PNG. Добавлены файлы данных о команде (avatars, роли) и заглушки‑функции для поиска документов, формирования URL и подсчёта статистики компонентов.",
+    "affectedFilesOrComponents": [
+      ".storybook",
+      "ChangelogSearch.mdx",
+      "docs",
+      "tsconfig.json"
+    ]
+  },
+  {
+    "date": "2026-10-23",
+    "title": "[LOC] Fix:es-mx loc updated",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлены файлы локализации es‑mx: заменены устаревшие переводы, исправлены родовые формы, согласованы множественные формы и терминология (например, «SO» → «Sistema operativo», «Activo» → «Activas», «Сетевой агент» → «Network Agent»). Добавлены новые ключи nextEDRExpert и nextXDRExpert, а также унифицированы названия продуктов и элементов интерфейса (global‑subnets, notifications, reports и др.). Цель — повысить точность, согласованность и полноту испанской (мексиканской) локализации UI.",
+    "affectedFilesOrComponents": [
+      "helpers"
+    ]
+  },
+  {
+    "date": "2026-10-23",
+    "title": "fix:add test attributes to dropdown group",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "В компоненте, генерирующем содержимое выпадающего списка, к элементу <DropdownGroup> добавлен spread‑оператор {...testAttributes}, что позволяет передавать кастомные атрибуты для тестирования (например, data‑dropdown‑item‑group). Это расширяет возможности автоматизированных тестов, не затрагивая основную бизнес‑логику компонента.",
+    "affectedFilesOrComponents": [
+      "Dropdown"
+    ]
+  },
+  {
+    "date": "2026-10-23",
+    "title": "fix: updated pt-br translations for cxdr",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлены и уточнены переводы в наборе pt‑BR: заменены некорректные формулировки, добавлены новые сообщения об ошибках сертификатов и статусах подключения, а также расширены описания событий и параметров (например, новые заголовки устройств, условия правил, типы параметров). Введён новый перечень технологий обнаружения и уточнены категории контента, включены новые ключи для действий с аккаунтами (Okta, Entra ID) и улучшена консистентность терминологии (например, «Активировано/Деактивировано», «Приоритет», «Состояние»). Кроме того, исправлены грамматические и стилистические ошибки в многочисленных строках UI, а также добавлены новые подсказки и ссылки для замены/переиздания сертификатов. Все изменения направлены на повышение точности и удобства локализации Brazillian Portuguese в продукте.",
+    "affectedFilesOrComponents": [
+      "helpers"
+    ]
+  },
+  {
+    "date": "2026-10-23",
+    "title": "fix:update storybook docs",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлена структура и содержание документации: заменён устаревший набор разделов «Component», «Component View», «CSS config» и «Themed Hook» на более лаконичную схему `Component + Component.styles.scss + Types`, добавлены новые MDX‑файлы (Usage of tokens, Recommendations, Hexa UI Components showcase) и удалены дублирующие/неактуальные страницы (ComponentTyping, ThemeConfig, Help, старые версии HexaUIComponents). В рекомендациях зафиксировано отказ от использования `Icon`/`IconResolver` в пользу прямого импорта конкретных иконок и расширено API компонентов `Card`, `Input.Password` (icon теперь принимает `ReactNode`), а также помечено как устаревшее свойство `type: 'icon'` у `Toolbar`. Перенесён и вынесен в отдельный модуль пример интерактивного тура по таблице (`HiddenInterfaceTour`), а также добавлен экспорт этого сторибука в `Onboarding.examples.stories.tsx`.",
+    "affectedFilesOrComponents": [
+      "Onboarding",
+      "docs"
+    ]
+  },
+  {
+    "date": "2026-10-23",
+    "title": "fix:reset columns with presets and add stories",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Внесены изменения в API‑обработчики: onOverlayClick теперь получает объект",
+    "affectedFilesOrComponents": [
+      "Dropdown",
+      "Table",
+      "package.json",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-23",
+    "title": "fix:export hexa-ui types",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Расширены публичные типы библиотек: в компоненте просмотра кода добавлен экспорт `CustomLanguages`; в селекте теперь экспортируются `OptionType` и `SelectProps`; в таблице расширен набор экспортируемых фильтров и сортировок, включая `ActiveFilter`, `EnumFilter`, `EnumOption`, `FilterAttributes`, `FilterFromColumn`, `FilterGroup`, `UnitedFilter`, а также `ActiveSorting` и типы для выбора строк. В модуле фильтра арендаторов переименованы и дополнены типы: добавлены `ProcessedTreeDataItem`, `TenantFilterTreeDataMap` и `TenantFilterTreeDataMapItem`. В загрузчике добавлен экспорт дополнительных типов `RcFile`, `UploadChangeParam`, `UploadRequestOption` наряду с существующим `UploaderProps` и `UploadFile`. Эти изменения повышают типовую совместимость и позволяют внешним потребителям использовать более полные типовые описания.",
+    "affectedFilesOrComponents": [
+      "Code-viewer",
+      "Select",
+      "Table",
+      "TenantFilter",
+      "Upload"
+    ]
+  },
+  {
+    "date": "2026-10-22",
+    "title": "fix:migrate page header to css modules",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Мигрировали стили заголовка страницы с `styled-components` на CSS‑модули: добавлен новый файл `PageHeader.module.scss` с классами‑контейнерами и вложенными селекторами. Компонент `PageHeader` теперь использует импортированные модули стилей вместо динамического `styled`‑контейнера и удалён файл `pageHeaderCss.tsx`, содержащий прежние CSS‑правила. Это упрощает сборку и изоляцию стилей, а также устраняет лишнюю зависимость от `styled-components` для данного UI‑элемента.",
+    "affectedFilesOrComponents": [
+      "Page-header"
+    ]
+  },
+  {
+    "date": "2026-10-22",
+    "title": "fix:add sticky props controls",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Увеличен z-index панели инструментов до 4, чтобы гарантировать её отображение над другими элементами. Добавлено описание нового свойства `toolbar.sticky` в константы рассказов и расширены аргументы Storybook: введены `stickyHeader`, `stickySelection`, `toolbar` и `useDragDrop` с соответствующими базовыми типами, а также включён параметр `stickyHeader: 40` и флаг `sticky: 0`. В примерах виртуализации изменён основной столбец с `name` на `kind` и добавлена настройка `rowSelection` с включённым встроенным выбором строк и логированием процесса выбора. Обновлены контрольные суммы тестовых снимков, отражающие визуальные изменения.",
+    "affectedFilesOrComponents": [
+      "Table",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-22",
+    "title": "fix:migrate rich text editor to semantic tokens & check docs",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлены стили RichTextEditor – перешли на семантические токены (`--border--color--focus`, `--bg--neutral--level_0`, новые токены теней), что унифицирует внешний вид. В документацию добавлен пример с пропсом `enabled`, исправлено описание параметров `readOnly` и `enabled`, а также продемонстрированы варианты `textareaMode` (disabled, readOnly, validationStatus, showCount). Компонент ToolbarContainer также получил пересмотренные стили тени и фона, использующие новые токены. Все изменения повышают согласованность UI‑темы и гибкость конфигурации редактора.",
+    "affectedFilesOrComponents": [
+      "Rich-text-editor"
+    ]
+  },
+  {
+    "date": "2026-10-22",
+    "title": "[Loc] feat:zh-Hans, zh-Hant upd",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлены новые секции `defaultError` и `certificateError` в файлы локализации zh‑Hans и zh‑Hant Web Console, а также введены сообщения о скором истечении, истечении и недействительности сертификатов (nwcCertificateExpiresSoon/Expired/Invalid, internalCertificatesExpiresSoon, kscCertificateExpiresSoon, iamCertificateExpiresSoon) с рекомендациями по замене. Обновлены и уточнены тексты лицензий, названий продуктов (nextEDRExpert, nextXDRExpert), пользовательских подсказок и сообщений об ошибках во всех китайских локализациях, включая новые ключи `deactivate-products`, `replaceCertificate`, `reissueCertificate` и улучшенные формулировки UI‑элементов. Эти изменения улучшают информативность и консистентность интерфейса при работе с сертификатами, лицензиями и кастомными параметрами.",
+    "affectedFilesOrComponents": [
+      "helpers"
+    ]
+  },
+  {
+    "date": "2026-10-22",
+    "title": "fix:migrate badge to css modules & semantic tokens",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Удалены файлы тем оформления badge (light/dark) и переориентирован стиль компонента на CSS‑модули с использованием SCSS‑токенов и миксинов, что заменило прежнее решение на styled‑components. Добавлен новый модуль Badge.module.scss, содержащий карты цветов и размеров, а также классы для режимов и размеров, а компонент Badge теперь собирает className через getClassNameWithTheme и стили из модуля. Удалён хук useThemedBadge и соответствующий файл badgeCss, а типы Badge были упрощены: убрана избыточная типизация, добавлен параметр theme и поддержка пользовательского className. В результате стилизация badge стала более модульной, согласованной с токенами дизайн‑системы и упрощённой в поддержке.",
+    "affectedFilesOrComponents": [
+      "Badge",
+      "design-system"
+    ]
+  },
+  {
+    "date": "2026-10-22",
+    "title": "fix:add geometry tokens to button",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлена стилизация кнопки: вместо фиксированных значений радиуса, высоты, ширины и отступов введён миксин `apply-sizes`, который использует токены `--geometry--button--*` для всех поддерживаемых размеров (small, medium, large, extra_large). Импорт токенов типографии переименован в alias `typography`, а в медиазапросе `max-width: 767px` к тексту кнопки применяется стиль шрифта `btm3` через `typography.apply-font-styles`. Эти изменения обеспечивают единообразное применение дизайн‑токенов и упрощают дальнейшую настройку размеров и типографики кнопок.",
+    "affectedFilesOrComponents": [
+      "Button",
+      "package.json",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-22",
+    "title": "fix: remove external font",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Удалён блок @font-face, определяющий внешний шрифт 'anticon', из стилей выпадающего списка. Это исключает загрузку сторонних файлов шрифтов, сокращая количество запросов и упрощая управление ресурсами UI.",
+    "affectedFilesOrComponents": [
+      "Dropdown"
+    ]
+  },
+  {
+    "date": "2026-10-21",
+    "title": "fix:migrate action button to semantic tokens",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Внесена реорганизация стори‑файлов кнопки ActionButton: общие типы, массивы состояний, вариантов и размеров вынесены в новый модуль `common.ts`, а все истории теперь используют единый обёрточный `div` с фоновым стилем из колонок вариантов. В SCSS заменён жёстко привязанный к переменным фокусный стиль на семантический токен `--border--color--focus` и добавлена карта `$modes-config`, позволяющая задавать цвета фона и текста через `map.get` в миксинах, что упрощает поддержку режимов (включая обновление названий миксинов). Обновлен комментарий в типах, отмечающий устаревание режима `filledInverted`. Пересозданы визуальные снапшоты тестов, отражающие новые стили и структуру компонентов.",
+    "affectedFilesOrComponents": [
+      "Action-button",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-21",
+    "title": "feat: [table] add table toolbar docs",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен новый MDX‑файл с полной документацией компонента Toolbar для таблиц, включающий примеры конфигурации левой и правой части, автоматического переноса излишних кнопок в меню «Ещё», а также демонстрацию поиска, фильтров, импорта‑экспорта, обновления, пресетов и настроек. Описаны типы элементов (кнопки, выпадающие списки, переключатели, разделители) и их поведение при выборе строк, отключении и переключении режимов отображения. Документация оформлена в виде интерактивных блоков с кодом и предварительным просмотром, что упрощает интеграцию Toolbar в существующие таблицы.",
+    "affectedFilesOrComponents": [
+      "Table"
+    ]
+  },
+  {
+    "date": "2026-10-20",
+    "title": "fix: (hexa-ui):fix stickyHeader with DND",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен флаг `hasDragDrop` в контекст и свойства компонентов таблицы, позволяющий учитывать включённый режим перетаскивания при расчёте sticky‑заголовка. В `ObservableScrollableContainer`, `ResizableColumnsContext`, `StickyHeader` и `ResizableColumns` учтён новый параметр, а также добавлен визуальный маркер `hexa-ui-dnd-cell` и соответствующие CSS‑правила. Z‑индексы некоторых слоёв UI повышены для корректного наложения элементов при активном DND. В истории таблицы `HorizontalScroll` задействовано новое свойство `useDragDrop` с значением `false` по умолчанию.",
+    "affectedFilesOrComponents": [
+      "Table"
+    ]
+  },
+  {
+    "date": "2026-10-19",
+    "title": "feat: # 10924283 [Loc] upd RU loc",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлены русские локализации: исправлены формулировки заголовка и имени действия сброса MFA в Okta, заменив «Сбросить учетную запись MFA в Okta» на более точное «Сбросить MFA для учетной записи Okta». Скорректировано сообщение об ошибке неверного формата, заменив «Недопустимый формат YARA» на «Недопустимый формат XML». Эти изменения повышают точность интерфейса и согласованность сообщений об ошибках.",
+    "affectedFilesOrComponents": [
+      "helpers"
+    ]
+  },
+  {
+    "date": "2026-10-19",
+    "title": "fix:add custom elements for toolbar",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлены экспериментальные свойства `TEMP_DONT_USE_customButton` и `TEMP_DONT_USE_customComponent` в типы Toolbar, позволяющие вставлять кастомную кнопку справа от иконки фильтра и произвольный React‑node между тулбаром и таблицей. В модуле получения правых элементов реализовано условное рендеринг кнопки, а в интеграционном компоненте передаётся пользовательский компонент. Обновлена история `ExperimentalDontUseToolbarSlots` с демонстрацией переключаемой кнопки‑индикатора и временного слота‑query‑builder, а также добавлены пояснительные сообщения о предстоящем удалении этих пропов.",
+    "affectedFilesOrComponents": [
+      "Table"
+    ]
+  },
+  {
+    "date": "2026-10-19",
+    "title": "feat:[hexa-ui][table] add tanstack virtualization",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен новый модуль виртуализации таблицы, использующий tanstack react‑virtual для отрисовки только видимых строк и колонок, с поддержкой блокового окна (block‑range), измерения высоты строк в микрозадачах и корректного сохранения индексов записей. Реализованы вспомогательные функции и хуки — `useAxisVirtualizer`, `useScrollContext`, `useRowHeightEstimate`, `useRowMeasure`, `useExpandedKeys`, а также логика горизонтального окна колонок (`windowColumns`, `canVirtualizeColumns`) и мемоизация ячеек (`withCellMemo`, `rowClassNameInPlace`). Добавлены тест‑утилиты для имитации скроллинга, новые стили‑классы‑плейсхолдеры, конфигурация пропа `virtualization` в типах и интеграция модуля в сборку таблицы, включая обновления Jest‑конфигурации и адаптацию вспомогательных компонентов.",
+    "affectedFilesOrComponents": [
+      "Table",
+      "jest.virtual.config.js",
+      "package.json",
+      "setupVirtualTests.ts",
+      "tests",
+      "tsconfig.json"
+    ]
+  },
+  {
+    "date": "2026-10-16",
+    "title": "fix:make wizard content fittable",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен гибкий вертикальный макет для модального окна (display:flex; flex-direction:column), что позволяет корректно растягивать содержимое. В стилях мастера внедрён класс `.overflowAuto` с `overflow:auto` и соответствующее правило в JSX, обеспечивая скроллинг при переполнении. Добавлен пример‑компонент `Agreement`, использующий `Card` и `Checkbox`, и заменён статический шаг на рендеринг этого компонента, демонстрируя правильное отображение длинного текста внутри мастера. Эти изменения делают контент мастера адаптивным и прокручиваемым.",
+    "affectedFilesOrComponents": [
+      "Modal",
+      "Wizard"
+    ]
+  },
+  {
+    "date": "2026-10-16",
+    "title": "[LOC] Fix:en loc updated",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "В тестах onboarding переключён механизм идентификации элементов на data‑testid: добавлена конфигурация @testing‑library/react, заменён kl‑id на data‑testid, все запросы заменены на getByTestId, упрощена асинхронная логика и передан проп testId в компонент. Обновлены строки локализации en‑us для Okta: переформулированы названия действий (reset, resume, revoke, suspend) и сокращено сообщение об ошибке правила.",
+    "affectedFilesOrComponents": [
+      "Onboarding",
+      "helpers"
+    ]
+  },
+  {
+    "date": "2026-10-15",
+    "title": "feat:Migrate Card to css-modules and semantic tokens",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Перенесён компонент Card на CSS‑модули: создан файл Card.module.scss с токенами‑карты, миксином применения цветов и адаптацией размеров, а стили теперь подключаются через `import styles from './Card.module.scss'`. Удалён механизм стилизации через styled‑components и хук useThemedCard, заменён на построение классов с помощью утилиты getClassNameWithTheme и `classnames`. Обновлены типы CardProps — убраны отдельные конфигурации CSS и интегрированы свойства theme, mode и size прямо в пропсы компонента. Исключены устаревшие файлы css‑config и их импорты из индексов, что упрощает структуру и консолидацию стилей в единой системе токенов.",
+    "affectedFilesOrComponents": [
+      "Card",
+      "design-system",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-15",
+    "title": "feat:[hexa-ui][table] add units to number sidebar filter",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлена поддержка единиц измерения для числовых фильтров таблицы: определены новые типы `TableFilterUnits` и `TableFilterUnitsOption`, расширено описание колонок полем `units` и реализовано преобразование значений в канонические единицы в `FilterApi` через функцию `normalizeFilterUnits`. В UI‑компоненты боковой панели добавлен вывод и взаимодействие с контролами выбора единиц (select и segmented‑button), а также стилизация элементов с единицами; компонент `NumberItem` теперь принимает и передаёт выбранную единицу. Обновлены мок‑данные и тесты для проверки серверного фильтра с единицами (в том числе колонка `fileSize`), а также расширен контекст таблицы флагом `isServerFiltering` для корректной передачи этой информации.",
+    "affectedFilesOrComponents": [
+      "Table",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-15",
+    "title": "feat: [Indicator] add document usage and fix borderBackground",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен проп `borderBackground` в компонент `Indicator`, который задаёт цвет границы через CSS‑переменную `--indicator-border-color` с fallback‑значением `var(--border--neutral--inverted_static)`. Обновлена реализация `Indicator.tsx` для передачи значения стиля только при одновременном включении `border` и `borderBackground`. Документация расширена примерами использования индикатора в табах, навигации и таблицах, а также новыми правилами применения; добавлен набор визуальных тестов `StatesMatrix` и удалён устаревший файл историй. Все изменения обеспечивают более гибкую настройку внешнего вида индикатора без изменения существующего API.",
+    "affectedFilesOrComponents": [
+      "Indicator",
+      "Scrollbar",
+      "Submenu",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-14",
+    "title": "feat: [Storybook] add documentation search panel",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "В Storybook добавлена панель поиска по документации: реализованы сбор индексов MDX, преобразование в plain‑text с анкорами, движок поиска на базе MiniSearch и UI‑компонент DocsSearchPanel, интегрированный в manager. Добавлены утилиты revealDocumentationLocation и обновлены хуки для прокрутки к секциям, а также обогащение манифестов публичными импортами и описаниями компонентов. Внедрён механизм кэширования поискового индекса, preset для сборки и dev‑сервер, а также набор тестов для новых функций. Обновлены конфигурации Jest и метаданные историй для поддержки новых путей.",
+    "affectedFilesOrComponents": [
+      "Action-button",
+      "Button",
+      "Code-viewer",
+      "Lock-group",
+      "Tag",
+      "Upload",
+      "Wizard",
+      ".storybook",
+      "jest.config.js",
+      "package.json",
+      "tsconfig.build.json",
+      "tsconfig.json"
+    ]
+  },
+  {
+    "date": "2026-10-14",
+    "title": "fix:Fix secondary and tertiary active button tokens",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлены токены стилей кнопок: исправлены имена переменных для состояний hover и active (переключены на `--bg--neutral--level_0_hover`, `--bg--neutral_transparent--level_1/2`), заменены фон и цвета на новые переменные (`--bg--neutral--level_0`, `--fg--neutral_inverted--primary`, `--fg--neutral--secondary`). Добавлены стили `:hover` и `:active` для неотключённых, не загружаемых кнопок с опасным (danger) оформлением, задающие цвет и границу из `--common--danger` токенов. Обновлены контрольные суммы скриншотов визуальных тестов, отражающие изменённый внешний вид кнопок.",
+    "affectedFilesOrComponents": [
+      "Button",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-14",
+    "title": "fix:set date format according to locale",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлена поддержка локализации формата даты: функции `formatDate` и вспомогательный `formatByLocale` теперь принимают параметр `locale` и формируют строку даты/времени на основе токенов `DATE_FORMATS` и `DEFAULT_TIME_FORMAT`, с резервным вариантом `MM/DD/YYYY`. Компоненты фильтров в таблице (`FilterItems.tsx`) обновлены для передачи текущей локали из `i18n.language` во все вызовы `formatDate` и в `getFilterItemCondition`. Внедрена интеграция i18n в хук `useTranslation`, что обеспечивает единообразное отображение дат в соответствии с пользовательскими региональными настройками.",
+    "affectedFilesOrComponents": [
+      "Table",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-14",
+    "title": "fix:fix sticky toolbar background color",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен стиль `.sticky` для ToolbarIntegration, задающий фон `var(--bg--neutral--level_1)`. Это исправляет некорректный цвет фона фиксированной (sticky) панели инструментов, обеспечивая визуальную консистентность интерфейса.",
+    "affectedFilesOrComponents": [
+      "Table"
+    ]
+  },
+  {
+    "date": "2026-10-14",
+    "title": "feat:[Loc] upd RU loc",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлены файлы локализации ru‑ru.json: исправлены грамматические и пунктуационные ошибки, согласованы названия полей (порт, IP, SHA1) и удалены лишние точки. Добавлены новые ключи действий — «Копировать», «Перейти в Поиск угроз», «Найти похожие алерты/инциденты», а также элементы управления учетными записями Entra ID и Okta. Переписаны сообщения об ошибках, плейсхолдеры и некоторые метки (senderEmail, sessionID и др.), при этом английские строки для «unsupported», «combine», «sort» оставлены без изменения. В целом повышена точность и согласованность русской UI‑локализации.",
+    "affectedFilesOrComponents": [
+      "helpers"
+    ]
+  },
+  {
+    "date": "2026-10-13",
+    "title": "fix: (hexa-ui):console toggle css-priority fix",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Скорректированы стили переключателя: свойства `background-color` и `box-shadow` теперь находятся внутри селектора `&:global(.ant-switch)`, что ограничивает их применение только элементам с глобальным классом `.ant-switch`. Такое изменение повышает приоритет CSS и устраняет конфликт стилей, возникавший в предыдущей реализации.",
+    "affectedFilesOrComponents": [
+      "Toggle"
+    ]
+  },
+  {
+    "date": "2026-10-13",
+    "title": "[Table] feat: add views and refactor presets",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлена поддержка представлений (view) и переработана система пресетов: введены обобщённые типы TablePreset, TablePresetDraft, TableView и TablePresetsProp, а также единый store PresetStoreValue, хранит текущий пресет, состояние колонок и список представлений. Компоненты таблицы (контекст, колонка‑селекция, ресайз столбцов, тулбар и модальные окна) теперь используют новые типы и обновлённый контекст, поддерживая сохранение ширины колонок, порядок, фильтры и действия, специфичные для выбранного представления. Реализованы функции сравнения и нормализации состояния колонок, а также логика переключения пресетов и представлений без подтверждений при наличии несохранённых изменений. Тесты и визуальные сценарии обновлены под новую архитектуру пресетов и представлений.",
+    "affectedFilesOrComponents": [
+      "Table",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-09",
+    "title": "feat:[Loc] upd RU loc",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлены русские локализации: в сообщении о предстоящем обновлении Kaspersky EDR указаны новые версии KES (Windows 14.2, Mac 14.0) и исправлена пунктуация. Добавлены и откорректированы наборы строк интерфейса (переключатели dropdown, ссылки на сеансы, причины SLA, правила сбора данных, сетевые сеансы, идентификаторы интерфейсов, IDS‑правила, наблюдаемые участники, полезная нагрузка) и новые заголовки для управления учетными записями Okta (сброс пароля, MFA, возобновление, отзыв сессии, приостановка). Удалена устаревшая секция «changeStatus», заменив её более полным набором действий по управлению статусом.",
+    "affectedFilesOrComponents": [
+      "helpers"
+    ]
+  },
+  {
+    "date": "2026-10-08",
+    "title": "fix:[hexa-ui][table] fix incorrect current page in onChange",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлена проверка, что при изменении pageSize пагинация сбрасывается на первую страницу, и обновлён хук usePaginationConfig для вызова propsOnChange с FIRST_PAGE вместо текущего номера страницы, устраняя неверный параметр в onChange. В тестах реализован сценарий перехода к первой странице после изменения размера страницы и подтверждены корректные данные строк. Удалён лишний eslint‑комментарий, не влияющий на функциональность.",
+    "affectedFilesOrComponents": [
+      "Table"
+    ]
+  },
+  {
+    "date": "2026-10-07",
+    "title": "fix: (hexa-ui):expandable rows fix",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Внесены исправления стилей таблицы Hexa UI: добавлен селектор, скрывающий ячейки строк и пользовательский expand‑иконку, что устраняет некорректное отображение расширяемых строк. Это гарантирует корректную работу функции раскрытия строк без визуальных артефактов.",
+    "affectedFilesOrComponents": [
+      "Table"
+    ]
+  },
+  {
+    "date": "2026-10-07",
+    "title": "feat: [ExpandableText] replace expander icons with up-down arrows",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Заменены иконки разворачивания текста на новые двойные стрелки (ArrowDownAndUp / ArrowUpAndDown) с соответствующими testId, а также обновлена стилизация экспандера для корректного позиционирования. Добавлены тесты, проверяющие наличие новых иконок, и расширена документация, описывающая поведение текста с переносами строк. Внедрён новый пример компонента с управлением переносом строк и добавлен набор скриншот‑тестов, покрывающихcollapsed, expanded и варианты с градиентом. Удалён устаревший файл историй и скорректированы стили SCSS для глобального класса экспандера.",
+    "affectedFilesOrComponents": [
+      "Expandable-text",
+      "helpers",
+      "package.json",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-06",
+    "title": "fix:Fix sticky pagination shadow",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлена логика вычисления нижней границы содержимого: вместо прямого обращения к корневому элементу теперь ищется дочерний блок «.table-scrolling-wrapper», добавлена проверка наличия и используется его ограничивающий прямоугольник. В стилизации пагинации заменён CSS‑переменный токен тени с `--elevation--overlap` на более корректный `--elevation--shadow_drop`, что устраняет артефакт «липкой» тени при прокрутке. Эти правки повышают точность расчётов видимости и устраняют визуальные баги в интерфейсе таблицы.",
+    "affectedFilesOrComponents": [
+      "Table"
+    ]
+  },
+  {
+    "date": "2026-10-05",
+    "title": "feat:[Loc] upd RU loc",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлена русская локализация: в файле консоли добавлены новые категории ошибок — `defaultError` и `certificateError` с уточнёнными описаниями и подсказкой о добавлении сертификата. В плагинах расширены тексты UI (исправлена пунктуация, добавлены строки «Приоритет», «Журналы удалённой установки», «Экспорт недоступен для унифицированных политик»). В IRP‑плагине введён набор терминов `detectionTechnology`, подробные поля `emailInfo`, переименованы и структурированы секции сканирования файлов (`fileScan`, `tipSandboxScan`) и добавлены новые элементы интерфейса для правил IDS (`IDSRule`, `MitreTechniques`) с соответствующими подсказками и переводами. Эти изменения повышают точность сообщений об ошибках и расширяют поддержку новых функций в пользовательском интерфейсе.",
+    "affectedFilesOrComponents": [
+      "helpers"
+    ]
+  },
+  {
+    "date": "2026-10-05",
+    "title": "[Table] fix: add TablePresetsProp.loading option",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен флаг `loading` в тип `TablePresetsProp` и поддержка этого свойства в компоненте `ToolbarPresetsButton`: при включённом загрузочном состоянии в выпадающем меню отображается центрированный `Loader` с новой стилевой обёрткой `.loaderItem`. Обновлены стили для элемента‑загрузчика, а также передача `className` в `DropdownInnerActions` и проброс `loading` из `getRightElements` к кнопке пресетов. Эти изменения позволяют визуально индицировать загрузку пресетов таблицы без изменения существующего API.",
+    "affectedFilesOrComponents": [
+      "Dropdown",
+      "Table"
+    ]
+  },
+  {
+    "date": "2026-10-05",
+    "title": "feat:add Onboarding component",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен новый модуль Onboarding, включающий модальное окно с двумя вариантами — tour (кнопки «Try now», «Skip», чекбокс «Don’t show again» и запуск интерактивного тура) и info (кнопка «OK» и опциональная ссылка). Реализованы компоненты InteractiveTour, TourTooltip и их вспомогательные функции, контекст и типы для описания шагов, позиционирования, темной темы и завершения тура, а также стили и тесты визуального и unit‑тестирования. Обновлена экспортная таблица и документация Storybook, добавлены примеры, контрольные свойства и метаданные для демонстрации и настройки новых компонентов.",
+    "affectedFilesOrComponents": [
+      "@types",
+      "Onboarding",
+      ".storybook",
+      "helpers",
+      "package.json",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-05",
+    "title": "feat:[hexa-ui][table] cell reductions refactor",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "В проект внёс масштабный рефакторинг измерения переполнения: заменён кастомный ResizeObserver на общий watchOverflow/​useWatchOverflow, добавлены хуки useOverflowToggle, useOverflowToggle, а также новые компоненты clipping, textExpander и стили clipping.module.scss для управления клиппингом и экспандером. ExpandableText и Table переписаны на новую инфраструктуру overflow‑toggle, введены CSS‑классы hexa-ui-expandable‑cell и hexa-ui-ellipsis‑cell для пометки ячеек и поддержка подсказок через CellTooltip. Обновлены тесты и стили (TableCell.module.scss, tableCss.ts) для корректного измерения, рендеринга и визуального отображения переполнения без потери состояния.",
+    "affectedFilesOrComponents": [
+      "Expand",
+      "Expandable-text",
+      "Table",
+      "helpers",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-02",
+    "title": "[LOC] Fix:en loc updated",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлены английские локализационные строки для улучшения читаемости и согласованности пользовательского интерфейса. В сообщении о лицензии добавлена запятая и уточнено действие («…перейдите к “Operations” > “Licenses”, затем…»), а текст “groupBy” изменён на более естественное «…grouping by using the filter». Переписаны дублирующие ключи предупреждения лицензии для единообразия, а метка “verdict” переименована в “Decision”. Описание и название сканирования в Kaspersky TIP Sandbox уточнены до «File scanning in Kaspersky TIP Sandbox» и «Kaspersky TIP Sandbox scan».",
+    "affectedFilesOrComponents": [
+      "helpers"
+    ]
+  },
+  {
+    "date": "2026-10-02",
+    "title": "fix: (hexa-ui):table dnd with groups",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "В проекте заменён старый модуль перемещения строк в таблице на реализацию с dnd‑kit, добавлена поддержка перетаскивания как внутри групп, так и между ними, а также обновление свойства группировки при перемещении (groupingPropertyPath). Реализованы новые вспомогательные функции findChildrenKey, arrayGroupMove, resolveEmptyGroupCollision и resolveLastInGroupCollision, а также типы ChildrenPath, ArrayGroupMove и DraggableRowProps. Добавлен набор тестов DraggableGroupMove.test.ts для проверки корректного перемещения строк между группами. Удалён прежний код‑базис Draggable.tsx, обновлены стили и типы таблицы для работы с группировкой.",
+    "affectedFilesOrComponents": [
+      "Table",
+      "bundle-size-checker",
+      "package.json",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-02",
+    "title": "fix:Add SegmentedButton selection confirmation",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен проп `checked={isChecked}` в `SegmentedButtonItem`, что позволяет явно управлять состоянием выбранного элемента извне. В примерах внедрён новый сторий `PreventChangeValue`, где изменение значения откладывается в состоянии `pending` и подтверждается модальным окном `Modal` до применения. Для нового сценария добавлен визуальный тест‑снимок, обеспечивающий регрессионную проверку отображения подтверждающего диалога.",
+    "affectedFilesOrComponents": [
+      "Segmented-button",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-02",
+    "title": "fix:[hexa-ui][table] fix dataSourceFunction docs",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Удалён параметр `tags: ['!autodocs']` из файла‑примера `DataSourceFunction.stories.tsx`. Это исправляет некорректную автогенерацию документации для Storybook‑истории, обеспечивая корректное отображение примера функции `dataSource`. В результате документация таблицы более точно отражает её API без лишних метаданных.",
+    "affectedFilesOrComponents": [
+      "Table"
+    ]
+  },
+  {
+    "date": "2026-10-02",
+    "title": "feat: [Menu] show menu item icons on all nesting levels",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлена поддержка отображения иконок пунктов меню на всех уровнях вложенности: в CSS `.uif-nav-item-entry-icon` теперь отображается, а для элементов без иконки применён класс `title-wo-icon`. Обновлены селекторы, чтобы иконки и заголовки корректно стилизовались как в дочерних, так и в многократно вложенных пунктах. В story‑файле добавлен новый набор примеров меню с иконками на корневом уровне и в дочерних элементах, включая вложенные структуры и обработчики кликов. Эти изменения делают визуальное представление меню более информативным и согласованным.",
+    "affectedFilesOrComponents": [
+      "Menu"
+    ]
+  },
+  {
+    "date": "2026-10-02",
+    "title": "fix: skip checking the delete message",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Удалено проверка сообщения подтверждения удаления пресета в тестах, что исключает проверку диалогового окна «Delete preset …? This action can't be undone». Убраны неиспользуемые импорты — TableColumn и мок‑данные (generatedData, tableColumns) из тестового класса таблицы. Эти изменения упрощают тестовую базу, устраняя лишние зависимости и предотвращая ложные сбои при удалении.",
+    "affectedFilesOrComponents": [
+      "Table"
+    ]
+  },
+  {
+    "date": "2026-10-02",
+    "title": "fix:add currentPageRows in table context for row selection BUMP_CONSOLE",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлено новое поле `currentPageRows` в контекст таблицы и соответствующее обновление в компоненте `Table`, где при каждом рендере стабильно‑отсортированные строки передаются в контекст. Хук `useRowSelection` теперь использует `currentPageRows` вместо прямого среза `dataSource` для определения выбираемых строк текущей страницы. Добавлен тест, проверяющий корректный выбор отсортированных строк текущей страницы при клиентском сортировании.",
+    "affectedFilesOrComponents": [
+      "Table"
+    ]
+  },
+  {
+    "date": "2026-10-02",
+    "title": "fix:Make the title content width fill all available space",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлено правило CSS `.hexa-ui-tree-node-title > span:first-child { flex: 1; }`, которое заставляет первый `span` в заголовке узла дерева растягиваться и занимать всю доступную ширину. Это устраняет проблему ограничения ширины текста заголовка и обеспечивает корректное заполнение пространства в пользовательском интерфейсе.",
+    "affectedFilesOrComponents": [
+      "Tree"
+    ]
+  },
+  {
+    "date": "2026-10-01",
+    "title": "fix:[hexa-ui][tag] reduction group excessive margin",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Удалён неиспользуемый импорт `Space` из компонента метки формы, что упрощает код и устраняет лишние зависимости. В стилях тега изменён селектор `.tagWithReduction` на глобальный `:global(.ant-tag).tagWithReduction`, повышая специфичность и корректируя лишние отступы в группе редукций. Обновлены снимки визуальных тестов, отражающие новые размеры и внешний вид после правки стилей.",
+    "affectedFilesOrComponents": [
+      "Form-label",
+      "Tag",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-01",
+    "title": "[Table] feat: add presets",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлена поддержка пресетов в таблице: расширен контекст TableStore новыми полями и функцией usePresetsUpdate, реализованы модули Presets с UI‑кнопкой в тулбаре, выпадающим списком, действиями (создание, переименование, удаление) и модальными окнами, а также логика применения и синхронизации настроек колонок, фильтров, сортировки, группировки и размера страницы. Добавлены вспомогательные функции для работы с колонками пресетов, их порядком, ширинами и фильтрами, а также комплексные тесты и storybook‑пример, покрывающие операции с пресетами и представлениями. В интерфейсе внесены небольшие стилевые поправки (max‑width, скрытие кнопки меню) и внедрён DropdownMenuFooter для фиксированного футера списка пресетов.",
+    "affectedFilesOrComponents": [
+      "Dropdown",
+      "Table",
+      "Toolbar",
+      "helpers",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-10-01",
+    "title": "fix: update doc help message",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлена документация компонентов **Accordion**, **Badge**, **HelpMessage**, **Loader** и **LoadingOverlay**: заменён устаревший текст, добавлены новые рекомендации по использованию, расширены примеры, уточнены описания пропсов и сценарии «когда использовать/не использовать». В файлы стори добавлены импорты React и соответствующих иконок, а также новые блоки `DocRulesBlock` и переработанные структуры табов и автодок‑таблиц для более читаемого представления свойств. Внесены правки в схему `Accordion.design.properties.ts` и убраны неактуальные свойства (`disabled`‑описание). Все изменения призваны улучшить качество справочного материала без изменения поведения компонентов.",
+    "affectedFilesOrComponents": [
+      "Accordion",
+      "Badge",
+      "Help-message",
+      "Loader",
+      "Loading-overlay"
+    ]
+  },
+  {
+    "date": "2026-09-30",
+    "title": "fix:Fix TreeList prop blockNode",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлено правило CSS `.ant-tree-block-node` с шириной 100 % внутри компонента дерева, что гарантирует полное растягивание блок‑узлов. Это корректирует проблему отображения, связанной с пропсом `blockNode`, и восстанавливает ожидаемое визуальное поведение списка.",
+    "affectedFilesOrComponents": [
+      "Tree"
+    ]
+  },
+  {
+    "date": "2026-09-29",
+    "title": "fix:add render trigger for toolbar BUMP_CONSOLE",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен импорт useEffect и состояние renderTrigger, которое инкрементируется в useEffect при изменении массива left, теперь инициализируемого пустым leftEmpty. Значение renderTrigger передаётся в хук useIntersectionChildren, заставляя пересчитывать последний подходящий элемент при каждом изменении элементов панели. Это обеспечивает корректный повторный рендер тулбара BUMP_CONSOLE и устраняет ошибку #10764535.",
+    "affectedFilesOrComponents": [
+      "Toolbar"
+    ]
+  },
+  {
+    "date": "2026-09-29",
+    "title": "[hexa-ui] fix: reduce memory consumption by tests",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен параметр `workerIdleMemoryLimit: '1GB'` в конфигурацию Jest, позволяющий ограничить потребление памяти тестовыми воркерами. Во всех тестах библиотеки заменены устаревшие матчер‑методы `toBeCalled`/`toBeCalledTimes` на актуальные `toHaveBeenCalled`/`toHaveBeenCalledTimes`, а также скорректированы проверки `console.warn` и `console.error`. Эти изменения повышают стабильность и совместимость тестового окружения при одновременном снижении нагрузки на ресурсы.",
+    "affectedFilesOrComponents": [
+      "Datepicker",
+      "Radio",
+      "TenantFilter",
+      "Tree",
+      "Weekly-schedule",
+      "jest.config.js",
+      "package.json"
+    ]
+  },
+  {
+    "date": "2026-09-29",
+    "title": "feat: [Chip] update doc, hide close icon when disabled",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Обновлена реализация Chip: иконка закрытия скрывается в состоянии disabled, а свойство closable становится условным (`closable={!disabled}`) с упрощённым `onClose`. В CSS‑файлах заменены переменные SPACES на фиксированные размеры (высота 24 / 32 px, паддинги 4‑8 px, 4‑12 px) и уточнён gap и border‑radius. Добавлен тест, проверяющий отсутствие иконки закрытия при disabled, а также изменена логика выравнивания в редакторе стилей, позволяющая переключать вертикальное/горизонтальное расположение. Документация и stories переработаны для отражения новых правил использования, поведения при disabled и ограничений по тексту.",
+    "affectedFilesOrComponents": [
+      "Chip",
+      ".storybook",
+      "design-system",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-09-29",
+    "title": "fix:[hexa-ui][table] fix select current page",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен тест, проверяющий выбор строк на второй странице и корректное снятие выбора после возврата на первую страницу, с применением await для переходов пагинации. В хуке useRowSelection переработана логика selectAllRows: теперь набор выбираемых строк определяется режимом пагинации (client, server, pseudo‑server). Методы next и prev в TableTestingClass стали асинхронными и включают ожидание подтверждения изменения активной страницы. Эти изменения исправляют ошибку #10688780, обеспечивая правильную работу selectCurrentPage при переключении страниц.",
+    "affectedFilesOrComponents": [
+      "Table"
+    ]
+  },
+  {
+    "date": "2026-09-28",
+    "title": "fix:hexadecimal view",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен новый компонент Hexadecimal View, реализующий отображение сырых данных в шестнадцатеричном виде с виртуализованным скроллом, динамическим расчётом количества байтов в строке и поддержкой как ArrayBuffer, так и строковых представлений. Включены новые константы (заголовок байтов, размеры строк, графические символы), типы, утилиты (bufferToView, fromHex, useRowWidth) и стилизованный CSS, а также тестовые stories и обновлённый набор визуальных тестов для исключения группы Early Adopt. Компонент экспортируется из корневого индекса пакета и использует @tanstack/react-virtual и ResizeObserver для оптимальной производительности.",
+    "affectedFilesOrComponents": [
+      "Hexadecimal-view",
+      "tests"
+    ]
+  },
+  {
+    "date": "2026-09-28",
+    "title": "feat:Migrate to css-modules and validate Indicator doc",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Мигрировано отображение индикатора на CSS‑модули: добавлен `Indicator.module.scss` с переменными и классами, а стилизованный компонент заменён на простой `<span>` с динамическим формированием className через `getClassNameWithTheme`. Удалены файлы темных и светлых индикаторов, а также соответствующие типы и хук `useThemedIndicator`, что упрощает их тематизацию и исключает дублирование конфигураций в `Theme.ts`. Обновлена документация и типы — убраны устаревшие `IndicatorViewProps` и упрощён импорт типовых свойств.",
+    "affectedFilesOrComponents": [
+      "Indicator",
+      "design-system"
+    ]
+  },
+  {
+    "date": "2026-09-28",
+    "title": "fix:migrate on css modules progress bar and add mode for modal",
+    "commitId": "",
+    "sha": "",
+    "author": "",
+    "version": "",
+    "description": "Добавлен новый вариант индикатора ProgressBar — circular, реализованный через CSS‑модули с набором переменных --progress-bar-*, включающим новые размеры, цвета и SVG‑круг для визуализации прогресса; логика компонента переписана с styled‑components на classnames и SCSS, а тип ProgressBarProps расширен полем variant. В модальном окне введён режим onboarding и поддержка footerExtra для вывода дополнительного контента в подвале, с соответствующими изменениями типов и тестов. Для чекбокса заменены устаревшие margin‑left и border‑radius на логические свойства margin-inline-start и border‑end‑start‑radius/‑start‑end‑radius. Эти изменения мигрируют стили на CSS‑модули, добавляют новый визуальный режим и улучшают RTL‑поддержку.",
+    "affectedFilesOrComponents": [
+      "Checkbox",
+      "Modal",
+      "Progress-bar",
+      "design-system",
+      "tests"
+    ]
+  },
+  {
     "date": "2026-09-25",
     "title": "fix:Fix indicator, migrate to css-modules and validate Toolbar doc",
     "commitId": "",

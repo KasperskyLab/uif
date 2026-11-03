@@ -1,2 +1,2 @@
 export * from './CodeViewer'
-export type { CodeViewerProps, LintSource } from './types'
+export type { CodeViewerProps, CustomLanguages, LintSource } from './types'

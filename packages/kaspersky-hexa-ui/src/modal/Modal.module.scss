@@ -256,6 +256,8 @@ $modal-modes: (
 }
 
 .modalContent {
+  display: flex;
+  flex-direction: column;
   max-height: calc(
     100vh
     - var(--modal-top)

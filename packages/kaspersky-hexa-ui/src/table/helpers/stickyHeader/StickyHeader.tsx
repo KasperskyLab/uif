@@ -19,7 +19,7 @@ export const TableStickyHeaderWrapper = styled.div.withConfig({
   shouldForwardProp: prop => !tableCssProps.includes(prop as typeof tableCssProps[number])
 })<TableCssProps>`
   position: sticky;
-  z-index: 3;
+  z-index: 4;
   overflow: hidden;
   max-width: 100%;
   ${({ stickyHeader }) => `top: ${stickyHeader}px;`}
@@ -29,10 +29,6 @@ export const TableStickyHeader = styled.div.withConfig({
   shouldForwardProp: prop => !tableCssProps.includes(prop as typeof tableCssProps[number])
 })<TableCssProps>`
   ${tableCss}
-  
-  & .ant-table table col {
-    min-width: unset;
-  }
 
   &.table-sticky-selection {
     ${scrollShadowCss}
@@ -55,7 +51,7 @@ export function StickyHeaderWrapper ({ children, className }: {
     portalRef.current = document.createElement('table')
   }
   const theadRef = useRef<HTMLTableSectionElement>(null)
-  const { columns, hasRowSelection } = useResizableColumnsContext()
+  const { columns, hasRowSelection, hasDragDrop } = useResizableColumnsContext()
 
   useEffect(() => {
     if (portalRef.current && theadRef.current) {
@@ -79,6 +75,7 @@ export function StickyHeaderWrapper ({ children, className }: {
     return (
       <>
         {hasRowSelection ? <Tag className={`ant-table-selection-${classname}`} /> : null}
+        {hasDragDrop ? <Tag className="hexa-ui-dnd-cell" /> : null}
         {columns.filter(isColumnVisible).map(item => (
           <Tag key={item.key} style={{ width: item.width, minWidth: item.minWidth }} />
         ))}

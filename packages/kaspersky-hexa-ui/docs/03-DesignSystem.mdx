@@ -1,0 +1,21 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Docs/Использование токенов" />
+
+# Дизайн Система
+
+Для стилизации компонента используются **только CSS-переменные**.
+
+
+
+### Использование цветов в продукте
+
+Для раскрашивания элементов в продукте есть 2 способа:
+
+1. **Предпочтительный** - использование css-переменных. Например, если на макете используется цвет **icon/status/status critical**, то в коде его можно вытащить через переменную **var(--icon--status--statuscritical)**.
+2. Использование нужного токена цвета через прямой импорт из библиотеки `@kaspersky/hexa-ui-core`:
+```typescript
+import { productColors } from '@kaspersky/hexa-ui-core/colors/js'
+
+const statusColor = productColors.status.statuscritical
+```

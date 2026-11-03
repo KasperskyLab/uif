@@ -29,10 +29,11 @@ import {
 export const ToolbarButton: FC<Omit<ToolbarButtonProps, 'type'> & ToolbarVariantButtonProps> = ({
   label,
   children,
+  className,
   tooltip,
   showIndicator,
   iconBefore,
-  className,
+  indicatorMode,
   ...rest
 }) => {
   // ToolbarButton is wrapped in a <span> tag to show tooltip even if the button is disabled.
@@ -46,7 +47,7 @@ export const ToolbarButton: FC<Omit<ToolbarButtonProps, 'type'> & ToolbarVariant
             iconBefore && (
               <span className={styles.buttonIconWrapper}>
                 {iconBefore}
-                {showIndicator && <Indicator className={styles.buttonIndicator} mode="critical" />}
+                {showIndicator && <Indicator className={styles.buttonIndicator} mode={indicatorMode || 'critical'} />}
               </span>
             )
           }

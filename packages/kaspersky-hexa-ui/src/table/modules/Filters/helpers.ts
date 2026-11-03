@@ -1,3 +1,4 @@
+import { DATE_FORMATS, DEFAULT_TIME_FORMAT, locales as dsLocales } from '@design-system/tokens'
 import { DateInputValue } from '@src/datepicker'
 import { parse } from 'date-fns'
 import isEqual from 'lodash/isEqual'
@@ -23,6 +24,7 @@ import {
   FilterOperation,
   FilterType,
   LegacyEnumOption,
+  NumberFilter,
   SidebarFilter,
   SidebarFilterGroupInternal,
   SidebarFilterInternal,
@@ -76,8 +78,16 @@ export const convertToDate = (date: DateInputValue | number | undefined): DateIn
   return null
 }
 
-export const formatDate = (date: Parameters<typeof convertToDate>[0], dateFormat: string): string => {
-  return moment(convertToDate(date)).format(dateFormat)
+const formatByLocale = (locale: string) => {
+  const resolvedLocale = dsLocales[locale.substring(0, locale.indexOf('-'))]
+  if (resolvedLocale) {
+    return `${resolvedLocale.format} ${DEFAULT_TIME_FORMAT}`
+  }
+  return `${DATE_FORMATS.SLASH_MMDDYYYY} ${DEFAULT_TIME_FORMAT}`
+}
+
+export const formatDate = (date: Parameters<typeof convertToDate>[0], locale: string, dateFormat?: string): string => {
+  return moment(convertToDate(date)).format(dateFormat || formatByLocale(locale))
 }
 
 export const parseEnumValue = (value: any): any => {
@@ -96,6 +106,22 @@ export const convertColumnFiltersToFilterFromColumn = <T extends TableRecord = T
   filterName: columnFilter.name,
   predicate: columnFilter.filter
 })
+
+/** Active table filters in the {@link TablePreset.settings.filters} format: column filters are flat {@link FilterFromColumn}
+ *  items (without `predicate`), sidebar filters stay on the root level */
+export const getPresetFilters = <T extends TableRecord = TableRecord> (
+  filterItems: UnitedFilter<T>[]
+): UnitedFilter<T>[] => {
+  const columnFilters = filterItems
+    .filter(isGroup)
+    .filter(group => group.id.startsWith('column.'))
+    .flatMap(group => group.items)
+    .filter(item => isFilterFromColumn(item, false))
+    .map(filter => ({ name: filter.name, filterName: filter.filterName }))
+  const sidebarFilters = filterItems.filter(isSidebarFilter)
+
+  return [...columnFilters, ...sidebarFilters]
+}
 
 export const convertActiveFilterToFilterFromColumn = (activeFilter: ActiveFilter): FilterFromColumn[] => {
   const filters: FilterFromColumn[] = []
@@ -232,7 +258,8 @@ export const isSameItem = <T extends TableRecord = TableRecord> (a: UnitedFilter
       a.type === b.type &&
       a.condition === b.condition &&
       isEqual(a.value, b.value) &&
-      a.attribute === b.attribute
+      a.attribute === b.attribute &&
+      (a as NumberFilter).unit === (b as NumberFilter).unit
     )
   } else if (isFilterFromColumn(a) && isFilterFromColumn(b)) {
     return a.filterName === b.filterName && a.name === b.name

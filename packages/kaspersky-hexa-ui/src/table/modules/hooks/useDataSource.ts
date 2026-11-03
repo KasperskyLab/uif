@@ -23,6 +23,11 @@ type UseDataSourceProps<T extends TableRecord = TableRecord> =
 
 const EMPTY_ARR: TableRecord[] = []
 
+type UseDataSourceResult<T extends TableRecord> = {
+  dataSource: T[],
+  isInitialLoading: boolean
+}
+
 export const useDataSource = <T extends TableRecord = TableRecord> ({
   additional,
   dataSourceClient,
@@ -34,8 +39,10 @@ export const useDataSource = <T extends TableRecord = TableRecord> ({
   loading,
   setIsDefaultSortDisabled,
   setIsClientGroupSortingDisabled
-}: UseDataSourceProps<T>): T[] => {
+}: UseDataSourceProps<T>): UseDataSourceResult<T> => {
   const [dataSource, setDataSource] = useState<T[]>(EMPTY_ARR as T[])
+  const [isInitialLoading, setIsInitialLoading] = useState(true)
+  const isDataSourceFunctionDisabled = pagination.paginationDisabled || !dataSourceFunction
 
   const patchedData = useMemo(() => {
     if (!dataSourceClient) return EMPTY_ARR as T[]
@@ -55,8 +62,6 @@ export const useDataSource = <T extends TableRecord = TableRecord> ({
     }
   }, [dataSourceFunction, patchedData, dataSourceClient, loading])
 
-  if (pagination.paginationDisabled || !dataSourceFunction) return patchedData
-
   const { groupBy, filterApi, searchValue, sorting } = useTableContext(state => ({
     groupBy: state.groupBy,
     filterApi: state.filterApi,
@@ -67,6 +72,8 @@ export const useDataSource = <T extends TableRecord = TableRecord> ({
   const [filters, setFilters] = useState<SidebarFilter<T>[]>(filterApi?.getSidebarFilters() || [])
 
   useEffect(() => {
+    if (isDataSourceFunctionDisabled) return
+
     if (filterApi) {
       const getFiltersCallback = () => {
         setFilters(filterApi.getSidebarFilters() || [])
@@ -74,7 +81,7 @@ export const useDataSource = <T extends TableRecord = TableRecord> ({
       getFiltersCallback()
       return filterApi.subscribe(getFiltersCallback)
     }
-  }, [filterApi])
+  }, [filterApi, isDataSourceFunctionDisabled])
 
   const debouncedFetchDataSource = useCallback(
     debounce(async (args: TableDataSourceFunctionArgs<T>) => {
@@ -101,13 +108,17 @@ export const useDataSource = <T extends TableRecord = TableRecord> ({
           isClientGroupsSortingDisabled !== undefined && setIsClientGroupSortingDisabled(isClientGroupsSortingDisabled)
           isDefaultSortDisabled !== undefined && setIsDefaultSortDisabled(isDefaultSortDisabled)
           hideOnSinglePage !== undefined && additional?.setHideOnSinglePage(hideOnSinglePage)
+          setIsInitialLoading(false)
           setIsInited(true)
         })
         onDataSourceChange?.(patchedRows)
       } catch (e) {
         console.error('[hexa-ui][table] Unable to fetch data from dataSourceFunction', e)
-      } finally {
-        setIsInited(true)
+
+        unstable_batchedUpdates(() => {
+          setIsInitialLoading(false)
+          setIsInited(true)
+        })
       }
     }, 300),
     [dataSourceFunction, patchDataSource, onDataSourceChange, additional?.setTotal, additional?.setHideOnSinglePage, pagination.paginationDisabled]
@@ -146,6 +157,7 @@ export const useDataSource = <T extends TableRecord = TableRecord> ({
   }, [params])
 
   useEffect(() => {
+    if (isDataSourceFunctionDisabled) return
     debouncedFetchDataSource(params)
 
     return () => {
@@ -155,5 +167,9 @@ export const useDataSource = <T extends TableRecord = TableRecord> ({
 
   useRefMethod('triggerDataSourceFunction', () => setDataSourceFunctionTrigger(prev => !prev))
 
-  return dataSource
+  if (isDataSourceFunctionDisabled) {
+    return { dataSource: patchedData, isInitialLoading: false }
+  }
+
+  return { dataSource, isInitialLoading }
 }

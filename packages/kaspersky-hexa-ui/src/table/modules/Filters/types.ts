@@ -97,6 +97,8 @@ export type NumberFilter = BasicFilter<NumberOperations> & {
   type: FilterType.Number,
   /** Can use '>' and '<' in conditions */
   exact?: boolean,
+  /** Value of the selected unit of measure. Defined by column.filterType.units */
+  unit?: string,
   value: number | null
 }
 

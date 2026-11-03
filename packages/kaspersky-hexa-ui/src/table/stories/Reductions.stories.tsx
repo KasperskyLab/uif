@@ -4,7 +4,7 @@ import { CodeViewer } from '@src/code-viewer'
 import { Link } from '@src/link'
 import { Markdown } from '@src/markdown'
 import { Meta } from '@storybook/react'
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 
 import { ITableProps, Table } from '..'
 
@@ -239,4 +239,20 @@ export const ExpandableText: Story = {
     columns: genArgType('columns[n].ellipsis = true - collapses long labels and shows tooltip with full text on hover')
   },
   parameters: { controls: { exclude: ['dataSource'] } }
+}
+
+const CustomCell: FC = ({ children, ...props }) => (
+  <td {...props}>
+    {children}
+  </td>
+)
+
+export const CustomCellWithoutRef: Story = {
+  args: {
+    components: {
+      body: {
+        cell: CustomCell
+      }
+    }
+  }
 }

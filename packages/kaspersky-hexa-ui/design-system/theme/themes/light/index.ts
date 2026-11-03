@@ -4,7 +4,6 @@ import { ThemeConfig, ThemeKey } from '../../../types'
 import { COMMON_THEME } from '../common-theme'
 
 import { anchor } from './anchor'
-import { badge, badgeSize } from './badge'
 import { breadcrumbs, breadcrumbsSize } from './breadcrumbs'
 import { chip, chipSize } from './chip'
 import { colors } from './colors'
@@ -37,10 +36,6 @@ export const LIGHT_THEME: ThemeConfig = {
     segmentedControl: {
       colors: segmentedControl({ colors, effects }),
       sizes: segmentedControlSize
-    },
-    badge: {
-      colors: badge({ colors, effects }),
-      sizes: badgeSize
     },
     sidebar: {
       colors: sidebar({ colors, effects }),

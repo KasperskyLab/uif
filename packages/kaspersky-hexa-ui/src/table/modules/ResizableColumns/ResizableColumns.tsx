@@ -1,4 +1,6 @@
 import { useUpdateEffect } from '@helpers/useUpdateEffect'
+import { PresetStoreValue, usePresetsUpdate, useTableContext } from '@src/table/context/tableStore'
+import isEqual from 'lodash/isEqual'
 import React, {
   MouseEventHandler,
   useCallback,
@@ -9,13 +11,17 @@ import React, {
 } from 'react'
 
 import { TableComponent } from '..'
-import { ITableProps, TableColumn, TableRecord } from '../..'
-import { isColumnReadonly, isColumnVisible } from '../../helpers/common'
+import {
+  ITableProps,
+  TableColumn,
+  TableRecord
+} from '../..'
+import { findColumnByKey, isColumnReadonly, isColumnVisible } from '../../helpers/common'
 import { getPersistentStorageValue, updatePersistentStorage } from '../../helpers/persistentStorage'
 import { ResizableColumnsContext, STICKY_HEADER_CLASS, StickyHeaderWrapper } from '../../helpers/stickyHeader'
-import { ResizableHeaderCellProps, SetColumns } from './types'
 
-import { addWidthFromStorage, applyResizingMode, selectAutoResizingMode, resizeColumns } from './helpers'
+import { addWidthFromStorage, applyResizingMode, resizeColumns, selectAutoResizingMode } from './helpers'
+import { ResizableHeaderCellProps, SetColumns } from './types'
 
 const DEFAULT_COLUMN_WIDTH = 220
 const COLUMN_DEFAULT_MIN_WIDTH = 100
@@ -199,6 +205,38 @@ export const ResizableColumns = <T extends TableRecord = TableRecord> (
   const [columns, setColumns] = useState(
     applyResizingMode(columnsFromStorage, resolvedInitialResizingMode, defaultColumnWidth)
   )
+  const [currentPreset, columnsState] = useTableContext(state => [
+    state.presets.currentPreset,
+    state.presets.columnsState
+  ])
+
+  useEffect(() => {
+    if (!currentPreset) return
+
+    setColumns(prevColumns => {
+      const nextColumns = prevColumns.map(column => {
+        if (isColumnReadonly(column)) {
+          return column
+        }
+
+        const presetColumn = currentPreset.settings.columns?.[column.key]
+
+        const originalColumn = findColumnByKey(props.columns!, column.key)
+
+        return {
+          ...column,
+          width: presetColumn?.width ?? originalColumn?.width,
+          isUserDefinedWidth: presetColumn?.isUserDefinedWidth
+        }
+      })
+
+      return applyResizingMode(
+        nextColumns,
+        resizingMode,
+        defaultColumnWidth
+      )
+    })
+  }, [currentPreset, props.columns, resizingMode, defaultColumnWidth])
 
   const [resizableColumns, setResizableColumns] = useState(
     mapColumns(columns, setColumns, props.onColumnResize, props.onManualColumnResize)
@@ -258,12 +296,18 @@ export const ResizableColumns = <T extends TableRecord = TableRecord> (
   useEffect(() => {
     const columnsWithSyncedWidth = columnsFromStorage.map(column => {
       const processedColumn = columns.find(col => col.key === column.key)
-      return { ...column, width: processedColumn?.width ?? column?.width }
+
+      return {
+        ...column,
+        width: processedColumn?.width ?? column.width,
+        isUserDefinedWidth: processedColumn?.isUserDefinedWidth ?? column.isUserDefinedWidth
+      }
     })
     setColumns(applyResizingMode(columnsWithSyncedWidth, resolvedInitialResizingMode, defaultColumnWidth))
   }, [props.columns])
 
   const hasRowSelection = !!props.rowSelection
+  const hasDragDrop = !!props.useDragDrop
 
   /**
    * StickyHeader реализован через вынос thead в отдельную таблицу, потому что браузеры не умеют держать общий
@@ -312,7 +356,7 @@ export const ResizableColumns = <T extends TableRecord = TableRecord> (
       }, 150)
     }
     return () => interval && clearInterval(interval)
-  }, [props.stickyHeader, props.dataSource, hasRowSelection, isTableVisible, props.columns])
+  }, [props.stickyHeader, props.dataSource, hasRowSelection, hasDragDrop, isTableVisible, props.columns])
 
   useEffect(() => {
     setColumns((prevState) => {
@@ -329,7 +373,8 @@ export const ResizableColumns = <T extends TableRecord = TableRecord> (
 
         return {
           ...column,
-          width: prevColumnState.width
+          width: prevColumnState.width,
+          isUserDefinedWidth: prevColumnState.isUserDefinedWidth
         }
       })
 
@@ -366,11 +411,32 @@ export const ResizableColumns = <T extends TableRecord = TableRecord> (
       mapColumns(columns, setColumns, props.onColumnResize, props.onManualColumnResize)
     )
   }, [columns, props.onColumnResize, props.onManualColumnResize])
+  const updateContext = usePresetsUpdate<T>()
+
+  useEffect(() => {
+    const nextColumnsState: PresetStoreValue<T>['columnsState'] = { ...columnsState }
+
+    resizableColumns.forEach((column => {
+      if (isColumnReadonly(column)) return
+
+      nextColumnsState[column.key] = {
+        ...nextColumnsState[column.key],
+        width: column.width,
+        isUserDefinedWidth: column.isUserDefinedWidth
+      }
+    }))
+
+    if (isEqual(columnsState, nextColumnsState))
+      return
+
+    updateContext({ columnsState: nextColumnsState })
+  }, [resizableColumns, updateContext])
 
   return (
     <ResizableColumnsContext.Provider value={{
       columns: resizableColumns,
       hasRowSelection,
+      hasDragDrop,
       setOverflow,
       setColumns: setColumns as SetColumns
     }}>

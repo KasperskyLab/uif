@@ -1,12 +1,14 @@
 import { RefObject, useEffect } from 'react'
 
 type UseSyncTableScrollProps = {
+  disabled?: boolean,
   horizontalScrollbarRef: RefObject<HTMLDivElement>,
   scrollableContainerRef: RefObject<HTMLDivElement>,
   stickyHeaderRef: RefObject<HTMLDivElement>
 }
 
 export const useSyncTableScroll = ({
+  disabled = false,
   horizontalScrollbarRef,
   scrollableContainerRef,
   stickyHeaderRef
@@ -15,6 +17,8 @@ export const useSyncTableScroll = ({
    *  скроллбар, то и выставлять scrollLeft нам нужно при обоих событиях ресайза
    */
   useEffect(() => {
+    if (disabled) return
+
     const scrollbarContainer = horizontalScrollbarRef.current
     const tableContainer = scrollableContainerRef.current
     const stickyHeaderContainer = stickyHeaderRef.current
@@ -43,5 +47,5 @@ export const useSyncTableScroll = ({
       tableContainer.removeEventListener('scroll', scrollHandler)
       scrollbarContainer.removeEventListener('scroll', scrollHandler)
     }
-  }, [])
+  }, [disabled])
 }

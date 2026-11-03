@@ -1,0 +1,138 @@
+/* HEXA UI: isolated static-image Hero. Do not append legacy HeroLayers overrides. */
+.hexa-welcome .hexa-visual-hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  min-height: clamp(420px, 43cqi, 540px);
+  overflow: hidden;
+  background: var(--bg--neutral--level_0, #fff);
+  border-bottom: 1px solid var(--border--neutral--medium, #e0e4eb);
+}
+
+/* Images have transparent, smoothly faded edges; no hard rectangle and no crop. */
+.hexa-welcome .hexa-visual-hero__picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.hexa-welcome .hexa-visual-hero__background {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.hexa-welcome .hexa-visual-hero__mobile-background {
+  display: none;
+}
+
+.hexa-welcome .hexa-visual-hero__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 48%;
+  min-width: 0;
+  padding: 28px 0 28px clamp(16px, 4.5cqi, 64px);
+}
+.hexa-welcome .hexa-visual-hero h1.hexa-visual-hero__title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: clamp(48px, 7.2cqi, 86px);
+  line-height: 1.05;
+  letter-spacing: -.055em;
+  color: var(--fg--neutral--primary, #1d1d20);
+  text-transform: none;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.hexa-welcome .hexa-visual-hero__description {
+  margin: clamp(20px, 2.6cqi, 32px) 0 0;
+  max-width: 390px;
+  font-size: clamp(14px, 1.55cqi, 18px);
+  line-height: 1.5;
+  color: var(--fg--neutral--secondary, #424854);
+  text-wrap: pretty;
+}
+.hexa-welcome .hexa-visual-hero__action {
+  display: flex;
+  align-items: flex-start;
+  margin-top: clamp(22px, 2.8cqi, 34px);
+}
+
+/* Storybook has a resizable sidebar: break at content-container width. */
+@container (max-width: 850px) {
+  .hexa-welcome .hexa-visual-hero {
+    min-height: 390px;
+  }
+  .hexa-welcome .hexa-visual-hero h1.hexa-visual-hero__title {
+    font-size: clamp(46px, 7.2cqi, 64px);
+  }
+  .hexa-welcome .hexa-visual-hero__description {
+    max-width: 285px;
+  }
+}
+
+@container (max-width: 660px) {
+  .hexa-welcome .hexa-visual-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 0;
+    padding: 24px 0 16px;
+  }
+  .hexa-welcome .hexa-visual-hero__content {
+    order: 0;
+    width: 100%;
+    padding: 0 12px;
+  }
+  .hexa-welcome .hexa-visual-hero h1.hexa-visual-hero__title {
+    font-size: clamp(44px, 13cqi, 72px);
+  }
+  .hexa-welcome .hexa-visual-hero__description {
+    margin-top: 20px;
+    max-width: 390px;
+    font-size: 15px;
+  }
+  .hexa-welcome .hexa-visual-hero__action {
+    margin-top: 22px;
+  }
+  .hexa-welcome .hexa-visual-hero__picture {
+    position: relative;
+    order: 1;
+    inset: auto;
+    width: min(100%, 480px);
+    height: auto;
+    margin: 12px auto 0;
+  }
+  .hexa-welcome .hexa-visual-hero__background {
+    display: none;
+  }
+  .hexa-welcome .hexa-visual-hero__mobile-background {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
+@container (max-width: 360px) {
+  .hexa-welcome .hexa-visual-hero h1.hexa-visual-hero__title {
+    font-size: clamp(40px, 13cqi, 48px);
+  }
+  .hexa-welcome .hexa-visual-hero__description {
+    font-size: 14px;
+  }
+}

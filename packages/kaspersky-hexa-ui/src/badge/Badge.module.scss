@@ -1,0 +1,133 @@
+@use "sass:map";
+@use '../../design-system/tokens/typography.module.scss';
+
+$color-tokens: (
+  medium: (
+    background: var(--fg--warning--muted),
+    color: var(--fg--neutral--primary--static)
+  ),
+  neutral: (
+    background: var(--bg--neutral--level_3),
+    color: var(--fg--neutral--primary)
+  ),
+  accent: (
+    background: var(--common--accent--enabled),
+    color: var(--fg--neutral_inverted--primary)
+  ),
+  positive: (
+    background: var(--common--success--enabled),
+    color: var(--fg--neutral_inverted--primary)
+  ),
+  high: (
+    background: var(--fg--danger--muted),
+    color: var(--fg--neutral_inverted--primary)
+  ),
+  critical: (
+    background: var(--common--danger--enabled),
+    color: var(--fg--neutral_inverted--primary)
+  ),
+  new: (
+    background: var(--fg--marengo--muted),
+    color: var(--fg--neutral_inverted--primary)
+  ),
+  update: (
+    background: var(--common--violet--enabled),
+    color: var(--fg--neutral_inverted--primary)
+  ),
+  in-progress: (
+    background: var(--common--accent--enabled),
+    color: var(--fg--neutral_inverted--primary)
+  ),
+  resolved: (
+    background: var(--fg--info--muted),
+    color: var(--fg--neutral_inverted--primary)
+  ),
+  in-incident: (
+    background: var(--common--purple--enabled),
+    color: var(--fg--neutral_inverted--primary)
+  ),
+  low: (
+    background: var(--bg--neutral_transparent--level_4),
+    color: var(--fg--neutral_inverted--primary)
+  ),
+  info: (
+    background: var(--common--purple--enabled),
+    color: var(--fg--neutral_inverted--primary)
+  ),
+  neutral_transparent: (
+    background: transparent,
+    color: var(--fg--neutral--tertiary)
+  ),
+  critical_transparent: (
+    background: transparent,
+    color: var(--common--danger--enabled)
+  )
+);
+
+$size-tokens: (
+  mediumSize: (
+    height: 20px,
+    padding: 1px var(--spacing--padding_xs),
+    gap: var(--spacing--gap_closest),
+    radius: var(--radius--s),
+  ),
+  largeSize: (
+    height: 24px,
+    padding: var(--spacing--padding_xs) var(--spacing--padding_s),
+    gap: var(--spacing--gap_closest),
+    radius: var(--radius--s),
+  ),
+);
+
+@mixin apply-size($size) {
+  box-shadow: none;
+  height: var(--text--#{$size}--line-height);
+  min-width: var(--text--#{$size}--line-height);
+}
+
+.badge {
+  @each $mode, $tokens in $color-tokens {
+    &.#{"" + $mode} :global(.ant-badge-count) {
+      background-color: map.get($tokens, background);
+      color: map.get($tokens, color);
+    }
+  }
+
+  &.mediumSize :global(.ant-badge-count) {
+    @extend .btr4;
+    @include apply-size(btr4);
+  }
+
+  &.largeSize :global(.ant-badge-count) {
+    @extend .btr3;
+    @include apply-size(btr3);
+  }
+
+  &.isTransparent {
+    :global(.ant-badge-count) {
+      display: flex;
+      border-radius: 0;
+      height: auto;
+      min-width: auto;
+      padding: 0;
+    }
+
+    :global(.ant-scroll-number-only) {
+      height: auto;
+      display: flex;
+    }
+  }
+
+  &::selection,
+  & :global(.ant-badge-count)::selection {
+    color: inherit;
+    background-color: inherit;
+  }
+
+  :global(.ant-badge-dot) {
+    transform: none;
+    height: 8px;
+    width: 8px;
+    box-shadow: none;
+  }
+}

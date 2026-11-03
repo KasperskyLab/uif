@@ -72,7 +72,7 @@ describe('Weekly schedule', () => {
         firstCell && userEvent.click(firstCell)
       })
 
-      expect(onChangeHandler).toBeCalledWith(reference)
+      expect(onChangeHandler).toHaveBeenCalledWith(reference)
     })
 
     test('Check schedule if click on wednesday in 20:00', () => {
@@ -102,7 +102,7 @@ describe('Weekly schedule', () => {
         firstCell && userEvent.click(firstCell)
       })
 
-      expect(onChangeHandler).toBeCalledWith(reference)
+      expect(onChangeHandler).toHaveBeenCalledWith(reference)
     })
   })
 

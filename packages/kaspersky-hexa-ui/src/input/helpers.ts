@@ -1,27 +1,5 @@
 import { TextboxNumberProps } from './types'
 
-export type UseHandleKeyDownProps = Pick<TextboxNumberProps, 'min' | 'integerOnly' | 'decimalSeparator' | 'precision'>
-
-const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-
-export const getValidator = ({
-  min,
-  integerOnly,
-  decimalSeparator = '.',
-  precision
-}: UseHandleKeyDownProps): RegExp => {
-  const sign = min !== undefined && min >= 0 ? '' : '-?'
-
-  const escapedSep = escape(decimalSeparator)
-  const decimalPart = integerOnly
-    ? ''
-    : `(?:${escapedSep}\\d{0,${precision ?? ''}})?`
-
-  const pattern = `^${sign}\\d*${decimalPart}$`
-
-  return new RegExp(pattern)
-}
-
 export const trimmedValue = (value: number, { min, max }: Pick<TextboxNumberProps, 'min' | 'max'>) => {
   if (min !== undefined && max !== undefined && min > max) {
     return 0
@@ -40,6 +18,16 @@ export const getDecimalPrecision = (num: number) => {
   }
   const parts = num.toString().split('.')
   return parts[1] ? parts[1].length : 0
+}
+
+export const toExactNumber = (
+  value: TextboxNumberProps['value']
+): TextboxNumberProps['value'] => {
+  if (typeof value === 'number') {
+    return value
+  }
+
+  return String(Number(value)) === value ? Number(value) : value
 }
 
 export const normalizeValue = (
@@ -67,7 +55,23 @@ export const normalizeValue = (
   const fracPart = fracRaw.replace(/0+$/g, '')
   const result = fracPart ? `${sign}${intPart}.${fracPart}` : `${sign}${intPart}`
 
-  const trimmedResult = trimmedValue(Number(result), { min, max })
+  const numeric = Number(result)
+  const trimmedResult = trimmedValue(numeric, { min, max })
 
-  return typeof value === 'number' ? trimmedResult : trimmedResult.toString()
+  if (typeof value === 'number') {
+    return trimmedResult
+  }
+
+  return trimmedResult !== numeric ? trimmedResult.toString() : result
+}
+
+export const getNumberSeparators = (locale: string) => {
+  const parts = new Intl.NumberFormat(
+    locale === 'hash-id' ? 'en-US' : locale
+  ).formatToParts(12345.6)
+
+  return {
+    group: parts.find(part => part.type === 'group')?.value ?? '',
+    decimal: parts.find(part => part.type === 'decimal')?.value ?? '.'
+  }
 }

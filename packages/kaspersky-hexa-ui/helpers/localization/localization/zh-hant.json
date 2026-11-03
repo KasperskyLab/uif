@@ -1,12 +1,19 @@
 {
   "translation": {
     "common": {
+      "back": "上一步",
+      "cancel": "取消",
+      "delete": "刪除",
       "empty": "無資料",
       "import": "匯入",
       "export": "匯出",
       "filters": "篩選器",
+      "next": "下一頁",
       "no": "否",
-      "yes": "是"
+      "ok": "確定",
+      "rename": "重新命名",
+      "yes": "是",
+      "save": "儲存"
     },
     "upload": {
       "dropFileTitle": "將檔案拖放在此",
@@ -56,6 +63,21 @@
         "maxTotalSize2": "所有上傳檔案的總大小超過了目前允許的大小限制",
         "filesDoNotMeetRequirements": "檔案不符合要求",
         "format": "由於格式要求，{{count}} 個檔案無法上傳。"
+      }
+    },
+    "onboarding": {
+      "modal": {
+        "actions": {
+          "tryNow": "立即嘗試",
+          "skip": "略過"
+        },
+        "dontShowAgain": "不再顯示"
+      },
+      "interactiveTour": {
+        "actions": {
+          "complete": "完成"
+        },
+        "stepStack": "第 {{currentStep}} 步，共 {{totalSteps}} 步"
       }
     },
     "wizard": {
@@ -181,6 +203,38 @@
         "nrange": "超出 {{from}}–{{to}}"
       },
       "groupingEmpty": "其他"
+    },
+    "tablePresets": {
+      "actions": {
+        "createPreset": "另存為新預設",
+        "updatePreset": "更新預設"
+      },
+      "createFirstPresetTip": "您可以將選取的列、其順序、篩選條件或整個表格組態儲存為自訂預設。請依需要設定表格和篩選條件，然後將組態儲存為新預設。",
+      "createPresetModal": {
+        "header": "將表格設定另存為新預設",
+        "presetName": "預設名稱",
+        "tip": "預設包含列順序和顯示狀態、已套用的篩選條件以及排序方式。如果您變更其中任何參數，即可更新預設。"
+      },
+      "renamePresetModal": {
+        "header": "重新命名預設"
+      },
+      "deletePresetModal": {
+        "header": "刪除預設？",
+        "message": "確定要刪除預設“{{name}}”嗎？此操作無法復原。"
+      },
+      "errors": {
+        "presetCreate": "無法建立預設 {{name}}",
+        "presetDelete": "無法刪除預設 {{name}}",
+        "presetUpdate": "無法更新預設 {{name}}"
+      },
+      "presetCreated": "預設 {{name}} 已儲存",
+      "presetDeleted": "預設 {{name}} 已刪除",
+      "presetUpdated": "預設 {{name}} 已儲存",
+      "presets": "預設",
+      "validation": {
+        "presetNameEmpty": "輸入預設名稱",
+        "presetNameExists": "已存在同名預設"
+      }
     },
     "tabs": {
       "dropdown": {

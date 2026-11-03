@@ -15,13 +15,14 @@ import { Initial } from './Initial'
 import { LocalizeColumnTitles } from './LocalizeColumnTitles'
 import { MemoizeProps } from './MemoizeProps'
 import { Pagination } from './Pagination'
+import { Presets } from './Presets'
 import { Reductions } from './Reductions'
 import { ResizableColumns } from './ResizableColumns/ResizableColumns'
 import { SidebarFilters } from './SidebarFilters'
 import { SortingAndFilters } from './SortingAndFilters'
-// import { ExpandableRows } from './ExpandableRows'
 import { ToolbarIntegration } from './ToolbarIntegration'
 import { VirtualTanstack as Virtual } from './Virtual'
+import { Virtualization } from './Virtualization'
 
 export type TableComponent<T extends TableRecord = TableRecord> = FC<ITableProps<T> & React.RefAttributes<TableRef>>
 export type TableModule<T extends TableRecord = TableRecord> = (Component: TableComponent<T>) => TableComponent<T>
@@ -43,18 +44,19 @@ export const composeWithModules = (Component: TableComponent, modules: TableModu
  * -ToolbarIntegration must be below SidebarFilters
  * -LocalizeColumnTitles must be below SortingAndFilters and SidebarFilters
  * -Groups must be above ColumnsSelection
+ * -Virtualization must be first: it must see the final rows and columns
  * -to be continued...
  */
 export const tableModules: TableModule[] = [
+  Virtualization,
+  DraggableTable,
   Groups,
-  // ExpandableRows,
   Pagination,
   SortingAndFilters,
   Reductions,
   ResizableColumns,
   TableAccordion,
   EmptyCellDash,
-  DraggableTable,
   ColumnsSelection,
   SidebarFilters,
   InfiniteScroll,
@@ -63,6 +65,7 @@ export const tableModules: TableModule[] = [
   Virtual, // in developing, not ready for use
   LocalizeColumnTitles,
   Filters,
+  Presets,
   Initial,
   MemoizeProps('columns')
 ] // calls in reverse order - tableModules[n], tableModules[n-1] etc...
