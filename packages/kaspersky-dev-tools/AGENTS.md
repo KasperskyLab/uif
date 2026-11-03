@@ -98,7 +98,7 @@ Provides `utils/get-node-options.js` for handling different Node.js versions:
 Он ломается, как только зависимости поднимаются в общий каталог (npm workspaces): пакет уезжает
 в корень, и путь перестаёт существовать (`TS5083`). Исторически такая форма использовалась в 45
 файлах `tsconfig*.json` 42 проектов — как обход отсутствующей записи в `exports`; см.
-[спеку](../../../.ai/specs/cross-zone/kl-dev-tools-exports-configs.md).
+[спеку](../../../.agents/specs/cross-zone/kl-dev-tools-exports-configs.md).
 
 **Переводить потребителя на пакетную форму можно только после того, как он поднял `@kaspersky/dev-tools`
 до версии с этой записью** — на более старых версиях `exports` её не содержит и подключение упадёт
