@@ -8,3 +8,5 @@ eslint.config.mjs
 jest.config.js
 tsconfig.json
 README.md
+
+AGENTS.md
