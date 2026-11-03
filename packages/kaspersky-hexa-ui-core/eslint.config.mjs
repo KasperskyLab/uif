@@ -16,6 +16,12 @@ export default defineConfig([
     }
   },
   {
+    files: ['**/*.test.{js,jsx}'],
+    languageOptions: {
+      globals: { describe: 'readonly', test: 'readonly', expect: 'readonly' }
+    }
+  },
+  {
     files: [
       '**/*.test.{js,jsx,ts,tsx}',
       '**/*.config.*',

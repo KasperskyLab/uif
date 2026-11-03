@@ -1,6 +1,6 @@
 {
   "name": "@kaspersky/hexa-ui-core",
-  "version": "0.22.0",
+  "version": "0.24.3",
   "description": "Tokens for Kaspersky Hexa UI Design system: colors, fonts and typography",
   "author": "AO Kaspersky Lab",
   "license": "Apache-2.0",
@@ -36,24 +36,23 @@
     }
   },
   "scripts": {
-    "test": "npm run lint && jest --colors && jest src/colors/palette-pixso-build/palette-pixso-build.test.js --runInBand",
+    "test": "npm run lint && jest --colors",
     "prepublishOnly": "npm run build",
     "build": "rollup -c --bundleConfigAsCjs",
     "release": "export release=true; npm run build",
-    "storybook-hexa-ui": "gulp swapTokensFiles && gulp swapTokensFilesPixso && npm run update-colors && npm run release && (cd ../kaspersky-hexa-ui && npm run storybook)",
+    "storybook-hexa-ui": "npm run update-colors && npm run release && (cd ../kaspersky-hexa-ui && npm run storybook)",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
-    "update-colors": "gulp updatePixsoColors && gulp mergePixsoTokens",
-    "check-tokens-change": "gulp checkPixsoSwappedTokensChange",
-    "check-tokens-change:noswapped": "gulp checkPixsoNotSwappedTokensChange",
+    "update-colors": "node ./src/colors/pixso-build.js",
+    "check-tokens-change": "node ./src/colors/pixso-build.js --check",
     "update-typography": "npx ts-node ./src/typography/write-tokens-to-json.ts && gulp updateTypography"
   },
   "devDependencies": {
-    "@kaspersky/dev-tools": "3.11.0",
+    "@kaspersky/dev-tools": "3.15.1",
     "@rollup/plugin-commonjs": "26.0.1",
     "@rollup/plugin-node-resolve": "15.2.3",
+    "@rollup/plugin-replace": "6.0.2",
     "@types/jest": "29.5.14",
-    "del": "6.0.0",
     "dotenv": "16.0.0",
     "eslint": "^9.0.0",
     "gulp": "5.0.1",
