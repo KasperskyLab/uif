@@ -1,4 +1,10 @@
 import{j as n}from"./jsx-runtime-Xd4z3NZ5.js";import{useMDXComponents as d}from"./index-D3o9IPAT.js";import"./index-ChG7qhfk.js";function e(s){const i={code:"code",h1:"h1",h2:"h2",p:"p",pre:"pre",strong:"strong",...d(),...s.components};return n.jsxs(n.Fragment,{children:[n.jsx(i.h1,{id:"kasperskyhexa-ui-icons",children:"@kaspersky/hexa-ui-icons"}),`
+`,n.jsx(i.h2,{id:"2250",children:"2.25.0"}),`
+`,n.jsx(i.p,{children:"Sync with design on 21.10.2026"}),`
+`,n.jsx(i.h2,{id:"2240",children:"2.24.0"}),`
+`,n.jsx(i.p,{children:"Sync with design on 21.09.2026"}),`
+`,n.jsx(i.h2,{id:"2230",children:"2.23.0"}),`
+`,n.jsx(i.p,{children:"Sync with design on 11.09.2026"}),`
 `,n.jsx(i.h2,{id:"2191",children:"2.19.1"}),`
 `,n.jsx(i.p,{children:"Sync with design on 09.08.2026"}),`
 `,n.jsx(i.h2,{id:"2190",children:"2.19.0"}),`
