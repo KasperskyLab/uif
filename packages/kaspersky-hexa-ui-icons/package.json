@@ -1,6 +1,6 @@
 {
   "name": "@kaspersky/hexa-ui-icons",
-  "version": "2.22.0",
+  "version": "2.26.1",
   "description": "Kaspersky Hexa UI Design System icon pack",
   "author": "AO Kaspersky Lab",
   "license": "Apache-2.0",
@@ -63,7 +63,7 @@
   },
   "keywords": [],
   "devDependencies": {
-    "@kaspersky/dev-tools": "3.11.0",
+    "@kaspersky/dev-tools": "3.15.1",
     "@rollup/plugin-babel": "6.1.0",
     "@rollup/plugin-commonjs": "29.0.0",
     "@rollup/plugin-multi-entry": "7.1.0",
