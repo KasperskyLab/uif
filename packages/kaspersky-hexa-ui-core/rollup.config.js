@@ -1,9 +1,12 @@
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
+import replace from '@rollup/plugin-replace'
 import copy from 'rollup-plugin-copy'
 import css from 'rollup-plugin-css-only'
 import typescript from 'rollup-plugin-typescript2'
 import url from 'rollup-plugin-url'
+
+import pkg from './package.json' with { type: 'json' }
 
 require('dotenv').config()
 
@@ -26,6 +29,10 @@ export default {
     }
   ],
   plugins: [
+    replace({
+      __VERSION__: pkg.version,
+      preventAssignment: true
+    }),
     css(),
     resolve(),
     commonjs(),

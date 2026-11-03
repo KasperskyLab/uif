@@ -9,8 +9,9 @@
     - [Шрифты](#шрифты)
     - [Токены типографии](#токены-типографии)
     - [Токены цветов](#токены-цветов)
-* [Обновление токенов](#обновление-токенов-for-maintainers)
+* [Обновление токенов](#обновление-токенов)
 * [Сборка пакета](#сборка-пакета)
+* [Структура пакета](#структура-пакета)
 * [Ресурсы](#ресурсы)
 
 ---
@@ -67,6 +68,8 @@ import '@kaspersky/hexa-ui-core/colors/css'
 
 На странице создается элемент `<style class="hexa-ui-colors"></style>`, в котором определены css-variables для токенов цветов.
 
+Светлая тема описана селекторами `:root, .theme-light, .hexa-ui-light-theme`, темная - `.theme-dark, .hexa-ui-dark-theme`.
+
 ```tsx
 import '@kaspersky/hexa-ui-core/colors/css/static'
 import '@kaspersky/hexa-ui-core/colors/css/button'
@@ -86,10 +89,15 @@ _Экспортируемые объекты:_
 + `colors` - цвета из статической базовой палитры (в том числе **устаревшей**)
 + `productColors` - цвета, имеющие пару в темной теме, предназначены для продуктовых команд для раскраски некоторых компонентов (например, иконок) и всего, что не является компонентом
 + `componentColors` - цвета, имеющие пару в темной теме, предназначены для раскраски компонентов библиотеки
++ `widgetColors`, `semanticColors` - цвета виджетов и семантические цвета, имеющие пару в темной теме
 + `themeColors` - **устаревшие** цвета, имеющие пару в темной теме
 + `allColors` - `colors` + `themeColors` + `productColors` + `componentColors`
-+ `shortcutsV6` (**устаревшие**), `productColorsShortcuts`, `componentColorsShortcuts` - цвета, имеющие пару в темной теме (другая структура объекта)
-+ `shortcuts` - `productColorsShortcuts` + `componentColorsShortcuts` + `shortcutsV6`
++ `shortcutsV6` (**устаревшие**), `productColorsShortcuts`, `componentColorsShortcuts`, `widgetColorsShortcuts` - цвета, имеющие пару в темной теме (другая структура объекта)
++ `shortcuts` - `productColorsShortcuts` + `componentColorsShortcuts` + `widgetColorsShortcuts` + `shortcutsV6`
+
+> **_ВАЖНО_**
+>
+> JS-объекты цветов не обновляются при обновлении токенов и остаются такими, какими были сгенерированы ранее. Актуальный источник токенов цветов — css-variables.
 
 При SSR подключение токенов цветов происходит следующим образом:
 
@@ -97,7 +105,7 @@ _Экспортируемые объекты:_
 import '@kaspersky/hexa-ui-core/colors/tokens.css'
 ```
 
-### Сборка пакета
+## Сборка пакета
 
 ```shell
 npm run build
@@ -105,74 +113,30 @@ npm run build
 
 В корне пакета создается директория `/dist` со сборкой пакета в двух основных форматах: CommonJS и ESM.
 
-### Обновление токенов (for maintainers)
+```shell
+npm run release
+```
+
+То же, но в директорию `deployPath` из файла `.env` (см. `.env.example`) — по умолчанию в `node_modules` соседнего пакета `@kaspersky/hexa-ui`.
+
+## Обновление токенов
+
+Токены цветов обновляются из CSS-файлов, экспортированных из Pixso. Файлы (`core.css`, `widgets.css`, `static.css`, `semantic.css`) кладутся в `src/colors/pixso/`, затем:
 
 ```shell
-npm run update-colors
+npm run check-tokens-change   # показать, что изменится, можно пропустить
+npm run update-colors         # применить
+```
+
+Пошаговая инструкция для дизайнеров и описание правил преобразования для разработчиков — в [TOKENS_UPDATE.md](TOKENS_UPDATE.md).
+
+
+```shell
 npm run update-typography
 ```
 
-Команда `update-colors` обновляет токены цветов в пакете: создает новую палитру цветов по импортированным токенам из Figma в формате JSON, генерирует css-variables для токенов.
+Команда генерирует JSON-файл с токенами типографии из `src/typography/js` и css-variables для них.
 
-Команда `update-typography` обновляет токены типографии в пакете: генерирует JSON-файл с токенами типографии, генерирует css-variables для токенов.
+## Структура пакета
 
-### Обновление токенов (for designers)
-
-_{base_path} = /full/path/to/repo/product/osmp/web/packages/packages_
-
-Перед первым обновлением токенов однократно выполнить следующее: создать .env файл по аналогии с .env.example.
-
-1. Перейти в директорию с пакетом компонентов @kaspersky/hexa-ui (_{base_path}/kaspersky-hexa-ui_). Установить или обновить node_modules.
-
-```shell
-npm i
-```
-
-2. Установить или обновить node_modules в пакете @kaspersky/hexa-ui-core.
-
-```shell
-npm i
-```
-
-3. Копирование токенов
-
-#### (Pixso) [NEW]
-
-Экспортированные из Pixso JSON-файлы с необходимыми обновлениями скопировать в `./src/colors/tokens-pixso/_`, заменив существующие. Для статических токенов название файла следующее - `static-tokens.json`, для токенов продукта - `product-tokens.json`, для семантических токенов - `semantic-tokens.json`, а для токенов виджетов - `widget-tokens.json`. Добавить только файлы, в которых есть изменения.
-
-
-#### (Figma) [OLD]
-
-Скопировать JSON-файлы (`static-tokens.json`, `product-tokens.json`, `component-tokens.json`, `widget-tokens.json`) из директории `./src/colors/tokens` в директорию `./src/colors/tokens/_`, заменив существующие.
-
-Экспортированные из Figma JSON-файлы с необходимыми обновлениями скопировать в `./src/colors/tokens/_`, заменив существующие. Для статических токенов название файла следующее - `static-tokens.json`, для токенов продукта - `product-tokens.json`, для токенов компонентов - `component-tokens.json`, а для токенов виджетов - `widget-tokens.json`. Добавить только файлы, в которых есть изменения.
-
-4. Выполнить команду
-
-```shell
-npm run check-tokens-change:noswapped
-```
-
-Команда `check-tokens-change:noswapped` проверяет, изменилась ли структура токенов, и выводит об этом информацию.
-
-5. 
-
-> **_ВАЖНО_**
->
-> Если были добавлены токены для нового компонента в `component-tokens.json`, его нужно добавить в список `src/colors/constants.js` (в алфавитном порядке) и экспортировать из индекса (`src/index.ts`) по аналогии с другими компонентами (в алфавитном порядке).
-
-Если структура токенов не изменилась, необходимо выполнить команду.
-
-```shell
-npm run storybook-hexa-ui
-```
-
-Команда `storybook-hexa-ui` делает swap между `./src/colors/tokens-pixso/` и `./src/colors/tokens-pixso/_`, собирает пакет с новыми токенами, копирует обновленный пакет в директорию с компонентами и запускает сторибук.
-
-### Ресурсы
-#### Hexa UI Core в Pixso
-
-[Product tokens](https://pixso.net/app/design/Nz9aK6S6u21wvOGYfPRjAQ)  
-[Semantic tokens](https://pixso.net/app/design/RvvSBi5i7wxnG0_Pg9tzdw)  
-[Static tokens](https://pixso.net/app/design/Caz0XNIOHLHIG7SGkUZ53g)  
-[Widget tokens](https://pixso.net/app/design/Nm37XP3kqM_HJPFAXaciuw)  
+Описание директорий, сгенерированных файлов и точек входа — в [PACKAGE_STRUCTURE.md](PACKAGE_STRUCTURE.md).

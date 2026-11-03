@@ -1,35 +1,8 @@
-/* eslint-disable */
-const fs = require('fs')
-const path = require('path')
+const PIXSO_FILES = ['core.css', 'widgets.css', 'static.css', 'semantic.css']
 
-/**====== FIGMA ======*/
-const JSON_DATA = {
-  'static-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens/static-tokens.json'))),
-  'product-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens/product-tokens.json'))),
-  'component-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens/component-tokens.json'))),
-  'widget-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens/widget-tokens.json')))
-}
-
-const JSON_OLD_DATA = {
-  'static-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens/_/static-tokens.json'))),
-  'product-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens/_/product-tokens.json'))),
-  'component-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens/_/component-tokens.json'))),
-  'widget-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens/_/widget-tokens.json')))
-}
-
-/**====== PIXSO ======*/
-const PIXSO_DATA = {
-  'static-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens-pixso/static-tokens.json'))),
-  'semantic-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens-pixso/semantic-tokens.json'))),
-  'product-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens-pixso/product-tokens.json'))),
-  'widget-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens-pixso/widget-tokens.json')))
-}
-
-const PIXSO_OLD_DATA = {
-  'static-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens-pixso/_/static-tokens.json'))),
-  'semantic-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens-pixso/_/semantic-tokens.json'))),
-  'product-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens-pixso/_/product-tokens.json'))),
-  'widget-tokens': JSON.parse(fs.readFileSync(path.resolve(__dirname, './tokens-pixso/_/widget-tokens.json')))
+const MEDIA = {
+  mobile: '(max-width: 767px)',
+  tablet: '(min-width: 768px) and (max-width: 1023px)'
 }
 
 const COMPONENTS = [
@@ -103,8 +76,6 @@ const COMPONENTS = [
 
 module.exports = {
   COMPONENTS,
-  JSON_DATA,
-  JSON_OLD_DATA,
-  PIXSO_DATA,
-  PIXSO_OLD_DATA
+  MEDIA,
+  PIXSO_FILES
 }
