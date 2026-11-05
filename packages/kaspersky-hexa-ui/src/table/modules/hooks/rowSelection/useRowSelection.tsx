@@ -296,8 +296,17 @@ export const useRowSelection = <T extends TableRecord = TableRecord> ({
 
   const disableSelectAllOnCurrentPage = dataSource.slice(0, pageSize).every(row => getCheckboxProps(row).disabled)
 
-  const rowSelection: RowSelectionAntd<T> = {
+  const rowSelection: RowSelectionAntd<T> & Pick<TableRowSelection<T>, 'builtInRowSelection'> = {
     ...restRowSelection,
+    /**
+     * Kept in what comes out, not only in what went in.
+     *
+     * Modules further in have to be able to tell which of the two selections they are looking at,
+     * and the flag was being destructured away. Row virtualization is the one that cares: antd
+     * works selection out from the rows it was handed, which under windowing is a screenful, while
+     * this one keeps its own list against the whole table. See the Virtualization module.
+     */
+    builtInRowSelection: true,
     columnWidth: 0,
     columnTitle: hasSelectAll && restRowSelection.type !== 'radio' && (
       <HeaderCheckbox

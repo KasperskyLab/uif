@@ -1,27 +1,33 @@
-import { useResizeObserver } from '@helpers/useResizeObserver'
-import { fireEvent, render } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { watchOverflow } from '@helpers/overflow/overflowWatcher'
+import { act, fireEvent, render } from '@testing-library/react'
 import React from 'react'
 
 import { ExpandableText } from '../ExpandableText'
-import { isEllipsisActive } from '../helpers'
 
-jest.mock('@helpers/useResizeObserver', () => ({
-  useResizeObserver: jest.fn()
+jest.mock('@helpers/overflow/overflowWatcher', () => ({
+  watchOverflow: jest.fn(),
+  unwatchOverflow: jest.fn()
 }))
 
-jest.mock('../helpers', () => ({
-  isEllipsisActive: jest.fn()
-}))
+const mockedWatch = watchOverflow as jest.Mock
 
-const mockedUseResizeObserver = useResizeObserver as jest.Mock
-const mockedIsEllipsisActive = isEllipsisActive as jest.Mock
+let reporters: Array<(value: boolean) => void> = []
+let clippedNow = false
+
+const reportClipped = (clipped: boolean) => {
+  clippedNow = clipped
+  act(() => { reporters.forEach(onMeasured => onMeasured(clipped)) })
+}
 
 describe('ExpandableText', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockedUseResizeObserver.mockReturnValue({ width: 100, height: 20 })
-    mockedIsEllipsisActive.mockReturnValue(false)
+    reporters = []
+    clippedNow = false
+    mockedWatch.mockImplementation((_element: unknown, onMeasured: (value: boolean) => void) => {
+      if (!reporters.includes(onMeasured)) reporters.push(onMeasured)
+      onMeasured(clippedNow)
+    })
   })
 
   it('should receive qa props', () => {
@@ -46,16 +52,17 @@ describe('ExpandableText', () => {
 
   describe('clipping state', () => {
     it('should not apply clipped class when text is not truncated', () => {
-      mockedIsEllipsisActive.mockReturnValue(false)
+      clippedNow = false
       const { container } = render(<ExpandableText>text</ExpandableText>)
       const root = container.firstElementChild
 
       expect(root).not.toHaveClass('expandable-text-clipped')
       expect(root).toHaveAttribute('data-hide', 'true')
+      expect(container.querySelector('.hexa-ui-expander')).not.toBeInTheDocument()
     })
 
     it('should apply clipped class when text is truncated', () => {
-      mockedIsEllipsisActive.mockReturnValue(true)
+      clippedNow = true
       const { container } = render(<ExpandableText>very long text that gets truncated</ExpandableText>)
       const root = container.firstElementChild
 
@@ -65,23 +72,21 @@ describe('ExpandableText', () => {
 
     it('should collapse expanded state automatically when text stops being clipped', () => {
       const onExpand = jest.fn()
-      mockedIsEllipsisActive.mockReturnValue(false)
+      clippedNow = false
       render(<ExpandableText onExpand={onExpand}>text</ExpandableText>)
 
       expect(onExpand).toHaveBeenCalledWith(false)
     })
 
     it('should remove clipped state and hide the arrow when the container is resized to fit the text', () => {
-      mockedIsEllipsisActive.mockReturnValue(true)
+      reportClipped(true)
       const { container, rerender } = render(<ExpandableText>very long text that gets truncated</ExpandableText>)
       const root = container.firstElementChild as HTMLElement
 
       expect(root).toHaveClass('expandable-text-clipped')
 
-      // simulate the container growing: ResizeObserver fires with new dimensions
-      // and the text no longer overflows
-      mockedIsEllipsisActive.mockReturnValue(false)
-      mockedUseResizeObserver.mockReturnValue({ width: 500, height: 20 })
+      // the container grows and the watcher reports that the text now fits
+      reportClipped(false)
       rerender(<ExpandableText>very long text that gets truncated</ExpandableText>)
 
       expect(root).not.toHaveClass('expandable-text-clipped')
@@ -91,7 +96,7 @@ describe('ExpandableText', () => {
 
   describe('expand/collapse interaction', () => {
     it('should toggle expanded state and data-hide, calling onExpand on each click', () => {
-      mockedIsEllipsisActive.mockReturnValue(true)
+      clippedNow = true
       const onExpand = jest.fn()
       const { container } = render(<ExpandableText onExpand={onExpand}>very long text that gets truncated</ExpandableText>)
       const root = container.firstElementChild as HTMLElement
@@ -110,17 +115,20 @@ describe('ExpandableText', () => {
       expect(onExpand).toHaveBeenLastCalledWith(false)
     })
 
-    it('should expand on Enter keydown', () => {
-      mockedIsEllipsisActive.mockReturnValue(true)
-      const onExpand = jest.fn()
-      const { container } = render(<ExpandableText onExpand={onExpand}>text</ExpandableText>)
-      const expander = container.querySelector('.hexa-ui-expander') as HTMLElement
-      fireEvent.keyDown(expander, { key: 'Enter' })
-      expect(onExpand).toHaveBeenCalledWith(true)
+    it('exposes the toggle as a real button so the keyboard reaches it', () => {
+      clippedNow = true
+      const { container } = render(<ExpandableText>text</ExpandableText>)
+      const expander = container.querySelector('.hexa-ui-expander') as HTMLButtonElement
+
+      // A native button is activated by Enter and Space by the browser itself, so
+      // no key handler of our own is needed for it.
+      expect(expander.tagName).toBe('BUTTON')
+      expect(expander.type).toBe('button')
+      expect(expander).toHaveAttribute('aria-expanded', 'false')
     })
 
     it('should stop click propagation to parent so outer handlers are not triggered', () => {
-      mockedIsEllipsisActive.mockReturnValue(true)
+      clippedNow = true
       const parentClick = jest.fn()
       const { container } = render(
         <div onClick={parentClick}>

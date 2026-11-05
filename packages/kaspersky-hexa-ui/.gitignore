@@ -15,3 +15,5 @@ esm/
 
 playwright-report/
 test-results/
+
+perf

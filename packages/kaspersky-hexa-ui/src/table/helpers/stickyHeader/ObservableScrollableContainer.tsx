@@ -134,13 +134,23 @@ export const ObservableScrollableContainer = forwardRef(
       }
 
       const resizeObserver = new ResizeObserver((entries) => {
+        let widthChanged = false
+
         for (const entry of entries) {
+          const { width } = entry.contentRect
+
           switch (entry.target) {
             case table:
-              tableWidth = entry.contentRect.width
+              if (width !== tableWidth) {
+                tableWidth = width
+                widthChanged = true
+              }
               break
             case container:
-              containerWidth = entry.contentRect.width
+              if (width !== containerWidth) {
+                containerWidth = width
+                widthChanged = true
+              }
               resolveLastColWidth(colGroup)
               break
             case colGroup:
@@ -148,6 +158,8 @@ export const ObservableScrollableContainer = forwardRef(
               break
           }
         }
+
+        if (!widthChanged) return
 
         const tableContentWidth = Math.max(
           tableWidth,

@@ -33,6 +33,31 @@ describe('Sidebar', () => {
     expect(container.parentElement?.querySelector(`.${className}`)).toBeInTheDocument()
   })
 
+  /**
+   * Anything inside a sidebar that looks itself up in the document on mount has to find itself.
+   * The column selector does exactly that — it asks for `.ant-drawer-body` from `componentDidMount`
+   * to learn what scrolls — and a portal attached from the sidebar's own layout effect is still
+   * detached at that moment, because React runs a parent's layout effect after its children's.
+   */
+  test('should be in the document by the time its content mounts', () => {
+    const seen: { connected: boolean, foundByQuery: boolean } = { connected: false, foundByQuery: false }
+
+    const Probe = () => {
+      React.useLayoutEffect(() => {
+        const body = document.querySelector('.probe-sidebar .ant-drawer-body')
+        seen.foundByQuery = Boolean(body)
+        seen.connected = Boolean(body?.isConnected)
+      }, [])
+
+      return <div>content</div>
+    }
+
+    render(<Sidebar visible className="probe-sidebar"><Probe /></Sidebar>)
+
+    expect(seen.foundByQuery).toBe(true)
+    expect(seen.connected).toBe(true)
+  })
+
   test('should render close button', () => {
     const klId = 'close-icon'
     render(<DefaultSidebar />)
@@ -67,6 +92,34 @@ describe('Sidebar', () => {
   test('should render mask with mask prop', () => {
     const { container } = render(<DefaultSidebar mask />)
     expect(container.parentElement?.querySelector('.ant-drawer-mask')).toBeInTheDocument()
+  })
+
+  describe('mounting', () => {
+    test('should not build its content until it is opened for the first time', () => {
+      const { rerender } = render(<Sidebar visible={false} {...defaultProps}><p>содержимое</p></Sidebar>)
+
+      expect(screen.queryByText('содержимое')).not.toBeInTheDocument()
+
+      rerender(<Sidebar visible {...defaultProps}><p>содержимое</p></Sidebar>)
+
+      expect(screen.getByText('содержимое')).toBeInTheDocument()
+    })
+
+    test('should mark the wrapper once opened, so stacking and styling still find it', () => {
+      const { baseElement, rerender } = render(<Sidebar visible={false} {...defaultProps} />)
+
+      rerender(<Sidebar visible {...defaultProps} />)
+
+      expect(baseElement.querySelector('.antd-sidebar-wrapper_last')).toBeInTheDocument()
+    })
+
+    test('should keep the given zIndex for the first sidebar and lift only the one above it', () => {
+      render(<Sidebar visible zIndex={2000} klId="lower" />)
+      render(<Sidebar visible zIndex={2000} klId="upper" />)
+
+      expect(screen.getByTestId('lower')).toHaveStyle({ 'z-index': 2000 })
+      expect(screen.getByTestId('upper')).toHaveStyle({ 'z-index': 2001 })
+    })
   })
 
   test('should pass zIndex prop as style', () => {
